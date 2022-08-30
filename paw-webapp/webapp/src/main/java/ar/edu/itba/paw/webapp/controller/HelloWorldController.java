@@ -93,6 +93,14 @@ public class HelloWorldController {
         return mav;
     }
 
+    @RequestMapping("/review")
+    public ModelAndView review() {
+        final ModelAndView mav = new ModelAndView("review");
+//        final Movie movie = ms.findByName();
+//        TODO: Esta hardcodeado el nombre de la pelicula
+        return mav;
+    }
+
     @ExceptionHandler(UserNotFoundException.class)
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
     public ModelAndView userNotFound(){
