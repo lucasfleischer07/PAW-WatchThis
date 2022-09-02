@@ -81,15 +81,22 @@
 
       </div>
 
-
+    <jsp:include page="components/reviewCard.jsp">
+      <jsp:param name="reviewScore" value="${7}" />
+      <jsp:param name="reviewTitle" value="podria mejorar" />
+      <jsp:param name="reviewBody" value="Texto review" />
+      <jsp:param name="reviewRating" value="${5}" />
+      <jsp:param name="reviewId" value="${1}" />
+    </jsp:include>
 
         <jsp:include page="components/reviewCard.jsp">
           <jsp:param name="reviewScore" value="${7}" />
           <jsp:param name="reviewTitle" value="PELICULON" />
           <jsp:param name="reviewBody" value="Texto review" />
           <jsp:param name="reviewRating" value="${5}" />
-          <jsp:param name="reviewId" value="${1}" />
+          <jsp:param name="reviewId" value="${2}" />
         </jsp:include>
+
 
 
 

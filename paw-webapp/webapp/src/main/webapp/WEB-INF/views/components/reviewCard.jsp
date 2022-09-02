@@ -4,8 +4,6 @@
     <div class="accordion-item">
         <div class="accordion-header" id="<c:out value="heading${param.reviewId}"/>">
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="<c:out value="#collapse${param.reviewId}"/>" aria-expanded="false" aria-controls="<c:out value="#collapse${param.reviewId}"/>">
-
-
             <p><c:out value="${param.reviewScore}"/></p>
             <h2><c:out value="${param.reviewTitle}"/></h2>
             <c:forEach  begin="1" step="1" end="5" var="var">
@@ -29,7 +27,7 @@
             </c:forEach>
             </button>
         </div>
-        <div id="<c:out value="#collapse${param.reviewId}"/>" class="accordion-collapse collapse" aria-labelledby="<c:out value="heading${param.reviewId}"/>" data-bs-parent="<c:out value="#accordion${param.reviewId}"/>">
+        <div id="<c:out value="collapse${param.reviewId}"/>" class="accordion-collapse collapse" aria-labelledby="<c:out value="heading${param.reviewId}"/>" data-bs-parent="<c:out value="#accordion${param.reviewId}"/>">
             <div class="accordion-body">
                 <p><c:out value="${param.reviewBody}"/></p>
                 <button class="btn-outline-dark">
