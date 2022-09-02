@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -38,6 +39,12 @@ public class SerieJdbcDao implements SerieDao {
 //                + "password VARCHAR(255) NOT NULL"
 //                + ")");
     }
+
+    @Override
+    public List<Serie> getAllSeries() {
+        return template.query("SELECT * FROM series", SERIE_ROW_MAPPER);
+    }
+
     @Override
     public Optional<Serie> findByName(String name) {
         // Hacer esto esta MAL por SQL Injection
@@ -68,6 +75,13 @@ public class SerieJdbcDao implements SerieDao {
         // TODO: Aca, cuando definamos para hacer la consulta, tiene que ser en el sigueinte formato: 2 horas 22 minutos, es decir, numero horas numero minuto
         return template.query("SELECT * FROM series WHERE duration = ?",
                 new Object[]{ duration }, SERIE_ROW_MAPPER
+        ).stream().findFirst();
+    }
+
+    @Override
+    public Optional<Serie> findById(long id) {
+        return template.query("SELECT * FROM series WHERE serieId = ?",
+                new Object[]{ id }, SERIE_ROW_MAPPER
         ).stream().findFirst();
     }
 }

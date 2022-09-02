@@ -13,29 +13,28 @@
         <link href="<c:url value="/resources/css/homeStyles.css"/>" rel="stylesheet" type="text/css"/>
         <link href="<c:url value="/resources/css/navBarStyles.css"/>" rel="stylesheet" type="text/css"/>
         <link href="<c:url value="/resources/css/reviewsStyles.css"/>" rel="stylesheet" type="text/css"/>
-        <title>Watch This</title>
+        <title>Series</title>
     </head>
-
     <body>
-        <jsp:include page="components/header.jsp" />
+    <jsp:include page="components/header.jsp" />
 
-        <div class="W-row-display">
-            <jsp:include page="components/filter.jsp" />
+    <div class="W-row-display">
+        <jsp:include page="components/filter.jsp" />
 
-            <div class="W-films-div W-row-display">
-                <div class="row row-cols-1 row-cols-md-2 g-2">
-                    <c:forEach var="movie" items="${movies}">
-                        <jsp:include page="components/movieCard.jsp">
-                            <jsp:param name="movieName" value="${movie.name}"/>
-                            <jsp:param name="movieDescription" value="${movie.description}"/>
-                            <jsp:param name="movieImage" value="${movie.image}"/>
-                            <jsp:param name="movieId" value="${movie.movieId}"/>
-                        </jsp:include>
-                    </c:forEach>
-                </div>
+        <div class="W-films-div W-row-display">
+            <div class="row row-cols-1 row-cols-md-2 g-2">
+                <c:forEach var="serie" items="${series}">
+                    <jsp:include page="components/serieCard.jsp">
+                        <jsp:param name="serieName" value="${serie.name}"/>
+                        <jsp:param name="serieDescription" value="${serie.description}"/>
+                        <jsp:param name="serieImage" value="${serie.image}"/>
+                        <jsp:param name="serieId" value="${serie.serieId}"/>
+                    </jsp:include>
+                </c:forEach>
             </div>
         </div>
+    </div>
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
     </body>
 </html>

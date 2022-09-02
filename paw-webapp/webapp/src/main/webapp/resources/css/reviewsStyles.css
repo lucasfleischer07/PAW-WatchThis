@@ -1,0 +1,23 @@
+
+.W-column-display {
+    display: flex;
+    flex-direction: column;
+}
+
+.W-inv-film-card-margin{
+    margin-top: 5%;
+    margin-right: 5%;
+    margin-left: 5%;
+    max-height: 30vw;
+    max-width: 70vw;
+}
+
+.W-img-size{
+    max-height: 30vw;
+    max-width: 70vw;
+}
+
+.W-star-style{
+    height: 1vw;
+    width: 1vw;
+}

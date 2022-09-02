@@ -7,7 +7,9 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Repository
 public class MovieJdbcDao implements MovieDao {
@@ -39,12 +41,14 @@ public class MovieJdbcDao implements MovieDao {
 //                + "password VARCHAR(255) NOT NULL"
 //                + ")");
     }
+
+    @Override
+    public List<Movie> getAllMovies() {
+        return template.query("SELECT * FROM movies", MOVIE_ROW_MAPPER);
+    }
+
     @Override
     public Optional<Movie> findByName(String name) {
-        // Hacer esto esta MAL por SQL Injection
-        // NO hay que concatenar variables en una query
-        //template.query("SELECT * FROM users WHERE email = " + email, null);
-
         return template.query("SELECT * FROM movies WHERE name = ?",
                 new Object[]{ name }, MOVIE_ROW_MAPPER
         ).stream().findFirst();
@@ -52,9 +56,6 @@ public class MovieJdbcDao implements MovieDao {
 
     @Override
     public Optional<Movie> findByGenre(String genre) {
-        // Hacer esto esta MAL por SQL Injection
-        // NO hay que concatenar variables en una query
-        //template.query("SELECT * FROM users WHERE email = " + email, null);
         // TODO: Ver como hacer para que, dentro de los genereos, que me agarre 1 de todos los que tiene
         return template.query("SELECT * FROM movies WHERE genre = ?",
                 new Object[]{ genre }, MOVIE_ROW_MAPPER
@@ -63,12 +64,17 @@ public class MovieJdbcDao implements MovieDao {
 
     @Override
     public Optional<Movie> findByDuration(String duration) {
-        // Hacer esto esta MAL por SQL Injection
-        // NO hay que concatenar variables en una query
-        //template.query("SELECT * FROM users WHERE email = " + email, null);
         // TODO: Aca, cuando definamos para hacer la consulta, tiene que ser en el sigueinte formato: 2 horas 22 minutos, es decir, numero horas numero minuto
         return template.query("SELECT * FROM movies WHERE duration = ?",
                 new Object[]{ duration }, MOVIE_ROW_MAPPER
+        ).stream().findFirst();
+    }
+
+    @Override
+    public Optional<Movie> findById(long id) {
+        // TODO: Aca, cuando definamos para hacer la consulta, tiene que ser en el sigueinte formato: 2 horas 22 minutos, es decir, numero horas numero minuto
+        return template.query("SELECT * FROM movies WHERE movieId = ?",
+                new Object[]{ id }, MOVIE_ROW_MAPPER
         ).stream().findFirst();
     }
 }

@@ -5,6 +5,7 @@ import ar.edu.itba.paw.persistance.SerieDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -18,8 +19,18 @@ public class SerieServiceImpl implements SerieService{
     }
 
     @Override
+    public List<Serie> getAllSeries() {
+        return serieDao.getAllSeries();
+    }
+
+    @Override
     public Optional<Serie> findByName(String name) {
         return serieDao.findByName(name);
+    }
+
+    @Override
+    public Optional<Serie> findById(long id) {
+        return serieDao.findById(id);
     }
 
     @Override

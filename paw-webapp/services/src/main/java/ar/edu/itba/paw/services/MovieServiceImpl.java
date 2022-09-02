@@ -5,6 +5,7 @@ import ar.edu.itba.paw.persistance.MovieDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -15,6 +16,11 @@ public class MovieServiceImpl implements MovieService {
     @Autowired
     public MovieServiceImpl(final MovieDao movieDao) {
         this.movieDao = movieDao;
+    }
+
+    @Override
+    public List<Movie> getAllMovies() {
+        return movieDao.getAllMovies();
     }
 
     @Override
@@ -30,5 +36,10 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public Optional<Movie> findByDuration(String duration) {
         return movieDao.findByDuration(duration);
+    }
+
+    @Override
+    public Optional<Movie> findById(long id){
+        return movieDao.findById(id);
     }
 }
