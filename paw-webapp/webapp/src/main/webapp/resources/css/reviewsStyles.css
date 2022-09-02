@@ -13,11 +13,26 @@
 }
 
 .W-img-size{
-    max-height: 30vw;
-    max-width: 70vw;
+    width: 60%;
+    /*max-height: 30vw;*/
+    /*max-width: 70vw;*/
 }
 
-.W-star-style{
-    height: 1vw;
-    width: 1vw;
+.W-star-style-info-page{
+    height: 7%;
+    width: 20%;
+    display: flex;
+    flex-direction: row;
+}
+
+.W-span-text-info-card-movie {
+    font-weight: bold;
+    font-style: italic;
+}
+
+.W-add-review-button {
+    display: flex;
+    flex-direction: row-reverse;
+    margin-right: 8%;
+    margin-bottom: 6%;
 }
