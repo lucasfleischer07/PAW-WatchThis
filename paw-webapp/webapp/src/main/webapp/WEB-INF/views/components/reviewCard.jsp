@@ -29,7 +29,7 @@
             </c:forEach>
             </button>
         </div>
-        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+        <div id="collapseOne" class="accordion-collapse collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
             <div class="accordion-body">
                 <p><c:out value="${param.reviewBody}"/></p>
                 <button class="btn-outline-dark">

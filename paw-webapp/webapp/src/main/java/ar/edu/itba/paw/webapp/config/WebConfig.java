@@ -12,6 +12,9 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
 import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 @EnableWebMvc
 @ComponentScan({
@@ -33,14 +36,24 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Bean
     public DataSource dataSource(){
-        final SimpleDriverDataSource ds = new SimpleDriverDataSource();
-        ds.setDriverClass(org.postgresql.Driver.class);
-        //La base de datos se llama 'paw'
-        ds.setUrl("jdbc:postgresql://localhost/paw");
-        //El username y la password son aquellos establecidos en la creación de la BD PostgreSQL.
-        ds.setUsername("postgres");
-        ds.setPassword("postgres");
-        return ds;
+        //final SimpleDriverDataSource ds = new SimpleDriverDataSource();
+        //ds.setDriverClass(org.postgresql.Driver.class);
+        //ds.setUrl("jdbc:postgresql://localhost/paw");
+        //ds.setUsername("postgres");
+        //ds.setPassword("postgres");
+        //return ds;
+
+        //String dbUrl ="jdbc:postgresql://nnsbcsmyzbkewt:2d3518851436a2f7f6c4367b2c79aa6f66f456a436aeaf02f44cd07a80497f27@ec2-44-209-158-64.compute-1.amazonaws.com:5432/dejahu751a4sa5";
+        String dbUrl="jdbc:postgresql://ec2-44-209-158-64.compute-1.amazonaws.com:5432/dejahu751a4sa5";
+        String username = "nnsbcsmyzbkewt";
+        String password = "2d3518851436a2f7f6c4367b2c79aa6f66f456a436aeaf02f44cd07a80497f27";
+        final SimpleDriverDataSource basicDataSource = new SimpleDriverDataSource();
+        basicDataSource.setDriverClass(org.postgresql.Driver.class);
+        basicDataSource.setUrl(dbUrl);
+        basicDataSource.setUsername(username);
+       basicDataSource.setPassword(password);
+        return basicDataSource;
+
     }
 
     @Override
