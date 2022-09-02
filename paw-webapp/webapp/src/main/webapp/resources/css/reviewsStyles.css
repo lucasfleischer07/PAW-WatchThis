@@ -36,3 +36,50 @@
     margin-right: 8%;
     margin-bottom: 6%;
 }
+
+.W-title-review {
+    margin-left: 3%;
+}
+
+.W-reviewScore {
+    margin-top: 1%;
+}
+
+.W-stars {
+    margin-left: 5%;
+    display: flex;
+}
+
+.W-column-display-thumbs {
+    display: flex;
+    flex-direction: row;
+}
+
+.W-reviewText {
+    margin-left: 2%;
+    width: 100%;
+}
+
+.W-thumbs-buttons-and-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.W-thumbsButton-orientation {
+    margin-bottom: 60%;
+    margin-top: 60%;
+    font-size: 1vw;
+}
+
+.W-thumb-up {
+    text-decoration: none;
+    color: green;
+    width: 2vw;
+}
+
+.W-thumb-down {
+    text-decoration: none;
+    color: red;
+    width: 2vw;
+}
