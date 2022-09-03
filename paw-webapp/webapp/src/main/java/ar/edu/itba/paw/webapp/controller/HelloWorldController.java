@@ -110,7 +110,7 @@ public class HelloWorldController {
     @ExceptionHandler(UserNotFoundException.class)
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
     public ModelAndView userNotFound(){
-        return new ModelAndView("404");
+        return new ModelAndView("errors");
     }
 
 }
