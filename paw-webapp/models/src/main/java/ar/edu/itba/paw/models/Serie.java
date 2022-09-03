@@ -1,17 +1,11 @@
 package ar.edu.itba.paw.models;
 
 public class Serie {
-    private long serieid;
-    private String name;
-    private String image;
-    private String description;
-    private String released;
-    private String genre;
-    private String creator;
-    private String duration;
+    private long id;
+    private String name, image, description, released, genre, creator, duration, type = "serie";
 
-    public Serie(long serieid, String name, String image, String description, String released, String genre, String creator, String duration) {
-        this.serieid = serieid;
+    public Serie(long id, String name, String image, String description, String released, String genre, String creator, String duration) {
+        this.id = id;
         this.name = name;
         this.image = image;
         this.description = description;
@@ -21,8 +15,8 @@ public class Serie {
         this.duration = duration;
     }
 
-    public long getSerieId() {
-        return serieid;
+    public long getId() {
+        return id;
     }
 
     public String getName() {
@@ -49,7 +43,11 @@ public class Serie {
         return creator;
     }
 
-    public String getAvgDuration() {
+    public String getDuration() {
         return duration;
+    }
+
+    public String getType() {
+        return type;
     }
 }

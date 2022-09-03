@@ -12,7 +12,7 @@
     <%--       * Referencia a nuestra hoja de estilos propia --%>
     <link href="<c:url value="/resources/css/reviewsStyles.css"/>" rel="stylesheet" type="text/css"/>
     <link href="<c:url value="/resources/css/navBarStyles.css"/>" rel="stylesheet" type="text/css"/>
-    <title>Watch This</title>
+    <title>${details.name}</title>
   </head>
 
   <body>
@@ -58,7 +58,7 @@
           </div>
 
           <div class="W-add-review-button">
-            <button type="button" class="btn btn-dark">Add review</button>
+            <a href="<c:url value="/reviewForm/movie/${details.id}"/>"><button type="button" class="btn btn-dark">Add review</button></a>
           </div>
 
         </div>
@@ -80,10 +80,6 @@
       <jsp:param name="reviewRating" value="${5}" />
       <jsp:param name="reviewId" value="${2}" />
     </jsp:include>
-
-
-
-
 
 
 

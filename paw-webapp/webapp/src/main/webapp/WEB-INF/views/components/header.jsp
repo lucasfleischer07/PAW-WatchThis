@@ -1,9 +1,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top W-header-height" style="z-index: 1;">
     <div class="container-fluid">
         <div class="W-logo-div">
-            <a class="navbar-brand W-logo-style" href="#">
+            <a class="navbar-brand W-logo-style" href="<c:url value="/"/>">
                 <img src="<c:url value="/resources/img/WatchThisLogo.png"/>" alt="WatchThisLogo" style="width:100%;height:100%;">
             </a>
         </div>
@@ -25,9 +25,12 @@
                         </li>
                         <li class="nav-item W-nav-item">
                             <a class="nav-link" data-bs-dismiss="offcanvas" aria-current="page" href="<c:url value="/"/>">Movies</a>
+<%--                            <a class="nav-link" data-bs-dismiss="offcanvas" aria-current="page" href="<c:url value='/movie/${param.movieId}'/>">Movies</a>--%>
                         </li>
                         <li class="nav-item W-nav-item">
-                            <a class="nav-link" data-bs-dismiss="offcanvas" href="<c:url value="/series"/>">Series</a>
+                        <a class="nav-link" data-bs-dismiss="offcanvas" href="<c:url value="/series"/>">Series</a>
+<%--                            <a class="nav-link" data-bs-dismiss="offcanvas"  href="<c:url value='/serie/${param.serieId}'/>">Series</a>--%>
+
                         </li>
                     </ul>
                 </div>
