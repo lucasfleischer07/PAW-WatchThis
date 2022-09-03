@@ -29,7 +29,8 @@
                             <jsp:param name="movieName" value="${movie.name}"/>
                             <jsp:param name="movieDescription" value="${movie.description}"/>
                             <jsp:param name="movieImage" value="${movie.image}"/>
-                            <jsp:param name="movieId" value="${movie.movieId}"/>
+                            <jsp:param name="movieId" value="${movie.id}"/>
+                            <jsp:param name="type" value="${movie.type}"/>
                         </jsp:include>
                     </c:forEach>
                 </div>

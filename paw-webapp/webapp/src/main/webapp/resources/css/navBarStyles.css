@@ -1,9 +1,18 @@
 .W-logo-div {
     width: 15%;
+    margin-top: 1%;
+}
+
+.W-header-height {
+    height: 12%;
 }
 
 .W-home-button-hamburger-button {
     display: none;
+}
+
+.W-navbar-hamburger-margin {
+    margin-bottom: 20%;
 }
 
 .W-nav-item {

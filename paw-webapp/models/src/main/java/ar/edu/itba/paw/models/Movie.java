@@ -1,17 +1,12 @@
 package ar.edu.itba.paw.models;
 
 public class Movie {
-    private long movieid;
-    private String name;
-    private String image;
-    private String description;
-    private String released;
-    private String genre;
-    private String creator;
-    private String duration;
+    private long id;
+    private String name, image, description, released, genre, creator, duration, type = "movie";
 
-    public Movie(long movieid, String name, String image, String description, String released, String genre, String creator, String duration) {
-        this.movieid = movieid;
+
+    public Movie(long id, String name, String image, String description, String released, String genre, String creator, String duration) {
+        this.id = id;
         this.name = name;
         this.image = image;
         this.description = description;
@@ -21,8 +16,8 @@ public class Movie {
         this.duration = duration;
     }
 
-    public long getMovieId() {
-        return movieid;
+    public long getId() {
+        return id;
     }
 
     public String getName() {
@@ -51,5 +46,9 @@ public class Movie {
 
     public String getDuration() {
         return duration;
+    }
+
+    public String getType() {
+        return type;
     }
 }

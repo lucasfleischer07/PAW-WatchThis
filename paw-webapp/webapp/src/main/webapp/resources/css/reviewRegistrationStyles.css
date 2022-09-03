@@ -1,0 +1,27 @@
+.W-movieCardStyle-ReviewForm{
+    width: 40%;
+}
+
+.W-general-div-review-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 2%;
+    width: 100%;
+}
+
+.W-review-card {
+    width: 60%;
+}
+
+.W-input-label-review-info {
+    margin-top: 3%;
+    margin-left: 3%;
+    margin-right: 3%;
+}
+
+.W-submit-cancel-buttons {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 1%;
+}

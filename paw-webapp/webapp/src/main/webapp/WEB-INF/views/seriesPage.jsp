@@ -28,7 +28,8 @@
                         <jsp:param name="serieName" value="${serie.name}"/>
                         <jsp:param name="serieDescription" value="${serie.description}"/>
                         <jsp:param name="serieImage" value="${serie.image}"/>
-                        <jsp:param name="serieId" value="${serie.serieId}"/>
+                        <jsp:param name="serieId" value="${serie.id}"/>
+                        <jsp:param name="type" value="${serie.type}"/>
                     </jsp:include>
                 </c:forEach>
             </div>

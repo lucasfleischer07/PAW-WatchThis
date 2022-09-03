@@ -1,18 +1,22 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.models.Movie;
+import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.Serie;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.services.MovieService;
 import ar.edu.itba.paw.services.SerieService;
 import ar.edu.itba.paw.services.UserService;
 import ar.edu.itba.paw.webapp.exceptions.UserNotFoundException;
+import ar.edu.itba.paw.webapp.form.ReviewForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -21,21 +25,7 @@ public class HelloWorldController {
     private final UserService us;
     private final MovieService ms;
     private final SerieService ss;
-
-
-    //----------------------------------------------
-    //Inyeccion de dependencias por el contructor
-    //----------------------------------------------
-
-    // @Qualifier("userServiceImpl") es para indicarle cual implementacion quiero que use y evitar
-    // conflictos en la inyeccion de dependencias
-
-    //    public HelloWorldController(@Qualifier("userServiceImpl") final UserService us){
-    //        this.us = us;
-    //    }
-
-    // La otra forma es agregarle @Primary a la clase que quiero que use,
-    // sin embargo el @Qualifier tiene mayor prioridad
+//    private final ReviewService rs;
 
     @Autowired  //Para indicarle que este es el constructor que quiero que use
     public HelloWorldController(final UserService us, final MovieService ms, SerieService ss){
@@ -105,6 +95,24 @@ public class HelloWorldController {
         final ModelAndView mav = new ModelAndView("infoPage");
         mav.addObject("details", ss.findById(serieId).orElseThrow(UserNotFoundException::new));
         return mav;
+    }
+
+    @RequestMapping(value = "/reviewForm/movie/{id:[0-9]+}", method = {RequestMethod.GET})
+    public ModelAndView reviewFormCreateMovies(@ModelAttribute("registerForm") final ReviewForm reviewForm, @PathVariable("id")final long id) {
+        final ModelAndView mav = new ModelAndView("reviewRegistration");
+        mav.addObject("id", id);
+        return mav;
+    }
+
+    @RequestMapping(value = "/reviewForm/movie/{id:[0-9]+}", method = {RequestMethod.POST})
+    public ModelAndView reviewFormMovie(@Valid @ModelAttribute("registerForm") final ReviewForm form, final BindingResult errors, @PathVariable("id")final long id) {
+        if(errors.hasErrors()) {
+            return reviewFormCreateMovies(form,id);
+        }
+
+        Review newReview = new Review(form.getName(), form.getDescription(), form.getUserName(), form.getEmail(), id);
+        newReview.setId(id);
+        return new ModelAndView("redirect:/movie/"+id);//Para que redija bien
     }
 
     @ExceptionHandler(UserNotFoundException.class)

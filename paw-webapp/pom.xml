@@ -19,8 +19,8 @@
     <!--JETTY-->
     <servlet-api.version>2.5</servlet-api.version>
     <jstl.version>1.2</jstl.version>
-    <!--<javax.validation-api.version>1.0.0.GA</javax.validation-api.version>
-    <org.hibernate.validator>4.3.1.Final</org.hibernate.validator>-->
+    <javax.validation-api.version>1.0.0.GA</javax.validation-api.version>
+    <org.hibernate.validator>4.3.1.Final</org.hibernate.validator>
   </properties>
     
   <dependencyManagement>
@@ -61,7 +61,7 @@
         <version>${jstl.version}</version>
       </dependency>
       <!--Dependencia para las validaciones de forms    -->
-      <!--<dependency>
+      <dependency>
         <groupId>javax.validation</groupId>
         <artifactId>validation-api</artifactId>
         <version>${javax.validation-api.version}</version>
@@ -70,7 +70,7 @@
         <groupId>org.hibernate</groupId>
         <artifactId>hibernate-validator</artifactId>
         <version>${org.hibernate.validator}</version>
-      </dependency>-->
+      </dependency>
     </dependencies>
   </dependencyManagement>
     
