@@ -22,11 +22,7 @@
     <body>
         <jsp:include page="components/header.jsp" />
 
-<%--        <div class="W-movieCardStyle-ReviewForm">--%>
-<%--            <jsp:include page="components/movieCard.jsp" />--%>
-<%--        </div>--%>
-
-        <c:url value="/reviewForm" var="postPath"/>
+        <c:url value="/reviewForm/${type}/${id}" var="postPath"/>
         <form:form modelAttribute="registerForm" action="${postPath}" method="post">
             <div class="W-general-div-review-info">
                 <div class="card W-review-card">

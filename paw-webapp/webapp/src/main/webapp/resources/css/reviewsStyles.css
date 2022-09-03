@@ -48,6 +48,11 @@
 .W-stars {
     margin-left: 5%;
     display: flex;
+    font-size: 1vw;
+}
+
+.W-starts-width {
+    width: 2vw;
 }
 
 .W-column-display-thumbs {
@@ -82,5 +87,9 @@
     text-decoration: none;
     color: red;
     width: 2vw;
+}
+
+.W-accordion-margin {
+    margin-bottom: 5%;
 }
 

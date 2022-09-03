@@ -5,6 +5,7 @@ import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.Serie;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.services.MovieService;
+import ar.edu.itba.paw.services.ReviewService;
 import ar.edu.itba.paw.services.SerieService;
 import ar.edu.itba.paw.services.UserService;
 import ar.edu.itba.paw.webapp.exceptions.UserNotFoundException;
@@ -25,16 +26,18 @@ public class HelloWorldController {
     private final UserService us;
     private final MovieService ms;
     private final SerieService ss;
-//    private final ReviewService rs;
+    private final ReviewService rs;
 
     @Autowired  //Para indicarle que este es el constructor que quiero que use
-    public HelloWorldController(final UserService us, final MovieService ms, SerieService ss){
+    public HelloWorldController(final UserService us, final MovieService ms, SerieService ss, ReviewService rs){
         this.us = us;
         this.ms = ms;
         this.ss = ss;
+        this.rs = rs;
     }
 
-//    @RequestMapping(value = "/", method = RequestMethod.GET, headers = ..., consumes = ..., produces = ...)
+
+    //  ----------------------------------- Movie Info -----------------------------------------------------------------------
     @RequestMapping("/")
     public ModelAndView helloWorld() {
         final ModelAndView mav = new ModelAndView("index");
@@ -47,6 +50,20 @@ public class HelloWorldController {
         return mav;
     }
 
+    @RequestMapping("/movie/{movieId:[0-9]+}")
+    public ModelAndView movieReview(@PathVariable("movieId")final long movieId) {
+        final ModelAndView mav = new ModelAndView("infoPage");
+        mav.addObject("details", ms.findById(movieId).orElseThrow(UserNotFoundException::new));
+        List<Review> reviewList = rs.getAllReviews("movie",movieId);
+        if( reviewList == null) {
+            throw new UserNotFoundException();
+        } else {
+            mav.addObject("reviews", reviewList);
+        }
+//        mav.addObject("reviews", rs.getAllReviews());
+        return mav;
+    }
+
 //    TODO: Ver como transformar la para que la root sea /movies
 //    @RequestMapping("/movies")
 //    public ModelAndView movies() {
@@ -54,7 +71,10 @@ public class HelloWorldController {
 //        mav.addObject("movies", ms.getAllMovies().orElseThrow(UserNotFoundException::new));
 //        return mav;
 //    }
+    //  -----------------------------------------------------------------------------------------------------------------------
 
+
+    //  ----------------------------------- Serie Info -----------------------------------------------------------------------
     @RequestMapping("/series")
     public ModelAndView series() {
         final ModelAndView mav = new ModelAndView("seriesPage");
@@ -67,40 +87,28 @@ public class HelloWorldController {
         return mav;
     }
 
-    @RequestMapping("/register")
-    public ModelAndView register(
-            @RequestParam(value = "email", required = false) final String email,
-            @RequestParam("password") final String password
-    ) {
-        final User user = us.register(email, password);
-        return new ModelAndView("redirect:/profile" + user.getId());
-    }
-
-    @RequestMapping("/profile/{userId:[0-9]+}")
-    public ModelAndView profile(@PathVariable("userId") final long userId) {
-        final ModelAndView mav = new ModelAndView("profile");
-        mav.addObject("user", us.findById(userId).orElseThrow(UserNotFoundException::new));
-        return mav;
-    }
-
-    @RequestMapping("/movie/{movieId:[0-9]+}")
-    public ModelAndView movieReview(@PathVariable("movieId")final long movieId) {
-        final ModelAndView mav = new ModelAndView("infoPage");
-        mav.addObject("details", ms.findById(movieId).orElseThrow(UserNotFoundException::new));
-        return mav;
-    }
-
     @RequestMapping("/serie/{serieId:[0-9]+}")
     public ModelAndView serieReview(@PathVariable("serieId")final long serieId) {
         final ModelAndView mav = new ModelAndView("infoPage");
         mav.addObject("details", ss.findById(serieId).orElseThrow(UserNotFoundException::new));
+        List<Review> reviewList = rs.getAllReviews("serie",serieId);
+        if( reviewList == null) {
+            throw new UserNotFoundException();
+        } else {
+            mav.addObject("reviews", reviewList);
+        }
         return mav;
     }
+    //  -----------------------------------------------------------------------------------------------------------------------
 
+
+
+    //  ----------------------------------- Movies Review -----------------------------------------------------------------------
     @RequestMapping(value = "/reviewForm/movie/{id:[0-9]+}", method = {RequestMethod.GET})
     public ModelAndView reviewFormCreateMovies(@ModelAttribute("registerForm") final ReviewForm reviewForm, @PathVariable("id")final long id) {
         final ModelAndView mav = new ModelAndView("reviewRegistration");
         mav.addObject("id", id);
+        mav.addObject("type", "movie");
         return mav;
     }
 
@@ -110,16 +118,65 @@ public class HelloWorldController {
             return reviewFormCreateMovies(form,id);
         }
 
-        Review newReview = new Review(form.getName(), form.getDescription(), form.getUserName(), form.getEmail(), id);
+        Review newReview = new Review(form.getName(), form.getDescription(), form.getUserName(), form.getEmail(), id,"movie", null);    //ReviewId va en null por que eso lo asigna la tabla
         newReview.setId(id);
-        return new ModelAndView("redirect:/movie/"+id);//Para que redija bien
+        rs.addReview(newReview);
+        return new ModelAndView("redirect:/movie/"+id);
+    }
+    //  -----------------------------------------------------------------------------------------------------------------------
+
+    
+    //  ----------------------------------- Serie Review -----------------------------------------------------------------------
+    @RequestMapping(value = "/reviewForm/serie/{id:[0-9]+}", method = {RequestMethod.GET})
+    public ModelAndView reviewFormCreateSeries(@ModelAttribute("registerForm") final ReviewForm reviewForm, @PathVariable("id")final long id) {
+        final ModelAndView mav = new ModelAndView("reviewRegistration");
+        mav.addObject("id", id);
+        mav.addObject("type", "serie");
+        return mav;
     }
 
+    @RequestMapping(value = "/reviewForm/serie/{id:[0-9]+}", method = {RequestMethod.POST})
+    public ModelAndView reviewFormSeries(@Valid @ModelAttribute("registerForm") final ReviewForm form, final BindingResult errors, @PathVariable("id")final long id) {
+        if(errors.hasErrors()) {
+            return reviewFormCreateSeries(form,id);
+        }
+
+        Review newReview = new Review(form.getName(), form.getDescription(), form.getUserName(), form.getEmail(), id,"serie", null);    //ReviewId va en null por que eso lo asigna la tabla
+        newReview.setId(id);
+        rs.addReview(newReview);
+        return new ModelAndView("redirect:/serie/"+id);
+    }
+    //  -----------------------------------------------------------------------------------------------------------------------
+
+
+    //  ----------------------------------- Errors Page -----------------------------------------------------------------------
     @ExceptionHandler(UserNotFoundException.class)
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
     public ModelAndView userNotFound(){
         return new ModelAndView("errors");
     }
+    //  -----------------------------------------------------------------------------------------------------------------------
+
+
+
+    //  ----------------------------------- Otros -----------------------------------------------------------------------
+//    @RequestMapping("/register")
+//    public ModelAndView register(
+//            @RequestParam(value = "email", required = false) final String email,
+//            @RequestParam("password") final String password
+//    ) {
+//        final User user = us.register(email, password);
+//        return new ModelAndView("redirect:/profile" + user.getId());
+//    }
+//
+//    @RequestMapping("/profile/{userId:[0-9]+}")
+//    public ModelAndView profile(@PathVariable("userId") final long userId) {
+//        final ModelAndView mav = new ModelAndView("profile");
+//        mav.addObject("user", us.findById(userId).orElseThrow(UserNotFoundException::new));
+//        return mav;
+//    }
+    //  -----------------------------------------------------------------------------------------------------------------------
+
 
 }
 

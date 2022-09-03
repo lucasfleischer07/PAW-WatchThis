@@ -58,28 +58,23 @@
           </div>
 
           <div class="W-add-review-button">
-            <a href="<c:url value="/reviewForm/movie/${details.id}"/>"><button type="button" class="btn btn-dark">Add review</button></a>
+            <a href="<c:url value="/reviewForm/${details.type}/${details.id}"/>"><button type="button" class="btn btn-dark">Add review</button></a>
           </div>
 
         </div>
 
       </div>
 
-    <jsp:include page="components/reviewCard.jsp">
-      <jsp:param name="reviewScore" value="${7}" />
-      <jsp:param name="reviewTitle" value="Podria mejorar" />
-      <jsp:param name="reviewBody" value="Texto review" />
-      <jsp:param name="reviewRating" value="${5}" />
-      <jsp:param name="reviewId" value="${1}" />
-    </jsp:include>
-
-    <jsp:include page="components/reviewCard.jsp">
-      <jsp:param name="reviewScore" value="${7}" />
-      <jsp:param name="reviewTitle" value="Peliculon" />
-      <jsp:param name="reviewBody" value="Texto review" />
-      <jsp:param name="reviewRating" value="${5}" />
-      <jsp:param name="reviewId" value="${2}" />
-    </jsp:include>
+    <%--        TODO: el value de review score queda harcodeado porq no esta includio en el primer spint guardar, lo hacemos para el segundo--%>
+    <c:forEach var="review" items="${reviews}">
+      <jsp:include page="components/reviewCard.jsp">
+        <jsp:param name="reviewScore" value="${7}" />
+        <jsp:param name="reviewTitle" value="${review.name}" />
+        <jsp:param name="reviewDescription" value="${review.description}" />
+        <jsp:param name="reviewUsername" value="${review.userName}" />
+        <jsp:param name="reviewId" value="${review.reviewId}" />
+      </jsp:include>
+    </c:forEach>
 
 
 

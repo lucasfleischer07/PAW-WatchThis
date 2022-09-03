@@ -5,15 +5,15 @@ import javax.validation.constraints.Size;
 
 public class ReviewForm {
     @Size(min = 6, max = 50)
-    @Pattern(regexp	= "[a-zA-Z0-9!?(){}\\[\\]+\\-_]+")
+    @Pattern(regexp	= "[a-zA-Z0-9!?(){}\\[\\]+\\-_\\s]+")
     private String name;
 
     @Size(min = 20, max = 500)
-    @Pattern(regexp	= "[a-zA-Z0-9!,.:;=+\n\\-_()?<>$%&#@{}\\[\\]|*\"'~`^]+")
+    @Pattern(regexp	= "[a-zA-Z0-9!,.:;=+\n\\-_()?<>$%&#@{}\\[\\]|*\"'~`^\\s]+")
     private String description;
 
     @Size(min = 6, max = 30)
-    @Pattern(regexp	= "[a-zA-Z0-9]+")
+    @Pattern(regexp	= "[a-zA-Z0-9\\s]+")
     private String userName;
 
     @Size(min = 10, max = 70)
