@@ -11,6 +11,7 @@ import ar.edu.itba.paw.services.UserService;
 import ar.edu.itba.paw.webapp.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.webapp.form.ReviewForm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -18,7 +19,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 public class HelloWorldController {
@@ -41,11 +44,57 @@ public class HelloWorldController {
     @RequestMapping("/")
     public ModelAndView helloWorld() {
         final ModelAndView mav = new ModelAndView("index");
-        List<Movie> movieList = ms.getAllMovies();
-        if( movieList == null) {
+        List<Movie> movieList = movieList = ms.getAllMovies();
+
+        if(movieList == null) {
             throw new UserNotFoundException();
         } else {
             mav.addObject("movies", movieList);
+        }
+        return mav;
+    }
+
+    @RequestMapping("/{type:movies|series}/filters")
+    public ModelAndView moviesWithFilters(
+            @PathVariable("type") final String type,
+            @RequestParam(name = "durationFrom",defaultValue = "ANY")final String durationFrom,
+            @RequestParam(name = "durationTo",defaultValue = "ANY")final String durationTo,
+            @RequestParam(name = "genre", defaultValue = "ANY")final String genre) {
+        ModelAndView mav = null;
+        if(Objects.equals(type, "movies")) {
+            mav = new ModelAndView("index");
+            List<Movie> movieListFilter;
+            if(!Objects.equals(genre, "ANY") && Objects.equals(durationFrom, "ANY")) {
+                movieListFilter = ms.findByGenre(genre);
+            } else if(Objects.equals(genre, "ANY") && !Objects.equals(durationFrom, "ANY")) {
+                movieListFilter = ms.findByDuration(Integer.parseInt(durationFrom), Integer.parseInt(durationTo));
+            } else {    // Caso de que si los filtros estan vacios
+                movieListFilter = ms.getAllMovies();
+            }
+
+            if(movieListFilter == null) {
+                throw new UserNotFoundException();
+            } else {
+                mav.addObject("movies", movieListFilter);
+            }
+            return mav;
+        } else if(Objects.equals(type, "series")) {
+            mav = new ModelAndView("seriesPage");
+            List<Serie> serieListFilter;
+            if(!Objects.equals(genre, "ANY") && (Objects.equals(durationFrom, "ANY") && Objects.equals(durationTo, "ANY"))) {
+                serieListFilter = ss.findByGenre(genre);
+            } else if(Objects.equals(genre, "ANY") && (!Objects.equals(durationFrom, "ANY") && Objects.equals(durationTo, "ANY"))) {
+                serieListFilter = ss.findByDuration(Integer.parseInt(durationFrom), Integer.parseInt(durationTo));
+            } else {    // Caso de que si los filtros estan vacios
+                serieListFilter = ss.getAllSeries();
+            }
+
+            if(serieListFilter == null) {
+                throw new UserNotFoundException();
+            } else {
+                mav.addObject("series", serieListFilter);
+            }
+            return mav;
         }
         return mav;
     }
@@ -86,6 +135,30 @@ public class HelloWorldController {
         }
         return mav;
     }
+
+//    @RequestMapping("/series/filters")
+//    public ModelAndView seriesWithFilters(
+//            @RequestParam(name = "durationFrom",defaultValue = "ANY")final String durationFrom,
+//            @RequestParam(name = "durationTo",defaultValue = "ANY")final String durationTo,
+//            @RequestParam(name = "genre", defaultValue = "ANY")final String genre) {
+//        final ModelAndView mav = new ModelAndView("index");
+//        List<Serie> serieListFilter;
+//
+//        if(!Objects.equals(genre, "ANY") && Objects.equals(durationFrom, "ANY")) {
+//            serieListFilter = ss.findByGenre(genre);
+//        } else if(Objects.equals(genre, "ANY") && !Objects.equals(durationFrom, "ANY")) {
+//            serieListFilter = ss.findByDuration(Integer.parseInt(durationFrom), Integer.parseInt(durationTo));
+//        } else {    // Caso de que si los filtros estan vacios
+//            serieListFilter = ss.getAllSeries();
+//        }
+//
+//        if(serieListFilter == null) {
+//            throw new UserNotFoundException();
+//        } else {
+//            mav.addObject("series", serieListFilter);
+//        }
+//        return mav;
+//    }
 
     @RequestMapping("/serie/{serieId:[0-9]+}")
     public ModelAndView serieReview(@PathVariable("serieId")final long serieId) {

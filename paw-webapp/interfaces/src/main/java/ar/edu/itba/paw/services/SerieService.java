@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface SerieService {
     List<Serie> getAllSeries();
     Optional<Serie> findByName(String name);
-    Optional<Serie> findByGenre(String genre);
-    Optional<Serie> findByDuration(String duration);
+    List<Serie> findByGenre(String genre);
+    List<Serie> findByDuration(int durationFrom, int durationTo);
     Optional<Serie> findById(long id);
 }

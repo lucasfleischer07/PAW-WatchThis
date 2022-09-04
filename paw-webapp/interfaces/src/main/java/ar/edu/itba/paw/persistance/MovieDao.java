@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface MovieDao {
     List<Movie> getAllMovies();
     Optional<Movie> findByName(String name);
-    Optional<Movie> findByGenre(String genre);
-    Optional<Movie> findByDuration(String duration);
+    List<Movie> findByGenre(String genre);
+    List<Movie> findByDuration(int durationFrom, int durationTo);
     Optional<Movie> findById(long id);
 }

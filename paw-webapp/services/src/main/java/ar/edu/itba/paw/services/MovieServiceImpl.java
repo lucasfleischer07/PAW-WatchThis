@@ -29,13 +29,13 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public Optional<Movie> findByGenre(String genre) {
+    public List<Movie> findByGenre(String genre) {
         return movieDao.findByGenre(genre);
     }
 
     @Override
-    public Optional<Movie> findByDuration(String duration) {
-        return movieDao.findByDuration(duration);
+    public List<Movie> findByDuration(int durationFrom, int durationTo) {
+        return movieDao.findByDuration(durationFrom, durationTo);
     }
 
     @Override

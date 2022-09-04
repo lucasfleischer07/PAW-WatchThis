@@ -20,9 +20,11 @@
         <jsp:include page="components/header.jsp" />
 
         <div class="W-row-display">
-            <jsp:include page="components/filter.jsp" />
+            <jsp:include page="components/filter.jsp">
+                <jsp:param name="type" value="movies"/>
+            </jsp:include>
 
-            <div class="W-films-div W-row-display">
+                <div class="W-films-div W-row-display">
                 <div class="row row-cols-1 row-cols-md-2 g-2">
                     <c:forEach var="movie" items="${movies}">
                         <jsp:include page="components/movieCard.jsp">

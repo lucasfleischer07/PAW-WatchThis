@@ -57,25 +57,18 @@ public class SerieJdbcDao implements SerieDao {
     }
 
     @Override
-    public Optional<Serie> findByGenre(String genre) {
-        // Hacer esto esta MAL por SQL Injection
-        // NO hay que concatenar variables en una query
-        //template.query("SELECT * FROM users WHERE email = " + email, null);
+    public List<Serie> findByGenre(String genre) {
         // TODO: Ver como hacer para que, dentro de los genereos, que me agarre 1 de todos los que tiene
-        return template.query("SELECT * FROM series WHERE genre = ?",
-                new Object[]{ genre }, SERIE_ROW_MAPPER
-        ).stream().findFirst();
+        return template.query("SELECT * FROM series WHERE genre LIKE '%'||?||'%'", new Object[]{ genre }, SERIE_ROW_MAPPER);
     }
 
     @Override
-    public Optional<Serie> findByDuration(String duration) {
+    public List<Serie> findByDuration(int durationFrom, int durationTo) {
         // Hacer esto esta MAL por SQL Injection
         // NO hay que concatenar variables en una query
         //template.query("SELECT * FROM users WHERE email = " + email, null);
         // TODO: Aca, cuando definamos para hacer la consulta, tiene que ser en el sigueinte formato: 2 horas 22 minutos, es decir, numero horas numero minuto
-        return template.query("SELECT * FROM series WHERE duration = ?",
-                new Object[]{ duration }, SERIE_ROW_MAPPER
-        ).stream().findFirst();
+        return template.query("SELECT * FROM series WHERE durationnum > ? AND durationnum <= ?", new Object[]{ durationFrom, durationTo }, SERIE_ROW_MAPPER);
     }
 
     @Override
