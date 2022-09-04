@@ -16,11 +16,12 @@
     flex-direction: column;
     height: 100%;
     width: 12%;
+    margin-left: 1vw;
 }
 
 
 .W-films-div{
-    padding: 5%;
+    padding: 3%;
 }
 
 .W-row-display {
@@ -42,7 +43,7 @@
 }
 
 .W-line-style{
-    margin-left: 1%;
+    margin-left: 1vw;
     width: 5px;
 }
 
@@ -68,8 +69,9 @@
 }
 
 .W-movie-card-size {
-    /*height: 15%;*/
     width: 25%;
+    margin: 1vm;
+    height: auto;
 }
 
 .card-img-top {
@@ -121,6 +123,14 @@
     list-style: none;
 }
 
+.W-movie-title {
+    font-size: 2vw;
+}
+
+.W-movie-description {
+    font-size: 1.5vw;
+}
+
 .W-star-color{
     height: 1.5vw;
     width: 1.5vw;
@@ -151,10 +161,78 @@
 }
 
 .W-filter-padding {
-    padding: 8%;
+    padding: 2%;
 }
 
 .W-star-style{
     height: 1vw;
     width: 1vw;
+}
+
+@media (max-width: 1800px) {
+    .W-movie-title {
+        font-size: 1.5vw;
+    }
+
+    .W-movie-description {
+        font-size: 1.2vw;
+    }
+}
+
+@media (max-width: 1600px) {
+    .W-movie-title {
+        font-size: 1.8vw;
+    }
+
+    .W-movie-description {
+        font-size: 1.3vw;
+    }
+}
+
+
+@media (max-width: 992px) {
+    .W-filter-div {
+        display: none;
+    }
+
+    .W-filter-line-divider {
+        display: none;
+    }
+}
+
+@media (max-width: 591px) {
+    .W-movie-description {
+        display: none;
+    }
+
+    .W-filter-div {
+        display: none;
+    }
+
+    .W-filter-line-divider {
+        display: none;
+    }
+}
+
+@media (max-width: 450px) {
+    .W-movie-title {
+        font-size: 2.5vw;
+    }
+}
+
+@media (max-width: 291px) {
+    .W-movie-description {
+        display: none;
+    }
+
+    .W-filter-div {
+        display: none;
+    }
+
+    .W-movie-title {
+        font-size: 3vw;
+    }
+    .W-filter-line-divider {
+        display: none;
+    }
 }

@@ -6,8 +6,8 @@
             <div class="card" style="display: flex; align-items: center">
                 <img src="<c:url value="${param.serieImage}"/>" class="card-img-top" alt="Image <c:out value="${param.serieName}"/>">
                 <div class="card-body">
-                    <h5 class="card-title"><c:out value="${param.serieName}"/></h5>
-                    <p class="card-text"><c:out value="${param.serieDescription}"/></p>
+                    <h5 class="card-title W-movie-title"><c:out value="${param.serieName}"/></h5>
+                    <p class="card-text W-movie-description"><c:out value="${param.serieDescription}"/></p>
                 </div>
             </div>
         </div>

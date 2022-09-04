@@ -27,30 +27,143 @@
 
     <p class="W-filter-title">Genre</p>
     <div class="list-group">
-        <a href="#" class="list-group-item border-0  W-filter-items-text-style">Action and Adventure</a>
-        <a href="#" class="list-group-item border-0  W-filter-items-text-style">Science Fiction</a>
-        <a href="#" class="list-group-item border-0  W-filter-items-text-style">Comedy</a>
-        <a href="#" class="list-group-item border-0  W-filter-items-text-style">Documental</a>
-        <a href="#" class="list-group-item border-0  W-filter-items-text-style">Drama</a>
-        <a href="#" class="list-group-item border-0  W-filter-items-text-style">Terror</a>
-        <a href="#" class="list-group-item border-0  W-filter-items-text-style">Animation</a>
-        <a href="#" class="list-group-item border-0  W-filter-items-text-style">Musical</a>
-        <a href="#" class="list-group-item border-0 W-filter-items-text-style">Based on Real Life Story</a>
-        <a href="#" class="list-group-item border-0  W-filter-items-text-style">Classic</a>
-        <a href="#" class="list-group-item border-0  W-filter-items-text-style">Western</a>
-        <a href="#" class="list-group-item border-0  W-filter-items-text-style">Romance</a>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id=genreFilterAction>
+            <label class="form-check-label" for="genreFilterAction">
+                Action
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="genreFilterScienceFiction" >
+            <label class="form-check-label" for="genreFilterScienceFiction">
+                Science Fiction
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="genreFilterComedy" >
+            <label class="form-check-label" for="genreFilterComedy">
+                Comedy
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="genreFilterAdventure" >
+            <label class="form-check-label" for="genreFilterAdventure">
+                Adventure
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="genreFilterDrama" >
+            <label class="form-check-label" for="genreFilterDrama">
+                Drama
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="genreFilterHorror" >
+            <label class="form-check-label" for="genreFilterHorror">
+                Horror
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="genreFilterAnimation" >
+            <label class="form-check-label" for="genreFilterAnimation">
+                Animation
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="genreFilterThrillers" >
+            <label class="form-check-label" for="genreFilterThrillers">
+                Thrillers
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="genreFilterMystery" >
+            <label class="form-check-label" for="genreFilterMystery">
+                Mystery
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="genreFilterCrime" >
+            <label class="form-check-label" for="genreFilterCrime">
+                Crime
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="genreFilterFantasy" >
+            <label class="form-check-label" for="genreFilterFantasy">
+                Fantasy
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="genreFilterRomance" >
+            <label class="form-check-label" for="genreFilterRomance">
+                Romance
+            </label>
+        </div>
     </div>
+<%--        <a href="#" class="list-group-item border-0  W-filter-items-text-style">Action</a>--%>
+<%--        <a href="#" class="list-group-item border-0  W-filter-items-text-style">Science Fiction</a>--%>
+<%--        <a href="#" class="list-group-item border-0  W-filter-items-text-style">Comedy</a>--%>
+<%--        <a href="#" class="list-group-item border-0  W-filter-items-text-style">Adventure</a>--%>
+<%--        <a href="#" class="list-group-item border-0  W-filter-items-text-style">Drama</a>--%>
+<%--        <a href="#" class="list-group-item border-0  W-filter-items-text-style">Horror</a>--%>
+<%--        <a href="#" class="list-group-item border-0  W-filter-items-text-style">Animation</a>--%>
+<%--        <a href="#" class="list-group-item border-0  W-filter-items-text-style">Thrillers</a>--%>
+<%--        <a href="#" class="list-group-item border-0  W-filter-items-text-style">Mystery</a>--%>
+<%--        <a href="#" class="list-group-item border-0  W-filter-items-text-style">Crime</a>--%>
+<%--        <a href="#" class="list-group-item border-0  W-filter-items-text-style">Fantasy</a>--%>
+<%--        <a href="#" class="list-group-item border-0  W-filter-items-text-style">Romance</a>--%>
+
+<%--        <a href="<c:url value="/movies/Action">" class="list-group-item border-0  W-filter-items-text-style">Action</a>--%>
+<%--        <a href="<c:url value="/movies/Sfi-Fi">" class="list-group-item border-0  W-filter-items-text-style">Science Fiction</a>--%>
+<%--        <a href="<c:url value="/movies/Comedy">" class="list-group-item border-0  W-filter-items-text-style">Comedy</a>--%>
+<%--        <a href="<c:url value="/movies/Adventure">" class="list-group-item border-0  W-filter-items-text-style">Adventure</a>--%>
+<%--        <a href="<c:url value="/movies/Drama">" class="list-group-item border-0  W-filter-items-text-style">Drama</a>--%>
+<%--        <a href="<c:url value="/movies/Horror">" class="list-group-item border-0  W-filter-items-text-style">Horror</a>--%>
+<%--        <a href="<c:url value="/movies/Animation">" class="list-group-item border-0  W-filter-items-text-style">Animation</a>--%>
+<%--        <a href="<c:url value="/movies/Thriller">" class="list-group-item border-0  W-filter-items-text-style">Thrillers</a>--%>
+<%--        <a href="<c:url value="/movies/Mystery">" class="list-group-item border-0  W-filter-items-text-style">Mystery</a>--%>
+<%--        <a href="<c:url value="/movies/Crime">" class="list-group-item border-0  W-filter-items-text-style">Crime</a>--%>
+<%--        <a href="<c:url value="/movies/Fantasy">" class="list-group-item border-0  W-filter-items-text-style">Fantasy</a>--%>
+<%--        <a href="<c:url value="/movies/Romance">" class="list-group-item border-0  W-filter-items-text-style">Romance</a>                                        --%>
 
     <p class="W-filter-title">Duration</p>
     <div class="list-group">
-        <a href="#" class="list-group-item border-0 W-filter-items-text-style">0-90 minutes</a>
-        <a href="#" class="list-group-item border-0 W-filter-items-text-style">90-120 minutes</a>
-        <a href="#" class="list-group-item border-0 W-filter-items-text-style">120-150 minutes</a>
-        <a href="#" class="list-group-item border-0 W-filter-items-text-style">150 or more</a>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="flexRadioDefault" id="durationFilter90">
+            <label class="form-check-label" for="durationFilter90">
+                0-90 minutes
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="flexRadioDefault" id="durationFilter120">
+            <label class="form-check-label" for="durationFilter120">
+                90-120 minutes
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="flexRadioDefault" id="durationFilter150">
+            <label class="form-check-label" for="durationFilter150">
+                120-150 minutes
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="flexRadioDefault" id="durationFilterMore">
+            <label class="form-check-label" for="durationFilterMore">
+                150 or more
+            </label>
+        </div>
+<%--        <a href="#" class="list-group-item border-0 W-filter-items-text-style">0-90 minutes</a>--%>
+<%--        <a href="#" class="list-group-item border-0 W-filter-items-text-style">90-120 minutes</a>--%>
+<%--        <a href="#" class="list-group-item border-0 W-filter-items-text-style">120-150 minutes</a>--%>
+<%--        <a href="#" class="list-group-item border-0 W-filter-items-text-style">150 or more</a>--%>
+    </div>
+
+    <div class="W-confirm-filters-button">
+        <button type="button" class="btn btn-success">Apply</button>
     </div>
 
 </div>
 
-<div class="d-flex" >
+<div class="d-flex W-filter-line-divider" >
     <div class="vr W-line-style"></div>
 </div>

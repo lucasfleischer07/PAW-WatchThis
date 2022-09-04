@@ -22,11 +22,11 @@
         <div>
           <div class="card W-inv-film-card-margin">
             <div class="row g-0">
-              <div class="col-md-4">
+              <div class="col-md-4 W-img-aligment">
                 <img src="<c:url value="${details.image}"/>" class="W-img-size" alt="foto ">
               </div>
               <div class="col-md-8">
-                <div class="card-body">
+                <div class="card-body W-card-body-aligment">
                   <h5 class="card-title"><c:out value="${details.name}"/></h5>
                   <p class="card-text"><c:out value="${details.description}"/></p>
                   <p class="card-text"><span class="W-span-text-info-card-movie">Duration:</span> <c:out value="${details.duration}"/></p>
@@ -36,7 +36,7 @@
                 </div>
               </div>
             </div>
-            <a href="#" class="list-group-item border-0 W-star-location">
+            <a href="#" class="list-group-item border-0 W-star-location W-star-aligment">
               <div class="W-star-style-info-page">
                 <svg xmlns="http://www.w3.org/2000/svg"  fill="currentColor" class="bi bi-star-fill W-star-color" viewBox="0 0 16 16">
                   <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>

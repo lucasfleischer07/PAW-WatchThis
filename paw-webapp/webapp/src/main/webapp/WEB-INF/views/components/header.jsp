@@ -30,10 +30,79 @@
                         <li class="nav-item W-nav-item">
                         <a class="nav-link" data-bs-dismiss="offcanvas" href="<c:url value="/series"/>">Series</a>
 <%--                            <a class="nav-link" data-bs-dismiss="offcanvas"  href="<c:url value='/serie/${param.serieId}'/>">Series</a>--%>
-
                         </li>
                     </ul>
                 </div>
+
+                <div class="W-filters-hamburger-buttons">
+                    <div class="btn-group-vertical" role="group" aria-label="Button group with nested dropdown">
+                        <div class="btn-group" role="group">
+                            <button id="ratingGroupDrop" type="button" class="btn btn-dark dropdown-toggle W-filter-hamburger-button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Rating
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="ratingGroupDrop">
+                                <li><a class="dropdown-item" href="#" onclick="showRating(this)">1 star</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="showRating(this)">2 stars</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="showRating(this)">3 stars</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="showRating(this)">4 stars</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="showRating(this)">5 stars</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="btn-group" role="group">
+                            <button id="genreGroupDrop" type="button" class="btn btn-dark dropdown-toggle W-filter-hamburger-button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Genre
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="genreGroupDrop">
+                                <li><a class="dropdown-item" href="#" onclick="showGenre(this)">Action</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="showGenre(this)">Science Fiction</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="showGenre(this)">Comedy</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="showGenre(this)">Adventure</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="showGenre(this)">Drama</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="showGenre(this)">Horror</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="showGenre(this)">Animation</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="showGenre(this)">Thrillers</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="showGenre(this)">Mystery</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="showGenre(this)">Crime</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="showGenre(this)">Fantasy</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="showGenre(this)">Romance</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="btn-group" role="group">
+                            <button id="durationGroupDrop" type="button" class="btn btn-dark dropdown-toggle W-filter-hamburger-button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Duration
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="durationGroupDrop">
+                                <li><a class="dropdown-item" href="#" onclick="showDuration(this)">0-90 minutes</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="showDuration(this)">90-120 minutes</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="showDuration(this)">120-150 minutes</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="showDuration(this)">150 or more</a></li>
+                            </ul>
+                        </div>
+                        <div class="W-confirm-filters-button">
+                            <button type="button" class="btn btn-success">Apply</button>
+                        </div>
+                    </div>
+
+                    <script>
+                        function showRating(item) {
+                            document.getElementById("ratingGroupDrop").innerHTML = item.innerHTML;
+                        }
+
+                        function showGenre(item) {
+                            document.getElementById("genreGroupDrop").innerHTML = item.innerHTML;
+                        }
+
+                        function showDuration(item) {
+                            document.getElementById("durationGroupDrop").innerHTML = item.innerHTML;
+                        }
+                    </script>
+                </div>
+
+
+
+
                 <div class="W-navbar-search">
                     <form class="d-flex W-searchbar" role="search">
                         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
