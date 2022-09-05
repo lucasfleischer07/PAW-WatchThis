@@ -81,9 +81,9 @@ public class HelloWorldController {
         } else if(Objects.equals(type, "series")) {
             mav = new ModelAndView("seriesPage");
             List<Serie> serieListFilter;
-            if(!Objects.equals(genre, "ANY") && (Objects.equals(durationFrom, "ANY") && Objects.equals(durationTo, "ANY"))) {
+            if(!Objects.equals(genre, "ANY") && (Objects.equals(durationFrom, "ANY"))) {
                 serieListFilter = ss.findByGenre(genre);
-            } else if(Objects.equals(genre, "ANY") && (!Objects.equals(durationFrom, "ANY") && Objects.equals(durationTo, "ANY"))) {
+            } else if(Objects.equals(genre, "ANY") && (!Objects.equals(durationFrom, "ANY"))) {
                 serieListFilter = ss.findByDuration(Integer.parseInt(durationFrom), Integer.parseInt(durationTo));
             } else {    // Caso de que si los filtros estan vacios
                 serieListFilter = ss.getAllSeries();
