@@ -67,8 +67,13 @@ public class MovieJdbcDao implements MovieDao {
     }
 
     @Override
+    public List<Movie> findByDurationAndGenre(String genre,int durationFrom, int durationTo){
+        return template.query("SELECT * FROM movies WHERE durationnum > ? and durationnum <= ? and genre LIKE '%'||?||'%'",new Object[]{ durationFrom, durationTo,genre},MOVIE_ROW_MAPPER);
+    }
+
+    @Override
     public Optional<Movie> findById(long id) {
-        // TODO: Aca, cuando definamos para hacer la consulta, tiene que ser en el sigueinte formato: 2 horas 22 minutos, es decir, numero horas numero minuto
+        // TODO: Aca, cuando d"SELECT * FROM movies WHERE durationnum > ? and durationnum <= ?efinamos para hacer la consulta, tiene que ser en el sigueinte formato: 2 horas 22 minutos, es decir, numero horas numero minuto
         return template.query("SELECT * FROM movies WHERE movieId = ?",
                 new Object[]{ id }, MOVIE_ROW_MAPPER
         ).stream().findFirst();

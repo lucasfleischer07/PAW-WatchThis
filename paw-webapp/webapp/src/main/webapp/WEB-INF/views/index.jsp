@@ -17,14 +17,22 @@
     </head>
 
     <body>
-        <jsp:include page="components/header.jsp" />
+        <jsp:include page="components/header.jsp">
+            <jsp:param name="type" value="movies"/>
+            <jsp:param name="genre" value="${genre}"/>
+            <jsp:param name="durationFrom" value="${durationFrom}"/>
+            <jsp:param name="durationTo" value="${durationTo}"/>
+        </jsp:include>
 
         <div class="W-row-display">
             <jsp:include page="components/filter.jsp">
+                <jsp:param name="genre" value="${genre}"/>
+                <jsp:param name="durationFrom" value="${durationFrom}"/>
+                <jsp:param name="durationTo" value="${durationTo}"/>
                 <jsp:param name="type" value="movies"/>
             </jsp:include>
 
-                <div class="W-films-div W-row-display">
+            <div class="W-films-div W-row-display">
                 <div class="row row-cols-1 row-cols-md-2 g-2">
                     <c:forEach var="movie" items="${movies}">
                         <jsp:include page="components/movieCard.jsp">
@@ -35,6 +43,18 @@
                             <jsp:param name="type" value="${movie.type}"/>
                         </jsp:include>
                     </c:forEach>
+                    <c:if test="${movies==null || movies.size()==0}">
+                        <div class="card W-not-found-card">
+                            <div class="card-body W-row-display" >
+                                <div>
+                                    <img class="W-not-found" src="<c:url value="/resources/img/noResults.png"/>"/>
+                                </div>
+                                <div>
+                                    <h4 class="W-not-found-message"> We looked everywhere, but we couldn't find any movies with these filters.</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </c:if>
                 </div>
             </div>
         </div>

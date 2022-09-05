@@ -49,31 +49,11 @@
                 </div>
             </div>
             <div class="W-submit-cancel-buttons">
-                <a href="<c:url value="/movie/${id}"/>"><button type="button" class="btn btn-danger">Cancel</button></a>
-                <button type="submit" class="btn btn-success" onclick="(this).disabled = true">Submit</button>
+                <a href="<c:url value="/movie/${id}"/>"><button type="button" class="btn btn-danger" id="cancelButton" onclick="(this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'; document.getElementById('submitButton').disabled=true">Cancel</button></a>
+                <button id="submitButton" type="submit" class="btn btn-success" onclick="this.form.submit(); (this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'; document.getElementById('cancelButton').disabled=true">Submit</button>
             </div>
         </form:form>
 
-<%--        <!-- Flexbox container for aligning the toasts -->--%>
-<%--        <div aria-live="polite" aria-atomic="true" class="d-flex justify-content-center align-items-center" style="min-height: 200px;">--%>
-
-<%--            <!-- Then put toasts within -->--%>
-<%--            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">--%>
-<%--                <div class="toast-header">--%>
-<%--                    <img src="..." class="rounded mr-2" alt="...">--%>
-<%--                    <strong class="mr-auto">Bootstrap</strong>--%>
-<%--                    <small>11 mins ago</small>--%>
-<%--                    <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">--%>
-<%--                        <span aria-hidden="true">&times;</span>--%>
-<%--                    </button>--%>
-<%--                </div>--%>
-<%--                <div class="toast-body">--%>
-<%--                    Hello, world! This is a toast message.--%>
-<%--                </div>--%>
-<%--            </div>--%>
-<%--        </div>--%>
-
-<%--        <script src="<c:url value="/resources/js/reviewRegistration.js">"></script>--%>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
     </body>

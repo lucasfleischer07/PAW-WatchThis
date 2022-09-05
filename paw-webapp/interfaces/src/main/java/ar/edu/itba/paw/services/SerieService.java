@@ -10,5 +10,6 @@ public interface SerieService {
     Optional<Serie> findByName(String name);
     List<Serie> findByGenre(String genre);
     List<Serie> findByDuration(int durationFrom, int durationTo);
+    List<Serie> findByDurationAndGenre(String genre,int durationFrom, int durationTo);
     Optional<Serie> findById(long id);
 }

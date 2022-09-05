@@ -39,6 +39,11 @@ public class SerieServiceImpl implements SerieService{
     }
 
     @Override
+    public List<Serie> findByDurationAndGenre(String genre,int durationFrom, int durationTo){
+        return serieDao.findByDurationAndGenre(genre,durationFrom,durationTo);
+    }
+
+    @Override
     public List<Serie> findByDuration(int durationFrom, int durationTo) {
         return serieDao.findByDuration(durationFrom, durationTo);
     }

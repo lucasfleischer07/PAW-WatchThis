@@ -63,12 +63,17 @@ public class HelloWorldController {
         ModelAndView mav = null;
         if(Objects.equals(type, "movies")) {
             mav = new ModelAndView("index");
+            mav.addObject("genre",genre);
+            mav.addObject("durationFrom",durationFrom);
+            mav.addObject("durationTo",durationTo);
             List<Movie> movieListFilter;
             if(!Objects.equals(genre, "ANY") && Objects.equals(durationFrom, "ANY")) {
                 movieListFilter = ms.findByGenre(genre);
             } else if(Objects.equals(genre, "ANY") && !Objects.equals(durationFrom, "ANY")) {
                 movieListFilter = ms.findByDuration(Integer.parseInt(durationFrom), Integer.parseInt(durationTo));
-            } else {    // Caso de que si los filtros estan vacios
+            } else if(!Objects.equals(durationFrom, "ANY") && !Objects.equals(genre, "ANY")){    // Caso de que si los filtros estan vacios
+                movieListFilter = ms.findByDurationAndGenre(genre,Integer.parseInt(durationFrom),Integer.parseInt(durationTo));
+            } else{
                 movieListFilter = ms.getAllMovies();
             }
 
@@ -80,6 +85,9 @@ public class HelloWorldController {
             return mav;
         } else if(Objects.equals(type, "series")) {
             mav = new ModelAndView("seriesPage");
+            mav.addObject("genre",genre);
+            mav.addObject("durationFrom",durationFrom);
+            mav.addObject("durationTo",durationTo);
             List<Serie> serieListFilter;
             if(!Objects.equals(genre, "ANY") && (Objects.equals(durationFrom, "ANY"))) {
                 serieListFilter = ss.findByGenre(genre);

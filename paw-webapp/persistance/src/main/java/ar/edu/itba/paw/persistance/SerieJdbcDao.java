@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.persistance;
 
+import ar.edu.itba.paw.models.Movie;
 import ar.edu.itba.paw.models.Serie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -69,6 +70,11 @@ public class SerieJdbcDao implements SerieDao {
         //template.query("SELECT * FROM users WHERE email = " + email, null);
         // TODO: Aca, cuando definamos para hacer la consulta, tiene que ser en el sigueinte formato: 2 horas 22 minutos, es decir, numero horas numero minuto
         return template.query("SELECT * FROM series WHERE durationnum > ? AND durationnum <= ?", new Object[]{ durationFrom, durationTo }, SERIE_ROW_MAPPER);
+    }
+
+    @Override
+    public List<Serie> findByDurationAndGenre(String genre, int durationFrom, int durationTo){
+        return template.query("SELECT * FROM series WHERE durationnum > ? AND durationnum <= ? and genre LIKE '%'||?||'%'", new Object[]{ durationFrom, durationTo,genre }, SERIE_ROW_MAPPER);
     }
 
     @Override

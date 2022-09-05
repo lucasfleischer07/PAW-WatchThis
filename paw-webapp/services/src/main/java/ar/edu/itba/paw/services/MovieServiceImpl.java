@@ -39,6 +39,11 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
+    public List<Movie> findByDurationAndGenre(String genre,int durationFrom, int durationTo){
+        return movieDao.findByDurationAndGenre(genre,durationFrom,durationTo);
+    }
+
+    @Override
     public Optional<Movie> findById(long id){
         return movieDao.findById(id);
     }

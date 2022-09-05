@@ -21,6 +21,9 @@
     <div class="W-row-display">
         <jsp:include page="components/filter.jsp">
             <jsp:param name="type" value="series"/>
+            <jsp:param name="genre" value="${genre}"/>
+            <jsp:param name="durationFrom" value="${durationFrom}"/>
+            <jsp:param name="durationTo" value="${durationTo}"/>
         </jsp:include>
 
         <div class="W-films-div W-row-display">
@@ -34,8 +37,21 @@
                         <jsp:param name="type" value="${serie.type}"/>
                     </jsp:include>
                 </c:forEach>
+
             </div>
         </div>
+        <c:if test="${series==null || series.size()==0}">
+            <div class="card W-not-found-card">
+                <div class="card-body W-row-display" >
+                    <div>
+                        <img class="W-not-found" src="<c:url value="/resources/img/noResults.png"/>"/>
+                    </div>
+                    <div>
+                        <h4 class="W-not-found-message"> We looked everywhere, but we couldn't find any series with these filters.</h4>
+                    </div>
+                </div>
+            </div>
+        </c:if>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>

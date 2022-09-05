@@ -168,6 +168,21 @@
     height: 1vw;
     width: 1vw;
 }
+.W-not-found{
+    height: 10vw;
+    width: 10vw;
+}
+
+.W-not-found-card {
+    height: 90%;
+    justify-content: center;
+    align-content: center;
+    width: 70%;
+    margin-top: 4vw;
+}
+.W-not-found-message{
+    font-size: 2.5vw;
+}
 
 @media (max-width: 1800px) {
     .W-movie-title {
@@ -195,7 +210,7 @@
         display: none;
     }
 
-    .W-filter-line-divider {
+    .W-line-style {
         display: none;
     }
 }
@@ -209,7 +224,8 @@
         display: none;
     }
 
-    .W-filter-line-divider {
+
+    .W-line-style {
         display: none;
     }
 }
@@ -232,7 +248,8 @@
     .W-movie-title {
         font-size: 3vw;
     }
-    .W-filter-line-divider {
+
+    .W-line-style {
         display: none;
     }
 }

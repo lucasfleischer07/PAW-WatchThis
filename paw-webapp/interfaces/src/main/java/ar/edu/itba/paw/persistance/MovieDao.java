@@ -10,5 +10,6 @@ public interface MovieDao {
     Optional<Movie> findByName(String name);
     List<Movie> findByGenre(String genre);
     List<Movie> findByDuration(int durationFrom, int durationTo);
+    List<Movie> findByDurationAndGenre(String genre,int durationFrom, int durationTo);
     Optional<Movie> findById(long id);
 }
