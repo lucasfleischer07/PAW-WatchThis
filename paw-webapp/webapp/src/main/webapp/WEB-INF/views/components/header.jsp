@@ -20,16 +20,14 @@
             <div class="offcanvas-body W-navbar-buttons-acomodation">
                 <div class="W-navbar-hamburger-postion">
                     <ul class="navbar-nav justify-content-between flex-grow-1 pe-3 W-navitem-list">
-                        <li class="nav-item W-home-button-hamburger-button">
-                            <a class="nav-link" data-bs-dismiss="offcanvas" aria-current="page" href="<c:url value="/"/>">Home</a>
+                        <li class="nav-item W-home-button-hamburger-button" style="display: none">
+                            <a class="nav-link" aria-current="page" href="<c:url value="/"/>">Home</a>
                         </li>
                         <li class="nav-item W-nav-item">
-                            <a class="nav-link" data-bs-dismiss="offcanvas" aria-current="page" href="<c:url value="/"/>">Movies</a>
-<%--                            <a class="nav-link" data-bs-dismiss="offcanvas" aria-current="page" href="<c:url value='/movie/${param.movieId}'/>">Movies</a>--%>
+                            <a class="nav-link" aria-current="page" href="<c:url value="/"/>">Movies</a>
                         </li>
                         <li class="nav-item W-nav-item">
-                        <a class="nav-link" data-bs-dismiss="offcanvas" href="<c:url value="/series"/>">Series</a>
-<%--                            <a class="nav-link" data-bs-dismiss="offcanvas"  href="<c:url value='/serie/${param.serieId}'/>">Series</a>--%>
+                            <a class="nav-link" href="<c:url value="/series"/>">Series</a>
                         </li>
                     </ul>
                 </div>
@@ -97,10 +95,9 @@
                         function showDuration(item) {
                             document.getElementById("durationGroupDrop").innerHTML = item.innerHTML;
                         }
+
                     </script>
                 </div>
-
-
 
 
                 <div class="W-navbar-search">
