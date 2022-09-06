@@ -17,8 +17,8 @@ public class UserServiceImpl implements UserService{
         this.userDao = userDao;
     }
     @Override
-    public User register(String email, String password) {
-        return userDao.create(email, password);
+    public Optional<Long> register(User user) {
+        return userDao.create(user.getEmail(), user.getUserName());
     }
 
     @Override

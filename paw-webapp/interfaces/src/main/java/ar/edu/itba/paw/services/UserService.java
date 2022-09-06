@@ -4,8 +4,8 @@ import ar.edu.itba.paw.models.User;
 import java.util.Optional;
 
 public interface UserService {
-
-    User register(String email, String password);
+    //Intenta agregar el usuario si no existe y devuelve su id luego de agregarlo
+    Optional<Long> register(User user);
 
     Optional<User> findByEmail(String email);
 

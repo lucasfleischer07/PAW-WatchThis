@@ -69,19 +69,20 @@
           </div>
         </div>
 
+        <%--              <jsp:param name="reviewUsername" value="${review.userName}" />--%>
+
         <div class="card-body">
           <c:forEach var="review" items="${reviews}">
             <jsp:include page="components/reviewCard.jsp">
               <jsp:param name="reviewTitle" value="${review.name}" />
               <jsp:param name="reviewDescription" value="${review.description}" />
-              <jsp:param name="reviewUsername" value="${review.userName}" />
-              <jsp:param name="reviewId" value="${review.reviewId}" />
+              <jsp:param name="reviewId" value="${review.id}" />
             </jsp:include>
           </c:forEach>
           <c:if test="${reviews==null || reviews.size()==0}">
               <div>
                 <div class="W-no-reviews-icon">
-                <img src="<c:url value="/resources/img/noReviews.png"/>"/>
+                <img src="<c:url value="/resources/img/noReviews.png"/>" alt="No_Review_Img"/>
                 </div>
                 <h3 class="W-no-reviews-text">There are no reviews for this movie yet.
                     Be the first to add one!</h3>

@@ -22,6 +22,7 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Controller
 public class HelloWorldController {
@@ -40,11 +41,11 @@ public class HelloWorldController {
     }
 
 
-    //  ----------------------------------- Movie Info -----------------------------------------------------------------------
+    // * ----------------------------------- Movie Info -----------------------------------------------------------------------
     @RequestMapping("/")
     public ModelAndView helloWorld() {
         final ModelAndView mav = new ModelAndView("index");
-        List<Movie> movieList = movieList = ms.getAllMovies();
+        List<Movie> movieList = ms.getAllMovies();
 
         if(movieList == null) {
             throw new UserNotFoundException();
@@ -53,6 +54,30 @@ public class HelloWorldController {
         }
         return mav;
     }
+
+    @RequestMapping("/movie/{movieId:[0-9]+}")
+    public ModelAndView movieReview(@PathVariable("movieId")final long movieId) {
+        final ModelAndView mav = new ModelAndView("infoPage");
+        mav.addObject("details", ms.findById(movieId).orElseThrow(UserNotFoundException::new));
+        List<Review> reviewList = rs.getAllReviews("movie",movieId);
+        if( reviewList == null) {
+            throw new UserNotFoundException();
+        } else {
+            mav.addObject("reviews", reviewList);
+        }
+        return mav;
+    }
+
+//    TODO: Ver como transformar la para que la root sea /movies
+//    @RequestMapping("/movies")
+//    public ModelAndView movies() {
+//        final ModelAndView mav = new ModelAndView("index");
+//        mav.addObject("movies", ms.getAllMovies().orElseThrow(UserNotFoundException::new));
+//        return mav;
+//    }
+    // * -----------------------------------------------------------------------------------------------------------------------
+
+    // *  ----------------------------------- Movies and Serie Filters -----------------------------------------------------------------------
 
     @RequestMapping("/{type:movies|series}/filters")
     public ModelAndView moviesWithFilters(
@@ -110,31 +135,10 @@ public class HelloWorldController {
         return mav;
     }
 
-    @RequestMapping("/movie/{movieId:[0-9]+}")
-    public ModelAndView movieReview(@PathVariable("movieId")final long movieId) {
-        final ModelAndView mav = new ModelAndView("infoPage");
-        mav.addObject("details", ms.findById(movieId).orElseThrow(UserNotFoundException::new));
-        List<Review> reviewList = rs.getAllReviews("movie",movieId);
-        if( reviewList == null) {
-            throw new UserNotFoundException();
-        } else {
-            mav.addObject("reviews", reviewList);
-        }
-//        mav.addObject("reviews", rs.getAllReviews());
-        return mav;
-    }
-
-//    TODO: Ver como transformar la para que la root sea /movies
-//    @RequestMapping("/movies")
-//    public ModelAndView movies() {
-//        final ModelAndView mav = new ModelAndView("index");
-//        mav.addObject("movies", ms.getAllMovies().orElseThrow(UserNotFoundException::new));
-//        return mav;
-//    }
-    //  -----------------------------------------------------------------------------------------------------------------------
+    // * -----------------------------------------------------------------------------------------------------------------------
 
 
-    //  ----------------------------------- Serie Info -----------------------------------------------------------------------
+    // * ----------------------------------- Serie Info -----------------------------------------------------------------------
     @RequestMapping("/series")
     public ModelAndView series() {
         final ModelAndView mav = new ModelAndView("seriesPage");
@@ -183,11 +187,11 @@ public class HelloWorldController {
         }
         return mav;
     }
-    //  -----------------------------------------------------------------------------------------------------------------------
+    // * -----------------------------------------------------------------------------------------------------------------------
 
 
 
-    //  ----------------------------------- Movies Review -----------------------------------------------------------------------
+    // * ----------------------------------- Movies Review -----------------------------------------------------------------------
     @RequestMapping(value = "/reviewForm/movie/{id:[0-9]+}", method = {RequestMethod.GET})
     public ModelAndView reviewFormCreateMovies(@ModelAttribute("registerForm") final ReviewForm reviewForm, @PathVariable("id")final long id) {
         final ModelAndView mav = new ModelAndView("reviewRegistration");
@@ -201,16 +205,21 @@ public class HelloWorldController {
         if(errors.hasErrors()) {
             return reviewFormCreateMovies(form,id);
         }
-
-        Review newReview = new Review(form.getName(), form.getDescription(), form.getUserName(), form.getEmail(), id,"movie", null);    //ReviewId va en null por que eso lo asigna la tabla
-        newReview.setId(id);
-        rs.addReview(newReview);
+        User newUser = new User(null,form.getEmail(),form.getUserName());
+        //Primero intenta agregar el usuario, luego intenta agregar la review
+        Optional<Long> userId = us.register(newUser);
+        //Falta Agregar mensaje de error para el caso -1 (si falla en el pedido)
+        if(userId.get() != -1) {
+            Review newReview = new Review( null,"movie",id,null,userId.get(),form.getName(),form.getDescription());    //ReviewId va en null por que eso lo asigna la tabla
+            newReview.setId(id);
+            rs.addReview(newReview);
+        }
         return new ModelAndView("redirect:/movie/"+id);
     }
-    //  -----------------------------------------------------------------------------------------------------------------------
+    // * -----------------------------------------------------------------------------------------------------------------------
 
     
-    //  ----------------------------------- Serie Review -----------------------------------------------------------------------
+    // * ----------------------------------- Serie Review -----------------------------------------------------------------------
     @RequestMapping(value = "/reviewForm/serie/{id:[0-9]+}", method = {RequestMethod.GET})
     public ModelAndView reviewFormCreateSeries(@ModelAttribute("registerForm") final ReviewForm reviewForm, @PathVariable("id")final long id) {
         final ModelAndView mav = new ModelAndView("reviewRegistration");
@@ -224,26 +233,32 @@ public class HelloWorldController {
         if(errors.hasErrors()) {
             return reviewFormCreateSeries(form,id);
         }
+        User newUser = new User(null,form.getEmail(),form.getUserName());
+        //Primero intenta agregar el usuario, luego intenta agregar la review
+        Optional<Long> userId = us.register(newUser);
+        //Falta Agregar mensaje de error para el caso -1 (si falla en el pedido)
+        if (userId.get() != -1) {
+            Review newReview = new Review(null,"serie",null,id,userId.get(),form.getName(),form.getDescription() );    //ReviewId va en null por que eso lo asigna la tabla
+            newReview.setId(id);
+            rs.addReview(newReview);
 
-        Review newReview = new Review(form.getName(), form.getDescription(), form.getUserName(), form.getEmail(), id,"serie", null);    //ReviewId va en null por que eso lo asigna la tabla
-        newReview.setId(id);
-        rs.addReview(newReview);
+        }
         return new ModelAndView("redirect:/serie/"+id);
     }
-    //  -----------------------------------------------------------------------------------------------------------------------
+    // * -----------------------------------------------------------------------------------------------------------------------
 
 
-    //  ----------------------------------- Errors Page -----------------------------------------------------------------------
+    // * ----------------------------------- Errors Page -----------------------------------------------------------------------
     @ExceptionHandler(UserNotFoundException.class)
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
     public ModelAndView userNotFound(){
         return new ModelAndView("errors");
     }
-    //  -----------------------------------------------------------------------------------------------------------------------
+    // * -----------------------------------------------------------------------------------------------------------------------
 
 
 
-    //  ----------------------------------- Otros -----------------------------------------------------------------------
+    // * ----------------------------------- Otros -----------------------------------------------------------------------
 //    @RequestMapping("/register")
 //    public ModelAndView register(
 //            @RequestParam(value = "email", required = false) final String email,
@@ -259,7 +274,7 @@ public class HelloWorldController {
 //        mav.addObject("user", us.findById(userId).orElseThrow(UserNotFoundException::new));
 //        return mav;
 //    }
-    //  -----------------------------------------------------------------------------------------------------------------------
+    // * -----------------------------------------------------------------------------------------------------------------------
 
 
 }

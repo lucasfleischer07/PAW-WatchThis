@@ -12,11 +12,11 @@ public class ReviewForm {
     @Pattern(regexp	= "[a-zA-Z0-9!,.:;=+\n\\-_()?<>$%&#@{}\\[\\]|*\"'~`^\\s]+")
     private String description;
 
-    @Size(min = 6, max = 30)
+    @Size(min = 4, max = 30)
     @Pattern(regexp	= "[a-zA-Z0-9\\s]+")
     private String userName;
 
-    @Size(min = 10, max = 70)
+    @Size(min = 10, max = 50)
     @Pattern(regexp	= "([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+")
     private String email;
 

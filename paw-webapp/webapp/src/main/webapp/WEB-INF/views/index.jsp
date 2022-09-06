@@ -47,7 +47,7 @@
                         <div class="card W-not-found-card">
                             <div class="card-body W-row-display" >
                                 <div>
-                                    <img class="W-not-found" src="<c:url value="/resources/img/noResults.png"/>"/>
+                                    <img class="W-not-found" src="<c:url value="/resources/img/noResults.png"/>" alt="Not_Found_Ing"/>
                                 </div>
                                 <div>
                                     <h4 class="W-not-found-message"> We looked everywhere, but we couldn't find any movies with these filters.</h4>

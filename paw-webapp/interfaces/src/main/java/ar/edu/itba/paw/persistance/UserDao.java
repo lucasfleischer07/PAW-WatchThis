@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public interface UserDao {
 
-    User create(String email, String password);
+    Optional<Long> create(String userEmail, String password);
 
     Optional<User> findByEmail(String email);
 
