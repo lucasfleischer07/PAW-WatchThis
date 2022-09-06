@@ -154,6 +154,10 @@
     font-size: 1.1vw;
 }
 
+.W-link-selected-color-red {
+    color: red;
+}
+
 .accordion {
     margin-left: 5%;
     margin-bottom: 5%;
