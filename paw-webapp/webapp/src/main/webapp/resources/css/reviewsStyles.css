@@ -12,7 +12,6 @@
 
 .W-img-size{
     width: 60%;
-
 }
 
 .W-star-style-info-page{
@@ -43,6 +42,15 @@
     display: flex;
     justify-content: space-between;
     align-content: center;
+}
+
+.W-card-title {
+    font-size: 2vw;
+}
+
+.W-card-body-aligment {
+    font-size: 1.5vw;
+    margin-top: 3%;
 }
 
 .W-no-reviews-icon{
@@ -144,6 +152,10 @@
     .W-reviewText {
         font-size: 1.5vw;
     }
+
+    .W-card-body-aligment {
+       font-size: 1.5vw;
+    }
 }
 
 @media (max-width: 800px) {
@@ -178,12 +190,17 @@
         flex-direction: column;
         align-items: flex-start;
         justify-content: center;
+        font-size: 2vw;
     }
 
     .W-img-aligment {
         display: flex;
         margin-top: 1%;
         justify-content: center;
+    }
+
+    .W-card-title {
+        font-size: 3vw;
     }
 }
 
@@ -210,6 +227,14 @@
 
     .W-reviewText {
         font-size: 3vw;
+    }
+
+    .W-card-title {
+        font-size: 3.5vw;
+    }
+
+    .W-card-body-aligment {
+        font-size: 2.5vw;
     }
 }
 
@@ -238,6 +263,14 @@
         font-size: 3.5vw;
     }
 
+    .W-card-body-aligment {
+        font-size: 3vw;
+    }
+
+    .W-card-title {
+        font-size: 4.2vw;
+    }
+
 }
 
 @media (max-width: 301px) {
@@ -263,6 +296,14 @@
     }
 
     .W-reviewText {
+        font-size: 4.5vw;
+    }
+
+    .W-card-body-aligment {
+        font-size: 3.5vw;
+    }
+
+    .W-card-title {
         font-size: 4.5vw;
     }
 

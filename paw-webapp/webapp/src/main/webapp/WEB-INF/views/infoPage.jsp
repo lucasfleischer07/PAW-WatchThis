@@ -27,7 +27,7 @@
               </div>
               <div class="col-md-8">
                 <div class="card-body W-card-body-aligment">
-                  <h5 class="card-title"><c:out value="${details.name}"/></h5>
+                  <h5 class="card-title W-card-title"><c:out value="${details.name}"/></h5>
                   <p class="card-text"><c:out value="${details.description}"/></p>
                   <p class="card-text"><span class="W-span-text-info-card-movie">Duration:</span> <c:out value="${details.duration}"/></p>
                   <p class="card-text"><span class="W-span-text-info-card-movie">Genre:</span> <c:out value="${details.genre}"/></p>

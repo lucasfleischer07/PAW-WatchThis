@@ -17,6 +17,9 @@
     height: 100%;
     width: 12%;
     margin-left: 1vw;
+    position: -webkit-sticky;
+    position: sticky;
+    top: -20%;
 }
 
 
