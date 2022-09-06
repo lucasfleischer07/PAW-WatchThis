@@ -17,7 +17,7 @@
 
   <body>
     <jsp:include page="components/header.jsp" />
-    <div class="W-column-display">
+    <div class="W-column-display W-word-break">
 
         <div>
           <div class="card W-inv-film-card-margin">
@@ -59,23 +59,39 @@
 
           </div>
 
-          <div class="W-add-review-button">
-            <a href="<c:url value="/reviewForm/${details.type}/${details.id}"/>"><button type="button" class="btn btn-dark">Add review</button></a>
-          </div>
-
         </div>
 
-      </div>
+      <div class="card W-inv-film-card-margin">
+        <div class="card-header W-card-header">
+          <h3 class="W-title-review">Reviews</h3>
+          <div class="W-add-review ">
+            <a href="<c:url value="/reviewForm/${details.type}/${details.id}"/>"><button type="button" class="btn btn-dark W-add-review-button W-reviewText">Add review</button></a>
+          </div>
+        </div>
 
-    <%--        TODO: el value de review score queda harcodeado porq no esta includio en el primer spint guardar, lo hacemos para el segundo--%>
-    <c:forEach var="review" items="${reviews}">
-      <jsp:include page="components/reviewCard.jsp">
-        <jsp:param name="reviewTitle" value="${review.name}" />
-        <jsp:param name="reviewDescription" value="${review.description}" />
-        <jsp:param name="reviewUsername" value="${review.userName}" />
-        <jsp:param name="reviewId" value="${review.reviewId}" />
-      </jsp:include>
-    </c:forEach>
+        <div class="card-body">
+          <c:forEach var="review" items="${reviews}">
+            <jsp:include page="components/reviewCard.jsp">
+              <jsp:param name="reviewTitle" value="${review.name}" />
+              <jsp:param name="reviewDescription" value="${review.description}" />
+              <jsp:param name="reviewUsername" value="${review.userName}" />
+              <jsp:param name="reviewId" value="${review.reviewId}" />
+            </jsp:include>
+          </c:forEach>
+          <c:if test="${reviews==null || reviews.size()==0}">
+              <div>
+                <div class="W-no-reviews-icon">
+                <img src="<c:url value="/resources/img/noReviews.png"/>"/>
+                </div>
+                <h3 class="W-no-reviews-text">There are no reviews for this movie yet.
+                    Be the first to add one!</h3>
+              </div>
+          </c:if>
+        </div>
+      </div>
+    </div>
+
+
 
 
 
