@@ -27,87 +27,1085 @@
 
     <p class="W-filter-title">Genre</p>
     <div class="list-group">
-        <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
-                                                                            <c:param name="genre" value="Action"/>
-                                                                            <c:param name="durationFrom" value="${param.durationFrom}"/>
-                                                                            <c:param name="durationTo" value="${param.durationTo}"/>
-                                                                            </c:url>">Action</a>
-        <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
-                                                                            <c:param name="genre" value="Sci-Fi"/>
-                                                                            <c:param name="durationFrom" value="${param.durationFrom}"/>
-                                                                             <c:param name="durationTo" value="${param.durationTo}"/>
-                                                                            </c:url>">Science Fiction</a>
-        <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
-                                                                             <c:param name="genre" value="Comedy"/>
-                                                                             <c:param name="durationFrom" value="${param.durationFrom}"/>
-                                                                             <c:param name="durationTo" value="${param.durationTo}"/>
-                                                                             </c:url>">Comedy</a>
-        <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
-                                                                             <c:param name="genre" value="Adventure"/>
-                                                                             <c:param name="durationFrom" value="${param.durationFrom}"/>
-                                                                             <c:param name="durationTo" value="${param.durationTo}"/>
-                                                                             </c:url>">Adventure</a>
-        <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
-                                                                            <c:param name="genre" value="Drama"/>
-                                                                            <c:param name="durationFrom" value="${param.durationFrom}"/>
-                                                                            <c:param name="durationTo" value="${param.durationTo}"/>
-                                                                            </c:url>">Drama</a>
-        <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
-                                                                            <c:param name="genre" value="Horror"/>
-                                                                            <c:param name="durationFrom" value="${param.durationFrom}"/>
-                                                                            <c:param name="durationTo" value="${param.durationTo}"/>
-                                                                            </c:url>">Horror</a>
-        <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
-                                                                            <c:param name="genre" value="Animation"/>
-                                                                            <c:param name="durationFrom" value="${param.durationFrom}"/>
-                                                                            <c:param name="durationTo" value="${param.durationTo}"/>
-                                                                            </c:url>">Animation</a>
-        <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
-                                                                            <c:param name="genre" value="Thrillers"/>
-                                                                            <c:param name="durationFrom" value="${param.durationFrom}"/>
-                                                                            <c:param name="durationTo" value="${param.durationTo}"/>
-                                                                            </c:url>">Thrillers</a>
-        <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
-                                                                            <c:param name="genre" value="Mystery"/>
-                                                                            <c:param name="durationFrom" value="${param.durationFrom}"/>
-                                                                            <c:param name="durationTo" value="${param.durationTo}"/>
-                                                                            </c:url>">Mystery</a>
-        <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
-                                                                            <c:param name="genre" value="Crime"/>
-                                                                            <c:param name="durationFrom" value="${param.durationFrom}"/>
-                                                                            <c:param name="durationTo" value="${param.durationTo}"/>
-                                                                            </c:url>">Crime</a>
-        <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
-                                                                            <c:param name="genre" value="Fantasy"/>
-                                                                            <c:param name="durationFrom" value="${param.durationFrom}"/>
-                                                                            <c:param name="durationTo" value="${param.durationTo}"/>
-                                                                            </c:url>">Fantasy</a>
-        <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
-                                                                            <c:param name="genre" value="Romance"/>
-                                                                            <c:param name="durationFrom" value="${param.durationFrom}"/>
-                                                                            <c:param name="durationTo" value="${param.durationTo}"/>
-                                                                            </c:url>">Romance</a>
+        <c:choose>
+            <c:when test="${param.genre == 'ANY'}">
+                <a class="list-group-item border-0  W-filter-items-text-style W-link-selected-color-red" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="ANY"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">None</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Action"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Action</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Sci-Fi"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                     <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Science Fiction</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                     <c:param name="genre" value="Comedy"/>
+                                                                                     <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                     <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                     </c:url>">Comedy</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                     <c:param name="genre" value="Adventure"/>
+                                                                                     <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                     <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                     </c:url>">Adventure</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Drama"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Drama</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Horror"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Horror</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Animation"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Animation</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Thriller"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Thriller</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Mystery"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Mystery</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Crime"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Crime</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Fantasy"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Fantasy</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Romance"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                   </c:url>">Romance</a>
+            </c:when>
+            <c:when test="${param.genre == 'Action'}">
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="ANY"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">None</a>
+                <a class="list-group-item border-0  W-filter-items-text-style W-link-selected-color-red" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Action"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Action</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Sci-Fi"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                     <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Science Fiction</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                     <c:param name="genre" value="Comedy"/>
+                                                                                     <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                     <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                     </c:url>">Comedy</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                     <c:param name="genre" value="Adventure"/>
+                                                                                     <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                     <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                     </c:url>">Adventure</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Drama"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Drama</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Horror"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Horror</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Animation"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Animation</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Thriller"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Thriller</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Mystery"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Mystery</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Crime"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Crime</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Fantasy"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Fantasy</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Romance"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                   </c:url>">Romance</a>
+            </c:when>
+            <c:when test="${param.genre == 'Sci-Fi'}">
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="ANY"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">None</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Action"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Action</a>
+                <a class="list-group-item border-0  W-filter-items-text-style W-link-selected-color-red" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Sci-Fi"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                     <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Science Fiction</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                     <c:param name="genre" value="Comedy"/>
+                                                                                     <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                     <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                     </c:url>">Comedy</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                     <c:param name="genre" value="Adventure"/>
+                                                                                     <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                     <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                     </c:url>">Adventure</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Drama"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Drama</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Horror"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Horror</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Animation"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Animation</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Thriller"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Thriller</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Mystery"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Mystery</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Crime"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Crime</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Fantasy"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Fantasy</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Romance"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                   </c:url>">Romance</a>
+            </c:when>
+            <c:when test="${param.genre == 'Comedy'}">
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="ANY"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">None</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Action"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Action</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Sci-Fi"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                     <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Science Fiction</a>
+                <a class="list-group-item border-0  W-filter-items-text-style W-link-selected-color-red" href="<c:url value="/${param.type}/filters">
+                                                                                     <c:param name="genre" value="Comedy"/>
+                                                                                     <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                     <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                     </c:url>">Comedy</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                     <c:param name="genre" value="Adventure"/>
+                                                                                     <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                     <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                     </c:url>">Adventure</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Drama"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Drama</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Horror"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Horror</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Animation"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Animation</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Thriller"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Thriller</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Mystery"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Mystery</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Crime"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Crime</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Fantasy"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Fantasy</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Romance"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                   </c:url>">Romance</a>
+            </c:when>
+            <c:when test="${param.genre == 'Adventure'}">
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="ANY"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">None</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Action"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Action</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Sci-Fi"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                     <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Science Fiction</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                     <c:param name="genre" value="Comedy"/>
+                                                                                     <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                     <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                     </c:url>">Comedy</a>
+                <a class="list-group-item border-0  W-filter-items-text-style W-link-selected-color-red" href="<c:url value="/${param.type}/filters">
+                                                                                     <c:param name="genre" value="Adventure"/>
+                                                                                     <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                     <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                     </c:url>">Adventure</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Drama"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Drama</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Horror"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Horror</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Animation"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Animation</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Thriller"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Thriller</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Mystery"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Mystery</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Crime"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Crime</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Fantasy"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Fantasy</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Romance"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                   </c:url>">Romance</a>
+            </c:when>
+            <c:when test="${param.genre == 'Drama'}">
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="ANY"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">None</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Action"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Action</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Sci-Fi"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                     <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Science Fiction</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                     <c:param name="genre" value="Comedy"/>
+                                                                                     <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                     <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                     </c:url>">Comedy</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                     <c:param name="genre" value="Adventure"/>
+                                                                                     <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                     <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                     </c:url>">Adventure</a>
+                <a class="list-group-item border-0  W-filter-items-text-style W-link-selected-color-red" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Drama"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Drama</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Horror"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Horror</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Animation"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Animation</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Thriller"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Thriller</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Mystery"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Mystery</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Crime"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Crime</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Fantasy"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Fantasy</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Romance"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                   </c:url>">Romance</a>
+            </c:when>
+            <c:when test="${param.genre == 'Horror'}">
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="ANY"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">None</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Action"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Action</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Sci-Fi"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                     <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Science Fiction</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                     <c:param name="genre" value="Comedy"/>
+                                                                                     <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                     <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                     </c:url>">Comedy</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                     <c:param name="genre" value="Adventure"/>
+                                                                                     <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                     <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                     </c:url>">Adventure</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Drama"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Drama</a>
+                <a class="list-group-item border-0  W-filter-items-text-style W-link-selected-color-red" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Horror"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Horror</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Animation"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Animation</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Thriller"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Thriller</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Mystery"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Mystery</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Crime"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Crime</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Fantasy"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Fantasy</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Romance"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                   </c:url>">Romance</a>
+            </c:when>
+            <c:when test="${param.genre == 'Animation'}">
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="ANY"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">None</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Action"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Action</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Sci-Fi"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                     <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Science Fiction</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                     <c:param name="genre" value="Comedy"/>
+                                                                                     <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                     <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                     </c:url>">Comedy</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                     <c:param name="genre" value="Adventure"/>
+                                                                                     <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                     <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                     </c:url>">Adventure</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Drama"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Drama</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Horror"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Horror</a>
+                <a class="list-group-item border-0  W-filter-items-text-style W-link-selected-color-red" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Animation"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Animation</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Thriller"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Thriller</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Mystery"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Mystery</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Crime"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Crime</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Fantasy"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Fantasy</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Romance"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                   </c:url>">Romance</a>
+            </c:when>
+            <c:when test="${param.genre == 'Thriller'}">
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="ANY"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">None</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Action"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Action</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Sci-Fi"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                     <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Science Fiction</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                     <c:param name="genre" value="Comedy"/>
+                                                                                     <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                     <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                     </c:url>">Comedy</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                     <c:param name="genre" value="Adventure"/>
+                                                                                     <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                     <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                     </c:url>">Adventure</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Drama"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Drama</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Horror"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Horror</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Animation"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Animation</a>
+                <a class="list-group-item border-0  W-filter-items-text-style W-link-selected-color-red" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Thriller"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Thriller</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Mystery"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Mystery</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Crime"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Crime</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Fantasy"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Fantasy</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Romance"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                   </c:url>">Romance</a>
+            </c:when>
+            <c:when test="${param.genre == 'Mystery'}">
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="ANY"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">None</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Action"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Action</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Sci-Fi"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                     <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Science Fiction</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                     <c:param name="genre" value="Comedy"/>
+                                                                                     <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                     <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                     </c:url>">Comedy</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                     <c:param name="genre" value="Adventure"/>
+                                                                                     <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                     <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                     </c:url>">Adventure</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Drama"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Drama</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Horror"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Horror</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Animation"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Animation</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Thriller"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Thriller</a>
+                <a class="list-group-item border-0  W-filter-items-text-style W-link-selected-color-red" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Mystery"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Mystery</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Crime"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Crime</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Fantasy"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Fantasy</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Romance"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                   </c:url>">Romance</a>
+            </c:when>
+            <c:when test="${param.genre == 'Crime'}">
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="ANY"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">None</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Action"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Action</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Sci-Fi"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                     <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Science Fiction</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                     <c:param name="genre" value="Comedy"/>
+                                                                                     <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                     <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                     </c:url>">Comedy</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                     <c:param name="genre" value="Adventure"/>
+                                                                                     <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                     <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                     </c:url>">Adventure</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Drama"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Drama</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Horror"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Horror</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Animation"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Animation</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Thriller"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Thriller</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Mystery"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Mystery</a>
+                <a class="list-group-item border-0  W-filter-items-text-style W-link-selected-color-red" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Crime"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Crime</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Fantasy"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Fantasy</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Romance"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                   </c:url>">Romance</a>
+            </c:when>
+            <c:when test="${param.genre == 'Fantasy'}">
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="ANY"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">None</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Action"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Action</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Sci-Fi"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                     <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Science Fiction</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                     <c:param name="genre" value="Comedy"/>
+                                                                                     <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                     <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                     </c:url>">Comedy</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                     <c:param name="genre" value="Adventure"/>
+                                                                                     <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                     <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                     </c:url>">Adventure</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Drama"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Drama</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Horror"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Horror</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Animation"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Animation</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Thriller"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Thriller</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Mystery"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Mystery</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Crime"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Crime</a>
+                <a class="list-group-item border-0  W-filter-items-text-style W-link-selected-color-red" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Fantasy"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Fantasy</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Romance"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                   </c:url>">Romance</a>
+            </c:when>
+            <c:when test="${param.genre == 'Romance'}">
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="ANY"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">None</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Action"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Action</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Sci-Fi"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                     <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Science Fiction</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                     <c:param name="genre" value="Comedy"/>
+                                                                                     <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                     <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                     </c:url>">Comedy</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                     <c:param name="genre" value="Adventure"/>
+                                                                                     <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                     <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                     </c:url>">Adventure</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Drama"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Drama</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Horror"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Horror</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Animation"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Animation</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Thriller"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Thriller</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Mystery"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Mystery</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Crime"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Crime</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Fantasy"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Fantasy</a>
+                <a class="list-group-item border-0  W-filter-items-text-style W-link-selected-color-red" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Romance"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                   </c:url>">Romance</a>
+            </c:when>
+            <c:otherwise>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="ANY"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">None</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Action"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Action</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Sci-Fi"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                     <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Science Fiction</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                     <c:param name="genre" value="Comedy"/>
+                                                                                     <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                     <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                     </c:url>">Comedy</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                     <c:param name="genre" value="Adventure"/>
+                                                                                     <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                     <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                     </c:url>">Adventure</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Drama"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Drama</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Horror"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Horror</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Animation"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Animation</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Thriller"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Thriller</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Mystery"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Mystery</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Crime"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Crime</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Fantasy"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                    </c:url>">Fantasy</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Romance"/>
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                   </c:url>">Romance</a>
+            </c:otherwise>
+        </c:choose>
     </div>
 
     <p class="W-filter-title">Duration</p>
     <div class="list-group">
 
-        <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
-                                                                            <c:param name="genre" value="${param.genre}"/>
-                                                                            <c:param name="durationFrom" value="0"/>-<c:param name="durationTo" value="90"/>
-                                                                            </c:url>">0-90 minutes</a>
-        <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
-                                                                            <c:param name="genre" value="${param.genre}"/>
-                                                                            <c:param name="durationFrom" value="90"/>-<c:param name="durationTo" value="120"/>
-                                                                            </c:url>">90-120 minutes</a>
-        <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
-                                                                            <c:param name="genre" value="${param.genre}"/>
-                                                                            <c:param name="durationFrom" value="120"/>-<c:param name="durationTo" value="150"/>
-                                                                            </c:url>">120-150 minutes</a>
-        <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
-                                                                            <c:param name="genre" value="${param.genre}"/>
-                                                                            <c:param name="durationFrom" value="150"/>-<c:param name="durationTo" value="1000"/>
-                                                                            </c:url>">150 or more</a>
+        <c:choose>
+            <c:when test="${param.durationFrom == 'ANY'}">
+                <a class="list-group-item border-0  W-filter-items-text-style W-link-selected-color-red" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="${param.genre}"/>
+                                                                                    <c:param name="durationFrom" value="ANY"/>-<c:param name="durationTo" value="ANY"/>
+                                                                                    </c:url>">None</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="${param.genre}"/>
+                                                                                    <c:param name="durationFrom" value="0"/>-<c:param name="durationTo" value="90"/>
+                                                                                    </c:url>">0-90 minutes</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="${param.genre}"/>
+                                                                                    <c:param name="durationFrom" value="90"/>-<c:param name="durationTo" value="120"/>
+                                                                                    </c:url>">90-120 minutes</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="${param.genre}"/>
+                                                                                    <c:param name="durationFrom" value="120"/>-<c:param name="durationTo" value="150"/>
+                                                                                    </c:url>">120-150 minutes</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="${param.genre}"/>
+                                                                                    <c:param name="durationFrom" value="150"/>-<c:param name="durationTo" value="1000"/>
+                                                                                    </c:url>">150 or more</a>
+            </c:when>
+            <c:when test="${param.durationFrom == '0'}">
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="${param.genre}"/>
+                                                                                    <c:param name="durationFrom" value="ANY"/>-<c:param name="durationTo" value="ANY"/>
+                                                                                    </c:url>">None</a>
+                <a class="list-group-item border-0  W-filter-items-text-style W-link-selected-color-red" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="${param.genre}"/>
+                                                                                    <c:param name="durationFrom" value="0"/>-<c:param name="durationTo" value="90"/>
+                                                                                    </c:url>">0-90 minutes</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="${param.genre}"/>
+                                                                                    <c:param name="durationFrom" value="90"/>-<c:param name="durationTo" value="120"/>
+                                                                                    </c:url>">90-120 minutes</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="${param.genre}"/>
+                                                                                    <c:param name="durationFrom" value="120"/>-<c:param name="durationTo" value="150"/>
+                                                                                    </c:url>">120-150 minutes</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="${param.genre}"/>
+                                                                                    <c:param name="durationFrom" value="150"/>-<c:param name="durationTo" value="1000"/>
+                                                                                    </c:url>">150 or more</a>
+            </c:when>
+            <c:when test="${param.durationFrom == '90'}">
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="${param.genre}"/>
+                                                                                    <c:param name="durationFrom" value="ANY"/>-<c:param name="durationTo" value="ANY"/>
+                                                                                    </c:url>">None</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="${param.genre}"/>
+                                                                                    <c:param name="durationFrom" value="0"/>-<c:param name="durationTo" value="90"/>
+                                                                                    </c:url>">0-90 minutes</a>
+                <a class="list-group-item border-0  W-filter-items-text-style W-link-selected-color-red" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="${param.genre}"/>
+                                                                                    <c:param name="durationFrom" value="90"/>-<c:param name="durationTo" value="120"/>
+                                                                                    </c:url>">90-120 minutes</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="${param.genre}"/>
+                                                                                    <c:param name="durationFrom" value="120"/>-<c:param name="durationTo" value="150"/>
+                                                                                    </c:url>">120-150 minutes</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="${param.genre}"/>
+                                                                                    <c:param name="durationFrom" value="150"/>-<c:param name="durationTo" value="1000"/>
+                                                                                    </c:url>">150 or more</a>
+            </c:when>
+            <c:when test="${param.durationFrom == '120'}">
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="${param.genre}"/>
+                                                                                    <c:param name="durationFrom" value="ANY"/>-<c:param name="durationTo" value="ANY"/>
+                                                                                    </c:url>">None</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="${param.genre}"/>
+                                                                                    <c:param name="durationFrom" value="0"/>-<c:param name="durationTo" value="90"/>
+                                                                                    </c:url>">0-90 minutes</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="${param.genre}"/>
+                                                                                    <c:param name="durationFrom" value="90"/>-<c:param name="durationTo" value="120"/>
+                                                                                    </c:url>">90-120 minutes</a>
+                <a class="list-group-item border-0  W-filter-items-text-style W-link-selected-color-red" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="${param.genre}"/>
+                                                                                    <c:param name="durationFrom" value="120"/>-<c:param name="durationTo" value="150"/>
+                                                                                    </c:url>">120-150 minutes</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="${param.genre}"/>
+                                                                                    <c:param name="durationFrom" value="150"/>-<c:param name="durationTo" value="1000"/>
+                                                                                    </c:url>">150 or more</a>
+            </c:when>
+            <c:when test="${param.durationFrom == '150'}">
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="${param.genre}"/>
+                                                                                    <c:param name="durationFrom" value="ANY"/>-<c:param name="durationTo" value="ANY"/>
+                                                                                    </c:url>">None</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="${param.genre}"/>
+                                                                                    <c:param name="durationFrom" value="0"/>-<c:param name="durationTo" value="90"/>
+                                                                                    </c:url>">0-90 minutes</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="${param.genre}"/>
+                                                                                    <c:param name="durationFrom" value="90"/>-<c:param name="durationTo" value="120"/>
+                                                                                    </c:url>">90-120 minutes</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="${param.genre}"/>
+                                                                                    <c:param name="durationFrom" value="120"/>-<c:param name="durationTo" value="150"/>
+                                                                                    </c:url>">120-150 minutes</a>
+                <a class="list-group-item border-0  W-filter-items-text-style W-link-selected-color-red" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="${param.genre}"/>
+                                                                                    <c:param name="durationFrom" value="150"/>-<c:param name="durationTo" value="1000"/>
+                                                                                    </c:url>">150 or more</a>
+            </c:when>
+            <c:otherwise>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="${param.genre}"/>
+                                                                                    <c:param name="durationFrom" value="ANY"/>-<c:param name="durationTo" value="ANY"/>
+                                                                                    </c:url>">None</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="${param.genre}"/>
+                                                                                    <c:param name="durationFrom" value="0"/>-<c:param name="durationTo" value="90"/>
+                                                                                    </c:url>">0-90 minutes</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="${param.genre}"/>
+                                                                                    <c:param name="durationFrom" value="90"/>-<c:param name="durationTo" value="120"/>
+                                                                                    </c:url>">90-120 minutes</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="${param.genre}"/>
+                                                                                    <c:param name="durationFrom" value="120"/>-<c:param name="durationTo" value="150"/>
+                                                                                    </c:url>">120-150 minutes</a>
+                <a class="list-group-item border-0  W-filter-items-text-style" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="${param.genre}"/>
+                                                                                    <c:param name="durationFrom" value="150"/>-<c:param name="durationTo" value="1000"/>
+                                                                                    </c:url>">150 or more</a>
+            </c:otherwise>
+        </c:choose>
     </div>
 
 <%-- TODO: VER SI DESPUES LO VAMOS A AGREGAR--%>

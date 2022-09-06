@@ -78,12 +78,17 @@
                             </c:choose>
                             <ul class="dropdown-menu" aria-labelledby="genreGroupDrop">
                                 <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
+                                                                            <c:param name="genre" value="ANY"/>
+                                                                            <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                            <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                            </c:url>" onclick="showGenre(this)">None</a></li>
+                                <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
                                                                             <c:param name="genre" value="Action"/>
                                                                             <c:param name="durationFrom" value="${param.durationFrom}"/>
                                                                             <c:param name="durationTo" value="${param.durationTo}"/>
                                                                             </c:url>" onclick="showGenre(this)">Action</a></li>
                                 <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
-                                                                            <c:param name="genre" value="Sci-fi"/>
+                                                                            <c:param name="genre" value="Sci-Fi"/>
                                                                             <c:param name="durationFrom" value="${param.durationFrom}"/>
                                                                             <c:param name="durationTo" value="${param.durationTo}"/>
                                                                             </c:url>" onclick="showGenre(this)">Science Fiction</a></li>
@@ -160,6 +165,10 @@
                                 </c:otherwise>
                             </c:choose>
                             <ul class="dropdown-menu" aria-labelledby="durationGroupDrop">
+                                <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
+                                                                            <c:param name="genre" value="${param.genre}"/>
+                                                                            <c:param name="durationFrom" value="ANY"/>-<c:param name="durationTo" value="ANY"/>
+                                                                            </c:url>" onclick="showDuration(this)">None</a></li>
                                 <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
                                                                             <c:param name="genre" value="${param.genre}"/>
                                                                             <c:param name="durationFrom" value="0"/>-<c:param name="durationTo" value="90"/>

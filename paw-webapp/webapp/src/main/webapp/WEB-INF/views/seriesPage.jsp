@@ -16,7 +16,12 @@
         <title>Series</title>
     </head>
     <body>
-    <jsp:include page="components/header.jsp" />
+    <jsp:include page="components/header.jsp">
+        <jsp:param name="type" value="series"/>
+        <jsp:param name="genre" value="${genre}"/>
+        <jsp:param name="durationFrom" value="${durationFrom}"/>
+        <jsp:param name="durationTo" value="${durationTo}"/>
+    </jsp:include>
 
     <div class="W-row-display">
         <jsp:include page="components/filter.jsp">

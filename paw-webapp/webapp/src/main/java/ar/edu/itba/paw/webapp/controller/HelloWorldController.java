@@ -93,7 +93,10 @@ public class HelloWorldController {
                 serieListFilter = ss.findByGenre(genre);
             } else if(Objects.equals(genre, "ANY") && (!Objects.equals(durationFrom, "ANY"))) {
                 serieListFilter = ss.findByDuration(Integer.parseInt(durationFrom), Integer.parseInt(durationTo));
-            } else {    // Caso de que si los filtros estan vacios
+            } else if(!Objects.equals(durationFrom, "ANY") && !Objects.equals(genre, "ANY")){    // Caso de que si los filtros estan vacios
+                serieListFilter = ss.findByDurationAndGenre(genre,Integer.parseInt(durationFrom),Integer.parseInt(durationTo));
+            }
+            else {    // Caso de que si los filtros estan vacios
                 serieListFilter = ss.getAllSeries();
             }
 
