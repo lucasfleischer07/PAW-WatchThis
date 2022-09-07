@@ -193,6 +193,10 @@ public class HelloWorldController {
     @RequestMapping(value = "/reviewForm/movie/{id:[0-9]+}", method = {RequestMethod.GET})
     public ModelAndView reviewFormCreateMovies(@ModelAttribute("registerForm") final ReviewForm reviewForm, @PathVariable("id")final long id) {
         final ModelAndView mav = new ModelAndView("reviewRegistration");
+        Optional<Movie> movieWithId = ms.findById(id);
+        if(!movieWithId.isPresent()){
+            throw new PageNotFoundException();
+        }
         mav.addObject("id", id);
         mav.addObject("type", "movie");
         return mav;
