@@ -21,7 +21,7 @@
                 <div class="W-navbar-hamburger-postion">
                     <ul class="navbar-nav justify-content-between flex-grow-1 pe-3 W-navitem-list">
                         <c:choose>
-                            <c:when test="${param.type == 'movies'}">
+                            <c:when test="${param.type == 'movies' || param.type == 'movie'}">
                                 <li class="nav-item W-home-button-hamburger-button" style="display: none">
                                     <a class="nav-link" aria-current="page" href="<c:url value="/"/>">Home</a>
                                 </li>
@@ -32,7 +32,7 @@
                                     <a class="nav-link" href="<c:url value="/series"/>">Series</a>
                                 </li>
                             </c:when>
-                            <c:otherwise>
+                            <c:when test="${param.type == 'series' || param.type == 'serie'}">
                                 <li class="nav-item W-home-button-hamburger-button" style="display: none">
                                     <a class="nav-link" aria-current="page" href="<c:url value="/"/>">Home</a>
                                 </li>
@@ -41,6 +41,17 @@
                                 </li>
                                 <li class="nav-item W-nav-item">
                                     <a class="nav-link active" href="<c:url value="/series"/>">Series</a>
+                                </li>
+                            </c:when>
+                            <c:otherwise>
+                                <li class="nav-item W-home-button-hamburger-button" style="display: none">
+                                    <a class="nav-link" aria-current="page" href="<c:url value="/"/>">Home</a>
+                                </li>
+                                <li class="nav-item W-nav-item">
+                                    <a class="nav-link" aria-current="page" href="<c:url value="/"/>">Movies</a>
+                                </li>
+                                <li class="nav-item W-nav-item">
+                                    <a class="nav-link" href="<c:url value="/series"/>">Series</a>
                                 </li>
                             </c:otherwise>
                         </c:choose>
@@ -118,10 +129,10 @@
                                                                             <c:param name="durationTo" value="${param.durationTo}"/>
                                                                             </c:url>" onclick="showGenre(this)">Animation</a></li>
                                 <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
-                                                                            <c:param name="genre" value="Thrillers"/>
+                                                                            <c:param name="genre" value="Thriller"/>
                                                                             <c:param name="durationFrom" value="${param.durationFrom}"/>
                                                                             <c:param name="durationTo" value="${param.durationTo}"/>
-                                                                            </c:url>" onclick="showGenre(this)">Thrillers</a></li>
+                                                                            </c:url>" onclick="showGenre(this)">Thriller</a></li>
                                 <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
                                                                             <c:param name="genre" value="Mystery"/>
                                                                             <c:param name="durationFrom" value="${param.durationFrom}"/>
