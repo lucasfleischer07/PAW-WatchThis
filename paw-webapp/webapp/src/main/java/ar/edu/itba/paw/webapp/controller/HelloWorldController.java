@@ -8,10 +8,9 @@ import ar.edu.itba.paw.services.MovieService;
 import ar.edu.itba.paw.services.ReviewService;
 import ar.edu.itba.paw.services.SerieService;
 import ar.edu.itba.paw.services.UserService;
-import ar.edu.itba.paw.webapp.exceptions.UserNotFoundException;
+import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
 import ar.edu.itba.paw.webapp.form.ReviewForm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -48,7 +46,7 @@ public class HelloWorldController {
         List<Movie> movieList = ms.getAllMovies();
 
         if(movieList == null) {
-            throw new UserNotFoundException();
+            throw new PageNotFoundException();
         } else {
             mav.addObject("movies", movieList);
         }
@@ -58,10 +56,10 @@ public class HelloWorldController {
     @RequestMapping("/movie/{movieId:[0-9]+}")
     public ModelAndView movieReview(@PathVariable("movieId")final long movieId) {
         final ModelAndView mav = new ModelAndView("infoPage");
-        mav.addObject("details", ms.findById(movieId).orElseThrow(UserNotFoundException::new));
+        mav.addObject("details", ms.findById(movieId).orElseThrow(PageNotFoundException::new));
         List<Review> reviewList = rs.getAllReviews("movie",movieId);
         if( reviewList == null) {
-            throw new UserNotFoundException();
+            throw new PageNotFoundException();
         } else {
             mav.addObject("reviews", reviewList);
         }
@@ -103,7 +101,7 @@ public class HelloWorldController {
             }
 
             if(movieListFilter == null) {
-                throw new UserNotFoundException();
+                throw new PageNotFoundException();
             } else {
                 mav.addObject("movies", movieListFilter);
             }
@@ -126,7 +124,7 @@ public class HelloWorldController {
             }
 
             if(serieListFilter == null) {
-                throw new UserNotFoundException();
+                throw new PageNotFoundException();
             } else {
                 mav.addObject("series", serieListFilter);
             }
@@ -144,7 +142,7 @@ public class HelloWorldController {
         final ModelAndView mav = new ModelAndView("seriesPage");
         List<Serie> seriesList = ss.getAllSeries();
         if( seriesList == null) {
-            throw new UserNotFoundException();
+            throw new PageNotFoundException();
         } else {
             mav.addObject("series", seriesList);
         }
@@ -178,10 +176,10 @@ public class HelloWorldController {
     @RequestMapping("/serie/{serieId:[0-9]+}")
     public ModelAndView serieReview(@PathVariable("serieId")final long serieId) {
         final ModelAndView mav = new ModelAndView("infoPage");
-        mav.addObject("details", ss.findById(serieId).orElseThrow(UserNotFoundException::new));
+        mav.addObject("details", ss.findById(serieId).orElseThrow(PageNotFoundException::new));
         List<Review> reviewList = rs.getAllReviews("serie",serieId);
         if( reviewList == null) {
-            throw new UserNotFoundException();
+            throw new PageNotFoundException();
         } else {
             mav.addObject("reviews", reviewList);
         }
@@ -249,9 +247,9 @@ public class HelloWorldController {
 
 
     // * ----------------------------------- Errors Page -----------------------------------------------------------------------
-    @ExceptionHandler(UserNotFoundException.class)
+    @ExceptionHandler(PageNotFoundException.class)
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
-    public ModelAndView userNotFound(){
+    public ModelAndView PageNotFound(){
         return new ModelAndView("errors");
     }
     // * -----------------------------------------------------------------------------------------------------------------------
