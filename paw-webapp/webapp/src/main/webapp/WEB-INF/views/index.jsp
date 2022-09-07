@@ -43,20 +43,20 @@
                             <jsp:param name="type" value="${movie.type}"/>
                         </jsp:include>
                     </c:forEach>
-                    <c:if test="${movies==null || movies.size()==0}">
-                        <div class="card W-not-found-card">
-                            <div class="card-body W-row-display" >
-                                <div>
-                                    <img class="W-not-found" src="<c:url value="/resources/img/noResults.png"/>" alt="Not_Found_Ing"/>
-                                </div>
-                                <div>
-                                    <h4 class="W-not-found-message"> We looked everywhere, but we couldn't find any movies with these filters.</h4>
-                                </div>
-                            </div>
-                        </div>
-                    </c:if>
                 </div>
             </div>
+            <c:if test="${movies==null || movies.size()==0}">
+                <div class="card W-not-found-card">
+                    <div class="card-body W-row-display" >
+                        <div>
+                            <img class="W-not-found" src="<c:url value="/resources/img/noResults.png"/>" alt="Not_Found_Ing"/>
+                        </div>
+                        <div>
+                            <h4 class="W-not-found-message"> We looked everywhere, but we couldn't find any movies with these filters.</h4>
+                        </div>
+                    </div>
+                </div>
+            </c:if>
         </div>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>

@@ -11,6 +11,8 @@ import ar.edu.itba.paw.services.UserService;
 import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
 import ar.edu.itba.paw.webapp.form.ReviewForm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -211,10 +213,20 @@ public class HelloWorldController {
         //Primero intenta agregar el usuario, luego intenta agregar la review
         Optional<Long> userId = us.register(newUser);
         //Falta Agregar mensaje de error para el caso -1 (si falla en el pedido)
-        if(userId.get() != -1) {
+        if(userId.get() == -1) {
+            ModelAndView mav=reviewFormCreateMovies(form,id);
+            mav.addObject("errorMsg","This username or mail is already in use.");
+            return mav;
+        }
+        try {
             Review newReview = new Review( null,"movie",id,null,userId.get(),form.getName(),form.getDescription());    //ReviewId va en null por que eso lo asigna la tabla
             newReview.setId(id);
             rs.addReview(newReview);
+        }
+        catch(DuplicateKeyException e){
+            ModelAndView mav=reviewFormCreateMovies(form,id);
+            mav.addObject("errorMsg","You have already written a review for this movie.");
+            return mav;
         }
         return new ModelAndView("redirect:/movie/"+id);
     }
@@ -225,6 +237,10 @@ public class HelloWorldController {
     @RequestMapping(value = "/reviewForm/serie/{id:[0-9]+}", method = {RequestMethod.GET})
     public ModelAndView reviewFormCreateSeries(@ModelAttribute("registerForm") final ReviewForm reviewForm, @PathVariable("id")final long id) {
         final ModelAndView mav = new ModelAndView("reviewRegistration");
+        Optional<Serie> serieWithId = ss.findById(id);
+        if(!serieWithId.isPresent()){
+            throw new PageNotFoundException();
+        }
         mav.addObject("id", id);
         mav.addObject("type", "serie");
         return mav;
@@ -239,11 +255,20 @@ public class HelloWorldController {
         //Primero intenta agregar el usuario, luego intenta agregar la review
         Optional<Long> userId = us.register(newUser);
         //Falta Agregar mensaje de error para el caso -1 (si falla en el pedido)
-        if (userId.get() != -1) {
-            Review newReview = new Review(null,"serie",null,id,userId.get(),form.getName(),form.getDescription() );    //ReviewId va en null por que eso lo asigna la tabla
+        if(userId.get() == -1) {
+            ModelAndView mav=reviewFormCreateSeries(form,id);
+            mav.addObject("errorMsg","This username or mail is already in use.");
+            return mav;
+        }
+        try {
+            Review newReview = new Review( null,"serie",null,id,userId.get(),form.getName(),form.getDescription());    //ReviewId va en null por que eso lo asigna la tabla
             newReview.setId(id);
             rs.addReview(newReview);
-
+        }
+        catch(DuplicateKeyException e){
+            ModelAndView mav=reviewFormCreateSeries(form,id);
+            mav.addObject("errorMsg","You have already written a review for this serie.");
+            return mav;
         }
         return new ModelAndView("redirect:/serie/"+id);
     }

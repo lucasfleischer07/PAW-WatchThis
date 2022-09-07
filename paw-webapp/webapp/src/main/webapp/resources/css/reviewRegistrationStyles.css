@@ -1,7 +1,9 @@
 .W-movieCardStyle-ReviewForm{
     width: 40%;
 }
-
+W-register-errorMsg{
+    text-align: center;
+}
 .W-general-div-review-info {
     display: flex;
     flex-direction: column;
