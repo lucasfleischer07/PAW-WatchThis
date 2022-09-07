@@ -9,7 +9,7 @@ public class ReviewForm {
     private String name;
 
     @Size(min = 20, max = 500)
-    @Pattern(regexp	= "[a-zA-Z0-9!,.:;=+\n\\-_()?<>$%&#@{}\\[\\]|*\"'~`^\\s]+")
+    @Pattern(regexp	= "[a-zA-Z0-9!,.:;=+\n\\-_()?<>$%&#@{}\\[\\]|*\"'~/`^\\s]+")
     private String description;
 
     @Size(min = 4, max = 30)
