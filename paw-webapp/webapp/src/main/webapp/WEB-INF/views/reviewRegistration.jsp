@@ -26,6 +26,14 @@
         <form:form modelAttribute="registerForm" action="${postPath}" method="post">
             <div class="W-general-div-review-info">
                 <div class="card W-review-card">
+                    <c:if test="${errorMsg!=null && errorMsg != ''}">
+                        <div class="alert alert-danger d-flex align-items-center" role="alert">
+                            <div class W-register-errorMsg>
+                                <c:out value="${errorMsg}"/>
+                            </div>
+                        </div>
+
+                    </c:if>
                     <div class="mb-3 W-input-label-review-info">
                         <form:errors path="userName" element="p" cssStyle="color: red"/>
                         <form:label class="form-label" path="userName">Username</form:label>
@@ -54,22 +62,7 @@
             </div>
         </form:form>
 
-        <div class="modal fade" id="errorModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        ...
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
     </body>
 </html>

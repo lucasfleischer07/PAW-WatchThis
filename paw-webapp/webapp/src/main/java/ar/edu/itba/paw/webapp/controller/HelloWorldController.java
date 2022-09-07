@@ -12,6 +12,7 @@ import ar.edu.itba.paw.webapp.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.webapp.form.ReviewForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -209,10 +210,20 @@ public class HelloWorldController {
         //Primero intenta agregar el usuario, luego intenta agregar la review
         Optional<Long> userId = us.register(newUser);
         //Falta Agregar mensaje de error para el caso -1 (si falla en el pedido)
-        if(userId.get() != -1) {
+        if(userId.get() == -1) {
+            ModelAndView mav=reviewFormCreateMovies(form,id);
+            mav.addObject("errorMsg","This username or mail is already in use.");
+            return mav;
+        }
+        try {
             Review newReview = new Review( null,"movie",id,null,userId.get(),form.getName(),form.getDescription());    //ReviewId va en null por que eso lo asigna la tabla
             newReview.setId(id);
             rs.addReview(newReview);
+        }
+        catch(DuplicateKeyException e){
+            ModelAndView mav=reviewFormCreateMovies(form,id);
+            mav.addObject("errorMsg","You have already written a review for this.");
+            return mav;
         }
         return new ModelAndView("redirect:/movie/"+id);
     }
