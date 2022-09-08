@@ -13,18 +13,17 @@
 
 .W-filter-div {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     height: 100%;
-    width: 12%;
     margin-left: 1vw;
-    position: -webkit-sticky;
-    position: sticky;
-    top: -30%;
+    margin-top: 1.5vw;
+    z-index: 1;
 }
 
 
 .W-films-div{
-    padding: 3%;
+    padding-right: 5%;
+    padding-left: 5%;
 }
 
 .W-row-display {
@@ -32,13 +31,20 @@
     flex-direction: row;
 }
 
-.W-filter-title{
+.W-filter-title {
     padding-left: 3%;
-    padding-top: 10%;
     margin-bottom: 1%;
     padding-bottom: 1%;
     font-size: 1.5vw;
     font-weight: bold;
+    width: 9vw;
+    border-color: darkred;
+}
+
+.W-dropdown-button {
+    mmargin-top: 2vw;
+    margin-right: 8vw;
+    margin-bottom: 1vw;
 }
 
 .W-films-margin{
@@ -46,8 +52,16 @@
 }
 
 .W-line-style{
-    margin-left: 1vw;
-    width: 5px;
+    width: 100vw;
+    color: inherit;
+    border: 0;
+    border-top: 1px solid;
+    opacity: .85;
+}
+
+.W-films-card-body {
+    display: flex;
+    align-items: flex-start;
 }
 
 .W-card-design{
@@ -131,7 +145,11 @@
 }
 
 .W-movie-description {
-    font-size: 1.5vw;
+    font-size: 1vw;
+}
+
+.W-card-details-color {
+    color: darkred;
 }
 
 .W-star-color{
@@ -197,7 +215,7 @@
     }
 
     .W-movie-description {
-        font-size: 1.2vw;
+        font-size: 0.7vw;
     }
 }
 
@@ -207,7 +225,7 @@
     }
 
     .W-movie-description {
-        font-size: 1.3vw;
+        font-size: 0.6vw;
     }
 }
 

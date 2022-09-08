@@ -17,7 +17,6 @@
 
 .W-nav-item {
     display: flex;
-    margin-left: 30%;
     font-size: 30px;
 }
 
@@ -30,18 +29,22 @@
 .W-navbar-buttons-acomodation {
     height: 100%;
     display: flex;
+    overflow-y: visible;
+    align-content: stretch;
+    align-items: center;
     justify-content: space-around;
-    margin-right: 25%;
+    flex-direction: row;
 }
 
 
 .W-navbar-hamburger-postion {
     display: flex;
     margin-right: 90px;
+    width: 20vw;
 }
 
 .W-navbar-search {
-    display: none;
+    display: flex;
     margin-right: 40px;
     margin-left: 80px;
 }
@@ -56,6 +59,11 @@
 
 .W-confirm-filters-button {
     margin-top: 15%;
+    display: flex;
+    justify-content: center;
+}
+
+.W-nav-login-button {
     display: flex;
     justify-content: center;
 }
@@ -109,14 +117,13 @@
     }
 
     .W-navbar-search {
-        display: none;
+        display: flex;
         margin: 20px 0 20px 0;
     }
 
     .W-nav-login-button {
-        display: none !important;
+        display: flex;
         justify-content: center;
-        margin-top: 20px;
     }
 
     .W-filters-hamburger-buttons {
@@ -215,6 +222,7 @@
 
 .W-searchbar {
     display: flex;
+    margin-bottom: 0vw;
 }
 
 .W-search-button-color {

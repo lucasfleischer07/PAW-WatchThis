@@ -28,6 +28,25 @@ W-register-errorMsg{
     margin-top: 1%;
 }
 
+.W-review-registration-text {
+    font-size: 0.6vw;
+    color: #636464;
+}
+
+.W-review-registration-img {
+    width: 8vw;
+}
+
+.W-review-registration-img-and-name {
+    display: flex;
+    align-items: center;
+    margin: 1vw 0 2vw 0;
+}
+
+.W-review-registration-name {
+    margin-left: 2vw;
+}
+
 @media (max-width: 591px) {
     .W-submit-cancel-buttons {
         margin-top: 3%;

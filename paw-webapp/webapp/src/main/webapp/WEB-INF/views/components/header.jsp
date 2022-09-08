@@ -29,7 +29,7 @@
                                     <a class="nav-link active" aria-current="page" href="<c:url value="/"/>">Movies</a>
                                 </li>
                                 <li class="nav-item W-nav-item">
-                                    <a class="nav-link" href="<c:url value="/series"/>">Series</a>
+                                    <a class="nav-link" href="<c:url value="/series"/>">Tv Shows</a>
                                 </li>
                             </c:when>
                             <c:when test="${param.type == 'series' || param.type == 'serie'}">
@@ -40,7 +40,7 @@
                                     <a class="nav-link" aria-current="page" href="<c:url value="/"/>">Movies</a>
                                 </li>
                                 <li class="nav-item W-nav-item">
-                                    <a class="nav-link active" href="<c:url value="/series"/>">Series</a>
+                                    <a class="nav-link active" href="<c:url value="/series"/>">Tv Shows</a>
                                 </li>
                             </c:when>
                             <c:otherwise>
@@ -51,7 +51,7 @@
                                     <a class="nav-link" aria-current="page" href="<c:url value="/"/>">Movies</a>
                                 </li>
                                 <li class="nav-item W-nav-item">
-                                    <a class="nav-link" href="<c:url value="/series"/>">Series</a>
+                                    <a class="nav-link" href="<c:url value="/series"/>">Tv Shows</a>
                                 </li>
                             </c:otherwise>
                         </c:choose>
@@ -92,7 +92,7 @@
                                                                             <c:param name="genre" value="ANY"/>
                                                                             <c:param name="durationFrom" value="${param.durationFrom}"/>
                                                                             <c:param name="durationTo" value="${param.durationTo}"/>
-                                                                            </c:url>" onclick="showGenre(this)">None</a></li>
+                                                                            </c:url>" onclick="showGenre(this)">Clear filter</a></li>
                                 <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
                                                                             <c:param name="genre" value="Action"/>
                                                                             <c:param name="durationFrom" value="${param.durationFrom}"/>
@@ -179,7 +179,7 @@
                                 <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
                                                                             <c:param name="genre" value="${param.genre}"/>
                                                                             <c:param name="durationFrom" value="ANY"/>-<c:param name="durationTo" value="ANY"/>
-                                                                            </c:url>" onclick="showDuration(this)">None</a></li>
+                                                                            </c:url>" onclick="showDuration(this)">Clear filter</a></li>
                                 <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
                                                                             <c:param name="genre" value="${param.genre}"/>
                                                                             <c:param name="durationFrom" value="0"/>-<c:param name="durationTo" value="90"/>
@@ -227,7 +227,7 @@
                         <button class="btn btn-success W-search-button-color" type="submit">Search</button>
                     </form>
                 </div>
-                <div class="W-nav-login-button" style="display: none">
+                <div class="W-nav-login-button">
                     <button class="btn btn-success" type="submit">Login</button>
                 </div>
             </div>

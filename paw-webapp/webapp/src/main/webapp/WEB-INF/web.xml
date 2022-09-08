@@ -40,9 +40,9 @@
     <servlet-name>dispatcher</servlet-name>
     <url-pattern>/</url-pattern>
   </servlet-mapping>
-  <error-page>
+  <!--<error-page>
     <location>/errors</location>
-  </error-page>
+  </error-page>-->
 
 
 </web-app>

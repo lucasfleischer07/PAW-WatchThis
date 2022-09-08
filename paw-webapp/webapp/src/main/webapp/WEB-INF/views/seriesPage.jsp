@@ -13,7 +13,7 @@
         <link href="<c:url value="/resources/css/homeStyles.css"/>" rel="stylesheet" type="text/css"/>
         <link href="<c:url value="/resources/css/navBarStyles.css"/>" rel="stylesheet" type="text/css"/>
         <link href="<c:url value="/resources/css/reviewsStyles.css"/>" rel="stylesheet" type="text/css"/>
-        <title>Series</title>
+        <title>Tv Shows</title>
     </head>
     <body>
     <jsp:include page="components/header.jsp">
@@ -36,7 +36,9 @@
                 <c:forEach var="serie" items="${series}">
                     <jsp:include page="components/serieCard.jsp">
                         <jsp:param name="serieName" value="${serie.name}"/>
-                        <jsp:param name="serieDescription" value="${serie.description}"/>
+                        <jsp:param name="serieReleased" value="${serie.released}"/>
+                        <jsp:param name="serieCreator" value="${serie.creator}"/>
+                        <jsp:param name="serieGenre" value="${serie.genre}"/>
                         <jsp:param name="serieImage" value="${serie.image}"/>
                         <jsp:param name="serieId" value="${serie.id}"/>
                         <jsp:param name="type" value="${serie.type}"/>
@@ -58,6 +60,7 @@
             </div>
         </c:if>
     </div>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
     </body>

@@ -24,7 +24,7 @@
             <jsp:param name="durationTo" value="${durationTo}"/>
         </jsp:include>
 
-        <div class="W-row-display">
+        <div class="W-column-display">
             <jsp:include page="components/filter.jsp">
                 <jsp:param name="genre" value="${genre}"/>
                 <jsp:param name="durationFrom" value="${durationFrom}"/>
@@ -37,7 +37,9 @@
                     <c:forEach var="movie" items="${movies}">
                         <jsp:include page="components/movieCard.jsp">
                             <jsp:param name="movieName" value="${movie.name}"/>
-                            <jsp:param name="movieDescription" value="${movie.description}"/>
+                            <jsp:param name="movieReleased" value="${movie.released}"/>
+                            <jsp:param name="movieCreator" value="${movie.creator}"/>
+                            <jsp:param name="movieGenre" value="${movie.genre}"/>
                             <jsp:param name="movieImage" value="${movie.image}"/>
                             <jsp:param name="movieId" value="${movie.id}"/>
                             <jsp:param name="type" value="${movie.type}"/>

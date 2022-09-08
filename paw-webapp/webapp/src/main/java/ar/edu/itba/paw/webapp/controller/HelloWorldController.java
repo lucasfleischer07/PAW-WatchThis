@@ -15,9 +15,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -195,12 +197,7 @@ public class HelloWorldController {
     @RequestMapping(value = "/reviewForm/movie/{id:[0-9]+}", method = {RequestMethod.GET})
     public ModelAndView reviewFormCreateMovies(@ModelAttribute("registerForm") final ReviewForm reviewForm, @PathVariable("id")final long id) {
         final ModelAndView mav = new ModelAndView("reviewRegistration");
-        Optional<Movie> movieWithId = ms.findById(id);
-        if(!movieWithId.isPresent()){
-            throw new PageNotFoundException();
-        }
-        mav.addObject("id", id);
-        mav.addObject("type", "movie");
+        mav.addObject("details", ms.findById(id).orElseThrow(PageNotFoundException::new));
         return mav;
     }
 
@@ -228,7 +225,10 @@ public class HelloWorldController {
             mav.addObject("errorMsg","You have already written a review for this movie.");
             return mav;
         }
-        return new ModelAndView("redirect:/movie/"+id);
+
+        ModelMap model =new ModelMap();
+        model.addAttribute("toastMsg","Your review was correctly added");
+        return new ModelAndView("redirect:/movie/"+id,model);
     }
     // * -----------------------------------------------------------------------------------------------------------------------
 
@@ -237,17 +237,12 @@ public class HelloWorldController {
     @RequestMapping(value = "/reviewForm/serie/{id:[0-9]+}", method = {RequestMethod.GET})
     public ModelAndView reviewFormCreateSeries(@ModelAttribute("registerForm") final ReviewForm reviewForm, @PathVariable("id")final long id) {
         final ModelAndView mav = new ModelAndView("reviewRegistration");
-        Optional<Serie> serieWithId = ss.findById(id);
-        if(!serieWithId.isPresent()){
-            throw new PageNotFoundException();
-        }
-        mav.addObject("id", id);
-        mav.addObject("type", "serie");
+        mav.addObject("details", ss.findById(id).orElseThrow(PageNotFoundException::new));
         return mav;
     }
 
     @RequestMapping(value = "/reviewForm/serie/{id:[0-9]+}", method = {RequestMethod.POST})
-    public ModelAndView reviewFormSeries(@Valid @ModelAttribute("registerForm") final ReviewForm form, final BindingResult errors, @PathVariable("id")final long id) {
+    public ModelAndView reviewFormSeries(@Valid @ModelAttribute("registerForm") final ReviewForm form, final BindingResult errors, @PathVariable("id")final long id, RedirectAttributes redirectAttributes) {
         if(errors.hasErrors()) {
             return reviewFormCreateSeries(form,id);
         }
@@ -270,7 +265,11 @@ public class HelloWorldController {
             mav.addObject("errorMsg","You have already written a review for this serie.");
             return mav;
         }
-        return new ModelAndView("redirect:/serie/"+id);
+
+        ModelAndView mav =new ModelAndView("redirect:/serie/"+id);
+        redirectAttributes.addFlashAttribute("toastMsg","Review added correctly");
+        mav.addObject("toastMsg","Review added correctly");
+        return mav;
     }
     // * -----------------------------------------------------------------------------------------------------------------------
 
