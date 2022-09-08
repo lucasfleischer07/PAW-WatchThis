@@ -1,7 +1,7 @@
 .W-movieCardStyle-ReviewForm{
     width: 40%;
 }
-W-register-errorMsg{
+.W-register-errorMsg {
     text-align: center;
 }
 .W-general-div-review-info {
@@ -26,6 +26,29 @@ W-register-errorMsg{
     display: flex;
     justify-content: space-evenly;
     margin-top: 1%;
+}
+
+.W-review-registration-text {
+    font-size: 0.6vw;
+    color: #636464;
+}
+
+.W-review-registration-img {
+    width: 8vw;
+}
+
+.W-review-registration-img-and-name {
+    display: flex;
+    align-items: center;
+    margin: 1vw 0 2vw 0;
+}
+
+.W-review-registration-name {
+    margin-left: 2vw;
+}
+
+.W-red-asterisco {
+    color: red;
 }
 
 @media (max-width: 591px) {

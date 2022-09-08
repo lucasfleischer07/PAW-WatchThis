@@ -1,0 +1,40 @@
+.W-general-div-login {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 2%;
+    width: 100%;
+}
+
+.W-login-title {
+    display: flex;
+    align-items: center;
+    margin: 1vw 0 2vw 0;
+}
+
+.W-input-label-login-info {
+    margin-top: 3%;
+    margin-left: 3%;
+    margin-right: 3%;
+}
+
+.W-login-card {
+    width: 30%;
+}
+
+
+
+
+@media (max-width: 591px) {
+    .W-submit-cancel-buttons {
+        margin-top: 3%;
+    }
+
+    .W-general-div-login {
+        margin-top: 10%;
+    }
+
+    .W-login-card {
+        width: 60%;
+    }
+}

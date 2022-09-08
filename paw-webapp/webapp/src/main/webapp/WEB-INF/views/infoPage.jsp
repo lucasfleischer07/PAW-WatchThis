@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
+<%@ page contentType="text/html;charset=UTF-8" %>
 
 <html lang="en">
   <head>
@@ -86,17 +87,29 @@
                 <div class="W-no-reviews-icon">
                 <img src="<c:url value="/resources/img/noReviews.png"/>" alt="No_Review_Img"/>
                 </div>
-                <h3 class="W-no-reviews-text">There are no reviews for this movie yet.
-                    Be the first to add one!</h3>
+                <c:choose>
+                  <c:when test="{${details.type == 'movie'}}">
+                    <h3 class="W-no-reviews-text" >There are no reviews for this movie yet. Be the first to add one!</h3>
+                  </c:when>
+                  <c:otherwise>
+                    <h3 class="W-no-reviews-text" >There are no reviews for this tv show yet. Be the first to add one!</h3>
+                  </c:otherwise>
+                </c:choose>
               </div>
           </c:if>
         </div>
       </div>
     </div>
-
-
-
-
+    <c:if test="${toastMsg!=null && toastMsg !=''}">
+      <div class="toast align-items-center text-bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+          <div class="toast-body">
+            <c:out value="${toastMsg}"/>
+          </div>
+          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+      </div>
+    </c:if>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
   </body>

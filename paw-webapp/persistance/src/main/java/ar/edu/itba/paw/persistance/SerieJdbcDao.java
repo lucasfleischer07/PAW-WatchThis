@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.persistance;
 
-import ar.edu.itba.paw.models.Movie;
 import ar.edu.itba.paw.models.Serie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -82,5 +81,25 @@ public class SerieJdbcDao implements SerieDao {
         return template.query("SELECT * FROM series WHERE serieId = ?",
                 new Object[]{ id }, SERIE_ROW_MAPPER
         ).stream().findFirst();
+    }
+
+    @Override
+    public List<Serie> getSearchedSeries(String query) {
+        List<Serie> series =  template.query("SELECT * FROM series WHERE LOWER(name) LIKE ? ",
+                new Object[]{"%" + query.toLowerCase() + "%"},SERIE_ROW_MAPPER);
+        return series;
+    }
+
+
+
+    @Override
+    public List<Serie> ordenByAsc(String parameter) {
+        return template.query("SELECT * FROM series order by ? asc ", new Object[]{ parameter }, SERIE_ROW_MAPPER);
+
+    }
+
+    @Override
+    public List<Serie> ordenByDesc(String parameter) {
+        return template.query("SELECT * FROM series order by ? desc ", new Object[]{ parameter }, SERIE_ROW_MAPPER);
     }
 }

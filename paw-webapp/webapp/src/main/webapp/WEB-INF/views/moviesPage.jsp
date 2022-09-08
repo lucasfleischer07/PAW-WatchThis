@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
+<%@ page contentType="text/html;charset=UTF-8" %>
 
 <html>
     <head>
@@ -24,7 +25,7 @@
             <jsp:param name="durationTo" value="${durationTo}"/>
         </jsp:include>
 
-        <div class="W-row-display">
+        <div class="W-column-display">
             <jsp:include page="components/filter.jsp">
                 <jsp:param name="genre" value="${genre}"/>
                 <jsp:param name="durationFrom" value="${durationFrom}"/>
@@ -37,14 +38,20 @@
                     <c:forEach var="movie" items="${movies}">
                         <jsp:include page="components/movieCard.jsp">
                             <jsp:param name="movieName" value="${movie.name}"/>
-                            <jsp:param name="movieDescription" value="${movie.description}"/>
+                            <jsp:param name="movieReleased" value="${movie.released}"/>
+                            <jsp:param name="movieCreator" value="${movie.creator}"/>
+                            <jsp:param name="movieGenre" value="${movie.genre}"/>
                             <jsp:param name="movieImage" value="${movie.image}"/>
                             <jsp:param name="movieId" value="${movie.id}"/>
                             <jsp:param name="type" value="${movie.type}"/>
                         </jsp:include>
                     </c:forEach>
+
                 </div>
+
+
             </div>
+
             <c:if test="${movies==null || movies.size()==0}">
                 <div class="card W-not-found-card">
                     <div class="card-body W-row-display" >
@@ -57,8 +64,28 @@
                     </div>
                 </div>
             </c:if>
-        </div>
 
+        </div>
+        <div>
+            <ul class="pagination justify-content-center W-pagination">
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1">Previous</a>
+                </li>
+                <c:forEach var="page" begin="1" end="${amountPages}">
+                    <c:choose>
+                        <c:when test="${page == pageSelected}">
+                            <li class="page-item active"><a class="page-link" href="<c:url value="/movies/filters/page/${page}"/>"><c:out value="${page}"/></a></li>
+                        </c:when>
+                        <c:otherwise>
+                            <li class="page-item"><a class="page-link" href="<c:url value="/movies/filters/page/${page}"/>"><c:out value="${page}"/></a></li>
+                        </c:otherwise>
+                    </c:choose>
+                </c:forEach>
+                <li class="page-item">
+                    <a class="page-link" href="#">Next</a>
+                </li>
+            </ul>
+        </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
     </body>
 </html>

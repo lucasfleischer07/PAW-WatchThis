@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
 
 <html>
     <head>
@@ -20,44 +21,64 @@
     </head>
 
     <body>
-        <jsp:include page="components/header.jsp" />
+        <jsp:include page="components/header.jsp">
+            <jsp:param name="type" value="${details.type}"/>
+        </jsp:include>
 
-        <c:url value="/reviewForm/${type}/${id}" var="postPath"/>
+        <c:url value="/reviewForm/${details.type}/${details.id}" var="postPath"/>
         <form:form modelAttribute="registerForm" action="${postPath}" method="post">
             <div class="W-general-div-review-info">
+                <div class="W-review-registration-img-and-name">
+                    <img class="W-review-registration-img" src="<c:url value="${details.image}"/>" alt="<c:out value="${details.name}"/>">
+                    <h4 class="W-review-registration-name"><c:out value="${details.name}"/></h4>
+                </div>
                 <div class="card W-review-card">
                     <c:if test="${errorMsg!=null && errorMsg != ''}">
                         <div class="alert alert-danger d-flex align-items-center" role="alert">
-                            <div class W-register-errorMsg>
+                            <div class="W-register-errorMsg">
                                 <c:out value="${errorMsg}"/>
                             </div>
                         </div>
-
                     </c:if>
                     <div class="mb-3 W-input-label-review-info">
+                        <p class="W-review-registration-text"><span class="W-red-asterisco">* Required</span></p>
                         <form:errors path="userName" element="p" cssStyle="color: red"/>
-                        <form:label class="form-label" path="userName">Username</form:label>
+                        <form:label class="form-label" path="userName">Username <span class="W-red-asterisco">*</span></form:label>
+                        <p class="W-review-registration-text">(Must be between 4 and 30 alpha-numeric characters)</p>
                         <form:input type="text" class="form-control" placeholder="example123" path="userName"/>
                     </div>
                     <div class="mb-3 W-input-label-review-info">
                         <form:errors path="email" element="p" cssStyle="color: red"/>
-                        <form:label path="email" class="form-label">Email</form:label>
+                        <form:label path="email" class="form-label">Email <span class="W-red-asterisco">*</span></form:label>
                         <form:input type="email" class="form-control" path="email" placeholder="example@mail.com"/>
                     </div>
                     <div class="mb-3 W-input-label-review-info">
                         <form:errors path="name" element="p" cssStyle="color: red"/>
-                        <form:label path="name" class="form-label">Review name</form:label>
+                        <form:label path="name" class="form-label">Rating <span class="W-red-asterisco">*</span></form:label>
+                        <form:select path="rating" class="form-select" aria-label="Default select example">
+                            <form:option value="1">1 star</form:option>
+                            <form:option value="2">2 stars</form:option>
+                            <form:option value="3">3 stars</form:option>
+                            <form:option value="4">4 stars</form:option>
+                            <form:option selected="true" value="5">5 stars</form:option>
+                        </form:select>
+                    </div>
+                    <div class="mb-3 W-input-label-review-info">
+                        <form:errors path="name" element="p" cssStyle="color: red"/>
+                        <form:label path="name" class="form-label">Review name <span class="W-red-asterisco">*</span></form:label>
+                        <p class="W-review-registration-text">(Must be between 6 and 50 characters)</p>
                         <form:input type="text" class="form-control" path="name" placeholder="My review"/>
                     </div>
                     <div class="mb-3 W-input-label-review-info">
                         <form:errors path="description" element="p" cssStyle="color: red"/>
-                        <form:label path="description" class="form-label">Review description</form:label>
+                        <form:label path="description" class="form-label">Review description <span class="W-red-asterisco">*</span></form:label>
+                        <p class="W-review-registration-text">(Must be between 20 and 500 characters)</p>
                         <form:textarea class="form-control" path="description" rows="3"/>
                     </div>
                 </div>
             </div>
             <div class="W-submit-cancel-buttons">
-                <a href="<c:url value="/movie/${id}"/>"><button type="button" class="btn btn-danger" id="cancelButton" onclick="(this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'; document.getElementById('submitButton').disabled=true">Cancel</button></a>
+                <a href="<c:url value="/${details.type}/${details.id}"/>"><button type="button" class="btn btn-danger" id="cancelButton" onclick="(this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'; document.getElementById('submitButton').disabled=true">Cancel</button></a>
                 <button id="submitButton" type="submit" class="btn btn-success" onclick="this.form.submit(); (this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'; document.getElementById('cancelButton').disabled=true">Submit</button>
             </div>
         </form:form>

@@ -78,4 +78,22 @@ public class MovieJdbcDao implements MovieDao {
                 new Object[]{ id }, MOVIE_ROW_MAPPER
         ).stream().findFirst();
     }
+
+    @Override
+    public List<Movie> getSearchedMovies(String query) {
+        List<Movie> movies =  template.query("SELECT * FROM movies WHERE LOWER(name) LIKE ? ",
+                new Object[]{"%" + query.toLowerCase() + "%"},MOVIE_ROW_MAPPER);
+        return movies;
+    }
+
+    @Override
+    public List<Movie> ordenByAsc(String parameter) {
+        return template.query("SELECT * FROM movies order by ? asc", new Object[]{ parameter }, MOVIE_ROW_MAPPER);
+    }
+
+    @Override
+    public List<Movie> ordenByDesc(String parameter) {
+        return template.query("SELECT * FROM movies order by ? desc", new Object[]{ parameter }, MOVIE_ROW_MAPPER);
+
+    }
 }

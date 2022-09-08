@@ -46,7 +46,8 @@ public class UserJdbcDao implements UserDao{
         }catch(Exception e) {
             //Por ahora vacio, en el futuro un cartel
         }
-        Optional<User> userFound = template.query("SELECT * FROM userdata WHERE email = ?", new Object[]{userEmail}, USER_ROW_MAPPER).stream().findFirst();
+        //Chequeo si el {usuario,email} existe
+        Optional<User> userFound = template.query("SELECT * FROM userdata WHERE email = ? AND name = ?", new Object[]{userEmail,userName}, USER_ROW_MAPPER).stream().findFirst();
         return userFound.isPresent() ? Optional.of(userFound.get().getId()) : Optional.of((long) -1);
     }
 

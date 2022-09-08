@@ -12,5 +12,10 @@ public interface MovieService {
     List<Movie> findByDuration(int durationFrom, int durationTo);
     List<Movie> findByDurationAndGenre(String genre,int durationFrom, int durationTo);
     Optional<Movie> findById(long id);
+    List<Movie> getSearchedMovies(String query);
+    List<Movie> ordenByAsc(String parameter);
+    List<Movie> ordenByDesc(String parameter);
+
+
 
 }
