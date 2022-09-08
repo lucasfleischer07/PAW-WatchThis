@@ -21,6 +21,7 @@ public class ReviewForm {
     private String email;
 
     private long id;
+    private Long rating;
     private String type;
 
 
@@ -70,5 +71,13 @@ public class ReviewForm {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public Long getRating() {
+        return rating;
+    }
+
+    public void setRating(Long rating) {
+        this.rating = rating;
     }
 }

@@ -9,9 +9,9 @@ import ar.edu.itba.paw.services.ReviewService;
 import ar.edu.itba.paw.services.SerieService;
 import ar.edu.itba.paw.services.UserService;
 import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
+import ar.edu.itba.paw.webapp.form.LoginForm;
 import ar.edu.itba.paw.webapp.form.ReviewForm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -46,7 +46,7 @@ public class HelloWorldController {
     // * ----------------------------------- Movie Info -----------------------------------------------------------------------
     @RequestMapping("/")
     public ModelAndView helloWorld() {
-        final ModelAndView mav = new ModelAndView("index");
+        final ModelAndView mav = new ModelAndView("moviesPage");
         List<Movie> movieList = ms.getAllMovies();
 
         if(movieList == null) {
@@ -89,7 +89,7 @@ public class HelloWorldController {
             @RequestParam(name = "genre", defaultValue = "ANY")final String genre) {
         ModelAndView mav = null;
         if(Objects.equals(type, "movies")) {
-            mav = new ModelAndView("index");
+            mav = new ModelAndView("moviesPage");
             mav.addObject("genre",genre);
             mav.addObject("durationFrom",durationFrom);
             mav.addObject("durationTo",durationTo);
@@ -216,7 +216,7 @@ public class HelloWorldController {
             return mav;
         }
         try {
-            Review newReview = new Review( null,"movie",id,null,userId.get(),form.getName(),form.getDescription());    //ReviewId va en null por que eso lo asigna la tabla
+            Review newReview = new Review( null,"movie",id,null,userId.get(),form.getName(),form.getDescription(), form.getRating());    //ReviewId va en null por que eso lo asigna la tabla
             newReview.setId(id);
             rs.addReview(newReview);
         }
@@ -256,7 +256,7 @@ public class HelloWorldController {
             return mav;
         }
         try {
-            Review newReview = new Review( null,"serie",null,id,userId.get(),form.getName(),form.getDescription());    //ReviewId va en null por que eso lo asigna la tabla
+            Review newReview = new Review( null,"serie",null,id,userId.get(),form.getName(),form.getDescription(), form.getRating());    //ReviewId va en null por que eso lo asigna la tabla
             newReview.setId(id);
             rs.addReview(newReview);
         }
@@ -270,6 +270,50 @@ public class HelloWorldController {
         redirectAttributes.addFlashAttribute("toastMsg","Review added correctly");
         mav.addObject("toastMsg","Review added correctly");
         return mav;
+    }
+    // * -----------------------------------------------------------------------------------------------------------------------
+
+
+    // * ----------------------------------- login Page -----------------------------------------------------------------------
+
+//    TODO: Terminar
+    @RequestMapping(value = "/login", method = {RequestMethod.GET})
+    public ModelAndView logIn(@ModelAttribute("loginForm") final LoginForm loginForm) {
+//        final ModelAndView mav = new ModelAndView("reviewRegistration");
+//        mav.addObject("details", ms.findById(id).orElseThrow(PageNotFoundException::new));
+//        return mav;
+        return new ModelAndView("logInPage");
+    }
+
+    @RequestMapping(value = "/login", method = {RequestMethod.POST})
+    public ModelAndView logIn(@Valid @ModelAttribute("loginForm") final LoginForm loginForm, final BindingResult errors, RedirectAttributes redirectAttributes) {
+//        if(errors.hasErrors()) {
+//            return reviewFormCreateSeries(form,id);
+//        }
+//        User newUser = new User(null,form.getEmail(),form.getUserName());
+//        //Primero intenta agregar el usuario, luego intenta agregar la review
+//        Optional<Long> userId = us.register(newUser);
+//        //Falta Agregar mensaje de error para el caso -1 (si falla en el pedido)
+//        if(userId.get() == -1) {
+//            ModelAndView mav=reviewFormCreateSeries(form,id);
+//            mav.addObject("errorMsg","This username or mail is already in use.");
+//            return mav;
+//        }
+//        try {
+//            Review newReview = new Review( null,"serie",null,id,userId.get(),form.getName(),form.getDescription(), form.getRating());    //ReviewId va en null por que eso lo asigna la tabla
+//            newReview.setId(id);
+//            rs.addReview(newReview);
+//        }
+//        catch(DuplicateKeyException e){
+//            ModelAndView mav=reviewFormCreateSeries(form,id);
+//            mav.addObject("errorMsg","You have already written a review for this serie.");
+//            return mav;
+//        }
+//
+//        ModelAndView mav =new ModelAndView("redirect:/serie/"+id);
+//        redirectAttributes.addFlashAttribute("toastMsg","Review added correctly");
+//        mav.addObject("toastMsg","Review added correctly");
+        return new ModelAndView("logInPage");
     }
     // * -----------------------------------------------------------------------------------------------------------------------
 

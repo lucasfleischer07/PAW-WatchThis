@@ -28,4 +28,14 @@ public class ReviewServiceImpl implements ReviewService{
     public List<Review> getAllReviews(String type, Long id) {
         return reviewDao.getAllReviews(type,id);
     }
+
+    @Override
+    public void deleteReview(Long id) {
+        reviewDao.deleteReview(id);
+    }
+
+    @Override
+    public void editReview(String newDesc, Long id, String typeOfEdit) {
+        reviewDao.editReview(newDesc, id, typeOfEdit);
+    }
 }

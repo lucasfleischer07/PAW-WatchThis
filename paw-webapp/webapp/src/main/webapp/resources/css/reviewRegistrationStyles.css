@@ -1,7 +1,7 @@
 .W-movieCardStyle-ReviewForm{
     width: 40%;
 }
-W-register-errorMsg{
+.W-register-errorMsg {
     text-align: center;
 }
 .W-general-div-review-info {
@@ -45,6 +45,10 @@ W-register-errorMsg{
 
 .W-review-registration-name {
     margin-left: 2vw;
+}
+
+.W-red-asterisco {
+    color: red;
 }
 
 @media (max-width: 591px) {

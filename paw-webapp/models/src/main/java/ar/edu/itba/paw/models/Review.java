@@ -2,9 +2,9 @@ package ar.edu.itba.paw.models;
 
 public class Review {
     private String name, description, type;
-    private Long id, serieId, movieId, userId;
+    private Long id, serieId, movieId, userId, rating;
 
-    public Review(Long id, String type, Long movieId, Long serieId, Long userId, String name, String description) {
+    public Review(Long id, String type, Long movieId, Long serieId, Long userId, String name, String description, Long rating) {
         this.name = name;
         this.description = description;
         this.id=id;
@@ -12,6 +12,7 @@ public class Review {
         this.serieId=serieId;
         this.movieId=movieId;
         this.userId=userId;
+        this.rating = rating;
 
     }
 
@@ -70,5 +71,13 @@ public class Review {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public Long getRating() {
+        return rating;
+    }
+
+    public void setRating(Long rating) {
+        this.rating = rating;
     }
 }
