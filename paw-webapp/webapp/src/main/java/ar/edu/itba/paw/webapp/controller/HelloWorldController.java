@@ -11,6 +11,7 @@ import ar.edu.itba.paw.services.UserService;
 import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
 import ar.edu.itba.paw.webapp.form.LoginForm;
 import ar.edu.itba.paw.webapp.form.ReviewForm;
+import org.jboss.logging.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
@@ -42,13 +43,12 @@ public class HelloWorldController {
         this.rs = rs;
     }
 
-
     // * ----------------------------------- Movie Info -----------------------------------------------------------------------
     @RequestMapping("/")
-    public ModelAndView helloWorld() {
+    public ModelAndView helloWorld(@RequestParam(name = "query", defaultValue = "") final String query) {
         final ModelAndView mav = new ModelAndView("moviesPage");
-        List<Movie> movieList = ms.getAllMovies();
-
+        mav.addObject("query", query);
+        List<Movie> movieList = ms.getSearchedMovies(query);
         if(movieList == null) {
             throw new PageNotFoundException();
         } else {
@@ -56,6 +56,26 @@ public class HelloWorldController {
         }
         return mav;
     }
+
+    @RequestMapping("/search")
+    public ModelAndView search(@RequestParam(name = "query", defaultValue = "") final String query) {
+        final ModelAndView mav = new ModelAndView("index");
+        mav.addObject("query", query);
+        List<Movie> movieList = ms.getSearchedMovies(query);
+        List<Serie> seriesList = ss.getSearchedSeries(query);
+
+        if(movieList == null && seriesList == null) {
+            throw new PageNotFoundException();
+
+        } else if(movieList != null && seriesList == null) {
+            mav.addObject("movies", movieList);
+
+        }else if(movieList == null) {
+            mav.addObject("movies", seriesList);
+        }
+        return mav;
+    }
+
 
     @RequestMapping("/movie/{movieId:[0-9]+}")
     public ModelAndView movieReview(@PathVariable("movieId")final long movieId) {
@@ -69,6 +89,8 @@ public class HelloWorldController {
         }
         return mav;
     }
+
+
 
 //    TODO: Ver como transformar la para que la root sea /movies
 //    @RequestMapping("/movies")
@@ -142,9 +164,10 @@ public class HelloWorldController {
 
     // * ----------------------------------- Serie Info -----------------------------------------------------------------------
     @RequestMapping("/series")
-    public ModelAndView series() {
+    public ModelAndView series(@RequestParam(name = "query", defaultValue = "") final String query) {
         final ModelAndView mav = new ModelAndView("seriesPage");
-        List<Serie> seriesList = ss.getAllSeries();
+        mav.addObject("query", query);
+        List<Serie> seriesList = ss.getSearchedSeries(query);
         if( seriesList == null) {
             throw new PageNotFoundException();
         } else {
@@ -152,6 +175,7 @@ public class HelloWorldController {
         }
         return mav;
     }
+
 
 //    @RequestMapping("/series/filters")
 //    public ModelAndView seriesWithFilters(

@@ -24,7 +24,7 @@
         <jsp:param name="durationTo" value="${durationTo}"/>
     </jsp:include>
 
-    <div class="W-row-display">
+    <div class="W-column-display">
         <jsp:include page="components/filter.jsp">
             <jsp:param name="type" value="series"/>
             <jsp:param name="genre" value="${genre}"/>

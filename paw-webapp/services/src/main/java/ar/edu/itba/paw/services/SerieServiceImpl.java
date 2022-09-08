@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.services;
 
+import ar.edu.itba.paw.models.Movie;
 import ar.edu.itba.paw.models.Serie;
 import ar.edu.itba.paw.persistance.SerieDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,11 @@ public class SerieServiceImpl implements SerieService{
     @Override
     public List<Serie> findByDuration(int durationFrom, int durationTo) {
         return serieDao.findByDuration(durationFrom, durationTo);
+    }
+
+    @Override
+    public List<Serie> getSearchedSeries(String query) {
+        return serieDao.getSearchedSeries(query);
     }
 
     @Override

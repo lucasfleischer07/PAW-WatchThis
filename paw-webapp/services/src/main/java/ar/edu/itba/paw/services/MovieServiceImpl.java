@@ -49,6 +49,11 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
+    public List<Movie> getSearchedMovies(String query) {
+        return movieDao.getSearchedMovies(query);
+    }
+
+    @Override
     public List<Movie> ordenByAsc(String parameter) {
         return movieDao.ordenByAsc(parameter);
 

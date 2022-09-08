@@ -80,6 +80,13 @@ public class MovieJdbcDao implements MovieDao {
     }
 
     @Override
+    public List<Movie> getSearchedMovies(String query) {
+        List<Movie> movies =  template.query("SELECT * FROM movies WHERE LOWER(name) LIKE ? ",
+                new Object[]{"%" + query.toLowerCase() + "%"},MOVIE_ROW_MAPPER);
+        return movies;
+    }
+
+    @Override
     public List<Movie> ordenByAsc(String parameter) {
         return template.query("SELECT * FROM movies order by ? asc", new Object[]{ parameter }, MOVIE_ROW_MAPPER);
     }

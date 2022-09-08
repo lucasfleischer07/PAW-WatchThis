@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top W-header-height" style="z-index: 1;">
     <div class="container-fluid">
@@ -221,12 +222,15 @@
                 </div>
 
 
-                <div class="W-navbar-search">
-                    <form class="d-flex W-searchbar" role="search">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-success W-search-button-color" type="submit">Search</button>
+                <div class="d-flex W-navbar-search">
+                    <form class="form-inline my-2 my-lg-0 W-searchbar" method="GET" action="<c:url value="/search"/>">
+                        <spring:message var="searchPlaceholder" />
+                        <input name="query" class="form-control me-2" type="search" placeholder="Search movies or tv shows" aria-label="Search" >
+<%--                        <button class="btn btn-success W-search-button-color" type="submit">Search</button>--%>
+<%--                        <input type="submit">--%>
                     </form>
                 </div>
+
                 <div class="W-nav-login-button">
                     <button class="btn btn-success" type="submit">Login</button>
                 </div>
