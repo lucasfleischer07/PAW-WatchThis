@@ -47,4 +47,15 @@ public class SerieServiceImpl implements SerieService{
     public List<Serie> findByDuration(int durationFrom, int durationTo) {
         return serieDao.findByDuration(durationFrom, durationTo);
     }
+
+    @Override
+    public List<Serie> ordenByAsc(String parameter) {
+        return serieDao.ordenByAsc(parameter);
+
+    }
+
+    @Override
+    public List<Serie> ordenByDesc(String parameter) {
+        return serieDao.ordenByDesc(parameter);
+    }
 }

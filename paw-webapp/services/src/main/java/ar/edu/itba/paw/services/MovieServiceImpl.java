@@ -47,4 +47,16 @@ public class MovieServiceImpl implements MovieService {
     public Optional<Movie> findById(long id){
         return movieDao.findById(id);
     }
+
+    @Override
+    public List<Movie> ordenByAsc(String parameter) {
+        return movieDao.ordenByAsc(parameter);
+
+    }
+
+    @Override
+    public List<Movie> ordenByDesc(String parameter) {
+        return movieDao.ordenByDesc(parameter);
+    }
+
 }

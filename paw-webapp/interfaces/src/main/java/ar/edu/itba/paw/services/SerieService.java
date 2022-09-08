@@ -12,4 +12,6 @@ public interface SerieService {
     List<Serie> findByDuration(int durationFrom, int durationTo);
     List<Serie> findByDurationAndGenre(String genre,int durationFrom, int durationTo);
     Optional<Serie> findById(long id);
+    List<Serie> ordenByAsc(String parameter);
+    List<Serie> ordenByDesc(String parameter);
 }

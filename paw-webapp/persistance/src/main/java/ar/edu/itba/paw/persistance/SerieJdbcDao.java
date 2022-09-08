@@ -83,4 +83,15 @@ public class SerieJdbcDao implements SerieDao {
                 new Object[]{ id }, SERIE_ROW_MAPPER
         ).stream().findFirst();
     }
+
+    @Override
+    public List<Serie> ordenByAsc(String parameter) {
+        return template.query("SELECT * FROM series order by ? asc ", new Object[]{ parameter }, SERIE_ROW_MAPPER);
+
+    }
+
+    @Override
+    public List<Serie> ordenByDesc(String parameter) {
+        return template.query("SELECT * FROM series order by ? desc ", new Object[]{ parameter }, SERIE_ROW_MAPPER);
+    }
 }

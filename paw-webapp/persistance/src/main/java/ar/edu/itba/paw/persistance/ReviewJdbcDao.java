@@ -41,11 +41,11 @@ public class ReviewJdbcDao implements ReviewDao{
     @Override
     public List<Review> getAllReviews(String type, Long id) {
         if(type.equals("movie")) {
-            return template.query("SELECT * FROM review where movieid = ?", new Object[]{ id }, REVIEW_ROW_MAPPER);
+            return template.query("SELECT * FROM review where movieid = ? order by review.reviewid desc", new Object[]{ id }, REVIEW_ROW_MAPPER);
 //            return template.query("SELECT * FROM review where type = ? and movieid = ?", new Object[]{ type, id }, REVIEW_ROW_MAPPER);
 
         } else if(type.equals("serie")) {
-            return template.query("SELECT * FROM review where serieid = ?", new Object[]{ id }, REVIEW_ROW_MAPPER);
+            return template.query("SELECT * FROM review where serieid = ? order by review.reviewid desc", new Object[]{ id }, REVIEW_ROW_MAPPER);
 //            return template.query("SELECT * FROM review where type = ? and serieid = ?", new Object[]{ type, id }, REVIEW_ROW_MAPPER);
 
         }
