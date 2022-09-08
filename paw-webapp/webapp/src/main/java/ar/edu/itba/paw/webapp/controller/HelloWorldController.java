@@ -34,6 +34,7 @@ public class HelloWorldController {
     private final MovieService ms;
     private final SerieService ss;
     private final ReviewService rs;
+    private final int ELEMS_AMOUNT = 10;
 
     @Autowired  //Para indicarle que este es el constructor que quiero que use
     public HelloWorldController(final UserService us, final MovieService ms, SerieService ss, ReviewService rs){
@@ -44,15 +45,18 @@ public class HelloWorldController {
     }
 
     // * ----------------------------------- Movie Info -----------------------------------------------------------------------
-    @RequestMapping("/")
-    public ModelAndView helloWorld(@RequestParam(name = "query", defaultValue = "") final String query) {
+    @RequestMapping(value= {"/","page/{pageNum"})
+    public ModelAndView helloWorld(@PathVariable("pageNum")final Optional<Integer> pageNum,@RequestParam(name = "query", defaultValue = "") final String query) {
         final ModelAndView mav = new ModelAndView("moviesPage");
         mav.addObject("query", query);
         List<Movie> movieList = ms.getSearchedMovies(query);
+        int page= pageNum.orElse(1);
         if(movieList == null) {
             throw new PageNotFoundException();
         } else {
-            mav.addObject("movies", movieList);
+            mav.addObject("movies", movieList.subList((page-1)*ELEMS_AMOUNT,(page-1)*ELEMS_AMOUNT + ELEMS_AMOUNT));
+            mav.addObject("amountPages",(int)Math.ceil((double) movieList.size()/(double)ELEMS_AMOUNT));
+            mav.addObject("pageSelected",page);
         }
         return mav;
     }
@@ -103,13 +107,15 @@ public class HelloWorldController {
 
     // *  ----------------------------------- Movies and Serie Filters -----------------------------------------------------------------------
 
-    @RequestMapping("/{type:movies|series}/filters")
+    @RequestMapping(value = {"/{type:movies|series}/filters" , "/{type:movies|series}/filters/page/{pageNum}"})
     public ModelAndView moviesWithFilters(
             @PathVariable("type") final String type,
-            @RequestParam(name = "durationFrom",defaultValue = "ANY")final String durationFrom,
-            @RequestParam(name = "durationTo",defaultValue = "ANY")final String durationTo,
-            @RequestParam(name = "genre", defaultValue = "ANY")final String genre) {
+            @PathVariable("pageNum")final Optional<Integer> pageNum,
+            @RequestParam(name = "durationFrom",defaultValue = "ANY",required = false)final String durationFrom,
+            @RequestParam(name = "durationTo",defaultValue = "ANY",required = false)final String durationTo,
+            @RequestParam(name = "genre", defaultValue = "ANY",required = false)final String genre) {
         ModelAndView mav = null;
+        int page = pageNum.orElse(1);
         if(Objects.equals(type, "movies")) {
             mav = new ModelAndView("moviesPage");
             mav.addObject("genre",genre);
@@ -117,7 +123,7 @@ public class HelloWorldController {
             mav.addObject("durationTo",durationTo);
             List<Movie> movieListFilter;
             if(!Objects.equals(genre, "ANY") && Objects.equals(durationFrom, "ANY")) {
-                movieListFilter = ms.findByGenre(genre);
+                movieListFilter = ms.findByGenre(genre) ;
             } else if(Objects.equals(genre, "ANY") && !Objects.equals(durationFrom, "ANY")) {
                 movieListFilter = ms.findByDuration(Integer.parseInt(durationFrom), Integer.parseInt(durationTo));
             } else if(!Objects.equals(durationFrom, "ANY") && !Objects.equals(genre, "ANY")){    // Caso de que si los filtros estan vacios
@@ -129,7 +135,10 @@ public class HelloWorldController {
             if(movieListFilter == null) {
                 throw new PageNotFoundException();
             } else {
-                mav.addObject("movies", movieListFilter);
+                mav.addObject("movies", movieListFilter.subList((page-1)*ELEMS_AMOUNT,(page-1)*ELEMS_AMOUNT + ELEMS_AMOUNT));
+                mav.addObject("amountPages",Math.ceil((double)movieListFilter.size()/(double)ELEMS_AMOUNT));
+                mav.addObject("pageSelected",page);
+
             }
             return mav;
         } else if(Objects.equals(type, "series")) {
@@ -152,7 +161,9 @@ public class HelloWorldController {
             if(serieListFilter == null) {
                 throw new PageNotFoundException();
             } else {
-                mav.addObject("series", serieListFilter);
+                mav.addObject("series", serieListFilter.subList((page-1)*ELEMS_AMOUNT,(page-1)*ELEMS_AMOUNT + ELEMS_AMOUNT));
+                mav.addObject("amountPages",Math.ceil((double)serieListFilter.size()/(double)ELEMS_AMOUNT));
+                mav.addObject("pageSelected",page);
             }
             return mav;
         }
@@ -163,15 +174,16 @@ public class HelloWorldController {
 
 
     // * ----------------------------------- Serie Info -----------------------------------------------------------------------
-    @RequestMapping("/series")
-    public ModelAndView series(@RequestParam(name = "query", defaultValue = "") final String query) {
+    @RequestMapping(value = {"/series","/series/page/{pageNum}"})
+    public ModelAndView series(@PathVariable("pageNum") Optional<Integer> pageNum,@RequestParam(name = "query", defaultValue = "") final String query) {
         final ModelAndView mav = new ModelAndView("seriesPage");
+        int page= pageNum.orElse(1);
         mav.addObject("query", query);
         List<Serie> seriesList = ss.getSearchedSeries(query);
         if( seriesList == null) {
             throw new PageNotFoundException();
         } else {
-            mav.addObject("series", seriesList);
+            mav.addObject("series", seriesList.subList((page-1)*ELEMS_AMOUNT,(page-1)*ELEMS_AMOUNT + ELEMS_AMOUNT));
         }
         return mav;
     }

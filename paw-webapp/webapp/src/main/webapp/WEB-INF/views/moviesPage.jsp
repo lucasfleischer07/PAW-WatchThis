@@ -46,8 +46,12 @@
                             <jsp:param name="type" value="${movie.type}"/>
                         </jsp:include>
                     </c:forEach>
+
                 </div>
+
+
             </div>
+
             <c:if test="${movies==null || movies.size()==0}">
                 <div class="card W-not-found-card">
                     <div class="card-body W-row-display" >
@@ -60,8 +64,28 @@
                     </div>
                 </div>
             </c:if>
-        </div>
 
+        </div>
+        <div>
+            <ul class="pagination justify-content-center W-pagination">
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1">Previous</a>
+                </li>
+                <c:forEach var="page" begin="1" end="${amountPages}">
+                    <c:choose>
+                        <c:when test="${page == pageSelected}">
+                            <li class="page-item active"><a class="page-link" href="<c:url value="/movies/filters/page/${page}"/>"><c:out value="${page}"/></a></li>
+                        </c:when>
+                        <c:otherwise>
+                            <li class="page-item"><a class="page-link" href="<c:url value="/movies/filters/page/${page}"/>"><c:out value="${page}"/></a></li>
+                        </c:otherwise>
+                    </c:choose>
+                </c:forEach>
+                <li class="page-item">
+                    <a class="page-link" href="#">Next</a>
+                </li>
+            </ul>
+        </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
     </body>
 </html>
