@@ -71,16 +71,44 @@
                 <li class="page-item disabled">
                     <a class="page-link" href="#" tabindex="-1">Previous</a>
                 </li>
-                <c:forEach var="page" begin="1" end="${amountPages}">
+                <%--Si hay menos de 10 paginas, se muestran todas, si hay mas se muestran las 4 antes --%>
+                <%--de la actual, la actual y las 5 proximas, con los bordes ... --%>
+
+
                     <c:choose>
-                        <c:when test="${page == pageSelected}">
-                            <li class="page-item active"><a class="page-link" href="<c:url value="/movies/filters/page/${page}"/>"><c:out value="${page}"/></a></li>
+                        <c:when test="${amountPages > 10 }">
+                            <c:forEach var="page" begin="1" end="${amountPages}">
+                                <c:choose>
+                                    <c:when test="${page != pageSelected && ((page > pageSelected - 4 && page<pageSelected) || (page < pageSelected+5 && page > pageSelected)) }">
+                                        <li class="page-item"><a class="page-link" href="<c:url value="/movies/filters/page/${page}"/>"><c:out value="${page}"/></a></li>
+                                    </c:when>
+                                    <c:when test="${page == pageSelected - 4 || page == pageSelected + 5 }">
+                                        <li class="page-item"><a class="page-link" href="<c:url value="/movies/filters/page/${page}"/>">...</a></li>
+                                    </c:when>
+                                    <c:when test="${page == pageSelected}">
+                                        <li class="page-item active"><a class="page-link" href="<c:url value="/movies/filters/page/${page}"/>"><c:out value="${page}"/></a></li>
+                                    </c:when>
+                                    <c:otherwise>
+
+                                    </c:otherwise>
+                                </c:choose>
+                            </c:forEach>
                         </c:when>
                         <c:otherwise>
-                            <li class="page-item"><a class="page-link" href="<c:url value="/movies/filters/page/${page}"/>"><c:out value="${page}"/></a></li>
+                            <c:forEach var="page" begin="1" end="${amountPages}">
+                                <c:choose>
+                                    <c:when test="${page == pageSelected}">
+                                        <li class="page-item active"><a class="page-link" href="<c:url value="/movies/filters/page/${page}"/>"><c:out value="${page}"/></a></li>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <li class="page-item"><a class="page-link" href="<c:url value="/movies/filters/page/${page}"/>"><c:out value="${page}"/></a></li>
+                                    </c:otherwise>
+                                </c:choose>
+                            </c:forEach>
                         </c:otherwise>
+
                     </c:choose>
-                </c:forEach>
+
                 <li class="page-item">
                     <a class="page-link" href="#">Next</a>
                 </li>
