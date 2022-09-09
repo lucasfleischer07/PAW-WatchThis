@@ -1,17 +1,16 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.models.Movie;
+import ar.edu.itba.paw.models.Content;
+
 import ar.edu.itba.paw.models.Review;
-import ar.edu.itba.paw.models.Serie;
 import ar.edu.itba.paw.models.User;
-import ar.edu.itba.paw.services.MovieService;
+import ar.edu.itba.paw.services.ContentService;
+
 import ar.edu.itba.paw.services.ReviewService;
-import ar.edu.itba.paw.services.SerieService;
 import ar.edu.itba.paw.services.UserService;
 import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
 import ar.edu.itba.paw.webapp.form.LoginForm;
 import ar.edu.itba.paw.webapp.form.ReviewForm;
-import org.jboss.logging.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
@@ -31,16 +30,14 @@ import java.util.Optional;
 public class HelloWorldController {
 
     private final UserService us;
-    private final MovieService ms;
-    private final SerieService ss;
+    private final ContentService cs;
     private final ReviewService rs;
     private final int ELEMS_AMOUNT = 10;
 
     @Autowired  //Para indicarle que este es el constructor que quiero que use
-    public HelloWorldController(final UserService us, final MovieService ms, SerieService ss, ReviewService rs){
+    public HelloWorldController(final UserService us, final ContentService cs, ReviewService rs){
         this.us = us;
-        this.ms = ms;
-        this.ss = ss;
+        this.cs = cs;
         this.rs = rs;
     }
 
@@ -49,43 +46,41 @@ public class HelloWorldController {
     public ModelAndView helloWorld(@PathVariable("pageNum")final Optional<Integer> pageNum,@RequestParam(name = "query", defaultValue = "") final String query) {
         final ModelAndView mav = new ModelAndView("moviesPage");
         mav.addObject("query", query);
-        List<Movie> movieList = ms.getSearchedMovies(query);
+        List<Content> contentList = cs.getSearchedContent(query);
         int page= pageNum.orElse(1);
-        if(movieList == null) {
+        if(contentList == null) {
             throw new PageNotFoundException();
         } else {
-            mav.addObject("movies", movieList.subList((page-1)*ELEMS_AMOUNT,(page-1)*ELEMS_AMOUNT + ELEMS_AMOUNT));
-            mav.addObject("amountPages",(int)Math.ceil((double) movieList.size()/(double)ELEMS_AMOUNT));
+            mav.addObject("content", contentList.subList((page-1)*ELEMS_AMOUNT,(page-1)*ELEMS_AMOUNT + ELEMS_AMOUNT));
+            mav.addObject("amountPages",(int)Math.ceil((double) contentList.size()/(double)ELEMS_AMOUNT));
             mav.addObject("pageSelected",page);
         }
         return mav;
     }
 
-    @RequestMapping("/search")
-    public ModelAndView search(@RequestParam(name = "query", defaultValue = "") final String query) {
-        final ModelAndView mav = new ModelAndView("index");
-        mav.addObject("query", query);
-        List<Movie> movieList = ms.getSearchedMovies(query);
-        List<Serie> seriesList = ss.getSearchedSeries(query);
-
-        if(movieList == null && seriesList == null) {
-            throw new PageNotFoundException();
-
-        } else if(movieList != null && seriesList == null) {
-            mav.addObject("movies", movieList);
-
-        }else if(movieList == null) {
-            mav.addObject("movies", seriesList);
-        }
-        return mav;
-    }
+//    @RequestMapping("/search")
+//    public ModelAndView search(@RequestParam(name = "query", defaultValue = "") final String query) {
+//        final ModelAndView mav = new ModelAndView("index");
+//        mav.addObject("query", query);
+//        List<Content> movieList = cs.getSearchedMovies(query);
+//        if(movieList == null && seriesList == null) {
+//            throw new PageNotFoundException();
+//
+//        } else if(movieList != null && seriesList == null) {
+//            mav.addObject("movies", movieList);
+//
+//        }else if(movieList == null) {
+//            mav.addObject("movies", seriesList);
+//        }
+//        return mav;
+//    }
 
 
     @RequestMapping("/movie/{movieId:[0-9]+}")
-    public ModelAndView movieReview(@PathVariable("movieId")final long movieId) {
+    public ModelAndView movieReview(@PathVariable("contentId")final long contentId) {
         final ModelAndView mav = new ModelAndView("infoPage");
-        mav.addObject("details", ms.findById(movieId).orElseThrow(PageNotFoundException::new));
-        List<Review> reviewList = rs.getAllReviews("movie",movieId);
+        mav.addObject("details", cs.findById(contentId).orElseThrow(PageNotFoundException::new));
+        List<Review> reviewList = rs.getAllReviews("movie",contentId);
         if( reviewList == null) {
             throw new PageNotFoundException();
         } else {
@@ -121,15 +116,15 @@ public class HelloWorldController {
             mav.addObject("genre",genre);
             mav.addObject("durationFrom",durationFrom);
             mav.addObject("durationTo",durationTo);
-            List<Movie> movieListFilter;
+            List<Content> movieListFilter;
             if(!Objects.equals(genre, "ANY") && Objects.equals(durationFrom, "ANY")) {
-                movieListFilter = ms.findByGenre(genre) ;
+                movieListFilter = cs.findByGenre(genre) ;
             } else if(Objects.equals(genre, "ANY") && !Objects.equals(durationFrom, "ANY")) {
-                movieListFilter = ms.findByDuration(Integer.parseInt(durationFrom), Integer.parseInt(durationTo));
+                movieListFilter = cs.findByDuration(Integer.parseInt(durationFrom), Integer.parseInt(durationTo));
             } else if(!Objects.equals(durationFrom, "ANY") && !Objects.equals(genre, "ANY")){    // Caso de que si los filtros estan vacios
-                movieListFilter = ms.findByDurationAndGenre(genre,Integer.parseInt(durationFrom),Integer.parseInt(durationTo));
+                movieListFilter = cs.findByDurationAndGenre(genre,Integer.parseInt(durationFrom),Integer.parseInt(durationTo));
             } else{
-                movieListFilter = ms.getAllMovies();
+                movieListFilter = cs.getAllContent();
             }
 
             if(movieListFilter == null) {
@@ -146,16 +141,16 @@ public class HelloWorldController {
             mav.addObject("genre",genre);
             mav.addObject("durationFrom",durationFrom);
             mav.addObject("durationTo",durationTo);
-            List<Serie> serieListFilter;
+            List<Content> serieListFilter;
             if(!Objects.equals(genre, "ANY") && (Objects.equals(durationFrom, "ANY"))) {
-                serieListFilter = ss.findByGenre(genre);
+                serieListFilter = cs.findByGenre(genre);
             } else if(Objects.equals(genre, "ANY") && (!Objects.equals(durationFrom, "ANY"))) {
-                serieListFilter = ss.findByDuration(Integer.parseInt(durationFrom), Integer.parseInt(durationTo));
+                serieListFilter = cs.findByDuration(Integer.parseInt(durationFrom), Integer.parseInt(durationTo));
             } else if(!Objects.equals(durationFrom, "ANY") && !Objects.equals(genre, "ANY")){    // Caso de que si los filtros estan vacios
-                serieListFilter = ss.findByDurationAndGenre(genre,Integer.parseInt(durationFrom),Integer.parseInt(durationTo));
+                serieListFilter = cs.findByDurationAndGenre(genre,Integer.parseInt(durationFrom),Integer.parseInt(durationTo));
             }
             else {    // Caso de que si los filtros estan vacios
-                serieListFilter = ss.getAllSeries();
+                serieListFilter = cs.getAllContent();
             }
 
             if(serieListFilter == null) {
@@ -179,7 +174,7 @@ public class HelloWorldController {
         final ModelAndView mav = new ModelAndView("seriesPage");
         int page= pageNum.orElse(1);
         mav.addObject("query", query);
-        List<Serie> seriesList = ss.getSearchedSeries(query);
+        List<Content> seriesList = cs.getSearchedSeries(query);
         if( seriesList == null) {
             throw new PageNotFoundException();
         } else {
@@ -216,7 +211,7 @@ public class HelloWorldController {
     @RequestMapping("/serie/{serieId:[0-9]+}")
     public ModelAndView serieReview(@PathVariable("serieId")final long serieId) {
         final ModelAndView mav = new ModelAndView("infoPage");
-        mav.addObject("details", ss.findById(serieId).orElseThrow(PageNotFoundException::new));
+        mav.addObject("details", cs.findById(serieId).orElseThrow(PageNotFoundException::new));
         List<Review> reviewList = rs.getAllReviews("serie",serieId);
         if( reviewList == null) {
             throw new PageNotFoundException();
@@ -233,7 +228,7 @@ public class HelloWorldController {
     @RequestMapping(value = "/reviewForm/movie/{id:[0-9]+}", method = {RequestMethod.GET})
     public ModelAndView reviewFormCreateMovies(@ModelAttribute("registerForm") final ReviewForm reviewForm, @PathVariable("id")final long id) {
         final ModelAndView mav = new ModelAndView("reviewRegistration");
-        mav.addObject("details", ms.findById(id).orElseThrow(PageNotFoundException::new));
+        mav.addObject("details", cs.findById(id).orElseThrow(PageNotFoundException::new));
         return mav;
     }
 
@@ -273,7 +268,7 @@ public class HelloWorldController {
     @RequestMapping(value = "/reviewForm/serie/{id:[0-9]+}", method = {RequestMethod.GET})
     public ModelAndView reviewFormCreateSeries(@ModelAttribute("registerForm") final ReviewForm reviewForm, @PathVariable("id")final long id) {
         final ModelAndView mav = new ModelAndView("reviewRegistration");
-        mav.addObject("details", ss.findById(id).orElseThrow(PageNotFoundException::new));
+        mav.addObject("details", cs.findById(id).orElseThrow(PageNotFoundException::new));
         return mav;
     }
 

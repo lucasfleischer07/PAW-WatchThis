@@ -1,11 +1,11 @@
 package ar.edu.itba.paw.models;
 
-public class Movie {
+public class Content {
     private long id;
-    private String name, image, description, released, genre, creator, duration, type = "movie";
+    private String name, image, description, released, genre, creator, duration, type;
 
 
-    public Movie(long id, String name, String image, String description, String released, String genre, String creator, String duration) {
+    public Content(long id, String name, String image, String description, String released, String genre, String creator, String duration,String type) {
         this.id = id;
         this.name = name;
         this.image = image;
@@ -14,6 +14,7 @@ public class Movie {
         this.genre = genre;
         this.creator = creator;
         this.duration = duration;
+        this.type= type;
     }
 
     public long getId() {

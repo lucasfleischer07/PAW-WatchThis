@@ -2,9 +2,7 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.models.Movie;
 import ar.edu.itba.paw.models.Review;
-import ar.edu.itba.paw.models.Serie;
 import ar.edu.itba.paw.persistance.ReviewDao;
-import ar.edu.itba.paw.persistance.SerieDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

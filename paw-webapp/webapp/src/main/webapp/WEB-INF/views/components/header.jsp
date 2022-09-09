@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top W-header-height" style="z-index: 1;">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top W-header-height">
     <div class="container-fluid">
         <div class="W-logo-div">
             <a class="navbar-brand W-logo-style" href="<c:url value="/"/>">
