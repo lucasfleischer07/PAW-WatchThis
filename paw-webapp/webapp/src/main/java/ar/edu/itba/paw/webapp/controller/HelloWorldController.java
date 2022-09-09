@@ -63,7 +63,7 @@ public class HelloWorldController {
 
     @RequestMapping("/search")
     public ModelAndView search(@RequestParam(name = "query", defaultValue = "") final String query) {
-        final ModelAndView mav = new ModelAndView("index");
+        final ModelAndView mav = new ModelAndView("seriesPage");
         mav.addObject("query", query);
         List<Movie> movieList = ms.getSearchedMovies(query);
         List<Serie> seriesList = ss.getSearchedSeries(query);
