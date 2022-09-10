@@ -80,13 +80,28 @@
                             <c:forEach var="page" begin="1" end="${amountPages}">
                                 <c:choose>
                                     <c:when test="${page != pageSelected && ((page > pageSelected - 4 && page<pageSelected) || (page < pageSelected+5 && page > pageSelected))}">
-                                        <li class="page-item"><a class="page-link" href="<c:url value="/series/page/${page}"/>"><c:out value="${page}"/></a></li>
+                                        <li class="page-item"><a class="page-link" href="<c:url value="/${contentType}/filters/page/${page}">
+                                                                                         <c:param name="genre" value="${genre}"/>
+                                                                                         <c:param name="durationFrom" value="${durationFrom}"/>
+                                                                                         <c:param name="durationTo" value="${durationTo}"/>
+
+</c:url> "><c:out value="${page}"/></a></li>
                                     </c:when>
                                     <c:when test="${page == pageSelected - 4 || page == pageSelected + 5 }">
-                                        <li class="page-item"><a class="page-link" href="<c:url value="/series/page/${page}"/>">...</a></li>
+                                        <li class="page-item"><a class="page-link" href="<c:url value="/${contentType}/filters/page/${page}">
+                                                                                         <c:param name="genre" value="${genre}"/>
+                                                                                         <c:param name="durationFrom" value="${durationFrom}"/>
+                                                                                         <c:param name="durationTo" value="${durationTo}"/>
+
+</c:url> ">...</a></li>
                                     </c:when>
                                     <c:when test="${page == pageSelected}">
-                                        <li class="page-item active"><a class="page-link" href="<c:url value="/series/page/${page}"/>"><c:out value="${page}"/></a></li>
+                                        <li class="page-item active"><a class="page-link" href="<c:url value="/${contentType}/filters/page/${page}">
+                                                                                         <c:param name="genre" value="${genre}"/>
+                                                                                         <c:param name="durationFrom" value="${durationFrom}"/>
+                                                                                         <c:param name="durationTo" value="${durationTo}"/>
+
+</c:url>  "><c:out value="${page}"/></a></li>
                                     </c:when>
                                     <c:otherwise>
 
@@ -98,10 +113,20 @@
                             <c:forEach var="page" begin="1" end="${amountPages}">
                                 <c:choose>
                                     <c:when test="${page == pageSelected}">
-                                        <li class="page-item active"><a class="page-link" href="<c:url value="/series/page/${page}"/>"><c:out value="${page}"/></a></li>
+                                        <li class="page-item active"><a class="page-link" href="<c:url value="/${contentType}/filters/page/${page}">
+                                                                                         <c:param name="genre" value="${genre}"/>
+                                                                                         <c:param name="durationFrom" value="${durationFrom}"/>
+                                                                                         <c:param name="durationTo" value="${durationTo}"/>
+
+</c:url>"><c:out value="${page}"/></a></li>
                                     </c:when>
                                     <c:otherwise>
-                                        <li class="page-item"><a class="page-link" href="<c:url value="/series/page/${page}"/>"><c:out value="${page}"/></a></li>
+                                        <li class="page-item"><a class="page-link" href="<c:url value="/${contentType}/filters/page/${page}">
+                                                                                         <c:param name="genre" value="${genre}"/>
+                                                                                         <c:param name="durationFrom" value="${durationFrom}"/>
+                                                                                         <c:param name="durationTo" value="${durationTo}"/>
+
+</c:url>"><c:out value="${page}"/></a></li>
                                     </c:otherwise>
                                 </c:choose>
                             </c:forEach>

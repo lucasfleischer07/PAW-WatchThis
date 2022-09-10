@@ -54,13 +54,15 @@ public class HelloWorldController {
             mav.addObject("allContent", contentList.subList((page-1)*ELEMS_AMOUNT,(page-1)*ELEMS_AMOUNT + ELEMS_AMOUNT));
             mav.addObject("amountPages",(int)Math.ceil((double) contentList.size()/(double)ELEMS_AMOUNT));
             mav.addObject("pageSelected",page);
+            mav.addObject("contentType", "movies");
+
         }
         return mav;
     }
 
 
-    @RequestMapping("/{type:movies|series}")
-    public ModelAndView contentType(@PathVariable("type") final String type) {
+    @RequestMapping(value= {"/{type:movies|series}","/{type:movies|series}/page/{pageNum}"})
+    public ModelAndView contentType(@PathVariable("type") final String type,@PathVariable("pageNum")final Optional<Integer> pageNum) {
         String auxType = null;
         final ModelAndView mav = new ModelAndView("ContentPage");
         if(Objects.equals(type, "movies")) {
@@ -68,11 +70,14 @@ public class HelloWorldController {
         } else if(Objects.equals(type, "series")) {
             auxType = "serie";
         }
+        int page= pageNum.orElse(1);
         List<Content> contentList = cs.getAllContent(auxType);
         if( contentList == null) {
             throw new PageNotFoundException();
         } else {
-            mav.addObject("allContent", contentList);
+            mav.addObject("allContent", contentList.subList((page-1)*ELEMS_AMOUNT,(page-1)*ELEMS_AMOUNT + ELEMS_AMOUNT));
+            mav.addObject("amountPages",(int)Math.ceil((double) contentList.size()/(double)ELEMS_AMOUNT));
+            mav.addObject("pageSelected",page);
             mav.addObject("contentType", type);
         }
         return mav;
@@ -152,6 +157,7 @@ public class HelloWorldController {
             mav.addObject("allContent", contentListFilter.subList((page-1)*ELEMS_AMOUNT,(page-1)*ELEMS_AMOUNT + ELEMS_AMOUNT));
             mav.addObject("amountPages",Math.ceil((double)contentListFilter.size()/(double)ELEMS_AMOUNT));
             mav.addObject("pageSelected",page);
+            mav.addObject("contentType", type);
         }
         return mav;
     }
