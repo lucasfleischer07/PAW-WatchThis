@@ -55,6 +55,9 @@ public class HelloWorldController {
             mav.addObject("amountPages",(int)Math.ceil((double) contentList.size()/(double)ELEMS_AMOUNT));
             mav.addObject("pageSelected",page);
             mav.addObject("contentType", "movies");
+            mav.addObject("genre","ANY");
+            mav.addObject("durationFrom","ANY");
+            mav.addObject("durationTo","ANY");
 
         }
         return mav;
@@ -79,6 +82,9 @@ public class HelloWorldController {
             mav.addObject("amountPages",(int)Math.ceil((double) contentList.size()/(double)ELEMS_AMOUNT));
             mav.addObject("pageSelected",page);
             mav.addObject("contentType", type);
+            mav.addObject("genre","ANY");
+            mav.addObject("durationFrom","ANY");
+            mav.addObject("durationTo","ANY");
         }
         return mav;
     }
@@ -158,6 +164,7 @@ public class HelloWorldController {
             mav.addObject("amountPages",Math.ceil((double)contentListFilter.size()/(double)ELEMS_AMOUNT));
             mav.addObject("pageSelected",page);
             mav.addObject("contentType", type);
+
         }
         return mav;
     }

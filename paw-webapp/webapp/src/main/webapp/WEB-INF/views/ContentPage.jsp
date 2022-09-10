@@ -81,25 +81,59 @@
                                 <c:choose>
                                     <c:when test="${page != pageSelected && ((page > pageSelected - 4 && page<pageSelected) || (page < pageSelected+5 && page > pageSelected))}">
                                         <li class="page-item"><a class="page-link" href="<c:url value="/${contentType}/filters/page/${page}">
-                                                                                         <c:param name="genre" value="${genre}"/>
-                                                                                         <c:param name="durationFrom" value="${durationFrom}"/>
-                                                                                         <c:param name="durationTo" value="${durationTo}"/>
+                                                                                        <c:choose>
+                                                                                            <c:when test="${genre != 'ANY' && durationFrom!= 'ANY'}">
+                                                                                                <c:param name="genre" value="${genre}"/>
+                                                                                                <c:param name="durationFrom" value="${durationFrom}"/>
+                                                                                                <c:param name="durationTo" value="${durationTo}"/>
+                                                                                            </c:when>
+                                                                                            <c:when test="${genre != 'ANY' && durationFrom== 'ANY'}">
+                                                                                                <c:param name="genre" value="${genre}"/>
+                                                                                            </c:when>
+                                                                                            <c:when test="${genre == 'ANY' && durationFrom!= 'ANY'}">
+                                                                                                <c:param name="durationFrom" value="${durationFrom}"/>
+                                                                                                <c:param name="durationTo" value="${durationTo}"/>
+                                                                                            </c:when>
+                                                                                        </c:choose>
 
 </c:url> "><c:out value="${page}"/></a></li>
                                     </c:when>
                                     <c:when test="${page == pageSelected - 4 || page == pageSelected + 5 }">
                                         <li class="page-item"><a class="page-link" href="<c:url value="/${contentType}/filters/page/${page}">
-                                                                                         <c:param name="genre" value="${genre}"/>
-                                                                                         <c:param name="durationFrom" value="${durationFrom}"/>
-                                                                                         <c:param name="durationTo" value="${durationTo}"/>
+                                                                                        <c:choose>
+                                                                                            <c:when test="${genre != 'ANY' && durationFrom!= 'ANY'}">
+                                                                                                <c:param name="genre" value="${genre}"/>
+                                                                                                <c:param name="durationFrom" value="${durationFrom}"/>
+                                                                                                <c:param name="durationTo" value="${durationTo}"/>
+                                                                                            </c:when>
+                                                                                            <c:when test="${genre != 'ANY' && durationFrom== 'ANY'}">
+                                                                                                <c:param name="genre" value="${genre}"/>
+                                                                                            </c:when>
+                                                                                            <c:when test="${genre == 'ANY' && durationFrom!= 'ANY'}">
+                                                                                                <c:param name="durationFrom" value="${durationFrom}"/>
+                                                                                                <c:param name="durationTo" value="${durationTo}"/>
+                                                                                            </c:when>
+                                                                                        </c:choose>
+
 
 </c:url> ">...</a></li>
                                     </c:when>
                                     <c:when test="${page == pageSelected}">
                                         <li class="page-item active"><a class="page-link" href="<c:url value="/${contentType}/filters/page/${page}">
-                                                                                         <c:param name="genre" value="${genre}"/>
-                                                                                         <c:param name="durationFrom" value="${durationFrom}"/>
-                                                                                         <c:param name="durationTo" value="${durationTo}"/>
+                                                                                         <c:choose>
+                                                                                            <c:when test="${genre != 'ANY' && durationFrom!= 'ANY'}">
+                                                                                                <c:param name="genre" value="${genre}"/>
+                                                                                                <c:param name="durationFrom" value="${durationFrom}"/>
+                                                                                                <c:param name="durationTo" value="${durationTo}"/>
+                                                                                            </c:when>
+                                                                                            <c:when test="${genre != 'ANY' && durationFrom== 'ANY'}">
+                                                                                                <c:param name="genre" value="${genre}"/>
+                                                                                            </c:when>
+                                                                                            <c:when test="${genre == 'ANY' && durationFrom!= 'ANY'}">
+                                                                                                <c:param name="durationFrom" value="${durationFrom}"/>
+                                                                                                <c:param name="durationTo" value="${durationTo}"/>
+                                                                                            </c:when>
+                                                                                        </c:choose>
 
 </c:url>  "><c:out value="${page}"/></a></li>
                                     </c:when>
@@ -114,17 +148,39 @@
                                 <c:choose>
                                     <c:when test="${page == pageSelected}">
                                         <li class="page-item active"><a class="page-link" href="<c:url value="/${contentType}/filters/page/${page}">
-                                                                                         <c:param name="genre" value="${genre}"/>
-                                                                                         <c:param name="durationFrom" value="${durationFrom}"/>
-                                                                                         <c:param name="durationTo" value="${durationTo}"/>
+                                                                                         <c:choose>
+                                                                                            <c:when test="${genre != 'ANY' && durationFrom!= 'ANY'}">
+                                                                                                <c:param name="genre" value="${genre}"/>
+                                                                                                <c:param name="durationFrom" value="${durationFrom}"/>
+                                                                                                <c:param name="durationTo" value="${durationTo}"/>
+                                                                                            </c:when>
+                                                                                            <c:when test="${genre != 'ANY' && durationFrom== 'ANY'}">
+                                                                                                <c:param name="genre" value="${genre}"/>
+                                                                                            </c:when>
+                                                                                            <c:when test="${genre == 'ANY' && durationFrom!= 'ANY'}">
+                                                                                                <c:param name="durationFrom" value="${durationFrom}"/>
+                                                                                                <c:param name="durationTo" value="${durationTo}"/>
+                                                                                            </c:when>
+                                                                                        </c:choose>
 
 </c:url>"><c:out value="${page}"/></a></li>
                                     </c:when>
                                     <c:otherwise>
                                         <li class="page-item"><a class="page-link" href="<c:url value="/${contentType}/filters/page/${page}">
-                                                                                         <c:param name="genre" value="${genre}"/>
-                                                                                         <c:param name="durationFrom" value="${durationFrom}"/>
-                                                                                         <c:param name="durationTo" value="${durationTo}"/>
+                                                                                         <c:choose>
+                                                                                            <c:when test="${genre != 'ANY' && durationFrom!= 'ANY'}">
+                                                                                                <c:param name="genre" value="${genre}"/>
+                                                                                                <c:param name="durationFrom" value="${durationFrom}"/>
+                                                                                                <c:param name="durationTo" value="${durationTo}"/>
+                                                                                            </c:when>
+                                                                                            <c:when test="${genre != 'ANY' && durationFrom== 'ANY'}">
+                                                                                                <c:param name="genre" value="${genre}"/>
+                                                                                            </c:when>
+                                                                                            <c:when test="${genre == 'ANY' && durationFrom!= 'ANY'}">
+                                                                                                <c:param name="durationFrom" value="${durationFrom}"/>
+                                                                                                <c:param name="durationTo" value="${durationTo}"/>
+                                                                                            </c:when>
+                                                                                        </c:choose>
 
 </c:url>"><c:out value="${page}"/></a></li>
                                     </c:otherwise>

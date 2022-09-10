@@ -42,69 +42,121 @@
             </c:choose>
             <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
-                                                                            <c:param name="genre" value="ANY"/>
-                                                                            <c:param name="durationFrom" value="${param.durationFrom}"/>
-                                                                            <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                            <c:choose>
+                                                                                <c:when test="${param.durationFrom != 'ANY'}">
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                </c:when>
+                                                                            </c:choose>
                                                                             </c:url>" onclick="showGenre(this)">Clear filter</a></li>
                 <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
                                                                             <c:param name="genre" value="Action"/>
-                                                                            <c:param name="durationFrom" value="${param.durationFrom}"/>
-                                                                            <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                            <c:choose>
+                                                                                <c:when test="${param.durationFrom != 'ANY'}">
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                </c:when>
+                                                                            </c:choose>
                                                                             </c:url>" onclick="showGenre(this)">Action</a></li>
                 <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
                                                                             <c:param name="genre" value="Sci-Fi"/>
-                                                                            <c:param name="durationFrom" value="${param.durationFrom}"/>
-                                                                            <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                            <c:choose>
+                                                                                <c:when test="${param.durationFrom != 'ANY'}">
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                </c:when>
+                                                                            </c:choose>
                                                                             </c:url>" onclick="showGenre(this)">Science Fiction</a></li>
                 <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
                                                                             <c:param name="genre" value="Comedy"/>
-                                                                            <c:param name="durationFrom" value="${param.durationFrom}"/>
-                                                                            <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                            <c:choose>
+                                                                                <c:when test="${param.durationFrom != 'ANY'}">
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                </c:when>
+                                                                            </c:choose>
                                                                             </c:url>" onclick="showGenre(this)">Comedy</a></li>
                 <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
                                                                             <c:param name="genre" value="Adventure"/>
-                                                                            <c:param name="durationFrom" value="${param.durationFrom}"/>
-                                                                            <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                            <c:choose>
+                                                                                <c:when test="${param.durationFrom != 'ANY'}">
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                </c:when>
+                                                                            </c:choose>
                                                                             </c:url>" onclick="showGenre(this)">Adventure</a></li>
                 <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
                                                                             <c:param name="genre" value="Drama"/>
-                                                                            <c:param name="durationFrom" value="${param.durationFrom}"/>
-                                                                            <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                            <c:choose>
+                                                                                <c:when test="${param.durationFrom != 'ANY'}">
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                </c:when>
+                                                                            </c:choose>
                                                                             </c:url>" onclick="showGenre(this)">Drama</a></li>
                 <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
                                                                             <c:param name="genre" value="Horror"/>
-                                                                            <c:param name="durationFrom" value="${param.durationFrom}"/>
-                                                                            <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                            <c:choose>
+                                                                                <c:when test="${param.durationFrom != 'ANY'}">
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                </c:when>
+                                                                            </c:choose>
                                                                             </c:url>" onclick="showGenre(this)">Horror</a></li>
                 <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
                                                                             <c:param name="genre" value="Animation"/>
-                                                                            <c:param name="durationFrom" value="${param.durationFrom}"/>
-                                                                            <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                            <c:choose>
+                                                                                <c:when test="${param.durationFrom != 'ANY'}">
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                </c:when>
+                                                                            </c:choose>
                                                                             </c:url>" onclick="showGenre(this)">Animation</a></li>
                 <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
                                                                             <c:param name="genre" value="Thriller"/>
-                                                                            <c:param name="durationFrom" value="${param.durationFrom}"/>
-                                                                            <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                            <c:choose>
+                                                                                <c:when test="${param.durationFrom != 'ANY'}">
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                </c:when>
+                                                                            </c:choose>
                                                                             </c:url>" onclick="showGenre(this)">Thriller</a></li>
                 <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
                                                                             <c:param name="genre" value="Mystery"/>
-                                                                            <c:param name="durationFrom" value="${param.durationFrom}"/>
-                                                                            <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                            <c:choose>
+                                                                                <c:when test="${param.durationFrom != 'ANY'}">
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                </c:when>
+                                                                            </c:choose>
                                                                             </c:url>" onclick="showGenre(this)">Mystery</a></li>
                 <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
                                                                             <c:param name="genre" value="Crime"/>
-                                                                            <c:param name="durationFrom" value="${param.durationFrom}"/>
-                                                                            <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                            <c:choose>
+                                                                                <c:when test="${param.durationFrom != 'ANY'}">
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                </c:when>
+                                                                            </c:choose>
                                                                             </c:url>" onclick="showGenre(this)">Crime</a></li>
                 <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
                                                                             <c:param name="genre" value="Fantasy"/>
-                                                                            <c:param name="durationFrom" value="${param.durationFrom}"/>
-                                                                            <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                            <c:choose>
+                                                                                <c:when test="${param.durationFrom != 'ANY'}">
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                </c:when>
+                                                                            </c:choose>
                                                                             </c:url>" onclick="showGenre(this)">Fantasy</a></li>
                 <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
                                                                             <c:param name="genre" value="Romance"/>
-                                                                            <c:param name="durationFrom" value="${param.durationFrom}"/>
-                                                                            <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                            <c:choose>
+                                                                                <c:when test="${param.durationFrom != 'ANY'}">
+                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                </c:when>
+                                                                            </c:choose>
+
                                                                             </c:url>" onclick="showGenre(this)">Romance</a></li>
 
             </ul>
@@ -134,23 +186,41 @@
             </c:choose>
             <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
-                                                                            <c:param name="genre" value="${param.genre}"/>
-                                                                            <c:param name="durationFrom" value="ANY"/>-<c:param name="durationTo" value="ANY"/>
+                                                                            <c:choose>
+                                                                                <c:when test="${param.genre != 'ANY'}">
+                                                                                    <c:param name="genre" value="${param.genre}"/>
+                                                                                </c:when>
+                                                                            </c:choose>
                                                                             </c:url>" onclick="showDuration(this)">Clear filter</a></li>
                 <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
-                                                                            <c:param name="genre" value="${param.genre}"/>
-                                                                            <c:param name="durationFrom" value="0"/>-<c:param name="durationTo" value="90"/>
+                                                                            <c:choose>
+                                                                                <c:when test="${param.genre != 'ANY'}">
+                                                                                    <c:param name="genre" value="${param.genre}"/>
+                                                                                </c:when>
+                                                                            </c:choose>                                                                      <c:param name="durationFrom" value="0"/>-<c:param name="durationTo" value="90"/>
                                                                             </c:url>" onclick="showDuration(this)">0-90 minutes</a></li>
                 <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
-                                                                            <c:param name="genre" value="${param.genre}"/>
+                                                                            <c:choose>
+                                                                                <c:when test="${param.genre != 'ANY'}">
+                                                                                    <c:param name="genre" value="${param.genre}"/>
+                                                                                </c:when>
+                                                                            </c:choose>
                                                                             <c:param name="durationFrom" value="90"/>-<c:param name="durationTo" value="120"/>
                                                                             </c:url>" onclick="showDuration(this)">90-120 minutes</a></li>
                 <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
-                                                                            <c:param name="genre" value="${param.genre}"/>
+                                                                            <c:choose>
+                                                                                <c:when test="${param.genre != 'ANY'}">
+                                                                                    <c:param name="genre" value="${param.genre}"/>
+                                                                                </c:when>
+                                                                            </c:choose>
                                                                             <c:param name="durationFrom" value="120"/>-<c:param name="durationTo" value="150"/>
                                                                             </c:url>" onclick="showDuration(this)">120-150 minutes</a></li>
                 <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
-                                                                            <c:param name="genre" value="${param.genre}"/>
+                                                                            <c:choose>
+                                                                                <c:when test="${param.genre != 'ANY'}">
+                                                                                    <c:param name="genre" value="${param.genre}"/>
+                                                                                </c:when>
+                                                                            </c:choose>
                                                                             <c:param name="durationFrom" value="150"/>-<c:param name="durationTo" value="1000"/>
                                                                             </c:url>" onclick="showDuration(this)">150 or more</a></li>
             </ul>
