@@ -204,21 +204,8 @@
 <%--                            <button type="button" class="btn btn-success">Apply</button>--%>
 <%--                        </div>--%>
                     </div>
+                    <script src="<c:url value="/resources/js/dropDownBehaviour.js"/>"></script>
 
-                    <script>
-                        function showRating(item) {
-                            document.getElementById("ratingGroupDrop").innerHTML = item.innerHTML;
-                        }
-
-                        function showGenre(item) {
-                            document.getElementById("genreGroupDrop").innerHTML = item.innerHTML;
-                        }
-
-                        function showDuration(item) {
-                            document.getElementById("durationGroupDrop").innerHTML = item.innerHTML;
-                        }
-
-                    </script>
                 </div>
 
 
