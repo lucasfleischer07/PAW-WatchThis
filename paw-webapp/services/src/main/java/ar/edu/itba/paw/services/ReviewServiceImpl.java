@@ -1,10 +1,7 @@
 package ar.edu.itba.paw.services;
 
-import ar.edu.itba.paw.models.Movie;
 import ar.edu.itba.paw.models.Review;
-import ar.edu.itba.paw.models.Serie;
 import ar.edu.itba.paw.persistance.ReviewDao;
-import ar.edu.itba.paw.persistance.SerieDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,8 +22,8 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     @Override
-    public List<Review> getAllReviews(String type, Long id) {
-        return reviewDao.getAllReviews(type,id);
+    public List<Review> getAllReviews(Long id) {
+        return reviewDao.getAllReviews(id);
     }
 
     @Override

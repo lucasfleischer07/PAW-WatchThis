@@ -58,6 +58,9 @@
                     </div>
                 </div>
 
+                <jsp:include page="comment.jsp">
+                    <jsp:param name="commentText" value="${param.reviewDescription}"/>
+                </jsp:include>
             </div>
         </div>
     </div>

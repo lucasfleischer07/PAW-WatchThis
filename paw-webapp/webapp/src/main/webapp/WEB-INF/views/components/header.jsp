@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top W-header-height" style="z-index: 1;">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top W-header-height">
     <div class="container-fluid">
         <div class="W-logo-div">
             <a class="navbar-brand W-logo-style" href="<c:url value="/"/>">
@@ -27,7 +27,7 @@
                                     <a class="nav-link" aria-current="page" href="<c:url value="/"/>">Home</a>
                                 </li>
                                 <li class="nav-item W-nav-item">
-                                    <a class="nav-link active" aria-current="page" href="<c:url value="/"/>">Movies</a>
+                                    <a class="nav-link active" aria-current="page" href="<c:url value="/movies"/>">Movies</a>
                                 </li>
                                 <li class="nav-item W-nav-item">
                                     <a class="nav-link" href="<c:url value="/series"/>">Tv Shows</a>
@@ -38,7 +38,7 @@
                                     <a class="nav-link" aria-current="page" href="<c:url value="/"/>">Home</a>
                                 </li>
                                 <li class="nav-item W-nav-item">
-                                    <a class="nav-link" aria-current="page" href="<c:url value="/"/>">Movies</a>
+                                    <a class="nav-link" aria-current="page" href="<c:url value="/movies"/>">Movies</a>
                                 </li>
                                 <li class="nav-item W-nav-item">
                                     <a class="nav-link active" href="<c:url value="/series"/>">Tv Shows</a>
@@ -49,7 +49,7 @@
                                     <a class="nav-link" aria-current="page" href="<c:url value="/"/>">Home</a>
                                 </li>
                                 <li class="nav-item W-nav-item">
-                                    <a class="nav-link" aria-current="page" href="<c:url value="/"/>">Movies</a>
+                                    <a class="nav-link" aria-current="page" href="<c:url value="/movies"/>">Movies</a>
                                 </li>
                                 <li class="nav-item W-nav-item">
                                     <a class="nav-link" href="<c:url value="/series"/>">Tv Shows</a>
@@ -204,21 +204,8 @@
 <%--                            <button type="button" class="btn btn-success">Apply</button>--%>
 <%--                        </div>--%>
                     </div>
+                    <script src="<c:url value="/resources/js/dropDownBehaviour.js"/>"></script>
 
-                    <script>
-                        function showRating(item) {
-                            document.getElementById("ratingGroupDrop").innerHTML = item.innerHTML;
-                        }
-
-                        function showGenre(item) {
-                            document.getElementById("genreGroupDrop").innerHTML = item.innerHTML;
-                        }
-
-                        function showDuration(item) {
-                            document.getElementById("durationGroupDrop").innerHTML = item.innerHTML;
-                        }
-
-                    </script>
                 </div>
 
 
