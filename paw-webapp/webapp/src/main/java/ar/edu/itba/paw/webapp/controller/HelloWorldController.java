@@ -41,19 +41,39 @@ public class HelloWorldController {
         this.rs = rs;
     }
 
-    // * ----------------------------------- Movie Info -----------------------------------------------------------------------
-    @RequestMapping(value= {"/","page/{pageNum"})
+    // * ----------------------------------- Movie and Series Info -----------------------------------------------------------------------
+    @RequestMapping(value= {"/","page/{pageNum}"})
     public ModelAndView helloWorld(@PathVariable("pageNum")final Optional<Integer> pageNum,@RequestParam(name = "query", defaultValue = "") final String query) {
-        final ModelAndView mav = new ModelAndView("moviesPage");
+        final ModelAndView mav = new ModelAndView("ContentPage");
         mav.addObject("query", query);
         List<Content> contentList = cs.getSearchedContent(query);
         int page= pageNum.orElse(1);
         if(contentList == null) {
             throw new PageNotFoundException();
         } else {
-            mav.addObject("content", contentList.subList((page-1)*ELEMS_AMOUNT,(page-1)*ELEMS_AMOUNT + ELEMS_AMOUNT));
+            mav.addObject("allContent", contentList.subList((page-1)*ELEMS_AMOUNT,(page-1)*ELEMS_AMOUNT + ELEMS_AMOUNT));
             mav.addObject("amountPages",(int)Math.ceil((double) contentList.size()/(double)ELEMS_AMOUNT));
             mav.addObject("pageSelected",page);
+        }
+        return mav;
+    }
+
+
+    @RequestMapping("/{type:movies|series}")
+    public ModelAndView contentType(@PathVariable("type") final String type) {
+        String auxType = null;
+        final ModelAndView mav = new ModelAndView("ContentPage");
+        if(Objects.equals(type, "movies")) {
+            auxType = "movie";
+        } else if(Objects.equals(type, "series")) {
+            auxType = "serie";
+        }
+        List<Content> contentList = cs.getAllContent(auxType);
+        if( contentList == null) {
+            throw new PageNotFoundException();
+        } else {
+            mav.addObject("allContent", contentList);
+            mav.addObject("contentType", type);
         }
         return mav;
     }
@@ -75,13 +95,12 @@ public class HelloWorldController {
 //        return mav;
 //    }
 
-
-    @RequestMapping("/movie/{movieId:[0-9]+}")
-    public ModelAndView movieReview(@PathVariable("contentId")final long contentId) {
+    @RequestMapping("/{type:movie|serie}/{contentId:[0-9]+}")
+    public ModelAndView reviews(@PathVariable("contentId")final long contentId, @PathVariable("type") final String type) {
         final ModelAndView mav = new ModelAndView("infoPage");
         mav.addObject("details", cs.findById(contentId).orElseThrow(PageNotFoundException::new));
-        List<Review> reviewList = rs.getAllReviews("movie",contentId);
-        if( reviewList == null) {
+        List<Review> reviewList = rs.getAllReviews(contentId);
+        if(reviewList == null) {
             throw new PageNotFoundException();
         } else {
             mav.addObject("reviews", reviewList);
@@ -89,16 +108,8 @@ public class HelloWorldController {
         return mav;
     }
 
+    // * -------------------------------------------------------------------------------------------------------------------------------------
 
-
-//    TODO: Ver como transformar la para que la root sea /movies
-//    @RequestMapping("/movies")
-//    public ModelAndView movies() {
-//        final ModelAndView mav = new ModelAndView("index");
-//        mav.addObject("movies", ms.getAllMovies().orElseThrow(UserNotFoundException::new));
-//        return mav;
-//    }
-    // * -----------------------------------------------------------------------------------------------------------------------
 
     // *  ----------------------------------- Movies and Serie Filters -----------------------------------------------------------------------
 
@@ -109,58 +120,38 @@ public class HelloWorldController {
             @RequestParam(name = "durationFrom",defaultValue = "ANY",required = false)final String durationFrom,
             @RequestParam(name = "durationTo",defaultValue = "ANY",required = false)final String durationTo,
             @RequestParam(name = "genre", defaultValue = "ANY",required = false)final String genre) {
+
         ModelAndView mav = null;
         int page = pageNum.orElse(1);
+        String auxType = null;
+
         if(Objects.equals(type, "movies")) {
-            mav = new ModelAndView("moviesPage");
-            mav.addObject("genre",genre);
-            mav.addObject("durationFrom",durationFrom);
-            mav.addObject("durationTo",durationTo);
-            List<Content> movieListFilter;
-            if(!Objects.equals(genre, "ANY") && Objects.equals(durationFrom, "ANY")) {
-                movieListFilter = cs.findByGenre(genre) ;
-            } else if(Objects.equals(genre, "ANY") && !Objects.equals(durationFrom, "ANY")) {
-                movieListFilter = cs.findByDuration(Integer.parseInt(durationFrom), Integer.parseInt(durationTo));
-            } else if(!Objects.equals(durationFrom, "ANY") && !Objects.equals(genre, "ANY")){    // Caso de que si los filtros estan vacios
-                movieListFilter = cs.findByDurationAndGenre(genre,Integer.parseInt(durationFrom),Integer.parseInt(durationTo));
-            } else{
-                movieListFilter = cs.getAllContent();
-            }
-
-            if(movieListFilter == null) {
-                throw new PageNotFoundException();
-            } else {
-                mav.addObject("movies", movieListFilter.subList((page-1)*ELEMS_AMOUNT,(page-1)*ELEMS_AMOUNT + ELEMS_AMOUNT));
-                mav.addObject("amountPages",Math.ceil((double)movieListFilter.size()/(double)ELEMS_AMOUNT));
-                mav.addObject("pageSelected",page);
-
-            }
-            return mav;
+            auxType = "movie";
         } else if(Objects.equals(type, "series")) {
-            mav = new ModelAndView("seriesPage");
-            mav.addObject("genre",genre);
-            mav.addObject("durationFrom",durationFrom);
-            mav.addObject("durationTo",durationTo);
-            List<Content> serieListFilter;
-            if(!Objects.equals(genre, "ANY") && (Objects.equals(durationFrom, "ANY"))) {
-                serieListFilter = cs.findByGenre(genre);
-            } else if(Objects.equals(genre, "ANY") && (!Objects.equals(durationFrom, "ANY"))) {
-                serieListFilter = cs.findByDuration(Integer.parseInt(durationFrom), Integer.parseInt(durationTo));
-            } else if(!Objects.equals(durationFrom, "ANY") && !Objects.equals(genre, "ANY")){    // Caso de que si los filtros estan vacios
-                serieListFilter = cs.findByDurationAndGenre(genre,Integer.parseInt(durationFrom),Integer.parseInt(durationTo));
-            }
-            else {    // Caso de que si los filtros estan vacios
-                serieListFilter = cs.getAllContent();
-            }
+            auxType = "serie";
+        }
 
-            if(serieListFilter == null) {
-                throw new PageNotFoundException();
-            } else {
-                mav.addObject("series", serieListFilter.subList((page-1)*ELEMS_AMOUNT,(page-1)*ELEMS_AMOUNT + ELEMS_AMOUNT));
-                mav.addObject("amountPages",Math.ceil((double)serieListFilter.size()/(double)ELEMS_AMOUNT));
-                mav.addObject("pageSelected",page);
-            }
-            return mav;
+        mav = new ModelAndView("ContentPage");
+        mav.addObject("genre",genre);
+        mav.addObject("durationFrom",durationFrom);
+        mav.addObject("durationTo",durationTo);
+        List<Content> contentListFilter;
+        if(!Objects.equals(genre, "ANY") && Objects.equals(durationFrom, "ANY")) {
+            contentListFilter = cs.findByGenre(auxType, genre) ;
+        } else if(Objects.equals(genre, "ANY") && !Objects.equals(durationFrom, "ANY")) {
+            contentListFilter = cs.findByDuration(auxType, Integer.parseInt(durationFrom), Integer.parseInt(durationTo));
+        } else if(!Objects.equals(durationFrom, "ANY") && !Objects.equals(genre, "ANY")){    // Caso de que si los filtros estan vacios
+            contentListFilter = cs.findByDurationAndGenre(auxType, genre,Integer.parseInt(durationFrom),Integer.parseInt(durationTo));
+        } else{
+            contentListFilter = cs.getAllContent(auxType);
+        }
+
+        if(contentListFilter == null) {
+            throw new PageNotFoundException();
+        } else {
+            mav.addObject("allContent", contentListFilter.subList((page-1)*ELEMS_AMOUNT,(page-1)*ELEMS_AMOUNT + ELEMS_AMOUNT));
+            mav.addObject("amountPages",Math.ceil((double)contentListFilter.size()/(double)ELEMS_AMOUNT));
+            mav.addObject("pageSelected",page);
         }
         return mav;
     }
@@ -169,138 +160,60 @@ public class HelloWorldController {
 
 
     // * ----------------------------------- Serie Info -----------------------------------------------------------------------
-    @RequestMapping(value = {"/series","/series/page/{pageNum}"})
-    public ModelAndView series(@PathVariable("pageNum") Optional<Integer> pageNum,@RequestParam(name = "query", defaultValue = "") final String query) {
-        final ModelAndView mav = new ModelAndView("seriesPage");
-        int page= pageNum.orElse(1);
-        mav.addObject("query", query);
-        List<Content> seriesList = cs.getSearchedSeries(query);
-        if( seriesList == null) {
-            throw new PageNotFoundException();
-        } else {
-            mav.addObject("series", seriesList.subList((page-1)*ELEMS_AMOUNT,(page-1)*ELEMS_AMOUNT + ELEMS_AMOUNT));
-        }
-        return mav;
-    }
-
-
-//    @RequestMapping("/series/filters")
-//    public ModelAndView seriesWithFilters(
-//            @RequestParam(name = "durationFrom",defaultValue = "ANY")final String durationFrom,
-//            @RequestParam(name = "durationTo",defaultValue = "ANY")final String durationTo,
-//            @RequestParam(name = "genre", defaultValue = "ANY")final String genre) {
-//        final ModelAndView mav = new ModelAndView("index");
-//        List<Serie> serieListFilter;
-//
-//        if(!Objects.equals(genre, "ANY") && Objects.equals(durationFrom, "ANY")) {
-//            serieListFilter = ss.findByGenre(genre);
-//        } else if(Objects.equals(genre, "ANY") && !Objects.equals(durationFrom, "ANY")) {
-//            serieListFilter = ss.findByDuration(Integer.parseInt(durationFrom), Integer.parseInt(durationTo));
-//        } else {    // Caso de que si los filtros estan vacios
-//            serieListFilter = ss.getAllSeries();
-//        }
-//
-//        if(serieListFilter == null) {
-//            throw new UserNotFoundException();
+//    @RequestMapping(value = {"/series","/series/page/{pageNum}"})
+//    public ModelAndView series(@PathVariable("pageNum") Optional<Integer> pageNum,@RequestParam(name = "query", defaultValue = "") final String query) {
+//        final ModelAndView mav = new ModelAndView("seriesPage");
+//        int page= pageNum.orElse(1);
+//        mav.addObject("query", query);
+//        List<Content> seriesList = cs.getSearchedSeries(query);
+//        if( seriesList == null) {
+//            throw new PageNotFoundException();
 //        } else {
-//            mav.addObject("series", serieListFilter);
+//            mav.addObject("series", seriesList.subList((page-1)*ELEMS_AMOUNT,(page-1)*ELEMS_AMOUNT + ELEMS_AMOUNT));
 //        }
 //        return mav;
 //    }
-
-    @RequestMapping("/serie/{serieId:[0-9]+}")
-    public ModelAndView serieReview(@PathVariable("serieId")final long serieId) {
-        final ModelAndView mav = new ModelAndView("infoPage");
-        mav.addObject("details", cs.findById(serieId).orElseThrow(PageNotFoundException::new));
-        List<Review> reviewList = rs.getAllReviews("serie",serieId);
-        if( reviewList == null) {
-            throw new PageNotFoundException();
-        } else {
-            mav.addObject("reviews", reviewList);
-        }
-        return mav;
-    }
     // * -----------------------------------------------------------------------------------------------------------------------
 
 
 
-    // * ----------------------------------- Movies Review -----------------------------------------------------------------------
-    @RequestMapping(value = "/reviewForm/movie/{id:[0-9]+}", method = {RequestMethod.GET})
-    public ModelAndView reviewFormCreateMovies(@ModelAttribute("registerForm") final ReviewForm reviewForm, @PathVariable("id")final long id) {
+    // * ----------------------------------- Movies and Series Review -----------------------------------------------------------------------
+    @RequestMapping(value = "/reviewForm/{type:movie|serie}/{id:[0-9]+}", method = {RequestMethod.GET})
+    public ModelAndView reviewFormCreate(@ModelAttribute("registerForm") final ReviewForm reviewForm, @PathVariable("id")final long id) {
         final ModelAndView mav = new ModelAndView("reviewRegistration");
         mav.addObject("details", cs.findById(id).orElseThrow(PageNotFoundException::new));
         return mav;
     }
 
-    @RequestMapping(value = "/reviewForm/movie/{id:[0-9]+}", method = {RequestMethod.POST})
-    public ModelAndView reviewFormMovie(@Valid @ModelAttribute("registerForm") final ReviewForm form, final BindingResult errors, @PathVariable("id")final long id) {
+    @RequestMapping(value = "/reviewForm/{type:movie|serie}/{id:[0-9]+}", method = {RequestMethod.POST})
+    public ModelAndView reviewFormMovie(@Valid @ModelAttribute("registerForm") final ReviewForm form, final BindingResult errors, @PathVariable("id")final long id, @PathVariable("type")final String type) {
         if(errors.hasErrors()) {
-            return reviewFormCreateMovies(form,id);
+            return reviewFormCreate(form,id);
         }
-        User newUser = new User(null,form.getEmail(),form.getUserName());
+        User newUser = new User(null, form.getEmail(), form.getUserName());
         //Primero intenta agregar el usuario, luego intenta agregar la review
         Optional<Long> userId = us.register(newUser);
         //Falta Agregar mensaje de error para el caso -1 (si falla en el pedido)
         if(userId.get() == -1) {
-            ModelAndView mav=reviewFormCreateMovies(form,id);
+            ModelAndView mav=reviewFormCreate(form,id);
             mav.addObject("errorMsg","This username or mail is already in use.");
             return mav;
         }
         try {
-            Review newReview = new Review( null,"movie",id,null,userId.get(),form.getName(),form.getDescription(), form.getRating());    //ReviewId va en null por que eso lo asigna la tabla
+            // ReviewId va en null porque eso lo asigna la tabla
+            Review newReview = new Review(null, type, id, userId.get(), form.getName(), form.getDescription(), form.getRating());
             newReview.setId(id);
             rs.addReview(newReview);
         }
         catch(DuplicateKeyException e){
-            ModelAndView mav=reviewFormCreateMovies(form,id);
-            mav.addObject("errorMsg","You have already written a review for this movie.");
+            ModelAndView mav = reviewFormCreate(form,id);
+            mav.addObject("errorMsg","You have already written a review for this " + type + ".");
             return mav;
         }
 
         ModelMap model =new ModelMap();
         model.addAttribute("toastMsg","Your review was correctly added");
-        return new ModelAndView("redirect:/movie/"+id,model);
-    }
-    // * -----------------------------------------------------------------------------------------------------------------------
-
-    
-    // * ----------------------------------- Serie Review -----------------------------------------------------------------------
-    @RequestMapping(value = "/reviewForm/serie/{id:[0-9]+}", method = {RequestMethod.GET})
-    public ModelAndView reviewFormCreateSeries(@ModelAttribute("registerForm") final ReviewForm reviewForm, @PathVariable("id")final long id) {
-        final ModelAndView mav = new ModelAndView("reviewRegistration");
-        mav.addObject("details", cs.findById(id).orElseThrow(PageNotFoundException::new));
-        return mav;
-    }
-
-    @RequestMapping(value = "/reviewForm/serie/{id:[0-9]+}", method = {RequestMethod.POST})
-    public ModelAndView reviewFormSeries(@Valid @ModelAttribute("registerForm") final ReviewForm form, final BindingResult errors, @PathVariable("id")final long id, RedirectAttributes redirectAttributes) {
-        if(errors.hasErrors()) {
-            return reviewFormCreateSeries(form,id);
-        }
-        User newUser = new User(null,form.getEmail(),form.getUserName());
-        //Primero intenta agregar el usuario, luego intenta agregar la review
-        Optional<Long> userId = us.register(newUser);
-        //Falta Agregar mensaje de error para el caso -1 (si falla en el pedido)
-        if(userId.get() == -1) {
-            ModelAndView mav=reviewFormCreateSeries(form,id);
-            mav.addObject("errorMsg","This username or mail is already in use.");
-            return mav;
-        }
-        try {
-            Review newReview = new Review( null,"serie",null,id,userId.get(),form.getName(),form.getDescription(), form.getRating());    //ReviewId va en null por que eso lo asigna la tabla
-            newReview.setId(id);
-            rs.addReview(newReview);
-        }
-        catch(DuplicateKeyException e){
-            ModelAndView mav=reviewFormCreateSeries(form,id);
-            mav.addObject("errorMsg","You have already written a review for this serie.");
-            return mav;
-        }
-
-        ModelAndView mav =new ModelAndView("redirect:/serie/"+id);
-        redirectAttributes.addFlashAttribute("toastMsg","Review added correctly");
-        mav.addObject("toastMsg","Review added correctly");
-        return mav;
+        return new ModelAndView("redirect:/" + type + "/" + id, model);
     }
     // * -----------------------------------------------------------------------------------------------------------------------
 

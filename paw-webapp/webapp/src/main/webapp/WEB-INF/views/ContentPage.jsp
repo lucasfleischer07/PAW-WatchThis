@@ -19,7 +19,7 @@
 
     <body>
         <jsp:include page="components/header.jsp">
-            <jsp:param name="type" value="movies"/>
+            <jsp:param name="type" value="${contentType}"/>
             <jsp:param name="genre" value="${genre}"/>
             <jsp:param name="durationFrom" value="${durationFrom}"/>
             <jsp:param name="durationTo" value="${durationTo}"/>
@@ -30,20 +30,20 @@
                 <jsp:param name="genre" value="${genre}"/>
                 <jsp:param name="durationFrom" value="${durationFrom}"/>
                 <jsp:param name="durationTo" value="${durationTo}"/>
-                <jsp:param name="type" value="movies"/>
+                <jsp:param name="type" value="${contentType}"/>
             </jsp:include>
 
             <div class="W-films-div W-row-display">
                 <div class="row row-cols-1 row-cols-md-2 g-2">
-                    <c:forEach var="movie" items="${movies}">
+                    <c:forEach var="content" items="${allContent}">
                         <jsp:include page="components/movieCard.jsp">
-                            <jsp:param name="movieName" value="${movie.name}"/>
-                            <jsp:param name="movieReleased" value="${movie.released}"/>
-                            <jsp:param name="movieCreator" value="${movie.creator}"/>
-                            <jsp:param name="movieGenre" value="${movie.genre}"/>
-                            <jsp:param name="movieImage" value="${movie.image}"/>
-                            <jsp:param name="movieId" value="${movie.id}"/>
-                            <jsp:param name="type" value="${movie.type}"/>
+                            <jsp:param name="movieName" value="${content.name}"/>
+                            <jsp:param name="movieReleased" value="${content.released}"/>
+                            <jsp:param name="movieCreator" value="${content.creator}"/>
+                            <jsp:param name="movieGenre" value="${content.genre}"/>
+                            <jsp:param name="movieImage" value="${content.image}"/>
+                            <jsp:param name="movieId" value="${content.id}"/>
+                            <jsp:param name="type" value="${content.type}"/>
                         </jsp:include>
                     </c:forEach>
 
@@ -52,14 +52,14 @@
 
             </div>
 
-            <c:if test="${movies==null || movies.size()==0}">
+            <c:if test="${allContent == null || allContent.size() == 0}">
                 <div class="card W-not-found-card">
                     <div class="card-body W-row-display" >
                         <div>
                             <img class="W-not-found" src="<c:url value="/resources/img/noResults.png"/>" alt="Not_Found_Ing"/>
                         </div>
                         <div>
-                            <h4 class="W-not-found-message"> We looked everywhere, but we couldn't find any movies with these filters.</h4>
+                            <h4 class="W-not-found-message"> We looked everywhere, but we couldn't find any <c:out value="${contentType}"/> with these filters.</h4>
                         </div>
                     </div>
                 </div>
@@ -79,14 +79,14 @@
                         <c:when test="${amountPages > 10 }">
                             <c:forEach var="page" begin="1" end="${amountPages}">
                                 <c:choose>
-                                    <c:when test="${page != pageSelected && ((page > pageSelected - 4 && page<pageSelected) || (page < pageSelected+5 && page > pageSelected)) }">
-                                        <li class="page-item"><a class="page-link" href="<c:url value="/movies/filters/page/${page}"/>"><c:out value="${page}"/></a></li>
+                                    <c:when test="${page != pageSelected && ((page > pageSelected - 4 && page<pageSelected) || (page < pageSelected+5 && page > pageSelected))}">
+                                        <li class="page-item"><a class="page-link" href="<c:url value="/series/page/${page}"/>"><c:out value="${page}"/></a></li>
                                     </c:when>
                                     <c:when test="${page == pageSelected - 4 || page == pageSelected + 5 }">
-                                        <li class="page-item"><a class="page-link" href="<c:url value="/movies/filters/page/${page}"/>">...</a></li>
+                                        <li class="page-item"><a class="page-link" href="<c:url value="/series/page/${page}"/>">...</a></li>
                                     </c:when>
                                     <c:when test="${page == pageSelected}">
-                                        <li class="page-item active"><a class="page-link" href="<c:url value="/movies/filters/page/${page}"/>"><c:out value="${page}"/></a></li>
+                                        <li class="page-item active"><a class="page-link" href="<c:url value="/series/page/${page}"/>"><c:out value="${page}"/></a></li>
                                     </c:when>
                                     <c:otherwise>
 
@@ -98,10 +98,10 @@
                             <c:forEach var="page" begin="1" end="${amountPages}">
                                 <c:choose>
                                     <c:when test="${page == pageSelected}">
-                                        <li class="page-item active"><a class="page-link" href="<c:url value="/movies/filters/page/${page}"/>"><c:out value="${page}"/></a></li>
+                                        <li class="page-item active"><a class="page-link" href="<c:url value="/series/page/${page}"/>"><c:out value="${page}"/></a></li>
                                     </c:when>
                                     <c:otherwise>
-                                        <li class="page-item"><a class="page-link" href="<c:url value="/movies/filters/page/${page}"/>"><c:out value="${page}"/></a></li>
+                                        <li class="page-item"><a class="page-link" href="<c:url value="/series/page/${page}"/>"><c:out value="${page}"/></a></li>
                                     </c:otherwise>
                                 </c:choose>
                             </c:forEach>
@@ -114,6 +114,8 @@
                 </li>
             </ul>
         </div>
+
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
     </body>
 </html>

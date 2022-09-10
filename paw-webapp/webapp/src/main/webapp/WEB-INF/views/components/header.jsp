@@ -27,7 +27,7 @@
                                     <a class="nav-link" aria-current="page" href="<c:url value="/"/>">Home</a>
                                 </li>
                                 <li class="nav-item W-nav-item">
-                                    <a class="nav-link active" aria-current="page" href="<c:url value="/"/>">Movies</a>
+                                    <a class="nav-link active" aria-current="page" href="<c:url value="/movies"/>">Movies</a>
                                 </li>
                                 <li class="nav-item W-nav-item">
                                     <a class="nav-link" href="<c:url value="/series"/>">Tv Shows</a>
@@ -38,7 +38,7 @@
                                     <a class="nav-link" aria-current="page" href="<c:url value="/"/>">Home</a>
                                 </li>
                                 <li class="nav-item W-nav-item">
-                                    <a class="nav-link" aria-current="page" href="<c:url value="/"/>">Movies</a>
+                                    <a class="nav-link" aria-current="page" href="<c:url value="/movies"/>">Movies</a>
                                 </li>
                                 <li class="nav-item W-nav-item">
                                     <a class="nav-link active" href="<c:url value="/series"/>">Tv Shows</a>
@@ -49,7 +49,7 @@
                                     <a class="nav-link" aria-current="page" href="<c:url value="/"/>">Home</a>
                                 </li>
                                 <li class="nav-item W-nav-item">
-                                    <a class="nav-link" aria-current="page" href="<c:url value="/"/>">Movies</a>
+                                    <a class="nav-link" aria-current="page" href="<c:url value="/movies"/>">Movies</a>
                                 </li>
                                 <li class="nav-item W-nav-item">
                                     <a class="nav-link" href="<c:url value="/series"/>">Tv Shows</a>

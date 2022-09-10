@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Repository
@@ -26,26 +27,19 @@ public class ContentJdbcDao implements ContentDao {
 
 
     private final JdbcTemplate template;
-//    private final SimpleJdbcInsert insert;
 
     @Autowired
     public ContentJdbcDao(final DataSource ds){
         this.template = new JdbcTemplate(ds);
-//        this.insert = new SimpleJdbcInsert(ds)
-//                .withTableName("users")
-//                .usingGeneratedKeyColumns("id");
-//
-//        //Hacer esto NO esta bueno, ya va a mostrar una mejor forma
-//        template.execute("CREATE TABLE IF NOT EXISTS users ("
-//                + "id SERIAL PRIMARY KEY,"
-//                + "email VARCHAR(255) UNIQUE NOT NULL,"
-//                + "password VARCHAR(255) NOT NULL"
-//                + ")");
     }
 
     @Override
-    public List<Content> getAllContent() {
-        return template.query("SELECT * FROM content", CONTENT_ROW_MAPPER);
+    public List<Content> getAllContent(String type) {
+        if(Objects.equals(type, "movie") || Objects.equals(type, "serie")) {
+            return template.query("SELECT * FROM content WHERE type = ?", new Object[]{type}, CONTENT_ROW_MAPPER);
+        } else {
+            return template.query("SELECT * FROM content", CONTENT_ROW_MAPPER);
+        }
     }
 
     @Override
@@ -56,20 +50,20 @@ public class ContentJdbcDao implements ContentDao {
     }
 
     @Override
-    public List<Content> findByGenre(String genre) {
+    public List<Content> findByGenre(String type, String genre) {
         // TODO: Ver como hacer para que, dentro de los genereos, que me agarre 1 de todos los que tiene
-        return template.query("SELECT * FROM content WHERE genre LIKE '%'||?||'%'", new Object[]{ genre }, CONTENT_ROW_MAPPER);
+        return template.query("SELECT * FROM content WHERE genre LIKE '%'||?||'%' AND type = ?", new Object[]{ genre, type }, CONTENT_ROW_MAPPER);
     }
 
     @Override
-    public List<Content> findByDuration(int durationFrom, int durationTo) {
+    public List<Content> findByDuration(String type, int durationFrom, int durationTo) {
         // TODO: Aca, cuando definamos para hacer la consulta, tiene que ser en el sigueinte formato: 2 horas 22 minutos, es decir, numero horas numero minuto
-        return template.query("SELECT * FROM content WHERE durationnum > ? and durationnum <= ?", new Object[]{ durationFrom, durationTo }, CONTENT_ROW_MAPPER);
+        return template.query("SELECT * FROM content WHERE durationnum > ? AND durationnum <= ? AND type = ?", new Object[]{ durationFrom, durationTo, type }, CONTENT_ROW_MAPPER);
     }
 
     @Override
-    public List<Content> findByDurationAndGenre(String genre,int durationFrom, int durationTo){
-        return template.query("SELECT * FROM content WHERE durationnum > ? and durationnum <= ? and genre LIKE '%'||?||'%'",new Object[]{ durationFrom, durationTo,genre},CONTENT_ROW_MAPPER);
+    public List<Content> findByDurationAndGenre(String type, String genre,int durationFrom, int durationTo){
+        return template.query("SELECT * FROM content WHERE durationnum > ? AND durationnum <= ? AND genre LIKE '%'||?||'%' AND type = ?",new Object[]{ durationFrom, durationTo, genre, type},CONTENT_ROW_MAPPER);
     }
 
     @Override
@@ -86,6 +80,7 @@ public class ContentJdbcDao implements ContentDao {
                 new Object[]{"%" + query.toLowerCase() + "%"},CONTENT_ROW_MAPPER);
         return content;
     }
+
 
     @Override
     public List<Content> ordenByAsc(String parameter) {
