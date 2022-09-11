@@ -130,7 +130,8 @@ public class HelloWorldController {
             @PathVariable("pageNum")final Optional<Integer> pageNum,
             @RequestParam(name = "durationFrom",defaultValue = "ANY",required = false)final String durationFrom,
             @RequestParam(name = "durationTo",defaultValue = "ANY",required = false)final String durationTo,
-            @RequestParam(name = "genre", defaultValue = "ANY",required = false)final String genre) {
+            @RequestParam(name = "genre", defaultValue = "ANY",required = false)final String genre,
+            @RequestParam(name = "sorting", defaultValue = "ANY", required = false) final String sorting) {
 
         ModelAndView mav = null;
         int page = pageNum.orElse(1);
@@ -146,13 +147,16 @@ public class HelloWorldController {
         mav.addObject("genre",genre);
         mav.addObject("durationFrom",durationFrom);
         mav.addObject("durationTo",durationTo);
+        mav.addObject("sorting", sorting);
+
         List<Content> contentListFilter;
+
         if(!Objects.equals(genre, "ANY") && Objects.equals(durationFrom, "ANY")) {
             contentListFilter = cs.findByGenre(auxType, genre) ;
         } else if(Objects.equals(genre, "ANY") && !Objects.equals(durationFrom, "ANY")) {
             contentListFilter = cs.findByDuration(auxType, Integer.parseInt(durationFrom), Integer.parseInt(durationTo));
-        } else if(!Objects.equals(durationFrom, "ANY") && !Objects.equals(genre, "ANY")){    // Caso de que si los filtros estan vacios
-            contentListFilter = cs.findByDurationAndGenre(auxType, genre,Integer.parseInt(durationFrom),Integer.parseInt(durationTo));
+        } else if(!Objects.equals(durationFrom, "ANY") && !Objects.equals(genre, "ANY")) {    // Caso de que si los filtros estan vacios
+            contentListFilter = cs.findByDurationAndGenre(auxType, genre, Integer.parseInt(durationFrom), Integer.parseInt(durationTo));
         } else{
             contentListFilter = cs.getAllContent(auxType);
         }

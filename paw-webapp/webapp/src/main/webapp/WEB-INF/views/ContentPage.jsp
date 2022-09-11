@@ -31,6 +31,7 @@
                 <jsp:param name="durationFrom" value="${durationFrom}"/>
                 <jsp:param name="durationTo" value="${durationTo}"/>
                 <jsp:param name="type" value="${contentType}"/>
+                <jsp:param name="sorting" value="${sortingBy}"/>
             </jsp:include>
 
             <div class="W-films-div W-row-display">

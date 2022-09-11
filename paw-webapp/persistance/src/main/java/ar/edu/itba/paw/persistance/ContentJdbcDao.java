@@ -93,6 +93,8 @@ public class ContentJdbcDao implements ContentDao {
 
     }
 
+
+
     @Override
     public List<Content> findByType(String type) {
         return template.query("SELECT * FROM content where type = ?",new Object[]{ type }, CONTENT_ROW_MAPPER);

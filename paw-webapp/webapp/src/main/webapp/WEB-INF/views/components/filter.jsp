@@ -156,11 +156,10 @@
                                                                                     <c:param name="durationTo" value="${param.durationTo}"/>
                                                                                 </c:when>
                                                                             </c:choose>
-
                                                                             </c:url>" onclick="showGenre(this)">Romance</a></li>
 
             </ul>
-    </div>
+        </div>
     </div>
 
 <%--    <p class="W-filter-title">Duration</p>--%>
@@ -177,7 +176,6 @@
                         <c:out value="${param.durationFrom}"/>-<c:out value="${param.durationTo}"/> minutes
                     </button>
                 </c:when>
-
                 <c:otherwise>
                     <button id="genreGroupDrop" type="button" class="W-filter-title btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                         Duration
@@ -197,7 +195,8 @@
                                                                                 <c:when test="${param.genre != 'ANY'}">
                                                                                     <c:param name="genre" value="${param.genre}"/>
                                                                                 </c:when>
-                                                                            </c:choose>                                                                      <c:param name="durationFrom" value="0"/>-<c:param name="durationTo" value="90"/>
+                                                                            </c:choose>
+                                                                            <c:param name="durationFrom" value="0"/>-<c:param name="durationTo" value="90"/>
                                                                             </c:url>" onclick="showDuration(this)">0-90 minutes</a></li>
                 <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
                                                                             <c:choose>
@@ -226,14 +225,53 @@
             </ul>
         </div>
     </div>
+    <div class="list-group">
+        <div class="dropdown W-dropdown-button-sorting">
+            <c:choose>
+                <c:when test="${param.sorting == '1000'}">
+                    <button id="sortingGroupDrop" type="button" class="W-filter-title btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        <c:out value="${param.durationFrom}"/>
+                    </button>
+                </c:when>
+                <c:when test="${param.sorting != '' &&  param.durationFrom != 'ANY'}">
+                    <button id="sortingGroupDrop" type="button" class="W-filter-title btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        <c:out value="${param.durationFrom}"/>
+                    </button>
+                </c:when>
+                <c:otherwise>
+                    <button id="sortingGroupDrop" type="button" class="W-filter-title btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        Sort by
+                    </button>
+                </c:otherwise>
+            </c:choose>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
+                                                                                        <c:choose>
+                                                                                            <c:when test="${param.sorting != 'ANY'}">
+                                                                                                <c:param name="genre" value="${param.sorting}"/>
+                                                                                            </c:when>
+                                                                                        </c:choose>
+                                                                                        </c:url>" onclick="showSorting(this)">Last released</a></li>
+                <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
+                                                                                        <c:choose>
+                                                                                            <c:when test="${param.genre != 'ANY'}">
+                                                                                                <c:param name="sorting" value="${param.sorting}"/>
+                                                                                            </c:when>
+                                                                                        </c:choose>                                                                      <c:param name="durationFrom" value="0"/>-<c:param name="durationTo" value="90"/>
+                                                                                        </c:url>" onclick="showSorting(this)">Older released</a></li>
+                <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
+                                                                                        <c:choose>
+                                                                                            <c:when test="${param.genre != 'ANY'}">
+                                                                                                <c:param name="sorting" value="${param.sorting}"/>
+                                                                                            </c:when>
+                                                                                        </c:choose>
+                                                                                        <c:param name="sorting" value="90"/>
+                                                                                        </c:url>" onclick="showSorting(this)">Best ratings</a></li>
 
-<%-- TODO: VER SI DESPUES LO VAMOS A AGREGAR--%>
-<%--    <div class="W-confirm-filters-button">--%>
-<%--        <button type="button" class="btn btn-success">Apply</button>--%>
-<%--    </div>--%>
-
+            </ul>
+        </div>
+    </div>
 </div>
+
 <script src="<c:url value="/resources/js/dropDownBehaviour.js"/>"></script>
-
-
 <hr class="d-flex W-line-style"/>

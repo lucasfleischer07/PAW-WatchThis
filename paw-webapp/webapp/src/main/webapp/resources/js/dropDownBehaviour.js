@@ -11,3 +11,8 @@
     document.getElementById("durationGroupDrop").innerHTML = item.innerHTML;
 }
 
+    function showSorting(item) {
+        document.getElementById("sortingGroupDrop").innerHTML = item.innerHTML;
+    }
+
+

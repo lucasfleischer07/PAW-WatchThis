@@ -156,67 +156,85 @@
                                                                             </c:url>" onclick="showGenre(this)">Romance</a></li>
                             </ul>
                         </div>
+    <div class="list-group">
+        <div class="dropdown W-dropdown-button">
+            <c:choose>
+                <c:when test="${param.durationTo == '1000'}">
+                    <button id="genreGroupDrop" type="button" class="W-filter-title btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        <c:out value="${param.durationFrom}"/> or more
+                    </button>
+                </c:when>
+                <c:when test="${param.durationFrom != '' &&  param.durationFrom != 'ANY'}">
+                    <button id="genreGroupDrop" type="button" class="W-filter-title btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        <c:out value="${param.durationFrom}"/>-<c:out value="${param.durationTo}"/> minutes
+                    </button>
+                </c:when>
 
-                        <div class="btn-group" role="group">
-                            <c:choose>
-                                <c:when test="${param.durationTo == '1000'}">
-                                  <button id="genreGroupDrop" type="button" class="btn btn-dark dropdown-toggle W-filter-hamburger-button" data-bs-toggle="dropdown" aria-expanded="false">
-                                      <c:out value="${param.durationFrom}"/> or more
-                                  </button>
-                                </c:when>
-                                <c:when test="${param.durationFrom != '' &&  param.durationFrom != 'ANY'}">
-                                    <button id="genreGroupDrop" type="button" class="btn btn-dark dropdown-toggle W-filter-hamburger-button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <c:out value="${param.durationFrom}"/>-<c:out value="${param.durationTo}"/> minutes
-                                    </button>
-                                </c:when>
-
-                                <c:otherwise>
-                                    <button id="genreGroupDrop" type="button" class="btn btn-dark dropdown-toggle W-filter-hamburger-button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Duration
-                                    </button>
-                                </c:otherwise>
-                            </c:choose>
-                            <ul class="dropdown-menu" aria-labelledby="durationGroupDrop">
-                                <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
-                                                                            <c:param name="genre" value="${param.genre}"/>
-                                                                            <c:param name="durationFrom" value="ANY"/>-<c:param name="durationTo" value="ANY"/>
+                <c:otherwise>
+                    <button id="genreGroupDrop" type="button" class="W-filter-title btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        Duration
+                    </button>
+                </c:otherwise>
+            </c:choose>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
+                                                                            <c:choose>
+                                                                                <c:when test="${param.genre != 'ANY'}">
+                                                                                    <c:param name="genre" value="${param.genre}"/>
+                                                                                </c:when>
+                                                                            </c:choose>
                                                                             </c:url>" onclick="showDuration(this)">Clear filter</a></li>
-                                <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
-                                                                            <c:param name="genre" value="${param.genre}"/>
+                <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
+                                                                            <c:choose>
+                                                                                <c:when test="${param.genre != 'ANY'}">
+                                                                                    <c:param name="genre" value="${param.genre}"/>
+                                                                                </c:when>
+                                                                            </c:choose>
                                                                             <c:param name="durationFrom" value="0"/>-<c:param name="durationTo" value="90"/>
                                                                             </c:url>" onclick="showDuration(this)">0-90 minutes</a></li>
-                                <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
-                                                                            <c:param name="genre" value="${param.genre}"/>
+                <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
+                                                                            <c:choose>
+                                                                                <c:when test="${param.genre != 'ANY'}">
+                                                                                    <c:param name="genre" value="${param.genre}"/>
+                                                                                </c:when>
+                                                                            </c:choose>
                                                                             <c:param name="durationFrom" value="90"/>-<c:param name="durationTo" value="120"/>
                                                                             </c:url>" onclick="showDuration(this)">90-120 minutes</a></li>
-                                <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
-                                                                            <c:param name="genre" value="${param.genre}"/>
+                <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
+                                                                            <c:choose>
+                                                                                <c:when test="${param.genre != 'ANY'}">
+                                                                                    <c:param name="genre" value="${param.genre}"/>
+                                                                                </c:when>
+                                                                            </c:choose>
                                                                             <c:param name="durationFrom" value="120"/>-<c:param name="durationTo" value="150"/>
                                                                             </c:url>" onclick="showDuration(this)">120-150 minutes</a></li>
-                                <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
-                                                                            <c:param name="genre" value="${param.genre}"/>
+                <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
+                                                                            <c:choose>
+                                                                                <c:when test="${param.genre != 'ANY'}">
+                                                                                    <c:param name="genre" value="${param.genre}"/>
+                                                                                </c:when>
+                                                                            </c:choose>
                                                                             <c:param name="durationFrom" value="150"/>-<c:param name="durationTo" value="1000"/>
                                                                             </c:url>" onclick="showDuration(this)">150 or more</a></li>
-                            </ul>
-                        </div>
-<%--                        TODO: Ver si despues lo agregamos o no--%>
-<%--                        <div class="W-confirm-filters-button">--%>
-<%--                            <button type="button" class="btn btn-success">Apply</button>--%>
-<%--                        </div>--%>
-                    </div>
+            </ul>
+        </div>
+
                     <script src="<c:url value="/resources/js/dropDownBehaviour.js"/>"></script>
 
                 </div>
 
 
-                <div class="d-flex W-navbar-search">
-                    <form class="form-inline my-2 my-lg-0 W-searchbar" method="GET" action="<c:url value="/search"/>">
-                        <spring:message var="searchPlaceholder" />
-                        <input name="query" class="form-control me-2" type="search" placeholder="Search movies or tv shows" aria-label="Search" >
-<%--                        <button class="btn btn-success W-search-button-color" type="submit">Search</button>--%>
-<%--                        <input type="submit">--%>
-                    </form>
-                </div>
+<%--                <div class="d-flex W-navbar-search">--%>
+<%--                    <form class="form-inline my-2 my-lg-0 W-searchbar" method="GET" action="<c:url value="/search"/>">--%>
+<%--                        <spring:message var="searchPlaceholder" />--%>
+<%--                        <input name="query" class="form-control me-2" type="search" placeholder="Search movies or tv shows" aria-label="Search" >--%>
+<%--                        <button class="btn btn-success W-search-button-color" type="submit">--%>
+<%--                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">--%>
+<%--                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>--%>
+<%--                            </svg>--%>
+<%--                        </button>--%>
+<%--                    </form>--%>
+<%--                </div>--%>
 
                 <div class="W-nav-login-button">
                     <button class="btn btn-success" type="submit">Login</button>
