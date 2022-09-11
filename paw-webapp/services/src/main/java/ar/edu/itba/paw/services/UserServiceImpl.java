@@ -30,4 +30,8 @@ public class UserServiceImpl implements UserService{
     public Optional<User> findById(long userId) {
         return userDao.findById(userId);
     }
+
+    @Override
+    public void setPassword(String password,String email){userDao.setPassword(password,email);}
+
 }

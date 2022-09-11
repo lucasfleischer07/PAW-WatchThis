@@ -22,11 +22,21 @@
     width: 30%;
 }
 
+.W-email-verification-message {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1vw;
+}
+
+.W-submit-cancel-buttons-login {
+    margin: 1% 2% 1% 2%;
+}
 
 
 
 @media (max-width: 591px) {
-    .W-submit-cancel-buttons {
+    .W-submit-cancel-buttons-login {
         margin-top: 3%;
     }
 

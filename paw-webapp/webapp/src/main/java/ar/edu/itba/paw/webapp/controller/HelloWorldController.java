@@ -23,6 +23,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -176,105 +177,121 @@ public class HelloWorldController {
     // * -----------------------------------------------------------------------------------------------------------------------
 
 
-    // * ----------------------------------- Serie Info -----------------------------------------------------------------------
-//    @RequestMapping(value = {"/series","/series/page/{pageNum}"})
-//    public ModelAndView series(@PathVariable("pageNum") Optional<Integer> pageNum,@RequestParam(name = "query", defaultValue = "") final String query) {
-//        final ModelAndView mav = new ModelAndView("seriesPage");
-//        int page= pageNum.orElse(1);
-//        mav.addObject("query", query);
-//        List<Content> seriesList = cs.getSearchedSeries(query);
-//        if( seriesList == null) {
-//            throw new PageNotFoundException();
-//        } else {
-//            mav.addObject("series", seriesList.subList((page-1)*ELEMS_AMOUNT,(page-1)*ELEMS_AMOUNT + ELEMS_AMOUNT));
-//        }
+    // * ----------------------------------- Movies and Series Review -----------------------------------------------------------------------
+//    @RequestMapping(value = "/reviewForm/{type:movie|serie}/{id:[0-9]+}", method = {RequestMethod.GET})
+//    public ModelAndView reviewFormCreate(@ModelAttribute("registerForm") final ReviewForm reviewForm, @PathVariable("id")final long id) {
+//        final ModelAndView mav = new ModelAndView("reviewRegistration");
+//        mav.addObject("details", cs.findById(id).orElseThrow(PageNotFoundException::new));
 //        return mav;
 //    }
-    // * -----------------------------------------------------------------------------------------------------------------------
-
-
-
-    // * ----------------------------------- Movies and Series Review -----------------------------------------------------------------------
-    @RequestMapping(value = "/reviewForm/{type:movie|serie}/{id:[0-9]+}", method = {RequestMethod.GET})
-    public ModelAndView reviewFormCreate(@ModelAttribute("registerForm") final ReviewForm reviewForm, @PathVariable("id")final long id) {
-        final ModelAndView mav = new ModelAndView("reviewRegistration");
-        mav.addObject("details", cs.findById(id).orElseThrow(PageNotFoundException::new));
-        return mav;
-    }
-
-    @RequestMapping(value = "/reviewForm/{type:movie|serie}/{id:[0-9]+}", method = {RequestMethod.POST})
-    public ModelAndView reviewFormMovie(@Valid @ModelAttribute("registerForm") final ReviewForm form, final BindingResult errors, @PathVariable("id")final long id, @PathVariable("type")final String type) {
-        if(errors.hasErrors()) {
-            return reviewFormCreate(form,id);
-        }
-        User newUser = new User(null, form.getEmail(), form.getUserName());
-        //Primero intenta agregar el usuario, luego intenta agregar la review
-        Optional<Long> userId = us.register(newUser);
-        //Falta Agregar mensaje de error para el caso -1 (si falla en el pedido)
-        if(userId.get() == -1) {
-            ModelAndView mav=reviewFormCreate(form,id);
-            mav.addObject("errorMsg","This username or mail is already in use.");
-            return mav;
-        }
-        try {
-            // ReviewId va en null porque eso lo asigna la tabla
-            Review newReview = new Review(null, type, id, userId.get(), form.getName(), form.getDescription(), form.getRating());
-            newReview.setId(id);
-            rs.addReview(newReview);
-        }
-        catch(DuplicateKeyException e){
-            ModelAndView mav = reviewFormCreate(form,id);
-            mav.addObject("errorMsg","You have already written a review for this " + type + ".");
-            return mav;
-        }
-
-        ModelMap model =new ModelMap();
-        model.addAttribute("toastMsg","Your review was correctly added");
-        return new ModelAndView("redirect:/" + type + "/" + id, model);
-    }
+//
+//    @RequestMapping(value = "/reviewForm/{type:movie|serie}/{id:[0-9]+}", method = {RequestMethod.POST})
+//    public ModelAndView reviewFormMovie(@Valid @ModelAttribute("registerForm") final ReviewForm form, final BindingResult errors, @PathVariable("id")final long id, @PathVariable("type")final String type) {
+//        if(errors.hasErrors()) {
+//            return reviewFormCreate(form,id);
+//        }
+//        User newUser = new User(null, form.getEmail(), form.getUserName());
+//        //Primero intenta agregar el usuario, luego intenta agregar la review
+//        Optional<Long> userId = us.register(newUser);
+//        //Falta Agregar mensaje de error para el caso -1 (si falla en el pedido)
+//        if(userId.get() == -1) {
+//            ModelAndView mav=reviewFormCreate(form,id);
+//            mav.addObject("errorMsg","This username or mail is already in use.");
+//            return mav;
+//        }
+//        try {
+//            // ReviewId va en null porque eso lo asigna la tabla
+//            Review newReview = new Review(null, type, id, userId.get(), form.getName(), form.getDescription(), form.getRating());
+//            newReview.setId(id);
+//            rs.addReview(newReview);
+//        }
+//        catch(DuplicateKeyException e){
+//            ModelAndView mav = reviewFormCreate(form,id);
+//            mav.addObject("errorMsg","You have already written a review for this " + type + ".");
+//            return mav;
+//        }
+//
+//        ModelMap model =new ModelMap();
+//        model.addAttribute("toastMsg","Your review was correctly added");
+//        return new ModelAndView("redirect:/" + type + "/" + id, model);
+//    }
     // * -----------------------------------------------------------------------------------------------------------------------
 
 
     // * ----------------------------------- login Page -----------------------------------------------------------------------
 
 //    TODO: Terminar
-    @RequestMapping(value = "/login", method = {RequestMethod.GET})
-    public ModelAndView logIn(@ModelAttribute("loginForm") final LoginForm loginForm) {
-//        final ModelAndView mav = new ModelAndView("reviewRegistration");
-//        mav.addObject("details", ms.findById(id).orElseThrow(PageNotFoundException::new));
-//        return mav;
-        return new ModelAndView("logInPage");
+    @RequestMapping(value = "/login/{loginStage:verifyEmail|log|registration|setPassword}", method = {RequestMethod.GET})
+    public ModelAndView emailForm(@ModelAttribute("loginForm") final LoginForm loginForm, @PathVariable("loginStage") final String loginStage) {
+        final ModelAndView mav = new ModelAndView("logInPage");
+//        * Pregunto que tipo de loginStage es
+        if(Objects.equals(loginStage, "verifyEmail") || Objects.equals(loginStage, "log") || Objects.equals(loginStage, "registration") || Objects.equals(loginStage, "setPassword")) {
+//            * Si es serPassword o log (login)
+            if(Objects.equals(loginStage, "setPassword") || Objects.equals(loginStage, "log")) {
+                if(loginForm.getEmail() != null) {
+//                * Me traigo la info del ususario ese
+                    User registedUserInfo = us.findByEmail(loginForm.getEmail()).get();
+//                * Si la contrasena es 1, significa que no esta seteada => la tiene que setear y lo mando a que la setee
+                    if(Objects.equals(registedUserInfo.getPassword(), "1")) {
+                        mav.addObject("loginStage", "setPassword");
+                    } else {
+//                    * Si es distinto de 1 significa que ya la tiene seteada => lo mando a que se loguee
+                        mav.addObject("loginStage", "log");
+                    }
+                    mav.addObject("userEmail", registedUserInfo.getEmail());
+                    mav.addObject("userName", registedUserInfo.getUserName());
+                    return mav;
+                } else {
+                    return new ModelAndView("redirect:/login/verifyEmail");
+                }
+//                * Ahora pregunto si es registration
+            } else if(Objects.equals(loginStage, "registration")) {
+//                * Si es disitnto de null, me lo guardo y lo paso asi no lo tineen que volver a escribir
+                if(loginForm.getEmail() != null) {
+                    mav.addObject("userEmail", loginForm.getEmail());
+                    mav.addObject("loginStage", loginStage);
+                } else {
+//                    * SI es null, significa que intentaron entrar cambiando la URL, enotnces lo redirijo
+                    return new ModelAndView("redirect:/login/verifyEmail");
+                }
+                return mav;
+            } else {
+                mav.addObject("loginStage", loginStage);
+                return mav;
+            }
+        } else {
+            throw new PageNotFoundException();
+        }
     }
 
-    @RequestMapping(value = "/login", method = {RequestMethod.POST})
-    public ModelAndView logIn(@Valid @ModelAttribute("loginForm") final LoginForm loginForm, final BindingResult errors, RedirectAttributes redirectAttributes) {
-//        if(errors.hasErrors()) {
-//            return reviewFormCreateSeries(form,id);
-//        }
-//        User newUser = new User(null,form.getEmail(),form.getUserName());
-//        //Primero intenta agregar el usuario, luego intenta agregar la review
-//        Optional<Long> userId = us.register(newUser);
-//        //Falta Agregar mensaje de error para el caso -1 (si falla en el pedido)
-//        if(userId.get() == -1) {
-//            ModelAndView mav=reviewFormCreateSeries(form,id);
-//            mav.addObject("errorMsg","This username or mail is already in use.");
-//            return mav;
-//        }
-//        try {
-//            Review newReview = new Review( null,"serie",null,id,userId.get(),form.getName(),form.getDescription(), form.getRating());    //ReviewId va en null por que eso lo asigna la tabla
-//            newReview.setId(id);
-//            rs.addReview(newReview);
-//        }
-//        catch(DuplicateKeyException e){
-//            ModelAndView mav=reviewFormCreateSeries(form,id);
-//            mav.addObject("errorMsg","You have already written a review for this serie.");
-//            return mav;
-//        }
-//
-//        ModelAndView mav =new ModelAndView("redirect:/serie/"+id);
-//        redirectAttributes.addFlashAttribute("toastMsg","Review added correctly");
-//        mav.addObject("toastMsg","Review added correctly");
-        return new ModelAndView("logInPage");
+    @RequestMapping(value = "/login/{loginStage:verifyEmail|log|registration|setPassword}", method = {RequestMethod.POST})
+    public ModelAndView emailFormVerification(@Valid @ModelAttribute("loginForm") final LoginForm loginForm, final BindingResult errors, RedirectAttributes redirectAttributes, @PathVariable("loginStage") final String loginStage) {
+        if(errors.hasErrors()) {
+            return emailForm(loginForm, loginStage);
+        }
+        if(Objects.equals(loginStage, "verifyEmail")) {
+            try {
+                User registedUserInfo = us.findByEmail(loginForm.getEmail()).get();
+                final ModelAndView mav;
+                if(Objects.equals(registedUserInfo.getPassword(), "1")) {
+//                    TODO: VER SI ESTO ANDA ASI, LA DUDA SERIA DSI SE VA A MANDAR ESTA INFO CUANDO HAGA EL REDIRECTO O NO YA QUE ARRIBA DEFINO OTRO MAV (EN LA FUNCION DE ARRIBA)
+                    return emailForm(loginForm, "setPassword");
+
+                } else {
+//                    TODO: VER SI ESTO ANDA ASI, LA DUDA SERIA DSI SE VA A MANDAR ESTA INFO CUANDO HAGA EL REDIRECTO O NO YA QUE ARRIBA DEFINO OTRO MAV (EN LA FUNCION DE ARRIBA)
+                    return emailForm(loginForm, "log");
+                }
+//                mav.addObject("userEmail", registedUserInfo.getEmail());
+//                mav.addObject("userName", registedUserInfo.getUserName());
+            } catch (NoSuchElementException e) {
+                return emailForm(loginForm, "registration");
+            }
+        } else if(Objects.equals(loginStage, "setPassword")) {
+            us.setPassword(loginForm.getPassword(), loginForm.getEmail());
+        }
+
+        return new ModelAndView("redirect:/");
+
     }
     // * -----------------------------------------------------------------------------------------------------------------------
 

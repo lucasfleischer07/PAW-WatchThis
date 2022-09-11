@@ -12,4 +12,7 @@ public interface UserDao {
 
     Optional<User> findById(long userId);
 
+    void setPassword(String password,String email);
+
+
 }
