@@ -237,7 +237,7 @@
 <%--                </div>--%>
 
                 <div class="W-nav-login-button">
-                    <button class="btn btn-success" type="submit">Login</button>
+                    <a href="<c:url value="/login/verifyEmail"/>"><button class="btn btn-success" type="button">Login</button></a>
                 </div>
             </div>
         </div>
