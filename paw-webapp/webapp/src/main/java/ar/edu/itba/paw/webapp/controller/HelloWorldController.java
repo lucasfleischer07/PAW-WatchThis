@@ -288,6 +288,11 @@ public class HelloWorldController {
             }
         } else if(Objects.equals(loginStage, "setPassword")) {
             us.setPassword(loginForm.getPassword(), loginForm.getEmail());
+        } else if(Objects.equals(loginStage, "registration")) {
+            User newUser = new User(null, loginForm.getEmail(), loginForm.getUserName(), loginForm.getPassword(), 0L);
+            us.register(newUser);
+        } else if(Objects.equals(loginStage, "log")) {
+            us.setPassword(loginForm.getPassword(), loginForm.getEmail());
         }
 
         return new ModelAndView("redirect:/");

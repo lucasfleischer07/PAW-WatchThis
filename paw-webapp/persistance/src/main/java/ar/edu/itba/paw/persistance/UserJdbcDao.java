@@ -21,7 +21,6 @@ public class UserJdbcDao implements UserDao{
                     resultSet.getString("name"),
                     resultSet.getString("email"),
                     resultSet.getString("password"),
-                    resultSet.getLong("age"),
                     resultSet.getLong("reputation"));
 
     private final JdbcTemplate template;
@@ -43,9 +42,9 @@ public class UserJdbcDao implements UserDao{
     }
 
     @Override
-    public Optional<Long> create(final String userEmail, final String userName) {
+    public Optional<Long> create(final String userEmail, String userName, String password, Long rating) {
         try {
-            template.update("INSERT INTO userdata(name, email) VALUES(?,?)", userName, userEmail);
+            template.update("INSERT INTO userdata(name, email, password, reputation) VALUES(?,?,?,?)", userName, userEmail, password, rating);
         }catch(Exception e) {
             //Por ahora vacio, en el futuro un cartel
         }

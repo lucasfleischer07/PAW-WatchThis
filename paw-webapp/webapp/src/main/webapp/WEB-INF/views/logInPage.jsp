@@ -29,7 +29,41 @@
         <c:choose>
 <%--            * Caso en el que ESTA registrado y tiene contrasena--%>
             <c:when test="${loginStage == 'log'}">
-
+                <c:url value="/login/${loginStage}" var="postPath"/>
+                <form:form modelAttribute="loginForm" action="${postPath}" method="post">
+                    <div class="W-general-div-login">
+                        <div class="W-login-title">
+                            <h4>Login to Watch This</h4>
+                        </div>
+                        <div class="card W-login-card">
+<%--                    TODO: Ver esto de los errores--%>
+<%--                    <c:if test="${errorMsg!=null && errorMsg != ''}">--%>
+<%--                        <div class="alert alert-danger d-flex align-items-center" role="alert">--%>
+<%--                            <div class="W-register-errorMsg">--%>
+<%--                                <c:out value="${errorMsg}"/>--%>
+<%--                            </div>--%>
+<%--                        </div>--%>
+<%--                    </c:if>--%>
+                            <div class="W-email-verification-message">
+                                <h6>Welcome back!!</h6>
+                            </div>
+                            <div class="mb-3 W-input-label-login-info">
+                                <form:errors path="email" element="p" cssStyle="color: red"/>
+                                <form:label path="email" class="form-label">Email</form:label>
+                                <form:input type="email" class="form-control" value="${loginForm.email}" path="email" readonly="true"/>
+                            </div>
+                            <div class="mb-3 W-input-label-login-info">
+                                <form:errors path="password" element="p" cssStyle="color: red"/>
+                                <form:label path="password" class="form-label">Password</form:label>
+                                <form:input type="password" class="form-control" path="password"/>
+                            </div>
+                        </div>
+                        <div class="W-submit-cancel-buttons">
+                            <a href="<c:url value="/"/>"><button type="button" class="btn btn-danger" id="cancelButton1" onclick="(this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'; document.getElementById('submitButton1').disabled=true">Cancel</button></a>
+                            <button id="submitButton1" type="submit" class="btn btn-success" onclick="this.form.submit(); (this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'; document.getElementById('cancelButton1').disabled=true">Verify</button>
+                        </div>
+                    </div>
+                </form:form>
             </c:when>
 
 <%--            * En el caso de que el NO tenga mail registrado NI ESTE REGISTRADO--%>
@@ -61,7 +95,7 @@
                                 <div class="mb-3 W-input-label-login-info">
                                     <form:errors path="email" element="p" cssStyle="color: red"/>
                                     <form:label path="email" class="form-label">Email</form:label>
-                                    <form:input type="email" class="form-control" path="email" placeholder="example@mail.com"/>
+                                    <form:input type="email" class="form-control" value="${loginForm.email}" path="email" readonly="true"/>
                                 </div>
                             </div>
                             <div class="mb-3 W-input-label-login-info">
@@ -99,14 +133,9 @@
                                 <h6>You already had registered your email, please set a password</h6>
                             </div>
                             <div class="mb-3 W-input-label-login-info">
-                                <form:errors path="userName" element="p" cssStyle="color: red"/>
-                                <form:label path="userName" class="form-label">Username</form:label>
-                                <form:input type="text" class="form-control" value="${userName}" path="userName" readonly="true" disabled="true"/>
-                            </div>
-                            <div class="mb-3 W-input-label-login-info">
                                 <form:errors path="email" element="p" cssStyle="color: red"/>
                                 <form:label path="email" class="form-label">Email</form:label>
-                                <form:input type="email" class="form-control" value="${userEmail}" path="email" readonly="true" disabled="true"/>
+                                <form:input type="email" class="form-control" value="${loginForm.email}" path="email" readonly="true"/>
                             </div>
                             <div class="mb-3 W-input-label-login-info">
                                 <form:errors path="password" element="p" cssStyle="color: red"/>
