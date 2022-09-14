@@ -51,7 +51,11 @@ public class HelloWorldController {
         if(contentList == null) {
             throw new PageNotFoundException();
         } else {
-            mav.addObject("allContent", contentList.subList((page-1)*ELEMS_AMOUNT,(page-1)*ELEMS_AMOUNT + ELEMS_AMOUNT));
+            if(contentList.size()<10){
+                mav.addObject("allContent", contentList);
+            }else{
+                mav.addObject("allContent", contentList.subList((page-1)*ELEMS_AMOUNT,(page-1)*ELEMS_AMOUNT + ELEMS_AMOUNT));
+            }
             mav.addObject("amountPages",(int)Math.ceil((double) contentList.size()/(double)ELEMS_AMOUNT));
             mav.addObject("pageSelected",page);
             mav.addObject("contentType", "movies");
@@ -78,8 +82,11 @@ public class HelloWorldController {
         if( contentList == null) {
             throw new PageNotFoundException();
         } else {
-            mav.addObject("allContent", contentList.subList((page-1)*ELEMS_AMOUNT,(page-1)*ELEMS_AMOUNT + ELEMS_AMOUNT));
-            mav.addObject("amountPages",(int)Math.ceil((double) contentList.size()/(double)ELEMS_AMOUNT));
+            if(contentList.size()<10){
+                mav.addObject("allContent", contentList);
+            }else{
+                mav.addObject("allContent", contentList.subList((page-1)*ELEMS_AMOUNT,(page-1)*ELEMS_AMOUNT + ELEMS_AMOUNT));
+            }            mav.addObject("amountPages",(int)Math.ceil((double) contentList.size()/(double)ELEMS_AMOUNT));
             mav.addObject("pageSelected",page);
             mav.addObject("contentType", type);
             mav.addObject("genre","ANY");
@@ -164,7 +171,11 @@ public class HelloWorldController {
         if(contentListFilter == null) {
             throw new PageNotFoundException();
         } else {
-            mav.addObject("allContent", contentListFilter.subList((page-1)*ELEMS_AMOUNT,(page-1)*ELEMS_AMOUNT + ELEMS_AMOUNT));
+            if(contentListFilter.size()<10){
+                mav.addObject("allContent", contentListFilter);
+            }else{
+                mav.addObject("allContent", contentListFilter.subList((page-1)*ELEMS_AMOUNT,(page-1)*ELEMS_AMOUNT + ELEMS_AMOUNT));
+            }
             mav.addObject("amountPages",Math.ceil((double)contentListFilter.size()/(double)ELEMS_AMOUNT));
             mav.addObject("pageSelected",page);
             mav.addObject("contentType", type);
