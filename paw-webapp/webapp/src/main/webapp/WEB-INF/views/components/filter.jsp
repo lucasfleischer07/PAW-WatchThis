@@ -162,7 +162,6 @@
         </div>
     </div>
 
-<%--    <p class="W-filter-title">Duration</p>--%>
     <div class="list-group">
         <div class="dropdown W-dropdown-button">
             <c:choose>
@@ -257,7 +256,8 @@
                                                                                             <c:when test="${param.genre != 'ANY'}">
                                                                                                 <c:param name="sorting" value="${param.sorting}"/>
                                                                                             </c:when>
-                                                                                        </c:choose>                                                                      <c:param name="durationFrom" value="0"/>-<c:param name="durationTo" value="90"/>
+                                                                                        </c:choose>
+                                                                                        <c:param name="durationFrom" value="0"/>-<c:param name="durationTo" value="90"/>
                                                                                         </c:url>" onclick="showSorting(this)">Older released</a></li>
                 <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
                                                                                         <c:choose>
@@ -271,6 +271,7 @@
             </ul>
         </div>
     </div>
+
 </div>
 
 <script src="<c:url value="/resources/js/dropDownBehaviour.js"/>"></script>
