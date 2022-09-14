@@ -28,7 +28,7 @@
 
         <c:choose>
 <%--            * Caso en el que ESTA registrado y tiene contrasena--%>
-            <c:when test="${loginStage == 'log'}">
+            <c:when test="${loginStage == 'sign-in'}">
                 <c:url value="/login/${loginStage}" var="postPath"/>
                 <form:form modelAttribute="loginForm" action="${postPath}" method="post">
                     <div class="W-general-div-login">
@@ -59,7 +59,8 @@
                             </div>
                         </div>
                         <div class="W-submit-cancel-buttons">
-                            <a href="<c:url value="/"/>"><button type="button" class="btn btn-danger" id="cancelButton1" onclick="(this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'; document.getElementById('submitButton1').disabled=true">Cancel</button></a>
+                            <a href="<c:url value="/"/>">
+                                <button type="button" class="btn btn-danger" id="cancelButton1" onclick="(this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'; document.getElementById('submitButton1').disabled=true">Cancel</button></a>
                             <button id="submitButton1" type="submit" class="btn btn-success" onclick="this.form.submit(); (this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'; document.getElementById('cancelButton1').disabled=true">Verify</button>
                         </div>
                     </div>
@@ -67,12 +68,12 @@
             </c:when>
 
 <%--            * En el caso de que el NO tenga mail registrado NI ESTE REGISTRADO--%>
-            <c:when test="${loginStage == 'registration'}">
+            <c:when test="${loginStage == 'sign-up'}">
                 <c:url value="/login/${loginStage}" var="postPath"/>
                 <form:form modelAttribute="loginForm" action="${postPath}" method="post">
                     <div class="W-general-div-login">
                         <div class="W-login-title">
-                            <h4>Register into Watch This</h4>
+                            <h4>Sign up into Watch This</h4>
                         </div>
                         <div class="card W-login-card">
 <%--                    TODO: Ver esto de los errores--%>
@@ -106,19 +107,18 @@
                         </div>
                         <div class="W-submit-cancel-buttons">
                             <a href="<c:url value="/"/>"><button type="button" class="btn btn-danger" id="cancelButton2" onclick="(this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'; document.getElementById('submitButton2').disabled=true">Cancel</button></a>
-                            <button id="submitButton2" type="submit" class="btn btn-success" onclick="this.form.submit(); (this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'; document.getElementById('cancelButton2').disabled=true">Verify</button>
+                            <button id="submitButton2" type="submit" class="btn btn-success" onclick="this.form.submit(); (this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'; document.getElementById('cancelButton2').disabled=true">Sing In</button>
                         </div>
                     </div>
                 </form:form>
             </c:when>
 
-<%--            * En el caso de que el tenga mail registrado PERO SIN contrasena--%>
-            <c:when test="${loginStage == 'setPassword'}">
+            <c:when test="${loginStage == 'forgot-password'}">
                 <c:url value="/login/${loginStage}" var="postPath"/>
                 <form:form modelAttribute="loginForm" action="${postPath}" method="post">
                     <div class="W-general-div-login">
                         <div class="W-login-title">
-                            <h4>Login to Watch This</h4>
+                            <h4>Sign up into Watch This</h4>
                         </div>
                         <div class="card W-login-card">
 <%--                    TODO: Ver esto de los errores--%>
@@ -129,23 +129,18 @@
 <%--                            </div>--%>
 <%--                        </div>--%>
 <%--                    </c:if>--%>
-                            <div class="W-email-verification-message">
-                                <h6>You already had registered your email, please set a password</h6>
-                            </div>
+
                             <div class="mb-3 W-input-label-login-info">
-                                <form:errors path="email" element="p" cssStyle="color: red"/>
-                                <form:label path="email" class="form-label">Email</form:label>
-                                <form:input type="email" class="form-control" value="${loginForm.email}" path="email" readonly="true"/>
-                            </div>
-                            <div class="mb-3 W-input-label-login-info">
-                                <form:errors path="password" element="p" cssStyle="color: red"/>
-                                <form:label path="password" class="form-label">Password</form:label>
-                                <form:input type="password" class="form-control" path="password"/>
+                                <div class="mb-3 W-input-label-login-info">
+                                    <form:errors path="email" element="p" cssStyle="color: red"/>
+                                    <form:label path="email" class="form-label">Email</form:label>
+                                    <form:input type="email" class="form-control" value="${loginForm.email}" path="email" readonly="true"/>
+                                </div>
                             </div>
                         </div>
                         <div class="W-submit-cancel-buttons">
-                            <a href="<c:url value="/"/>"><button type="button" class="btn btn-danger" id="cancelButton3" onclick="(this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'; document.getElementById('submitButton3').disabled=true">Cancel</button></a>
-                            <button id="submitButton3" type="submit" class="btn btn-success" onclick="this.form.submit(); (this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'; document.getElementById('cancelButton3').disabled=true">Verify</button>
+                            <a href="<c:url value="/login/sign-in"/>"><button type="button" class="btn btn-danger" id="cancelButton3" onclick="(this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'; document.getElementById('submitButton3').disabled=true">Cancel</button></a>
+                            <button id="submitButton3" type="submit" class="btn btn-success" onclick="this.form.submit(); (this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'; document.getElementById('cancelButton3').disabled=true">Send</button>
                         </div>
                     </div>
                 </form:form>
@@ -153,37 +148,7 @@
 
 <%--            Para que cargue el verificar mail--%>
             <c:otherwise>
-                <c:url value="/login/${loginStage}" var="postPath"/>
-                <form:form modelAttribute="loginForm" action="${postPath}" method="post">
-                    <div class="W-general-div-login">
-                        <div class="W-login-title">
-                            <h4>Login to Watch This</h4>
-                        </div>
-<%--                    TODO: Ver esto de los errores--%>
-<%--                    <c:if test="${errorMsg!=null && errorMsg != ''}">--%>
-<%--                        <div class="alert alert-danger d-flex align-items-center" role="alert">--%>
-<%--                            <div class="W-register-errorMsg">--%>
-<%--                                <c:out value="${errorMsg}"/>--%>
-<%--                            </div>--%>
-<%--                        </div>--%>
-<%--                    </c:if>--%>
-                        <div class="card W-login-card">
-                            <div class="W-email-verification-message">
-                                <h6>Please enter your email to se if you are register</h6>
-                            </div>
-
-                            <div class="mb-3 W-input-label-login-info">
-                                <form:errors path="email" element="p" cssStyle="color: red"/>
-                                <form:label path="email" class="form-label">Email</form:label>
-                                <form:input type="email" class="form-control" path="email" placeholder="example@mail.com"/>
-                            </div>
-                        </div>
-                        <div class="W-submit-cancel-buttons">
-                            <a href="<c:url value="/"/>"><button type="button" class="btn btn-danger" id="cancelButton4" onclick="(this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'; document.getElementById('submitButton4').disabled=true">Cancel</button></a>
-                            <button id="submitButton4" type="submit" class="btn btn-success" onclick="this.form.submit(); (this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'; document.getElementById('cancelButton4').disabled=true">Verify</button>
-                        </div>
-                    </div>
-                </form:form>
+<%--                TODO: Llamar a la pagina de error?--%>
             </c:otherwise>
         </c:choose>
 

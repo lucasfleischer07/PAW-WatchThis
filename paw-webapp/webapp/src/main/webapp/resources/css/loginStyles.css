@@ -30,7 +30,8 @@
 }
 
 .W-submit-cancel-buttons-login {
-    margin: 1% 2% 1% 2%;
+    /*margin: 1% 2% 1% 2%;*/
+    margin-right: 10vw;
 }
 
 

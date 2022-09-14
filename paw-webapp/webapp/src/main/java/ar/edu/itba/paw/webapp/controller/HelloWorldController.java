@@ -221,78 +221,39 @@ public class HelloWorldController {
     // * ----------------------------------- login Page -----------------------------------------------------------------------
 
 //    TODO: Terminar
-    @RequestMapping(value = "/login/{loginStage:verifyEmail|log|registration|setPassword}", method = {RequestMethod.GET})
+    @RequestMapping(value = "/login/{loginStage:sign-in|sign-up|forgot-password}", method = {RequestMethod.GET})
     public ModelAndView emailForm(@ModelAttribute("loginForm") final LoginForm loginForm, @PathVariable("loginStage") final String loginStage) {
         final ModelAndView mav = new ModelAndView("logInPage");
-//        * Pregunto que tipo de loginStage es
-        if(Objects.equals(loginStage, "verifyEmail") || Objects.equals(loginStage, "log") || Objects.equals(loginStage, "registration") || Objects.equals(loginStage, "setPassword")) {
-//            * Si es serPassword o log (login)
-            if(Objects.equals(loginStage, "setPassword") || Objects.equals(loginStage, "log")) {
-                if(loginForm.getEmail() != null) {
-//                * Me traigo la info del ususario ese
-                    User registedUserInfo = us.findByEmail(loginForm.getEmail()).get();
-//                * Si la contrasena es 1, significa que no esta seteada => la tiene que setear y lo mando a que la setee
-                    if(Objects.equals(registedUserInfo.getPassword(), "1")) {
-                        mav.addObject("loginStage", "setPassword");
-                    } else {
-//                    * Si es distinto de 1 significa que ya la tiene seteada => lo mando a que se loguee
-                        mav.addObject("loginStage", "log");
-                    }
-                    mav.addObject("userEmail", registedUserInfo.getEmail());
-                    mav.addObject("userName", registedUserInfo.getUserName());
-                    return mav;
-                } else {
-                    return new ModelAndView("redirect:/login/verifyEmail");
-                }
-//                * Ahora pregunto si es registration
-            } else if(Objects.equals(loginStage, "registration")) {
-//                * Si es disitnto de null, me lo guardo y lo paso asi no lo tineen que volver a escribir
-                if(loginForm.getEmail() != null) {
-                    mav.addObject("userEmail", loginForm.getEmail());
-                    mav.addObject("loginStage", loginStage);
-                } else {
-//                    * SI es null, significa que intentaron entrar cambiando la URL, enotnces lo redirijo
-                    return new ModelAndView("redirect:/login/verifyEmail");
-                }
-                return mav;
-            } else {
-                mav.addObject("loginStage", loginStage);
-                return mav;
-            }
-        } else {
-            throw new PageNotFoundException();
-        }
+        mav.addObject("loginStage", loginStage);
+        return mav;
     }
 
-    @RequestMapping(value = "/login/{loginStage:verifyEmail|log|registration|setPassword}", method = {RequestMethod.POST})
+    @RequestMapping(value = "/login/{loginStage:sign-in|sign-up|forgot-password}", method = {RequestMethod.POST})
     public ModelAndView emailFormVerification(@Valid @ModelAttribute("loginForm") final LoginForm loginForm, final BindingResult errors, RedirectAttributes redirectAttributes, @PathVariable("loginStage") final String loginStage) {
         if(errors.hasErrors()) {
             return emailForm(loginForm, loginStage);
         }
-        if(Objects.equals(loginStage, "verifyEmail")) {
+        if(Objects.equals(loginStage, "sign-in")) {
             try {
                 User registedUserInfo = us.findByEmail(loginForm.getEmail()).get();
-                final ModelAndView mav;
-                if(Objects.equals(registedUserInfo.getPassword(), "1")) {
-//                    TODO: VER SI ESTO ANDA ASI, LA DUDA SERIA DSI SE VA A MANDAR ESTA INFO CUANDO HAGA EL REDIRECTO O NO YA QUE ARRIBA DEFINO OTRO MAV (EN LA FUNCION DE ARRIBA)
-                    return emailForm(loginForm, "setPassword");
-
+                if(Objects.equals(registedUserInfo.getPassword(), loginForm.getPassword())) {
+                    return new ModelAndView("ContentPage");
                 } else {
-//                    TODO: VER SI ESTO ANDA ASI, LA DUDA SERIA DSI SE VA A MANDAR ESTA INFO CUANDO HAGA EL REDIRECTO O NO YA QUE ARRIBA DEFINO OTRO MAV (EN LA FUNCION DE ARRIBA)
-                    return emailForm(loginForm, "log");
+//                    TODO: ACA HAY QUE MANDAR EL ERROR DE CONTRASENA INCORRECTA
+                    return emailForm(loginForm, loginStage);
                 }
-//                mav.addObject("userEmail", registedUserInfo.getEmail());
-//                mav.addObject("userName", registedUserInfo.getUserName());
             } catch (NoSuchElementException e) {
-                return emailForm(loginForm, "registration");
+//                TODO: ACA DEBERIA IR EL TEMA DE QUE NO EXISTE EL MAIL Y TIRARLE EL ERROR
+//                return emailForm(loginForm, loginStage);
+
             }
-        } else if(Objects.equals(loginStage, "setPassword")) {
-            us.setPassword(loginForm.getPassword(), loginForm.getEmail());
-        } else if(Objects.equals(loginStage, "registration")) {
+        }  else if(Objects.equals(loginStage, "sign-up")) {
             User newUser = new User(null, loginForm.getEmail(), loginForm.getUserName(), loginForm.getPassword(), 0L);
             us.register(newUser);
-        } else if(Objects.equals(loginStage, "log")) {
-            us.setPassword(loginForm.getPassword(), loginForm.getEmail());
+        } else if(Objects.equals(loginStage, "forgot-password")) {
+//            TODO, VER EL TEMA DE MANDAR EL EMAIL
+            User newUser = new User(null, loginForm.getEmail(), loginForm.getUserName(), loginForm.getPassword(), 0L);
+//            us.register(newUser);
         }
 
         return new ModelAndView("redirect:/");
