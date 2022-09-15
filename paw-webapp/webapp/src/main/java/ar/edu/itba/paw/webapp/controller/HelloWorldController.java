@@ -218,6 +218,7 @@ public class HelloWorldController {
         if(errors.hasErrors()) {
             return reviewFormCreate(form,id);
         }
+//        TODO: CAMBIAR LA LOGICA DE ESTO ESTO
         User newUser = new User(null, form.getEmail(), form.getUserName());
         //Primero intenta agregar el usuario, luego intenta agregar la review
         Optional<Long> userId = us.register(newUser);
@@ -228,8 +229,9 @@ public class HelloWorldController {
             return mav;
         }
         try {
+//            TODO: Cambiar esto tambien
             // ReviewId va en null porque eso lo asigna la tabla
-            Review newReview = new Review(null, type, id, userId.get(), form.getName(), form.getDescription(), form.getRating());
+            Review newReview = new Review(null, type, id, userId.get(), form.getName(), form.getDescription(), form.getRating(), form.getUserName());
             newReview.setId(id);
             rs.addReview(newReview);
         }
@@ -240,7 +242,6 @@ public class HelloWorldController {
         }
 
         ModelMap model =new ModelMap();
-        model.addAttribute("toastMsg","Your review was correctly added");
         return new ModelAndView("redirect:/" + type + "/" + id, model);
     }
     // * -----------------------------------------------------------------------------------------------------------------------
@@ -283,8 +284,7 @@ public class HelloWorldController {
 //        }
 //
 //        ModelAndView mav =new ModelAndView("redirect:/serie/"+id);
-//        redirectAttributes.addFlashAttribute("toastMsg","Review added correctly");
-//        mav.addObject("toastMsg","Review added correctly");
+//
         return new ModelAndView("logInPage");
     }
     // * -----------------------------------------------------------------------------------------------------------------------

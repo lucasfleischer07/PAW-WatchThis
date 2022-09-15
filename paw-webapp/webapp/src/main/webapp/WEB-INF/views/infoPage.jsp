@@ -79,7 +79,10 @@
             <jsp:include page="components/reviewCard.jsp">
               <jsp:param name="reviewTitle" value="${review.name}" />
               <jsp:param name="reviewDescription" value="${review.description}" />
+              <jsp:param name="reviewRating" value="${review.rating}"/>
               <jsp:param name="reviewId" value="${review.id}" />
+              <jsp:param name="userName" value="${review.userName}"/>
+
             </jsp:include>
           </c:forEach>
           <c:if test="${reviews==null || reviews.size()==0}">
@@ -100,17 +103,6 @@
         </div>
       </div>
     </div>
-
-    <c:if test="${toastMsg!=null && toastMsg !=''}">
-      <div class="toast align-items-center text-bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="d-flex">
-          <div class="toast-body">
-            <c:out value="${toastMsg}"/>
-          </div>
-          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-      </div>
-    </c:if>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
   </body>
