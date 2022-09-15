@@ -90,22 +90,17 @@ public class HelloWorldController {
         return mav;
     }
 
-//    @RequestMapping("/search")
-//    public ModelAndView search(@RequestParam(name = "query", defaultValue = "") final String query) {
-//        final ModelAndView mav = new ModelAndView("index");
-//        mav.addObject("query", query);
-//        List<Content> movieList = cs.getSearchedMovies(query);
-//        if(movieList == null && seriesList == null) {
-//            throw new PageNotFoundException();
-//
-//        } else if(movieList != null && seriesList == null) {
-//            mav.addObject("movies", movieList);
-//
-//        }else if(movieList == null) {
-//            mav.addObject("movies", seriesList);
-//        }
-//        return mav;
-//    }
+    @RequestMapping("/search")
+    public ModelAndView search(@RequestParam(name = "query", defaultValue = "") final String query) {
+        final ModelAndView mav = new ModelAndView("ContentPage");
+        mav.addObject("query", query);
+        List<Content> contentList = cs.getSearchedContent(query);
+        if(contentList == null) {
+            throw new PageNotFoundException();
+        }
+        mav.addObject("allContent", contentList);
+        return mav;
+    }
 
     @RequestMapping("/{type:movie|serie}/{contentId:[0-9]+}")
     public ModelAndView reviews(@PathVariable("contentId")final long contentId, @PathVariable("type") final String type) {
@@ -221,14 +216,14 @@ public class HelloWorldController {
     // * ----------------------------------- login Page -----------------------------------------------------------------------
 
 //    TODO: Terminar
-    @RequestMapping(value = "/login/{loginStage:sign-in|sign-up|forgot-password}", method = {RequestMethod.GET})
+    @RequestMapping(value = "/login/{loginStage:sign-in|sign-up|forgot-password|set-password}", method = {RequestMethod.GET})
     public ModelAndView emailForm(@ModelAttribute("loginForm") final LoginForm loginForm, @PathVariable("loginStage") final String loginStage) {
         final ModelAndView mav = new ModelAndView("logInPage");
         mav.addObject("loginStage", loginStage);
         return mav;
     }
 
-    @RequestMapping(value = "/login/{loginStage:sign-in|sign-up|forgot-password}", method = {RequestMethod.POST})
+    @RequestMapping(value = "/login/{loginStage:sign-in|sign-up|forgot-password|set-password}", method = {RequestMethod.POST})
     public ModelAndView emailFormVerification(@Valid @ModelAttribute("loginForm") final LoginForm loginForm, final BindingResult errors, RedirectAttributes redirectAttributes, @PathVariable("loginStage") final String loginStage) {
         if(errors.hasErrors()) {
             return emailForm(loginForm, loginStage);
@@ -252,6 +247,10 @@ public class HelloWorldController {
             us.register(newUser);
         } else if(Objects.equals(loginStage, "forgot-password")) {
 //            TODO, VER EL TEMA DE MANDAR EL EMAIL
+            User newUser = new User(null, loginForm.getEmail(), loginForm.getUserName(), loginForm.getPassword(), 0L);
+//            us.register(newUser);
+        } else if (Objects.equals(loginStage, "set-password")) {
+            //VER EL TEMA DE SETEAR NUEVA PASSWORD EN BDD
             User newUser = new User(null, loginForm.getEmail(), loginForm.getUserName(), loginForm.getPassword(), 0L);
 //            us.register(newUser);
         }

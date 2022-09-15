@@ -175,9 +175,9 @@
                                     <div class="mb-3 W-input-label-login-info">
                                         <h5 class="W-password-title">Enter your password below</h5>
                                         <div class="mb-3 W-input-label-login-info">
-                                            <form:errors path="email" element="p" cssStyle="color: red"/>
-                                            <form:label path="email" class="form-label">New password</form:label>
-                                            <form:input type="email" class="form-control" value="${loginForm.email}" path="email" readonly="true" placeholder="*****"/>
+                                            <form:errors path="password" element="p" cssStyle="color: red"/>
+                                            <form:label path="password" class="form-label">Password</form:label>
+                                            <form:input type="password" class="form-control" path="password" placeholder="*****"/>
                                         </div>
                                     </div>
                                 </div>

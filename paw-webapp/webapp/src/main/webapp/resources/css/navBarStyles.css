@@ -66,6 +66,7 @@
 .W-nav-login-button {
     display: flex;
     justify-content: center;
+    width: 7vw;
 }
 
 @media (max-width: 992px) {
@@ -228,7 +229,7 @@
 .W-search-button-color {
     color: white;
     background-color: transparent;
-    border-color: red;
+    border-color: white;
 }
 
 .W-search-button-color:hover {

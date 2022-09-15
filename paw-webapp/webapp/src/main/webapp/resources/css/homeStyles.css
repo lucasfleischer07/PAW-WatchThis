@@ -53,6 +53,7 @@
 
 .W-films-margin{
     margin: 7%;
+    width: 100% ;
 }
 
 .W-line-style{
@@ -66,6 +67,7 @@
 .W-films-card-body {
     display: flex;
     align-items: flex-start;
+    height: 100%;
 }
 
 .W-card-design{
@@ -93,6 +95,7 @@
     width: 25%;
     margin: 1vm;
     height: auto;
+    display: flex;
 }
 
 .card-img-top {
