@@ -13,7 +13,7 @@
 
 .W-filter-div {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     height: 100%;
     margin-left: 1vw;
     margin-top: 1.5vw;
@@ -42,7 +42,7 @@
 }
 
 .W-dropdown-button-sorting {
-    margin-left: 54vw;
+    margin-left: 45vw;
 }
 
 .W-dropdown-button {
