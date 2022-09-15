@@ -22,10 +22,13 @@
     margin-right: 3%;
 }
 
-.W-submit-cancel-buttons {
-    display: flex;
-    justify-content: space-evenly;
-    margin-top: 1%;
+
+.W-forgot-password {
+    margin-left: 18vw;
+}
+
+.W-line-style-login {
+    width: 30%;
 }
 
 .W-review-registration-text {
@@ -33,14 +36,33 @@
     color: #636464;
 }
 
+.W-login-button {
+    width: 7vw;
+    margin-top: 1vw;
+    margin-left: 23vw;
+}
+
 .W-review-registration-img {
     width: 8vw;
+}
+
+.W-send-password {
+    margin-top: 1vw;
+}
+
+.W-sign-up-button-link {
+    width: 7vw;
+    margin-left: 4vw;
 }
 
 .W-review-registration-img-and-name {
     display: flex;
     align-items: center;
     margin: 1vw 0 2vw 0;
+}
+
+.W-sign-ip-link {
+    margin-top: 3vw;
 }
 
 .W-review-registration-name {

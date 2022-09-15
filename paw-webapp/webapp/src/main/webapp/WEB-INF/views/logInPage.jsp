@@ -50,18 +50,22 @@
                             <div class="mb-3 W-input-label-login-info">
                                 <form:errors path="email" element="p" cssStyle="color: red"/>
                                 <form:label path="email" class="form-label">Email</form:label>
-                                <form:input type="email" class="form-control" value="${loginForm.email}" path="email" readonly="true"/>
+                                <form:input type="email" class="form-control" value="${loginForm.email}" path="email" placeholder="Email" readonly="true"/>
                             </div>
                             <div class="mb-3 W-input-label-login-info">
                                 <form:errors path="password" element="p" cssStyle="color: red"/>
                                 <form:label path="password" class="form-label">Password</form:label>
-                                <form:input type="password" class="form-control" path="password"/>
+                                <form:input type="password" class="form-control" path="password" placeholder="Password"/>
+                                <a href="<c:url value="//login/forgot-password"/>" class="W-forgot-password">Forgot password?</a>
                             </div>
                         </div>
-                        <div class="W-submit-cancel-buttons">
-                            <a href="<c:url value="/"/>">
-                                <button type="button" class="btn btn-danger" id="cancelButton1" onclick="(this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'; document.getElementById('submitButton1').disabled=true">Cancel</button></a>
-                            <button id="submitButton1" type="submit" class="btn btn-success" onclick="this.form.submit(); (this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'; document.getElementById('cancelButton1').disabled=true">Verify</button>
+                        <div>
+                            <button id="submitButton1" type="submit" class="btn btn-success W-login-button" onclick="this.form.submit(); (this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'; document.getElementById('cancelButton1').disabled=true">Log in</button>
+                        </div>
+                        <hr class="d-flex W-line-style-login"/>
+                        <div>
+                            <h5>Do not have an account?</h5>
+                            <button type="button" class="btn btn-secondary W-sign-up-button-link"><a style="color: aliceblue" href="<c:url value="//login/sign-up"/>" class="W-sign-ip-link">Sign up!</a></button>
                         </div>
                     </div>
                 </form:form>
@@ -96,18 +100,19 @@
                                 <div class="mb-3 W-input-label-login-info">
                                     <form:errors path="email" element="p" cssStyle="color: red"/>
                                     <form:label path="email" class="form-label">Email</form:label>
-                                    <form:input type="email" class="form-control" value="${loginForm.email}" path="email" readonly="true"/>
+                                    <form:input type="email" class="form-control" value="${loginForm.email}" path="email" readonly="true" placeholder="Email"/>
                                 </div>
                             </div>
                             <div class="mb-3 W-input-label-login-info">
-                                <form:errors path="password" element="p" cssStyle="color: red"/>
-                                <form:label path="password" class="form-label">Password</form:label>
-                                <form:input type="password" class="form-control" path="password"/>
+                                <div class="mb-3 W-input-label-login-info">
+                                    <form:errors path="password" element="p" cssStyle="color: red"/>
+                                    <form:label path="password" class="form-label">Password</form:label>
+                                    <form:input type="password" class="form-control" path="password" placeholder="Password"/>
+                                </div>
                             </div>
                         </div>
-                        <div class="W-submit-cancel-buttons">
-                            <a href="<c:url value="/"/>"><button type="button" class="btn btn-danger" id="cancelButton2" onclick="(this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'; document.getElementById('submitButton2').disabled=true">Cancel</button></a>
-                            <button id="submitButton2" type="submit" class="btn btn-success" onclick="this.form.submit(); (this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'; document.getElementById('cancelButton2').disabled=true">Sing In</button>
+                        <div>
+                            <button id="submitButton2" type="submit" class="btn btn-success W-login-button" onclick="this.form.submit(); (this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'; document.getElementById('cancelButton2').disabled=true">Sign up</button>
                         </div>
                     </div>
                 </form:form>
@@ -138,9 +143,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="W-submit-cancel-buttons">
-                            <a href="<c:url value="/login/sign-in"/>"><button type="button" class="btn btn-danger" id="cancelButton3" onclick="(this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'; document.getElementById('submitButton3').disabled=true">Cancel</button></a>
-                            <button id="submitButton3" type="submit" class="btn btn-success" onclick="this.form.submit(); (this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'; document.getElementById('cancelButton3').disabled=true">Send</button>
+                        <div>
+                            <button id="submitButton3" type="submit" class="btn btn-success W-send-password" onclick="this.form.submit(); (this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'; document.getElementById('cancelButton3').disabled=true">Send</button>
                         </div>
                     </div>
                 </form:form>
