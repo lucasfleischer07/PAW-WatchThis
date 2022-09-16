@@ -21,6 +21,7 @@
     <jstl.version>1.2</jstl.version>
     <javax.validation-api.version>1.0.0.GA</javax.validation-api.version>
     <org.hibernate.validator>4.3.1.Final</org.hibernate.validator>
+    <org.springframework.boot.email>2.5.6</org.springframework.boot.email>
   </properties>
     
   <dependencyManagement>
@@ -70,6 +71,13 @@
         <groupId>org.hibernate</groupId>
         <artifactId>hibernate-validator</artifactId>
         <version>${org.hibernate.validator}</version>
+      </dependency>
+
+<!--      Dependencia para mandar emials-->
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-mail</artifactId>
+        <version>2.5.6</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

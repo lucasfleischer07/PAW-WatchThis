@@ -23,6 +23,7 @@
       <groupId>org.springframework</groupId>
       <artifactId>spring-context</artifactId>
     </dependency>
+
     <!--Para el modulo interfaces-->
     <dependency>
       <groupId>ar.edu.itba.paw</groupId>
@@ -35,6 +36,11 @@
       <artifactId>persistance</artifactId>
       <version>${parent.version}</version>
       <scope>runtime</scope>
+    </dependency>
+    <!--    PAra mails-->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-mail</artifactId>
     </dependency>
   </dependencies>
 
