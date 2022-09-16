@@ -6,16 +6,11 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ContentService {
-    List<Content> getAllContent(String type);
+    List<Content> getAllContent(String type, String sort);
     Optional<Content> findByName(String name);
-    List<Content> findByGenre(String type, String genre);
-    List<Content> findByDuration(String type, int durationFrom, int durationTo);
-    List<Content> findByDurationAndGenre(String type, String genre,int durationFrom, int durationTo);
+    List<Content> findByGenre(String type, String genre, String sort);
+    List<Content> findByDuration(String type, int durationFrom, int durationTo, String sort);
+    List<Content> findByDurationAndGenre(String type, String genre,int durationFrom, int durationTo, String sort);
     Optional<Content> findById(long id);
     List<Content> getSearchedContent(String query);
-    List<Content> ordenByAsc(String parameter);
-    List<Content> ordenByDesc(String parameter);
-
-
-
 }

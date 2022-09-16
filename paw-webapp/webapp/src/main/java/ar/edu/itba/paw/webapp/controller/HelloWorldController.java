@@ -75,7 +75,7 @@ public class HelloWorldController {
             auxType = "serie";
         }
         int page= pageNum.orElse(1);
-        List<Content> contentList = cs.getAllContent(auxType);
+        List<Content> contentList = cs.getAllContent(auxType, "ANY");
         if( contentList == null) {
             throw new PageNotFoundException();
         } else {
@@ -90,15 +90,20 @@ public class HelloWorldController {
         return mav;
     }
 
-    @RequestMapping("/search")
-    public ModelAndView search(@RequestParam(name = "query", defaultValue = "") final String query) {
+    @RequestMapping(value = {"/search", "/page/{pageNum}"})
+    public ModelAndView search(@PathVariable("pageNum")final Optional<Integer> pageNum, @RequestParam(name = "query", defaultValue = "") final String query) {
         final ModelAndView mav = new ModelAndView("ContentPage");
         mav.addObject("query", query);
         List<Content> contentList = cs.getSearchedContent(query);
+        int page= pageNum.orElse(1);
         if(contentList == null) {
             throw new PageNotFoundException();
+        }else {
+            mav.addObject("allContent", contentList.subList((page - 1) * ELEMS_AMOUNT, (page - 1) * ELEMS_AMOUNT + ELEMS_AMOUNT));
+            mav.addObject("amountPages", (int) Math.ceil((double) contentList.size() / (double) ELEMS_AMOUNT));
+            mav.addObject("pageSelected", page);
+            mav.addObject("allContent", contentList);
         }
-        mav.addObject("allContent", contentList);
         return mav;
     }
 
@@ -148,13 +153,13 @@ public class HelloWorldController {
         List<Content> contentListFilter;
 
         if(!Objects.equals(genre, "ANY") && Objects.equals(durationFrom, "ANY")) {
-            contentListFilter = cs.findByGenre(auxType, genre) ;
+            contentListFilter = cs.findByGenre(auxType, genre, sorting) ;
         } else if(Objects.equals(genre, "ANY") && !Objects.equals(durationFrom, "ANY")) {
-            contentListFilter = cs.findByDuration(auxType, Integer.parseInt(durationFrom), Integer.parseInt(durationTo));
+            contentListFilter = cs.findByDuration(auxType, Integer.parseInt(durationFrom), Integer.parseInt(durationTo), sorting);
         } else if(!Objects.equals(durationFrom, "ANY") && !Objects.equals(genre, "ANY")) {    // Caso de que si los filtros estan vacios
-            contentListFilter = cs.findByDurationAndGenre(auxType, genre, Integer.parseInt(durationFrom), Integer.parseInt(durationTo));
+            contentListFilter = cs.findByDurationAndGenre(auxType, genre, Integer.parseInt(durationFrom), Integer.parseInt(durationTo), sorting);
         } else{
-            contentListFilter = cs.getAllContent(auxType);
+            contentListFilter = cs.getAllContent(auxType, sorting);
         }
 
         if(contentListFilter == null) {
@@ -269,6 +274,11 @@ public class HelloWorldController {
     }
     // * -----------------------------------------------------------------------------------------------------------------------
 
+
+    // * ----------------------------------- Sort by Filter -----------------------------------------------------------------------
+
+
+    // * -----------------------------------------------------------------------------------------------------------------------
 
 
     // * ----------------------------------- Otros -----------------------------------------------------------------------

@@ -34,12 +34,37 @@ public class ContentJdbcDao implements ContentDao {
     }
 
     @Override
-    public List<Content> getAllContent(String type) {
-        if(Objects.equals(type, "movie") || Objects.equals(type, "serie")) {
-            return template.query("SELECT * FROM content WHERE type = ?", new Object[]{type}, CONTENT_ROW_MAPPER);
+    public List<Content> getAllContent(String type, String sort) {
+        if (Objects.equals(type, "movie") || Objects.equals(type, "serie")) {
+            if (Objects.equals(sort, "ANY")) {
+                return template.query("SELECT * FROM content WHERE type = ?", new Object[]{type}, CONTENT_ROW_MAPPER);
+            } else if (Objects.equals(sort, "Last-released")) {
+                return template.query("SELECT * FROM content WHERE type = ? ORDER BY released desc", new Object[]{type}, CONTENT_ROW_MAPPER);
+            } else if (Objects.equals(sort, "Older-released")) {
+                return template.query("SELECT * FROM content WHERE type = ? ORDER BY released asc", new Object[]{type}, CONTENT_ROW_MAPPER);
+            } else if (Objects.equals(sort, "Best-ratings")) {
+                return template.query("SELECT * FROM content WHERE type = ? ORDER BY rating desc", new Object[]{type}, CONTENT_ROW_MAPPER);
+            } else if (Objects.equals(sort, "A-Z")) {
+                return template.query("SELECT * FROM content WHERE type = ? ORDER BY name asc", new Object[]{type}, CONTENT_ROW_MAPPER);
+            } else if (Objects.equals(sort, "Z-A")) {
+                return template.query("SELECT * FROM content WHERE type = ? ORDER BY name desc", new Object[]{type}, CONTENT_ROW_MAPPER);
+            }
         } else {
-            return template.query("SELECT * FROM content", CONTENT_ROW_MAPPER);
+            if (Objects.equals(sort, "ANY")) {
+                return template.query("SELECT * FROM content", CONTENT_ROW_MAPPER);
+            } else if (Objects.equals(sort, "Last-released")) {
+                return template.query("SELECT * FROM content ORDER BY released desc", CONTENT_ROW_MAPPER);
+            } else if (Objects.equals(sort, "Older-released")) {
+                return template.query("SELECT * FROM content ORDER BY released asc", CONTENT_ROW_MAPPER);
+            } else if (Objects.equals(sort, "Best-ratings")) {
+                return template.query("SELECT * FROM content ORDER BY rating desc", CONTENT_ROW_MAPPER);
+            } else if (Objects.equals(sort, "A-Z")) {
+                return template.query("SELECT * FROM content ORDER BY name asc", CONTENT_ROW_MAPPER);
+            } else if (Objects.equals(sort, "Z-A")) {
+                return template.query("SELECT * FROM content ORDER BY name desc", CONTENT_ROW_MAPPER);
+            }
         }
+        return null;
     }
 
     @Override
@@ -50,25 +75,62 @@ public class ContentJdbcDao implements ContentDao {
     }
 
     @Override
-    public List<Content> findByGenre(String type, String genre) {
+    public List<Content> findByGenre(String type, String genre, String sort) {
         // TODO: Ver como hacer para que, dentro de los genereos, que me agarre 1 de todos los que tiene
-        return template.query("SELECT * FROM content WHERE genre LIKE '%'||?||'%' AND type = ?", new Object[]{ genre, type }, CONTENT_ROW_MAPPER);
+        if(Objects.equals(sort, "ANY")) {
+            return template.query("SELECT * FROM content WHERE genre LIKE '%'||?||'%' AND type = ?", new Object[]{ genre, type }, CONTENT_ROW_MAPPER);
+        } else if(Objects.equals(sort, "Last-released")){
+            return template.query("SELECT * FROM content WHERE genre LIKE '%'||?||'%' AND type = ? ORDER BY released desc", new Object[]{ genre, type }, CONTENT_ROW_MAPPER);
+        } else if(Objects.equals(sort, "Older-released")){
+            return template.query("SELECT * FROM content WHERE genre LIKE '%'||?||'%' AND type = ? ORDER BY released asc", new Object[]{ genre, type }, CONTENT_ROW_MAPPER);
+        } else if(Objects.equals(sort, "Best-ratings")){
+            return template.query("SELECT * FROM content WHERE genre LIKE '%'||?||'%' AND type = ? ORDER BY rating desc", new Object[]{ genre, type }, CONTENT_ROW_MAPPER);
+        } else if(Objects.equals(sort, "A-Z")){
+            return template.query("SELECT * FROM content WHERE genre LIKE '%'||?||'%' AND type = ? ORDER BY name asc", new Object[]{ genre, type }, CONTENT_ROW_MAPPER);
+        } else if(Objects.equals(sort, "Z-A")){
+            return template.query("SELECT * FROM content WHERE genre LIKE '%'||?||'%' AND type = ? ORDER BY name desc", new Object[]{ genre, type }, CONTENT_ROW_MAPPER);
+        }
+        return null;
     }
 
     @Override
-    public List<Content> findByDuration(String type, int durationFrom, int durationTo) {
-        // TODO: Aca, cuando definamos para hacer la consulta, tiene que ser en el sigueinte formato: 2 horas 22 minutos, es decir, numero horas numero minuto
-        return template.query("SELECT * FROM content WHERE durationnum > ? AND durationnum <= ? AND type = ?", new Object[]{ durationFrom, durationTo, type }, CONTENT_ROW_MAPPER);
+    public List<Content> findByDuration(String type, int durationFrom, int durationTo, String sort) {
+        if(Objects.equals(sort, "ANY")) {
+            return template.query("SELECT * FROM content WHERE durationnum > ? AND durationnum <= ? AND type = ?", new Object[]{ durationFrom, durationTo, type }, CONTENT_ROW_MAPPER);
+        } else if(Objects.equals(sort, "Last-released")){
+            return template.query("SELECT * FROM content WHERE durationnum > ? AND durationnum <= ? AND type = ? ORDER BY released desc", new Object[]{ durationFrom, durationTo, type }, CONTENT_ROW_MAPPER);
+        } else if(Objects.equals(sort, "Older-released")){
+            return template.query("SELECT * FROM content WHERE durationnum > ? AND durationnum <= ? AND type = ? ORDER BY released asc", new Object[]{ durationFrom, durationTo, type }, CONTENT_ROW_MAPPER);
+        } else if(Objects.equals(sort, "Best-ratings")){
+            return template.query("SELECT * FROM content WHERE durationnum > ? AND durationnum <= ? AND type = ? ORDER BY rating desc", new Object[]{ durationFrom, durationTo, type }, CONTENT_ROW_MAPPER);
+        } else if(Objects.equals(sort, "A-Z")){
+            return template.query("SELECT * FROM content WHERE durationnum > ? AND durationnum <= ? AND type = ? ORDER BY name asc", new Object[]{ durationFrom, durationTo, type }, CONTENT_ROW_MAPPER);
+        } else if(Objects.equals(sort, "Z-A")){
+            return template.query("SELECT * FROM content WHERE durationnum > ? AND durationnum <= ? AND type = ? ORDER BY name desc", new Object[]{ durationFrom, durationTo, type }, CONTENT_ROW_MAPPER);
+        }
+        return null;
     }
 
     @Override
-    public List<Content> findByDurationAndGenre(String type, String genre,int durationFrom, int durationTo){
-        return template.query("SELECT * FROM content WHERE durationnum > ? AND durationnum <= ? AND genre LIKE '%'||?||'%' AND type = ?",new Object[]{ durationFrom, durationTo, genre, type},CONTENT_ROW_MAPPER);
+    public List<Content> findByDurationAndGenre(String type, String genre,int durationFrom, int durationTo, String sort){
+        if(Objects.equals(sort, "ANY")) {
+            return template.query("SELECT * FROM content WHERE durationnum > ? AND durationnum <= ? AND genre LIKE '%'||?||'%' AND type = ?",new Object[]{ durationFrom, durationTo, genre, type},CONTENT_ROW_MAPPER);
+        } else if(Objects.equals(sort, "Last-released")){
+            return template.query("SELECT * FROM content WHERE durationnum > ? AND durationnum <= ? AND genre LIKE '%'||?||'%' AND type = ? ORDER BY released desc",new Object[]{ durationFrom, durationTo, genre, type},CONTENT_ROW_MAPPER);
+        } else if(Objects.equals(sort, "Older-released")){
+            return template.query("SELECT * FROM content WHERE durationnum > ? AND durationnum <= ? AND genre LIKE '%'||?||'%' AND type = ? ORDER BY released asc",new Object[]{ durationFrom, durationTo, genre, type},CONTENT_ROW_MAPPER);
+        } else if(Objects.equals(sort, "Best-ratings")){
+            return template.query("SELECT * FROM content WHERE durationnum > ? AND durationnum <= ? AND genre LIKE '%'||?||'%' AND type = ? ORDER BY rating desc",new Object[]{ durationFrom, durationTo, genre, type},CONTENT_ROW_MAPPER);
+        } else if(Objects.equals(sort, "A-Z")){
+            return template.query("SELECT * FROM content WHERE durationnum > ? AND durationnum <= ? AND genre LIKE '%'||?||'%' AND type = ? ORDER BY name asc",new Object[]{ durationFrom, durationTo, genre, type},CONTENT_ROW_MAPPER);
+        } else if(Objects.equals(sort, "Z-A")){
+            return template.query("SELECT * FROM content WHERE durationnum > ? AND durationnum <= ? AND genre LIKE '%'||?||'%' AND type = ? ORDER BY name desc",new Object[]{ durationFrom, durationTo, genre, type},CONTENT_ROW_MAPPER);
+        }
+        return null;
     }
 
     @Override
     public Optional<Content> findById(long id) {
-        // TODO: Aca, cuando d"SELECT * FROM content WHERE durationnum > ? and durationnum <= ?efinamos para hacer la consulta, tiene que ser en el sigueinte formato: 2 horas 22 minutos, es decir, numero horas numero minuto
         return template.query("SELECT * FROM content WHERE id = ?",
                 new Object[]{ id }, CONTENT_ROW_MAPPER
         ).stream().findFirst();
@@ -80,19 +142,6 @@ public class ContentJdbcDao implements ContentDao {
                 new Object[]{"%" + query.toLowerCase() + "%"},CONTENT_ROW_MAPPER);
         return content;
     }
-
-
-    @Override
-    public List<Content> ordenByAsc(String parameter) {
-        return template.query("SELECT * FROM content order by ? asc", new Object[]{ parameter }, CONTENT_ROW_MAPPER);
-    }
-
-    @Override
-    public List<Content> ordenByDesc(String parameter) {
-        return template.query("SELECT * FROM content order by ? desc", new Object[]{ parameter }, CONTENT_ROW_MAPPER);
-
-    }
-
 
 
     @Override
