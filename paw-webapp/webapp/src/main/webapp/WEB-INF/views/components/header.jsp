@@ -67,15 +67,15 @@
                 <div class="W-filters-hamburger-buttons">
                     <div class="btn-group-vertical" role="group" aria-label="Button group with nested dropdown">
                         <div class="list-group">
-                            <div class="dropdown W-dropdown-button">
+                            <div class="dropdown">
                                 <c:choose>
                                     <c:when test="${param.genre != '' && param.genre != 'ANY'}">
-                                        <button id="genreGroupDrop" type="button" class="W-filter-title btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <button id="genreGroupDrop" type="button" class="W-filter-title W-dropdown-button-genre-duration-sort btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                             <c:out value="${param.genre}"/>
                                         </button>
                                     </c:when>
                                     <c:otherwise>
-                                        <button id="genreGroupDrop" type="button" class="W-filter-title btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <button id="genreGroupDrop" type="button" class="W-filter-title W-dropdown-button-genre-duration-sort btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                             Genre
                                         </button>
                                     </c:otherwise>
@@ -216,20 +216,20 @@
                         </div>
 
                         <div class="list-group">
-                            <div class="dropdown W-dropdown-button">
+                            <div class="dropdown">
                                 <c:choose>
                                     <c:when test="${param.durationTo == '1000'}">
-                                        <button id="genreGroupDrop" type="button" class="W-filter-title btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <button id="genreGroupDrop" type="button" class="W-filter-title W-dropdown-button-genre-duration-sort  btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                             <c:out value="${param.durationFrom}"/> or more
                                         </button>
                                     </c:when>
                                     <c:when test="${param.durationFrom != '' &&  param.durationFrom != 'ANY'}">
-                                        <button id="genreGroupDrop" type="button" class="W-filter-title btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <button id="genreGroupDrop" type="button" class="W-filter-title W-dropdown-button-genre-duration-sort  btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                             <c:out value="${param.durationFrom}"/>-<c:out value="${param.durationTo}"/> minutes
                                         </button>
                                     </c:when>
                                     <c:otherwise>
-                                        <button id="genreGroupDrop" type="button" class="W-filter-title btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <button id="genreGroupDrop" type="button" class="W-filter-title W-dropdown-button-genre-duration-sort  btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                             Duration
                                         </button>
                                     </c:otherwise>
@@ -286,12 +286,12 @@
                             <div class="dropdown W-dropdown-button">
                                 <c:choose>
                                     <c:when test="${param.sorting != '' && param.sorting != 'ANY'}">
-                                        <button id="sortingGroupDrop" type="button" class="W-filter-title btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <button id="sortingGroupDrop" type="button" class="W-dropdown-button-genre-duration-sort  W-filter-title btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                             <c:out value="${param.sorting}"/>
                                         </button>
                                     </c:when>
                                     <c:otherwise>
-                                        <button id="sortingGroupDrop" type="button" class="W-filter-title btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <button id="sortingGroupDrop" type="button" class="W-dropdown-button-genre-duration-sort  W-filter-title btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                             Sort by
                                         </button>
                                     </c:otherwise>

@@ -66,7 +66,7 @@
 .W-nav-login-button {
     display: flex;
     justify-content: center;
-    width: 7vw;
+    /*width: 7vw;*/
 }
 
 @media (max-width: 992px) {
@@ -114,7 +114,7 @@
     .W-nav-item {
         display: block;
         margin-left: 0%;
-        font-size: 100%;
+        font-size: 2vw;
     }
 
     .W-navbar-search {
@@ -129,7 +129,7 @@
 
     .W-filters-hamburger-buttons {
         display: flex;
-        margin-top: 7%;
+        margin-top: 15%;
     }
 }
 
@@ -176,7 +176,7 @@
     .W-nav-item {
         display: block;
         margin-left: 0%;
-        font-size: 100%;
+        font-size: 1.5vw;
     }
 }
 @media (max-width: 291px) {
@@ -217,7 +217,7 @@
     .W-nav-item {
         display: block;
         margin-left: 0%;
-        font-size: 100%;
+        font-size: 1vw;
     }
 }
 
