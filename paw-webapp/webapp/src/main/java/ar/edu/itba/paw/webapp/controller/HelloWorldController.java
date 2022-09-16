@@ -201,8 +201,12 @@ public class HelloWorldController {
         if(errors.hasErrors()) {
             return reviewFormCreate(form,id);
         }
+<<<<<<< Updated upstream
 //        TODO: CAMBIAR LA LOGICA DE ESTO ESTO
         User newUser = new User(null, form.getEmail(), form.getUserName());
+=======
+        User newUser = new User(null, form.getEmail(), form.getUserName(),"CAMBIAR",(long)4);//ESTO SE TIENE QUE SACAR
+>>>>>>> Stashed changes
         //Primero intenta agregar el usuario, luego intenta agregar la review
         Optional<Long> userId = us.register(newUser);
         //Falta Agregar mensaje de error para el caso -1 (si falla en el pedido)
@@ -212,9 +216,14 @@ public class HelloWorldController {
             return mav;
         }
         try {
+<<<<<<< Updated upstream
 //            TODO: Cambiar esto tambien
             // ReviewId va en null porque eso lo asigna la tabla
             Review newReview = new Review(null, type, id, userId.get(), form.getName(), form.getDescription(), form.getRating(), form.getUserName());
+=======
+            // ReviewId va en null porque eso lo asigna la tabla
+            Review newReview = new Review(null, type, id, userId.get(), form.getName(), form.getDescription(), form.getRating());
+>>>>>>> Stashed changes
             newReview.setId(id);
             rs.addReview(newReview);
         }
@@ -225,6 +234,7 @@ public class HelloWorldController {
         }
 
         ModelMap model =new ModelMap();
+<<<<<<< Updated upstream
         return new ModelAndView("redirect:/" + type + "/" + id, model);
     }
     // * -----------------------------------------------------------------------------------------------------------------------
@@ -270,39 +280,46 @@ public class HelloWorldController {
 //        model.addAttribute("toastMsg","Your review was correctly added");
 //        return new ModelAndView("redirect:/" + type + "/" + id, model);
 //    }
+=======
+        model.addAttribute("toastMsg","Your review was correctly added");
+        return new ModelAndView("redirect:/" + type + "/" + id, model);
+    }
+>>>>>>> Stashed changes
     // * -----------------------------------------------------------------------------------------------------------------------
 
 
     // * ----------------------------------- login Page -----------------------------------------------------------------------
-
-//    TODO: Terminar
-    @RequestMapping(value = "/login/{loginStage:sign-in|sign-up|forgot-password|set-password}", method = {RequestMethod.GET})
-    public ModelAndView emailForm(@ModelAttribute("loginForm") final LoginForm loginForm, @PathVariable("loginStage") final String loginStage) {
+    @RequestMapping(value = "/login/{loginStage:sign-in}", method = {RequestMethod.GET})
+    public ModelAndView emailForm(@PathVariable("loginStage") final String loginStage) {
         final ModelAndView mav = new ModelAndView("logInPage");
         mav.addObject("loginStage", loginStage);
         return mav;
     }
 
+
+//    TODO: Terminar
+<<<<<<< Updated upstream
+    @RequestMapping(value = "/login/{loginStage:sign-in|sign-up|forgot-password|set-password}", method = {RequestMethod.GET})
+    public ModelAndView emailForm(@ModelAttribute("loginForm") final LoginForm loginForm, @PathVariable("loginStage") final String loginStage) {
+=======
+    @RequestMapping(value = "/login/{loginStage:sign-up|forgot-password|sign-out}", method = {RequestMethod.GET})
+    public ModelAndView emailForm(@ModelAttribute("loginForm") final LoginForm loginForm,@PathVariable("loginStage") final String loginStage) {
+>>>>>>> Stashed changes
+        final ModelAndView mav = new ModelAndView("logInPage");
+        mav.addObject("loginStage", loginStage);
+        return mav;
+    }
+
+<<<<<<< Updated upstream
     @RequestMapping(value = "/login/{loginStage:sign-in|sign-up|forgot-password|set-password}", method = {RequestMethod.POST})
+=======
+    @RequestMapping(value = "/login/{loginStage:sign-up|forgot-password|sign-out}", method = {RequestMethod.POST})
+>>>>>>> Stashed changes
     public ModelAndView emailFormVerification(@Valid @ModelAttribute("loginForm") final LoginForm loginForm, final BindingResult errors, RedirectAttributes redirectAttributes, @PathVariable("loginStage") final String loginStage) {
         if(errors.hasErrors()) {
             return emailForm(loginForm, loginStage);
         }
-        if(Objects.equals(loginStage, "sign-in")) {
-            try {
-                User registedUserInfo = us.findByEmail(loginForm.getEmail()).get();
-                if(Objects.equals(registedUserInfo.getPassword(), loginForm.getPassword())) {
-                    return new ModelAndView("ContentPage");
-                } else {
-//                    TODO: ACA HAY QUE MANDAR EL ERROR DE CONTRASENA INCORRECTA
-                    return emailForm(loginForm, loginStage);
-                }
-            } catch (NoSuchElementException e) {
-//                TODO: ACA DEBERIA IR EL TEMA DE QUE NO EXISTE EL MAIL Y TIRARLE EL ERROR
-//                return emailForm(loginForm, loginStage);
-
-            }
-        }  else if(Objects.equals(loginStage, "sign-up")) {
+        if(Objects.equals(loginStage, "sign-up")) {
             User newUser = new User(null, loginForm.getEmail(), loginForm.getUserName(), loginForm.getPassword(), 0L);
             us.register(newUser);
         } else if(Objects.equals(loginStage, "forgot-password")) {
@@ -318,6 +335,7 @@ public class HelloWorldController {
         return new ModelAndView("redirect:/");
 
     }
+
     // * -----------------------------------------------------------------------------------------------------------------------
 
 
