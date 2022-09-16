@@ -19,7 +19,9 @@ public class UserJdbcDao implements UserDao{
     private static final RowMapper<User> USER_ROW_MAPPER = (resultSet, rowNum) ->
             new User(resultSet.getLong("userid"),
                     resultSet.getString("name"),
-                    resultSet.getString("email"));
+                    resultSet.getString("email"),
+                    resultSet.getString("password"),
+                    resultSet.getLong("reputation"));
 
     private final JdbcTemplate template;
 //    private final SimpleJdbcInsert insert;
@@ -40,9 +42,9 @@ public class UserJdbcDao implements UserDao{
     }
 
     @Override
-    public Optional<Long> create(final String userEmail, final String userName) {
+    public Optional<Long> create(final String userEmail, String userName, String password, Long rating) {
         try {
-            template.update("INSERT INTO userdata(name, email) VALUES(?,?)", userName, userEmail);
+            template.update("INSERT INTO userdata(name, email, password, reputation) VALUES(?,?,?,?)", userName, userEmail, password, rating);
         }catch(Exception e) {
             //Por ahora vacio, en el futuro un cartel
         }
@@ -53,11 +55,16 @@ public class UserJdbcDao implements UserDao{
 
     @Override
     public Optional<User> findByEmail(final String email) {
-        return template.query("SELECT * FROM users WHERE email = ?", new Object[]{ email }, USER_ROW_MAPPER).stream().findFirst();
+        return template.query("SELECT * FROM userdata WHERE email = ?", new Object[]{ email }, USER_ROW_MAPPER).stream().findFirst();
     }
 
     @Override
     public Optional<User> findById(final long userId) {
-        return template.query("SELECT * FROM users WHERE id = ?", new Object[]{ userId }, USER_ROW_MAPPER).stream().findFirst();
+        return template.query("SELECT * FROM userdata WHERE id = ?", new Object[]{ userId }, USER_ROW_MAPPER).stream().findFirst();
     }
+    @Override
+    public void setPassword(String password,String email){
+        template.update("UPDATE userdata SET password = ? WHERE email = ?",new Object[]{password,email});
+    }
+
 }

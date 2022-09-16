@@ -18,7 +18,7 @@ public class UserServiceImpl implements UserService{
     }
     @Override
     public Optional<Long> register(User user) {
-        return userDao.create(user.getEmail(), user.getUserName());
+        return userDao.create(user.getEmail(), user.getUserName(), user.getPassword(), user.getRating());
     }
 
     @Override
@@ -30,4 +30,8 @@ public class UserServiceImpl implements UserService{
     public Optional<User> findById(long userId) {
         return userDao.findById(userId);
     }
+
+    @Override
+    public void setPassword(String password,String email){userDao.setPassword(password,email);}
+
 }

@@ -19,8 +19,8 @@ public class ContentServiceImpl implements ContentService {
     }
 
     @Override
-    public List<Content> getAllContent(String type) {
-        return ContentDao.getAllContent(type);
+    public List<Content> getAllContent(String type, String sort) {
+        return ContentDao.getAllContent(type, sort);
     }
 
     @Override
@@ -29,18 +29,18 @@ public class ContentServiceImpl implements ContentService {
     }
 
     @Override
-    public List<Content> findByGenre(String type, String genre) {
-        return ContentDao.findByGenre(type, genre);
+    public List<Content> findByGenre(String type, String genre, String sort) {
+        return ContentDao.findByGenre(type, genre, sort);
     }
 
     @Override
-    public List<Content> findByDuration(String type, int durationFrom, int durationTo) {
-        return ContentDao.findByDuration(type, durationFrom, durationTo);
+    public List<Content> findByDuration(String type, int durationFrom, int durationTo, String sort) {
+        return ContentDao.findByDuration(type, durationFrom, durationTo, sort);
     }
 
     @Override
-    public List<Content> findByDurationAndGenre(String type, String genre,int durationFrom, int durationTo){
-        return ContentDao.findByDurationAndGenre(type, genre,durationFrom,durationTo);
+    public List<Content> findByDurationAndGenre(String type, String genre,int durationFrom, int durationTo, String sort){
+        return ContentDao.findByDurationAndGenre(type, genre,durationFrom,durationTo, sort);
     }
 
     @Override
@@ -51,17 +51,6 @@ public class ContentServiceImpl implements ContentService {
     @Override
     public List<Content> getSearchedContent(String query) {
         return ContentDao.getSearchedContent(query);
-    }
-
-    @Override
-    public List<Content> ordenByAsc(String parameter) {
-        return ContentDao.ordenByAsc(parameter);
-
-    }
-
-    @Override
-    public List<Content> ordenByDesc(String parameter) {
-        return ContentDao.ordenByDesc(parameter);
     }
 
 }
