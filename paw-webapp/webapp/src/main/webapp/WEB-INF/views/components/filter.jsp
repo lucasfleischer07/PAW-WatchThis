@@ -286,6 +286,7 @@
             </ul>
         </div>
     </div>
+
 </div>
 
 <script src="<c:url value="/resources/js/dropDownBehaviour.js"/>"></script>

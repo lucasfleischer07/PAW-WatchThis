@@ -20,7 +20,8 @@ public class ReviewJdbcDao implements ReviewDao{
                     resultSet.getLong("userid"),
                     resultSet.getString("name"),
                     resultSet.getString("description"),
-                    resultSet.getLong("rating"));
+                    resultSet.getLong("rating"),
+                    resultSet.getString("username"));
 
     private final JdbcTemplate template;
 
@@ -32,8 +33,8 @@ public class ReviewJdbcDao implements ReviewDao{
     @Override
     public void addReview(Review review){
         template.update(
-                "INSERT INTO review(type, contentid, userid, name, description, rating) VALUES(?,?,?,?,?,?)",
-                review.getType(), review.getContentId(), review.getUserId(), review.getName(), review.getDescription(), review.getRating());
+                "INSERT INTO review(type, contentid, userid, name, description, rating,username) VALUES(?,?,?,?,?,?,?)",
+                review.getType(), review.getContentId(), review.getUserId(), review.getName(), review.getDescription(), review.getRating(),review.getUserName());
     }
 
     @Override

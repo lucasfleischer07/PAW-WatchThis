@@ -52,7 +52,11 @@ public class HelloWorldController {
         if(contentList == null) {
             throw new PageNotFoundException();
         } else {
-            mav.addObject("allContent", contentList.subList((page-1)*ELEMS_AMOUNT,(page-1)*ELEMS_AMOUNT + ELEMS_AMOUNT));
+            if(contentList.size()<10){
+                mav.addObject("allContent", contentList);
+            }else{
+                mav.addObject("allContent", contentList.subList((page-1)*ELEMS_AMOUNT,(page-1)*ELEMS_AMOUNT + ELEMS_AMOUNT));
+            }
             mav.addObject("amountPages",(int)Math.ceil((double) contentList.size()/(double)ELEMS_AMOUNT));
             mav.addObject("pageSelected",page);
             mav.addObject("contentType", "movies");
@@ -79,8 +83,11 @@ public class HelloWorldController {
         if( contentList == null) {
             throw new PageNotFoundException();
         } else {
-            mav.addObject("allContent", contentList.subList((page-1)*ELEMS_AMOUNT,(page-1)*ELEMS_AMOUNT + ELEMS_AMOUNT));
-            mav.addObject("amountPages",(int)Math.ceil((double) contentList.size()/(double)ELEMS_AMOUNT));
+            if(contentList.size()<10){
+                mav.addObject("allContent", contentList);
+            }else{
+                mav.addObject("allContent", contentList.subList((page-1)*ELEMS_AMOUNT,(page-1)*ELEMS_AMOUNT + ELEMS_AMOUNT));
+            }            mav.addObject("amountPages",(int)Math.ceil((double) contentList.size()/(double)ELEMS_AMOUNT));
             mav.addObject("pageSelected",page);
             mav.addObject("contentType", type);
             mav.addObject("genre","ANY");
@@ -165,7 +172,11 @@ public class HelloWorldController {
         if(contentListFilter == null) {
             throw new PageNotFoundException();
         } else {
-            mav.addObject("allContent", contentListFilter.subList((page-1)*ELEMS_AMOUNT,(page-1)*ELEMS_AMOUNT + ELEMS_AMOUNT));
+            if(contentListFilter.size()<10){
+                mav.addObject("allContent", contentListFilter);
+            }else{
+                mav.addObject("allContent", contentListFilter.subList((page-1)*ELEMS_AMOUNT,(page-1)*ELEMS_AMOUNT + ELEMS_AMOUNT));
+            }
             mav.addObject("amountPages",Math.ceil((double)contentListFilter.size()/(double)ELEMS_AMOUNT));
             mav.addObject("pageSelected",page);
             mav.addObject("contentType", type);
@@ -178,8 +189,52 @@ public class HelloWorldController {
 
 
     // * ----------------------------------- Movies and Series Review -----------------------------------------------------------------------
-//    @RequestMapping(value = "/reviewForm/{type:movie|serie}/{id:[0-9]+}", method = {RequestMethod.GET})
-//    public ModelAndView reviewFormCreate(@ModelAttribute("registerForm") final ReviewForm reviewForm, @PathVariable("id")final long id) {
+    @RequestMapping(value = "/reviewForm/{type:movie|serie}/{id:[0-9]+}", method = {RequestMethod.GET})
+    public ModelAndView reviewFormCreate(@ModelAttribute("registerForm") final ReviewForm reviewForm, @PathVariable("id")final long id) {
+        final ModelAndView mav = new ModelAndView("reviewRegistration");
+        mav.addObject("details", cs.findById(id).orElseThrow(PageNotFoundException::new));
+        return mav;
+    }
+
+    @RequestMapping(value = "/reviewForm/{type:movie|serie}/{id:[0-9]+}", method = {RequestMethod.POST})
+    public ModelAndView reviewFormMovie(@Valid @ModelAttribute("registerForm") final ReviewForm form, final BindingResult errors, @PathVariable("id")final long id, @PathVariable("type")final String type) {
+        if(errors.hasErrors()) {
+            return reviewFormCreate(form,id);
+        }
+//        TODO: CAMBIAR LA LOGICA DE ESTO ESTO
+        User newUser = new User(null, form.getEmail(), form.getUserName());
+        //Primero intenta agregar el usuario, luego intenta agregar la review
+        Optional<Long> userId = us.register(newUser);
+        //Falta Agregar mensaje de error para el caso -1 (si falla en el pedido)
+        if(userId.get() == -1) {
+            ModelAndView mav=reviewFormCreate(form,id);
+            mav.addObject("errorMsg","This username or mail is already in use.");
+            return mav;
+        }
+        try {
+//            TODO: Cambiar esto tambien
+            // ReviewId va en null porque eso lo asigna la tabla
+            Review newReview = new Review(null, type, id, userId.get(), form.getName(), form.getDescription(), form.getRating(), form.getUserName());
+            newReview.setId(id);
+            rs.addReview(newReview);
+        }
+        catch(DuplicateKeyException e){
+            ModelAndView mav = reviewFormCreate(form,id);
+            mav.addObject("errorMsg","You have already written a review for this " + type + ".");
+            return mav;
+        }
+
+        ModelMap model =new ModelMap();
+        return new ModelAndView("redirect:/" + type + "/" + id, model);
+    }
+    // * -----------------------------------------------------------------------------------------------------------------------
+
+
+    // * ----------------------------------- login Page -----------------------------------------------------------------------
+
+//    TODO: Terminar
+    @RequestMapping(value = "/login", method = {RequestMethod.GET})
+    public ModelAndView logIn(@ModelAttribute("loginForm") final LoginForm loginForm) {
 //        final ModelAndView mav = new ModelAndView("reviewRegistration");
 //        mav.addObject("details", cs.findById(id).orElseThrow(PageNotFoundException::new));
 //        return mav;

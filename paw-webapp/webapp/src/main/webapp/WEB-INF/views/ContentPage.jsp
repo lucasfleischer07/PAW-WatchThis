@@ -70,8 +70,34 @@
         </div>
         <div>
             <ul class="pagination justify-content-center W-pagination">
-                <li class="page-item disabled">
-                    <a class="page-link" href="#" tabindex="-1">Previous</a>
+                    <c:choose>
+                        <c:when test="${pageSelected > 1}">
+                            <li class="page-item">
+                                <a class="page-link" href="<c:url value="/${contentType}/filters/page/${pageSelected-1}">
+                                                                                             <c:choose>
+                                                                                                <c:when test="${genre != 'ANY' && durationFrom!= 'ANY'}">
+                                                                                                    <c:param name="genre" value="${genre}"/>
+                                                                                                    <c:param name="durationFrom" value="${durationFrom}"/>
+                                                                                                    <c:param name="durationTo" value="${durationTo}"/>
+                                                                                                </c:when>
+                                                                                                <c:when test="${genre != 'ANY' && durationFrom== 'ANY'}">
+                                                                                                    <c:param name="genre" value="${genre}"/>
+                                                                                                </c:when>
+                                                                                                <c:when test="${genre == 'ANY' && durationFrom!= 'ANY'}">
+                                                                                                    <c:param name="durationFrom" value="${durationFrom}"/>
+                                                                                                    <c:param name="durationTo" value="${durationTo}"/>
+                                                                                                </c:when>
+                                                                                            </c:choose>
+
+                                </c:url>">Previous</a>
+                            </li>
+                        </c:when>
+                        <c:otherwise>
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#">Previous</a>
+                            </li>
+                        </c:otherwise>
+                    </c:choose>
                 </li>
                 <%--Si hay menos de 10 paginas, se muestran todas, si hay mas se muestran las 4 antes --%>
                 <%--de la actual, la actual y las 5 proximas, con los bordes ... --%>
@@ -199,8 +225,36 @@
                     </c:otherwise>
                 </c:choose>
 
-                <li class="page-item">
-                    <a class="page-link" href="#">Next</a>
+
+                    <c:choose>
+                        <c:when test="${pageSelected < amountPages}">
+                            <li class="page-item">
+                                <a class="page-link" href="<c:url value="/${contentType}/filters/page/${pageSelected+1}">
+                                                                                             <c:choose>
+                                                                                                <c:when test="${genre != 'ANY' && durationFrom!= 'ANY'}">
+                                                                                                    <c:param name="genre" value="${genre}"/>
+                                                                                                    <c:param name="durationFrom" value="${durationFrom}"/>
+                                                                                                    <c:param name="durationTo" value="${durationTo}"/>
+                                                                                                </c:when>
+                                                                                                <c:when test="${genre != 'ANY' && durationFrom== 'ANY'}">
+                                                                                                    <c:param name="genre" value="${genre}"/>
+                                                                                                </c:when>
+                                                                                                <c:when test="${genre == 'ANY' && durationFrom!= 'ANY'}">
+                                                                                                    <c:param name="durationFrom" value="${durationFrom}"/>
+                                                                                                    <c:param name="durationTo" value="${durationTo}"/>
+                                                                                                </c:when>
+                                                                                            </c:choose>
+
+    </c:url>">Next</a>
+                            </li>
+                        </c:when>
+                        <c:otherwise>
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#">Next</a>
+                            </li>
+                        </c:otherwise>
+                    </c:choose>
+
                 </li>
             </ul>
         </div>
