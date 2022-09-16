@@ -69,7 +69,7 @@
                                 <hr class="d-flex W-line-style-login"/>
                                 <div class="W-alignment-signup-div">
                                     <h5>Do not have an account?</h5>
-                                    <button type="button" class="btn btn-secondary W-sign-up-button-link">Sign up!</button>
+                                    <a href="<c:url value="/login/sign-up"/>"><button type="button" class="btn btn-secondary W-sign-up-button-link">Sign up!</button></a>
                                 </div>
                             </div>
                         </form>

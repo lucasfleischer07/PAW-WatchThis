@@ -201,12 +201,8 @@ public class HelloWorldController {
         if(errors.hasErrors()) {
             return reviewFormCreate(form,id);
         }
-<<<<<<< Updated upstream
 //        TODO: CAMBIAR LA LOGICA DE ESTO ESTO
-        User newUser = new User(null, form.getEmail(), form.getUserName());
-=======
         User newUser = new User(null, form.getEmail(), form.getUserName(),"CAMBIAR",(long)4);//ESTO SE TIENE QUE SACAR
->>>>>>> Stashed changes
         //Primero intenta agregar el usuario, luego intenta agregar la review
         Optional<Long> userId = us.register(newUser);
         //Falta Agregar mensaje de error para el caso -1 (si falla en el pedido)
@@ -216,14 +212,9 @@ public class HelloWorldController {
             return mav;
         }
         try {
-<<<<<<< Updated upstream
 //            TODO: Cambiar esto tambien
             // ReviewId va en null porque eso lo asigna la tabla
             Review newReview = new Review(null, type, id, userId.get(), form.getName(), form.getDescription(), form.getRating(), form.getUserName());
-=======
-            // ReviewId va en null porque eso lo asigna la tabla
-            Review newReview = new Review(null, type, id, userId.get(), form.getName(), form.getDescription(), form.getRating());
->>>>>>> Stashed changes
             newReview.setId(id);
             rs.addReview(newReview);
         }
@@ -234,17 +225,11 @@ public class HelloWorldController {
         }
 
         ModelMap model =new ModelMap();
-<<<<<<< Updated upstream
         return new ModelAndView("redirect:/" + type + "/" + id, model);
     }
-    // * -----------------------------------------------------------------------------------------------------------------------
 
-
-    // * ----------------------------------- login Page -----------------------------------------------------------------------
-
-//    TODO: Terminar
-    @RequestMapping(value = "/login", method = {RequestMethod.GET})
-    public ModelAndView logIn(@ModelAttribute("loginForm") final LoginForm loginForm) {
+    //    @RequestMapping(value = "/reviewForm/{type:movie|serie}/{id:[0-9]+}", method = {RequestMethod.GET})
+//    public ModelAndView reviewFormCreate(@ModelAttribute("registerForm") final ReviewForm reviewForm, @PathVariable("id")final long id) {
 //        final ModelAndView mav = new ModelAndView("reviewRegistration");
 //        mav.addObject("details", cs.findById(id).orElseThrow(PageNotFoundException::new));
 //        return mav;
@@ -255,6 +240,7 @@ public class HelloWorldController {
 //        if(errors.hasErrors()) {
 //            return reviewFormCreate(form,id);
 //        }
+////        TODO: CAMBIAR LA LOGICA DE ESTO ESTO
 //        User newUser = new User(null, form.getEmail(), form.getUserName());
 //        //Primero intenta agregar el usuario, luego intenta agregar la review
 //        Optional<Long> userId = us.register(newUser);
@@ -265,8 +251,9 @@ public class HelloWorldController {
 //            return mav;
 //        }
 //        try {
+////            TODO: Cambiar esto tambien
 //            // ReviewId va en null porque eso lo asigna la tabla
-//            Review newReview = new Review(null, type, id, userId.get(), form.getName(), form.getDescription(), form.getRating());
+//            Review newReview = new Review(null, type, id, userId.get(), form.getName(), form.getDescription(), form.getRating(), form.getUserName());
 //            newReview.setId(id);
 //            rs.addReview(newReview);
 //        }
@@ -277,14 +264,8 @@ public class HelloWorldController {
 //        }
 //
 //        ModelMap model =new ModelMap();
-//        model.addAttribute("toastMsg","Your review was correctly added");
 //        return new ModelAndView("redirect:/" + type + "/" + id, model);
 //    }
-=======
-        model.addAttribute("toastMsg","Your review was correctly added");
-        return new ModelAndView("redirect:/" + type + "/" + id, model);
-    }
->>>>>>> Stashed changes
     // * -----------------------------------------------------------------------------------------------------------------------
 
 
@@ -298,23 +279,14 @@ public class HelloWorldController {
 
 
 //    TODO: Terminar
-<<<<<<< Updated upstream
-    @RequestMapping(value = "/login/{loginStage:sign-in|sign-up|forgot-password|set-password}", method = {RequestMethod.GET})
-    public ModelAndView emailForm(@ModelAttribute("loginForm") final LoginForm loginForm, @PathVariable("loginStage") final String loginStage) {
-=======
     @RequestMapping(value = "/login/{loginStage:sign-up|forgot-password|sign-out}", method = {RequestMethod.GET})
     public ModelAndView emailForm(@ModelAttribute("loginForm") final LoginForm loginForm,@PathVariable("loginStage") final String loginStage) {
->>>>>>> Stashed changes
         final ModelAndView mav = new ModelAndView("logInPage");
         mav.addObject("loginStage", loginStage);
         return mav;
     }
 
-<<<<<<< Updated upstream
-    @RequestMapping(value = "/login/{loginStage:sign-in|sign-up|forgot-password|set-password}", method = {RequestMethod.POST})
-=======
     @RequestMapping(value = "/login/{loginStage:sign-up|forgot-password|sign-out}", method = {RequestMethod.POST})
->>>>>>> Stashed changes
     public ModelAndView emailFormVerification(@Valid @ModelAttribute("loginForm") final LoginForm loginForm, final BindingResult errors, RedirectAttributes redirectAttributes, @PathVariable("loginStage") final String loginStage) {
         if(errors.hasErrors()) {
             return emailForm(loginForm, loginStage);
