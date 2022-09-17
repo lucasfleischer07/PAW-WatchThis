@@ -68,8 +68,33 @@
       <div class="card W-inv-film-card-margin">
         <div class="card-header W-card-header">
           <h3 class="W-title-review">Reviews</h3>
-          <div class="W-add-review ">
-            <a href="<c:url value="/reviewForm/${details.type}/${details.id}"/>"><button type="button" class="btn btn-dark W-add-review-button W-reviewText">Add review</button></a>
+          <div class="W-add-review">
+            <c:choose>
+              <c:when test="${userName != 'null'}">
+                <a href="<c:url value="/reviewForm/${details.type}/${details.id}"/>"><button type="button" class="btn btn-dark W-add-review-button W-reviewText W-add-review-button-add">Add review</button></a>
+              </c:when>
+              <c:otherwise>
+                <button type="button" class="btn btn-dark W-add-review-button W-reviewText W-add-review-button-add" data-bs-toggle="modal" data-bs-target="#exampleModal">Add review</button>
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Review</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <span>To make a review, you must be logged in.</span>
+                        <span>Please log in to continue.</span>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <a href="<c:url value="/login/sign-in"/>"><button type="button" class="btn btn-success">Log in</button></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </c:otherwise>
+            </c:choose>
           </div>
         </div>
 
