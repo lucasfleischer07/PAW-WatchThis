@@ -87,6 +87,10 @@
     font-size: 1vw;
 }
 
+.W-border-color-user-btn {
+    border-color: green;
+}
+
 .W-starts-width {
     width: 2vw;
 }
