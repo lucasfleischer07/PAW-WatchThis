@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService{
     }
     @Override
     public Optional<Long> register(User user) {
-        return userDao.create(user.getEmail(), user.getUserName(),passwordEncoder.encode(user.getPassword()), user.getRating());
+        return userDao.create(user.getEmail(), user.getUserName(),passwordEncoder.encode(user.getPassword()), user.getReputation());
     }
 
     @Override
@@ -36,6 +36,8 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void setPassword(String password,String email){userDao.setPassword(password,email);}
+    public void setPassword(String password, User user){
+        userDao.setPassword(passwordEncoder.encode(password), user);
+    }
 
 }

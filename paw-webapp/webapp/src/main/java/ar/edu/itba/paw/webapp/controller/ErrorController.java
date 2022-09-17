@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
     @Controller
     public class ErrorController {
 
-        @RequestMapping(value = "errors", method = RequestMethod.GET)
+        @RequestMapping(value = "errorPage", method = RequestMethod.GET)
         public ModelAndView renderErrorPage(HttpServletRequest httpRequest) {
 
             ModelAndView errorPage = new ModelAndView("errorPage");

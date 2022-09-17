@@ -10,14 +10,12 @@ import ar.edu.itba.paw.services.EmailService;
 import ar.edu.itba.paw.services.ReviewService;
 import ar.edu.itba.paw.services.UserService;
 import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
+import ar.edu.itba.paw.webapp.form.EditProfile;
 import ar.edu.itba.paw.webapp.form.LoginForm;
 import ar.edu.itba.paw.webapp.form.ReviewForm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -27,10 +25,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Properties;
 
 @Controller
 public class HelloWorldController {
@@ -94,7 +90,8 @@ public class HelloWorldController {
                 mav.addObject("allContent", contentList);
             }else{
                 mav.addObject("allContent", contentList.subList((page-1)*ELEMS_AMOUNT,(page-1)*ELEMS_AMOUNT + ELEMS_AMOUNT));
-            }            mav.addObject("amountPages",(int)Math.ceil((double) contentList.size()/(double)ELEMS_AMOUNT));
+            }
+            mav.addObject("amountPages",(int)Math.ceil((double) contentList.size()/(double)ELEMS_AMOUNT));
             mav.addObject("pageSelected",page);
             mav.addObject("contentType", type);
             mav.addObject("genre","ANY");
@@ -212,7 +209,7 @@ public class HelloWorldController {
         User newUser = new User(null, form.getEmail(), form.getUserName(),"CAMBIAR",(long)4);//ESTO SE TIENE QUE SACAR
         //Primero intenta agregar el usuario, luego intenta agregar la review
         Optional<Long> userId = us.register(newUser);
-        //Falta Agregar mensaje de error para el caso -1 (si falla en el pedido)
+        // TODO: Falta Agregar mensaje de error para el caso -1 (si falla en el pedido)
         if(userId.get() == -1) {
             ModelAndView mav=reviewFormCreate(form,id);
             mav.addObject("errorMsg","This username or mail is already in use.");
@@ -221,7 +218,7 @@ public class HelloWorldController {
         try {
 //            TODO: Cambiar esto tambien
             // ReviewId va en null porque eso lo asigna la tabla
-            Review newReview = new Review(null, type, id, userId.get(), form.getName(), form.getDescription(), form.getRating(), form.getUserName());
+            Review newReview = new Review(null, type, id, form.getName(), form.getDescription(), form.getRating(), form.getUserName(),null);
             newReview.setId(id);
             rs.addReview(newReview);
         }
@@ -235,44 +232,6 @@ public class HelloWorldController {
         return new ModelAndView("redirect:/" + type + "/" + id, model);
     }
 
-    //    @RequestMapping(value = "/reviewForm/{type:movie|serie}/{id:[0-9]+}", method = {RequestMethod.GET})
-//    public ModelAndView reviewFormCreate(@ModelAttribute("registerForm") final ReviewForm reviewForm, @PathVariable("id")final long id) {
-//        final ModelAndView mav = new ModelAndView("reviewRegistration");
-//        mav.addObject("details", cs.findById(id).orElseThrow(PageNotFoundException::new));
-//        return mav;
-//    }
-//
-//    @RequestMapping(value = "/reviewForm/{type:movie|serie}/{id:[0-9]+}", method = {RequestMethod.POST})
-//    public ModelAndView reviewFormMovie(@Valid @ModelAttribute("registerForm") final ReviewForm form, final BindingResult errors, @PathVariable("id")final long id, @PathVariable("type")final String type) {
-//        if(errors.hasErrors()) {
-//            return reviewFormCreate(form,id);
-//        }
-////        TODO: CAMBIAR LA LOGICA DE ESTO ESTO
-//        User newUser = new User(null, form.getEmail(), form.getUserName());
-//        //Primero intenta agregar el usuario, luego intenta agregar la review
-//        Optional<Long> userId = us.register(newUser);
-//        //Falta Agregar mensaje de error para el caso -1 (si falla en el pedido)
-//        if(userId.get() == -1) {
-//            ModelAndView mav=reviewFormCreate(form,id);
-//            mav.addObject("errorMsg","This username or mail is already in use.");
-//            return mav;
-//        }
-//        try {
-////            TODO: Cambiar esto tambien
-//            // ReviewId va en null porque eso lo asigna la tabla
-//            Review newReview = new Review(null, type, id, userId.get(), form.getName(), form.getDescription(), form.getRating(), form.getUserName());
-//            newReview.setId(id);
-//            rs.addReview(newReview);
-//        }
-//        catch(DuplicateKeyException e){
-//            ModelAndView mav = reviewFormCreate(form,id);
-//            mav.addObject("errorMsg","You have already written a review for this " + type + ".");
-//            return mav;
-//        }
-//
-//        ModelMap model =new ModelMap();
-//        return new ModelAndView("redirect:/" + type + "/" + id, model);
-//    }
     // * -----------------------------------------------------------------------------------------------------------------------
 
 
@@ -301,17 +260,17 @@ public class HelloWorldController {
         if(Objects.equals(loginStage, "sign-up")) {
             User newUser = new User(null, loginForm.getEmail(), loginForm.getUserName(), loginForm.getPassword(), 0L);
             us.register(newUser);
+            es.sendRegistrationEmail(newUser);
         } else if(Objects.equals(loginStage, "forgot-password")) {
 //            TODO, VER EL TEMA DE MANDAR EL EMAIL
-            User newUser = new User(null, loginForm.getEmail(), loginForm.getUserName(), loginForm.getPassword(), 0L);
-//            us.register(newUser);
+            es.sendForgottenPasswordEmail(loginForm.getEmail());
         } else if (Objects.equals(loginStage, "set-password")) {
-            //VER EL TEMA DE SETEAR NUEVA PASSWORD EN BDD
+            // TODO: VER EL TEMA DE SETEAR NUEVA PASSWORD EN BDD
             User newUser = new User(null, loginForm.getEmail(), loginForm.getUserName(), loginForm.getPassword(), 0L);
 //            us.register(newUser);
         }
 
-        return new ModelAndView("redirect:/");
+        return new ModelAndView("redirect:/login/sign-in");
 
     }
 
@@ -327,12 +286,6 @@ public class HelloWorldController {
     // * -----------------------------------------------------------------------------------------------------------------------
 
 
-    // * ----------------------------------- Sort by Filter -----------------------------------------------------------------------
-
-
-    // * -----------------------------------------------------------------------------------------------------------------------
-
-
     // * ----------------------------------- Otros -----------------------------------------------------------------------
 //    @RequestMapping("/register")
 //    public ModelAndView register(
@@ -343,14 +296,38 @@ public class HelloWorldController {
 //        return new ModelAndView("redirect:/profile" + user.getId());
 //    }
 //
-//    @RequestMapping("/profile/{userId:[0-9]+}")
-//    public ModelAndView profile(@PathVariable("userId") final long userId) {
-//        final ModelAndView mav = new ModelAndView("profile");
-//        mav.addObject("user", us.findById(userId).orElseThrow(UserNotFoundException::new));
-//        return mav;
-//    }
-    // * -----------------------------------------------------------------------------------------------------------------------
+    // * ------------------------------------------------Profile--------------------------------------------------------------------
+    @RequestMapping("/hola/{userId:[0-9]+}")
+    public ModelAndView profile(@PathVariable("userId") final long userId) {
+        final ModelAndView mav = new ModelAndView("profilePage");
+        User user = us.findById(userId).orElseThrow(PageNotFoundException::new);
+        mav.addObject("user", user);
+        mav.addObject("reviews",rs.getAllUserReviews(user.getUserName()));
+        return mav;
+    }
 
+    @RequestMapping(value = "/hola/{userId:[0-9]+}/edit-profile", method = {RequestMethod.GET})
+    public ModelAndView profileEdition(@Valid @ModelAttribute("editProfile") final EditProfile editProfile, @PathVariable("userId") final long userId) {
+        final ModelAndView mav = new ModelAndView("profileEditionPage");
+        User user = us.findById(userId).orElseThrow(PageNotFoundException::new);
+        mav.addObject("user", user);
+        return mav;
+    }
+
+    @RequestMapping(value = "/hola/{userId:[0-9]+}/edit-profile", method = {RequestMethod.POST})
+    public ModelAndView profileEditionPost(@Valid @ModelAttribute("editProfile") final EditProfile editProfile, final BindingResult errors, @PathVariable("userId") final long userId)  {
+
+        if(errors.hasErrors()) {
+            return profileEdition(editProfile, userId);
+        }
+
+        User user = us.findById(userId).orElseThrow(PageNotFoundException::new);
+        us.setPassword(editProfile.getPassword(), user);
+
+        return new ModelAndView("redirect:/hola/" + userId);
+    }
+
+    // * -----------------------------------------------------------------------------------------------------------------------
 
 }
 

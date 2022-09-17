@@ -35,4 +35,8 @@ public class ReviewServiceImpl implements ReviewService{
     public void editReview(String newDesc, Long id, String typeOfEdit) {
         reviewDao.editReview(newDesc, id, typeOfEdit);
     }
+    @Override
+    public List<Review> getAllUserReviews(String name) {
+        return reviewDao.getAllUserReviews(name);
+    }
 }

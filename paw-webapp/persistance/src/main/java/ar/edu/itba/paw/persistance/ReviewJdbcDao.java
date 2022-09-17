@@ -17,11 +17,11 @@ public class ReviewJdbcDao implements ReviewDao{
             new Review(resultSet.getLong("reviewid"),
                     resultSet.getString("type"),
                     resultSet.getLong("contentid"),
-                    resultSet.getLong("userid"),
                     resultSet.getString("name"),
                     resultSet.getString("description"),
                     resultSet.getLong("rating"),
-                    resultSet.getString("username"));
+                    resultSet.getString("username"),
+                    resultSet.getString("contentname"));
 
     private final JdbcTemplate template;
 
@@ -33,14 +33,22 @@ public class ReviewJdbcDao implements ReviewDao{
     @Override
     public void addReview(Review review){
         template.update(
-                "INSERT INTO review(type, contentid, userid, name, description, rating,username) VALUES(?,?,?,?,?,?,?)",
-                review.getType(), review.getContentId(), review.getUserId(), review.getName(), review.getDescription(), review.getRating(),review.getUserName());
+
+                "INSERT INTO review(type, contentid, userid, name, description, rating)\n" +
+                        "(SELECT ?,?,userid,?,?,? from userdata\n" +
+                        "WHERE userdata.name=?)",
+                review.getType(), review.getContentId(), review.getName(), review.getDescription(), review.getRating(),review.getUserName());
     }
 
     @Override
     public List<Review> getAllReviews(Long id) {
-        return template.query("SELECT * FROM review where contentid = ? order by reviewid desc", new Object[]{ id }, REVIEW_ROW_MAPPER);
+        return template.query("SELECT reviewid,review.type,contentid,review.name as name,review.description,review.rating,userdata.name as username,content.name as contentname FROM review JOIN userdata ON review.userid = userdata.userid JOIN content ON contentid= content.id where contentid = ? order by reviewid desc", new Object[]{ id }, REVIEW_ROW_MAPPER);
 
+    }
+
+    @Override
+    public List<Review> getAllUserReviews(String username) {
+        return template.query("SELECT reviewid,review.type,contentid,review.name as name,review.description,review.rating,userdata.name as username,content.name as contentname FROM review JOIN userdata ON review.userid = userdata.userid JOIN content ON contentid= content.id where userdata.name = ? order by reviewid desc", new Object[]{ username }, REVIEW_ROW_MAPPER);
 
     }
 

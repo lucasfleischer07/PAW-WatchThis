@@ -18,8 +18,8 @@ public class UserJdbcDao implements UserDao{
 
     private static final RowMapper<User> USER_ROW_MAPPER = (resultSet, rowNum) ->
             new User(resultSet.getLong("userid"),
-                    resultSet.getString("name"),
                     resultSet.getString("email"),
+                    resultSet.getString("name"),
                     resultSet.getString("password"),
                     resultSet.getLong("reputation"));
 
@@ -60,11 +60,11 @@ public class UserJdbcDao implements UserDao{
 
     @Override
     public Optional<User> findById(final long userId) {
-        return template.query("SELECT * FROM userdata WHERE id = ?", new Object[]{ userId }, USER_ROW_MAPPER).stream().findFirst();
+        return template.query("SELECT * FROM userdata WHERE userid = ?", new Object[]{ userId }, USER_ROW_MAPPER).stream().findFirst();
     }
     @Override
-    public void setPassword(String password,String email){
-        template.update("UPDATE userdata SET password = ? WHERE email = ?",new Object[]{password,email});
+    public void setPassword(String password, User user){
+        template.update("UPDATE userdata SET password = ? WHERE id = ?",new Object[]{password, user.getId()});
     }
 
 }

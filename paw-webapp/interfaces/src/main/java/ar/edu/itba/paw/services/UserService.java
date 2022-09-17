@@ -11,5 +11,6 @@ public interface UserService {
 
     Optional<User> findById(long userId);
 
-    void setPassword(String password,String email);
+    void setPassword(String password, User user);
+
 }
