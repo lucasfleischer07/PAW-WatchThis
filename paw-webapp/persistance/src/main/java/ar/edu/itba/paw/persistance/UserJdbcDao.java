@@ -64,7 +64,7 @@ public class UserJdbcDao implements UserDao{
     }
     @Override
     public void setPassword(String password, User user){
-        template.update("UPDATE userdata SET password = ? WHERE id = ?",new Object[]{password, user.getId()});
+        template.update("UPDATE userdata SET password = ? WHERE userid = ?",new Object[]{password, user.getId()});
     }
 
 }
