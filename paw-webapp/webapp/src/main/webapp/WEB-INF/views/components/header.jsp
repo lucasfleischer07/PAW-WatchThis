@@ -365,7 +365,24 @@
                 </div>
 
                 <div class="W-nav-login-button">
-                    <a href="<c:url value="/login/sign-in"/>"><button class="btn btn-success" type="button">Login</button></a>
+                    <c:choose>
+                        <c:when test="${param.userName != 'null'}">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-dark dropdown-toggle W-border-color-user-btn" data-bs-toggle="dropdown" aria-expanded="false">
+                                    ${param.userName}
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="<c:url value="/profile/${param.userId}"/>">Profile</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+    <%--                                TODO: HACER EL LOG OUT--%>
+                                    <li><a class="dropdown-item" href="#">Log Out</a></li>
+                                </ul>
+                            </div>
+                        </c:when>
+                        <c:otherwise>
+                            <a href="<c:url value="/login/sign-in"/>"><button class="btn btn-success" type="button">Login</button></a>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
             </div>
         </div>

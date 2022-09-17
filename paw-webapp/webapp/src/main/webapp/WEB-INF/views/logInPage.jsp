@@ -26,6 +26,8 @@
             <div>
                 <jsp:include page="components/header.jsp">
                     <jsp:param name="type" value="null"/>
+                    <jsp:param name="userName" value="${userName}"/>
+                    <jsp:param name="userId" value="${userId}"/>
                 </jsp:include>
             </div>
 
