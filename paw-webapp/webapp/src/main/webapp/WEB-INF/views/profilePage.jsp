@@ -37,7 +37,7 @@
                                     <h4 class="mt-0 mb-0"><c:out value="${user.userName}"/></h4>
 <%--                                    <p class="small mb-4"><i class="fas fa-map-marker-alt mr-2"></i>New York</p>--%>
                                 </div>
-                                <a href="<c:url value="/hola/${user.id}/edit-profile"/>" class="btn btn-outline-dark btn-sm btn-block">Edit profile</a>
+                                <a href="<c:url value="/profile/${user.id}/edit-profile"/>" class="btn btn-outline-dark btn-sm btn-block">Edit profile</a>
                             </div>
                         </div>
                     </div>
