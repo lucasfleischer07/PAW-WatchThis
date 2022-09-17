@@ -118,7 +118,13 @@
                 <version>${logback-ext-spring.version}</version>
                 <scope>runtime</scope>
             </dependency>
-        </dependencies>
+<!--      Dependencia para mandar emials-->
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-mail</artifactId>
+        <version>2.5.6</version>
+      </dependency>
+    </dependencies>
     </dependencyManagement>
 
     <modules>

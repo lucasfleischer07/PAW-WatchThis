@@ -21,6 +21,7 @@
       <groupId>org.springframework</groupId>
       <artifactId>spring-webmvc</artifactId>
     </dependency>
+
     <!--Para JDBC-->
     <dependency>
       <groupId>org.springframework</groupId>
@@ -94,6 +95,12 @@
     <dependency>
       <groupId>org.logback-extensions</groupId>
       <artifactId>logback-ext-spring</artifactId>
+    </dependency>
+
+<!--    PAra mails-->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-mail</artifactId>
     </dependency>
   </dependencies>
 

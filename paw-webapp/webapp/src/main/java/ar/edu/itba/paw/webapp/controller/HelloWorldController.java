@@ -6,14 +6,18 @@ import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.services.ContentService;
 
+import ar.edu.itba.paw.services.EmailService;
 import ar.edu.itba.paw.services.ReviewService;
 import ar.edu.itba.paw.services.UserService;
 import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
 import ar.edu.itba.paw.webapp.form.LoginForm;
 import ar.edu.itba.paw.webapp.form.ReviewForm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -26,6 +30,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Properties;
 
 @Controller
 public class HelloWorldController {
@@ -33,13 +38,15 @@ public class HelloWorldController {
     private final UserService us;
     private final ContentService cs;
     private final ReviewService rs;
+    private final EmailService es;
     private final int ELEMS_AMOUNT = 10;
 
     @Autowired  //Para indicarle que este es el constructor que quiero que use
-    public HelloWorldController(final UserService us, final ContentService cs, ReviewService rs){
+    public HelloWorldController(final UserService us, final ContentService cs, ReviewService rs, EmailService es){
         this.us = us;
         this.cs = cs;
         this.rs = rs;
+        this.es = es;
     }
 
     // * ----------------------------------- Movie and Series Info -----------------------------------------------------------------------
