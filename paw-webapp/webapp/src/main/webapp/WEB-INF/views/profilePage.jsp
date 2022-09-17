@@ -22,6 +22,8 @@
     <body class="body">
         <jsp:include page="components/header.jsp">
             <jsp:param name="type" value="profile"/>
+            <jsp:param name="userName" value="${user.userName}"/>
+            <jsp:param name="userId" value="${user.id}"/>
         </jsp:include>
 
         <div class="row py-5 px-4">
@@ -47,7 +49,7 @@
                             </li>
                             <li class="list-inline-item">
                                 <h5 class="font-weight-bold mb-0 d-block"><c:out value="${user.reputation}"/></h5>
-                                <small class="text-muted" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="This make reference to tha avg of the amount of likes and dislikes of all the reviews of the user."> <i class="fas fa-user mr-1"></i>Reputation</small></li>
+                                <small class="text-muted"><i class="fas fa-user mr-1"></i>Reputation</small></li>
                         </ul>
                     </div>
                     <div class="py-4 px-4">

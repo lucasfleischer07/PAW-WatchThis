@@ -49,10 +49,11 @@ public class HelloWorldController {
 
     // * ----------------------------------- Movie and Series Info -----------------------------------------------------------------------
     @RequestMapping(value= {"/","page/{pageNum}"})
-    public ModelAndView helloWorld(@PathVariable("pageNum")final Optional<Integer> pageNum,@RequestParam(name = "query", defaultValue = "") final String query) {
+    public ModelAndView helloWorld(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("pageNum")final Optional<Integer> pageNum,@RequestParam(name = "query", defaultValue = "") final String query) {
         final ModelAndView mav = new ModelAndView("ContentPage");
         mav.addObject("query", query);
         List<Content> contentList = cs.getSearchedContent(query);
+
         int page= pageNum.orElse(1);
         if(contentList == null) {
             throw new PageNotFoundException();
@@ -68,14 +69,24 @@ public class HelloWorldController {
             mav.addObject("genre","ANY");
             mav.addObject("durationFrom","ANY");
             mav.addObject("durationTo","ANY");
+        }
 
+        try {
+            String userEmail = userDetails.getUsername();
+            User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
+            mav.addObject("userName",user.getUserName());
+            mav.addObject("userId",user.getId());
+
+        } catch (NullPointerException e) {
+            mav.addObject("userName","null");
+            mav.addObject("userId","null");
         }
         return mav;
     }
 
 
     @RequestMapping(value= {"/{type:movies|series}","/{type:movies|series}/page/{pageNum}"})
-    public ModelAndView contentType(@PathVariable("type") final String type,@PathVariable("pageNum")final Optional<Integer> pageNum) {
+    public ModelAndView contentType(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("type") final String type,@PathVariable("pageNum")final Optional<Integer> pageNum) {
         String auxType = null;
         final ModelAndView mav = new ModelAndView("ContentPage");
         if(Objects.equals(type, "movies")) {
@@ -100,11 +111,22 @@ public class HelloWorldController {
             mav.addObject("durationFrom","ANY");
             mav.addObject("durationTo","ANY");
         }
+
+        try {
+            String userEmail = userDetails.getUsername();
+            User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
+            mav.addObject("userName",user.getUserName());
+            mav.addObject("userId",user.getId());
+
+        } catch (NullPointerException e) {
+            mav.addObject("userName","null");
+            mav.addObject("userId","null");
+        }
         return mav;
     }
 
     @RequestMapping(value = {"/search", "/page/{pageNum}"})
-    public ModelAndView search(@PathVariable("pageNum")final Optional<Integer> pageNum, @RequestParam(name = "query", defaultValue = "") final String query) {
+    public ModelAndView search(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("pageNum")final Optional<Integer> pageNum, @RequestParam(name = "query", defaultValue = "") final String query) {
         final ModelAndView mav = new ModelAndView("ContentPage");
         mav.addObject("query", query);
         List<Content> contentList = cs.getSearchedContent(query);
@@ -121,11 +143,22 @@ public class HelloWorldController {
             mav.addObject("pageSelected", page);
             mav.addObject("allContent", contentList);
         }
+
+        try {
+            String userEmail = userDetails.getUsername();
+            User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
+            mav.addObject("userName",user.getUserName());
+            mav.addObject("userId",user.getId());
+
+        } catch (NullPointerException e) {
+            mav.addObject("userName","null");
+            mav.addObject("userId","null");
+        }
         return mav;
     }
 
     @RequestMapping("/{type:movie|serie}/{contentId:[0-9]+}")
-    public ModelAndView reviews(@PathVariable("contentId")final long contentId, @PathVariable("type") final String type) {
+    public ModelAndView reviews(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("contentId")final long contentId, @PathVariable("type") final String type) {
         final ModelAndView mav = new ModelAndView("infoPage");
         mav.addObject("details", cs.findById(contentId).orElseThrow(PageNotFoundException::new));
         List<Review> reviewList = rs.getAllReviews(contentId);
@@ -133,6 +166,16 @@ public class HelloWorldController {
             throw new PageNotFoundException();
         } else {
             mav.addObject("reviews", reviewList);
+        }
+        try {
+            String userEmail = userDetails.getUsername();
+            User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
+            mav.addObject("userName",user.getUserName());
+            mav.addObject("userId",user.getId());
+
+        } catch (NullPointerException e) {
+            mav.addObject("userName","null");
+            mav.addObject("userId","null");
         }
         return mav;
     }
@@ -144,6 +187,7 @@ public class HelloWorldController {
 
     @RequestMapping(value = {"/{type:movies|series}/filters" , "/{type:movies|series}/filters/page/{pageNum}"})
     public ModelAndView moviesWithFilters(
+            @AuthenticationPrincipal PawUserDetails userDetails,
             @PathVariable("type") final String type,
             @PathVariable("pageNum")final Optional<Integer> pageNum,
             @RequestParam(name = "durationFrom",defaultValue = "ANY",required = false)final String durationFrom,
@@ -190,8 +234,19 @@ public class HelloWorldController {
             mav.addObject("amountPages",Math.ceil((double)contentListFilter.size()/(double)ELEMS_AMOUNT));
             mav.addObject("pageSelected",page);
             mav.addObject("contentType", type);
-
         }
+
+        try {
+            String userEmail = userDetails.getUsername();
+            User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
+            mav.addObject("userName",user.getUserName());
+            mav.addObject("userId",user.getId());
+
+        } catch (NullPointerException e) {
+            mav.addObject("userName","null");
+            mav.addObject("userId","null");
+        }
+
         return mav;
     }
 
@@ -200,16 +255,26 @@ public class HelloWorldController {
 
     // * ----------------------------------- Movies and Series Review -----------------------------------------------------------------------
     @RequestMapping(value = "/reviewForm/{type:movie|serie}/{id:[0-9]+}", method = {RequestMethod.GET})
-    public ModelAndView reviewFormCreate(@ModelAttribute("registerForm") final ReviewForm reviewForm, @PathVariable("id")final long id) {
+    public ModelAndView reviewFormCreate(@AuthenticationPrincipal PawUserDetails userDetails, @ModelAttribute("registerForm") final ReviewForm reviewForm, @PathVariable("id")final long id) {
         final ModelAndView mav = new ModelAndView("reviewRegistration");
         mav.addObject("details", cs.findById(id).orElseThrow(PageNotFoundException::new));
+        try {
+            String userEmail = userDetails.getUsername();
+            User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
+            mav.addObject("userName",user.getUserName());
+            mav.addObject("userId",user.getId());
+
+        } catch (NullPointerException e) {
+            mav.addObject("userName","null");
+            mav.addObject("userId","null");
+        }
         return mav;
     }
 
     @RequestMapping(value = "/reviewForm/{type:movie|serie}/{id:[0-9]+}", method = {RequestMethod.POST})
-    public ModelAndView reviewFormMovie(@Valid @ModelAttribute("registerForm") final ReviewForm form, final BindingResult errors, @PathVariable("id")final long id, @PathVariable("type")final String type) {
+    public ModelAndView reviewFormMovie(@AuthenticationPrincipal PawUserDetails userDetails, @Valid @ModelAttribute("registerForm") final ReviewForm form, final BindingResult errors, @PathVariable("id")final long id, @PathVariable("type")final String type) {
         if(errors.hasErrors()) {
-            return reviewFormCreate(form,id);
+            return reviewFormCreate(userDetails,form,id);
         }
 //        TODO: CAMBIAR LA LOGICA DE ESTO ESTO
         User newUser = new User(null, form.getEmail(), form.getUserName(),"CAMBIAR",(long)4);//ESTO SE TIENE QUE SACAR
@@ -217,7 +282,7 @@ public class HelloWorldController {
         Optional<Long> userId = us.register(newUser);
         // TODO: Falta Agregar mensaje de error para el caso -1 (si falla en el pedido)
         if(userId.get() == -1) {
-            ModelAndView mav=reviewFormCreate(form,id);
+            ModelAndView mav=reviewFormCreate(userDetails,form,id);
             mav.addObject("errorMsg","This username or mail is already in use.");
             return mav;
         }
@@ -229,7 +294,7 @@ public class HelloWorldController {
             rs.addReview(newReview);
         }
         catch(DuplicateKeyException e){
-            ModelAndView mav = reviewFormCreate(form,id);
+            ModelAndView mav = reviewFormCreate(userDetails,form,id);
             mav.addObject("errorMsg","You have already written a review for this " + type + ".");
             return mav;
         }
@@ -243,25 +308,45 @@ public class HelloWorldController {
 
     // * ----------------------------------- login Page -----------------------------------------------------------------------
     @RequestMapping(value = "/login/{loginStage:sign-in}", method = {RequestMethod.GET})
-    public ModelAndView emailForm(@PathVariable("loginStage") final String loginStage) {
+    public ModelAndView emailForm(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("loginStage") final String loginStage) {
         final ModelAndView mav = new ModelAndView("logInPage");
         mav.addObject("loginStage", loginStage);
+        try {
+            String userEmail = userDetails.getUsername();
+            User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
+            mav.addObject("userName",user.getUserName());
+            mav.addObject("userId",user.getId());
+
+        } catch (NullPointerException e) {
+            mav.addObject("userName","null");
+            mav.addObject("userId","null");
+        }
         return mav;
     }
 
 
 //    TODO: Terminar
     @RequestMapping(value = "/login/{loginStage:sign-up|forgot-password|sign-out}", method = {RequestMethod.GET})
-    public ModelAndView emailForm(@ModelAttribute("loginForm") final LoginForm loginForm,@PathVariable("loginStage") final String loginStage) {
+    public ModelAndView emailForm(@AuthenticationPrincipal PawUserDetails userDetails, @ModelAttribute("loginForm") final LoginForm loginForm,@PathVariable("loginStage") final String loginStage) {
         final ModelAndView mav = new ModelAndView("logInPage");
         mav.addObject("loginStage", loginStage);
+        try {
+            String userEmail = userDetails.getUsername();
+            User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
+            mav.addObject("userName",user.getUserName());
+            mav.addObject("userId",user.getId());
+
+        } catch (NullPointerException e) {
+            mav.addObject("userName","null");
+            mav.addObject("userId","null");
+        }
         return mav;
     }
 
     @RequestMapping(value = "/login/{loginStage:sign-up|forgot-password|sign-out}", method = {RequestMethod.POST})
-    public ModelAndView emailFormVerification(@Valid @ModelAttribute("loginForm") final LoginForm loginForm, final BindingResult errors, RedirectAttributes redirectAttributes, @PathVariable("loginStage") final String loginStage) {
+    public ModelAndView emailFormVerification(@AuthenticationPrincipal PawUserDetails userDetails, @Valid @ModelAttribute("loginForm") final LoginForm loginForm, final BindingResult errors, RedirectAttributes redirectAttributes, @PathVariable("loginStage") final String loginStage) {
         if(errors.hasErrors()) {
-            return emailForm(loginForm, loginStage);
+            return emailForm(userDetails, loginForm, loginStage);
         }
         if(Objects.equals(loginStage, "sign-up")) {
             User newUser = new User(null, loginForm.getEmail(), loginForm.getUserName(), loginForm.getPassword(), 0L);
@@ -274,12 +359,12 @@ public class HelloWorldController {
             // TODO: VER EL TEMA DE SETEAR NUEVA PASSWORD EN BDD
             User newUser = new User(null, loginForm.getEmail(), loginForm.getUserName(), loginForm.getPassword(), 0L);
 //            us.register(newUser);
+
         }
 
         return new ModelAndView("redirect:/login/sign-in");
 
     }
-
     // * -----------------------------------------------------------------------------------------------------------------------
 
 
@@ -292,18 +377,8 @@ public class HelloWorldController {
     // * -----------------------------------------------------------------------------------------------------------------------
 
 
-    // * ----------------------------------- Otros -----------------------------------------------------------------------
-//    @RequestMapping("/register")
-//    public ModelAndView register(
-//            @RequestParam(value = "email", required = false) final String email,
-//            @RequestParam("password") final String password
-//    ) {
-//        final User user = us.register(email, password);
-//        return new ModelAndView("redirect:/profile" + user.getId());
-//    }
-//
     // * ------------------------------------------------Profile--------------------------------------------------------------------
-    @RequestMapping("/hola/{userId:[0-9]+}")
+    @RequestMapping("/profile/{userId:[0-9]+}")
     public ModelAndView profile(@AuthenticationPrincipal PawUserDetails userDetails,@PathVariable("userId") final long userId) {
         final ModelAndView mav = new ModelAndView("profilePage");
         String userEmail = userDetails.getUsername();
@@ -313,7 +388,7 @@ public class HelloWorldController {
         return mav;
     }
 
-    @RequestMapping(value = "/hola/{userId:[0-9]+}/edit-profile", method = {RequestMethod.GET})
+    @RequestMapping(value = "/profile/{userId:[0-9]+}/edit-profile", method = {RequestMethod.GET})
     public ModelAndView profileEdition(@AuthenticationPrincipal PawUserDetails userDetails, @Valid @ModelAttribute("editProfile") final EditProfile editProfile, @PathVariable("userId") final long userId) {
         String userEmail = userDetails.getUsername();
         User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);

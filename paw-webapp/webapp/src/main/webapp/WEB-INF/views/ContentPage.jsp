@@ -24,6 +24,9 @@
             <jsp:param name="durationFrom" value="${durationFrom}"/>
             <jsp:param name="durationTo" value="${durationTo}"/>
             <jsp:param name="sorting" value="${sorting}"/>
+            <jsp:param name="userName" value="${userName}"/>
+            <jsp:param name="userId" value="${userId}"/>
+
         </jsp:include>
 
         <div class="W-column-display">
