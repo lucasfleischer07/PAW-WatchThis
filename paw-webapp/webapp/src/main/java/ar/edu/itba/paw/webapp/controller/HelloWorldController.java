@@ -27,6 +27,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
@@ -85,7 +86,7 @@ public class HelloWorldController {
             auxType = "serie";
         }
         int page= pageNum.orElse(1);
-        List<Content> contentList = cs.getAllContent(auxType);
+        List<Content> contentList = cs.getAllContent(auxType, "ANY");
         if( contentList == null) {
             throw new PageNotFoundException();
         } else {
@@ -103,22 +104,22 @@ public class HelloWorldController {
         return mav;
     }
 
-//    @RequestMapping("/search")
-//    public ModelAndView search(@RequestParam(name = "query", defaultValue = "") final String query) {
-//        final ModelAndView mav = new ModelAndView("index");
-//        mav.addObject("query", query);
-//        List<Content> movieList = cs.getSearchedMovies(query);
-//        if(movieList == null && seriesList == null) {
-//            throw new PageNotFoundException();
-//
-//        } else if(movieList != null && seriesList == null) {
-//            mav.addObject("movies", movieList);
-//
-//        }else if(movieList == null) {
-//            mav.addObject("movies", seriesList);
-//        }
-//        return mav;
-//    }
+    @RequestMapping(value = {"/search", "/page/{pageNum}"})
+    public ModelAndView search(@PathVariable("pageNum")final Optional<Integer> pageNum, @RequestParam(name = "query", defaultValue = "") final String query) {
+        final ModelAndView mav = new ModelAndView("ContentPage");
+        mav.addObject("query", query);
+        List<Content> contentList = cs.getSearchedContent(query);
+        int page= pageNum.orElse(1);
+        if(contentList == null) {
+            throw new PageNotFoundException();
+        }else {
+            mav.addObject("allContent", contentList.subList((page - 1) * ELEMS_AMOUNT, (page - 1) * ELEMS_AMOUNT + ELEMS_AMOUNT));
+            mav.addObject("amountPages", (int) Math.ceil((double) contentList.size() / (double) ELEMS_AMOUNT));
+            mav.addObject("pageSelected", page);
+            mav.addObject("allContent", contentList);
+        }
+        return mav;
+    }
 
     @RequestMapping("/{type:movie|serie}/{contentId:[0-9]+}")
     public ModelAndView reviews(@PathVariable("contentId")final long contentId, @PathVariable("type") final String type) {
@@ -166,13 +167,13 @@ public class HelloWorldController {
         List<Content> contentListFilter;
 
         if(!Objects.equals(genre, "ANY") && Objects.equals(durationFrom, "ANY")) {
-            contentListFilter = cs.findByGenre(auxType, genre) ;
+            contentListFilter = cs.findByGenre(auxType, genre, sorting) ;
         } else if(Objects.equals(genre, "ANY") && !Objects.equals(durationFrom, "ANY")) {
-            contentListFilter = cs.findByDuration(auxType, Integer.parseInt(durationFrom), Integer.parseInt(durationTo));
+            contentListFilter = cs.findByDuration(auxType, Integer.parseInt(durationFrom), Integer.parseInt(durationTo), sorting);
         } else if(!Objects.equals(durationFrom, "ANY") && !Objects.equals(genre, "ANY")) {    // Caso de que si los filtros estan vacios
-            contentListFilter = cs.findByDurationAndGenre(auxType, genre, Integer.parseInt(durationFrom), Integer.parseInt(durationTo));
+            contentListFilter = cs.findByDurationAndGenre(auxType, genre, Integer.parseInt(durationFrom), Integer.parseInt(durationTo), sorting);
         } else{
-            contentListFilter = cs.getAllContent(auxType);
+            contentListFilter = cs.getAllContent(auxType, sorting);
         }
 
         if(contentListFilter == null) {
@@ -194,24 +195,6 @@ public class HelloWorldController {
     // * -----------------------------------------------------------------------------------------------------------------------
 
 
-    // * ----------------------------------- Serie Info -----------------------------------------------------------------------
-//    @RequestMapping(value = {"/series","/series/page/{pageNum}"})
-//    public ModelAndView series(@PathVariable("pageNum") Optional<Integer> pageNum,@RequestParam(name = "query", defaultValue = "") final String query) {
-//        final ModelAndView mav = new ModelAndView("seriesPage");
-//        int page= pageNum.orElse(1);
-//        mav.addObject("query", query);
-//        List<Content> seriesList = cs.getSearchedSeries(query);
-//        if( seriesList == null) {
-//            throw new PageNotFoundException();
-//        } else {
-//            mav.addObject("series", seriesList.subList((page-1)*ELEMS_AMOUNT,(page-1)*ELEMS_AMOUNT + ELEMS_AMOUNT));
-//        }
-//        return mav;
-//    }
-    // * -----------------------------------------------------------------------------------------------------------------------
-
-
-
     // * ----------------------------------- Movies and Series Review -----------------------------------------------------------------------
     @RequestMapping(value = "/reviewForm/{type:movie|serie}/{id:[0-9]+}", method = {RequestMethod.GET})
     public ModelAndView reviewFormCreate(@ModelAttribute("registerForm") final ReviewForm reviewForm, @PathVariable("id")final long id) {
@@ -226,7 +209,7 @@ public class HelloWorldController {
             return reviewFormCreate(form,id);
         }
 //        TODO: CAMBIAR LA LOGICA DE ESTO ESTO
-        User newUser = new User(null, form.getEmail(), form.getUserName());
+        User newUser = new User(null, form.getEmail(), form.getUserName(),"CAMBIAR",(long)4);//ESTO SE TIENE QUE SACAR
         //Primero intenta agregar el usuario, luego intenta agregar la review
         Optional<Long> userId = us.register(newUser);
         //Falta Agregar mensaje de error para el caso -1 (si falla en el pedido)
@@ -251,53 +234,87 @@ public class HelloWorldController {
         ModelMap model =new ModelMap();
         return new ModelAndView("redirect:/" + type + "/" + id, model);
     }
-    // * -----------------------------------------------------------------------------------------------------------------------
 
-
-    // * ----------------------------------- login Page -----------------------------------------------------------------------
-
-//    TODO: Terminar
-    @RequestMapping(value = "/login", method = {RequestMethod.GET})
-    public ModelAndView logIn(@ModelAttribute("loginForm") final LoginForm loginForm) {
+    //    @RequestMapping(value = "/reviewForm/{type:movie|serie}/{id:[0-9]+}", method = {RequestMethod.GET})
+//    public ModelAndView reviewFormCreate(@ModelAttribute("registerForm") final ReviewForm reviewForm, @PathVariable("id")final long id) {
 //        final ModelAndView mav = new ModelAndView("reviewRegistration");
-//        mav.addObject("details", ms.findById(id).orElseThrow(PageNotFoundException::new));
+//        mav.addObject("details", cs.findById(id).orElseThrow(PageNotFoundException::new));
 //        return mav;
-
-        es.sendSimpleMessage("lfleischer@itba.edu.ar", "Prueba de email",
-                "Esto es una prueba de funcionamiento de email");
-
-        return new ModelAndView("logInPage");
-    }
-
-    @RequestMapping(value = "/login", method = {RequestMethod.POST})
-    public ModelAndView logIn(@Valid @ModelAttribute("loginForm") final LoginForm loginForm, final BindingResult errors, RedirectAttributes redirectAttributes) {
+//    }
+//
+//    @RequestMapping(value = "/reviewForm/{type:movie|serie}/{id:[0-9]+}", method = {RequestMethod.POST})
+//    public ModelAndView reviewFormMovie(@Valid @ModelAttribute("registerForm") final ReviewForm form, final BindingResult errors, @PathVariable("id")final long id, @PathVariable("type")final String type) {
 //        if(errors.hasErrors()) {
-//            return reviewFormCreateSeries(form,id);
+//            return reviewFormCreate(form,id);
 //        }
-//        User newUser = new User(null,form.getEmail(),form.getUserName());
+////        TODO: CAMBIAR LA LOGICA DE ESTO ESTO
+//        User newUser = new User(null, form.getEmail(), form.getUserName());
 //        //Primero intenta agregar el usuario, luego intenta agregar la review
 //        Optional<Long> userId = us.register(newUser);
 //        //Falta Agregar mensaje de error para el caso -1 (si falla en el pedido)
 //        if(userId.get() == -1) {
-//            ModelAndView mav=reviewFormCreateSeries(form,id);
+//            ModelAndView mav=reviewFormCreate(form,id);
 //            mav.addObject("errorMsg","This username or mail is already in use.");
 //            return mav;
 //        }
 //        try {
-//            Review newReview = new Review( null,"serie",null,id,userId.get(),form.getName(),form.getDescription(), form.getRating());    //ReviewId va en null por que eso lo asigna la tabla
+////            TODO: Cambiar esto tambien
+//            // ReviewId va en null porque eso lo asigna la tabla
+//            Review newReview = new Review(null, type, id, userId.get(), form.getName(), form.getDescription(), form.getRating(), form.getUserName());
 //            newReview.setId(id);
 //            rs.addReview(newReview);
 //        }
 //        catch(DuplicateKeyException e){
-//            ModelAndView mav=reviewFormCreateSeries(form,id);
-//            mav.addObject("errorMsg","You have already written a review for this serie.");
+//            ModelAndView mav = reviewFormCreate(form,id);
+//            mav.addObject("errorMsg","You have already written a review for this " + type + ".");
 //            return mav;
 //        }
 //
-//        ModelAndView mav =new ModelAndView("redirect:/serie/"+id);
-//
-        return new ModelAndView("logInPage");
+//        ModelMap model =new ModelMap();
+//        return new ModelAndView("redirect:/" + type + "/" + id, model);
+//    }
+    // * -----------------------------------------------------------------------------------------------------------------------
+
+
+    // * ----------------------------------- login Page -----------------------------------------------------------------------
+    @RequestMapping(value = "/login/{loginStage:sign-in}", method = {RequestMethod.GET})
+    public ModelAndView emailForm(@PathVariable("loginStage") final String loginStage) {
+        final ModelAndView mav = new ModelAndView("logInPage");
+        mav.addObject("loginStage", loginStage);
+        return mav;
     }
+
+
+//    TODO: Terminar
+    @RequestMapping(value = "/login/{loginStage:sign-up|forgot-password|sign-out}", method = {RequestMethod.GET})
+    public ModelAndView emailForm(@ModelAttribute("loginForm") final LoginForm loginForm,@PathVariable("loginStage") final String loginStage) {
+        final ModelAndView mav = new ModelAndView("logInPage");
+        mav.addObject("loginStage", loginStage);
+        return mav;
+    }
+
+    @RequestMapping(value = "/login/{loginStage:sign-up|forgot-password|sign-out}", method = {RequestMethod.POST})
+    public ModelAndView emailFormVerification(@Valid @ModelAttribute("loginForm") final LoginForm loginForm, final BindingResult errors, RedirectAttributes redirectAttributes, @PathVariable("loginStage") final String loginStage) {
+        if(errors.hasErrors()) {
+            return emailForm(loginForm, loginStage);
+        }
+        if(Objects.equals(loginStage, "sign-up")) {
+            User newUser = new User(null, loginForm.getEmail(), loginForm.getUserName(), loginForm.getPassword(), 0L);
+            us.register(newUser);
+        } else if(Objects.equals(loginStage, "forgot-password")) {
+//            TODO, VER EL TEMA DE MANDAR EL EMAIL
+            User newUser = new User(null, loginForm.getEmail(), loginForm.getUserName(), loginForm.getPassword(), 0L);
+//            us.register(newUser);
+        } else if (Objects.equals(loginStage, "set-password")) {
+            //VER EL TEMA DE SETEAR NUEVA PASSWORD EN BDD
+            User newUser = new User(null, loginForm.getEmail(), loginForm.getUserName(), loginForm.getPassword(), 0L);
+//            us.register(newUser);
+        }
+
+        return new ModelAndView("redirect:/");
+
+    }
+
     // * -----------------------------------------------------------------------------------------------------------------------
 
 
@@ -309,6 +326,11 @@ public class HelloWorldController {
     }
     // * -----------------------------------------------------------------------------------------------------------------------
 
+
+    // * ----------------------------------- Sort by Filter -----------------------------------------------------------------------
+
+
+    // * -----------------------------------------------------------------------------------------------------------------------
 
 
     // * ----------------------------------- Otros -----------------------------------------------------------------------

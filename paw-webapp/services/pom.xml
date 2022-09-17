@@ -37,6 +37,11 @@
       <version>${parent.version}</version>
       <scope>runtime</scope>
     </dependency>
+    <!-- Para usar el password Encoder de Spring Security -->
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-core</artifactId>
+    </dependency>
     <!--    PAra mails-->
     <dependency>
       <groupId>org.springframework.boot</groupId>

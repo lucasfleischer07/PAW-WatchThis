@@ -39,10 +39,11 @@
     font-weight: bold;
     width: 15vw;
     border-color: darkred;
+    background-color: white;
 }
 
 .W-dropdown-button-sorting {
-    margin-left: 54vw;
+    margin-left: 45vw;
 }
 
 .W-dropdown-button {
@@ -51,8 +52,17 @@
     margin-bottom: 1vw;
 }
 
+.W-dropdown-button-genre-duration-sort {
+    mmargin-top: 2vw;
+    margin-right: 4vw;
+    margin-bottom: 2vw;
+    height: 5vw;
+}
+
+
 .W-films-margin{
     margin: 7%;
+    width: 100% ;
 }
 
 .W-line-style{
@@ -66,6 +76,7 @@
 .W-films-card-body {
     display: flex;
     align-items: flex-start;
+    height: 100%;
 }
 
 .W-card-design{
@@ -93,6 +104,7 @@
     width: 25%;
     margin: 1vm;
     height: auto;
+    display: flex;
 }
 
 .card-img-top {
@@ -237,6 +249,7 @@
     .W-line-style {
         display: none;
     }
+
 }
 
 @media (max-width: 591px) {
