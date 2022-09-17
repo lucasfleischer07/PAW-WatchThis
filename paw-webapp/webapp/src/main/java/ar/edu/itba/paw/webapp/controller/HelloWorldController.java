@@ -9,6 +9,7 @@ import ar.edu.itba.paw.services.ContentService;
 import ar.edu.itba.paw.services.EmailService;
 import ar.edu.itba.paw.services.ReviewService;
 import ar.edu.itba.paw.services.UserService;
+import ar.edu.itba.paw.webapp.auth.PawUserDetails;
 import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
 import ar.edu.itba.paw.webapp.form.EditProfile;
 import ar.edu.itba.paw.webapp.form.LoginForm;
@@ -16,6 +17,7 @@ import ar.edu.itba.paw.webapp.form.ReviewForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -298,27 +300,29 @@ public class HelloWorldController {
 //
     // * ------------------------------------------------Profile--------------------------------------------------------------------
     @RequestMapping("/hola/{userId:[0-9]+}")
-    public ModelAndView profile(@PathVariable("userId") final long userId) {
+    public ModelAndView profile(@AuthenticationPrincipal PawUserDetails userDetails,@PathVariable("userId") final long userId) {
         final ModelAndView mav = new ModelAndView("profilePage");
-        User user = us.findById(userId).orElseThrow(PageNotFoundException::new);
+        String userEmail = userDetails.getUsername();
+        User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
         mav.addObject("user", user);
         mav.addObject("reviews",rs.getAllUserReviews(user.getUserName()));
         return mav;
     }
 
     @RequestMapping(value = "/hola/{userId:[0-9]+}/edit-profile", method = {RequestMethod.GET})
-    public ModelAndView profileEdition(@Valid @ModelAttribute("editProfile") final EditProfile editProfile, @PathVariable("userId") final long userId) {
+    public ModelAndView profileEdition(@AuthenticationPrincipal PawUserDetails userDetails, @Valid @ModelAttribute("editProfile") final EditProfile editProfile, @PathVariable("userId") final long userId) {
+        String userEmail = userDetails.getUsername();
+        User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
         final ModelAndView mav = new ModelAndView("profileEditionPage");
-        User user = us.findById(userId).orElseThrow(PageNotFoundException::new);
         mav.addObject("user", user);
         return mav;
     }
 
     @RequestMapping(value = "/hola/{userId:[0-9]+}/edit-profile", method = {RequestMethod.POST})
-    public ModelAndView profileEditionPost(@Valid @ModelAttribute("editProfile") final EditProfile editProfile, final BindingResult errors, @PathVariable("userId") final long userId)  {
+    public ModelAndView profileEditionPost(@AuthenticationPrincipal PawUserDetails userDetails,@Valid @ModelAttribute("editProfile") final EditProfile editProfile, final BindingResult errors, @PathVariable("userId") final long userId)  {
 
         if(errors.hasErrors()) {
-            return profileEdition(editProfile, userId);
+            return profileEdition(userDetails,editProfile, userId);
         }
 
         User user = us.findById(userId).orElseThrow(PageNotFoundException::new);
