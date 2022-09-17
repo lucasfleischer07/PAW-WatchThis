@@ -306,19 +306,19 @@ public class HelloWorldController {
     @RequestMapping("/hola/{userId:[0-9]+}")
     public ModelAndView profile(@AuthenticationPrincipal PawUserDetails userDetails,@PathVariable("userId") final long userId) {
         final ModelAndView mav = new ModelAndView("profilePage");
-        String userEmail = userDetails.getUsername();
-        User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
-        mav.addObject("user", user);
-        mav.addObject("reviews",rs.getAllUserReviews(user.getUserName()));
+//        String userEmail = userDetails.getUsername();
+//        User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
+//        mav.addObject("user", user);
+//        mav.addObject("reviews",rs.getAllUserReviews(user.getUserName()));
         return mav;
     }
 
     @RequestMapping(value = "/hola/{userId:[0-9]+}/edit-profile", method = {RequestMethod.GET})
     public ModelAndView profileEdition(@AuthenticationPrincipal PawUserDetails userDetails, @Valid @ModelAttribute("editProfile") final EditProfile editProfile, @PathVariable("userId") final long userId) {
-        String userEmail = userDetails.getUsername();
-        User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
+//        String userEmail = userDetails.getUsername();
+//        User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
         final ModelAndView mav = new ModelAndView("profileEditionPage");
-        mav.addObject("user", user);
+//        mav.addObject("user", user);
         return mav;
     }
 

@@ -29,25 +29,34 @@
             <div class="col-md-5 mx-auto">
                 <div class="bg-white shadow rounded overflow-hidden">
                     <div class="px-4 pt-0 pb-4 cover">
-                        <div class="media align-items-end profile-head">
-                            <div class="profile mr-3">
-                                <img src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=80" alt="..." width="130" class="rounded mb-2 img-thumbnail">
-                                <div class="media-body mb-5 text-white">
-                                    <h4 class="mt-0 mb-0"><c:out value="${user.userName}"/></h4>
+                        <div class="profile-head W-profile-photo-name">
+                            <div class="W-picture-upload">
+                                <img src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=80" alt="..." class="rounded img-thumbnail W-profile-picture">
+                                <div class="W-picture-upload-button-text">
+                                    <h6 class="W-edit-picture-text">Edit profile picture:</h6>
+                                    <div class="W-picture-upload">
+                                        <input type="file" class="form-control" id="inputGroupFile01">
+                                        <label class="input-group-text" for="inputGroupFile01">Upload</label>
+                                    </div>
                                 </div>
                             </div>
+                                <h3 class="media-body mb-5 text-white">male</h3>
+<%--                            <h4 class="mt-0 mb-0"><c:out value="${user.userName}"/></h4>--%>
                         </div>
-                        <div class="bg-light p-4 d-flex justify-content-end text-center">
-                            <c:url value="/hola/${user.id}/edit-profile" var="postPath"/>
-                            <form:form modelAttribute="editProfile" action="${postPath}" method="post">
-                                <div class="mb-3 W-input-label-edit-password">
+                    </div>
+                    <div>
+                        <h6 class="W-change-pass-text">Change password:</h6>
+                        <div class="bg-light d-flex justify-content-end text-center W-edit-divs-display">
+                            <div>
+                                <c:url value="/hola/${user.id}/edit-profile" var="postPath"/>
+                                <form:form modelAttribute="editProfile" action="${postPath}" method="post">
                                     <div class="mb-3 W-input-label-edit-password">
                                         <form:errors path="password" element="p" cssStyle="color: red"/>
                                         <form:label path="password" class="form-label">New password:</form:label>
                                         <form:input type="password" class="form-control" value="${editProfile.password}" path="password"  placeholder="*****"/>
                                     </div>
-                                </div>
-                            </form:form>
+                                </form:form>
+                            </div>
                             <div>
                                 <button type="submit" class="btn btn-success" onclick="this.form.submit(); (this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'">Change</button>
                             </div>

@@ -17,7 +17,45 @@
 }
 
 .W-input-label-edit-password {
-    margin-top: 3%;
-    margin-left: 3%;
-    margin-right: 3%;
+    display: flex;
+    align-items: flex-start;
+    font-size: 1vw;
+    flex-direction: column;
+}
+
+.W-profile-photo-name {
+    margin-bottom: 8vw;
+}
+
+.W-edit-divs-display {
+    display: flex;
+    flex-direction: column;
+    margin: 1vw;
+}
+
+.W-picture-upload {
+    display: flex;
+}
+
+.W-profile-picture {
+    margin-right: 1vw;
+    width: 25%;
+}
+
+.W-edit-picture-text {
+    color: white;
+}
+
+.W-picture-upload-button-text {
+    align-items: flex-end;
+    position: relative;
+    width: 100%;
+    margin-top: 5vw;
+    flex-wrap: wrap;
+}
+
+
+.W-change-pass-text {
+    margin-left: 1vw;
+    margin-top: 1vw;
 }
