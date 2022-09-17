@@ -14,5 +14,7 @@ public interface UserDao {
 
     void setPassword(String password, User user);
 
+    void setProfilePicture(byte[] profilePicture, User user);
 
 }
+

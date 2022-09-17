@@ -21,7 +21,9 @@ public class UserJdbcDao implements UserDao{
                     resultSet.getString("email"),
                     resultSet.getString("name"),
                     resultSet.getString("password"),
-                    resultSet.getLong("reputation"));
+                    resultSet.getLong("reputation"),
+                    resultSet.getBytes("image"));
+
 
     private final JdbcTemplate template;
 //    private final SimpleJdbcInsert insert;
@@ -65,6 +67,11 @@ public class UserJdbcDao implements UserDao{
     @Override
     public void setPassword(String password, User user){
         template.update("UPDATE userdata SET password = ? WHERE userid = ?",new Object[]{password, user.getId()});
+    }
+
+    @Override
+    public void setProfilePicture(byte[] profilePicture, User user) {
+        template.update("UPDATE userdata SET image = ? WHERE  userid = ?", new Object[]{profilePicture, user.getId()});
     }
 
 }

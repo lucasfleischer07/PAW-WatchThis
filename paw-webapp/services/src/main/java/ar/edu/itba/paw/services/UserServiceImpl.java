@@ -40,4 +40,9 @@ public class UserServiceImpl implements UserService{
         userDao.setPassword(passwordEncoder.encode(password), user);
     }
 
+    @Override
+    public void setProfilePicture(byte[] profilePicture, User user) {
+        userDao.setProfilePicture(profilePicture, user);
+    }
+
 }

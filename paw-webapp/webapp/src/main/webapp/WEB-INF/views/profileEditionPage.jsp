@@ -36,21 +36,32 @@
                                 <img src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=80" alt="..." class="rounded img-thumbnail W-profile-picture">
                                 <div class="W-picture-upload-button-text">
                                     <h6 class="W-edit-picture-text">Edit profile picture:</h6>
-                                    <div class="W-picture-upload">
-                                        <input type="file" class="form-control" id="inputGroupFile01">
-                                        <label class="input-group-text" for="inputGroupFile01">Upload</label>
+                                    <div class="p-0 m-2 d-flex flex-column"> <!--Imagenes-->
+<%--                                        <c:url value="/profile/${user.id}/edit-profile" var="postPath"/>--%>
+<%--                                        <form:form modelAttribute="editProfile" action="${postPath}" method="post" enctype="multipart/form-data">--%>
+<%--                                            <form:label path="activityImg" class="form-label">--%>
+<%--    &lt;%&ndash;                                            <spring:message code="experienceForm.activityImg"/>&ndash;%&gt;--%>
+<%--    &lt;%&ndash;                                            <span class="required-optional-text"><spring:message code="experienceForm.optional"/></span>&ndash;%&gt;--%>
+<%--                                            </form:label>--%>
+<%--                                            <form:input path="profilePicture" type="file" class="form-control"/>--%>
+<%--                                            <form:errors path="profilePicture" element="p" cssClass="form-error-label"/>--%>
+<%--                                        </form:form>--%>
                                     </div>
+<%--                                    <div class="W-picture-upload">--%>
+<%--                                        --%>
+<%--                                        <input type="file" class="form-control" id="inputGroupFile01">--%>
+<%--                                        <label class="input-group-text" for="inputGroupFile01">Upload</label>--%>
+<%--                                    </div>--%>
                                 </div>
                             </div>
-                                <h3 class="media-body mb-5 text-white">male</h3>
-<%--                            <h4 class="mt-0 mb-0"><c:out value="${user.userName}"/></h4>--%>
+                            <h4 class="mt-0 mb-0"><c:out value="${user.userName}"/></h4>
                         </div>
                     </div>
                     <div>
                         <h6 class="W-change-pass-text">Change password:</h6>
                         <div class="bg-light d-flex justify-content-end text-center W-edit-divs-display">
                             <div>
-                                <c:url value="/hola/${user.id}/edit-profile" var="postPath"/>
+                                <c:url value="/profile/${user.id}/edit-profile" var="postPath"/>
                                 <form:form modelAttribute="editProfile" action="${postPath}" method="post">
                                     <div class="mb-3 W-input-label-edit-password">
                                         <form:errors path="password" element="p" cssStyle="color: red"/>

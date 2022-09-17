@@ -26,6 +26,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -277,7 +278,7 @@ public class HelloWorldController {
             return reviewFormCreate(userDetails,form,id);
         }
 //        TODO: CAMBIAR LA LOGICA DE ESTO ESTO
-        User newUser = new User(null, form.getEmail(), form.getUserName(),"CAMBIAR",(long)4);//ESTO SE TIENE QUE SACAR
+        User newUser = new User(null, form.getEmail(), form.getUserName(),"CAMBIAR",(long)4, null);//ESTO SE TIENE QUE SACAR
         //Primero intenta agregar el usuario, luego intenta agregar la review
         Optional<Long> userId = us.register(newUser);
         // TODO: Falta Agregar mensaje de error para el caso -1 (si falla en el pedido)
@@ -349,7 +350,7 @@ public class HelloWorldController {
             return emailForm(userDetails, loginForm, loginStage);
         }
         if(Objects.equals(loginStage, "sign-up")) {
-            User newUser = new User(null, loginForm.getEmail(), loginForm.getUserName(), loginForm.getPassword(), 0L);
+            User newUser = new User(null, loginForm.getEmail(), loginForm.getUserName(), loginForm.getPassword(), 0L, null);
             us.register(newUser);
             es.sendRegistrationEmail(newUser);
         } else if(Objects.equals(loginStage, "forgot-password")) {
@@ -357,7 +358,7 @@ public class HelloWorldController {
             es.sendForgottenPasswordEmail(loginForm.getEmail());
         } else if (Objects.equals(loginStage, "set-password")) {
             // TODO: VER EL TEMA DE SETEAR NUEVA PASSWORD EN BDD
-            User newUser = new User(null, loginForm.getEmail(), loginForm.getUserName(), loginForm.getPassword(), 0L);
+            User newUser = new User(null, loginForm.getEmail(), loginForm.getUserName(), loginForm.getPassword(), 0L, null);
 //            us.register(newUser);
 
         }
@@ -381,33 +382,36 @@ public class HelloWorldController {
     @RequestMapping("/profile/{userId:[0-9]+}")
     public ModelAndView profile(@AuthenticationPrincipal PawUserDetails userDetails,@PathVariable("userId") final long userId) {
         final ModelAndView mav = new ModelAndView("profilePage");
-//        String userEmail = userDetails.getUsername();
-//        User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
-//        mav.addObject("user", user);
-//        mav.addObject("reviews",rs.getAllUserReviews(user.getUserName()));
+        String userEmail = userDetails.getUsername();
+        User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
+        mav.addObject("user", user);
+        mav.addObject("reviews",rs.getAllUserReviews(user.getUserName()));
         return mav;
     }
 
     @RequestMapping(value = "/profile/{userId:[0-9]+}/edit-profile", method = {RequestMethod.GET})
     public ModelAndView profileEdition(@AuthenticationPrincipal PawUserDetails userDetails, @Valid @ModelAttribute("editProfile") final EditProfile editProfile, @PathVariable("userId") final long userId) {
-//        String userEmail = userDetails.getUsername();
-//        User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
+        String userEmail = userDetails.getUsername();
+        User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
         final ModelAndView mav = new ModelAndView("profileEditionPage");
-//        mav.addObject("user", user);
+        mav.addObject("user", user);
         return mav;
     }
 
-    @RequestMapping(value = "/hola/{userId:[0-9]+}/edit-profile", method = {RequestMethod.POST})
-    public ModelAndView profileEditionPost(@AuthenticationPrincipal PawUserDetails userDetails,@Valid @ModelAttribute("editProfile") final EditProfile editProfile, final BindingResult errors, @PathVariable("userId") final long userId)  {
+    @RequestMapping(value = "/profile/{userId:[0-9]+}/edit-profile", method = {RequestMethod.POST})
+    public ModelAndView profileEditionPost(@AuthenticationPrincipal PawUserDetails userDetails,@Valid @ModelAttribute("editProfile") final EditProfile editProfile, final BindingResult errors, @PathVariable("userId") final long userId) throws IOException {
 
         if(errors.hasErrors()) {
             return profileEdition(userDetails,editProfile, userId);
         }
 
         User user = us.findById(userId).orElseThrow(PageNotFoundException::new);
-        us.setPassword(editProfile.getPassword(), user);
+//        us.setPassword(editProfile.getPassword(), user);
 
-        return new ModelAndView("redirect:/hola/" + userId);
+        us.setProfilePicture(editProfile.getProfilePicture().getBytes(), user);
+
+
+        return new ModelAndView("redirect:/profile/" + userId);
     }
 
     // * -----------------------------------------------------------------------------------------------------------------------

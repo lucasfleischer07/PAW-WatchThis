@@ -4,15 +4,18 @@ public class User {
 
     private Long id, reputation;
     private String email, userName, password;
+
+    private byte[] image;
 //    //private String password;
 
-    public User(Long id, String email, String userName, String password, Long reputation) {
+    public User(Long id, String email, String userName, String password, Long reputation, byte[] image) {
         super();
         this.id = id;
         this.email = email;
         this.userName = userName;
         this.password = password;
         this.reputation = reputation;
+        this.image = image;
     }
 
     public String getEmail() {
@@ -34,5 +37,7 @@ public class User {
     public String getPassword() {
         return password;
     }
+
+    public byte[] getImage(){ return image;}
 
 }
