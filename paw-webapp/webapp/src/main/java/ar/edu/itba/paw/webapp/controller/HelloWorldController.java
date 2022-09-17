@@ -57,10 +57,10 @@ public class HelloWorldController {
         if(contentList == null) {
             throw new PageNotFoundException();
         } else {
-            if(contentList.size()<10){
-                mav.addObject("allContent", contentList);
-            }else{
-                mav.addObject("allContent", contentList.subList((page-1)*ELEMS_AMOUNT,(page-1)*ELEMS_AMOUNT + ELEMS_AMOUNT));
+            if(contentList.size() < (page)*ELEMS_AMOUNT){       //Si no llega a completar la pagina entera, que sirva los que pueda
+                mav.addObject("allContent", contentList.subList((page-1)*ELEMS_AMOUNT,contentList.size()));
+            }else {
+                mav.addObject("allContent", contentList.subList((page - 1) * ELEMS_AMOUNT, (page - 1) * ELEMS_AMOUNT + ELEMS_AMOUNT));
             }
             mav.addObject("amountPages",(int)Math.ceil((double) contentList.size()/(double)ELEMS_AMOUNT));
             mav.addObject("pageSelected",page);
@@ -88,10 +88,10 @@ public class HelloWorldController {
         if( contentList == null) {
             throw new PageNotFoundException();
         } else {
-            if(contentList.size()<10){
-                mav.addObject("allContent", contentList);
-            }else{
-                mav.addObject("allContent", contentList.subList((page-1)*ELEMS_AMOUNT,(page-1)*ELEMS_AMOUNT + ELEMS_AMOUNT));
+            if(contentList.size() < (page)*ELEMS_AMOUNT){       //Si no llega a completar la pagina entera, que sirva los que pueda
+                mav.addObject("allContent", contentList.subList((page-1)*ELEMS_AMOUNT,contentList.size()));
+            }else {
+                mav.addObject("allContent", contentList.subList((page - 1) * ELEMS_AMOUNT, (page - 1) * ELEMS_AMOUNT + ELEMS_AMOUNT));
             }
             mav.addObject("amountPages",(int)Math.ceil((double) contentList.size()/(double)ELEMS_AMOUNT));
             mav.addObject("pageSelected",page);
@@ -112,7 +112,11 @@ public class HelloWorldController {
         if(contentList == null) {
             throw new PageNotFoundException();
         }else {
-            mav.addObject("allContent", contentList.subList((page - 1) * ELEMS_AMOUNT, (page - 1) * ELEMS_AMOUNT + ELEMS_AMOUNT));
+            if(contentList.size() < (page)*ELEMS_AMOUNT){       //Si no llega a completar la pagina entera, que sirva los que pueda
+                mav.addObject("allContent", contentList.subList((page-1)*ELEMS_AMOUNT,contentList.size()));
+            }else {
+                mav.addObject("allContent", contentList.subList((page - 1) * ELEMS_AMOUNT, (page - 1) * ELEMS_AMOUNT + ELEMS_AMOUNT));
+            }
             mav.addObject("amountPages", (int) Math.ceil((double) contentList.size() / (double) ELEMS_AMOUNT));
             mav.addObject("pageSelected", page);
             mav.addObject("allContent", contentList);
@@ -178,9 +182,9 @@ public class HelloWorldController {
         if(contentListFilter == null) {
             throw new PageNotFoundException();
         } else {
-            if(contentListFilter.size()<10){
-                mav.addObject("allContent", contentListFilter);
-            }else{
+            if(contentListFilter.size() < (page)*ELEMS_AMOUNT){       //Si no llega a completar la pagina entera, que sirva los que pueda
+                mav.addObject("allContent", contentListFilter.subList((page-1)*ELEMS_AMOUNT,contentListFilter.size()));
+            }else {
                 mav.addObject("allContent", contentListFilter.subList((page-1)*ELEMS_AMOUNT,(page-1)*ELEMS_AMOUNT + ELEMS_AMOUNT));
             }
             mav.addObject("amountPages",Math.ceil((double)contentListFilter.size()/(double)ELEMS_AMOUNT));
