@@ -6,6 +6,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -18,6 +20,7 @@ import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 
 @EnableWebMvc
 @ComponentScan({
@@ -36,15 +39,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         viewResolver.setSuffix(".jsp");
         return viewResolver;
     }
-/*
-    @Bean
-    public MessageSource messageSource(){
-        final ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasename("classpath:i18n/messages");
-        messageSource.setDefaultEncoding(StandardCharsets.UTF_8.displayName());
-        messageSource.setCacheSeconds(5);
-        return messageSource;
-    }*/
+
 
     @Bean
     public DataSource dataSource(){
@@ -78,5 +73,26 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         super.addResourceHandlers(registry);
         registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
     }
+
+    // * ----------------------------------- Emails -----------------------------------------------------------------------
+    @Bean
+    public JavaMailSender getJavaMailSender() {
+        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+        mailSender.setHost("smtp.gmail.com");
+        mailSender.setPort(587);
+
+        mailSender.setUsername("watchthisassist@gmail.com");
+        mailSender.setPassword("scyvyihczrzgdifw");
+
+        Properties props = mailSender.getJavaMailProperties();
+        props.put("mail.transport.protocol", "smtp");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.debug", "true");
+
+        return mailSender;
+    }
+
+    // * -----------------------------------------------------------------------------------------------------------------------
 
 }
