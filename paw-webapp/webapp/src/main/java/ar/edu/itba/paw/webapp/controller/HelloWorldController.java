@@ -41,7 +41,7 @@ public class HelloWorldController {
     private final ContentService cs;
     private final ReviewService rs;
     private final EmailService es;
-    private final int ELEMS_AMOUNT = 10;
+    private final int ELEMS_AMOUNT = 12;
 
     @Autowired  //Para indicarle que este es el constructor que quiero que use
     public HelloWorldController(final UserService us, final ContentService cs, ReviewService rs, EmailService es){
@@ -302,7 +302,7 @@ public class HelloWorldController {
 
     // * ----------------------------------- login Page -----------------------------------------------------------------------
     @RequestMapping(value = "/login/{loginStage:sign-in}", method = {RequestMethod.GET})
-    public ModelAndView emailForm(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("loginStage") final String loginStage) {
+    public ModelAndView emailForm(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("loginStage") final String loginStage, @RequestParam(value = "error",required = false)Optional<Boolean> error) {
         final ModelAndView mav = new ModelAndView("logInPage");
         mav.addObject("loginStage", loginStage);
         try {
@@ -314,6 +314,11 @@ public class HelloWorldController {
         } catch (NullPointerException e) {
             mav.addObject("userName","null");
             mav.addObject("userId","null");
+        }
+        if(error.isPresent()){
+            mav.addObject("error",true);
+        }else{
+            mav.addObject("error",false);
         }
         return mav;
     }

@@ -21,6 +21,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 @EnableWebMvc
 @ComponentScan({
@@ -95,4 +96,15 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
     // * -----------------------------------------------------------------------------------------------------------------------
 
+    @Bean
+    public MessageSource messageSource(){
+        final ReloadableResourceBundleMessageSource msgSource = new ReloadableResourceBundleMessageSource();
+
+        msgSource.setBasename("classpath:i18n/messages");
+        msgSource.setDefaultEncoding(StandardCharsets.UTF_8.name());
+        msgSource.setCacheSeconds((int)TimeUnit.MINUTES.toSeconds(2));
+
+
+        return msgSource;
+    }
 }

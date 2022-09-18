@@ -36,7 +36,7 @@
         <%--            * Caso en el que ESTA registrado y tiene contrasena--%>
                     <c:when test="${loginStage == 'sign-in'}">
                         <c:url value="/login/sign-in" var="postPath"/>
-                        <form action="<c:url value="/login/sign-in"/>" method="post">
+                        <form action="<c:url value="/login/sign-in"/>" method="post" name="loginForm">
                             <div class="W-general-div-login">
                                 <div class="W-login-title">
                                     <h4>Login to Watch This</h4>
@@ -55,6 +55,15 @@
                                     </div>
                                     <div class="mb-3 W-input-label-login-info">
                                       <%--  <form:errors path="email" element="p" cssStyle="color: red"/> --%>
+                                          <c:choose>
+                                              <c:when test="${error == true}">
+                                                  <div class="alert alert-danger d-flex align-items-center" role="alert">
+                                                      <div class="W-register-errorMsg">
+                                                           Email or Password are incorrect
+                                                      </div>
+                                                  </div>
+                                              </c:when>
+                                          </c:choose>
                                         <label class="form-label">Email</label>
                                         <input name="email" type="email" class="form-control"   placeholder="example@email"/>
                                     </div>
