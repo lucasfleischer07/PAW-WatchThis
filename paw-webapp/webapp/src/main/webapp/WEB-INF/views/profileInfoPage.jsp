@@ -30,11 +30,11 @@
       <div class="col-md-5 mx-auto">
         <div class="bg-white shadow rounded overflow-hidden">
           <div class="px-4 pt-0 pb-4 cover">
-            <div class="media align-items-end profile-head">
+            <div class="media align-items-end profile-head W-profile-photo-name">
               <div class="profile mr-3">
                 <img src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=80" alt="..." class="rounded W-profile-picture img-thumbnail">
                 <div class="media-body mb-5 text-white">
-                  <h4 class="mt-0 mb-0"><c:out value="${user.get().userName}"/></h4>
+                  <h4 class="W-username-profilepage"><c:out value="${user.get().userName}"/></h4>
                 </div>
               </div>
             </div>
@@ -52,12 +52,12 @@
           </div>
           <div class="py-4 px-4">
             <div class="d-flex align-items-center justify-content-between mb-3">
-              <h5 class="mb-0">Recent reviews</h5>
+              <h4 class="mb-0">Recent reviews</h4>
             </div>
             <div class="card">
               <div class="card-body">
                 <c:forEach var="review" items="${reviews}">
-                  <p><c:out value="${review.contentName}"/></p>
+                  <h4><c:out value="${review.contentName}"/></h4>
                   <jsp:include page="components/reviewCard.jsp">
                     <jsp:param name="reviewTitle" value="${review.name}" />
                     <jsp:param name="reviewDescription" value="${review.description}" />

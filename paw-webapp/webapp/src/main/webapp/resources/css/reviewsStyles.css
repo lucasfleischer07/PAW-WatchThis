@@ -70,6 +70,7 @@
     margin-left: 3%;
     margin-top: 0%;
     margin-bottom: 0%;
+    font-size: 1.3vw;
 }
 
 .W-reviewScore {
@@ -149,7 +150,7 @@
 
 @media (max-width: 1300px) {
     .W-title-review {
-        font-size: 2vw;
+        font-size: 1.5vw;
     }
 
     .W-reviewScore {
