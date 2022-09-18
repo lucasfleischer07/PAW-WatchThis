@@ -64,6 +64,12 @@ public class UserJdbcDao implements UserDao{
     public Optional<User> findById(final long userId) {
         return template.query("SELECT * FROM userdata WHERE userid = ?", new Object[]{ userId }, USER_ROW_MAPPER).stream().findFirst();
     }
+
+    @Override
+    public Optional<User> findByUserName(String userName) {
+        return template.query("SELECT * FROM userdata WHERE name = ?", new Object[]{ userName }, USER_ROW_MAPPER).stream().findFirst();
+    }
+
     @Override
     public void setPassword(String password, User user){
         template.update("UPDATE userdata SET password = ? WHERE userid = ?",new Object[]{password, user.getId()});

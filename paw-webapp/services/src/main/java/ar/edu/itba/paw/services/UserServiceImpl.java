@@ -36,6 +36,11 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public Optional<User> findByUserName(String userName) {
+        return userDao.findByUserName(userName);
+    }
+
+    @Override
     public void setPassword(String password, User user){
         userDao.setPassword(passwordEncoder.encode(password), user);
     }

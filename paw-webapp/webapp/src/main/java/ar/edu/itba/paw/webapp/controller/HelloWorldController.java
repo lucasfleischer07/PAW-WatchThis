@@ -372,6 +372,7 @@ public class HelloWorldController {
         final ModelAndView mav = new ModelAndView("profilePage");
         String userEmail = userDetails.getUsername();
         User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
+        mav.addObject("full-access", "yes");
         mav.addObject("user", user);
         mav.addObject("reviews",rs.getAllUserReviews(user.getUserName()));
         return mav;
@@ -406,6 +407,31 @@ public class HelloWorldController {
 
 
         return new ModelAndView("redirect:/profile/" + userId);
+    }
+
+    @RequestMapping("/profile-info/{userName:[a-zA-Z0-9\\s]+}")
+    public ModelAndView profileInfo(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("userName") final String userName) {
+        final ModelAndView mav = new ModelAndView("profileInfoPage");
+        Optional<User> user = us.findByUserName(userName);
+        if(user.isPresent()) {
+//            mav.addObject("full-access", "no");
+            mav.addObject("user", user);
+            mav.addObject("reviews",rs.getAllUserReviews(user.get().getUserName()));
+        } else {
+            throw new PageNotFoundException();
+        }
+
+        try {
+            String userEmail = userDetails.getUsername();
+            User userLogged = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
+            mav.addObject("userName",userLogged.getUserName());
+            mav.addObject("userId",userLogged.getId());
+
+        } catch (NullPointerException e) {
+            mav.addObject("userName","null");
+            mav.addObject("userId","null");
+        }
+        return mav;
     }
 
     // * -----------------------------------------------------------------------------------------------------------------------
