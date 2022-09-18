@@ -108,7 +108,7 @@
               <jsp:param name="reviewRating" value="${review.rating}"/>
               <jsp:param name="reviewId" value="${review.id}" />
               <jsp:param name="userName" value="${review.userName}"/>
-
+              <jsp:param name="loggedUserName" value="${userName}"/>
             </jsp:include>
           </c:forEach>
           <c:if test="${reviews==null || reviews.size()==0}">

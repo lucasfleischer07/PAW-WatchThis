@@ -17,6 +17,7 @@ import ar.edu.itba.paw.webapp.form.ReviewForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.naming.Context;
 import javax.validation.Valid;
 import java.io.IOException;
@@ -436,6 +438,19 @@ public class HelloWorldController {
     }
 
     // * -----------------------------------------------------------------------------------------------------------------------
+    // * ---------------------------------------------Edit and delete reviews--------------------------------------------------------------------------
+    @RequestMapping(value="/review/{reviewId:[0-9]+}/delete",method = {RequestMethod.DELETE})
+    public ModelAndView deleteReview(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("reviewId") final long reviewId, HttpServletRequest request){
+        Review review=rs.findById(reviewId).orElseThrow(PageNotFoundException::new);
+        rs.deleteReview(reviewId);
+        String referer = request.getHeader("Referer");
+        return new ModelAndView("redirect:"+ referer);
+
+    }
+
+
+    // * --------------------------------------------------------------------------------------------------------------------
+
 
 }
 

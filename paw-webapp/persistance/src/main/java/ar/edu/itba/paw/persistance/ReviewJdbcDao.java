@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class ReviewJdbcDao implements ReviewDao{
@@ -50,6 +51,11 @@ public class ReviewJdbcDao implements ReviewDao{
     public List<Review> getAllUserReviews(String username) {
         return template.query("SELECT reviewid,review.type,contentid,review.name as name,review.description,review.rating,userdata.name as username,content.name as contentname FROM review JOIN userdata ON review.userid = userdata.userid JOIN content ON contentid= content.id where userdata.name = ? order by reviewid desc", new Object[]{ username }, REVIEW_ROW_MAPPER);
 
+    }
+
+    @Override
+    public Optional<Review> findById(Long reviewId) {
+        return template.query("SELECT reviewid,review.type,contentid,review.name as name,review.description,review.rating,userdata.name as username,content.name as contentname FROM review JOIN userdata ON review.userid = userdata.userid JOIN content ON contentid= content.id where reviewid = ?", new Object[]{ reviewId }, REVIEW_ROW_MAPPER).stream().findFirst();
     }
 
     @Override

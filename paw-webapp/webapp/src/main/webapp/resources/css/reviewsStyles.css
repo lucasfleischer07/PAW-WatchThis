@@ -47,6 +47,9 @@
     justify-content: space-between;
     align-content: center;
 }
+.W-review-title-creator{
+    width: 75%;
+}
 
 .W-card-title {
     font-size: 2vw;
@@ -67,7 +70,6 @@
 }
 
 .W-title-review {
-    margin-left: 3%;
     margin-top: 0%;
     margin-bottom: 0%;
     font-size: 1.3vw;
@@ -78,14 +80,21 @@
 }
 
 .W-stars {
+    width: 9%;
     margin-right: 1%;
     margin-left: 1%;
     display: flex;
 }
+.W-delete-edit-buttons{
+    display: flex;
+    width: 8%;
+    justify-content: space-around;
+    height: 1vw;
+}
 
 .W-creator-review {
-    margin-left: 5%;
     font-size: 1vw;
+    color: #636464;
 }
 
 .W-border-color-user-btn {

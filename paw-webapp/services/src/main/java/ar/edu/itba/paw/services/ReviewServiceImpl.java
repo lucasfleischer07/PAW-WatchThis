@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ReviewServiceImpl implements ReviewService{
@@ -22,21 +23,24 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     @Override
-    public List<Review> getAllReviews(Long id) {
-        return reviewDao.getAllReviews(id);
+    public List<Review> getAllReviews(Long contentId) {
+        return reviewDao.getAllReviews(contentId);
     }
 
     @Override
-    public void deleteReview(Long id) {
-        reviewDao.deleteReview(id);
+    public void deleteReview(Long reviewId) {
+        reviewDao.deleteReview(reviewId);
     }
 
     @Override
-    public void editReview(String newDesc, Long id, String typeOfEdit) {
-        reviewDao.editReview(newDesc, id, typeOfEdit);
+    public void editReview(String newDesc, Long reviewId, String typeOfEdit) {
+        reviewDao.editReview(newDesc, reviewId, typeOfEdit);
     }
     @Override
     public List<Review> getAllUserReviews(String name) {
         return reviewDao.getAllUserReviews(name);
     }
+
+    @Override
+    public Optional<Review> findById(Long reviewId) {return reviewDao.findById(reviewId);}
 }
