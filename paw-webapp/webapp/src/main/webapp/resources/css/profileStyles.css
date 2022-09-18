@@ -35,11 +35,13 @@
 
 .W-picture-upload {
     display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 
-.W-profile-picture {
+.W-edit-profile-picture {
     margin-right: 1vw;
-    width: 25%;
+    width: 8vw;
 }
 
 .W-edit-picture-text {
@@ -49,8 +51,7 @@
 .W-picture-upload-button-text {
     align-items: flex-end;
     position: relative;
-    width: 100%;
-    margin-top: 5vw;
+    margin-top: 1vw;
     flex-wrap: wrap;
 }
 
@@ -62,4 +63,18 @@
 .W-username-profilepage {
     margin-top: 1vw;
     color: white;
+}
+
+.W-input-profile-picture {
+    display: flex;
+    flex-direction: row;
+}
+
+.W-input-width {
+    width: 15vw;
+    background-color: #e9ecef;
+}
+
+.W-profile-picture-button {
+    margin-left: 1.5vw;
 }

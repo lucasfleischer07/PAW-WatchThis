@@ -32,17 +32,17 @@
                 <div class="bg-white shadow rounded overflow-hidden">
                     <div class="px-4 pt-0 pb-4 cover">
                         <div class="profile-head W-profile-photo-name">
-                            <div class="W-picture-upload">
-                                <img src="<c:url value="/profile/${userId}/profileImage"/> " alt="User_img">
+                            <div class="W-picture-upload profile mr-3">
+                                <img src="<c:url value="/profile/${userId}/profileImage"/>" alt="User_img" class="W-edit-profile-picture">
 <%--                                <img src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=80" alt="..." class="rounded img-thumbnail W-profile-picture">--%>
                                 <div class="W-picture-upload-button-text">
                                     <h6 class="W-edit-picture-text">Edit profile picture:</h6>
-                                    <div class="W-picture-upload">
+                                    <div class="W-input-profile-picture">
                                         <c:url value="/profile/${user.id}/edit-profile" var="postPath"/>
                                         <form:form modelAttribute="editProfile" action="${postPath}" method="post" enctype="multipart/form-data">
                                             <form:errors path="profilePicture" element="p" cssClass="form-error-label"/>
-                                            <form:input type="file" class="form-control" path="profilePicture"/>
-                                            <button type="submit" class="btn btn-success" onclick="this.form.submit(); (this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'">Upload</button>
+                                            <form:input type="file" class="form-control" path="profilePicture" cssClass="W-input-width"/>
+                                            <button type="submit" class="btn btn-success W-profile-picture-button" onclick="this.form.submit(); (this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'">Upload</button>
                                         </form:form>
                                     </div>
                                 </div>

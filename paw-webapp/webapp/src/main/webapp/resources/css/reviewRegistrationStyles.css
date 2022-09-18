@@ -24,7 +24,8 @@
 
 
 .W-forgot-password {
-    margin-left: 18vw;
+    display: flex;
+    justify-content: flex-end;
 }
 
 .W-line-style-login {
@@ -37,7 +38,6 @@
 }
 
 .W-login-button {
-    width: 7vw;
     margin-top: 1vw;
     margin-left: 23vw;
 }
@@ -60,7 +60,6 @@
 }
 
 .W-sign-up-button-link {
-    width: 7vw;
     margin-top: 0.3vw;
 }
 
