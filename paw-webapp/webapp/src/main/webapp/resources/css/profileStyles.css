@@ -24,7 +24,7 @@
 }
 
 .W-profile-photo-name {
-    margin-bottom: 8vw;
+    margin-bottom: 6vw;
 }
 
 .W-edit-divs-display {
@@ -54,8 +54,12 @@
     flex-wrap: wrap;
 }
 
-
 .W-change-pass-text {
     margin-left: 1vw;
     margin-top: 1vw;
+}
+
+.W-username-profilepage {
+    margin-top: 1vw;
+    color: white;
 }

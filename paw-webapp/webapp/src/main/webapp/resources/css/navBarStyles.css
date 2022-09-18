@@ -18,6 +18,7 @@
 .W-nav-item {
     display: flex;
     font-size: 30px;
+    align-items: center;
 }
 
 .W-header-accomodation {
@@ -36,6 +37,9 @@
     flex-direction: row;
 }
 
+.container-fluid {
+    display: contents;
+}
 
 .W-navbar-hamburger-postion {
     display: flex;

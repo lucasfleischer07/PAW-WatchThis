@@ -46,7 +46,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <h4 class="mt-0 mb-0"><c:out value="${user.userName}"/></h4>
+                            <h4 class="W-username-profilepage"><c:out value="${user.userName}"/></h4>
                         </div>
                     </div>
                     <div>
