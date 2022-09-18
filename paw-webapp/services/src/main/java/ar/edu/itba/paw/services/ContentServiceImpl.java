@@ -64,8 +64,8 @@ public class ContentServiceImpl implements ContentService {
     }
 
     @Override
-    public void decreceContentPoints(int contentId,int rating){
-        ContentDao.addContentPoints(contentId,rating);
+    public void decreaseContentPoints(long contentId,int rating){
+        ContentDao.decreaseContentPoints(contentId,rating);
     }
 
 }

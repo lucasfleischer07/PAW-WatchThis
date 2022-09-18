@@ -39,11 +39,7 @@
                         </c:if>
                     </div>
                     <div class="W-review-title-creator">
-                        <svg height="2vw" width="8vw">
-                            <text x="0" y="15">
-                                <a href="<c:url value="/profile/${param.userName}"/>"  class="W-creator-review"><c:out value="${param.userName}"/></a>
-                            </text>
-                        </svg>
+                        <a href="<c:url value="/profile/${param.userName}"/>"  class="W-creator-review"><c:out value="${param.userName}"/></a>
                         <h2 class="W-title-review"><c:out value="${param.reviewTitle}"/></h2>
                     </div>
                         <c:if test="${param.userName.equals(param.loggedUserName)}">

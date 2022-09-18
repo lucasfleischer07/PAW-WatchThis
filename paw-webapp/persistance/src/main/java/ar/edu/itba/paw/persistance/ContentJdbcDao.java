@@ -211,7 +211,7 @@ public class ContentJdbcDao implements ContentDao {
         template.update("UPDATE content SET rating = rating + ?, reviewsAmount = reviewsAmount+1 WHERE id = ?", new Object[] {rating, contentId});
     }
     @Override
-    public void decreceContentPoints(int contentId,int rating){
+    public void decreaseContentPoints(long contentId,int rating){
         template.update("UPDATE content SET rating = rating - ?, reviewsAmount = reviewsAmount - 1 WHERE id = ?", new Object[] {rating, contentId});
     }
 }

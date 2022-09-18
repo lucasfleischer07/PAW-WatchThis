@@ -43,6 +43,9 @@ import javax.servlet.http.HttpServletRequest;
 
                     break;
                 }
+                default:{
+                    errorTitle = "Error:"+httpErrorCode;
+                }
             }
             errorPage.addObject("errorCode", httpErrorCode);
             errorPage.addObject("errorTitle", errorTitle);

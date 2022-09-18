@@ -466,16 +466,20 @@ public class HelloWorldController {
     @RequestMapping(value="/review/{reviewId:[0-9]+}/delete",method = {RequestMethod.POST})
     public ModelAndView deleteReview(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("reviewId") final long reviewId, HttpServletRequest request){
         Review review=rs.findById(reviewId).orElseThrow(PageNotFoundException::new);
-        if(review.getUserName().equals(userDetails.getUsername())){
+        User user=us.findByEmail(userDetails.getUsername()).get();
+        if(review.getUserName().equals(user.getUserName())){
             rs.deleteReview(reviewId);
+            cs.decreaseContentPoints(review.getContentId(),review.getRating());
             String referer = request.getHeader("Referer");
             return new ModelAndView("redirect:"+ referer);
         } else throw new MethodNotAllowedException();
     }
+
+
     @ExceptionHandler(MethodNotAllowedException.class)
-    @ResponseStatus(code = HttpStatus.METHOD_NOT_ALLOWED)
+    @ResponseStatus(code = HttpStatus.UNAUTHORIZED)
     public ModelAndView MethodNotAllowed(){
-        return new ModelAndView("errors");
+        return new ModelAndView("errorPage");
     }
 
 
