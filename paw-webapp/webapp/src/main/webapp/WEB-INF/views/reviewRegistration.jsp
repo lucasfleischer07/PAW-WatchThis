@@ -27,7 +27,7 @@
             <jsp:param name="userId" value="${userId}"/>
         </jsp:include>
 
-        <c:url value="/reviewForm/${details.type}/${details.id}" var="postPath"/>
+        <c:url value="/reviewForm/${details.type}/${details.id}/${userId}" var="postPath"/>
         <form:form modelAttribute="registerForm" action="${postPath}" method="post">
             <div class="W-general-div-review-info">
                 <div class="W-review-registration-img-and-name">
@@ -43,16 +43,16 @@
                         </div>
                     </c:if>
                     <div class="mb-3 W-input-label-review-info">
-                        <p class="W-review-registration-text"><span class="W-red-asterisco">* Required</span></p>
-                        <form:errors path="userName" element="p" cssStyle="color: red"/>
-                        <form:label class="form-label" path="userName">Username <span class="W-red-asterisco">*</span></form:label>
-                        <p class="W-review-registration-text">(Must be between 4 and 30 alpha-numeric characters)</p>
-                        <form:input type="text" class="form-control" placeholder="example123" path="userName"/>
+                        <form:errors path="name" element="p" cssStyle="color: red"/>
+                        <form:label path="name" class="form-label">Review name <span class="W-red-asterisco">*</span></form:label>
+                        <p class="W-review-registration-text">(Must be between 6 and 50 characters)</p>
+                        <form:input type="text" class="form-control" path="name" placeholder="My review"/>
                     </div>
                     <div class="mb-3 W-input-label-review-info">
-                        <form:errors path="email" element="p" cssStyle="color: red"/>
-                        <form:label path="email" class="form-label">Email <span class="W-red-asterisco">*</span></form:label>
-                        <form:input type="email" class="form-control" path="email" placeholder="example@mail.com"/>
+                        <form:errors path="description" element="p" cssStyle="color: red"/>
+                        <form:label path="description" class="form-label">Review description <span class="W-red-asterisco">*</span></form:label>
+                        <p class="W-review-registration-text">(Must be between 20 and 500 characters)</p>
+                        <form:textarea class="form-control" path="description" rows="3"/>
                     </div>
                     <div class="mb-3 W-input-label-review-info">
                         <form:errors path="name" element="p" cssStyle="color: red"/>
@@ -64,18 +64,6 @@
                             <form:option value="4">4 stars</form:option>
                             <form:option selected="true" value="5">5 stars</form:option>
                         </form:select>
-                    </div>
-                    <div class="mb-3 W-input-label-review-info">
-                        <form:errors path="name" element="p" cssStyle="color: red"/>
-                        <form:label path="name" class="form-label">Review name <span class="W-red-asterisco">*</span></form:label>
-                        <p class="W-review-registration-text">(Must be between 6 and 50 characters)</p>
-                        <form:input type="text" class="form-control" path="name" placeholder="My review"/>
-                    </div>
-                    <div class="mb-3 W-input-label-review-info">
-                        <form:errors path="description" element="p" cssStyle="color: red"/>
-                        <form:label path="description" class="form-label">Review description <span class="W-red-asterisco">*</span></form:label>
-                        <p class="W-review-registration-text">(Must be between 20 and 500 characters)</p>
-                        <form:textarea class="form-control" path="description" rows="3"/>
                     </div>
                 </div>
             </div>

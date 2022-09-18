@@ -71,7 +71,7 @@
           <div class="W-add-review">
             <c:choose>
               <c:when test="${userName != 'null'}">
-                <a href="<c:url value="/reviewForm/${details.type}/${details.id}"/>"><button type="button" class="btn btn-dark W-add-review-button W-reviewText W-add-review-button-add">Add review</button></a>
+                <a href="<c:url value="/reviewForm/${details.type}/${details.id}/${userId}"/>"><button type="button" class="btn btn-dark W-add-review-button W-reviewText W-add-review-button-add">Add review</button></a>
               </c:when>
               <c:otherwise>
                 <button type="button" class="btn btn-dark W-add-review-button W-reviewText W-add-review-button-add" data-bs-toggle="modal" data-bs-target="#exampleModal">Add review</button>

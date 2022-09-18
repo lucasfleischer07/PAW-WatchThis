@@ -7,6 +7,8 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 public class EmailServiceImpl implements EmailService {
 
@@ -18,17 +20,17 @@ public class EmailServiceImpl implements EmailService {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(user.getEmail());
         message.setSubject("Welcome to the Watch This family!");
-        message.setText("We are proud of having you as part of our family");
+        message.setText("Welcome " + user.getUserName() + " We are proud of having you as part of our family.\nRegards.\nWatch This support.");
         emailSender.send(message);
     }
 
 //    TODO: VER QUE METER ACA
     @Override
-    public void sendForgottenPasswordEmail(String email) {
+    public void sendForgottenPasswordEmail(Optional<User> user) {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(email);
+        message.setTo(user.get().getEmail());
         message.setSubject("Reset password");
-        message.setText("We are generating a new password so you can access.");
+        message.setText("Hello " + user.get().getUserName() + "here is your new password: " + user.get().getPassword() + ".\nRegards.\nWatch This support.");
         emailSender.send(message);
     }
 }
