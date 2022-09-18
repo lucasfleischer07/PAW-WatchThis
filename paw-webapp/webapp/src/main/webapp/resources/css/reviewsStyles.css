@@ -89,7 +89,6 @@
     display: flex;
     width: 8%;
     justify-content: space-around;
-    height: 1vw;
 }
 
 .W-creator-review {
@@ -140,6 +139,9 @@
 .W-thumb-down {
     text-decoration: none;
     color: red;
+}
+.W-delete-form{
+    margin: 0;
 }
 
 .W-accordion-margin {

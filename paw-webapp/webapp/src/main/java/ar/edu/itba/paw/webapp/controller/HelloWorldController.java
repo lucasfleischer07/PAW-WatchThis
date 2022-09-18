@@ -10,6 +10,7 @@ import ar.edu.itba.paw.services.EmailService;
 import ar.edu.itba.paw.services.ReviewService;
 import ar.edu.itba.paw.services.UserService;
 import ar.edu.itba.paw.webapp.auth.PawUserDetails;
+import ar.edu.itba.paw.webapp.exceptions.MethodNotAllowedException;
 import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
 import ar.edu.itba.paw.webapp.form.EditProfile;
 import ar.edu.itba.paw.webapp.form.LoginForm;
@@ -464,11 +465,17 @@ public class HelloWorldController {
     // * ---------------------------------------------Edit and delete reviews--------------------------------------------------------------------------
     @RequestMapping(value="/review/{reviewId:[0-9]+}/delete",method = {RequestMethod.POST})
     public ModelAndView deleteReview(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("reviewId") final long reviewId, HttpServletRequest request){
-        Review review = rs.findById(reviewId).orElseThrow(PageNotFoundException::new);
-        rs.deleteReview(reviewId);
-        String referer = request.getHeader("Referer");
-        return new ModelAndView("redirect:"+ referer);
-
+        Review review=rs.findById(reviewId).orElseThrow(PageNotFoundException::new);
+        if(review.getUserName().equals(userDetails.getUsername())){
+            rs.deleteReview(reviewId);
+            String referer = request.getHeader("Referer");
+            return new ModelAndView("redirect:"+ referer);
+        } else throw new MethodNotAllowedException();
+    }
+    @ExceptionHandler(MethodNotAllowedException.class)
+    @ResponseStatus(code = HttpStatus.METHOD_NOT_ALLOWED)
+    public ModelAndView MethodNotAllowed(){
+        return new ModelAndView("errors");
     }
 
 
