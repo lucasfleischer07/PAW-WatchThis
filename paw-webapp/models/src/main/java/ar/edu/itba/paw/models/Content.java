@@ -3,9 +3,11 @@ package ar.edu.itba.paw.models;
 public class Content {
     private long id;
     private String name, image, description, released, genre, creator, duration, type;
+    private Integer rating;
+    private Integer reviewsAmount;
 
 
-    public Content(long id, String name, String image, String description, String released, String genre, String creator, String duration,String type) {
+    public Content(long id, String name, String image, String description, String released, String genre, String creator, String duration,String type,Integer rating,Integer reviewsAmount) {
         this.id = id;
         this.name = name;
         this.image = image;
@@ -15,6 +17,15 @@ public class Content {
         this.creator = creator;
         this.duration = duration;
         this.type= type;
+        this.rating = rating;
+        this.reviewsAmount=reviewsAmount;
+    }
+    public Integer getReviewsAmount(){
+        return reviewsAmount;
+    }
+
+    public Integer getRating(){
+        return rating;
     }
 
     public long getId() {

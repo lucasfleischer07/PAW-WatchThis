@@ -20,7 +20,7 @@ public class ReviewJdbcDao implements ReviewDao{
                     resultSet.getLong("contentid"),
                     resultSet.getString("name"),
                     resultSet.getString("description"),
-                    resultSet.getLong("rating"),
+                    resultSet.getInt("rating"),
                     resultSet.getString("username"),
                     resultSet.getString("contentname"));
 

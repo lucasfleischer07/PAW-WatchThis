@@ -13,7 +13,7 @@ public class ReviewForm {
     private String description;
 
     private long id;
-    private Long rating;
+    private Integer rating;
     private String type;
 
 
@@ -49,11 +49,11 @@ public class ReviewForm {
         this.type = type;
     }
 
-    public Long getRating() {
+    public Integer getRating() {
         return rating;
     }
 
-    public void setRating(Long rating) {
+    public void setRating(Integer rating) {
         this.rating = rating;
     }
 }

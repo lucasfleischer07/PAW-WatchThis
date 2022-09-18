@@ -60,7 +60,7 @@ public class HelloWorldController {
     public ModelAndView helloWorld(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("pageNum")final Optional<Integer> pageNum,@RequestParam(name = "query", defaultValue = "") final String query) {
         final ModelAndView mav = new ModelAndView("ContentPage");
         mav.addObject("query", query);
-        List<Content> contentList = cs.getSearchedContent(query);
+        List<Content> contentList = cs.getSearchedContentRandom(query);
 
         int page= pageNum.orElse(1);
         if(contentList == null) {
@@ -77,6 +77,7 @@ public class HelloWorldController {
             mav.addObject("genre","ANY");
             mav.addObject("durationFrom","ANY");
             mav.addObject("durationTo","ANY");
+            mav.addObject("contentType", "all");
         }
 
         try {
@@ -149,7 +150,6 @@ public class HelloWorldController {
             }
             mav.addObject("amountPages", (int) Math.ceil((double) contentList.size() / (double) ELEMS_AMOUNT));
             mav.addObject("pageSelected", page);
-            mav.addObject("allContent", contentList);
         }
 
         try {
@@ -193,7 +193,7 @@ public class HelloWorldController {
 
     // *  ----------------------------------- Movies and Serie Filters -----------------------------------------------------------------------
 
-    @RequestMapping(value = {"/{type:movies|series}/filters" , "/{type:movies|series}/filters/page/{pageNum}"})
+    @RequestMapping(value = {"/{type:movies|series|all}/filters" , "/{type:movies|series|all}/filters/page/{pageNum}"})
     public ModelAndView moviesWithFilters(
             @AuthenticationPrincipal PawUserDetails userDetails,
             @PathVariable("type") final String type,
@@ -211,6 +211,8 @@ public class HelloWorldController {
             auxType = "movie";
         } else if(Objects.equals(type, "series")) {
             auxType = "serie";
+        } else {
+            auxType = "all";
         }
 
         mav = new ModelAndView("ContentPage");
@@ -290,6 +292,7 @@ public class HelloWorldController {
             Review newReview = new Review(null, type, id, form.getName(), form.getDescription(), form.getRating(), user.get().getUserName(),null);
             newReview.setId(id);
             rs.addReview(newReview);
+            cs.addContentPoints((int)id,(int)form.getRating());
         }
         catch(DuplicateKeyException e){
             ModelAndView mav = reviewFormCreate(userDetails,form,id,type);
@@ -328,7 +331,6 @@ public class HelloWorldController {
     }
 
 
-//    TODO: Terminar
     @RequestMapping(value = "/login/{loginStage:sign-up|forgot-password|sign-out}", method = {RequestMethod.GET})
     public ModelAndView emailForm(@AuthenticationPrincipal PawUserDetails userDetails, @ModelAttribute("loginForm") final LoginForm loginForm,@PathVariable("loginStage") final String loginStage) {
         if(!Objects.equals(loginStage, "sign-up") && !Objects.equals(loginStage, "forgot-password") && !Objects.equals(loginStage, "sign-out")) {
@@ -355,14 +357,15 @@ public class HelloWorldController {
             return emailForm(userDetails, loginForm, loginStage);
         }
         if(Objects.equals(loginStage, "sign-up")) {
-//            byte[] defaultImg = getClass().getClassLoader().getResource("defaultUserImg.png").getFile().getBytes();
             User newUser = new User(null, loginForm.getEmail(), loginForm.getUserName(), loginForm.getPassword(), 0L, null);
             us.register(newUser);
             es.sendRegistrationEmail(newUser);
         } else if(Objects.equals(loginStage, "forgot-password")) {
             Optional<User> user = us.findByEmail(loginForm.getEmail());
             if(user.isPresent()) {
-                es.sendForgottenPasswordEmail(user);
+//                TODO: Descomentar este y borrar el otro
+//                es.sendForgottenPasswordEmail(user.get());
+                es.sendPasswordEmail(user.get());
             } else {
                 return emailForm(userDetails, loginForm, loginStage);
             }
@@ -399,8 +402,8 @@ public class HelloWorldController {
     @RequestMapping(path = "/profile/{userId:[0-9]+}/profileImage", produces = {MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
     @ResponseBody
     public byte[] profileImage(@AuthenticationPrincipal PawUserDetails userDetails,@PathVariable("userId") final long userId) {
-        String userEmail = userDetails.getUsername();
-        User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
+//        String userEmail = userDetails.getUsername();
+        User user = us.findById(userId).orElseThrow(PageNotFoundException::new);
         return user.getImage();
     }
 
@@ -459,9 +462,9 @@ public class HelloWorldController {
 
     // * -----------------------------------------------------------------------------------------------------------------------
     // * ---------------------------------------------Edit and delete reviews--------------------------------------------------------------------------
-    @RequestMapping(value="/review/{reviewId:[0-9]+}/delete",method = {RequestMethod.DELETE})
+    @RequestMapping(value="/review/{reviewId:[0-9]+}/delete",method = {RequestMethod.POST})
     public ModelAndView deleteReview(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("reviewId") final long reviewId, HttpServletRequest request){
-        Review review=rs.findById(reviewId).orElseThrow(PageNotFoundException::new);
+        Review review = rs.findById(reviewId).orElseThrow(PageNotFoundException::new);
         rs.deleteReview(reviewId);
         String referer = request.getHeader("Referer");
         return new ModelAndView("redirect:"+ referer);
