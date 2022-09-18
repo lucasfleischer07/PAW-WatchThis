@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -49,7 +50,14 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers("/login/sign-in","/login/sign-up").anonymous()
                     //.antMatchers("/admin/**").hasRole("ADMIN")
                     .antMatchers("/profile/*").authenticated()
-                    .antMatchers("/reviewForm/*/*").authenticated()
+                    .antMatchers("/reviewForm/movie/*").authenticated()
+                    .antMatchers("/reviewForm/serie/*").authenticated()
+                    .antMatchers("/login/forgot-password").authenticated()
+                    .antMatchers("/login/sign-out").authenticated()
+                    .antMatchers("/profile/*/edit-profile").authenticated()
+                    .antMatchers(HttpMethod.POST,"/reviewForm/movie/*").authenticated()
+                    .antMatchers(HttpMethod.POST,"/reviewForm/serie/*").authenticated()
+                    .antMatchers(HttpMethod.POST,"/profile/*/edit-profile").authenticated()
                     .antMatchers("/**").permitAll()
                 .and().formLogin()
                     .usernameParameter("email")
