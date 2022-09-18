@@ -33,7 +33,8 @@
                     <div class="px-4 pt-0 pb-4 cover">
                         <div class="profile-head W-profile-photo-name">
                             <div class="W-picture-upload">
-                                <img src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=80" alt="..." class="rounded img-thumbnail W-profile-picture">
+                                <img src="<c:url value="/profile/${userId}/profileImage"/> " alt="User_img">
+<%--                                <img src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=80" alt="..." class="rounded img-thumbnail W-profile-picture">--%>
                                 <div class="W-picture-upload-button-text">
                                     <h6 class="W-edit-picture-text">Edit profile picture:</h6>
                                     <div class="W-picture-upload">

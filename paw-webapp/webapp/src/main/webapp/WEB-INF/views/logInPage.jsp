@@ -198,21 +198,8 @@
                             </div
                         </form:form>
                     </c:when>
-
-                    <%--            Para que cargue el verificar mail--%>
-                    <c:otherwise>
-                        <%--                    TODO: Llamar a la pagina de error?--%>
-                    </c:otherwise>
                 </c:choose>
-                <div id="emailSendToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                    <div class="toast-header">
-                        <img src="<c:url value="/resources/img/WatchThisLogo.png"/>" class="rounded me-2" alt="Logo">
-                        <strong class="me-auto">Watch This</strong>
-                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                    </div>
-                    <div class="toast-body">We just send you the email. Please verify your inbox and spam section.</div>
-                </div>
-                
+
                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
             </div>
         </div>

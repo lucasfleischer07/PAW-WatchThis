@@ -17,6 +17,7 @@ import ar.edu.itba.paw.webapp.form.ReviewForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -29,7 +30,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.naming.Context;
 import javax.validation.Valid;
+import java.awt.*;
+import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -259,7 +263,7 @@ public class HelloWorldController {
 
     // * ----------------------------------- Movies and Series Review -----------------------------------------------------------------------
     @RequestMapping(value = "/reviewForm/{type:movie|serie}/{id:[0-9]+}/{userId:[0-9]+}", method = {RequestMethod.GET})
-    public ModelAndView reviewFormCreate(@AuthenticationPrincipal PawUserDetails userDetails, @ModelAttribute("registerForm") final ReviewForm reviewForm, @PathVariable("id")final long id) {
+    public ModelAndView reviewFormCreate(@AuthenticationPrincipal PawUserDetails userDetails, @ModelAttribute("registerForm") final ReviewForm reviewForm, @PathVariable("id")final long id, @PathVariable("type")final String type) {
         final ModelAndView mav = new ModelAndView("reviewRegistration");
         mav.addObject("details", cs.findById(id).orElseThrow(PageNotFoundException::new));
         try {
@@ -278,7 +282,7 @@ public class HelloWorldController {
     @RequestMapping(value = "/reviewForm/{type:movie|serie}/{id:[0-9]+}/{userId:[0-9]+}", method = {RequestMethod.POST})
     public ModelAndView reviewFormMovie(@AuthenticationPrincipal PawUserDetails userDetails, @Valid @ModelAttribute("registerForm") final ReviewForm form, final BindingResult errors, @PathVariable("id")final long id, @PathVariable("type")final String type, @PathVariable("userId")final long userId) {
         if(errors.hasErrors()) {
-            return reviewFormCreate(userDetails,form,id);
+            return reviewFormCreate(userDetails,form,id,type);
         }
 
         Optional<User> user = us.findByEmail(userDetails.getUsername());
@@ -288,7 +292,7 @@ public class HelloWorldController {
             rs.addReview(newReview);
         }
         catch(DuplicateKeyException e){
-            ModelAndView mav = reviewFormCreate(userDetails,form,id);
+            ModelAndView mav = reviewFormCreate(userDetails,form,id,type);
             mav.addObject("errorMsg","You have already written a review for this " + type + ".");
             return mav;
         }
@@ -327,6 +331,9 @@ public class HelloWorldController {
 //    TODO: Terminar
     @RequestMapping(value = "/login/{loginStage:sign-up|forgot-password|sign-out}", method = {RequestMethod.GET})
     public ModelAndView emailForm(@AuthenticationPrincipal PawUserDetails userDetails, @ModelAttribute("loginForm") final LoginForm loginForm,@PathVariable("loginStage") final String loginStage) {
+        if(!Objects.equals(loginStage, "sign-up") && !Objects.equals(loginStage, "forgot-password") && !Objects.equals(loginStage, "sign-out")) {
+            throw new PageNotFoundException();
+        }
         final ModelAndView mav = new ModelAndView("logInPage");
         mav.addObject("loginStage", loginStage);
         try {
@@ -348,6 +355,7 @@ public class HelloWorldController {
             return emailForm(userDetails, loginForm, loginStage);
         }
         if(Objects.equals(loginStage, "sign-up")) {
+//            byte[] defaultImg = getClass().getClassLoader().getResource("defaultUserImg.png").getFile().getBytes();
             User newUser = new User(null, loginForm.getEmail(), loginForm.getUserName(), loginForm.getPassword(), 0L, null);
             us.register(newUser);
             es.sendRegistrationEmail(newUser);
@@ -358,6 +366,8 @@ public class HelloWorldController {
             } else {
                 return emailForm(userDetails, loginForm, loginStage);
             }
+        } else {
+            throw new PageNotFoundException();
         }
 
         return new ModelAndView("redirect:/login/sign-in");
@@ -386,6 +396,14 @@ public class HelloWorldController {
         return mav;
     }
 
+    @RequestMapping(path = "/profile/{userId:[0-9]+}/profileImage", produces = {MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
+    @ResponseBody
+    public byte[] profileImage(@AuthenticationPrincipal PawUserDetails userDetails,@PathVariable("userId") final long userId) {
+        String userEmail = userDetails.getUsername();
+        User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
+        return user.getImage();
+    }
+
     @RequestMapping(value = "/profile/{userId:[0-9]+}/edit-profile", method = {RequestMethod.GET})
     public ModelAndView profileEdition(@AuthenticationPrincipal PawUserDetails userDetails, @Valid @ModelAttribute("editProfile") final EditProfile editProfile, @PathVariable("userId") final long userId) {
         String userEmail = userDetails.getUsername();
@@ -397,7 +415,6 @@ public class HelloWorldController {
 
     @RequestMapping(value = "/profile/{userId:[0-9]+}/edit-profile", method = {RequestMethod.POST})
     public ModelAndView profileEditionPost(@AuthenticationPrincipal PawUserDetails userDetails,@Valid @ModelAttribute("editProfile") final EditProfile editProfile, final BindingResult errors, @PathVariable("userId") final long userId) throws IOException {
-
         if(errors.hasErrors()) {
             return profileEdition(userDetails,editProfile, userId);
         }
@@ -411,8 +428,6 @@ public class HelloWorldController {
             us.setPassword(editProfile.getPassword(), user);
             us.setProfilePicture(editProfile.getProfilePicture().getBytes(), user);
         }
-//        us.setProfilePicture(editProfile.getProfilePicture().getBytes(), user);
-
 
         return new ModelAndView("redirect:/profile/" + userId);
     }
