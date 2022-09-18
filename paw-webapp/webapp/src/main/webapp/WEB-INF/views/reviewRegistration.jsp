@@ -56,8 +56,8 @@
                         <form:textarea class="form-control" path="description" rows="3"/>
                     </div>
                     <div class="mb-3 W-input-label-review-info">
-                        <form:errors path="name" element="p" cssStyle="color: red"/>
-                        <form:label path="name" class="form-label">Rating <span class="W-red-asterisco">*</span></form:label>
+                        <form:errors path="rating" element="p" cssStyle="color: red"/>
+                        <form:label path="rating" class="form-label">Rating <span class="W-red-asterisco">*</span></form:label>
                         <form:select path="rating" class="form-select" aria-label="Default select example">
                             <form:option value="1">1 star</form:option>
                             <form:option value="2">2 stars</form:option>
