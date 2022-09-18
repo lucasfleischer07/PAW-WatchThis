@@ -8,12 +8,20 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
+import java.util.Random;
 
 @Component
 public class EmailServiceImpl implements EmailService {
 
     @Autowired
     private JavaMailSender emailSender;
+
+    private final UserService us;
+    @Autowired
+    public EmailServiceImpl(UserService us) {
+        this.us = us;
+    }
+
 
     //    TODO: VER QUE METER ACA
     public void sendRegistrationEmail(User user) {
@@ -30,7 +38,20 @@ public class EmailServiceImpl implements EmailService {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(user.get().getEmail());
         message.setSubject("Reset password");
-        message.setText("Hello " + user.get().getUserName() + "here is your new password: " + user.get().getPassword() + ".\nRegards.\nWatch This support.");
+        String newPassword = generateRandomWord();
+        message.setText("Hello " + user.get().getUserName() + " here is your new password: " + newPassword + ".\n\nRegards.\n\nWatch This support.");
+        us.setPassword(newPassword, user.get());
         emailSender.send(message);
+
+    }
+
+    String generateRandomWord() {
+        Random r = new Random();
+        StringBuilder sb = new StringBuilder(20);
+        for(int i = 0; i < 20; i++) {
+            char tmp = (char) ('a' + r.nextInt('z' - 'a'));
+            sb.append(tmp);
+        }
+        return sb.toString();
     }
 }
