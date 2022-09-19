@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.config;
 
 
 import ar.edu.itba.paw.webapp.auth.PawUserDetailsService;
+import ar.edu.itba.paw.webapp.auth.RedirectionSuccessHandler;
 import com.sun.org.glassfish.gmbal.ManagedObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -18,6 +19,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.util.FileCopyUtils;
 
 import javax.servlet.ServletException;
@@ -40,6 +43,11 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationSuccessHandler successHandler() {
+        return new RedirectionSuccessHandler("/");
     }
 
     @Override
@@ -71,7 +79,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .usernameParameter("email")
                     .passwordParameter("password")
                     .loginPage("/login/sign-in")
-                    .defaultSuccessUrl("/",false)
+                    .successHandler(successHandler())
+                   // .defaultSuccessUrl("/",false)
                     .failureUrl("/login/sign-in?error=true")
                 .and().rememberMe()
                     .rememberMeParameter("rememberMe")
