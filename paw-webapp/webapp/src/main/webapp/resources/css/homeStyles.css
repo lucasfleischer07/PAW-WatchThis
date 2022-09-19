@@ -220,6 +220,8 @@
     align-content: center;
     width: 70%;
     margin-top: 4vw;
+    margin-bottom: 4vw;
+    margin-left: 15vw;
 }
 .W-not-found-message{
     font-size: 2.5vw;
