@@ -365,8 +365,7 @@ public class HelloWorldController {
             Optional<User> user = us.findByEmail(loginForm.getEmail());
             if(user.isPresent()) {
 //                TODO: Descomentar este y borrar el otro
-//                es.sendForgottenPasswordEmail(user.get());
-                es.sendPasswordEmail(user.get());
+                es.sendForgottenPasswordEmail(user.get());
             } else {
                 return emailForm(userDetails, loginForm, loginStage);
             }

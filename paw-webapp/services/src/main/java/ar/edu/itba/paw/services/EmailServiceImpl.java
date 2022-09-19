@@ -44,18 +44,7 @@ public class EmailServiceImpl implements EmailService {
 
     }
 
-    @Override
-    public void sendPasswordEmail(User user) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(user.getEmail());
-        message.setSubject("Password assigment");
-        String newPassword = generateRandomWord();
-        message.setText("Hello " + user.getUserName() + ".\n\nWe are updating our user services and we can see that you do not have a password.\nWe are going to assign you one and then you can change it.\n\n Your password is: " + newPassword + "\n\nRegards.\n\nWatch This support.");
-        us.setPassword(newPassword, user);
-        emailSender.send(message);
-    }
-
-    String generateRandomWord() {
+    private String generateRandomWord() {
         Random r = new Random();
         StringBuilder sb = new StringBuilder(20);
         for(int i = 0; i < 20; i++) {
