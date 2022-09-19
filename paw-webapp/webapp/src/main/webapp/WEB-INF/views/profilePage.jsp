@@ -34,10 +34,10 @@
                             <div class="profile mr-3">
                                 <c:choose>
                                     <c:when test="${user.image == null}">
-                                        <img src="<c:url value="/resources/img/defaultUserImg.png"/> " alt="User_img">
+                                        <img src="<c:url value="/resources/img/defaultUserImg.png"/> " alt="User_img" class="W-edit-profile-picture">
                                     </c:when>
                                     <c:otherwise>
-                                        <img src="<c:url value="/profile/${userId}/profileImage"/> " alt="User_img">
+                                        <img src="<c:url value="/profile/${userId}/profileImage"/> " alt="User_img" class="W-edit-profile-picture">
                                     </c:otherwise>
                                 </c:choose>
                                 <div class="media-body mb-5 text-white">

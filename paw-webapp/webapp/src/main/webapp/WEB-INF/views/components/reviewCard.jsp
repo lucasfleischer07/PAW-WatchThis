@@ -39,7 +39,7 @@
                         </c:if>
                     </div>
                     <div class="W-review-title-creator">
-                        <a href="<c:url value="/profile/${param.userName}"/>"  class="W-creator-review"><c:out value="${param.userName}"/></a>
+                        <a href="<c:url value="/profile-info/${param.userName}"/>" class="W-creator-review"><c:out value="${param.userName}"/></a>
                         <h2 class="W-title-review"><c:out value="${param.reviewTitle}"/></h2>
                     </div>
                         <c:if test="${param.userName.equals(param.loggedUserName)}">
