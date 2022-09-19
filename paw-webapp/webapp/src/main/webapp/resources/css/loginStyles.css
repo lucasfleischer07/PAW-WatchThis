@@ -17,6 +17,19 @@
     margin-right: 3%;
 }
 
+.W-div-login-rememberMe {
+    display: flex;
+    flex-direction: column;
+    width: 30%;
+    margin-top: 1.5vw;
+}
+
+.W-div-login-button {
+    display: flex;
+    justify-content: flex-end;
+
+}
+
 .W-login-card {
     width: 30%;
 }

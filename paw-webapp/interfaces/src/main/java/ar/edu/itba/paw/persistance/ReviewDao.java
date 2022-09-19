@@ -10,8 +10,8 @@ public interface ReviewDao {
     void addReview(Review review);
     List<Review> getAllReviews(Long contentId);
     void deleteReview(Long reviewId);
-    void editReview(String newDesc, Long reviewId, String typeOfEdit);
-    List <Review> getAllUserReviews(String username);
     Optional<Review> findById(Long reviewId);
+    void updateReview(String name, String description, Integer rating, Long id);
+    List<Review> getAllUserReviews(String username);
 
 }

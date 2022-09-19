@@ -59,7 +59,7 @@ public class ContentServiceImpl implements ContentService {
     }
 
     @Override
-    public void addContentPoints(int contentId,int rating){
+    public void addContentPoints(long contentId,int rating){
         ContentDao.addContentPoints(contentId,rating);
     }
 

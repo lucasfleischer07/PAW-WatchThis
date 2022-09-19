@@ -293,7 +293,7 @@ public class HelloWorldController {
             Review newReview = new Review(null, type, id, form.getName(), form.getDescription(), form.getRating(), user.get().getUserName(),null);
             newReview.setId(id);
             rs.addReview(newReview);
-            cs.addContentPoints((int)id,(int)form.getRating());
+            cs.addContentPoints(id,(int)form.getRating());
         }
         catch(DuplicateKeyException e){
             ModelAndView mav = reviewFormCreate(userDetails,form,id,type);
@@ -332,7 +332,7 @@ public class HelloWorldController {
     }
 
 
-    @RequestMapping(value = "/login/{loginStage:sign-up|forgot-password|sign-out}", method = {RequestMethod.GET})
+    @RequestMapping(value = "/login/{loginStage:sign-up|forgot-password}", method = {RequestMethod.GET})
     public ModelAndView emailForm(@AuthenticationPrincipal PawUserDetails userDetails, @ModelAttribute("loginForm") final LoginForm loginForm,@PathVariable("loginStage") final String loginStage) {
         if(!Objects.equals(loginStage, "sign-up") && !Objects.equals(loginStage, "forgot-password") && !Objects.equals(loginStage, "sign-out")) {
             throw new PageNotFoundException();
@@ -378,22 +378,12 @@ public class HelloWorldController {
     // * -----------------------------------------------------------------------------------------------------------------------
 
 
-    // * ----------------------------------- Errors Page -----------------------------------------------------------------------
-    @ExceptionHandler(PageNotFoundException.class)
-    @ResponseStatus(code = HttpStatus.NOT_FOUND)
-    public ModelAndView PageNotFound(){
-        return new ModelAndView("errors");
-    }
-    // * -----------------------------------------------------------------------------------------------------------------------
-
-
     // * ------------------------------------------------Profile--------------------------------------------------------------------
     @RequestMapping("/profile/{userId:[0-9]+}")
     public ModelAndView profile(@AuthenticationPrincipal PawUserDetails userDetails,@PathVariable("userId") final long userId) {
         final ModelAndView mav = new ModelAndView("profilePage");
         String userEmail = userDetails.getUsername();
         User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
-        mav.addObject("full-access", "yes");
         mav.addObject("user", user);
         mav.addObject("reviews",rs.getAllUserReviews(user.getUserName()));
         return mav;
@@ -461,6 +451,8 @@ public class HelloWorldController {
     }
 
     // * -----------------------------------------------------------------------------------------------------------------------
+
+
     // * ---------------------------------------------Edit and delete reviews--------------------------------------------------------------------------
     @RequestMapping(value="/review/{reviewId:[0-9]+}/delete",method = {RequestMethod.POST})
     public ModelAndView deleteReview(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("reviewId") final long reviewId, HttpServletRequest request){
@@ -475,15 +467,72 @@ public class HelloWorldController {
     }
 
 
+    @RequestMapping(value = "/reviewForm/edit/{type:movie|serie}/{contentId:[0-9]+}/{reviewId:[0-9]+}", method = {RequestMethod.GET})
+    public ModelAndView reviewFormEdition(@AuthenticationPrincipal PawUserDetails userDetails, @ModelAttribute("registerForm") final ReviewForm reviewForm, @PathVariable("contentId")final long contentId, @PathVariable("reviewId")final long reviewId, @PathVariable("type")final String type, HttpServletRequest request) {
+        final ModelAndView mav = new ModelAndView("reviewEdition");
+        mav.addObject("details", cs.findById(contentId).orElseThrow(PageNotFoundException::new));
+        Optional<Review> oldReview = rs.findById(reviewId);
+        if(!oldReview.isPresent()){
+            throw new PageNotFoundException();
+        }
+        try {
+            String userEmail = userDetails.getUsername();
+            User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
+            mav.addObject("user",user);
+            mav.addObject("userName",user.getUserName());
+            mav.addObject("userId",user.getId());
+
+        } catch (NullPointerException e) {
+            mav.addObject("userName","null");
+            mav.addObject("userId","null");
+        }
+        if(!oldReview.get().getUserName().equals(us.findByEmail(userDetails.getUsername()).get().getUserName())){
+            throw new MethodNotAllowedException();
+        }
+        String referer = request.getHeader("Referer");
+        mav.addObject("backLink",referer);
+        mav.addObject("reviewInfo", rs.findById(reviewId).orElseThrow(PageNotFoundException::new));
+        return mav;
+    }
+
+    @RequestMapping(value = "/reviewForm/edit/{type:movie|serie}/{contentId:[0-9]+}/{reviewId:[0-9]+}", method = {RequestMethod.POST})
+    public ModelAndView reviewFormEditionPost(@AuthenticationPrincipal PawUserDetails userDetails, @Valid @ModelAttribute("registerForm") final ReviewForm form, final BindingResult errors, @PathVariable("type")final String type, @PathVariable("contentId")final long contentId, @PathVariable("reviewId")final long reviewId, HttpServletRequest request) {
+        if(errors.hasErrors()) {
+            return reviewFormEdition(userDetails,form,contentId,reviewId,type,request);
+        }
+        Optional<Review> oldReview = rs.findById(reviewId);
+        if(!oldReview.isPresent()){
+            throw new PageNotFoundException();
+        }
+
+        Optional<User> user = us.findByEmail(userDetails.getUsername());
+        if(!oldReview.get().getUserName().equals(user.get().getUserName())){
+            throw new MethodNotAllowedException();
+        }
+        rs.updateReview(form.getName(), form.getDescription(), form.getRating(), reviewId);
+        cs.decreaseContentPoints(contentId,oldReview.get().getRating());
+        cs.addContentPoints(contentId,form.getRating());
+        ModelMap model =new ModelMap();
+        return new ModelAndView("redirect:/" + type + "/" + contentId, model);
+    }
+
+    // * --------------------------------------------------------------------------------------------------------------------
+
+
+
+    // * ----------------------------------- Errors Page -----------------------------------------------------------------------
+    @ExceptionHandler(PageNotFoundException.class)
+    @ResponseStatus(code = HttpStatus.NOT_FOUND)
+    public ModelAndView PageNotFound(){
+        return new ModelAndView("errorPage");
+    }
+
     @ExceptionHandler(MethodNotAllowedException.class)
     @ResponseStatus(code = HttpStatus.UNAUTHORIZED)
     public ModelAndView MethodNotAllowed(){
         return new ModelAndView("errorPage");
     }
-
-
-    // * --------------------------------------------------------------------------------------------------------------------
-
+    // * -----------------------------------------------------------------------------------------------------------------------
 
 }
 

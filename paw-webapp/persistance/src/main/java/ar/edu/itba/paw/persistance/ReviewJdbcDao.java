@@ -64,8 +64,8 @@ public class ReviewJdbcDao implements ReviewDao{
     }
 
     @Override
-    public void editReview(String newDesc, Long id, String typeOfEdit) {
-        template.update("UPDATE review SET ? = ? WHERE reviewid = ?", new Object[] {typeOfEdit, newDesc, id});
+    public void updateReview(String name, String description, Integer rating, Long id) {
+        template.update("UPDATE review SET name = ?, description = ?, rating = ? WHERE reviewid = ?", new Object[]{name, description, rating, id});
     }
 
 }

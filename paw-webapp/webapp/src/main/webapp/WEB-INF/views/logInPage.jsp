@@ -61,11 +61,21 @@
                                     <div class="mb-3 W-input-label-login-info">
                                         <label class="form-label">Password</label>
                                         <input name="password" type="password" class="form-control" placeholder="*****"/>
-                                        <a href="<c:url value="/login/forgot-password"/>" class="W-forgot-password">Forgot password?</a>
+                                        <div>
+                                            <a href="<c:url value="/login/forgot-password"/>">Forgot password?</a>
+                                        </div>
                                     </div>
                                 </div>
-                                <div>
-                                    <button id="submitButton1" type="submit" class="btn btn-success W-login-button" onclick="this.form.submit(); (this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'">Log in</button>
+                                <div class="W-div-login-rememberMe">
+                                    <div class="form-check">
+                                        <input name="rememberMe" class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Remember me
+                                        </label>
+                                    </div>
+                                    <div class="W-div-login-button">
+                                        <button id="submitButton1" type="submit" class="btn btn-success W-login-button" onclick="this.form.submit(); (this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'">Log in</button>
+                                    </div>
                                 </div>
                                 <hr class="d-flex W-line-style-login"/>
                                 <div class="W-alignment-signup-div">

@@ -104,6 +104,8 @@
               <jsp:param name="reviewRating" value="${review.rating}"/>
               <jsp:param name="reviewId" value="${review.id}" />
               <jsp:param name="userName" value="${review.userName}"/>
+              <jsp:param name="contentId" value="${review.contentId}"/>
+              <jsp:param name="contentType" value="${review.type}"/>
               <jsp:param name="loggedUserName" value="${userName}"/>
             </jsp:include>
           </c:forEach>
@@ -113,7 +115,7 @@
                 <img src="<c:url value="/resources/img/noReviews.png"/>" alt="No_Review_Img"/>
                 </div>
                 <c:choose>
-                  <c:when test="{${details.type == 'movie'}}">
+                  <c:when test="${details.type.equals('movie')}">
                     <h3 class="W-no-reviews-text" >There are no reviews for this movie yet. Be the first to add one!</h3>
                   </c:when>
                   <c:otherwise>

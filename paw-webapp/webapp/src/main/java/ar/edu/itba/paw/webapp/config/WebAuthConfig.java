@@ -59,9 +59,13 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers("/reviewForm/serie/*").authenticated()
                     .antMatchers("/login/sign-out").authenticated()
                     .antMatchers("/profile/*/edit-profile").authenticated()
+                    .antMatchers("/reviewForm/edit/movie/*/*").authenticated()
+                    .antMatchers("/reviewForm/edit/serie/*/*").authenticated()
                     .antMatchers(HttpMethod.POST,"/reviewForm/movie/*").authenticated()
                     .antMatchers(HttpMethod.POST,"/reviewForm/serie/*").authenticated()
                     .antMatchers(HttpMethod.POST,"/profile/*/edit-profile").authenticated()
+                    .antMatchers(HttpMethod.POST,"/reviewForm/edit/movie/*/*").authenticated()
+                    .antMatchers(HttpMethod.POST,"/reviewForm/edit/serie/*/*").authenticated()
                     .antMatchers("/**").permitAll()
                 .and().formLogin()
                     .usernameParameter("email")
@@ -72,10 +76,10 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .and().rememberMe()
                     .rememberMeParameter("rememberMe")
                     .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(30))
-                 //   .key(loadRememberMeKey())
+                    .key(loadRememberMeKey())
                 .and().logout()
-                    .logoutSuccessUrl("/login/sign-out")
-                    .logoutSuccessUrl("/login/sign-in")
+                    .logoutUrl("/login/sign-out")
+                    .logoutSuccessUrl("/")
                 .and().exceptionHandling()
                     .accessDeniedPage("/403")
                 .and().csrf().disable();
@@ -84,7 +88,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     private String loadRememberMeKey(){
         try (Reader reader = new InputStreamReader(
-                getClass().getClassLoader().getResourceAsStream("rememberme.key")
+                getClass().getClassLoader().getResourceAsStream("rememberMe.key")
         )){
             return FileCopyUtils.copyToString(reader);
         }catch(IOException ex){

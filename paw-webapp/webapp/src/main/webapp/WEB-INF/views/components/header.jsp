@@ -375,7 +375,7 @@
                                     <li><a class="dropdown-item" href="<c:url value="/profile/${param.userId}"/>">Profile</a></li>
                                     <li><hr class="dropdown-divider"></li>
     <%--                                TODO: HACER EL LOG OUT--%>
-                                    <li><a class="dropdown-item" href="#">Log Out</a></li>
+                                    <li><a class="dropdown-item" href="<c:url value="/login/sign-out"/>">Log Out</a></li>
                                 </ul>
                             </div>
                         </c:when>

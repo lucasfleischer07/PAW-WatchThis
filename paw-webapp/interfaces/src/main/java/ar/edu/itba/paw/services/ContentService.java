@@ -14,6 +14,6 @@ public interface ContentService {
     Optional<Content> findById(long id);
     List<Content> getSearchedContent(String query);
     List<Content> getSearchedContentRandom(String query);
-    void addContentPoints(int contentId,int rating);
+    void addContentPoints(long contentId,int rating);
     void decreaseContentPoints(long contentId,int rating);
 }
