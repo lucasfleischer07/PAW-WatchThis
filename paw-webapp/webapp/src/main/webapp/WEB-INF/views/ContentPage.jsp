@@ -63,7 +63,7 @@
                             <img class="W-not-found" src="<c:url value="/resources/img/noResults.png"/>" alt="Not_Found_Ing"/>
                         </div>
                         <div>
-                            <h4 class="W-not-found-message"> We looked everywhere, but we couldn't find any <c:out value="${contentType}"/> with these filters.</h4>
+                            <h4 class="W-not-found-message"> We looked everywhere, but we couldn't find anything at all.</h4>
                         </div>
                     </div>
                 </div>
