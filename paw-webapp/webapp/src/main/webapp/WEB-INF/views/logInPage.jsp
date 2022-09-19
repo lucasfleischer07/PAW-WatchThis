@@ -62,7 +62,7 @@
                                         <label class="form-label">Password</label>
                                         <input name="password" type="password" class="form-control" placeholder="*****"/>
                                         <div>
-                                            <a href="<c:url value="/login/forgot-password"/>">Forgot password?</a>
+                                            <a class="W-forgot-password" href="<c:url value="/login/forgot-password"/>">Forgot password?</a>
                                         </div>
                                     </div>
                                 </div>

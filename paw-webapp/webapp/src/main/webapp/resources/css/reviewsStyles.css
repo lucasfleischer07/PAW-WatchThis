@@ -87,8 +87,6 @@
 }
 .W-delete-edit-buttons{
     display: flex;
-    width: 8%;
-    justify-content: space-around;
 }
 
 .W-creator-review {
@@ -142,9 +140,21 @@
     color: red;
 }
 .W-delete-form{
-    margin: 0;
+    margin-left:3vw;
+    margin-bottom: 0;
 }
-
+.W-accordion-card-header{
+    justify-content: space-between;
+    display: flex;
+    padding: 0.5vw;
+}
+.W-accordion-card-body{
+    display: flex;
+    padding: 0vw;
+}
+.W-accordion-button{
+    padding:2vw;
+}
 .W-accordion-margin {
     margin-bottom: 3%;
     margin-left: 3%;

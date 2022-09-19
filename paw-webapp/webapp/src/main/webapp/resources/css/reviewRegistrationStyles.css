@@ -24,6 +24,7 @@
 
 
 .W-forgot-password {
+    margin-top:1vw;
     display: flex;
     justify-content: flex-end;
 }
