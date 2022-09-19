@@ -46,7 +46,7 @@ public class HelloWorldController {
     private final ContentService cs;
     private final ReviewService rs;
     private final EmailService es;
-    private final int ELEMS_AMOUNT = 12;
+    private final int ELEMS_AMOUNT = 15;
 
     @Autowired  //Para indicarle que este es el constructor que quiero que use
     public HelloWorldController(final UserService us, final ContentService cs, ReviewService rs, EmailService es){
@@ -119,6 +119,8 @@ public class HelloWorldController {
             }else {
                 mav.addObject("contentType", "all");
             }
+            mav.addObject("amountPages",(int)Math.ceil((double) contentList.size()/(double)ELEMS_AMOUNT));
+            mav.addObject("pageSelected",page);
             mav.addObject("genre","ANY");
             mav.addObject("durationFrom","ANY");
             mav.addObject("durationTo","ANY");
