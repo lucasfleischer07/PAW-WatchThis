@@ -28,7 +28,7 @@ public class EmailServiceImpl implements EmailService {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(user.getEmail());
         message.setSubject("Welcome to the Watch This family!");
-        message.setText("Welcome " + user.getUserName() + " We are proud of having you as part of our family.\nRegards.\nWatch This support.");
+        message.setText("Welcome " + user.getUserName() + "!\n\nWe are proud of having you as part of our family.\nRegards.\nWatch This support.");
         emailSender.send(message);
     }
 
@@ -38,10 +38,20 @@ public class EmailServiceImpl implements EmailService {
         message.setTo(user.getEmail());
         message.setSubject("Reset password");
         String newPassword = generateRandomWord();
-        message.setText("Hello " + user.getUserName() + " here is your new password: " + newPassword + ".\n\nRegards.\n\nWatch This support.");
+        message.setText("Hello " + user.getUserName() + "!\n\nHere is your new password: " + newPassword + ".\n\nRegards.\n\nWatch This support.");
         us.setPassword(newPassword, user);
         emailSender.send(message);
+    }
 
+    @Override
+    public void sendRestorePasswordEmail(User user) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(user.getEmail());
+        message.setSubject("Password restore successfully!");
+        String newPassword = generateRandomWord();
+        message.setText("Hello " + user.getUserName() + "!\n\nYour password has been restore correctly.\n\nRegards.\n\nWatch This support.");
+        us.setPassword(newPassword, user);
+        emailSender.send(message);
     }
 
     private String generateRandomWord() {

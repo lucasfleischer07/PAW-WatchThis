@@ -293,6 +293,9 @@ public class HelloWorldController {
         if(errors.hasErrors()) {
             return reviewFormCreate(userDetails,form,id,type);
         }
+        if(form.getRating() < 0 || form.getRating() > 5) {
+            return reviewFormCreate(userDetails,form,id,type);
+        }
 
         Optional<User> user = us.findByEmail(userDetails.getUsername());
         try {
@@ -421,6 +424,7 @@ public class HelloWorldController {
         User user = us.findById(userId).orElseThrow(PageNotFoundException::new);
         if(editProfile.getPassword() != null && editProfile.getProfilePicture() == null) {
             us.setPassword(editProfile.getPassword(), user);
+            es.sendRestorePasswordEmail(user);
         } else if(editProfile.getPassword() == null && editProfile.getProfilePicture() != null) {
             us.setProfilePicture(editProfile.getProfilePicture().getBytes(), user);
         } else if(editProfile.getPassword() != null && editProfile.getProfilePicture() != null) {
