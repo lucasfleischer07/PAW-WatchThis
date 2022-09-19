@@ -20,7 +20,14 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -35,6 +42,7 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -48,12 +56,15 @@ public class HelloWorldController {
     private final EmailService es;
     private final int ELEMS_AMOUNT = 15;
 
+    protected AuthenticationManager authenticationManager;
+
     @Autowired  //Para indicarle que este es el constructor que quiero que use
-    public HelloWorldController(final UserService us, final ContentService cs, ReviewService rs, EmailService es){
+    public HelloWorldController(final UserService us, final ContentService cs, ReviewService rs, EmailService es,AuthenticationManager authenticationManager){
         this.us = us;
         this.cs = cs;
         this.rs = rs;
         this.es = es;
+        this.authenticationManager=authenticationManager;
     }
 
     // * ----------------------------------- Movie and Series Info -----------------------------------------------------------------------
@@ -377,7 +388,7 @@ public class HelloWorldController {
     }
 
     @RequestMapping(value = "/login/{loginStage:sign-up|forgot-password|sign-out}", method = {RequestMethod.POST})
-    public ModelAndView emailFormVerification(@AuthenticationPrincipal PawUserDetails userDetails, @Valid @ModelAttribute("loginForm") final LoginForm loginForm, final BindingResult errors, RedirectAttributes redirectAttributes, @PathVariable("loginStage") final String loginStage) {
+    public ModelAndView emailFormVerification(@AuthenticationPrincipal PawUserDetails userDetails, @Valid @ModelAttribute("loginForm") final LoginForm loginForm, final BindingResult errors, RedirectAttributes redirectAttributes, @PathVariable("loginStage") final String loginStage,HttpServletRequest request) {
         if(errors.hasErrors()) {
             return emailForm(userDetails, loginForm, loginStage);
         }
@@ -385,6 +396,7 @@ public class HelloWorldController {
             User newUser = new User(null, loginForm.getEmail(), loginForm.getUsername(), loginForm.getPassword(), 0L, null);
             us.register(newUser);
             es.sendRegistrationEmail(newUser);
+            authWithAuthManager(request,loginForm.getEmail(),loginForm.getPassword());
         } else if(Objects.equals(loginStage, "forgot-password")) {
             Optional<User> user = us.findByEmail(loginForm.getEmail());
             if(user.isPresent()) {
@@ -397,7 +409,17 @@ public class HelloWorldController {
             throw new PageNotFoundException();
         }
 
-        return new ModelAndView("redirect:/login/sign-in");
+        return new ModelAndView("redirect:/");
+    }
+
+    private void authWithAuthManager(HttpServletRequest request,String email,String password){
+        List<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();
+        request.getSession();
+        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(email, password, authorities);
+        token.setDetails(new WebAuthenticationDetails(request));
+        Authentication authentication = authenticationManager.authenticate(token);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
     // * -----------------------------------------------------------------------------------------------------------------------
 
