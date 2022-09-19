@@ -114,9 +114,11 @@ public class HelloWorldController {
             }else {
                 mav.addObject("allContent", contentList.subList((page - 1) * ELEMS_AMOUNT, (page - 1) * ELEMS_AMOUNT + ELEMS_AMOUNT));
             }
-            mav.addObject("amountPages",(int)Math.ceil((double) contentList.size()/(double)ELEMS_AMOUNT));
-            mav.addObject("pageSelected",page);
-            mav.addObject("contentType", type);
+            if(Objects.equals(type, "movies") || Objects.equals(type, "series")){
+                mav.addObject("contentType", type);
+            }else {
+                mav.addObject("contentType", "all");
+            }
             mav.addObject("genre","ANY");
             mav.addObject("durationFrom","ANY");
             mav.addObject("durationTo","ANY");
@@ -138,9 +140,13 @@ public class HelloWorldController {
     @RequestMapping(value = {"/search", "/page/{pageNum}"})
     public ModelAndView search(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("pageNum")final Optional<Integer> pageNum, @RequestParam(name = "query", defaultValue = "") final String query) {
         final ModelAndView mav = new ModelAndView("ContentPage");
+
         mav.addObject("query", query);
         List<Content> contentList = cs.getSearchedContent(query);
+        mav.addObject("contentType", "all");
+
         int page= pageNum.orElse(1);
+
         if(contentList == null) {
             throw new PageNotFoundException();
         }else {
