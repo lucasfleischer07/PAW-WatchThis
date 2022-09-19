@@ -70,6 +70,10 @@
                     <jsp:param name="reviewDescription" value="${review.description}" />
                     <jsp:param name="reviewRating" value="${review.rating}"/>
                     <jsp:param name="reviewId" value="${review.id}" />
+                    <jsp:param name="userName" value="${review.userName}"/>
+                    <jsp:param name="contentId" value="${review.contentId}"/>
+                    <jsp:param name="contentType" value="${review.type}"/>
+                    <jsp:param name="loggedUserName" value="${userName}"/>
                   </jsp:include>
                 </c:forEach>
               </div>
