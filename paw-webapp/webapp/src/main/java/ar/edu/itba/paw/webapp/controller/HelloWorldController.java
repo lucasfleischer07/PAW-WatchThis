@@ -179,14 +179,21 @@ public class HelloWorldController {
         List<Review> reviewList = rs.getAllReviews(contentId);
         if(reviewList == null) {
             throw new PageNotFoundException();
-        } else {
-            mav.addObject("reviews", reviewList);
         }
         try {
             String userEmail = userDetails.getUsername();
             User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
             mav.addObject("userName",user.getUserName());
             mav.addObject("userId",user.getId());
+            for (Review review:reviewList
+                 ) {
+                if(review.getUserName().equals(user.getUserName())){
+                    reviewList.remove(review);
+                    reviewList.add(0,review);
+                    break;
+                }
+            }
+            mav.addObject("reviews", reviewList);
 
         } catch (NullPointerException e) {
             mav.addObject("userName","null");
@@ -437,7 +444,7 @@ public class HelloWorldController {
 
     @RequestMapping("/profile-info/{userName:[a-zA-Z0-9\\s]+}")
     public ModelAndView profileInfo(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("userName") final String userName) {
-        final ModelAndView mav = new ModelAndView("profileInfoPage");
+        final ModelAndView mav = new ModelAndView("profileInfoPageInfoPage");
         Optional<User> user = us.findByUserName(userName);
         if(user.isPresent()) {
 //            mav.addObject("full-access", "no");

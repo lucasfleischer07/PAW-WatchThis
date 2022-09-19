@@ -68,6 +68,7 @@
           <h3 class="W-title-review">Reviews</h3>
           <div class="W-add-review">
             <c:choose>
+              <c:when test="${userName != 'null' && reviews[0].userName==userName}"/>
               <c:when test="${userName != 'null'}">
                 <a href="<c:url value="/reviewForm/${details.type}/${details.id}/${userId}"/>"><button type="button" class="btn btn-dark W-add-review-button W-reviewText W-add-review-button-add">Add review</button></a>
               </c:when>
