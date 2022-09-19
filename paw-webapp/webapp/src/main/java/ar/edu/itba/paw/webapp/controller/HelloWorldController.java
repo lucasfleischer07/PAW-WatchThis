@@ -506,6 +506,10 @@ public class HelloWorldController {
         if(errors.hasErrors()) {
             return reviewFormEdition(userDetails,form,contentId,reviewId,type,request);
         }
+        if(form.getRating() < 0 || form.getRating() > 5) {
+            return reviewFormEdition(userDetails,form,contentId,reviewId,type,request);
+        }
+
         Optional<Review> oldReview = rs.findById(reviewId);
         if(!oldReview.isPresent()){
             throw new PageNotFoundException();
