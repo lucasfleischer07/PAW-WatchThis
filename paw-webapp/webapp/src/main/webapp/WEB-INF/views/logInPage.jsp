@@ -68,7 +68,7 @@
                                 </div>
                                 <div class="W-div-login-rememberMe">
                                     <div class="form-check">
-                                        <input name="rememberMe" class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                        <input name="rememberMe" class="form-check-input" type="checkbox" id="flexCheckDefault">
                                         <label class="form-check-label" for="flexCheckDefault">
                                             Remember me
                                         </label>
@@ -77,6 +77,7 @@
                                         <button id="submitButton1" type="submit" class="btn btn-success W-login-button" onclick="this.form.submit(); (this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'">Log in</button>
                                     </div>
                                 </div>
+
                                 <hr class="d-flex W-line-style-login"/>
                                 <div class="W-alignment-signup-div">
                                     <h5>Do not have an account?</h5>
