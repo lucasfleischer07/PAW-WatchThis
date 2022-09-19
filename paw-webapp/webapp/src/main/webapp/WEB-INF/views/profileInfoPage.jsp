@@ -64,8 +64,8 @@
             <div class="card">
               <div class="card-body">
                 <c:forEach var="review" items="${reviews}">
-                  <h4><c:out value="${review.contentName}"/></h4>
-                  <jsp:include page="components/reviewCard.jsp">
+                    <a style="color: black" href="<c:url value="/${review.type}/${review.contentId}"/>"><h4><c:out value="${review.contentName}"/></h4></a>
+                    <jsp:include page="components/reviewCard.jsp">
                     <jsp:param name="reviewTitle" value="${review.name}" />
                     <jsp:param name="reviewDescription" value="${review.description}" />
                     <jsp:param name="reviewRating" value="${review.rating}"/>

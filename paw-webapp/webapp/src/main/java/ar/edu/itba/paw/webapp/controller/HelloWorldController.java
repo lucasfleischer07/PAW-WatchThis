@@ -431,18 +431,18 @@ public class HelloWorldController {
     }
 
     @RequestMapping(value = "/profile/{userId:[0-9]+}/edit-profile", method = {RequestMethod.POST})
-    public ModelAndView profileEditionPost(@AuthenticationPrincipal PawUserDetails userDetails,@Valid @ModelAttribute("editProfile") final EditProfile editProfile, final BindingResult errors, @PathVariable("userId") final long userId,@RequestParam("refered")final String referred) throws IOException {
+    public ModelAndView profileEditionPost(@AuthenticationPrincipal PawUserDetails userDetails,@Valid @ModelAttribute("editProfile") final EditProfile editProfile, final BindingResult errors, @PathVariable("userId") final long userId) throws IOException {
         if(errors.hasErrors()) {
             return profileEdition(userDetails,editProfile, userId);
         }
 
         User user = us.findById(userId).orElseThrow(PageNotFoundException::new);
-        if(editProfile.getPassword() != null && editProfile.getProfilePicture() == null) {
+        if(editProfile.getPassword() != null && editProfile.getProfilePicture().getBytes() == null) {
             us.setPassword(editProfile.getPassword(), user);
             es.sendRestorePasswordEmail(user);
-        } else if(editProfile.getPassword() == null && editProfile.getProfilePicture() != null) {
+        } else if(editProfile.getPassword() == null && editProfile.getProfilePicture().getBytes() != null) {
             us.setProfilePicture(editProfile.getProfilePicture().getBytes(), user);
-        } else if(editProfile.getPassword() != null && editProfile.getProfilePicture() != null) {
+        } else if(editProfile.getPassword() != null && editProfile.getProfilePicture().getBytes() != null) {
             us.setPassword(editProfile.getPassword(), user);
             us.setProfilePicture(editProfile.getProfilePicture().getBytes(), user);
         }
