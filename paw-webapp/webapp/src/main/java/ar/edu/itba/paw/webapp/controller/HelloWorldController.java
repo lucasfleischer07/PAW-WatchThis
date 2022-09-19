@@ -177,28 +177,32 @@ public class HelloWorldController {
         final ModelAndView mav = new ModelAndView("infoPage");
         mav.addObject("details", cs.findById(contentId).orElseThrow(PageNotFoundException::new));
         List<Review> reviewList = rs.getAllReviews(contentId);
+        User user=null;
         if(reviewList == null) {
             throw new PageNotFoundException();
         }
         try {
             String userEmail = userDetails.getUsername();
-            User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
+            user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
             mav.addObject("userName",user.getUserName());
             mav.addObject("userId",user.getId());
+
+
+        } catch (NullPointerException e) {
+            mav.addObject("userName","null");
+            mav.addObject("userId","null");
+        }
+        if(user!=null){
             for (Review review:reviewList
-                 ) {
+            ) {
                 if(review.getUserName().equals(user.getUserName())){
                     reviewList.remove(review);
                     reviewList.add(0,review);
                     break;
                 }
             }
-            mav.addObject("reviews", reviewList);
-
-        } catch (NullPointerException e) {
-            mav.addObject("userName","null");
-            mav.addObject("userId","null");
         }
+        mav.addObject("reviews", reviewList);
         return mav;
     }
 
