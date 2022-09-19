@@ -39,13 +39,13 @@
                     <div class="mb-3 W-input-label-review-info">
                         <form:errors path="name" element="p" cssStyle="color: red"/>
                         <form:label path="name" class="form-label">Review name <span class="W-red-asterisco">*</span></form:label>
-                        <p class="W-review-registration-text">(Must be between 6 and 50 characters)</p>
+                        <p class="W-review-registration-text">(Must be between 6 and 200 characters)</p>
                         <form:input type="text" class="form-control" path="name" placeholder="My review"/>
                     </div>
                     <div class="mb-3 W-input-label-review-info">
                         <form:errors path="description" element="p" cssStyle="color: red"/>
                         <form:label path="description" class="form-label">Review description <span class="W-red-asterisco">*</span></form:label>
-                        <p class="W-review-registration-text">(Must be between 20 and 500 characters)</p>
+                        <p class="W-review-registration-text">(Must be between 20 and 2000 characters)</p>
                         <form:textarea class="form-control" path="description" rows="3"/>
                     </div>
                     <div class="mb-3 W-input-label-review-info">
