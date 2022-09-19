@@ -47,7 +47,7 @@
                                         <c:url value="/profile/${user.id}/edit-profile" var="postPath"/>
                                         <form:form modelAttribute="editProfile" action="${postPath}" method="post" enctype="multipart/form-data">
                                             <form:errors path="profilePicture" element="p" cssClass="form-error-label"/>
-                                            <form:input type="file" accept="image/gif, image/jpeg, image/png" class="form-control" path="profilePicture" cssClass="W-input-width"/>
+                                            <form:input type="file" accept="image/gif, image/jpeg, image/jpg,  image/png" class="form-control" path="profilePicture" cssClass="W-input-width"/>
                                             <button type="submit" class="btn btn-success W-profile-picture-button" onclick="this.form.submit(); (this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'">Upload</button>
                                         </form:form>
                                     </div>
