@@ -508,6 +508,9 @@ public class HelloWorldController {
         if(!oldReview.get().getUserName().equals(us.findByEmail(userDetails.getUsername()).get().getUserName())){
             throw new MethodNotAllowedException();
         }
+        reviewForm.setDescription(oldReview.get().getDescription());
+        reviewForm.setRating(oldReview.get().getRating());
+        reviewForm.setName(oldReview.get().getName());
         String referer = request.getHeader("Referer");
         mav.addObject("backLink",referer);
         mav.addObject("reviewInfo", rs.findById(reviewId).orElseThrow(PageNotFoundException::new));
