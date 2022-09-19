@@ -97,9 +97,10 @@
                                 <div class="card W-login-card">
                                     <div class="mb-3 W-input-label-login-info">
                                         <div class="mb-3 W-input-label-login-info">
-                                            <form:errors path="userName" element="p" cssStyle="color: red"/>
-                                            <form:label path="userName" class="form-label">Username</form:label>
-                                            <form:input type="text" class="form-control" path="userName" placeholder="Example123"/>
+                                            <form:errors path="username" element="p" cssStyle="color: red"/>
+                                            <form:label path="username" class="form-label">Username</form:label>
+                                            <p class="W-review-registration-text">(Must be between 4 and 30 characters)</p>
+                                            <form:input type="text" class="form-control" path="username" placeholder="Example123"/>
                                         </div>
                                     </div>
                                     <div class="mb-3 W-input-label-login-info">
@@ -113,7 +114,8 @@
                                         <div class="mb-3 W-input-label-login-info">
                                             <form:errors path="password" element="p" cssStyle="color: red"/>
                                             <form:label path="password" class="form-label">Password</form:label>
-                                            <form:input type="password" class="form-control" path="password" placeholder="*****"/>
+                                            <p class="W-review-registration-text">(Must be between 6 and 50 characters)</p>
+                                            <form:input type="password" class="form-control" path="password" placeholder="******"/>
                                         </div>
                                     </div>
                                 </div>

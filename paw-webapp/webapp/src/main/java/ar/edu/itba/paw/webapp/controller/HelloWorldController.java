@@ -380,7 +380,7 @@ public class HelloWorldController {
             return emailForm(userDetails, loginForm, loginStage);
         }
         if(Objects.equals(loginStage, "sign-up")) {
-            User newUser = new User(null, loginForm.getEmail(), loginForm.getUserName(), loginForm.getPassword(), 0L, null);
+            User newUser = new User(null, loginForm.getEmail(), loginForm.getUsername(), loginForm.getPassword(), 0L, null);
             us.register(newUser);
             es.sendRegistrationEmail(newUser);
         } else if(Objects.equals(loginStage, "forgot-password")) {
