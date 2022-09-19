@@ -15,7 +15,7 @@ public class LoginForm {
 
     @Size(min = 4, max = 30)
     @Pattern(regexp	= "[a-zA-Z0-9\\s]+")
-    private String userName;
+    private String username;
 
     public String getEmail() {
         return email;
@@ -34,10 +34,10 @@ public class LoginForm {
     }
 
     public String getUserName() {
-        return userName;
+        return username;
     }
 
     public void setUserName(String userName) {
-        this.userName = userName;
+        this.username = userName;
     }
 }

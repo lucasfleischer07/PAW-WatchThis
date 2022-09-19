@@ -330,8 +330,10 @@ public class HelloWorldController {
 
     // * ----------------------------------- login Page -----------------------------------------------------------------------
     @RequestMapping(value = "/login/{loginStage:sign-in}", method = {RequestMethod.GET})
-    public ModelAndView emailForm(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("loginStage") final String loginStage, @RequestParam(value = "error",required = false)Optional<Boolean> error) {
+    public ModelAndView emailForm(@AuthenticationPrincipal PawUserDetails userDetails,HttpServletRequest request, @PathVariable("loginStage") final String loginStage, @RequestParam(value = "error",required = false)Optional<Boolean> error) {
         final ModelAndView mav = new ModelAndView("logInPage");
+        String referrer = request.getHeader("Referer");
+        request.getSession().setAttribute("url_prior_login", referrer);
         mav.addObject("loginStage", loginStage);
         try {
             String userEmail = userDetails.getUsername();
@@ -427,7 +429,7 @@ public class HelloWorldController {
     }
 
     @RequestMapping(value = "/profile/{userId:[0-9]+}/edit-profile", method = {RequestMethod.POST})
-    public ModelAndView profileEditionPost(@AuthenticationPrincipal PawUserDetails userDetails,@Valid @ModelAttribute("editProfile") final EditProfile editProfile, final BindingResult errors, @PathVariable("userId") final long userId) throws IOException {
+    public ModelAndView profileEditionPost(@AuthenticationPrincipal PawUserDetails userDetails,@Valid @ModelAttribute("editProfile") final EditProfile editProfile, final BindingResult errors, @PathVariable("userId") final long userId,@RequestParam("refered")final String referred) throws IOException {
         if(errors.hasErrors()) {
             return profileEdition(userDetails,editProfile, userId);
         }
@@ -510,6 +512,9 @@ public class HelloWorldController {
         if(!oldReview.get().getUserName().equals(us.findByEmail(userDetails.getUsername()).get().getUserName())){
             throw new MethodNotAllowedException();
         }
+        reviewForm.setDescription(oldReview.get().getDescription());
+        reviewForm.setRating(oldReview.get().getRating());
+        reviewForm.setName(oldReview.get().getName());
         String referer = request.getHeader("Referer");
         mav.addObject("backLink",referer);
         mav.addObject("reviewInfo", rs.findById(reviewId).orElseThrow(PageNotFoundException::new));
