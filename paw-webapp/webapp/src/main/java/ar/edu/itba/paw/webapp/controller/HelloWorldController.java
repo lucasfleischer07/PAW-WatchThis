@@ -452,7 +452,7 @@ public class HelloWorldController {
 
     @RequestMapping("/profile-info/{userName:[a-zA-Z0-9\\s]+}")
     public ModelAndView profileInfo(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("userName") final String userName) {
-        final ModelAndView mav = new ModelAndView("profileInfoPageInfoPage");
+        final ModelAndView mav = new ModelAndView("profileInfoPage");
         Optional<User> user = us.findByUserName(userName);
         if(user.isPresent()) {
 //            mav.addObject("full-access", "no");

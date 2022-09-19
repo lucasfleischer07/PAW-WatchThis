@@ -4,11 +4,11 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class ReviewForm {
-    @Size(min = 6, max = 50)
+    @Size(min = 6, max = 70)
     @Pattern(regexp	= "[a-zA-Z0-9!,.:;=+\n\\-_()?<>$%&#@{}\\[\\]|*\"'~/`^\\s]+")
     private String name;
 
-    @Size(min = 20, max = 500)
+    @Size(min = 20, max = 1000)
     @Pattern(regexp	= "[a-zA-Z0-9!,.:;=+\n\\-_()?<>$%&#@{}\\[\\]|*\"'~/`^\\s]+")
     private String description;
 
