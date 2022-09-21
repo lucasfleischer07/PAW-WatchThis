@@ -37,6 +37,12 @@ import javax.servlet.http.HttpServletRequest;
 
                     break;
                 }
+                case 405: {
+                    errorTitle = "Method not allowed";
+                    errorBody ="The action is not allowed for this url.";
+
+                    break;
+                }
                 case 500: {
                     errorTitle = "Internal Server Error";
                     errorBody ="There was a server error while processing your request.";

@@ -366,7 +366,7 @@
 
                 <div class="W-nav-login-button">
                     <c:choose>
-                        <c:when test="${param.userName != 'null'}">
+                        <c:when test="${param.userName != 'null' && param.userName!= ''}">
                             <div class="btn-group">
                                 <button type="button" class="btn btn-dark dropdown-toggle W-border-color-user-btn" data-bs-toggle="dropdown" aria-expanded="false">
                                     ${param.userName}

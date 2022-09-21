@@ -428,17 +428,23 @@ public class HelloWorldController {
     //This path is for the logged in profile, if the person is not logged in it will fail
     @RequestMapping("/profile")
     public ModelAndView profile(@AuthenticationPrincipal PawUserDetails userDetails) {
-        final ModelAndView mav = new ModelAndView("profilePage");
+        final ModelAndView mav = new ModelAndView("profileInfoPage");
         String userEmail = userDetails.getUsername();
         User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
         mav.addObject("user", user);
         mav.addObject("reviews",rs.getAllUserReviews(user.getUserName()));
+        mav.addObject("userName",user.getUserName());
+        mav.addObject("userId",user.getId());
+
         return mav;
     }
 
     @RequestMapping(path = "/profile/{userName:[a-zA-Z0-9\\s]+}/profileImage", produces = {MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
     @ResponseBody
     public byte[] profileImage(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("userName") final String userName) {
+        if(userName==null || userName==""){
+            throw new PageNotFoundException();
+        }
         User user = us.findByUserName(userName).orElseThrow(PageNotFoundException::new);
         return user.getImage();
     }
@@ -470,16 +476,19 @@ public class HelloWorldController {
             us.setProfilePicture(editProfile.getProfilePicture().getBytes(), user);
         }
 
-        return new ModelAndView("redirect:/profile/");
+        return new ModelAndView("redirect:/profile");
     }
 
     @RequestMapping("/profile/{userName:[a-zA-Z0-9\\s]+}")
     public ModelAndView profileInfo(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("userName") final String userName) {
+        if(userName==null || userName==""){
+            throw new PageNotFoundException();
+        }
         final ModelAndView mav = new ModelAndView("profileInfoPage");
         Optional<User> user = us.findByUserName(userName);
         if(user.isPresent()) {
 //            mav.addObject("full-access", "no");
-            mav.addObject("user", user);
+            mav.addObject("user", user.get());
             mav.addObject("reviews",rs.getAllUserReviews(user.get().getUserName()));
         } else {
             throw new PageNotFoundException();

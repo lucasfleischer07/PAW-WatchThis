@@ -33,16 +33,19 @@
             <div class="media align-items-end profile-head W-profile-photo-name">
               <div class="profile mr-3">
                   <c:choose>
-                      <c:when test="${user.get().image == null}">
+                      <c:when test="${user.image == null}">
                           <img src="<c:url value="/resources/img/defaultUserImg.png"/> " alt="User_img" class="W-edit-profile-picture">
                       </c:when>
                       <c:otherwise>
-                          <img src="<c:url value="/profile/${user.get().userName}/profileImage"/> " alt="User_img" class="W-edit-profile-picture">
+                          <img src="<c:url value="/profile/${user.userName}/profileImage"/> " alt="User_img" class="W-edit-profile-picture">
                       </c:otherwise>
                   </c:choose>
-                <div class="media-body mb-5 text-white">
-                  <h5 class="W-username-profilepage"><c:out value="${user.get().userName}"/></h5>
-                </div>
+                  <div class="media-body mb-5 text-white">
+                      <h5 class="W-username-profilepage"><c:out value="${user.userName}"/></h5>
+                  </div>
+                  <c:if test="${userName==user.userName}">
+                    <a href="<c:url value="/profile/edit-profile"/>" class="btn btn-outline-dark btn-sm btn-block">Edit profile</a>
+                  </c:if>
               </div>
             </div>
           </div>
