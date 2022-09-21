@@ -37,13 +37,13 @@
                                         <img src="<c:url value="/resources/img/defaultUserImg.png"/> " alt="User_img" class="W-edit-profile-picture">
                                     </c:when>
                                     <c:otherwise>
-                                        <img src="<c:url value="/profile/${userId}/profileImage"/> " alt="User_img" class="W-edit-profile-picture">
+                                        <img src="<c:url value="/profile/${user.userName}/profileImage"/> " alt="User_img" class="W-edit-profile-picture">
                                     </c:otherwise>
                                 </c:choose>
                                 <div class="media-body mb-5 text-white">
                                     <h5 class="W-username-profilepage"><c:out value="${user.userName}"/></h5>
                                 </div>
-                                <a href="<c:url value="/profile/${user.id}/edit-profile"/>" class="btn btn-outline-dark btn-sm btn-block">Edit profile</a>
+                                <a href="<c:url value="/profile/edit-profile"/>" class="btn btn-outline-dark btn-sm btn-block">Edit profile</a>
                             </div>
                         </div>
                     </div>

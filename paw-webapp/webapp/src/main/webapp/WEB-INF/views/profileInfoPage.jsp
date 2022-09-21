@@ -37,7 +37,7 @@
                           <img src="<c:url value="/resources/img/defaultUserImg.png"/> " alt="User_img" class="W-edit-profile-picture">
                       </c:when>
                       <c:otherwise>
-                          <img src="<c:url value="/profile/${user.get().id}/profileImage"/> " alt="User_img" class="W-edit-profile-picture">
+                          <img src="<c:url value="/profile/${user.get().userName}/profileImage"/> " alt="User_img" class="W-edit-profile-picture">
                       </c:otherwise>
                   </c:choose>
                 <div class="media-body mb-5 text-white">

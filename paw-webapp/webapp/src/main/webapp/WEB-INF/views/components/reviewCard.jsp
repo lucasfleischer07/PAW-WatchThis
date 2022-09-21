@@ -6,7 +6,7 @@
         <div class="accordion-header" id="<c:out value="heading${param.reviewId}"/>">
             <div class="card">
                 <div class="card-header W-accordion-card-header">
-                    <a href="<c:url value="/profile-info/${param.userName}"/>" class="W-creator-review"><c:out value="${param.userName}"/></a>
+                    <a href="<c:url value="/profile/${param.userName}"/>" class="W-creator-review"><c:out value="${param.userName}"/></a>
                     <c:if test="${param.userName.equals(param.loggedUserName)}">
                         <div >
                             <div class="W-delete-edit-buttons">

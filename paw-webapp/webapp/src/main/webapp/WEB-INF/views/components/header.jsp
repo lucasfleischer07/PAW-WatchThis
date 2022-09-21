@@ -372,7 +372,7 @@
                                     ${param.userName}
                                 </button>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="<c:url value="/profile/${param.userId}"/>">Profile</a></li>
+                                    <li><a class="dropdown-item" href="<c:url value="/profile"/>">Profile</a></li>
                                     <li><hr class="dropdown-divider"></li>
     <%--                                TODO: HACER EL LOG OUT--%>
                                     <li><a class="dropdown-item" href="<c:url value="/login/sign-out"/>">Log Out</a></li>

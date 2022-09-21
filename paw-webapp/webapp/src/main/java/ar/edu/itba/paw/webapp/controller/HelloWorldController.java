@@ -425,8 +425,9 @@ public class HelloWorldController {
 
 
     // * ------------------------------------------------Profile--------------------------------------------------------------------
-    @RequestMapping("/profile/{userId:[0-9]+}")
-    public ModelAndView profile(@AuthenticationPrincipal PawUserDetails userDetails,@PathVariable("userId") final long userId) {
+    //This path is for the logged in profile, if the person is not logged in it will fail
+    @RequestMapping("/profile")
+    public ModelAndView profile(@AuthenticationPrincipal PawUserDetails userDetails) {
         final ModelAndView mav = new ModelAndView("profilePage");
         String userEmail = userDetails.getUsername();
         User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
@@ -435,16 +436,15 @@ public class HelloWorldController {
         return mav;
     }
 
-    @RequestMapping(path = "/profile/{userId:[0-9]+}/profileImage", produces = {MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
+    @RequestMapping(path = "/profile/{userName:[a-zA-Z0-9\\s]+}/profileImage", produces = {MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
     @ResponseBody
-    public byte[] profileImage(@AuthenticationPrincipal PawUserDetails userDetails,@PathVariable("userId") final long userId) {
-//        String userEmail = userDetails.getUsername();
-        User user = us.findById(userId).orElseThrow(PageNotFoundException::new);
+    public byte[] profileImage(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("userName") final String userName) {
+        User user = us.findByUserName(userName).orElseThrow(PageNotFoundException::new);
         return user.getImage();
     }
 
-    @RequestMapping(value = "/profile/{userId:[0-9]+}/edit-profile", method = {RequestMethod.GET})
-    public ModelAndView profileEdition(@AuthenticationPrincipal PawUserDetails userDetails, @Valid @ModelAttribute("editProfile") final EditProfile editProfile, @PathVariable("userId") final long userId) {
+    @RequestMapping(value = "/profile/edit-profile", method = {RequestMethod.GET})
+    public ModelAndView profileEdition(@AuthenticationPrincipal PawUserDetails userDetails, @Valid @ModelAttribute("editProfile") final EditProfile editProfile) {
         String userEmail = userDetails.getUsername();
         User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
         final ModelAndView mav = new ModelAndView("profileEditionPage");
@@ -452,13 +452,14 @@ public class HelloWorldController {
         return mav;
     }
 
-    @RequestMapping(value = "/profile/{userId:[0-9]+}/edit-profile", method = {RequestMethod.POST})
-    public ModelAndView profileEditionPost(@AuthenticationPrincipal PawUserDetails userDetails,@Valid @ModelAttribute("editProfile") final EditProfile editProfile, final BindingResult errors, @PathVariable("userId") final long userId) throws IOException {
+    @RequestMapping(value = "/profile/edit-profile", method = {RequestMethod.POST})
+    public ModelAndView profileEditionPost(@AuthenticationPrincipal PawUserDetails userDetails,@Valid @ModelAttribute("editProfile") final EditProfile editProfile, final BindingResult errors) throws IOException {
         if(errors.hasErrors()) {
-            return profileEdition(userDetails,editProfile, userId);
+            return profileEdition(userDetails,editProfile);
         }
 
-        User user = us.findById(userId).orElseThrow(PageNotFoundException::new);
+        String userEmail = userDetails.getUsername();
+        User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
         if(editProfile.getPassword() != null && editProfile.getProfilePicture().getBytes() == null) {
             us.setPassword(editProfile.getPassword(), user);
             es.sendRestorePasswordEmail(user);
@@ -469,10 +470,10 @@ public class HelloWorldController {
             us.setProfilePicture(editProfile.getProfilePicture().getBytes(), user);
         }
 
-        return new ModelAndView("redirect:/profile/" + userId);
+        return new ModelAndView("redirect:/profile/");
     }
 
-    @RequestMapping("/profile-info/{userName:[a-zA-Z0-9\\s]+}")
+    @RequestMapping("/profile/{userName:[a-zA-Z0-9\\s]+}")
     public ModelAndView profileInfo(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("userName") final String userName) {
         final ModelAndView mav = new ModelAndView("profileInfoPage");
         Optional<User> user = us.findByUserName(userName);

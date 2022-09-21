@@ -38,13 +38,13 @@
                                         <img src="<c:url value="/resources/img/defaultUserImg.png"/> " alt="User_img" class="W-edit-profile-picture">
                                     </c:when>
                                     <c:otherwise>
-                                        <img src="<c:url value="/profile/${userId}/profileImage"/> " alt="User_img" class="W-edit-profile-picture">
+                                        <img src="<c:url value="/profile/${user.userName}/profileImage"/> " alt="User_img" class="W-edit-profile-picture">
                                     </c:otherwise>
                                 </c:choose>
                                 <div class="W-picture-upload-button-text">
                                     <h6 class="W-edit-picture-text">Edit profile picture:</h6>
                                     <div class="W-input-profile-picture">
-                                        <c:url value="/profile/${user.id}/edit-profile" var="postPath"/>
+                                        <c:url value="/profile/edit-profile" var="postPath"/>
                                         <form:form modelAttribute="editProfile" action="${postPath}" method="post" enctype="multipart/form-data">
                                             <form:errors path="profilePicture" element="p" cssClass="form-error-label"/>
                                             <form:input type="file" accept="image/gif, image/jpeg, image/jpg,  image/png" class="form-control" path="profilePicture" cssClass="W-input-width"/>
@@ -59,7 +59,7 @@
                     <div>
                         <h6 class="W-change-pass-text">Change password:</h6>
                         <div class="bg-light d-flex justify-content-end text-center W-edit-divs-display">
-                            <c:url value="/profile/${user.id}/edit-profile" var="postPath"/>
+                            <c:url value="/profile/edit-profile" var="postPath"/>
                             <form:form modelAttribute="editProfile" action="${postPath}" method="post">
                                 <div>
                                     <div class="mb-3 W-input-label-edit-password">
