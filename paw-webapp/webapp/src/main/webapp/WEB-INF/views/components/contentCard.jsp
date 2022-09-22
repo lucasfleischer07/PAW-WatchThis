@@ -1,5 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
-
+<%@ page contentType="text/html;charset=UTF-8" %>
 <div class="W-movie-card-size">
     <a class="card-group W-card-text W-films-margin" href="<c:url value='/${param.contentType}/${param.contentId}'/>">
         <div class="col">

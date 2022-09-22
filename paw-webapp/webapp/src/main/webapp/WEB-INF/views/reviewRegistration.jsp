@@ -18,6 +18,8 @@
         <link href="<c:url value="/resources/css/navBarStyles.css"/>" rel="stylesheet" type="text/css"/>
         <link href="<c:url value="/resources/css/reviewsStyles.css"/>" rel="stylesheet" type="text/css"/>
         <link href="<c:url value="/resources/css/reviewRegistrationStyles.css"/>" rel="stylesheet" type="text/css"/>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+
         <title>Review Registration</title>
     </head>
 
@@ -53,7 +55,7 @@
                         <form:errors path="description" element="p" cssStyle="color: red"/>
                         <form:label path="description" class="form-label">Review description <span class="W-red-asterisco">*</span></form:label>
                         <p class="W-review-registration-text">(Must be between 20 and 2000 characters)</p>
-                        <form:textarea class="form-control" path="description" rows="3"/>
+                        <form:textarea class="form-control" id="MyTextArea" path="description" rows="3"/>
                     </div>
                     <div class="mb-3 W-input-label-review-info">
                         <form:errors path="rating" element="p" cssStyle="color: red"/>
@@ -76,5 +78,7 @@
 
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+        <script>const simplemde = new SimpleMDE({ element: document.getElementById("MyTextArea")});</script>
     </body>
 </html>
