@@ -188,8 +188,8 @@ public class ContentJdbcDao implements ContentDao {
 
     @Override
     public List<Content> getSearchedContent(String query) {
-        List<Content> content =  template.query("SELECT * FROM content WHERE LOWER(name) LIKE ? ",
-                new Object[]{"%" + query.toLowerCase() + "%"},CONTENT_ROW_MAPPER);
+        List<Content> content =  template.query("SELECT * FROM content WHERE (LOWER(name) LIKE ? OR LOWER(creator) LIKE ?)",
+                new Object[]{"%" + query.toLowerCase() + "%", "%" + query.toLowerCase() + "%"},CONTENT_ROW_MAPPER);
         return content;
     }
 
