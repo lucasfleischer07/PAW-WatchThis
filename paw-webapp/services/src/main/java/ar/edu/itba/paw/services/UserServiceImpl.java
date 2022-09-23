@@ -33,7 +33,6 @@ public class UserServiceImpl implements UserService{
             mailVariables.put("to", user.getEmail());
             mailVariables.put("userName", user.getUserName());
             emailService.sendMail("registration", "Welcome to Watch This", mailVariables, locale);
-//            return userDao.create(user.getEmail(), user.getUserName(),passwordEncoder.encode(user.getPassword()), user.getReputation());
         } catch (MessagingException e) {
 
         }
@@ -57,29 +56,27 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void setPassword(String password, User user){
-        userDao.setPassword(passwordEncoder.encode(password), user);
+    public void setPassword(String password, User user, String type){
+        try {
+            Map<String, Object> mailVariables = new HashMap<>();
+            mailVariables.put("to", user.getEmail());
+            mailVariables.put("userName", user.getUserName());
+            if(Objects.equals(type, "forgotten")) {
+                String newPassword = generateRandomWord();
+                mailVariables.put("newPassword", newPassword);
+                emailService.sendMail("passwordForgotten", "Restore Password", mailVariables, locale);
+            } else {
+                emailService.sendMail("passwordChangeConfirmation", "Restore password confirmation", mailVariables, locale);
+                userDao.setPassword(passwordEncoder.encode(password), user);
+            }
+        } catch (MessagingException e) {
+
+        }
     }
 
     @Override
     public void setProfilePicture(byte[] profilePicture, User user) {
         userDao.setProfilePicture(profilePicture, user);
-    }
-
-    @Override
-    public void setForgottenPassword(User user) {
-        try {
-            Map<String, Object> mailVariables = new HashMap<>();
-            mailVariables.put("to", user.getEmail());
-            mailVariables.put("userName", user.getUserName());
-            String newPassword = generateRandomWord();
-            setPassword(newPassword, user);
-            mailVariables.put("newPassword", newPassword);
-            emailService.sendMail("passwordForgotten", "Restore Password", mailVariables, locale);
-
-        } catch (MessagingException e) {
-
-        }
     }
 
     private String generateRandomWord() {

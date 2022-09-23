@@ -7,9 +7,5 @@ import java.util.Locale;
 import java.util.Map;
 
 public interface EmailService {
-    void sendRegistrationEmail(User user);
     void sendMail(String template, String subject, Map<String, Object> variables, final Locale locale) throws MessagingException;
-
-    void sendForgottenPasswordEmail(User user);
-    void sendRestorePasswordEmail(User user);
 }

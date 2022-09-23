@@ -27,17 +27,6 @@ public class EmailServiceImpl implements EmailService {
 
     private static final String WATCHTHIS_EMAIL = "watchthisassist@gmail.com";
 
-//    private final UserService us;
-//    @Autowired
-//    public EmailServiceImpl(UserService us) {
-//        this.us = us;
-//    }
-
-
-    @Override
-    public void sendRegistrationEmail(User user) {
-
-    }
 
     @Async
     @Override
@@ -56,28 +45,6 @@ public class EmailServiceImpl implements EmailService {
         message.setText(htmlContent, true);
 
         emailSender.send(mimeMessage);
-    }
-
-    @Override
-    public void sendForgottenPasswordEmail(User user) {
-//        SimpleMailMessage message = new SimpleMailMessage();
-//        message.setTo(user.getEmail());
-//        message.setSubject("Reset password");
-//        String newPassword = generateRandomWord();
-//        message.setText("Hello " + user.getUserName() + "!\n\nHere is your new password: " + newPassword + ".\n\nRegards.\n\nWatch This support.");
-//        us.setPassword(newPassword, user);
-//        emailSender.send(message);
-    }
-
-    @Override
-    public void sendRestorePasswordEmail(User user) {
-//        SimpleMailMessage message = new SimpleMailMessage();
-//        message.setTo(user.getEmail());
-//        message.setSubject("Password restore successfully!");
-//        String newPassword = generateRandomWord();
-//        message.setText("Hello " + user.getUserName() + "!\n\nYour password has been restore correctly.\n\nRegards.\n\nWatch This support.");
-//        us.setPassword(newPassword, user);
-//        emailSender.send(message);
     }
 
 }

@@ -106,16 +106,19 @@ public class UserController {
             return LoginSingUp(userDetails, loginForm, loginStage);
         }
         if(Objects.equals(loginStage, "sign-up")) {
+            Optional<User> existUserEmail = us.findByEmail(loginForm.getEmail());
+            Optional<User> existUserName = us.findByUserName(loginForm.getUsername());
+            if(existUserEmail.isPresent() || existUserName.isPresent()) {
+//                TODO: Ver como meter el mensaje de error de que el emial y/o usernames ya existen
+                return LoginSingUp(userDetails, loginForm, loginStage);
+            }
             User newUser = new User(null, loginForm.getEmail(), loginForm.getUsername(), loginForm.getPassword(), 0L, null);
             us.register(newUser);
-//            es.sendRegistrationEmail(newUser);
             authWithAuthManager(request,loginForm.getEmail(),loginForm.getPassword());
         } else if(Objects.equals(loginStage, "forgot-password")) {
             Optional<User> user = us.findByEmail(loginForm.getEmail());
             if(user.isPresent()) {
-//                TODO: Descomentar este y borrar el otro
-                us.setForgottenPassword(user.get());
-//                es.sendForgottenPasswordEmail(user.get());
+                us.setPassword(null, user.get(), "forgotten");
             } else {
                 return LoginSingUp(userDetails, loginForm, loginStage);
             }
@@ -174,12 +177,11 @@ public class UserController {
         String userEmail = userDetails.getUsername();
         User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
         if(editProfile.getPassword() != null && editProfile.getProfilePicture().getBytes() == null) {
-            us.setPassword(editProfile.getPassword(), user);
-            es.sendRestorePasswordEmail(user);
+            us.setPassword(editProfile.getPassword(), user, "restore");
         } else if(editProfile.getPassword() == null && editProfile.getProfilePicture().getBytes() != null) {
             us.setProfilePicture(editProfile.getProfilePicture().getBytes(), user);
         } else if(editProfile.getPassword() != null && editProfile.getProfilePicture().getBytes() != null) {
-            us.setPassword(editProfile.getPassword(), user);
+            us.setPassword(editProfile.getPassword(), user, "restore");
             us.setProfilePicture(editProfile.getProfilePicture().getBytes(), user);
         }
 

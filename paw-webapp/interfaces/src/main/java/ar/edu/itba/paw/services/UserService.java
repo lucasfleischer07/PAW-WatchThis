@@ -13,9 +13,8 @@ public interface UserService {
     Optional<User> findById(long userId);
     Optional<User> findByUserName(String userName);
 
-    void setPassword(String password, User user);
+    void setPassword(String password, User user, String type);
 
     void setProfilePicture(byte[] profilePicture, User user);
-    void setForgottenPassword(User user);
 
 }
