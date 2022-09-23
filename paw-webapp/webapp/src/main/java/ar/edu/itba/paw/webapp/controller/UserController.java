@@ -108,13 +108,14 @@ public class UserController {
         if(Objects.equals(loginStage, "sign-up")) {
             User newUser = new User(null, loginForm.getEmail(), loginForm.getUsername(), loginForm.getPassword(), 0L, null);
             us.register(newUser);
-            es.sendRegistrationEmail(newUser);
+//            es.sendRegistrationEmail(newUser);
             authWithAuthManager(request,loginForm.getEmail(),loginForm.getPassword());
         } else if(Objects.equals(loginStage, "forgot-password")) {
             Optional<User> user = us.findByEmail(loginForm.getEmail());
             if(user.isPresent()) {
 //                TODO: Descomentar este y borrar el otro
-                es.sendForgottenPasswordEmail(user.get());
+                us.setForgottenPassword(user.get());
+//                es.sendForgottenPasswordEmail(user.get());
             } else {
                 return LoginSingUp(userDetails, loginForm, loginStage);
             }

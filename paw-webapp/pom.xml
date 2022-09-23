@@ -26,6 +26,8 @@
         <javax.validation-api.version>1.0.0.GA</javax.validation-api.version>
         <org.hibernate.validator>4.3.1.Final</org.hibernate.validator>
         <commons-fileupload.version>1.4</commons-fileupload.version>
+        <mail.version>1.4.7</mail.version>
+        <thymeleaf.version>3.0.12.RELEASE</thymeleaf.version>
     </properties>
 
     <dependencyManagement>
@@ -125,6 +127,28 @@
             <artifactId>spring-boot-starter-mail</artifactId>
             <version>2.5.6</version>
           </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context-support</artifactId>
+                <version>${org.springframework.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.thymeleaf</groupId>
+                <artifactId>thymeleaf</artifactId>
+                <version>${thymeleaf.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.thymeleaf</groupId>
+                <artifactId>thymeleaf-spring5</artifactId>
+                <version>${thymeleaf.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>javax.mail</groupId>
+                <artifactId>mail</artifactId>
+                <version>${mail.version}</version>
+            </dependency>
 <!--            Dependencias para uplodear fotos-->
             <dependency>
                 <groupId>org.springframework</groupId>

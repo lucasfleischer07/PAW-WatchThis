@@ -16,5 +16,6 @@ public interface UserService {
     void setPassword(String password, User user);
 
     void setProfilePicture(byte[] profilePicture, User user);
+    void setForgottenPassword(User user);
 
 }
