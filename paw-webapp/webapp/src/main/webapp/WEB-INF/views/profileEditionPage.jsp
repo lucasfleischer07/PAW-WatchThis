@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <html>
     <head>
@@ -42,13 +43,13 @@
                                     </c:otherwise>
                                 </c:choose>
                                 <div class="W-picture-upload-button-text">
-                                    <h6 class="W-edit-picture-text">Edit profile picture:</h6>
+                                    <h6 class="W-edit-picture-text"><spring:message code="EditProfile.EditPicture"/></h6>
                                     <div class="W-input-profile-picture">
                                         <c:url value="/profile/edit-profile" var="postPath"/>
                                         <form:form modelAttribute="editProfile" action="${postPath}" method="post" enctype="multipart/form-data">
                                             <form:errors path="profilePicture" element="p" cssClass="form-error-label"/>
                                             <form:input type="file" accept="image/gif, image/jpeg, image/jpg,  image/png" class="form-control" path="profilePicture" cssClass="W-input-width"/>
-                                            <button type="submit" class="btn btn-success W-profile-picture-button" onclick="this.form.submit(); (this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'">Upload</button>
+                                            <button type="submit" class="btn btn-success W-profile-picture-button" onclick="this.form.submit(); (this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'"><spring:message code="EditProfile.Upload"/></button>
                                         </form:form>
                                     </div>
                                 </div>
@@ -57,19 +58,19 @@
                         </div>
                     </div>
                     <div>
-                        <h6 class="W-change-pass-text">Change password:</h6>
+                        <h6 class="W-change-pass-text"><spring:message code="EditProfile.ChangePassword"/></h6>
                         <div class="bg-light d-flex justify-content-end text-center W-edit-divs-display">
                             <c:url value="/profile/edit-profile" var="postPath"/>
                             <form:form modelAttribute="editProfile" action="${postPath}" method="post">
                                 <div>
                                     <div class="mb-3 W-input-label-edit-password">
                                         <form:errors path="password" element="p" cssStyle="color: red"/>
-                                        <form:label path="password" class="form-label">New password:</form:label>
+                                        <form:label path="password" class="form-label"><spring:message code="EditProfile.NewPassword"/></form:label>
                                         <form:input type="password" class="form-control" value="${editProfile.password}" path="password" placeholder="*****"/>
                                     </div>
                                 </div>
                                 <div>
-                                    <button type="submit" class="btn btn-success" onclick="this.form.submit(); (this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'">Change</button>
+                                    <button type="submit" class="btn btn-success" onclick="this.form.submit(); (this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'"><spring:message code="EditProfile.Change"/></button>
                                 </div>
                             </form:form>
                         </div>

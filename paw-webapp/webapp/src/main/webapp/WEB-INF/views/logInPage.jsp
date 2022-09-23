@@ -2,6 +2,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <html>
     <head>
@@ -39,30 +40,30 @@
                         <form action="<c:url value="/login/sign-in"/>" method="post" name="loginForm">
                             <div class="W-general-div-login">
                                 <div class="W-login-title">
-                                    <h4>Login to Watch This</h4>
+                                    <h4><spring:message code="Login.PageInfo"/></h4>
                                 </div>
                                 <div class="card W-login-card">
                                     <div class="W-email-verification-message">
-                                        <h5>Welcome back!!</h5>
+                                        <h5><spring:message code="Login.WelcomeMessage"/></h5>
                                     </div>
                                     <div class="mb-3 W-input-label-login-info">
                                           <c:choose>
                                               <c:when test="${error == true}">
                                                   <div class="alert alert-danger d-flex align-items-center" role="alert">
                                                       <div class="W-register-errorMsg">
-                                                           Email or Password are incorrect
+                                                          <spring:message code="Login.WrongEmail"/>
                                                       </div>
                                                   </div>
                                               </c:when>
                                           </c:choose>
-                                        <label class="form-label">Email</label>
+                                        <label class="form-label"><spring:message code="Login.Email"/></label>
                                         <input name="email" type="email" class="form-control"   placeholder="example@email"/>
                                     </div>
                                     <div class="mb-3 W-input-label-login-info">
-                                        <label class="form-label">Password</label>
+                                        <label class="form-label"><spring:message code="Login.Password"/></label>
                                         <input name="password" type="password" class="form-control" placeholder="*****"/>
                                         <div>
-                                            <a class="W-forgot-password" href="<c:url value="/login/forgot-password"/>">Forgot password?</a>
+                                            <a class="W-forgot-password" href="<c:url value="/login/forgot-password"/>"><spring:message code="Login.ForgotPassword"/></a>
                                         </div>
                                     </div>
                                 </div>
@@ -70,18 +71,18 @@
                                     <div class="form-check">
                                         <input name="rememberMe" class="form-check-input" type="checkbox" id="flexCheckDefault">
                                         <label class="form-check-label" for="flexCheckDefault">
-                                            Remember me
+                                            <spring:message code="Login.RememberMe"/>
                                         </label>
                                     </div>
                                     <div class="W-div-login-button">
-                                        <button id="submitButton1" type="submit" class="btn btn-success W-login-button" onclick="this.form.submit(); (this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'">Log in</button>
+                                        <button id="submitButton1" type="submit" class="btn btn-success W-login-button" onclick="this.form.submit(); (this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'"><spring:message code="Login.loginMessage"/></button>
                                     </div>
                                 </div>
 
                                 <hr class="d-flex W-line-style-login"/>
                                 <div class="W-alignment-signup-div">
-                                    <h5>Do not have an account?</h5>
-                                    <a href="<c:url value="/login/sign-up"/>"><button type="button" class="btn btn-secondary W-sign-up-button-link">Sign up!</button></a>
+                                    <h5><spring:message code="Login.NoAccountMessage"/></h5>
+                                    <a href="<c:url value="/login/sign-up"/>"><button type="button" class="btn btn-secondary W-sign-up-button-link"><spring:message code="Login.SignUpMessage"/></button></a>
                                 </div>
                             </div>
                         </form>
@@ -92,35 +93,35 @@
                         <form:form modelAttribute="loginForm" action="${postPath}" method="post">
                             <div class="W-general-div-login">
                                 <div class="W-login-title">
-                                    <h4>Sign up into Watch This</h4>
+                                    <h4><spring:message code="Signup.PageInfo"/></h4>
                                 </div>
                                 <div class="card W-login-card">
                                     <div class="mb-3 W-input-label-login-info">
                                         <div class="mb-3 W-input-label-login-info">
                                             <form:errors path="username" element="p" cssStyle="color: red"/>
-                                            <form:label path="username" class="form-label">Username</form:label>
-                                            <p class="W-review-registration-text">(Must be between 4 and 30 characters)</p>
+                                            <form:label path="username" class="form-label"><spring:message code="Signup.Username"/></form:label>
+                                            <p class="W-review-registration-text"><spring:message code="Signup.CharacterLimits" arguments="4,30"/></p>
                                             <form:input type="text" class="form-control" path="username" placeholder="Example123"/>
                                         </div>
                                     </div>
                                     <div class="mb-3 W-input-label-login-info">
                                         <div class="mb-3 W-input-label-login-info">
                                             <form:errors path="email" element="p" cssStyle="color: red"/>
-                                            <form:label path="email" class="form-label">Email</form:label>
+                                            <form:label path="email" class="form-label"><spring:message code="Signup.Email"/></form:label>
                                             <form:input type="email" class="form-control" value="${loginForm.email}" path="email"  placeholder="example@email"/>
                                         </div>
                                     </div>
                                     <div class="mb-3 W-input-label-login-info">
                                         <div class="mb-3 W-input-label-login-info">
                                             <form:errors path="password" element="p" cssStyle="color: red"/>
-                                            <form:label path="password" class="form-label">Password</form:label>
-                                            <p class="W-review-registration-text">(Must be between 6 and 50 characters)</p>
+                                            <form:label path="password" class="form-label"><spring:message code="Signup.Password"/></form:label>
+                                            <p class="W-review-registration-text"><spring:message code="Signup.CharacterLimits" arguments="6,50"/></p>
                                             <form:input type="password" class="form-control" path="password" placeholder="******"/>
                                         </div>
                                     </div>
                                 </div>
                                 <div>
-                                    <button id="submitButton2" type="submit" class="btn btn-success W-login-button" onclick="this.form.submit(); (this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'">Sign up</button>
+                                    <button id="submitButton2" type="submit" class="btn btn-success W-login-button" onclick="this.form.submit(); (this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'"><spring:message code="Signup.SignupMessage"/></button>
                                 </div>
                             </div>
                         </form:form>

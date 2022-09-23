@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ page contentType="text/html;charset=UTF-8" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <html>
   <head>
@@ -50,7 +51,7 @@
             <ul class="list-inline mb-0">
               <li class="list-inline-item">
                 <h5 class="font-weight-bold mb-0 d-block"><c:out value="${reviews.size()}"/></h5>
-                <small class="text-muted"><i class="fas fa-image mr-1"></i>Reviews</small>
+                <small class="text-muted"><i class="fas fa-image mr-1"></i>R<spring:message code="Profile.Reviews"/></small>
               </li>
 <%--              <li class="list-inline-item">--%>
 <%--                <h5 class="font-weight-bold mb-0 d-block"><c:out value="${user.get().reputation}"/></h5>--%>
@@ -59,7 +60,7 @@
           </div>
           <div class="py-4 px-4">
             <div class="d-flex align-items-center justify-content-between mb-3">
-              <h4 class="mb-0">Recent reviews</h4>
+              <h4 class="mb-0"><spring:message code="Profile.RecentReviews"/></h4>
             </div>
             <div class="card">
               <div class="card-body">
