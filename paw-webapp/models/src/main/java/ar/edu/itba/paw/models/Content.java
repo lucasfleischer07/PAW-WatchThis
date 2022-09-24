@@ -2,12 +2,13 @@ package ar.edu.itba.paw.models;
 
 public class Content {
     private long id;
-    private String name, image, description, released, genre, creator, duration, type;
+    private String name, description, released, genre, creator, duration, type;
+    private byte[] image;
     private Integer rating;
     private Integer reviewsAmount;
 
 
-    public Content(long id, String name, String image, String description, String released, String genre, String creator, String duration,String type,Integer rating,Integer reviewsAmount) {
+    public Content(long id, String name, byte[] image, String description, String released, String genre, String creator, String duration,String type,Integer rating,Integer reviewsAmount) {
         this.id = id;
         this.name = name;
         this.image = image;
@@ -36,7 +37,7 @@ public class Content {
         return name;
     }
 
-    public String getImage() {
+    public byte[] getImage() {
         return image;
     }
 

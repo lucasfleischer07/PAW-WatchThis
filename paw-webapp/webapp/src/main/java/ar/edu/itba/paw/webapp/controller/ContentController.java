@@ -9,6 +9,7 @@ import ar.edu.itba.paw.webapp.exceptions.MethodNotAllowedException;
 import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -59,37 +60,6 @@ public class ContentController {
             mav.addObject("userId","null");
         }
 
-//        final ModelAndView mav = new ModelAndView("ContentPage");
-//        mav.addObject("query", query);
-//        List<Content> contentList = cs.getSearchedContentRandom(query);
-//
-//        int page= pageNum.orElse(1);
-//        if(contentList == null) {
-//            throw new PageNotFoundException();
-//        } else {
-//            if(contentList.size() < (page)*ELEMS_AMOUNT){       //Si no llega a completar la pagina entera, que sirva los que pueda
-//                mav.addObject("allContent", contentList.subList((page-1)*ELEMS_AMOUNT,contentList.size()));
-//            }else {
-//                mav.addObject("allContent", contentList.subList((page - 1) * ELEMS_AMOUNT, (page - 1) * ELEMS_AMOUNT + ELEMS_AMOUNT));
-//            }
-//            mav.addObject("amountPages",(int)Math.ceil((double) contentList.size()/(double)ELEMS_AMOUNT));
-//            mav.addObject("pageSelected",page);
-//            mav.addObject("genre","ANY");
-//            mav.addObject("durationFrom","ANY");
-//            mav.addObject("durationTo","ANY");
-//            mav.addObject("contentType", "all");
-//        }
-//
-//        try {
-//            String userEmail = userDetails.getUsername();
-//            User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
-//            mav.addObject("userName",user.getUserName());
-//            mav.addObject("userId",user.getId());
-//
-//        } catch (NullPointerException e) {
-//            mav.addObject("userName","null");
-//            mav.addObject("userId","null");
-//        }
         return mav;
     }
 
@@ -240,6 +210,17 @@ public class ContentController {
         }
 
         return mav;
+    }
+
+
+    @RequestMapping(path = "/contentImage/{contentId:[0-9]+}", method = RequestMethod.GET, produces = {MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
+    @ResponseBody
+    public byte[] contentImage(@PathVariable("contentId") final Long contentId) {
+        if(contentId==null || contentId < 0){
+            throw new PageNotFoundException();
+        }
+        Content content = cs.findById(contentId).orElseThrow(PageNotFoundException::new);
+        return content.getImage();
     }
 
     // * ----------------------------------- Errors Page -----------------------------------------------------------------------

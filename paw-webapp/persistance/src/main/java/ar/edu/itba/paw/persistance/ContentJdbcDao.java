@@ -17,7 +17,7 @@ public class ContentJdbcDao implements ContentDao {
     private static final RowMapper<Content> CONTENT_ROW_MAPPER = (resultSet, rowNum) ->
             new Content(resultSet.getLong("id"),
                     resultSet.getString("name"),
-                    resultSet.getString("image"),
+                    resultSet.getBytes("image"),
                     resultSet.getString("description"),
                     resultSet.getString("released"),
                     resultSet.getString("genre"),

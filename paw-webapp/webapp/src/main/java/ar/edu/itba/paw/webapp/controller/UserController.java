@@ -155,7 +155,7 @@ public class UserController {
         return mav;
     }
 
-    @RequestMapping(path = "/profile/{userName:[a-zA-Z0-9\\s]+}/profileImage", produces = {MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
+    @RequestMapping(path = "/profile/{userName:[a-zA-Z0-9\\s]+}/profileImage", method = RequestMethod.GET, produces = {MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
     @ResponseBody
     public byte[] profileImage(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("userName") final String userName) {
         if(userName==null || userName==""){
