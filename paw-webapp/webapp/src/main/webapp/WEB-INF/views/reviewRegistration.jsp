@@ -34,7 +34,7 @@
         <form:form modelAttribute="registerForm" action="${postPath}" method="post">
             <div class="W-general-div-review-info">
                 <div class="W-review-registration-img-and-name">
-                    <img class="W-review-registration-img" src="<c:url value="${details.image}"/>" alt="<c:out value="${details.name}"/>">
+                    <img class="W-review-registration-img" src="<c:url value="/contentImage/${details.id}"/>" alt="Image <c:out value="${details.name}"/>">
                     <h4 class="W-review-registration-name"><c:out value="${details.name}"/></h4>
                 </div>
                 <div class="card W-review-card">
