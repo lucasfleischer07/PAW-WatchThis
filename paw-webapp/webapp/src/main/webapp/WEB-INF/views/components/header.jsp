@@ -18,7 +18,7 @@
         <div class="offcanvas offcanvas-end text-bg-dark W-header-accomodation" tabindex="-1" id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
 
             <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">Watch This</h5>
+                <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel"><spring:message code="WatchThisMessage"/></h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
 
@@ -29,35 +29,35 @@
                         <c:choose>
                             <c:when test="${param.type == 'movies' || param.type == 'movie'}">
                                 <li class="nav-item W-home-button-hamburger-button" style="display: none">
-                                    <a class="nav-link" aria-current="page" href="<c:url value="/"/>">Home</a>
+                                    <a class="nav-link" aria-current="page" href="<c:url value="/"/>"><spring:message code="HomeMessage"/></a>
                                 </li>
                                 <li class="nav-item W-nav-item">
-                                    <a class="nav-link active" aria-current="page" href="<c:url value="/movies"/>">Movies</a>
+                                    <a class="nav-link active" aria-current="page" href="<c:url value="/movies"/>"><spring:message code="MovieMessage"/></a>
                                 </li>
                                 <li class="nav-item W-nav-item">
-                                    <a class="nav-link" href="<c:url value="/series"/>">TvShows</a>
+                                    <a class="nav-link" href="<c:url value="/series"/>"><spring:message code="SerieMessage"/></a>
                                 </li>
                             </c:when>
                             <c:when test="${param.type == 'series' || param.type == 'serie'}">
                                 <li class="nav-item W-home-button-hamburger-button" style="display: none">
-                                    <a class="nav-link" aria-current="page" href="<c:url value="/"/>">Home</a>
+                                    <a class="nav-link" aria-current="page" href="<c:url value="/"/>"><spring:message code="HomeMessage"/></a>
                                 </li>
                                 <li class="nav-item W-nav-item">
-                                    <a class="nav-link" aria-current="page" href="<c:url value="/movies"/>">Movies</a>
+                                    <a class="nav-link" aria-current="page" href="<c:url value="/movies"/>"><spring:message code="MovieMessage"/></a>
                                 </li>
                                 <li class="nav-item W-nav-item">
-                                    <a class="nav-link active" href="<c:url value="/series"/>">TvShows</a>
+                                    <a class="nav-link active" href="<c:url value="/series"/>"><spring:message code="SerieMessage"/></a>
                                 </li>
                             </c:when>
                             <c:otherwise>
                                 <li class="nav-item W-home-button-hamburger-button" style="display: none">
-                                    <a class="nav-link" aria-current="page" href="<c:url value="/"/>">Home</a>
+                                    <a class="nav-link" aria-current="page" href="<c:url value="/"/>"><spring:message code="HomeMessage"/></a>
                                 </li>
                                 <li class="nav-item W-nav-item">
-                                    <a class="nav-link" aria-current="page" href="<c:url value="/movies"/>">Movies</a>
+                                    <a class="nav-link" aria-current="page" href="<c:url value="/movies"/>"><spring:message code="MovieMessage"/></a>
                                 </li>
                                 <li class="nav-item W-nav-item">
-                                    <a class="nav-link" href="<c:url value="/series"/>">TvShows</a>
+                                    <a class="nav-link" href="<c:url value="/series"/>"><spring:message code="SerieMessage"/></a>
                                 </li>
                             </c:otherwise>
                         </c:choose>
@@ -76,7 +76,7 @@
                                     </c:when>
                                     <c:otherwise>
                                         <button id="genreGroupDrop" type="button" class="W-filter-title W-dropdown-button-genre-duration-sort btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                            Genre
+                                            <spring:message code="GenreMessage"/>
                                         </button>
                                     </c:otherwise>
                                 </c:choose>
@@ -89,7 +89,7 @@
                                                                                     <c:param name="sorting" value="${param.sorting}"/>
                                                                                 </c:when>
                                                                             </c:choose>
-                                                                            </c:url>" onclick="showGenre(this)">Clear filter</a></li>
+                                                                            </c:url>" onclick="showGenre(this)"><spring:message code="Genre.Clear"/></a></li>
                                     <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
                                                                             <c:param name="genre" value="Action"/>
                                                                             <c:choose>
@@ -99,7 +99,7 @@
                                                                                     <c:param name="sorting" value="${param.sorting}"/>
                                                                                 </c:when>
                                                                             </c:choose>
-                                                                            </c:url>" onclick="showGenre(this)">Action</a></li>
+                                                                            </c:url>" onclick="showGenre(this)"><spring:message code="Genre.Action"/></a></li>
                                     <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
                                                                             <c:param name="genre" value="Sci-Fi"/>
                                                                             <c:choose>
@@ -109,7 +109,7 @@
                                                                                     <c:param name="sorting" value="${param.sorting}"/>
                                                                                 </c:when>
                                                                             </c:choose>
-                                                                            </c:url>" onclick="showGenre(this)">Science Fiction</a></li>
+                                                                            </c:url>" onclick="showGenre(this)"><spring:message code="Genre.Science"/></a></li>
                                     <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
                                                                             <c:param name="genre" value="Comedy"/>
                                                                             <c:choose>
@@ -119,7 +119,7 @@
                                                                                     <c:param name="sorting" value="${param.sorting}"/>
                                                                                 </c:when>
                                                                             </c:choose>
-                                                                            </c:url>" onclick="showGenre(this)">Comedy</a></li>
+                                                                            </c:url>" onclick="showGenre(this)"><spring:message code="Genre.Comedy"/></a></li>
                                     <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
                                                                             <c:param name="genre" value="Adventure"/>
                                                                             <c:choose>
@@ -129,7 +129,7 @@
                                                                                     <c:param name="sorting" value="${param.sorting}"/>
                                                                                 </c:when>
                                                                             </c:choose>
-                                                                            </c:url>" onclick="showGenre(this)">Adventure</a></li>
+                                                                            </c:url>" onclick="showGenre(this)"><spring:message code="Genre.Adventure"/></a></li>
                                     <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
                                                                             <c:param name="genre" value="Drama"/>
                                                                             <c:choose>
@@ -139,7 +139,7 @@
                                                                                     <c:param name="sorting" value="${param.sorting}"/>
                                                                                 </c:when>
                                                                             </c:choose>
-                                                                            </c:url>" onclick="showGenre(this)">Drama</a></li>
+                                                                            </c:url>" onclick="showGenre(this)"><spring:message code="Genre.Drama"/></a></li>
                                     <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
                                                                             <c:param name="genre" value="Horror"/>
                                                                             <c:choose>
@@ -149,7 +149,7 @@
                                                                                     <c:param name="sorting" value="${param.sorting}"/>
                                                                                 </c:when>
                                                                             </c:choose>
-                                                                            </c:url>" onclick="showGenre(this)">Horror</a></li>
+                                                                            </c:url>" onclick="showGenre(this)"><spring:message code="Genre.Horror"/></a></li>
                                     <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
                                                                             <c:param name="genre" value="Animation"/>
                                                                             <c:choose>
@@ -159,7 +159,7 @@
                                                                                     <c:param name="sorting" value="${param.sorting}"/>
                                                                                 </c:when>
                                                                             </c:choose>
-                                                                            </c:url>" onclick="showGenre(this)">Animation</a></li>
+                                                                            </c:url>" onclick="showGenre(this)"><spring:message code="Genre.Animation"/></a></li>
                                     <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
                                                                             <c:param name="genre" value="Thriller"/>
                                                                             <c:choose>
@@ -169,7 +169,7 @@
                                                                                     <c:param name="sorting" value="${param.sorting}"/>
                                                                                 </c:when>
                                                                             </c:choose>
-                                                                            </c:url>" onclick="showGenre(this)">Thriller</a></li>
+                                                                            </c:url>" onclick="showGenre(this)"><spring:message code="Genre.Thriller"/></a></li>
                                     <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
                                                                             <c:param name="genre" value="Mystery"/>
                                                                             <c:choose>
@@ -179,7 +179,7 @@
                                                                                     <c:param name="sorting" value="${param.sorting}"/>
                                                                                 </c:when>
                                                                             </c:choose>
-                                                                            </c:url>" onclick="showGenre(this)">Mystery</a></li>
+                                                                            </c:url>" onclick="showGenre(this)"><spring:message code="Genre.Mystery"/></a></li>
                                     <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
                                                                             <c:param name="genre" value="Crime"/>
                                                                             <c:choose>
@@ -189,7 +189,7 @@
                                                                                     <c:param name="sorting" value="${param.sorting}"/>
                                                                                 </c:when>
                                                                             </c:choose>
-                                                                            </c:url>" onclick="showGenre(this)">Crime</a></li>
+                                                                            </c:url>" onclick="showGenre(this)"><spring:message code="Genre.Crime"/></a></li>
                                     <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
                                                                             <c:param name="genre" value="Fantasy"/>
                                                                             <c:choose>
@@ -199,7 +199,7 @@
                                                                                     <c:param name="sorting" value="${param.sorting}"/>
                                                                                 </c:when>
                                                                             </c:choose>
-                                                                            </c:url>" onclick="showGenre(this)">Fantasy</a></li>
+                                                                            </c:url>" onclick="showGenre(this)"><spring:message code="Genre.Fantasy"/></a></li>
                                     <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
                                                                             <c:param name="genre" value="Romance"/>
                                                                             <c:choose>
@@ -209,7 +209,7 @@
                                                                                     <c:param name="sorting" value="${param.sorting}"/>
                                                                                 </c:when>
                                                                             </c:choose>
-                                                                            </c:url>" onclick="showGenre(this)">Romance</a></li>
+                                                                            </c:url>" onclick="showGenre(this)"><spring:message code="Genre.Romance"/></a></li>
 
                                 </ul>
                             </div>
@@ -355,7 +355,7 @@
                 <div class="d-flex W-navbar-search">
                     <form class="form-inline my-2 my-lg-0 W-searchbar" method="GET" action="<c:url value="/search"/>">
                         <spring:message var="searchPlaceholder" />
-                        <input name="query" class="form-control me-2" type="search" placeholder="Search movies or tv shows" aria-label="Search" >
+                            <input name="query" class="form-control me-2" type="search" placeholder="<spring:message code="SearchMessage"/>" aria-label="Search" >
                         <button class="btn btn-success W-search-button-color" type="submit">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                                 <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
@@ -372,15 +372,15 @@
                                     ${param.userName}
                                 </button>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="<c:url value="/profile"/>">Profile</a></li>
+                                    <li><a class="dropdown-item" href="<c:url value="/profile"/>"><spring:message code="ProfileMessage"/></a></li>
                                     <li><hr class="dropdown-divider"></li>
     <%--                                TODO: HACER EL LOG OUT--%>
-                                    <li><a class="dropdown-item" href="<c:url value="/login/sign-out"/>">Log Out</a></li>
+                                    <li><a class="dropdown-item" href="<c:url value="/login/sign-out"/>"><spring:message code="LogOutMessage"/></a></li>
                                 </ul>
                             </div>
                         </c:when>
                         <c:otherwise>
-                            <a href="<c:url value="/login/sign-in"/>"><button class="btn btn-success" type="button">Login</button></a>
+                            <a href="<c:url value="/login/sign-in"/>"><button class="btn btn-success" type="button"><spring:message code="LoginMessage"/></button></a>
                         </c:otherwise>
                     </c:choose>
                 </div>

@@ -1,5 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
-
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <div class="accordion W-accordion-margin" id="<c:out value="accordion${param.reviewId}"/>">
     <div class="accordion-item">
@@ -30,7 +30,7 @@
                     </c:if>
                 </div>
                 <div class="card-body W-accordion-card-body">
-                    <button id="<c:out value="button${param.reviewId}"/>" class="accordion-button collapsed text-nowrap W-accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="<c:out value="#collapse${param.reviewId}"/>" aria-expanded="false" aria-controls="<c:out value="#collapse${param.reviewId}"/>">
+                    <button id="<c:out value="button${param.reviewId}"/>" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="<c:out value="#collapse${param.reviewId}"/>" aria-expanded="false" aria-controls="<c:out value="#collapse${param.reviewId}"/>">
                         <%--<c:if test="${param.reviewScore!=null}">
                         <p class="W-reviewScore"><c:out value="${param.reviewScore==null?0:param.reviewScore}"/></p>
                         </c:if>--%>

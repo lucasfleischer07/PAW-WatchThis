@@ -1,6 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ page contentType="text/html;charset=UTF-8" %>
-
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <html>
     <head>
         <meta charset="UTF-8">
@@ -109,12 +109,12 @@
                                                                                                 </c:when>
                                                                                             </c:choose>
 
-                                </c:url>">Previous</a>
+                                </c:url>"><spring:message code="Pagination.Prev"/></a>
                             </li>
                         </c:when>
                         <c:otherwise>
                             <li class="page-item disabled">
-                                <a class="page-link" href="#">Previous</a>
+                                <a class="page-link" href="#"><spring:message code="Pagination.Prev"/></a>
                             </li>
                         </c:otherwise>
                     </c:choose>
@@ -372,12 +372,12 @@
                                                                                                 </c:when>
                                                                                             </c:choose>
 
-    </c:url>">Next</a>
+    </c:url>"><spring:message code="Pagination.Next"/></a>
                             </li>
                         </c:when>
                         <c:otherwise>
                             <li class="page-item disabled">
-                                <a class="page-link" href="#">Next</a>
+                                <a class="page-link" href="#"><spring:message code="Pagination.Next"/></a>
                             </li>
                         </c:otherwise>
                     </c:choose>

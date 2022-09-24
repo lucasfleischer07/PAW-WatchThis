@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ page contentType="text/html;charset=UTF-8" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <html lang="en">
   <head>
@@ -33,10 +34,10 @@
                 <div class="card-body W-card-body-aligment">
                   <h5 class="card-title W-card-title"><c:out value="${details.name}"/></h5>
                   <p class="card-text"><c:out value="${details.description}"/></p>
-                  <p class="card-text"><span class="W-span-text-info-card-movie">Duration:</span> <c:out value="${details.duration}"/></p>
-                  <p class="card-text"><span class="W-span-text-info-card-movie">Genre:</span> <c:out value="${details.genre}"/></p>
-                  <p class="card-text"><span class="W-span-text-info-card-movie">Released:</span> <c:out value="${details.released}"/></p>
-                  <p class="card-text"><span class="W-span-text-info-card-movie">Creator:</span> <c:out value="${details.creator}"/></p>
+                  <p class="card-text"><span class="W-span-text-info-card-movie"><spring:message code="Content.Duration"/></span> <c:out value="${details.duration}"/></p>
+                  <p class="card-text"><span class="W-span-text-info-card-movie"><spring:message code="Content.Genre"/></span> <c:out value="${details.genre}"/></p>
+                  <p class="card-text"><span class="W-span-text-info-card-movie"><spring:message code="Content.Released"/></span> <c:out value="${details.released}"/></p>
+                  <p class="card-text"><span class="W-span-text-info-card-movie"><spring:message code="Content.Creator"/></span> <c:out value="${details.creator}"/></p>
 <%--                  <c:if test="${param.contentRating >= 1}">--%>
                     <c:forEach  begin="1" step="1" end="5" var="var">
                       <c:choose>
@@ -53,7 +54,7 @@
                       </c:choose>
                     </c:forEach>
 <%--                  </c:if>--%>
-                  <p class="card-text">(<c:out value="${details.reviewsAmount}"/> reviews)</p>
+                  <p class="card-text">(<c:out value="${details.reviewsAmount}"/> <spring:message code="Content.reviewAmount"/>)</p>
 
                 </div>
               </div>
@@ -65,12 +66,12 @@
 
       <div class="card W-inv-film-card-margin">
         <div class="card-header W-card-header">
-          <h3 class="W-title-review">Reviews</h3>
+          <h3 class="W-title-review"><spring:message code="Content.Review"/></h3>
           <div class="W-add-review">
             <c:choose>
               <c:when test="${userName != 'null' && reviews[0].userName==userName}"/>
               <c:when test="${userName != 'null'}">
-                <a href="<c:url value="/reviewForm/${details.type}/${details.id}/${userId}"/>"><button type="button" class="btn btn-dark W-add-review-button W-reviewText W-add-review-button-add">Add review</button></a>
+                <a href="<c:url value="/reviewForm/${details.type}/${details.id}/${userId}"/>"><button type="button" class="btn btn-dark W-add-review-button W-reviewText W-add-review-button-add"><spring:message code="Content.AddReview"/></button></a>
               </c:when>
               <c:otherwise>
                 <button type="button" class="btn btn-dark W-add-review-button W-reviewText W-add-review-button-add" data-bs-toggle="modal" data-bs-target="#exampleModal">Add review</button>
@@ -116,11 +117,11 @@
                 <img src="<c:url value="/resources/img/noReviews.png"/>" alt="No_Review_Img"/>
                 </div>
                 <c:choose>
-                  <c:when test="${details.type.equals('movie')}">
-                    <h3 class="W-no-reviews-text" >There are no reviews for this movie yet. Be the first to add one!</h3>
+                  <c:when test="${details.type == 'movie'}">
+                    <h3 class="W-no-reviews-text" ><spring:message code="Content.NoReviewMessage.Movie"/></h3>
                   </c:when>
                   <c:otherwise>
-                    <h3 class="W-no-reviews-text" >There are no reviews for this tv show yet. Be the first to add one!</h3>
+                    <h3 class="W-no-reviews-text" ><spring:message code="Content.NoReviewMessage.Serie"/></h3>
                   </c:otherwise>
                 </c:choose>
               </div>

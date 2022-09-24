@@ -105,6 +105,15 @@
     transition: 0.1s;
 }
 
+.W-watchList-icon {
+    margin-right: 0.5vw;
+    width: 14%;
+}
+
+.W-watchList-button {
+    margin-top: 1vw;
+}
+
 .W-movie-card-size {
     width: 20%;
     margin: 1vm;

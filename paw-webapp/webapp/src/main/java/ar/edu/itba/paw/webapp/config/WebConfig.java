@@ -76,27 +76,9 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
     }
 
-    // * ----------------------------------- Emails -----------------------------------------------------------------------
-    @Bean
-    public JavaMailSender getJavaMailSender() {
-        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setHost("smtp.gmail.com");
-        mailSender.setPort(587);
 
-        mailSender.setUsername("watchthisassist@gmail.com");
-        mailSender.setPassword("scyvyihczrzgdifw");
 
-        Properties props = mailSender.getJavaMailProperties();
-        props.put("mail.transport.protocol", "smtp");
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.debug", "true");
-
-        return mailSender;
-    }
-
-    // * -----------------------------------------------------------------------------------------------------------------------
-
+    // * ----------------------- Internacionalizacion ------------------------------------------------------------------
     @Bean
     public MessageSource messageSource(){
         final ReloadableResourceBundleMessageSource msgSource = new ReloadableResourceBundleMessageSource();
@@ -108,6 +90,11 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
         return msgSource;
     }
+
+    // * ---------------------------------------------------------------------------------------------------------------
+
+    // * ----------------------- Para subir fotos a la BDD--------------------------------------------------------------
+
     @Bean(name = "multipartResolver")
     public CommonsMultipartResolver multipartResolver() {
         CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
@@ -117,4 +104,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         multipartResolver.setDefaultEncoding("utf-8");
         return multipartResolver;
     }
+
+    // * ---------------------------------------------------------------------------------------------------------------
+
 }
