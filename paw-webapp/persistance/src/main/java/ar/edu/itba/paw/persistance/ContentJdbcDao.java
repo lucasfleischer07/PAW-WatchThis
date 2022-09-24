@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import javax.swing.plaf.PanelUI;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -218,5 +219,10 @@ public class ContentJdbcDao implements ContentDao {
     @Override
     public List<Content> getBestRated() {
         return template.query("SELECT * FROM content WHERE (rating > 0) AND ((rating/reviewsamount) >=3) ORDER BY (rating/reviewsAmount) DESC", CONTENT_ROW_MAPPER);
+    }
+
+    @Override
+    public List<Content> getLessDuration(String type) {
+        return template.query("SELECT * FROM content WHERE type = ? ORDER BY durationnum asc LIMIT 20", new Object[] {type}, CONTENT_ROW_MAPPER);
     }
 }

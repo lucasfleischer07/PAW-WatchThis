@@ -37,17 +37,27 @@ public class ContentController {
     public ModelAndView helloWorld(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("pageNum")final Optional<Integer> pageNum, @RequestParam(name = "query", defaultValue = "") final String query) {
         final ModelAndView mav = new ModelAndView("HomePage");
         List<Content> bestRatedList = cs.getBestRated();
-        if(bestRatedList == null) {
+        List<Content> lessDurationMoviesList = cs.getLessDuration("movie");
+        List<Content> lessDurationSeriesList = cs.getLessDuration("serie");
+
+        if(bestRatedList == null || lessDurationMoviesList == null || lessDurationSeriesList == null) {
             throw new PageNotFoundException();
         }
         mav.addObject("bestRatedList", bestRatedList);
         mav.addObject("bestRatedListSize", bestRatedList.size());
+
+        mav.addObject("lessDurationMoviesList", lessDurationMoviesList);
+        mav.addObject("lessDurationMoviesListSize", lessDurationMoviesList.size());
+
+        mav.addObject("lessDurationSeriesList", lessDurationSeriesList);
+        mav.addObject("lessDurationSeriesListSize", lessDurationSeriesList.size());
 
         mav.addObject("genre","ANY");
         mav.addObject("durationFrom","ANY");
         mav.addObject("durationTo","ANY");
         mav.addObject("sorting","ANY");
         mav.addObject("contentType", "all");
+
 
 
         try {

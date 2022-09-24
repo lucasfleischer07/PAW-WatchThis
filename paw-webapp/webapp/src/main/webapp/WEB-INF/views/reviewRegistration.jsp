@@ -20,7 +20,7 @@
         <link href="<c:url value="/resources/css/reviewRegistrationStyles.css"/>" rel="stylesheet" type="text/css"/>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
 
-        <title>Review Registration</title>
+        <title><spring:message code="Review.Registration"/></title>
     </head>
 
     <body>
@@ -48,24 +48,24 @@
                     <div class="mb-3 W-input-label-review-info">
                         <form:errors path="name" element="p" cssStyle="color: red"/>
                         <form:label path="name" class="form-label"><spring:message code="CreateReview.ReviewName"/> <span class="W-red-asterisco">*</span></form:label>
-                        <p class="W-review-registration-text">(Must be between 6 and 200 characters)</p>
+                        <p class="W-review-registration-text"><spring:message code="CreateReview.CharacterLimits" arguments="6,200"/></p>
                         <form:input type="text" class="form-control" path="name" placeholder="My review"/>
                     </div>
                     <div class="mb-3 W-input-label-review-info">
                         <form:errors path="description" element="p" cssStyle="color: red"/>
                         <form:label path="description" class="form-label"><spring:message code="CreateReview.ReviewDescription"/> <span class="W-red-asterisco">*</span></form:label>
-                        <p class="W-review-registration-text">(Must be between 20 and 2000 characters)</p>
+                        <p class="W-review-registration-text"><spring:message code="CreateReview.CharacterLimits" arguments="20,2000"/></p>
                         <form:textarea class="form-control" id="MyTextArea" path="description" rows="3"/>
                     </div>
                     <div class="mb-3 W-input-label-review-info">
                         <form:errors path="rating" element="p" cssStyle="color: red"/>
                         <form:label path="rating" class="form-label"><spring:message code="CreateReview.ReviewRating"/> <span class="W-red-asterisco">*</span></form:label>
                         <form:select path="rating" class="form-select" aria-label="Default select example">
-                            <form:option value="1">1 star</form:option>
-                            <form:option value="2">2 stars</form:option>
-                            <form:option value="3">3 stars</form:option>
-                            <form:option value="4">4 stars</form:option>
-                            <form:option selected="true" value="5">5 stars</form:option>
+                            <form:option value="1"><spring:message code="Stars.quantity.1"/></form:option>
+                            <form:option value="2"><spring:message code="Stars.quantity.2"/></form:option>
+                            <form:option value="3"><spring:message code="Stars.quantity.3"/></form:option>
+                            <form:option value="4"><spring:message code="Stars.quantity.4"/></form:option>
+                            <form:option selected="true" value="5"><spring:message code="Stars.quantity.5"/></form:option>
                         </form:select>
                     </div>
                 </div>

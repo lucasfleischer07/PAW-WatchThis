@@ -70,13 +70,13 @@
 }
 
 .W-title-review {
-    margin-top: 0%;
-    margin-bottom: 0%;
+    margin-top: 0;
+    margin-bottom: 0;
     font-size: 1.3vw;
 }
 
 .W-reviewScore {
-    margin: 0%;
+    margin: 0;
 }
 
 .W-stars {
@@ -85,8 +85,18 @@
     margin-left: 1%;
     display: flex;
 }
+
+.W-reviewCard-stars {
+    width: 1.2vw;
+}
+
 .W-delete-edit-buttons{
     display: flex;
+}
+
+.W-delete-edit-buttons-width {
+    width: 1.3vw;
+    height: 10%;
 }
 
 .W-creator-review {
@@ -128,6 +138,12 @@
     margin-bottom: 60%;
     margin-top: 60%;
     font-size: 1vw;
+}
+
+.W-img-aligment {
+    display: flex;
+    /*margin-top: 1%;*/
+    /*justify-content: center;*/
 }
 
 .W-thumb-up {

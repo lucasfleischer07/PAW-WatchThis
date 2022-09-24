@@ -18,7 +18,7 @@
         <link href="<c:url value="/resources/css/navBarStyles.css"/>" rel="stylesheet" type="text/css"/>
         <link href="<c:url value="/resources/css/reviewsStyles.css"/>" rel="stylesheet" type="text/css"/>
         <link href="<c:url value="/resources/css/reviewRegistrationStyles.css"/>" rel="stylesheet" type="text/css"/>
-        <title>Review Edition</title>
+        <title><spring:message code="Edit.Review"/></title>
     </head>
 
     <body>
@@ -54,39 +54,39 @@
                         <form:select path="rating" class="form-select" aria-label="Default select example">
                             <c:choose>
                                 <c:when test="${reviewInfo.rating == 1}">
-                                    <form:option selected="true" value="1">1 star</form:option>
-                                    <form:option value="2">2 stars</form:option>
-                                    <form:option value="3">3 stars</form:option>
-                                    <form:option value="4">4 stars</form:option>
-                                    <form:option value="5">5 stars</form:option>
+                                    <form:option selected="true" value="1"><spring:message code="Stars.quantity.1"/></form:option>
+                                    <form:option value="2"><spring:message code="Stars.quantity.2"/></form:option>
+                                    <form:option value="3"><spring:message code="Stars.quantity.3"/></form:option>
+                                    <form:option value="4"><spring:message code="Stars.quantity.4"/></form:option>
+                                    <form:option value="5"><spring:message code="Stars.quantity.5"/></form:option>
                                 </c:when>
                                 <c:when test="${reviewInfo.rating == 2}">
-                                    <form:option value="1">1 star</form:option>
-                                    <form:option selected="true" value="2">2 stars</form:option>
-                                    <form:option value="3">3 stars</form:option>
-                                    <form:option value="4">4 stars</form:option>
-                                    <form:option value="5">5 stars</form:option>
+                                    <form:option value="1"><spring:message code="Stars.quantity.1"/></form:option>
+                                    <form:option selected="true" value="2"><spring:message code="Stars.quantity.2"/></form:option>
+                                    <form:option value="3"><spring:message code="Stars.quantity.3"/></form:option>
+                                    <form:option value="4"><spring:message code="Stars.quantity.4"/></form:option>
+                                    <form:option value="5"><spring:message code="Stars.quantity.5"/></form:option>
                                 </c:when>
                                 <c:when test="${reviewInfo.rating == 3}">
-                                    <form:option value="1">1 star</form:option>
-                                    <form:option value="2">2 stars</form:option>
-                                    <form:option selected="true" value="3">3 stars</form:option>
-                                    <form:option value="4">4 stars</form:option>
-                                    <form:option value="5">5 stars</form:option>
+                                    <form:option value="1"><spring:message code="Stars.quantity.1"/></form:option>
+                                    <form:option value="2"><spring:message code="Stars.quantity.2"/></form:option>
+                                    <form:option selected="true" value="3"><spring:message code="Stars.quantity.3"/></form:option>
+                                    <form:option value="4"><spring:message code="Stars.quantity.4"/></form:option>
+                                    <form:option value="5"><spring:message code="Stars.quantity.5"/></form:option>
                                 </c:when>
                                 <c:when test="${reviewInfo.rating == 4}">
-                                    <form:option value="1">1 star</form:option>
-                                    <form:option value="2">2 stars</form:option>
-                                    <form:option value="3">3 stars</form:option>
-                                    <form:option selected="true" value="4">4 stars</form:option>
-                                    <form:option value="5">5 stars</form:option>
+                                    <form:option value="1"><spring:message code="Stars.quantity.1"/></form:option>
+                                    <form:option value="2"><spring:message code="Stars.quantity.2"/></form:option>
+                                    <form:option value="3"><spring:message code="Stars.quantity.3"/></form:option>
+                                    <form:option selected="true" value="4"><spring:message code="Stars.quantity.5"/></form:option>
+                                    <form:option value="5"><spring:message code="Stars.quantity.5"/></form:option>
                                 </c:when>
                                 <c:otherwise>
-                                    <form:option value="1">1 star</form:option>
-                                    <form:option value="2">2 stars</form:option>
-                                    <form:option value="3">3 stars</form:option>
-                                    <form:option value="4">4 stars</form:option>
-                                    <form:option selected="true" value="5">5 stars</form:option>
+                                    <form:option value="1"><spring:message code="Stars.quantity.1"/></form:option>
+                                    <form:option value="2"><spring:message code="Stars.quantity.2"/></form:option>
+                                    <form:option value="3"><spring:message code="Stars.quantity.3"/></form:option>
+                                    <form:option value="4"><spring:message code="Stars.quantity.4"/></form:option>
+                                    <form:option selected="true" value="5"><spring:message code="Stars.quantity.5"/></form:option>
                                 </c:otherwise>
                             </c:choose>
                         </form:select>
@@ -94,8 +94,8 @@
                 </div>
             </div>
             <div class="W-submit-cancel-buttons">
-                <a href="<c:url value="/${details.type}/${details.id}/"/>"><button type="button" class="btn btn-danger" id="cancelButton" onclick="(this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'; document.getElementById('submitButton').disabled=true">Cancel</button></a>
-                <button id="submitButton" type="submit" class="btn btn-success" onclick="this.form.submit(); (this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'; document.getElementById('cancelButton').disabled=true">Submit</button>
+                <a href="<c:url value="/${details.type}/${details.id}/"/>"><button type="button" class="btn btn-danger" id="cancelButton" onclick="(this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'; document.getElementById('submitButton').disabled=true"><spring:message code="Form.Cancel"/></button></a>
+                <button id="submitButton" type="submit" class="btn btn-success" onclick="this.form.submit(); (this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'; document.getElementById('cancelButton').disabled=true"><spring:message code="Form.Submit"/></button>
             </div>
         </form:form>
 

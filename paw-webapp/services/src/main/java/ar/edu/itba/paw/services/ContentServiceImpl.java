@@ -73,4 +73,9 @@ public class ContentServiceImpl implements ContentService {
         return ContentDao.getBestRated();
     }
 
+    @Override
+    public List<Content> getLessDuration(String type) {
+        return ContentDao.getLessDuration(type);
+    }
+
 }

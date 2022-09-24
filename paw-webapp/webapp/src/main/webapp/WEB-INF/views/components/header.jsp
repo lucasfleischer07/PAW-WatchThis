@@ -5,7 +5,7 @@
     <div class="container-fluid">
         <div class="W-logo-div">
             <a class="navbar-brand W-logo-style" href="<c:url value="/"/>">
-                <img src="<c:url value="/resources/img/WatchThisLogo.png"/>" alt="WatchThisLogo" style="width:100%;height:100%;">
+                <img src="<c:url value="/resources/img/WatchThisLogo.png"/>" alt="WatchThisLogo" class="W-img-size2">
             </a>
         </div>
 
@@ -65,292 +65,296 @@
                 </div>
 
                 <div class="W-filters-hamburger-buttons">
-                    <div class="btn-group-vertical" role="group" aria-label="Button group with nested dropdown">
-                        <div class="list-group">
-                            <div class="dropdown">
-                                <c:choose>
-                                    <c:when test="${param.genre != '' && param.genre != 'ANY'}">
-                                        <button id="genreGroupDrop" type="button" class="W-filter-title W-dropdown-button-genre-duration-sort btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <c:out value="${param.genre}"/>
-                                        </button>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <button id="genreGroupDrop" type="button" class="W-filter-title W-dropdown-button-genre-duration-sort btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <spring:message code="GenreMessage"/>
-                                        </button>
-                                    </c:otherwise>
-                                </c:choose>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
-                                                                            <c:choose>
-                                                                                <c:when test="${param.durationFrom != 'ANY' || param.sorting != 'ANY'}">
-                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
-                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
-                                                                                    <c:param name="sorting" value="${param.sorting}"/>
-                                                                                </c:when>
-                                                                            </c:choose>
-                                                                            </c:url>" onclick="showGenre(this)"><spring:message code="Genre.Clear"/></a></li>
-                                    <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
-                                                                            <c:param name="genre" value="Action"/>
-                                                                            <c:choose>
-                                                                                <c:when test="${param.durationFrom != 'ANY' || param.sorting != 'ANY'}">
-                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
-                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
-                                                                                    <c:param name="sorting" value="${param.sorting}"/>
-                                                                                </c:when>
-                                                                            </c:choose>
-                                                                            </c:url>" onclick="showGenre(this)"><spring:message code="Genre.Action"/></a></li>
-                                    <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
-                                                                            <c:param name="genre" value="Sci-Fi"/>
-                                                                            <c:choose>
-                                                                                <c:when test="${param.durationFrom != 'ANY' || param.sorting != 'ANY'}">
-                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
-                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
-                                                                                    <c:param name="sorting" value="${param.sorting}"/>
-                                                                                </c:when>
-                                                                            </c:choose>
-                                                                            </c:url>" onclick="showGenre(this)"><spring:message code="Genre.Science"/></a></li>
-                                    <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
-                                                                            <c:param name="genre" value="Comedy"/>
-                                                                            <c:choose>
-                                                                                <c:when test="${param.durationFrom != 'ANY' || param.sorting != 'ANY'}">
-                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
-                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
-                                                                                    <c:param name="sorting" value="${param.sorting}"/>
-                                                                                </c:when>
-                                                                            </c:choose>
-                                                                            </c:url>" onclick="showGenre(this)"><spring:message code="Genre.Comedy"/></a></li>
-                                    <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
-                                                                            <c:param name="genre" value="Adventure"/>
-                                                                            <c:choose>
-                                                                                <c:when test="${param.durationFrom != 'ANY' || param.sorting != 'ANY'}">
-                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
-                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
-                                                                                    <c:param name="sorting" value="${param.sorting}"/>
-                                                                                </c:when>
-                                                                            </c:choose>
-                                                                            </c:url>" onclick="showGenre(this)"><spring:message code="Genre.Adventure"/></a></li>
-                                    <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
-                                                                            <c:param name="genre" value="Drama"/>
-                                                                            <c:choose>
-                                                                                <c:when test="${param.durationFrom != 'ANY' || param.sorting != 'ANY'}">
-                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
-                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
-                                                                                    <c:param name="sorting" value="${param.sorting}"/>
-                                                                                </c:when>
-                                                                            </c:choose>
-                                                                            </c:url>" onclick="showGenre(this)"><spring:message code="Genre.Drama"/></a></li>
-                                    <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
-                                                                            <c:param name="genre" value="Horror"/>
-                                                                            <c:choose>
-                                                                                <c:when test="${param.durationFrom != 'ANY' || param.sorting != 'ANY'}">
-                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
-                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
-                                                                                    <c:param name="sorting" value="${param.sorting}"/>
-                                                                                </c:when>
-                                                                            </c:choose>
-                                                                            </c:url>" onclick="showGenre(this)"><spring:message code="Genre.Horror"/></a></li>
-                                    <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
-                                                                            <c:param name="genre" value="Animation"/>
-                                                                            <c:choose>
-                                                                                <c:when test="${param.durationFrom != 'ANY' || param.sorting != 'ANY'}">
-                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
-                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
-                                                                                    <c:param name="sorting" value="${param.sorting}"/>
-                                                                                </c:when>
-                                                                            </c:choose>
-                                                                            </c:url>" onclick="showGenre(this)"><spring:message code="Genre.Animation"/></a></li>
-                                    <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
-                                                                            <c:param name="genre" value="Thriller"/>
-                                                                            <c:choose>
-                                                                                <c:when test="${param.durationFrom != 'ANY' || param.sorting != 'ANY'}">
-                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
-                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
-                                                                                    <c:param name="sorting" value="${param.sorting}"/>
-                                                                                </c:when>
-                                                                            </c:choose>
-                                                                            </c:url>" onclick="showGenre(this)"><spring:message code="Genre.Thriller"/></a></li>
-                                    <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
-                                                                            <c:param name="genre" value="Mystery"/>
-                                                                            <c:choose>
-                                                                                <c:when test="${param.durationFrom != 'ANY' || param.sorting != 'ANY'}">
-                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
-                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
-                                                                                    <c:param name="sorting" value="${param.sorting}"/>
-                                                                                </c:when>
-                                                                            </c:choose>
-                                                                            </c:url>" onclick="showGenre(this)"><spring:message code="Genre.Mystery"/></a></li>
-                                    <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
-                                                                            <c:param name="genre" value="Crime"/>
-                                                                            <c:choose>
-                                                                                <c:when test="${param.durationFrom != 'ANY' || param.sorting != 'ANY'}">
-                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
-                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
-                                                                                    <c:param name="sorting" value="${param.sorting}"/>
-                                                                                </c:when>
-                                                                            </c:choose>
-                                                                            </c:url>" onclick="showGenre(this)"><spring:message code="Genre.Crime"/></a></li>
-                                    <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
-                                                                            <c:param name="genre" value="Fantasy"/>
-                                                                            <c:choose>
-                                                                                <c:when test="${param.durationFrom != 'ANY' || param.sorting != 'ANY'}">
-                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
-                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
-                                                                                    <c:param name="sorting" value="${param.sorting}"/>
-                                                                                </c:when>
-                                                                            </c:choose>
-                                                                            </c:url>" onclick="showGenre(this)"><spring:message code="Genre.Fantasy"/></a></li>
-                                    <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
-                                                                            <c:param name="genre" value="Romance"/>
-                                                                            <c:choose>
-                                                                                <c:when test="${param.durationFrom != 'ANY' || param.sorting != 'ANY'}">
-                                                                                    <c:param name="durationFrom" value="${param.durationFrom}"/>
-                                                                                    <c:param name="durationTo" value="${param.durationTo}"/>
-                                                                                    <c:param name="sorting" value="${param.sorting}"/>
-                                                                                </c:when>
-                                                                            </c:choose>
-                                                                            </c:url>" onclick="showGenre(this)"><spring:message code="Genre.Romance"/></a></li>
+                    <c:choose>
+                        <c:when test="${param.type != 'profile'}">
+                            <div class="btn-group-vertical" role="group" aria-label="Button group with nested dropdown">
+                                <div class="list-group">
+                                    <div class="dropdown">
+                                        <c:choose>
+                                            <c:when test="${param.genre != '' && param.genre != 'ANY'}">
+                                                <button id="genreGroupDrop" type="button" class="W-filter-title W-dropdown-button-genre-duration-sort btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <c:out value="${param.genre}"/>
+                                                </button>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <button id="genreGroupDrop" type="button" class="W-filter-title W-dropdown-button-genre-duration-sort btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <spring:message code="GenreMessage"/>
+                                                </button>
+                                            </c:otherwise>
+                                        </c:choose>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:choose>
+                                                                                        <c:when test="${param.durationFrom != 'ANY' || param.sorting != 'ANY'}">
+                                                                                            <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                            <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                            <c:param name="sorting" value="${param.sorting}"/>
+                                                                                        </c:when>
+                                                                                    </c:choose>
+                                                                                    </c:url>" onclick="showGenre(this)"><spring:message code="Genre.Clear"/></a></li>
+                                            <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Action"/>
+                                                                                    <c:choose>
+                                                                                        <c:when test="${param.durationFrom != 'ANY' || param.sorting != 'ANY'}">
+                                                                                            <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                            <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                            <c:param name="sorting" value="${param.sorting}"/>
+                                                                                        </c:when>
+                                                                                    </c:choose>
+                                                                                    </c:url>" onclick="showGenre(this)"><spring:message code="Genre.Action"/></a></li>
+                                            <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Sci-Fi"/>
+                                                                                    <c:choose>
+                                                                                        <c:when test="${param.durationFrom != 'ANY' || param.sorting != 'ANY'}">
+                                                                                            <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                            <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                            <c:param name="sorting" value="${param.sorting}"/>
+                                                                                        </c:when>
+                                                                                    </c:choose>
+                                                                                    </c:url>" onclick="showGenre(this)"><spring:message code="Genre.Science"/></a></li>
+                                            <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Comedy"/>
+                                                                                    <c:choose>
+                                                                                        <c:when test="${param.durationFrom != 'ANY' || param.sorting != 'ANY'}">
+                                                                                            <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                            <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                            <c:param name="sorting" value="${param.sorting}"/>
+                                                                                        </c:when>
+                                                                                    </c:choose>
+                                                                                    </c:url>" onclick="showGenre(this)"><spring:message code="Genre.Comedy"/></a></li>
+                                            <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Adventure"/>
+                                                                                    <c:choose>
+                                                                                        <c:when test="${param.durationFrom != 'ANY' || param.sorting != 'ANY'}">
+                                                                                            <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                            <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                            <c:param name="sorting" value="${param.sorting}"/>
+                                                                                        </c:when>
+                                                                                    </c:choose>
+                                                                                    </c:url>" onclick="showGenre(this)"><spring:message code="Genre.Adventure"/></a></li>
+                                            <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Drama"/>
+                                                                                    <c:choose>
+                                                                                        <c:when test="${param.durationFrom != 'ANY' || param.sorting != 'ANY'}">
+                                                                                            <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                            <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                            <c:param name="sorting" value="${param.sorting}"/>
+                                                                                        </c:when>
+                                                                                    </c:choose>
+                                                                                    </c:url>" onclick="showGenre(this)"><spring:message code="Genre.Drama"/></a></li>
+                                            <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Horror"/>
+                                                                                    <c:choose>
+                                                                                        <c:when test="${param.durationFrom != 'ANY' || param.sorting != 'ANY'}">
+                                                                                            <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                            <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                            <c:param name="sorting" value="${param.sorting}"/>
+                                                                                        </c:when>
+                                                                                    </c:choose>
+                                                                                    </c:url>" onclick="showGenre(this)"><spring:message code="Genre.Horror"/></a></li>
+                                            <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Animation"/>
+                                                                                    <c:choose>
+                                                                                        <c:when test="${param.durationFrom != 'ANY' || param.sorting != 'ANY'}">
+                                                                                            <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                            <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                            <c:param name="sorting" value="${param.sorting}"/>
+                                                                                        </c:when>
+                                                                                    </c:choose>
+                                                                                    </c:url>" onclick="showGenre(this)"><spring:message code="Genre.Animation"/></a></li>
+                                            <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Thriller"/>
+                                                                                    <c:choose>
+                                                                                        <c:when test="${param.durationFrom != 'ANY' || param.sorting != 'ANY'}">
+                                                                                            <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                            <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                            <c:param name="sorting" value="${param.sorting}"/>
+                                                                                        </c:when>
+                                                                                    </c:choose>
+                                                                                    </c:url>" onclick="showGenre(this)"><spring:message code="Genre.Thriller"/></a></li>
+                                            <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Mystery"/>
+                                                                                    <c:choose>
+                                                                                        <c:when test="${param.durationFrom != 'ANY' || param.sorting != 'ANY'}">
+                                                                                            <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                            <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                            <c:param name="sorting" value="${param.sorting}"/>
+                                                                                        </c:when>
+                                                                                    </c:choose>
+                                                                                    </c:url>" onclick="showGenre(this)"><spring:message code="Genre.Mystery"/></a></li>
+                                            <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Crime"/>
+                                                                                    <c:choose>
+                                                                                        <c:when test="${param.durationFrom != 'ANY' || param.sorting != 'ANY'}">
+                                                                                            <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                            <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                            <c:param name="sorting" value="${param.sorting}"/>
+                                                                                        </c:when>
+                                                                                    </c:choose>
+                                                                                    </c:url>" onclick="showGenre(this)"><spring:message code="Genre.Crime"/></a></li>
+                                            <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Fantasy"/>
+                                                                                    <c:choose>
+                                                                                        <c:when test="${param.durationFrom != 'ANY' || param.sorting != 'ANY'}">
+                                                                                            <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                            <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                            <c:param name="sorting" value="${param.sorting}"/>
+                                                                                        </c:when>
+                                                                                    </c:choose>
+                                                                                    </c:url>" onclick="showGenre(this)"><spring:message code="Genre.Fantasy"/></a></li>
+                                            <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:param name="genre" value="Romance"/>
+                                                                                    <c:choose>
+                                                                                        <c:when test="${param.durationFrom != 'ANY' || param.sorting != 'ANY'}">
+                                                                                            <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                            <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                            <c:param name="sorting" value="${param.sorting}"/>
+                                                                                        </c:when>
+                                                                                    </c:choose>
+                                                                                    </c:url>" onclick="showGenre(this)"><spring:message code="Genre.Romance"/></a></li>
 
-                                </ul>
-                            </div>
-                        </div>
+                                        </ul>
+                                    </div>
+                                </div>
 
-                        <div class="list-group">
-                            <div class="dropdown">
-                                <c:choose>
-                                    <c:when test="${param.durationTo == '1000'}">
-                                        <button id="genreGroupDrop" type="button" class="W-filter-title W-dropdown-button-genre-duration-sort  btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <c:out value="${param.durationFrom}"/> or more
-                                        </button>
-                                    </c:when>
-                                    <c:when test="${param.durationFrom != '' &&  param.durationFrom != 'ANY'}">
-                                        <button id="genreGroupDrop" type="button" class="W-filter-title W-dropdown-button-genre-duration-sort  btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <c:out value="${param.durationFrom}"/>-<c:out value="${param.durationTo}"/> minutes
-                                        </button>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <button id="genreGroupDrop" type="button" class="W-filter-title W-dropdown-button-genre-duration-sort  btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                            Duration
-                                        </button>
-                                    </c:otherwise>
-                                </c:choose>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
-                                                                            <c:choose>
-                                                                                <c:when test="${param.genre != 'ANY' || param.sorting != 'ANY'}">
-                                                                                    <c:param name="genre" value="${param.genre}"/>
-                                                                                    <c:param name="sorting" value="${param.sorting}"/>
-                                                                                </c:when>
-                                                                            </c:choose>
-                                                                            </c:url>" onclick="showDuration(this)">Clear filter</a></li>
-                                    <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
-                                                                            <c:choose>
-                                                                                <c:when test="${param.genre != 'ANY' || param.sorting != 'ANY'}">
-                                                                                    <c:param name="genre" value="${param.genre}"/>
-                                                                                    <c:param name="sorting" value="${param.sorting}"/>
-                                                                                </c:when>
-                                                                            </c:choose>
-                                                                            <c:param name="durationFrom" value="0"/>-<c:param name="durationTo" value="90"/>
-                                                                            </c:url>" onclick="showDuration(this)">0-90 minutes</a></li>
-                                    <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
-                                                                            <c:choose>
-                                                                                <c:when test="${param.genre != 'ANY' || param.sorting != 'ANY'}">
-                                                                                    <c:param name="genre" value="${param.genre}"/>
-                                                                                    <c:param name="sorting" value="${param.sorting}"/>
-                                                                                </c:when>
-                                                                            </c:choose>
-                                                                            <c:param name="durationFrom" value="90"/>-<c:param name="durationTo" value="120"/>
-                                                                            </c:url>" onclick="showDuration(this)">90-120 minutes</a></li>
-                                    <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
-                                                                            <c:choose>
-                                                                                <c:when test="${param.genre != 'ANY' || param.sorting != 'ANY'}">
-                                                                                    <c:param name="genre" value="${param.genre}"/>
-                                                                                    <c:param name="sorting" value="${param.sorting}"/>
-                                                                                </c:when>
-                                                                            </c:choose>
-                                                                            <c:param name="durationFrom" value="120"/>-<c:param name="durationTo" value="150"/>
-                                                                            </c:url>" onclick="showDuration(this)">120-150 minutes</a></li>
-                                    <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
-                                                                            <c:choose>
-                                                                                <c:when test="${param.genre != 'ANY' || param.sorting != 'ANY'}">
-                                                                                    <c:param name="genre" value="${param.genre}"/>
-                                                                                    <c:param name="sorting" value="${param.sorting}"/>
-                                                                                </c:when>
-                                                                            </c:choose>
-                                                                            <c:param name="durationFrom" value="150"/>-<c:param name="durationTo" value="1000"/>
-                                                                            </c:url>" onclick="showDuration(this)">150 or more</a></li>
-                                </ul>
+                                <div class="list-group">
+                                    <div class="dropdown">
+                                        <c:choose>
+                                            <c:when test="${param.durationTo == '1000'}">
+                                                <button id="genreGroupDrop" type="button" class="W-filter-title W-dropdown-button-genre-duration-sort  btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <c:out value="${param.durationFrom}"/> or more
+                                                </button>
+                                            </c:when>
+                                            <c:when test="${param.durationFrom != '' &&  param.durationFrom != 'ANY'}">
+                                                <button id="genreGroupDrop" type="button" class="W-filter-title W-dropdown-button-genre-duration-sort  btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <c:out value="${param.durationFrom}"/>-<c:out value="${param.durationTo}"/> minutes
+                                                </button>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <button id="genreGroupDrop" type="button" class="W-filter-title W-dropdown-button-genre-duration-sort  btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    Duration
+                                                </button>
+                                            </c:otherwise>
+                                        </c:choose>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:choose>
+                                                                                        <c:when test="${param.genre != 'ANY' || param.sorting != 'ANY'}">
+                                                                                            <c:param name="genre" value="${param.genre}"/>
+                                                                                            <c:param name="sorting" value="${param.sorting}"/>
+                                                                                        </c:when>
+                                                                                    </c:choose>
+                                                                                    </c:url>" onclick="showDuration(this)">Clear filter</a></li>
+                                            <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:choose>
+                                                                                        <c:when test="${param.genre != 'ANY' || param.sorting != 'ANY'}">
+                                                                                            <c:param name="genre" value="${param.genre}"/>
+                                                                                            <c:param name="sorting" value="${param.sorting}"/>
+                                                                                        </c:when>
+                                                                                    </c:choose>
+                                                                                    <c:param name="durationFrom" value="0"/>-<c:param name="durationTo" value="90"/>
+                                                                                    </c:url>" onclick="showDuration(this)">0-90 minutes</a></li>
+                                            <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:choose>
+                                                                                        <c:when test="${param.genre != 'ANY' || param.sorting != 'ANY'}">
+                                                                                            <c:param name="genre" value="${param.genre}"/>
+                                                                                            <c:param name="sorting" value="${param.sorting}"/>
+                                                                                        </c:when>
+                                                                                    </c:choose>
+                                                                                    <c:param name="durationFrom" value="90"/>-<c:param name="durationTo" value="120"/>
+                                                                                    </c:url>" onclick="showDuration(this)">90-120 minutes</a></li>
+                                            <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:choose>
+                                                                                        <c:when test="${param.genre != 'ANY' || param.sorting != 'ANY'}">
+                                                                                            <c:param name="genre" value="${param.genre}"/>
+                                                                                            <c:param name="sorting" value="${param.sorting}"/>
+                                                                                        </c:when>
+                                                                                    </c:choose>
+                                                                                    <c:param name="durationFrom" value="120"/>-<c:param name="durationTo" value="150"/>
+                                                                                    </c:url>" onclick="showDuration(this)">120-150 minutes</a></li>
+                                            <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
+                                                                                    <c:choose>
+                                                                                        <c:when test="${param.genre != 'ANY' || param.sorting != 'ANY'}">
+                                                                                            <c:param name="genre" value="${param.genre}"/>
+                                                                                            <c:param name="sorting" value="${param.sorting}"/>
+                                                                                        </c:when>
+                                                                                    </c:choose>
+                                                                                    <c:param name="durationFrom" value="150"/>-<c:param name="durationTo" value="1000"/>
+                                                                                    </c:url>" onclick="showDuration(this)">150 or more</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="list-group">
+                                    <div class="dropdown W-dropdown-button">
+                                        <c:choose>
+                                            <c:when test="${param.sorting != '' && param.sorting != 'ANY'}">
+                                                <button id="sortingGroupDrop" type="button" class="W-dropdown-button-genre-duration-sort  W-filter-title btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <c:out value="${param.sorting}"/>
+                                                </button>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <button id="sortingGroupDrop" type="button" class="W-dropdown-button-genre-duration-sort  W-filter-title btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    Sort by
+                                                </button>
+                                            </c:otherwise>
+                                        </c:choose>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
+                                                                                                <c:param name="sorting" value="Last-released"/>
+                                                                                                <c:choose>
+                                                                                                    <c:when test="${param.genre != 'ANY' || param.durationFrom != 'ANY'}">
+                                                                                                        <c:param name="genre" value="${param.genre}"/>
+                                                                                                        <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                                        <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                                    </c:when>
+                                                                                                </c:choose>
+                                                                                                </c:url>" onclick="showSorting(this)">Last released</a></li>
+                                            <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
+                                                                                                <c:param name="sorting" value="Older-released"/>
+                                                                                                <c:choose>
+                                                                                                    <c:when test="${param.genre != 'ANY' || param.durationFrom != 'ANY'}">
+                                                                                                        <c:param name="genre" value="${param.genre}"/>
+                                                                                                        <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                                        <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                                    </c:when>
+                                                                                                </c:choose>
+                                                                                                </c:url>" onclick="showSorting(this)">Older released</a></li>
+                                            <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
+                                                                                                <c:param name="sorting" value="Best-ratings"/>
+                                                                                                <c:choose>
+                                                                                                    <c:when test="${param.genre != 'ANY' || param.durationFrom != 'ANY'}">
+                                                                                                        <c:param name="genre" value="${param.genre}"/>
+                                                                                                        <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                                        <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                                    </c:when>
+                                                                                                </c:choose>
+                                                                                                </c:url>" onclick="showSorting(this)">Best ratings</a></li>
+                                            <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
+                                                                                                <c:param name="sorting" value="A-Z"/>
+                                                                                                <c:choose>
+                                                                                                    <c:when test="${param.genre != 'ANY' || param.durationFrom != 'ANY'}">
+                                                                                                        <c:param name="genre" value="${param.genre}"/>
+                                                                                                        <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                                        <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                                    </c:when>
+                                                                                                </c:choose>
+                                                                                                </c:url>" onclick="showSorting(this)">A-Z</a></li>
+                                            <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
+                                                                                                <c:param name="sorting" value="Z-A"/>
+                                                                                                <c:choose>
+                                                                                                    <c:when test="${param.genre != 'ANY' || param.durationFrom != 'ANY'}">
+                                                                                                        <c:param name="genre" value="${param.genre}"/>
+                                                                                                        <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                                                                                        <c:param name="durationTo" value="${param.durationTo}"/>
+                                                                                                    </c:when>
+                                                                                                </c:choose>
+                                                                                                </c:url>" onclick="showSorting(this)">Z-A</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="list-group">
-                            <div class="dropdown W-dropdown-button">
-                                <c:choose>
-                                    <c:when test="${param.sorting != '' && param.sorting != 'ANY'}">
-                                        <button id="sortingGroupDrop" type="button" class="W-dropdown-button-genre-duration-sort  W-filter-title btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <c:out value="${param.sorting}"/>
-                                        </button>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <button id="sortingGroupDrop" type="button" class="W-dropdown-button-genre-duration-sort  W-filter-title btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                            Sort by
-                                        </button>
-                                    </c:otherwise>
-                                </c:choose>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
-                                                                                        <c:param name="sorting" value="Last-released"/>
-                                                                                        <c:choose>
-                                                                                            <c:when test="${param.genre != 'ANY' || param.durationFrom != 'ANY'}">
-                                                                                                <c:param name="genre" value="${param.genre}"/>
-                                                                                                <c:param name="durationFrom" value="${param.durationFrom}"/>
-                                                                                                <c:param name="durationTo" value="${param.durationTo}"/>
-                                                                                            </c:when>
-                                                                                        </c:choose>
-                                                                                        </c:url>" onclick="showSorting(this)">Last released</a></li>
-                                    <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
-                                                                                        <c:param name="sorting" value="Older-released"/>
-                                                                                        <c:choose>
-                                                                                            <c:when test="${param.genre != 'ANY' || param.durationFrom != 'ANY'}">
-                                                                                                <c:param name="genre" value="${param.genre}"/>
-                                                                                                <c:param name="durationFrom" value="${param.durationFrom}"/>
-                                                                                                <c:param name="durationTo" value="${param.durationTo}"/>
-                                                                                            </c:when>
-                                                                                        </c:choose>
-                                                                                        </c:url>" onclick="showSorting(this)">Older released</a></li>
-                                    <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
-                                                                                        <c:param name="sorting" value="Best-ratings"/>
-                                                                                        <c:choose>
-                                                                                            <c:when test="${param.genre != 'ANY' || param.durationFrom != 'ANY'}">
-                                                                                                <c:param name="genre" value="${param.genre}"/>
-                                                                                                <c:param name="durationFrom" value="${param.durationFrom}"/>
-                                                                                                <c:param name="durationTo" value="${param.durationTo}"/>
-                                                                                            </c:when>
-                                                                                        </c:choose>
-                                                                                        </c:url>" onclick="showSorting(this)">Best ratings</a></li>
-                                    <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
-                                                                                        <c:param name="sorting" value="A-Z"/>
-                                                                                        <c:choose>
-                                                                                            <c:when test="${param.genre != 'ANY' || param.durationFrom != 'ANY'}">
-                                                                                                <c:param name="genre" value="${param.genre}"/>
-                                                                                                <c:param name="durationFrom" value="${param.durationFrom}"/>
-                                                                                                <c:param name="durationTo" value="${param.durationTo}"/>
-                                                                                            </c:when>
-                                                                                        </c:choose>
-                                                                                        </c:url>" onclick="showSorting(this)">A-Z</a></li>
-                                    <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
-                                                                                        <c:param name="sorting" value="Z-A"/>
-                                                                                        <c:choose>
-                                                                                            <c:when test="${param.genre != 'ANY' || param.durationFrom != 'ANY'}">
-                                                                                                <c:param name="genre" value="${param.genre}"/>
-                                                                                                <c:param name="durationFrom" value="${param.durationFrom}"/>
-                                                                                                <c:param name="durationTo" value="${param.durationTo}"/>
-                                                                                            </c:when>
-                                                                                        </c:choose>
-                                                                                        </c:url>" onclick="showSorting(this)">Z-A</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
+                        </c:when>
+                    </c:choose>
                 </div>
                 <div class="d-flex W-navbar-search">
                     <form class="form-inline my-2 my-lg-0 W-searchbar" method="GET" action="<c:url value="/search"/>">
@@ -374,7 +378,6 @@
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item" href="<c:url value="/profile"/>"><spring:message code="ProfileMessage"/></a></li>
                                     <li><hr class="dropdown-divider"></li>
-    <%--                                TODO: HACER EL LOG OUT--%>
                                     <li><a class="dropdown-item" href="<c:url value="/login/sign-out"/>"><spring:message code="LogOutMessage"/></a></li>
                                 </ul>
                             </div>

@@ -32,6 +32,10 @@
     width: 60vw;
 }
 
+.W-editProfile-button {
+   font-size: 1.3vw;
+}
+
 .W-profile-general-div-display {
     display: table;
 }

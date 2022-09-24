@@ -14,7 +14,7 @@
         <link href="<c:url value="/resources/css/homeStyles.css"/>" rel="stylesheet" type="text/css"/>
         <link href="<c:url value="/resources/css/navBarStyles.css"/>" rel="stylesheet" type="text/css"/>
         <link href="<c:url value="/resources/css/reviewsStyles.css"/>" rel="stylesheet" type="text/css"/>
-        <title>Watch This</title>
+        <title><spring:message code="WatchThisMessage"/></title>
     </head>
 
     <body>
@@ -63,7 +63,7 @@
                             <img class="W-not-found" src="<c:url value="/resources/img/noResults.png"/>" alt="Not_Found_Ing"/>
                         </div>
                         <div>
-                            <h4 class="W-not-found-message"> We looked everywhere, but we couldn't find anything at all.</h4>
+                            <h4 class="W-not-found-message"><spring:message code="Content.NoContent"/></h4>
                         </div>
                     </div>
                 </div>

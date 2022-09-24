@@ -38,30 +38,25 @@
                   <p class="card-text"><span class="W-span-text-info-card-movie"><spring:message code="Content.Genre"/></span> <c:out value="${details.genre}"/></p>
                   <p class="card-text"><span class="W-span-text-info-card-movie"><spring:message code="Content.Released"/></span> <c:out value="${details.released}"/></p>
                   <p class="card-text"><span class="W-span-text-info-card-movie"><spring:message code="Content.Creator"/></span> <c:out value="${details.creator}"/></p>
-<%--                  <c:if test="${param.contentRating >= 1}">--%>
                     <c:forEach  begin="1" step="1" end="5" var="var">
                       <c:choose>
                         <c:when test="${details.rating >= var}">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-star-fill W-starts-width" viewBox="0 0 16 16">
                             <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
                           </svg>
                         </c:when>
                         <c:otherwise>
-                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star" viewBox="0 0 16 16">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-star W-starts-width" viewBox="0 0 16 16">
                             <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"/>
                           </svg>
                         </c:otherwise>
                       </c:choose>
                     </c:forEach>
-<%--                  </c:if>--%>
                   <p class="card-text">(<c:out value="${details.reviewsAmount}"/> <spring:message code="Content.reviewAmount"/>)</p>
-
                 </div>
               </div>
             </div>
-
           </div>
-
         </div>
 
       <div class="card W-inv-film-card-margin">
@@ -74,7 +69,7 @@
                 <a href="<c:url value="/reviewForm/${details.type}/${details.id}/${userId}"/>"><button type="button" class="btn btn-dark W-add-review-button W-reviewText W-add-review-button-add"><spring:message code="Content.AddReview"/></button></a>
               </c:when>
               <c:otherwise>
-                <button type="button" class="btn btn-dark W-add-review-button W-reviewText W-add-review-button-add" data-bs-toggle="modal" data-bs-target="#exampleModal">Add review</button>
+                <button type="button" class="btn btn-dark W-add-review-button W-reviewText W-add-review-button-add" data-bs-toggle="modal" data-bs-target="#exampleModal"><spring:message code="Content.AddReview"/></button>
                 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                   <div class="modal-dialog">
                     <div class="modal-content">
@@ -83,12 +78,12 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                       </div>
                       <div class="modal-body">
-                        <span>To make a review, you must be logged in.</span>
-                        <span>Please log in to continue.</span>
+                        <span><spring:message code="Review.WarningAdd"/></span>
+                        <span><spring:message code="Review.WarningAddMessage"/></span>
                       </div>
                       <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <a href="<c:url value="/login/sign-in"/>"><button type="button" class="btn btn-success">Log in</button></a>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><spring:message code="Close"/></button>
+                        <a href="<c:url value="/login/sign-in"/>"><button type="button" class="btn btn-success"><spring:message code="Login.loginMessage"/></button></a>
                       </div>
                     </div>
                   </div>

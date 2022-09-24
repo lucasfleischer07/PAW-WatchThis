@@ -17,7 +17,7 @@
     <link href="<c:url value="/resources/css/reviewsStyles.css"/>" rel="stylesheet" type="text/css"/>
     <link href="<c:url value="/resources/css/profileStyles.css"/>" rel="stylesheet" type="text/css"/>
 
-    <title>Profile Information</title>
+    <title><spring:message code="Profile.Information"/></title>
   </head>
 
   <body class="body">
@@ -42,7 +42,7 @@
                       </c:otherwise>
                   </c:choose>
                   <div class="media-body mb-5 text-white">
-                      <h5 class="W-username-profilepage"><c:out value="${user.userName}"/></h5>
+                      <h3 class="W-username-profilepage"><c:out value="${user.userName}"/></h3>
                   </div>
               </div>
             </div>
@@ -50,13 +50,13 @@
           <div class="bg-light p-4 d-flex text-center W-editProfileButton-and-reviewsCant">
               <div>
                   <c:if test="${userName==user.userName}">
-                      <a href="<c:url value="/profile/edit-profile"/>" class="btn btn-outline-dark btn-sm btn-block"><spring:message code="Profile.EdirProfile"/></a>
+                      <a href="<c:url value="/profile/edit-profile"/>" class="btn btn-outline-dark btn-block W-editProfile-button"><spring:message code="Profile.EdirProfile"/></a>
                   </c:if>
               </div>
               <ul class="list-inline mb-0">
                   <li class="list-inline-item">
-                    <h5 class="font-weight-bold mb-0 d-block"><c:out value="${reviews.size()}"/></h5>
-                      <small class="text-muted"><i class="fas fa-image mr-1"></i><spring:message code="Profile.Reviews"/></small>
+                    <h4 class="font-weight-bold mb-0 d-block"><c:out value="${reviews.size()}"/></h4>
+                      <medium class="text-muted"><i class="fas fa-image mr-1"></i><spring:message code="Profile.Reviews"/></medium>
                   </li>
     <%--              <li class="list-inline-item">--%>
     <%--                <h5 class="font-weight-bold mb-0 d-block"><c:out value="${user.get().reputation}"/></h5>--%>

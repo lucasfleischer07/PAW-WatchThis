@@ -19,7 +19,7 @@
         <link href="<c:url value="/resources/css/reviewsStyles.css"/>" rel="stylesheet" type="text/css"/>
         <link href="<c:url value="/resources/css/loginStyles.css"/>" rel="stylesheet" type="text/css"/>
         <link href="<c:url value="/resources/css/reviewRegistrationStyles.css"/>" rel="stylesheet" type="text/css"/>
-        <title>Review Registration</title>
+        <title><spring:message code="Review.Registration"/></title>
     </head>
 
     <body>
@@ -57,7 +57,7 @@
                                               </c:when>
                                           </c:choose>
                                         <label class="form-label"><spring:message code="Login.Email"/></label>
-                                        <input name="email" type="email" class="form-control"   placeholder="example@email"/>
+                                        <input name="email" type="email" class="form-control" placeholder="example@email"/>
                                     </div>
                                     <div class="mb-3 W-input-label-login-info">
                                         <label class="form-label"><spring:message code="Login.Password"/></label>
@@ -70,9 +70,7 @@
                                 <div class="W-div-login-rememberMe">
                                     <div class="form-check">
                                         <input name="rememberMe" class="form-check-input" type="checkbox" id="flexCheckDefault">
-                                        <label class="form-check-label" for="flexCheckDefault">
-                                            <spring:message code="Login.RememberMe"/>
-                                        </label>
+                                        <label class="form-check-label" for="flexCheckDefault"><spring:message code="Login.RememberMe"/</label>
                                     </div>
                                     <div class="W-div-login-button">
                                         <button id="submitButton1" type="submit" class="btn btn-success W-login-button" onclick="this.form.submit(); (this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'"><spring:message code="Login.loginMessage"/></button>

@@ -18,7 +18,7 @@
         <link href="<c:url value="/resources/css/reviewsStyles.css"/>" rel="stylesheet" type="text/css"/>
         <link href="<c:url value="/resources/css/profileStyles.css"/>" rel="stylesheet" type="text/css"/>
 
-        <title>Profile</title>
+        <title><spring:message code="Profile"/></title>
     </head>
 
     <body class="body">

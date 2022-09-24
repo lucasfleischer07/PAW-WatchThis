@@ -4,7 +4,7 @@
 <div class="W-movie-card-size">
     <a class="card-group W-card-text W-films-margin" href="<c:url value='/${param.contentType}/${param.contentId}'/>">
         <div class="col">
-            <div class="card W-films-card-body" style="display: flex; align-items: center">
+            <div class="card W-films-card-body W-more-style">
                 <img src="<c:url value="/contentImage/${param.contentId}"/>" class="card-img-top" alt="Image <c:out value="${param.contentName}"/>">
                 <div class="card-body">
                     <h4 class="card-title W-movie-title"><c:out value="${param.contentName}"/></h4>

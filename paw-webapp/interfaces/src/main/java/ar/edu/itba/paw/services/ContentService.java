@@ -10,12 +10,12 @@ public interface ContentService {
     Optional<Content> findByName(String name);
     List<Content> findByGenre(String type, String genre, String sort);
     List<Content> findByDuration(String type, int durationFrom, int durationTo, String sort);
-    List<Content> findByDurationAndGenre(String type, String genre,int durationFrom, int durationTo, String sort);
+    List<Content> findByDurationAndGenre(String type, String genre, int durationFrom, int durationTo, String sort);
     Optional<Content> findById(long id);
     List<Content> getSearchedContent(String query);
     List<Content> getSearchedContentRandom(String query);
-    void addContentPoints(long contentId,int rating);
-    void decreaseContentPoints(long contentId,int rating);
+    void addContentPoints(long contentId, int rating);
+    void decreaseContentPoints(long contentId, int rating);
     List<Content> getBestRated();
-
+    List<Content> getLessDuration(String type);
 }

@@ -1,10 +1,13 @@
 .W-carousels-div {
-    margin-left: 13vw;
-    margin-right: 13vw;
+    margin-left: 10vw;
+    margin-right: 10vw;
 }
 
-.W-first-carousel {
-    margin-bottom: 10vw;
+.W-margin-carousel {
+    margin-bottom: 8vw;
+}
+
+.W-carousel-1-title {
     margin-top: 4vw;
 }
 
@@ -15,6 +18,18 @@
     width: 22%;
 }
 
+.W-card-text-carousel:hover {
+    transform: translateY(-5px);
+    transition: 0.1s ;
+    box-shadow: -1rem 0 3rem grey;
+}
+
+.W-card-text-carousel:hover ~ .W-card-text-carousel {
+    position: relative;
+    transition: 0.1s;
+}
+
+
 .W-watchList-button-carousel {
     margin-top: 1vw;
     display: flex;
@@ -24,6 +39,11 @@
     width: 100%;
     height: 20em;
     object-fit: cover;
+}
+
+.W-films-margin-carrousel {
+    max-resolution: 1.5%;
+    margin: 1vw;
 }
 
 .W-watchList-button-title {
@@ -42,8 +62,8 @@
 
 .cards-wrapper {
     display: flex;
-    justify-content: center;
 }
+
 .card img {
     max-width: 100%;
     max-height: 100%;
