@@ -109,6 +109,7 @@
               <jsp:param name="contentId" value="${review.contentId}"/>
               <jsp:param name="contentType" value="${review.type}"/>
               <jsp:param name="loggedUserName" value="${userName}"/>
+              <jsp:param name="isAdmin" value="${admin}"/>
             </jsp:include>
           </c:forEach>
           <c:if test="${reviews==null || reviews.size()==0}">

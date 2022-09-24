@@ -195,7 +195,7 @@ public class UserController {
     }
 
     @RequestMapping("/profile/{userName:[a-zA-Z0-9\\s]+}")
-    public ModelAndView profileInfo(@AuthenticationPrincipal PawUserDetails userDetails,@Valid @ModelAttribute("editProfile") final EditProfile editProfile, @PathVariable("userName") final String userName) {
+    public ModelAndView profileInfo(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("userName") final String userName) {
         if(userName==null || userName==""){
             throw new PageNotFoundException();
         }
@@ -217,13 +217,13 @@ public class UserController {
             if(userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")) && !user.get().getRole().equals("admin")){
                 mav.addObject("admin",true);
             }else{
-                mav.addObject("admin",false);
+                mav.addObject("admin",true);
             }
 
         } catch (NullPointerException e) {
             mav.addObject("userName","null");
             mav.addObject("userId","null");
-            mav.addObject("admin",false);
+            mav.addObject("admin",true);
         }
         return mav;
     }

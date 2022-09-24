@@ -48,11 +48,11 @@
                   <c:if test="${userName==user.userName}">
                       <a href="<c:url value="/profile/edit-profile"/>" class="btn btn-outline-dark btn-sm btn-block"><spring:message code="Profile.EdirProfile"/></a>
                   </c:if>
-                  <c:if test="${admin}">
+                  <c:if test="${admin==true}">
                       <c:url value="/profile/${user.userName}" var="postPath"/>
-                      <form:form modelAttribute="editProfile" action="${postPath}" method="post">
-                          <button type="submit" path="isPromoted" value="true" class="btn btn-outline-dark btn-sm btn-block" onclick="this.form.submit(); (this).disabled = true; (this).innerText = '|'"><spring:message code="Profile.PromoteUser"/></button>
-                      </form:form>
+                      <form class="W-delete-form" id="<c:out value="user${user.userName}"/>" method="post" action="${postPath}">
+                          <button type="submit" class="btn btn-outline-dark btn-sm btn-block" onclick="this.form.submit(); (this).disabled = true; (this).innerText = '|'"><spring:message code="Profile.PromoteUser"/></button>
+                      </form>
                   </c:if>
               </div>
             </div>

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -52,11 +53,17 @@ public class ReviewController {
             user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
             mav.addObject("userName",user.getUserName());
             mav.addObject("userId",user.getId());
+            if(user.getRole().equals("admin")){
+                mav.addObject("admin",true);
+            }else{
+                mav.addObject("admin",false);
+            }
 
 
         } catch (NullPointerException e) {
             mav.addObject("userName","null");
             mav.addObject("userId","null");
+            mav.addObject("admin",false);
         }
         if(user!=null){
             for (Review review:reviewList
@@ -122,7 +129,7 @@ public class ReviewController {
     public ModelAndView deleteReview(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("reviewId") final long reviewId, HttpServletRequest request){
         Review review=rs.findById(reviewId).orElseThrow(PageNotFoundException::new);
         User user=us.findByEmail(userDetails.getUsername()).get();
-        if(review.getUserName().equals(user.getUserName())){
+        if(review.getUserName().equals(user.getUserName()) || userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))){
             rs.deleteReview(reviewId);
             cs.decreaseContentPoints(review.getContentId(),review.getRating());
             String referer = request.getHeader("Referer");
