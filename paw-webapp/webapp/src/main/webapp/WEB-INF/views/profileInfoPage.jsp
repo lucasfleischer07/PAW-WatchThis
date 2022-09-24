@@ -28,7 +28,7 @@
     </jsp:include>
 
     <div class="row py-5 px-4">
-      <div class="col-md-5 mx-auto">
+      <div class="col-md-5 mx-auto W-profile-general-div-display">
           <div class="bg-white shadow rounded overflow-hidden W-profile-general-div">
           <div class="px-4 pt-0 pb-4 cover">
             <div class="media align-items-end profile-head W-profile-photo-name">
@@ -44,22 +44,24 @@
                   <div class="media-body mb-5 text-white">
                       <h5 class="W-username-profilepage"><c:out value="${user.userName}"/></h5>
                   </div>
+              </div>
+            </div>
+          </div>
+          <div class="bg-light p-4 d-flex text-center W-editProfileButton-and-reviewsCant">
+              <div>
                   <c:if test="${userName==user.userName}">
                       <a href="<c:url value="/profile/edit-profile"/>" class="btn btn-outline-dark btn-sm btn-block"><spring:message code="Profile.EdirProfile"/></a>
                   </c:if>
               </div>
-            </div>
-          </div>
-          <div class="bg-light p-4 d-flex justify-content-end text-center">
-            <ul class="list-inline mb-0">
-              <li class="list-inline-item">
-                <h5 class="font-weight-bold mb-0 d-block"><c:out value="${reviews.size()}"/></h5>
-                  <small class="text-muted"><i class="fas fa-image mr-1"></i><spring:message code="Profile.Reviews"/></small>
-              </li>
-<%--              <li class="list-inline-item">--%>
-<%--                <h5 class="font-weight-bold mb-0 d-block"><c:out value="${user.get().reputation}"/></h5>--%>
-<%--                <small class="text-muted"><i class="fas fa-user mr-1"></i>Reputation</small></li>--%>
-            </ul>
+              <ul class="list-inline mb-0">
+                  <li class="list-inline-item">
+                    <h5 class="font-weight-bold mb-0 d-block"><c:out value="${reviews.size()}"/></h5>
+                      <small class="text-muted"><i class="fas fa-image mr-1"></i><spring:message code="Profile.Reviews"/></small>
+                  </li>
+    <%--              <li class="list-inline-item">--%>
+    <%--                <h5 class="font-weight-bold mb-0 d-block"><c:out value="${user.get().reputation}"/></h5>--%>
+    <%--                <small class="text-muted"><i class="fas fa-user mr-1"></i>Reputation</small></li>--%>
+              </ul>
           </div>
           <div class="py-4 px-4">
             <div class="d-flex align-items-center justify-content-between mb-3">

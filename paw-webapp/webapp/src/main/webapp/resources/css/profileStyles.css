@@ -29,6 +29,16 @@
 
 .W-profile-general-div {
     display: inline-block;
+    width: 60vw;
+}
+
+.W-profile-general-div-display {
+    display: table;
+}
+
+.W-editProfileButton-and-reviewsCant {
+    justify-content: space-between;
+    align-items: center;
 }
 
 .W-edit-divs-display {
