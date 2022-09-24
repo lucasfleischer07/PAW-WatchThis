@@ -34,38 +34,62 @@ public class ContentController {
     // * ----------------------------------- Movie and Series Info -----------------------------------------------------------------------
     @RequestMapping(value= {"/","page/{pageNum}"})
     public ModelAndView helloWorld(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("pageNum")final Optional<Integer> pageNum, @RequestParam(name = "query", defaultValue = "") final String query) {
-        final ModelAndView mav = new ModelAndView("ContentPage");
-        mav.addObject("query", query);
-        List<Content> contentList = cs.getSearchedContentRandom(query);
-
-        int page= pageNum.orElse(1);
-        if(contentList == null) {
+        final ModelAndView mav = new ModelAndView("HomePage");
+        List<Content> bestRatedList = cs.getBestRated();
+        if(bestRatedList == null) {
             throw new PageNotFoundException();
-        } else {
-            if(contentList.size() < (page)*ELEMS_AMOUNT){       //Si no llega a completar la pagina entera, que sirva los que pueda
-                mav.addObject("allContent", contentList.subList((page-1)*ELEMS_AMOUNT,contentList.size()));
-            }else {
-                mav.addObject("allContent", contentList.subList((page - 1) * ELEMS_AMOUNT, (page - 1) * ELEMS_AMOUNT + ELEMS_AMOUNT));
-            }
-            mav.addObject("amountPages",(int)Math.ceil((double) contentList.size()/(double)ELEMS_AMOUNT));
-            mav.addObject("pageSelected",page);
-            mav.addObject("contentType", "movies");
-            mav.addObject("genre","ANY");
-            mav.addObject("durationFrom","ANY");
-            mav.addObject("durationTo","ANY");
-            mav.addObject("contentType", "all");
         }
+        mav.addObject("bestRatedList", bestRatedList);
+        mav.addObject("bestRatedListSize", bestRatedList.size());
+
+        mav.addObject("genre","ANY");
+        mav.addObject("durationFrom","ANY");
+        mav.addObject("durationTo","ANY");
+        mav.addObject("sorting","ANY");
+        mav.addObject("contentType", "all");
+
 
         try {
             String userEmail = userDetails.getUsername();
             User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
             mav.addObject("userName",user.getUserName());
             mav.addObject("userId",user.getId());
-
         } catch (NullPointerException e) {
             mav.addObject("userName","null");
             mav.addObject("userId","null");
         }
+
+//        final ModelAndView mav = new ModelAndView("ContentPage");
+//        mav.addObject("query", query);
+//        List<Content> contentList = cs.getSearchedContentRandom(query);
+//
+//        int page= pageNum.orElse(1);
+//        if(contentList == null) {
+//            throw new PageNotFoundException();
+//        } else {
+//            if(contentList.size() < (page)*ELEMS_AMOUNT){       //Si no llega a completar la pagina entera, que sirva los que pueda
+//                mav.addObject("allContent", contentList.subList((page-1)*ELEMS_AMOUNT,contentList.size()));
+//            }else {
+//                mav.addObject("allContent", contentList.subList((page - 1) * ELEMS_AMOUNT, (page - 1) * ELEMS_AMOUNT + ELEMS_AMOUNT));
+//            }
+//            mav.addObject("amountPages",(int)Math.ceil((double) contentList.size()/(double)ELEMS_AMOUNT));
+//            mav.addObject("pageSelected",page);
+//            mav.addObject("genre","ANY");
+//            mav.addObject("durationFrom","ANY");
+//            mav.addObject("durationTo","ANY");
+//            mav.addObject("contentType", "all");
+//        }
+//
+//        try {
+//            String userEmail = userDetails.getUsername();
+//            User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
+//            mav.addObject("userName",user.getUserName());
+//            mav.addObject("userId",user.getId());
+//
+//        } catch (NullPointerException e) {
+//            mav.addObject("userName","null");
+//            mav.addObject("userId","null");
+//        }
         return mav;
     }
 

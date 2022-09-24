@@ -214,4 +214,9 @@ public class ContentJdbcDao implements ContentDao {
     public void decreaseContentPoints(long contentId,int rating){
         template.update("UPDATE content SET rating = rating - ?, reviewsAmount = reviewsAmount - 1 WHERE id = ?", new Object[] {rating, contentId});
     }
+
+    @Override
+    public List<Content> getBestRated() {
+        return template.query("SELECT * FROM content WHERE (rating > 0) AND ((rating/reviewsamount) >=3) ORDER BY (rating/reviewsAmount) DESC", CONTENT_ROW_MAPPER);
+    }
 }

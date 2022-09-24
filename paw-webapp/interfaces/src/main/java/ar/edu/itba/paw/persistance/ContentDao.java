@@ -17,4 +17,5 @@ public interface ContentDao {
     List<Content> findByType(String type);
     void addContentPoints(long contentId,int rating);
     void decreaseContentPoints(long contentId,int rating);
+    List<Content> getBestRated();
 }

@@ -68,4 +68,9 @@ public class ContentServiceImpl implements ContentService {
         ContentDao.decreaseContentPoints(contentId,rating);
     }
 
+    @Override
+    public List<Content> getBestRated() {
+        return ContentDao.getBestRated();
+    }
+
 }

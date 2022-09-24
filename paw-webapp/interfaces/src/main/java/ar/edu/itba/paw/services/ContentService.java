@@ -16,4 +16,6 @@ public interface ContentService {
     List<Content> getSearchedContentRandom(String query);
     void addContentPoints(long contentId,int rating);
     void decreaseContentPoints(long contentId,int rating);
+    List<Content> getBestRated();
+
 }

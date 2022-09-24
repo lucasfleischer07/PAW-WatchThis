@@ -182,11 +182,11 @@ public class UserController {
 
         String userEmail = userDetails.getUsername();
         User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
-        if(editProfile.getPassword() != null && editProfile.getProfilePicture().getBytes() == null) {
+        if(editProfile.getPassword() != null && (editProfile.getProfilePicture() == null) || editProfile.getProfilePicture().getSize() <= 0 ) {
             us.setPassword(editProfile.getPassword(), user, "restore");
-        } else if(editProfile.getPassword() == null && editProfile.getProfilePicture().getBytes() != null) {
+        } else if(editProfile.getPassword() == null && (editProfile.getProfilePicture().getSize() > 0)) {
             us.setProfilePicture(editProfile.getProfilePicture().getBytes(), user);
-        } else if(editProfile.getPassword() != null && editProfile.getProfilePicture().getBytes() != null) {
+        } else if(editProfile.getPassword() != null && editProfile.getProfilePicture().getSize() > 0) {
             us.setPassword(editProfile.getPassword(), user, "restore");
             us.setProfilePicture(editProfile.getProfilePicture().getBytes(), user);
         }
