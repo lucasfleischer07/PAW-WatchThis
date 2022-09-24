@@ -40,9 +40,10 @@ public class PawUserDetailsService implements UserDetailsService {
         }*/
         final Set<GrantedAuthority> authorities = new HashSet<>();
        authorities.add(new SimpleGrantedAuthority(username));
+       if(user.get().getRole().equals("admin")){
+            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+       }
        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-       authorities.add(new SimpleGrantedAuthority("ROLE_EDITOR"));
-       authorities.add(new SimpleGrantedAuthority("ROLE_MANAGER"));
 
 
         return new PawUserDetails(username,user.get().getPassword(),authorities);

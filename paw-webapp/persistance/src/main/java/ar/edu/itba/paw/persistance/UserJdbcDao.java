@@ -22,7 +22,8 @@ public class UserJdbcDao implements UserDao{
                     resultSet.getString("name"),
                     resultSet.getString("password"),
                     resultSet.getLong("reputation"),
-                    resultSet.getBytes("image"));
+                    resultSet.getBytes("image"),
+                    resultSet.getString("role"));
 
 
     private final JdbcTemplate template;
@@ -46,7 +47,7 @@ public class UserJdbcDao implements UserDao{
     @Override
     public Optional<Long> create(final String userEmail, String userName, String password, Long rating) {
         try {
-            template.update("INSERT INTO userdata(name, email, password, reputation) VALUES(?,?,?,?)", userName, userEmail, password, rating);
+            template.update("INSERT INTO userdata(name, email, password, reputation,role) VALUES(?,?,?,?,'user')", userName, userEmail, password, rating);
         }catch(Exception e) {
             //Por ahora vacio, en el futuro un cartel
         }
@@ -78,6 +79,11 @@ public class UserJdbcDao implements UserDao{
     @Override
     public void setProfilePicture(byte[] profilePicture, User user) {
         template.update("UPDATE userdata SET image = ? WHERE  userid = ?", new Object[]{profilePicture, user.getId()});
+    }
+
+    @Override
+    public void promoteUser(Long userId){
+        template.update("UPDATE userdata SET role = 'admin' WHERE userid = ?",new Object[]{userId});
     }
 
 }

@@ -18,5 +18,6 @@ public interface UserDao {
 
     void setProfilePicture(byte[] profilePicture, User user);
 
+    void promoteUser(Long userId);
 }
 

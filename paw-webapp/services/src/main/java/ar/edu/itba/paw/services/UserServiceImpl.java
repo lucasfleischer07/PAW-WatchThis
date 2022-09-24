@@ -90,4 +90,9 @@ public class UserServiceImpl implements UserService{
         return sb.toString();
     }
 
+    @Override
+    public void promoteUser(Long userId){
+        userDao.promoteUser(userId);
+    }
+
 }

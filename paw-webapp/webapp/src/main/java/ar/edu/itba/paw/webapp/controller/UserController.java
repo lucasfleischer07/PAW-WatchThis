@@ -112,7 +112,7 @@ public class UserController {
 //                TODO: Ver como meter el mensaje de error de que el emial y/o usernames ya existen
                 return LoginSingUp(userDetails, loginForm, loginStage);
             }
-            User newUser = new User(null, loginForm.getEmail(), loginForm.getUsername(), loginForm.getPassword(), 0L, null);
+            User newUser = new User(null, loginForm.getEmail(), loginForm.getUsername(), loginForm.getPassword(), 0L, null,"user");
             us.register(newUser);
             authWithAuthManager(request,loginForm.getEmail(),loginForm.getPassword());
         } else if(Objects.equals(loginStage, "forgot-password")) {
@@ -195,7 +195,7 @@ public class UserController {
     }
 
     @RequestMapping("/profile/{userName:[a-zA-Z0-9\\s]+}")
-    public ModelAndView profileInfo(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("userName") final String userName) {
+    public ModelAndView profileInfo(@AuthenticationPrincipal PawUserDetails userDetails,@Valid @ModelAttribute("editProfile") final EditProfile editProfile, @PathVariable("userName") final String userName) {
         if(userName==null || userName==""){
             throw new PageNotFoundException();
         }
@@ -214,12 +214,26 @@ public class UserController {
             User userLogged = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
             mav.addObject("userName",userLogged.getUserName());
             mav.addObject("userId",userLogged.getId());
+            if(userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")) && !user.get().getRole().equals("admin")){
+                mav.addObject("admin",true);
+            }else{
+                mav.addObject("admin",false);
+            }
 
         } catch (NullPointerException e) {
             mav.addObject("userName","null");
             mav.addObject("userId","null");
+            mav.addObject("admin",false);
         }
         return mav;
+    }
+
+    @RequestMapping(value = "/profile/{userName:[a-zA-Z0-9\\s]+}",method = {RequestMethod.POST})
+    public ModelAndView profileInfo(@AuthenticationPrincipal PawUserDetails userDetails,@Valid @ModelAttribute("editProfile") final EditProfile editProfile, @PathVariable("userName") final String userName,final BindingResult errors) {
+        Optional<User> user = us.findByUserName(userName);
+        us.promoteUser(user.get().getId());
+
+        return new ModelAndView("redirect:/profile/" + userName);
     }
 
     // * ----------------------------------- Errors Page -----------------------------------------------------------------------

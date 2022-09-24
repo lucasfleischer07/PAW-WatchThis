@@ -17,4 +17,5 @@ public interface UserService {
 
     void setProfilePicture(byte[] profilePicture, User user);
 
+    void promoteUser(Long userId);
 }
