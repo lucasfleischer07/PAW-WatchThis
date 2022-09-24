@@ -45,7 +45,7 @@
                       <h5 class="W-username-profilepage"><c:out value="${user.userName}"/></h5>
                   </div>
                   <c:if test="${userName==user.userName}">
-                    <a href="<c:url value="/profile/edit-profile"/>" class="btn btn-outline-dark btn-sm btn-block">Edit profile</a>
+                      <a href="<c:url value="/profile/edit-profile"/>" class="btn btn-outline-dark btn-sm btn-block"><spring:message code="Profile.EdirProfile"/></a>
                   </c:if>
               </div>
             </div>
@@ -54,7 +54,7 @@
             <ul class="list-inline mb-0">
               <li class="list-inline-item">
                 <h5 class="font-weight-bold mb-0 d-block"><c:out value="${reviews.size()}"/></h5>
-                <small class="text-muted"><i class="fas fa-image mr-1"></i>R<spring:message code="Profile.Reviews"/></small>
+                  <small class="text-muted"><i class="fas fa-image mr-1"></i><spring:message code="Profile.Reviews"/></small>
               </li>
 <%--              <li class="list-inline-item">--%>
 <%--                <h5 class="font-weight-bold mb-0 d-block"><c:out value="${user.get().reputation}"/></h5>--%>
