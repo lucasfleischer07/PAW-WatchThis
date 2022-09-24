@@ -64,10 +64,11 @@ public class UserServiceImpl implements UserService{
             if(Objects.equals(type, "forgotten")) {
                 String newPassword = generateRandomWord();
                 mailVariables.put("newPassword", newPassword);
+                userDao.setPassword(passwordEncoder.encode(newPassword), user);
                 emailService.sendMail("passwordForgotten", "Restore Password", mailVariables, locale);
             } else {
-                emailService.sendMail("passwordChangeConfirmation", "Restore password confirmation", mailVariables, locale);
                 userDao.setPassword(passwordEncoder.encode(password), user);
+                emailService.sendMail("passwordChangeConfirmation", "Restore password confirmation", mailVariables, locale);
             }
         } catch (MessagingException e) {
 
