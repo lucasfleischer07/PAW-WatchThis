@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import javax.mail.Multipart;
 import javax.sql.DataSource;
 import java.util.List;
 import java.util.Objects;
@@ -214,4 +215,12 @@ public class ContentJdbcDao implements ContentDao {
     public void decreaseContentPoints(long contentId,int rating){
         template.update("UPDATE content SET rating = rating - ?, reviewsAmount = reviewsAmount - 1 WHERE id = ?", new Object[] {rating, contentId});
     }
+
+    @Override
+    public void contentCreate(String name, String description, String releaseDate, String genre, String creator, Integer duration,String durationString, String type, Multipart contentImage){
+        template.update(
+                "INSERT INTO content(name,image,description,released,genre,creator,duration,durationNum,rating,type) VALUES(?,?,?,?,?,?,?,?,0,?)",name,contentImage,description,releaseDate,genre,creator,durationString,duration,type
+        );
+    }
+
 }

@@ -39,6 +39,25 @@ public class ReviewController {
         this.rs = rs;
     }
 
+    private void HeaderSetUp(ModelAndView mav,PawUserDetails userDetails){
+        try {
+            String userEmail = userDetails.getUsername();
+            User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
+            mav.addObject("userName",user.getUserName());
+            mav.addObject("userId",user.getId());
+            if(user.getRole().equals("admin")){
+                mav.addObject("admin",true);
+            }else{
+                mav.addObject("admin",false);
+            }
+
+        } catch (NullPointerException e) {
+            mav.addObject("userName","null");
+            mav.addObject("userId","null");
+            mav.addObject("admin",false);
+        }
+    }
+
     @RequestMapping("/{type:movie|serie}/{contentId:[0-9]+}")
     public ModelAndView reviews(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("contentId")final long contentId, @PathVariable("type") final String type) {
         final ModelAndView mav = new ModelAndView("infoPage");
@@ -48,23 +67,7 @@ public class ReviewController {
         if(reviewList == null) {
             throw new PageNotFoundException();
         }
-        try {
-            String userEmail = userDetails.getUsername();
-            user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
-            mav.addObject("userName",user.getUserName());
-            mav.addObject("userId",user.getId());
-            if(user.getRole().equals("admin")){
-                mav.addObject("admin",true);
-            }else{
-                mav.addObject("admin",false);
-            }
-
-
-        } catch (NullPointerException e) {
-            mav.addObject("userName","null");
-            mav.addObject("userId","null");
-            mav.addObject("admin",false);
-        }
+        HeaderSetUp(mav,userDetails);
         if(user!=null){
             for (Review review:reviewList
             ) {
@@ -84,16 +87,7 @@ public class ReviewController {
     public ModelAndView reviewFormCreate(@AuthenticationPrincipal PawUserDetails userDetails, @ModelAttribute("registerForm") final ReviewForm reviewForm, @PathVariable("id")final long id, @PathVariable("type")final String type) {
         final ModelAndView mav = new ModelAndView("reviewRegistration");
         mav.addObject("details", cs.findById(id).orElseThrow(PageNotFoundException::new));
-        try {
-            String userEmail = userDetails.getUsername();
-            User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
-            mav.addObject("userName",user.getUserName());
-            mav.addObject("userId",user.getId());
-
-        } catch (NullPointerException e) {
-            mav.addObject("userName","null");
-            mav.addObject("userId","null");
-        }
+        HeaderSetUp(mav,userDetails);
         return mav;
     }
 

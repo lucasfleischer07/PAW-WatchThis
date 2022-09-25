@@ -2,6 +2,7 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.models.Content;
 
+import javax.mail.Multipart;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,4 +17,5 @@ public interface ContentService {
     List<Content> getSearchedContentRandom(String query);
     void addContentPoints(long contentId,int rating);
     void decreaseContentPoints(long contentId,int rating);
+    void contentCreate(String name, String description, String releaseDate, String genre, String creator, Integer duration, String type, Multipart contentImage);
 }

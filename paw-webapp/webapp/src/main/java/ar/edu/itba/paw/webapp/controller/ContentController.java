@@ -7,13 +7,17 @@ import ar.edu.itba.paw.services.UserService;
 import ar.edu.itba.paw.webapp.auth.PawUserDetails;
 import ar.edu.itba.paw.webapp.exceptions.MethodNotAllowedException;
 import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
+import ar.edu.itba.paw.webapp.form.ContentForm;
+import ar.edu.itba.paw.webapp.form.EditProfile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -55,18 +59,27 @@ public class ContentController {
             mav.addObject("durationTo","ANY");
             mav.addObject("contentType", "all");
         }
+        HeaderSetUp(mav,userDetails);
+        return mav;
+    }
 
+    private void HeaderSetUp(ModelAndView mav,PawUserDetails userDetails){
         try {
             String userEmail = userDetails.getUsername();
             User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
             mav.addObject("userName",user.getUserName());
             mav.addObject("userId",user.getId());
+            if(user.getRole().equals("admin")){
+                mav.addObject("admin",true);
+            }else{
+                mav.addObject("admin",false);
+            }
 
         } catch (NullPointerException e) {
             mav.addObject("userName","null");
             mav.addObject("userId","null");
+            mav.addObject("admin",false);
         }
-        return mav;
     }
 
 
@@ -101,16 +114,7 @@ public class ContentController {
             mav.addObject("durationTo","ANY");
         }
 
-        try {
-            String userEmail = userDetails.getUsername();
-            User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
-            mav.addObject("userName",user.getUserName());
-            mav.addObject("userId",user.getId());
-
-        } catch (NullPointerException e) {
-            mav.addObject("userName","null");
-            mav.addObject("userId","null");
-        }
+        HeaderSetUp(mav,userDetails);
         return mav;
     }
 
@@ -136,16 +140,7 @@ public class ContentController {
             mav.addObject("pageSelected", page);
         }
 
-        try {
-            String userEmail = userDetails.getUsername();
-            User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
-            mav.addObject("userName",user.getUserName());
-            mav.addObject("userId",user.getId());
-
-        } catch (NullPointerException e) {
-            mav.addObject("userName","null");
-            mav.addObject("userId","null");
-        }
+        HeaderSetUp(mav,userDetails);
         return mav;
     }
 
@@ -204,21 +199,29 @@ public class ContentController {
             mav.addObject("contentType", type);
         }
 
-        try {
-            String userEmail = userDetails.getUsername();
-            User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
-            mav.addObject("userName",user.getUserName());
-            mav.addObject("userId",user.getId());
-
-        } catch (NullPointerException e) {
-            mav.addObject("userName","null");
-            mav.addObject("userId","null");
-        }
+        HeaderSetUp(mav,userDetails);
 
         return mav;
     }
 
-    // * ----------------------------------- Errors Page -----------------------------------------------------------------------
+    @RequestMapping(value = "/content/create",method = {RequestMethod.GET})
+    public ModelAndView createContent(@AuthenticationPrincipal PawUserDetails userDetails,@ModelAttribute("contentCreate") final ContentForm contentForm) {
+        final ModelAndView mav = new ModelAndView("ContentCreate");
+        HeaderSetUp(mav,userDetails);
+        return mav;
+    }
+
+    @RequestMapping(value = "/content/create",method = {RequestMethod.POST})
+    public ModelAndView createContent(@AuthenticationPrincipal PawUserDetails userDetails,@Valid @ModelAttribute("contentCreate") final ContentForm contentForm, final BindingResult errors) {
+        if(errors.hasErrors()) {
+            return createContent(userDetails,contentForm);
+        }
+
+        return new ModelAndView("redirect:/");
+    }
+
+
+        // * ----------------------------------- Errors Page -----------------------------------------------------------------------
     @ExceptionHandler(PageNotFoundException.class)
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
     public ModelAndView PageNotFound(){

@@ -54,6 +54,25 @@ public class UserController {
         this.authenticationManager=authenticationManager;
     }
 
+    private void HeaderSetUp(ModelAndView mav,PawUserDetails userDetails){
+        try {
+            String userEmail = userDetails.getUsername();
+            User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
+            mav.addObject("userName",user.getUserName());
+            mav.addObject("userId",user.getId());
+            if(user.getRole().equals("admin")){
+                mav.addObject("admin",true);
+            }else{
+                mav.addObject("admin",false);
+            }
+
+        } catch (NullPointerException e) {
+            mav.addObject("userName","null");
+            mav.addObject("userId","null");
+            mav.addObject("admin",false);
+        }
+    }
+
     // * ----------------------------------- login Page -----------------------------------------------------------------------
     @RequestMapping(value = "/login/{loginStage:sign-in}", method = {RequestMethod.GET})
     public ModelAndView loginSignIn(@AuthenticationPrincipal PawUserDetails userDetails, HttpServletRequest request, @PathVariable("loginStage") final String loginStage, @RequestParam(value = "error",required = false) Optional<Boolean> error) {
@@ -61,16 +80,7 @@ public class UserController {
         String referrer = request.getHeader("Referer");
         request.getSession().setAttribute("url_prior_login", referrer);
         mav.addObject("loginStage", loginStage);
-        try {
-            String userEmail = userDetails.getUsername();
-            User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
-            mav.addObject("userName",user.getUserName());
-            mav.addObject("userId",user.getId());
-
-        } catch (NullPointerException e) {
-            mav.addObject("userName","null");
-            mav.addObject("userId","null");
-        }
+        HeaderSetUp(mav,userDetails);
         if(error.isPresent()){
             mav.addObject("error",true);
         }else{
@@ -87,16 +97,7 @@ public class UserController {
         }
         final ModelAndView mav = new ModelAndView("logInPage");
         mav.addObject("loginStage", loginStage);
-        try {
-            String userEmail = userDetails.getUsername();
-            User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
-            mav.addObject("userName",user.getUserName());
-            mav.addObject("userId",user.getId());
-
-        } catch (NullPointerException e) {
-            mav.addObject("userName","null");
-            mav.addObject("userId","null");
-        }
+        HeaderSetUp(mav,userDetails);
         return mav;
     }
 
@@ -217,13 +218,13 @@ public class UserController {
             if(userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")) && !user.get().getRole().equals("admin")){
                 mav.addObject("admin",true);
             }else{
-                mav.addObject("admin",true);
+                mav.addObject("admin",false);
             }
 
         } catch (NullPointerException e) {
             mav.addObject("userName","null");
             mav.addObject("userId","null");
-            mav.addObject("admin",true);
+            mav.addObject("admin",false);
         }
         return mav;
     }
