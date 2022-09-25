@@ -26,6 +26,19 @@ public class UserJdbcDao implements UserDao{
                     resultSet.getLong("reputation"),
                     resultSet.getBytes("image"));
 
+    private static final RowMapper<Content> CONTENT_ROW_MAPPER = (resultSet, rowNum) ->
+            new Content(resultSet.getLong("id"),
+                    resultSet.getString("name"),
+                    resultSet.getBytes("image"),
+                    resultSet.getString("description"),
+                    resultSet.getString("released"),
+                    resultSet.getString("genre"),
+                    resultSet.getString("creator"),
+                    resultSet.getString("duration"),
+                    resultSet.getString("type"),
+                    resultSet.getInt("rating")/(resultSet.getInt("reviewsAmount") ==0 ? 1 : resultSet.getInt("reviewsAmount"))
+                    ,resultSet.getInt("reviewsAmount"));
+
 
     private final JdbcTemplate template;
 
@@ -77,9 +90,7 @@ public class UserJdbcDao implements UserDao{
 
     @Override
     public List<Content> getWatchList(User user) {
-//      TODO: VER COMO HCAER EL JOIN CON LA DE USERWATCHLIST ASI ME TRAIGO EL CONTENIDO Y TODO ESO
-//        return template.query("SELECT * FROM content WHERE name = ?", new Object[]{ user.getId() }, USER_ROW_MAPPER);
-        return null;
+        return template.query("SELECT * FROM (content JOIN userwatchlist ON content.id = userwatchlist.contentId) JOIN userdata ON userdata.userid = userwatchlist.userid WHERE userdata.userid = ? ORDER BY desc", new Object[]{ user.getId() }, CONTENT_ROW_MAPPER);
     }
 
 
