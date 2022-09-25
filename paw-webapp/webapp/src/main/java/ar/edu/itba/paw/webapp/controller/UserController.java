@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.models.Content;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.services.ContentService;
 import ar.edu.itba.paw.services.EmailService;
@@ -166,6 +167,8 @@ public class UserController {
         return user.getImage();
     }
 
+
+
     @RequestMapping(value = "/profile/edit-profile", method = {RequestMethod.GET})
     public ModelAndView profileEdition(@AuthenticationPrincipal PawUserDetails userDetails, @Valid @ModelAttribute("editProfile") final EditProfile editProfile) {
         String userEmail = userDetails.getUsername();
@@ -193,6 +196,18 @@ public class UserController {
         }
 
         return new ModelAndView("redirect:/profile");
+    }
+
+    @RequestMapping(value = "/profile/watchList", method = {RequestMethod.GET})
+    public ModelAndView watchList(@AuthenticationPrincipal PawUserDetails userDetails) {
+        String userEmail = userDetails.getUsername();
+        User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
+//        List<Content> watchListContent = us.getWatchList(user);
+        final ModelAndView mav = new ModelAndView("watchListPage");
+        mav.addObject("user", user);
+//        mav.addObject("watchList", watchListContent);
+//        mav.addObject("watchListSize", watchListContent.size());
+        return mav;
     }
 
     @RequestMapping("/profile/{userName:[a-zA-Z0-9\\s]+}")

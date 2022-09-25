@@ -377,6 +377,7 @@
                                 </button>
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item" href="<c:url value="/profile"/>"><spring:message code="ProfileMessage"/></a></li>
+                                    <li><a class="dropdown-item" href="<c:url value="/profile/watchList"/>"><spring:message code="Content.WatchList"/></a></li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item" href="<c:url value="/login/sign-out"/>"><spring:message code="LogOutMessage"/></a></li>
                                 </ul>

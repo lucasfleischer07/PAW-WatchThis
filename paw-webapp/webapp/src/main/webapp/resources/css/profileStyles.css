@@ -96,3 +96,16 @@
 .W-profile-picture-button {
     margin-left: 1.5vw;
 }
+
+.W-watchlist-div-info-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2vw;
+}
+
+.W-watchlist-empty-icon {
+    margin-top: 5vw;
+    width: 5vw;
+    margin-bottom: 2vw;
+}
