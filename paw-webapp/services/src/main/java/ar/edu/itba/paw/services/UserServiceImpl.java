@@ -87,8 +87,18 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public void deleteFromWatchList(User user, Long contentId) {
+        userDao.deleteFromWatchList(user, contentId);
+    }
+
+    @Override
     public List<Content> getWatchList(User user) {
         return userDao.getWatchList(user);
+    }
+
+    @Override
+    public Optional<Long> searchContentInWatchList(User user, Long contentId) {
+        return userDao.searchContentInWatchList(user, contentId);
     }
 
     private String generateRandomWord() {

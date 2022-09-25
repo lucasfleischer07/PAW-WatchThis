@@ -225,17 +225,28 @@ public class UserController {
 
 
     // * ----------------------------------- Watch list -----------------------------------------------------------------------
-    @RequestMapping(value = "/watchList/{contentId:[0-9]+}", method = {RequestMethod.POST})
-    public ModelAndView watchListPost(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("contentId") final Optional<Long> contentId, final BindingResult errors) {
-
+    @RequestMapping(value = "/watchList/add/{contentId:[0-9]+}", method = {RequestMethod.POST})
+    public ModelAndView watchListAddPost(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("contentId") final Optional<Long> contentId, HttpServletRequest request) {
         if(!contentId.isPresent()) {
             throw new PageNotFoundException();
         }
         String userEmail = userDetails.getUsername();
         User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
         us.addToWatchList(user, contentId.get());
+        String referer = request.getHeader("Referer");
+        return new ModelAndView("redirect:" + referer);
+    }
 
-        return new ModelAndView("redirect:/profile");
+    @RequestMapping(value = "/watchList/delete/{contentId:[0-9]+}", method = {RequestMethod.POST})
+    public ModelAndView watchListDeletePost(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("contentId") final Optional<Long> contentId, HttpServletRequest request) {
+        if(!contentId.isPresent()) {
+            throw new PageNotFoundException();
+        }
+        String userEmail = userDetails.getUsername();
+        User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
+        us.deleteFromWatchList(user, contentId.get());
+        String referer = request.getHeader("Referer");
+        return new ModelAndView("redirect:" + referer);
     }
 
     // * ----------------------------------------------------------------------------------------------------------------------

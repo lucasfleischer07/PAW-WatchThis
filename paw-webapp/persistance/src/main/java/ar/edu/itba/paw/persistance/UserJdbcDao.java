@@ -39,6 +39,9 @@ public class UserJdbcDao implements UserDao{
                     resultSet.getInt("rating")/(resultSet.getInt("reviewsAmount") ==0 ? 1 : resultSet.getInt("reviewsAmount"))
                     ,resultSet.getInt("reviewsAmount"));
 
+    private static final RowMapper<Long> LONG_ROW_MAPPER = (resultSet, rowNum) ->
+            resultSet.getLong("contentid");
+
 
     private final JdbcTemplate template;
 
@@ -89,8 +92,19 @@ public class UserJdbcDao implements UserDao{
     }
 
     @Override
+    public void deleteFromWatchList(User user, Long contentId) {
+        template.update("DELETE FROM userwatchlist WHERE userid = ? and contentid = ?", user.getId(), contentId);
+    }
+
+    @Override
     public List<Content> getWatchList(User user) {
         return template.query("SELECT * FROM (content JOIN userwatchlist ON content.id = userwatchlist.contentId) JOIN userdata ON userdata.userid = userwatchlist.userid WHERE userdata.userid = ? ORDER BY desc", new Object[]{ user.getId() }, CONTENT_ROW_MAPPER);
+    }
+
+    @Override
+    public Optional<Long> searchContentInWatchList(User user, Long contentId) {
+        Optional<Long> contentIdDB = template.query("SELECT * FROM userwatchlist WHERE userid = ? AND contentid = ?", new Object[]{user.getId(), contentId} , LONG_ROW_MAPPER).stream().findFirst();
+        return contentIdDB.isPresent() ? Optional.of(contentIdDB.get()) : Optional.of((long) -1);
     }
 
 

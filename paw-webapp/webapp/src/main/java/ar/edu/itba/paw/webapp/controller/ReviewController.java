@@ -52,11 +52,17 @@ public class ReviewController {
             user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
             mav.addObject("userName",user.getUserName());
             mav.addObject("userId",user.getId());
+            Optional<Long> isInWatchList = us.searchContentInWatchList(user, contentId);
+            if(isInWatchList.get() != -1) {
+                mav.addObject("isInWatchList",isInWatchList);
+            } else {
+                mav.addObject("isInWatchList","null");
 
-
+            }
         } catch (NullPointerException e) {
             mav.addObject("userName","null");
             mav.addObject("userId","null");
+            mav.addObject("isInWatchList","null");
         }
         if(user!=null){
             for (Review review:reviewList
@@ -83,7 +89,6 @@ public class ReviewController {
             User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
             mav.addObject("userName",user.getUserName());
             mav.addObject("userId",user.getId());
-
         } catch (NullPointerException e) {
             mav.addObject("userName","null");
             mav.addObject("userId","null");

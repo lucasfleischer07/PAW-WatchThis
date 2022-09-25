@@ -15,5 +15,8 @@ public interface UserService {
     void setPassword(String password, User user, String type);
     void setProfilePicture(byte[] profilePicture, User user);
     void addToWatchList(User user, Long contentId);
+    void deleteFromWatchList(User user, Long contentId);
     List<Content> getWatchList(User user);
+    Optional<Long> searchContentInWatchList(User user, Long contentId);
+
 }
