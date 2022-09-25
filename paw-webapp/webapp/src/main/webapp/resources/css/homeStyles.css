@@ -84,6 +84,28 @@
     height: 100%;
 }
 
+.W-img-watchList-button-div {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+.W-watchList-button-div {
+    position: absolute;
+    z-index: 100;
+}
+
+.W-watchList-button {
+    height: 4vw;
+    background-color: #a9a9a9d1;
+}
+
+.W-films-card-body-div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
 .W-more-style {
     display: flex;
     align-items: center
@@ -91,7 +113,6 @@
 
 .W-stars-class {
     width: 10%;
-    height: 8%;
     fill: currentColor;
 }
 
@@ -117,12 +138,7 @@
 }
 
 .W-watchList-icon {
-    margin-right: 0.5vw;
-    width: 14%;
-}
-
-.W-watchList-button {
-    margin-top: 1vw;
+    width: 2vw;
 }
 
 .W-movie-card-size {

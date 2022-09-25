@@ -15,10 +15,7 @@
 }
 
 .W-star-style-info-page{
-    height: 7%;
-    width: 20%;
-    display: flex;
-    flex-direction: row;
+    width: 3%;
 }
 
 .W-span-text-info-card-movie {
@@ -109,8 +106,8 @@
     border-color: green;
 }
 
-.W-starts-width {
-    width: 2vw;
+.W-stars-width {
+    width: 1vw;
 }
 
 .W-row-display-thumbs {
