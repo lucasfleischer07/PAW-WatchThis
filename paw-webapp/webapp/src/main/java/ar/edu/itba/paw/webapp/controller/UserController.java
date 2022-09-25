@@ -27,6 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.swing.text.html.Option;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -221,6 +222,24 @@ public class UserController {
         }
         return mav;
     }
+
+
+    // * ----------------------------------- Watch list -----------------------------------------------------------------------
+    @RequestMapping(value = "/watchList/{contentId:[0-9]+}", method = {RequestMethod.POST})
+    public ModelAndView watchListPost(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("contentId") final Optional<Long> contentId, final BindingResult errors) {
+
+        if(!contentId.isPresent()) {
+            throw new PageNotFoundException();
+        }
+        String userEmail = userDetails.getUsername();
+        User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
+        us.addToWatchList(user, contentId.get());
+
+        return new ModelAndView("redirect:/profile");
+    }
+
+    // * ----------------------------------------------------------------------------------------------------------------------
+
 
     // * ----------------------------------- Errors Page -----------------------------------------------------------------------
     @ExceptionHandler(PageNotFoundException.class)

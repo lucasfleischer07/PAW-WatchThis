@@ -22,11 +22,51 @@
       <jsp:param name="userName" value="${userName}"/>
       <jsp:param name="userId" value="${userId}"/>
     </jsp:include>
-    <div class="W-column-display W-word-break">
 
+    <div class="W-column-display W-word-break">
         <div>
           <div class="card W-inv-film-card-margin">
             <div class="row g-0">
+              <div class="W-watchlist-button-div-infopage">
+                <c:choose>
+                  <c:when test="${userName != 'null'}">
+                    <a href="<c:url value="/watchList/${details.id}"/>">
+                      <button class="btn btn-secondary W-watchlist-button-infopage">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-bookmark-plus W-watchList-icon" viewBox="0 0 16 16">
+                          <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"/>
+                          <path d="M8 4a.5.5 0 0 1 .5.5V6H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V7H6a.5.5 0 0 1 0-1h1.5V4.5A.5.5 0 0 1 8 4z"/>
+                        </svg>
+                      </button>
+                    </a>
+                  </c:when>
+                  <c:otherwise>
+                    <button class="btn btn-secondary W-watchlist-button-infopage" type="button" data-bs-toggle="modal" data-bs-target="#watchListModal">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-bookmark-plus W-watchList-icon" viewBox="0 0 16 16">
+                        <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"/>
+                        <path d="M8 4a.5.5 0 0 1 .5.5V6H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V7H6a.5.5 0 0 1 0-1h1.5V4.5A.5.5 0 0 1 8 4z"/>
+                      </svg>
+                    </button>
+                    <div class="modal fade" id="watchListModal" tabindex="-1" aria-labelledby="watchListModalLabel" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="watchListModalLabel"><spring:message code="WatchList.title"/></h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                            <span><spring:message code="WatchList.WarningAdd"/></span>
+                            <span><spring:message code="Review.WarningAddMessage"/></span>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><spring:message code="Close"/></button>
+                            <a href="<c:url value="/login/sign-in"/>"><button type="button" class="btn btn-success"><spring:message code="Login.loginMessage"/></button></a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </c:otherwise>
+                </c:choose>
+              </div>
               <div class="col-md-4 W-img-aligment">
                 <img src="<c:url value="/contentImage/${details.id}"/>" class="W-img-size" alt="Image <c:out value="${details.name}"/>">
               </div>
@@ -74,7 +114,7 @@
                   <div class="modal-dialog">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Review</h5>
+                        <h5 class="modal-title" id="exampleModalLabel"><spring:message code="Profile.Reviews"/></h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                       </div>
                       <div class="modal-body">

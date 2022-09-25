@@ -78,4 +78,9 @@ public class ContentServiceImpl implements ContentService {
         return ContentDao.getLessDuration(type);
     }
 
+    @Override
+    public List<Content> getLastAdded() {
+        return ContentDao.getLastAdded();
+    }
+
 }

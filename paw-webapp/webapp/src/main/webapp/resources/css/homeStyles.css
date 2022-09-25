@@ -96,6 +96,17 @@
 }
 
 .W-watchList-button {
+    pointer-events: none;
+    height: 4vw;
+    background-color: #a9a9a9d1;
+}
+
+.W-a-display-none{
+    display: none;
+}
+
+.W-watchList-button:hover {
+    pointer-events: none;
     height: 4vw;
     background-color: #a9a9a9d1;
 }

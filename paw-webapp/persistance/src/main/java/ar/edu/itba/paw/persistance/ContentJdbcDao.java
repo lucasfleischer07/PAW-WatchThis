@@ -225,4 +225,9 @@ public class ContentJdbcDao implements ContentDao {
     public List<Content> getLessDuration(String type) {
         return template.query("SELECT * FROM content WHERE type = ? ORDER BY durationnum asc LIMIT 20", new Object[] {type}, CONTENT_ROW_MAPPER);
     }
+
+    @Override
+    public List<Content> getLastAdded() {
+        return template.query("SELECT * FROM content ORDER BY id desc LIMIT 20", CONTENT_ROW_MAPPER);
+    }
 }

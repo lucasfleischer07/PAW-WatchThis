@@ -32,15 +32,16 @@ public class ContentController {
         this.us=us;
     }
 
-    // * ----------------------------------- Movie and Series Info -----------------------------------------------------------------------
+    // * ----------------------------------- Home Page -----------------------------------------------------------------------
     @RequestMapping(value= {"/","page/{pageNum}"})
     public ModelAndView helloWorld(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("pageNum")final Optional<Integer> pageNum, @RequestParam(name = "query", defaultValue = "") final String query) {
         final ModelAndView mav = new ModelAndView("HomePage");
         List<Content> bestRatedList = cs.getBestRated();
         List<Content> lessDurationMoviesList = cs.getLessDuration("movie");
         List<Content> lessDurationSeriesList = cs.getLessDuration("serie");
+        List<Content> lastAddedList = cs.getLastAdded();
 
-        if(bestRatedList == null || lessDurationMoviesList == null || lessDurationSeriesList == null) {
+        if(bestRatedList == null || lessDurationMoviesList == null || lessDurationSeriesList == null || lastAddedList == null) {
             throw new PageNotFoundException();
         }
         mav.addObject("bestRatedList", bestRatedList);
@@ -51,6 +52,9 @@ public class ContentController {
 
         mav.addObject("lessDurationSeriesList", lessDurationSeriesList);
         mav.addObject("lessDurationSeriesListSize", lessDurationSeriesList.size());
+
+        mav.addObject("lastAddedList", lastAddedList);
+        mav.addObject("lastAddedListSize", lastAddedList.size());
 
         mav.addObject("genre","ANY");
         mav.addObject("durationFrom","ANY");
@@ -73,7 +77,10 @@ public class ContentController {
         return mav;
     }
 
+    // * ---------------------------------------------------------------------------------------------------------------
 
+
+    // * ----------------------------------- Movie and Series division -------------------------------------------------
     @RequestMapping(value= {"/{type:movies|series}","/{type:movies|series}/page/{pageNum}"})
     public ModelAndView contentType(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("type") final String type,@PathVariable("pageNum")final Optional<Integer> pageNum) {
         String auxType = null;
@@ -118,43 +125,10 @@ public class ContentController {
         return mav;
     }
 
-    @RequestMapping(value = {"/search", "/page/{pageNum}"})
-    public ModelAndView search(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("pageNum")final Optional<Integer> pageNum, @RequestParam(name = "query", defaultValue = "") final String query) {
-        final ModelAndView mav = new ModelAndView("ContentPage");
+    // * ---------------------------------------------------------------------------------------------------------------
 
-        mav.addObject("query", query);
-        List<Content> contentList = cs.getSearchedContent(query);
-        mav.addObject("contentType", "all");
 
-        int page= pageNum.orElse(1);
-
-        if(contentList == null) {
-            throw new PageNotFoundException();
-        }else {
-            if(contentList.size() < (page)*ELEMS_AMOUNT){       //Si no llega a completar la pagina entera, que sirva los que pueda
-                mav.addObject("allContent", contentList.subList((page-1)*ELEMS_AMOUNT,contentList.size()));
-            }else {
-                mav.addObject("allContent", contentList.subList((page - 1) * ELEMS_AMOUNT, (page - 1) * ELEMS_AMOUNT + ELEMS_AMOUNT));
-            }
-            mav.addObject("amountPages", (int) Math.ceil((double) contentList.size() / (double) ELEMS_AMOUNT));
-            mav.addObject("pageSelected", page);
-        }
-
-        try {
-            String userEmail = userDetails.getUsername();
-            User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
-            mav.addObject("userName",user.getUserName());
-            mav.addObject("userId",user.getId());
-
-        } catch (NullPointerException e) {
-            mav.addObject("userName","null");
-            mav.addObject("userId","null");
-        }
-        return mav;
-    }
-
-    // *  ----------------------------------- Movies and Serie Filters -----------------------------------------------------------------------
-
+    // *  ----------------------------------- Movies and Serie Filters -------------------------------------------------
     @RequestMapping(value = {"/{type:movies|series|all}/filters" , "/{type:movies|series|all}/filters/page/{pageNum}"})
     public ModelAndView moviesWithFilters(
             @AuthenticationPrincipal PawUserDetails userDetails,
@@ -223,6 +197,7 @@ public class ContentController {
     }
 
 
+    // * ----------------------------------- Get img from database -----------------------------------------------------
     @RequestMapping(path = "/contentImage/{contentId:[0-9]+}", method = RequestMethod.GET, produces = {MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
     @ResponseBody
     public byte[] contentImage(@PathVariable("contentId") final Long contentId) {
@@ -232,6 +207,48 @@ public class ContentController {
         Content content = cs.findById(contentId).orElseThrow(PageNotFoundException::new);
         return content.getImage();
     }
+
+    // * ---------------------------------------------------------------------------------------------------------------
+
+
+    // * ----------------------------------- Search bar ----------------------------------------------------------------
+    @RequestMapping(value = {"/search", "/page/{pageNum}"})
+    public ModelAndView search(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("pageNum")final Optional<Integer> pageNum, @RequestParam(name = "query", defaultValue = "") final String query) {
+        final ModelAndView mav = new ModelAndView("ContentPage");
+
+        mav.addObject("query", query);
+        List<Content> contentList = cs.getSearchedContent(query);
+        mav.addObject("contentType", "all");
+
+        int page= pageNum.orElse(1);
+
+        if(contentList == null) {
+            throw new PageNotFoundException();
+        }else {
+            if(contentList.size() < (page)*ELEMS_AMOUNT){       //Si no llega a completar la pagina entera, que sirva los que pueda
+                mav.addObject("allContent", contentList.subList((page-1)*ELEMS_AMOUNT,contentList.size()));
+            }else {
+                mav.addObject("allContent", contentList.subList((page - 1) * ELEMS_AMOUNT, (page - 1) * ELEMS_AMOUNT + ELEMS_AMOUNT));
+            }
+            mav.addObject("amountPages", (int) Math.ceil((double) contentList.size() / (double) ELEMS_AMOUNT));
+            mav.addObject("pageSelected", page);
+        }
+
+        try {
+            String userEmail = userDetails.getUsername();
+            User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
+            mav.addObject("userName",user.getUserName());
+            mav.addObject("userId",user.getId());
+
+        } catch (NullPointerException e) {
+            mav.addObject("userName","null");
+            mav.addObject("userId","null");
+        }
+        return mav;
+    }
+
+    // * ---------------------------------------------------------------------------------------------------------------
+
 
     // * ----------------------------------- Errors Page -----------------------------------------------------------------------
     @ExceptionHandler(PageNotFoundException.class)
@@ -245,6 +262,7 @@ public class ContentController {
     public ModelAndView MethodNotAllowed(){
         return new ModelAndView("errorPage");
     }
+
     // * -----------------------------------------------------------------------------------------------------------------------
 
 

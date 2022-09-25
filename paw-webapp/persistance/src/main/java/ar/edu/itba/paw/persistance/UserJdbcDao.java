@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.persistance;
 
+import ar.edu.itba.paw.models.Content;
 import ar.edu.itba.paw.models.User;
 import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -26,21 +28,10 @@ public class UserJdbcDao implements UserDao{
 
 
     private final JdbcTemplate template;
-//    private final SimpleJdbcInsert insert;
 
     @Autowired
     public UserJdbcDao(final DataSource ds){
         this.template = new JdbcTemplate(ds);
-//        this.insert = new SimpleJdbcInsert(ds)
-//                .withTableName("users")
-//                .usingGeneratedKeyColumns("id");
-
-        //Hacer esto NO esta bueno, ya va a mostrar una mejor forma
-//        template.execute("CREATE TABLE IF NOT EXISTS users ("
-//                + "id SERIAL PRIMARY KEY,"
-//                + "email VARCHAR(255) UNIQUE NOT NULL,"
-//                + "password VARCHAR(255) NOT NULL"
-//                + ")");
     }
 
     @Override
@@ -48,7 +39,6 @@ public class UserJdbcDao implements UserDao{
         try {
             template.update("INSERT INTO userdata(name, email, password, reputation) VALUES(?,?,?,?)", userName, userEmail, password, rating);
         }catch(Exception e) {
-            //Por ahora vacio, en el futuro un cartel
         }
         //Chequeo si el {usuario,email} existe
         Optional<User> userFound = template.query("SELECT * FROM userdata WHERE email = ? AND name = ?", new Object[]{userEmail,userName}, USER_ROW_MAPPER).stream().findFirst();
@@ -72,12 +62,25 @@ public class UserJdbcDao implements UserDao{
 
     @Override
     public void setPassword(String password, User user){
-        template.update("UPDATE userdata SET password = ? WHERE userid = ?",new Object[]{password, user.getId()});
+        template.update("UPDATE userdata SET password = ? WHERE userid = ?", password, user.getId());
     }
 
     @Override
     public void setProfilePicture(byte[] profilePicture, User user) {
-        template.update("UPDATE userdata SET image = ? WHERE  userid = ?", new Object[]{profilePicture, user.getId()});
+        template.update("UPDATE userdata SET image = ? WHERE  userid = ?", profilePicture, user.getId());
     }
+
+    @Override
+    public void addToWatchList(User user, Long contentId) {
+        template.update("INSERT INTO userwatchlist(userid, contentid) VALUES(?,?)", user.getId(), contentId);
+    }
+
+    @Override
+    public List<Content> getWatchList(User user) {
+//      TODO: VER COMO HCAER EL JOIN CON LA DE USERWATCHLIST ASI ME TRAIGO EL CONTENIDO Y TODO ESO
+//        return template.query("SELECT * FROM content WHERE name = ?", new Object[]{ user.getId() }, USER_ROW_MAPPER);
+        return null;
+    }
+
 
 }

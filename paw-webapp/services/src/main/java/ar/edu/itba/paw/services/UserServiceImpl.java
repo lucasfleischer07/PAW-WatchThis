@@ -2,6 +2,7 @@ package ar.edu.itba.paw.services;
 
 import java.util.*;
 
+import ar.edu.itba.paw.models.Content;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.persistance.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,6 +79,16 @@ public class UserServiceImpl implements UserService{
     @Override
     public void setProfilePicture(byte[] profilePicture, User user) {
         userDao.setProfilePicture(profilePicture, user);
+    }
+
+    @Override
+    public void addToWatchList(User user, Long contentId) {
+        userDao.addToWatchList(user, contentId);
+    }
+
+    @Override
+    public List<Content> getWatchList(User user) {
+        return userDao.getWatchList(user);
     }
 
     private String generateRandomWord() {

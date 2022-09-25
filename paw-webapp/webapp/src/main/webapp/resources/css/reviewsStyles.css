@@ -23,6 +23,21 @@
     font-style: italic;
 }
 
+.W-watchlist-button-div-infopage {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: flex-start;
+}
+
+.W-watchlist-button-infopage {
+    width: 70px;
+}
+
+.W-watchList-icon-infopage {
+    margin-right: 0.5vw;
+    width: 20%;
+}
+
 .W-card-details-margin {
     margin: 0;
 }
@@ -229,6 +244,10 @@
     .W-reviewText {
         font-size: 2.5vw;
     }
+
+    .W-watchlist-button-infopage {
+        width: 50px;
+    }
 }
 
 @media (max-width: 767px) {
@@ -312,6 +331,10 @@
         font-size: 4.2vw;
     }
 
+    .W-watchlist-button-infopage {
+        width: 55px;
+    }
+
 }
 
 @media (max-width: 301px) {
@@ -343,6 +366,10 @@
 
     .W-card-title {
         font-size: 4.5vw;
+    }
+
+    .W-watchlist-button-infopage {
+        width: 45px;
     }
 
 }

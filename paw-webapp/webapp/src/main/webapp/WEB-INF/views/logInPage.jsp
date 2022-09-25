@@ -70,7 +70,7 @@
                                 <div class="W-div-login-rememberMe">
                                     <div class="form-check">
                                         <input name="rememberMe" class="form-check-input" type="checkbox" id="flexCheckDefault">
-                                        <label class="form-check-label" for="flexCheckDefault"><spring:message code="Login.RememberMe"/</label>
+                                        <label class="form-check-label" for="flexCheckDefault"><spring:message code="Login.RememberMe"/></label>
                                     </div>
                                     <div class="W-div-login-button">
                                         <button id="submitButton1" type="submit" class="btn btn-success W-login-button" onclick="this.form.submit(); (this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'"><spring:message code="Login.loginMessage"/></button>

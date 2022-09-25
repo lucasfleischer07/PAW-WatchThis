@@ -19,4 +19,5 @@ public interface ContentDao {
     void decreaseContentPoints(long contentId,int rating);
     List<Content> getBestRated();
     List<Content> getLessDuration(String type);
+    List<Content> getLastAdded();
 }

@@ -72,6 +72,7 @@ public class ReviewController {
         return mav;
     }
 
+
     // * ----------------------------------- Movies and Series Review -----------------------------------------------------------------------
     @RequestMapping(value = "/reviewForm/{type:movie|serie}/{id:[0-9]+}/{userId:[0-9]+}", method = {RequestMethod.GET})
     public ModelAndView reviewFormCreate(@AuthenticationPrincipal PawUserDetails userDetails, @ModelAttribute("registerForm") final ReviewForm reviewForm, @PathVariable("id")final long id, @PathVariable("type")final String type) {
