@@ -54,8 +54,8 @@
                 </div>
             </div>
             <div class="bg-light p-4 d-flex text-center">
-<%--                <h4><c:out value="${watchListSize}"/></h4>--%>
-                <h4>50 titulos</h4>
+                <h4><c:out value="${watchListSize}"/></h4>
+<%--                <h4>50 titulos</h4>--%>
             </div>
 
             <c:choose>

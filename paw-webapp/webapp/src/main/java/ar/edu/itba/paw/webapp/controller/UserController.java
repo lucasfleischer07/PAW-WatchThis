@@ -202,11 +202,11 @@ public class UserController {
     public ModelAndView watchList(@AuthenticationPrincipal PawUserDetails userDetails) {
         String userEmail = userDetails.getUsername();
         User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
-//        List<Content> watchListContent = us.getWatchList(user);
+        List<Content> watchListContent = us.getWatchList(user);
         final ModelAndView mav = new ModelAndView("watchListPage");
         mav.addObject("user", user);
-//        mav.addObject("watchList", watchListContent);
-//        mav.addObject("watchListSize", watchListContent.size());
+        mav.addObject("watchListContent", watchListContent);
+        mav.addObject("watchListSize", watchListContent.size());
         return mav;
     }
 

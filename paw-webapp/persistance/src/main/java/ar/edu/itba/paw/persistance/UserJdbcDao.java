@@ -27,9 +27,9 @@ public class UserJdbcDao implements UserDao{
                     resultSet.getBytes("image"));
 
     private static final RowMapper<Content> CONTENT_ROW_MAPPER = (resultSet, rowNum) ->
-            new Content(resultSet.getLong("id"),
-                    resultSet.getString("name"),
-                    resultSet.getBytes("image"),
+            new Content(resultSet.getLong("contentid"),
+                    resultSet.getString("contentName"),
+                    resultSet.getBytes("contentImage"),
                     resultSet.getString("description"),
                     resultSet.getString("released"),
                     resultSet.getString("genre"),
@@ -98,7 +98,7 @@ public class UserJdbcDao implements UserDao{
 
     @Override
     public List<Content> getWatchList(User user) {
-        return template.query("SELECT * FROM (content JOIN userwatchlist ON content.id = userwatchlist.contentId) JOIN userdata ON userdata.userid = userwatchlist.userid WHERE userdata.userid = ? ORDER BY desc", new Object[]{ user.getId() }, CONTENT_ROW_MAPPER);
+        return template.query("SELECT (content.id) AS contentId, (content.name) AS contentName, (content.image) AS contentImage, description, released, genre, creator, duration, type, rating, reviewsamount FROM (content JOIN userwatchlist ON content.id = userwatchlist.contentId) JOIN userdata ON userdata.userid = userwatchlist.userid WHERE userwatchlist.userid = ? ORDER BY userwatchlist.id desc", new Object[]{ user.getId() }, CONTENT_ROW_MAPPER);
     }
 
     @Override
