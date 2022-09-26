@@ -1,7 +1,9 @@
 package ar.edu.itba.paw.persistance;
 
 import ar.edu.itba.paw.models.Content;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.mail.Multipart;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,4 +22,5 @@ public interface ContentDao {
     List<Content> getBestRated();
     List<Content> getLessDuration(String type);
     List<Content> getLastAdded();
+    void contentCreate(String name, String description, String releaseDate, String genre, String creator, Integer duration,String durationString, String type, byte[] contentImage);
 }

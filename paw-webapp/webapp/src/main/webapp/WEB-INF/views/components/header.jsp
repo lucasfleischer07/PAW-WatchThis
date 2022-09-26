@@ -379,6 +379,12 @@
                                     <li><a class="dropdown-item" href="<c:url value="/profile"/>"><spring:message code="ProfileMessage"/></a></li>
                                     <li><a class="dropdown-item" href="<c:url value="/profile/watchList"/>"><spring:message code="Content.WatchList"/></a></li>
                                     <li><hr class="dropdown-divider"></li>
+    <%--                                TODO: HACER EL LOG OUT--%>
+                                    <c:if test="${param.admin == true}">
+                                        <li><a class="dropdown-item" href="<c:url value="/content/create"/>"><spring:message code="CreateContentMessage"/></a></li>
+                                        <li><hr class="dropdown-divider"></li>
+
+                                    </c:if>
                                     <li><a class="dropdown-item" href="<c:url value="/login/sign-out"/>"><spring:message code="LogOutMessage"/></a></li>
                                 </ul>
                             </div>

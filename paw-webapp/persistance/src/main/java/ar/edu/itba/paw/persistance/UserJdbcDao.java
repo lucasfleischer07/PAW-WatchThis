@@ -24,7 +24,8 @@ public class UserJdbcDao implements UserDao{
                     resultSet.getString("name"),
                     resultSet.getString("password"),
                     resultSet.getLong("reputation"),
-                    resultSet.getBytes("image"));
+                    resultSet.getBytes("image"),
+                    resultSet.getString("role"));
 
     private static final RowMapper<Content> CONTENT_ROW_MAPPER = (resultSet, rowNum) ->
             new Content(resultSet.getLong("contentid"),
@@ -53,7 +54,7 @@ public class UserJdbcDao implements UserDao{
     @Override
     public Optional<Long> create(final String userEmail, String userName, String password, Long rating) {
         try {
-            template.update("INSERT INTO userdata(name, email, password, reputation) VALUES(?,?,?,?)", userName, userEmail, password, rating);
+            template.update("INSERT INTO userdata(name, email, password, reputation,role) VALUES(?,?,?,?,'user')", userName, userEmail, password, rating);
         }catch(Exception e) {
         }
         //Chequeo si el {usuario,email} existe
@@ -107,5 +108,10 @@ public class UserJdbcDao implements UserDao{
         return contentIdDB.isPresent() ? Optional.of(contentIdDB.get()) : Optional.of((long) -1);
     }
 
+
+    @Override
+    public void promoteUser(Long userId){
+        template.update("UPDATE userdata SET role = 'admin' WHERE userid = ?",new Object[]{userId});
+    }
 
 }

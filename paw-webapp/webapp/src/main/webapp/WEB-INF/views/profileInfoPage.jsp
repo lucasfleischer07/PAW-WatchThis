@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <html>
   <head>
@@ -51,6 +52,12 @@
               <div>
                   <c:if test="${userName==user.userName}">
                       <a href="<c:url value="/profile/edit-profile"/>" class="btn btn-outline-dark btn-block W-editProfile-button"><spring:message code="Profile.EdirProfile"/></a>
+                  </c:if>
+                  <c:if test="${admin==true}">
+                      <c:url value="/profile/${user.userName}" var="postPath"/>
+                      <form class="W-delete-form" id="<c:out value="user${user.userName}"/>" method="post" action="${postPath}">
+                          <button type="submit" class="btn btn-outline-dark btn-sm btn-block" onclick="this.form.submit(); (this).disabled = true; (this).innerText = '|'"><spring:message code="Profile.PromoteUser"/></button>
+                      </form>
                   </c:if>
               </div>
               <ul class="list-inline mb-0">

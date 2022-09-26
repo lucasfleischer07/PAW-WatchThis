@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import javax.mail.Multipart;
 import javax.sql.DataSource;
 import javax.swing.plaf.PanelUI;
 import java.util.List;
@@ -230,4 +231,12 @@ public class ContentJdbcDao implements ContentDao {
     public List<Content> getLastAdded() {
         return template.query("SELECT * FROM content ORDER BY id desc LIMIT 20", CONTENT_ROW_MAPPER);
     }
+
+    @Override
+    public void contentCreate(String name, String description, String releaseDate, String genre, String creator, Integer duration,String durationString, String type, byte[] contentImage){
+        template.update(
+                "INSERT INTO content(name,image,description,released,genre,creator,duration,durationNum,rating,type) VALUES(?,?,?,?,?,?,?,?,0,?)",name,contentImage,description,releaseDate,genre,creator,durationString,duration,type
+        );
+    }
+
 }

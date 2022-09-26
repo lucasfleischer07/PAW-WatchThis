@@ -3,12 +3,12 @@ package ar.edu.itba.paw.models;
 public class User {
 
     private Long id, reputation;
-    private String email, userName, password;
+    private String email, userName, password,role;
 
     private byte[] image;
 //    //private String password;
 
-    public User(Long id, String email, String userName, String password, Long reputation, byte[] image) {
+    public User(Long id, String email, String userName, String password, Long reputation, byte[] image,String role) {
         super();
         this.id = id;
         this.email = email;
@@ -16,6 +16,11 @@ public class User {
         this.password = password;
         this.reputation = reputation;
         this.image = image;
+        this.role=role;
+    }
+
+    public String getRole() {
+        return role;
     }
 
     public String getEmail() {

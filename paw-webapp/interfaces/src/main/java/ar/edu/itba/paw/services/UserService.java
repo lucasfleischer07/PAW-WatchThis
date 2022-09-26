@@ -19,4 +19,5 @@ public interface UserService {
     List<Content> getWatchList(User user);
     Optional<Long> searchContentInWatchList(User user, Long contentId);
 
+    void promoteUser(Long userId);
 }

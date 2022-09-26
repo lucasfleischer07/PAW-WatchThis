@@ -5,6 +5,7 @@ import ar.edu.itba.paw.persistance.ContentDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.mail.Multipart;
 import java.util.List;
 import java.util.Optional;
 
@@ -83,4 +84,10 @@ public class ContentServiceImpl implements ContentService {
         return ContentDao.getLastAdded();
     }
 
+    @Override
+    public void contentCreate(String name, String description, String releaseDate, String genre, String creator, Integer duration, String type, byte[] contentImage){
+        String durationString = String.format("%d:%d",duration/60,duration - (duration/60)*60);
+
+        ContentDao.contentCreate(name,description,releaseDate,genre,creator,duration,durationString,type,contentImage);
+    }
 }

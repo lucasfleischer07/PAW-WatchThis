@@ -1,7 +1,9 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.models.Content;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.mail.Multipart;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,4 +22,7 @@ public interface ContentService {
     List<Content> getLessDuration(String type);
     List<Content> getLastAdded();
 
+    void addContentPoints(long contentId,int rating);
+    void decreaseContentPoints(long contentId,int rating);
+    void contentCreate(String name, String description, String releaseDate, String genre, String creator, Integer duration, String type, byte[] contentImage);
 }
