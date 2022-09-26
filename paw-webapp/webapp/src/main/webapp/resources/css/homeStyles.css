@@ -96,7 +96,6 @@
 }
 
 .W-watchList-button {
-    pointer-events: none;
     height: 4vw;
     background-color: #a9a9a9d1;
 }
@@ -106,7 +105,6 @@
 }
 
 .W-watchList-button:hover {
-    pointer-events: none;
     height: 4vw;
     background-color: #a9a9a9d1;
 }
@@ -119,7 +117,7 @@
 
 .W-more-style {
     display: flex;
-    align-items: center
+    align-items: stretch;
 }
 
 .W-stars-class {

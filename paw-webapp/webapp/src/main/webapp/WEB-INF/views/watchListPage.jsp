@@ -17,7 +17,7 @@
     <link href="<c:url value="/resources/css/reviewsStyles.css"/>" rel="stylesheet" type="text/css"/>
     <link href="<c:url value="/resources/css/profileStyles.css"/>" rel="stylesheet" type="text/css"/>
 
-    <title><spring:message code="Content.WatchList"/></title>
+    <title><spring:message code="WatchList"/></title>
 </head>
 
 <body class="body">
@@ -29,8 +29,8 @@
 </jsp:include>
 
 <div class="row py-5 px-4">
-    <div class="col-md-5 mx-auto W-profile-general-div-display">
-        <div class="bg-white shadow rounded overflow-hidden W-profile-general-div">
+    <div class="W-profile-general-div-display">
+        <div>
             <div class="px-4 pt-0 pb-4 cover">
                 <div class="media align-items-end profile-head W-profile-photo-name">
                     <div class="profile mr-3">
@@ -38,13 +38,11 @@
                             <c:when test="${user.image == null}">
                                 <div>
                                     <img src="<c:url value="/resources/img/defaultUserImg.png"/> " alt="User_img" class="W-edit-profile-picture">
-                                    <p>hola</p>
                                 </div>
                             </c:when>
                             <c:otherwise>
                                 <div>
                                     <img src="<c:url value="/profile/${user.userName}/profileImage"/> " alt="User_img" class="W-edit-profile-picture">
-                                    <p>hola</p>
                                 </div>
                             </c:otherwise>
                         </c:choose>
@@ -55,24 +53,23 @@
                 </div>
             </div>
             <div class="bg-light p-4 d-flex text-center">
-                <h4><c:out value="${watchListSize}"/></h4>
-<%--                <h4>50 titulos</h4>--%>
+                <h4><c:out value="${watchListSize}"/> <spring:message code="WatchList.Titles"/></h4>
             </div>
 
             <c:choose>
-                <c:when test="${watchListContent==null || watchListSize==0}">
+                <c:when test="${watchListContent == null || watchListSize == 0}">
                             <div class="W-watchlist-div-info-empty">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-bookmark-x-fill W-watchlist-empty-icon" viewBox="0 0 16 16">
                                     <path fill-rule="evenodd" d="M2 15.5V2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.74.439L8 13.069l-5.26 2.87A.5.5 0 0 1 2 15.5zM6.854 5.146a.5.5 0 1 0-.708.708L7.293 7 6.146 8.146a.5.5 0 1 0 .708.708L8 7.707l1.146 1.147a.5.5 0 1 0 .708-.708L8.707 7l1.147-1.146a.5.5 0 0 0-.708-.708L8 6.293 6.854 5.146z"/>
                                 </svg>
                                 <div>
-                                    <p><spring:message code="Content.WatchList.Empty"/></p>
+                                    <p><spring:message code="WatchList.Empty"/></p>
                                 </div>
                                 <div>
-                                    <p><spring:message code="Content.WatchList.Empty2"/></p>
+                                    <p><spring:message code="WatchList.Empty2"/></p>
                                 </div>
                                 <div>
-                                    <a href="<c:url value="/"/>"> <spring:message code="Content.WatchList.Recomendation"/></a>
+                                    <a href="<c:url value="/"/>"><spring:message code="WatchList.Recomendation"/></a>
                                 </div>
                             </div>
                 </c:when>
@@ -90,6 +87,7 @@
                                 <jsp:param name="contentType" value="${content.type}"/>
                                 <jsp:param name="contentRating" value="${content.rating}"/>
                                 <jsp:param name="reviewsAmount" value="${content.reviewsAmount}"/>
+                                <jsp:param name="userWatchListContentId" value="${userWatchListContentId}"/>
                             </jsp:include>
                         </c:forEach>
                     </div>

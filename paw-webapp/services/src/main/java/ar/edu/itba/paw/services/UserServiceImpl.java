@@ -101,6 +101,11 @@ public class UserServiceImpl implements UserService{
         return userDao.searchContentInWatchList(user, contentId);
     }
 
+    @Override
+    public List<Long> getUserWatchListContent(User user) {
+        return userDao.getUserWatchListContent(user);
+    }
+
     private String generateRandomWord() {
         Random r = new Random();
         StringBuilder sb = new StringBuilder(20);

@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
-    //Intenta agregar el usuario si no existe y devuelve su id luego de agregarlo
     Optional<Long> register(User user);
     Optional<User> findByEmail(String email);
     Optional<User> findById(long userId);
@@ -18,6 +17,6 @@ public interface UserService {
     void deleteFromWatchList(User user, Long contentId);
     List<Content> getWatchList(User user);
     Optional<Long> searchContentInWatchList(User user, Long contentId);
-
     void promoteUser(Long userId);
+    List<Long> getUserWatchListContent(User user);
 }

@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserDao {
-
     Optional<Long> create(String userEmail, String userName, String password, Long rating);
     Optional<User> findByEmail(String email);
     Optional<User> findById(long userId);
@@ -18,6 +17,7 @@ public interface UserDao {
     void deleteFromWatchList(User user, Long contentId);
     List<Content> getWatchList(User user);
     Optional<Long> searchContentInWatchList(User user, Long contentId);
+    List<Long> getUserWatchListContent(User user);
 
     void promoteUser(Long userId);
 }

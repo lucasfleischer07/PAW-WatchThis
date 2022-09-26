@@ -112,7 +112,6 @@ public class UserController {
             Optional<User> existUserEmail = us.findByEmail(loginForm.getEmail());
             Optional<User> existUserName = us.findByUserName(loginForm.getUsername());
             if(existUserEmail.isPresent() || existUserName.isPresent()) {
-//                TODO: Ver como meter el mensaje de error de que el emial y/o usernames ya existen
                 return LoginSingUp(userDetails, loginForm, loginStage);
             }
             User newUser = new User(null, loginForm.getEmail(), loginForm.getUsername(), loginForm.getPassword(), 0L, null,"user");
@@ -209,10 +208,13 @@ public class UserController {
         String userEmail = userDetails.getUsername();
         User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
         List<Content> watchListContent = us.getWatchList(user);
+        List<Long> userWatchListContentId = us.getUserWatchListContent(user);
         final ModelAndView mav = new ModelAndView("watchListPage");
         mav.addObject("user", user);
         mav.addObject("watchListContent", watchListContent);
         mav.addObject("watchListSize", watchListContent.size());
+        mav.addObject("userWatchListContentId",userWatchListContentId);
+        
         if(user.getRole().equals("admin")){
             mav.addObject("admin",true);
         }else{
@@ -229,7 +231,6 @@ public class UserController {
         final ModelAndView mav = new ModelAndView("profileInfoPage");
         Optional<User> user = us.findByUserName(userName);
         if(user.isPresent()) {
-//            mav.addObject("full-access", "no");
             mav.addObject("user", user.get());
             mav.addObject("reviews",rs.getAllUserReviews(user.get().getUserName()));
         } else {
@@ -239,6 +240,8 @@ public class UserController {
         try {
             String userEmail = userDetails.getUsername();
             User userLogged = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
+            List<Long> userWatchListContentId = us.getUserWatchListContent(userLogged);
+            mav.addObject("userWatchListContentId",userWatchListContentId);
             mav.addObject("userName",userLogged.getUserName());
             mav.addObject("userId",userLogged.getId());
             if(userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")) && !user.get().getRole().equals("admin")){
@@ -250,6 +253,7 @@ public class UserController {
         } catch (NullPointerException e) {
             mav.addObject("userName","null");
             mav.addObject("userId","null");
+            mav.addObject("userWatchListContentId","null");
             mav.addObject("admin",false);
         }
         return mav;

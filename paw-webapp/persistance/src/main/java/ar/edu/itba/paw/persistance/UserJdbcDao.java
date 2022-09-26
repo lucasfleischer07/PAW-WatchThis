@@ -108,6 +108,12 @@ public class UserJdbcDao implements UserDao{
         return contentIdDB.isPresent() ? Optional.of(contentIdDB.get()) : Optional.of((long) -1);
     }
 
+    @Override
+    public List<Long> getUserWatchListContent(User user) {
+        return template.query("SELECT contentid FROM userwatchlist WHERE userid = ?", new Object[]{user.getId()} , LONG_ROW_MAPPER);
+    }
+
+
 
     @Override
     public void promoteUser(Long userId){
