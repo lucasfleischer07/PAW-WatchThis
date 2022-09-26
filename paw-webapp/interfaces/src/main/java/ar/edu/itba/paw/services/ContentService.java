@@ -21,8 +21,5 @@ public interface ContentService {
     List<Content> getBestRated();
     List<Content> getLessDuration(String type);
     List<Content> getLastAdded();
-
-    void addContentPoints(long contentId,int rating);
-    void decreaseContentPoints(long contentId,int rating);
     void contentCreate(String name, String description, String releaseDate, String genre, String creator, Integer duration, String type, byte[] contentImage);
 }

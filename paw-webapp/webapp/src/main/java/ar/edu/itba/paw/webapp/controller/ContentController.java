@@ -37,18 +37,23 @@ public class ContentController {
         this.us=us;
     }
 
-    private void HeaderSetUp(ModelAndView mav,PawUserDetails userDetails){
+    private void HeaderSetUp(ModelAndView mav,PawUserDetails userDetails) {
         try {
             String userEmail = userDetails.getUsername();
             User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
-            mav.addObject("userName",user.getUserName());
-            mav.addObject("userId",user.getId());
-
+            mav.addObject("userName", user.getUserName());
+            mav.addObject("userId", user.getId());
+            if(user.getRole().equals("admin")){
+                mav.addObject("admin",true);
+            }else{
+                mav.addObject("admin",false);
+            }
         } catch (NullPointerException e) {
-            mav.addObject("userName","null");
-            mav.addObject("userId","null");
-            mav.addObject("admin",false);
+            mav.addObject("userName", "null");
+            mav.addObject("userId", "null");
+            mav.addObject("admin", false);
         }
+    }
 
     // * ----------------------------------- Home Page -----------------------------------------------------------------------
     @RequestMapping(value= {"/","page/{pageNum}"})

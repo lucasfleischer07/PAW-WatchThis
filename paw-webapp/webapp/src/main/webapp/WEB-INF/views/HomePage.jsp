@@ -28,7 +28,7 @@
             <jsp:param name="sorting" value="${sorting}"/>
             <jsp:param name="userName" value="${userName}"/>
             <jsp:param name="userId" value="${userId}"/>
-
+            <jsp:param name="admin" value="${admin}"/>
         </jsp:include>
 
         <div class="W-column-display">

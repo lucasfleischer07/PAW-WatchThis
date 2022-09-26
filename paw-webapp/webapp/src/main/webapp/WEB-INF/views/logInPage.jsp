@@ -29,6 +29,7 @@
                     <jsp:param name="type" value="null"/>
                     <jsp:param name="userName" value="${userName}"/>
                     <jsp:param name="userId" value="${userId}"/>
+                    <jsp:param name="admin" value="${admin}"/>
                 </jsp:include>
             </div>
 

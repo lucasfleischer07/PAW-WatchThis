@@ -79,10 +79,16 @@ public class ReviewController {
                 mav.addObject("isInWatchList","null");
 
             }
+            if(user.getRole().equals("admin")){
+                mav.addObject("admin",true);
+            }else{
+                mav.addObject("admin",false);
+            }
         } catch (NullPointerException e) {
             mav.addObject("userName","null");
             mav.addObject("userId","null");
             mav.addObject("isInWatchList","null");
+            mav.addObject("admin",false);
         }
         if(user!=null){
             for (Review review:reviewList
@@ -109,9 +115,15 @@ public class ReviewController {
             User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
             mav.addObject("userName",user.getUserName());
             mav.addObject("userId",user.getId());
+            if(user.getRole().equals("admin")){
+                mav.addObject("admin",true);
+            }else{
+                mav.addObject("admin",false);
+            }
         } catch (NullPointerException e) {
             mav.addObject("userName","null");
             mav.addObject("userId","null");
+            mav.addObject("admin",false);
         }
         return mav;
     }
@@ -171,10 +183,16 @@ public class ReviewController {
             mav.addObject("user",user);
             mav.addObject("userName",user.getUserName());
             mav.addObject("userId",user.getId());
+            if(user.getRole().equals("admin")){
+                mav.addObject("admin",true);
+            }else{
+                mav.addObject("admin",false);
+            }
 
         } catch (NullPointerException e) {
             mav.addObject("userName","null");
             mav.addObject("userId","null");
+            mav.addObject("admin",false);
         }
         if(!oldReview.get().getUserName().equals(us.findByEmail(userDetails.getUsername()).get().getUserName())){
             throw new MethodNotAllowedException();

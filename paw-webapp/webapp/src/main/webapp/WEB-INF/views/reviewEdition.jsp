@@ -26,6 +26,7 @@
             <jsp:param name="type" value="${details.type}"/>
             <jsp:param name="userName" value="${userName}"/>
             <jsp:param name="userId" value="${userId}"/>
+            <jsp:param name="admin" value="${admin}"/>
         </jsp:include>
 
         <c:url value="/reviewForm/edit/${details.type}/${details.id}/${reviewInfo.id}" var="postPath"/>

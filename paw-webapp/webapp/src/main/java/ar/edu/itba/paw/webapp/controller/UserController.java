@@ -154,6 +154,11 @@ public class UserController {
         mav.addObject("reviews",rs.getAllUserReviews(user.getUserName()));
         mav.addObject("userName",user.getUserName());
         mav.addObject("userId",user.getId());
+        if(user.getRole().equals("admin")){
+            mav.addObject("admin",true);
+        }else{
+            mav.addObject("admin",false);
+        }
 
         return mav;
     }
@@ -208,6 +213,11 @@ public class UserController {
         mav.addObject("user", user);
         mav.addObject("watchListContent", watchListContent);
         mav.addObject("watchListSize", watchListContent.size());
+        if(user.getRole().equals("admin")){
+            mav.addObject("admin",true);
+        }else{
+            mav.addObject("admin",false);
+        }
         return mav;
     }
 
