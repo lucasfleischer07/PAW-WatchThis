@@ -97,6 +97,7 @@
                     </div>
                     <div class="mb-3 W-input-label-review-info">
                         <form:errors path="contentPicture" element="p" cssClass="form-error-label"/>
+                        <form:label path="type" class="form-label"><span class="W-red-asterisco">*</span></form:label>
                         <form:input type="file" accept="image/gif, image/jpeg, image/jpg,  image/png" class="form-control" path="contentPicture" cssClass="W-input-width"/>
                     </div>
                 </div>

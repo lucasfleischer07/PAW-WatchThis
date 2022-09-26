@@ -6,7 +6,7 @@ import javax.validation.constraints.*;
 
 public class ContentForm {
 
-    @Size(min = 6, max = 100)
+    @Size(min = 1, max = 100)
     @Pattern(regexp	= "[a-zA-Z0-9!,.:;=+\n\\-_()?<>$%&#@{}\\[\\]|*\"'~/`^\\s]+")
     private String name;
 
@@ -15,7 +15,7 @@ public class ContentForm {
     private String description;
 
     @Size(min = 4, max = 4)
-    @Pattern(regexp	= "[1-2][0-9][0-9][0-9]")
+    @Pattern(regexp	= "[1-2][90][0-9][0-9]")
     private String releaseDate;
 
     @NotNull
@@ -28,8 +28,10 @@ public class ContentForm {
     @Min(20)
     private Integer duration;
 
+    @NotNull
     private String type;
 
+    @NotNull
     private MultipartFile contentPicture;
 
 
