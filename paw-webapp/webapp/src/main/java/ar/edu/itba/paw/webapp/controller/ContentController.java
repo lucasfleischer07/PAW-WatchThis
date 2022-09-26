@@ -41,8 +41,10 @@ public class ContentController {
         try {
             String userEmail = userDetails.getUsername();
             User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
+            List<Long> userWatchListContentId = us.getUserWatchListContent(user);
             mav.addObject("userName", user.getUserName());
             mav.addObject("userId", user.getId());
+            mav.addObject("userWatchListContentId", userWatchListContentId);
             if(user.getRole().equals("admin")){
                 mav.addObject("admin",true);
             }else{
@@ -52,6 +54,7 @@ public class ContentController {
             mav.addObject("userName", "null");
             mav.addObject("userId", "null");
             mav.addObject("admin", false);
+            mav.addObject("userWatchListContentId", "null");
         }
     }
 
