@@ -217,7 +217,7 @@ public class ContentJdbcDao implements ContentDao {
     }
 
     @Override
-    public void contentCreate(String name, String description, String releaseDate, String genre, String creator, Integer duration,String durationString, String type, Multipart contentImage){
+    public void contentCreate(String name, String description, String releaseDate, String genre, String creator, Integer duration,String durationString, String type, byte[] contentImage){
         template.update(
                 "INSERT INTO content(name,image,description,released,genre,creator,duration,durationNum,rating,type) VALUES(?,?,?,?,?,?,?,?,0,?)",name,contentImage,description,releaseDate,genre,creator,durationString,duration,type
         );

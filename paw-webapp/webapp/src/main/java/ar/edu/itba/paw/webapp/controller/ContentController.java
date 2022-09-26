@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -212,11 +213,11 @@ public class ContentController {
     }
 
     @RequestMapping(value = "/content/create",method = {RequestMethod.POST})
-    public ModelAndView createContent(@AuthenticationPrincipal PawUserDetails userDetails,@Valid @ModelAttribute("contentCreate") final ContentForm contentForm, final BindingResult errors) {
+    public ModelAndView createContent(@AuthenticationPrincipal PawUserDetails userDetails,@Valid @ModelAttribute("contentCreate") final ContentForm contentForm, final BindingResult errors) throws IOException {
         if(errors.hasErrors()) {
             return createContent(userDetails,contentForm);
         }
-
+        cs.contentCreate(contentForm.getName(),contentForm.getDescription(),contentForm.getReleaseDate(),contentForm.getGenre(),contentForm.getCreator(),contentForm.getDuration(),contentForm.getType(),contentForm.getContentPicture().getBytes());
         return new ModelAndView("redirect:/");
     }
 
