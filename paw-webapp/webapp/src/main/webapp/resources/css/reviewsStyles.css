@@ -6,8 +6,27 @@
     flex-direction: column;
 }
 
+.W-review-div-sizing {
+    margin-right: 10vw;
+    margin-left: 10vw;
+}
+
 .W-inv-film-card-margin{
     margin: 3%;
+}
+
+.W-reviews-card-margins {
+    margin-left: 5vw;
+    margin-right: 5vw;
+}
+
+.W-general-div-infoPage-watchlistButton-and-review {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.W-div-img-and-reviewInfo {
+    display: flex;
 }
 
 .W-img-size{
@@ -64,7 +83,11 @@
 }
 
 .W-card-title {
-    font-size: 2vw;
+    font-size: 1.5vw;
+}
+
+.W-subTitles-font-size {
+    font-size: 1vw;
 }
 
 .W-card-body-aligment {
@@ -154,8 +177,6 @@
 
 .W-img-aligment {
     display: flex;
-    /*margin-top: 1%;*/
-    /*justify-content: center;*/
 }
 
 .W-thumb-up {
@@ -236,6 +257,9 @@
         width: 4vw;
     }
 
+    .W-subTitles-font-size {
+        font-size: 1.5vw;
+    }
 
     .W-thumbsButton-orientation {
         font-size: 3vw;
@@ -268,6 +292,14 @@
     .W-card-title {
         font-size: 3vw;
     }
+
+    .W-subTitles-font-size {
+        font-size: 2vw;
+    }
+
+    .W-div-img-and-reviewInfo{
+        display: grid;
+    }
 }
 
 @media (max-width: 650px) {
@@ -298,6 +330,14 @@
 
     .W-card-body-aligment {
         font-size: 2.5vw;
+    }
+
+    .W-subTitles-font-size {
+        font-size: 2.5vw;
+    }
+
+    .W-div-img-and-reviewInfo{
+        display: grid;
     }
 }
 
@@ -335,6 +375,14 @@
         width: 55px;
     }
 
+    .W-subTitles-font-size {
+        font-size: 3vw;
+    }
+
+    .W-div-img-and-reviewInfo{
+        display: grid;
+    }
+
 }
 
 @media (max-width: 301px) {
@@ -370,6 +418,14 @@
 
     .W-watchlist-button-infopage {
         width: 45px;
+    }
+
+    .W-subTitles-font-size {
+        font-size: 3.5vw;
+    }
+
+    .W-div-img-and-reviewInfo{
+        display: grid;
     }
 
 }
