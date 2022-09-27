@@ -1,0 +1,1 @@
+insert into userdata(userid,name,email,password,reputation,image,role) values(1,'brandyhuevo','mateoperezrivera@gmail.com','secret',0,null ,'user')

@@ -52,14 +52,14 @@ public class UserJdbcDao implements UserDao{
     }
 
     @Override
-    public Optional<Long> create(final String userEmail, String userName, String password, Long rating) {
+    public Optional<User> create(final String userEmail, String userName, String password, Long rating) {
         try {
             template.update("INSERT INTO userdata(name, email, password, reputation,role) VALUES(?,?,?,?,'user')", userName, userEmail, password, rating);
         }catch(Exception e) {
         }
         //Chequeo si el {usuario,email} existe
-        Optional<User> userFound = template.query("SELECT * FROM userdata WHERE email = ? AND name = ?", new Object[]{userEmail,userName}, USER_ROW_MAPPER).stream().findFirst();
-        return userFound.isPresent() ? Optional.of(userFound.get().getId()) : Optional.of((long) -1);
+        return  template.query("SELECT * FROM userdata WHERE email = ? AND name = ?", new Object[]{userEmail,userName}, USER_ROW_MAPPER).stream().findFirst();
+
     }
 
     @Override

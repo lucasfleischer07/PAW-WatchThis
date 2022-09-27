@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService{
         this.passwordEncoder = passwordEncoder;
     }
     @Override
-    public Optional<Long> register(User user) {
+    public Optional<User> register(User user) {
         try {
             Map<String, Object> mailVariables = new HashMap<>();
             mailVariables.put("to", user.getEmail());
