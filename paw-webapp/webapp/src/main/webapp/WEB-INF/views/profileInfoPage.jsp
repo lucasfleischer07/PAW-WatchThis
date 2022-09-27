@@ -44,7 +44,6 @@
                               <img src="<c:url value="/profile/${user.userName}/profileImage"/> " alt="User_img" class="W-edit-profile-picture">
                           </c:otherwise>
                       </c:choose>
-<%--                  TODO: CAMBIAR ESTE HOLA HARDCODEADO--%>
                       <p class="W-quote-in-profile">${quote}</p>
                   </div>
                   <div class="media-body mb-5 text-white">

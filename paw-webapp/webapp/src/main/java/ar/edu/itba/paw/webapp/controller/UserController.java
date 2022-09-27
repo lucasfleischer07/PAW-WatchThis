@@ -207,10 +207,13 @@ public class UserController {
     @RequestMapping(value = "/profile/watchList", method = {RequestMethod.GET})
     public ModelAndView watchList(@AuthenticationPrincipal PawUserDetails userDetails) {
         String userEmail = userDetails.getUsername();
+        final String locale = LocaleContextHolder.getLocale().getDisplayLanguage();
         User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
         List<Content> watchListContent = us.getWatchList(user);
         List<Long> userWatchListContentId = us.getUserWatchListContent(user);
         final ModelAndView mav = new ModelAndView("watchListPage");
+        Optional<String> quote = cs.getContentQuote(locale);
+        mav.addObject("quote", quote.get());
         mav.addObject("user", user);
         mav.addObject("userName",user.getUserName());
         mav.addObject("userId",user.getId());

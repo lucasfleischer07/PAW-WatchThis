@@ -34,18 +34,21 @@
             <div class="px-4 pt-0 pb-4 cover">
                 <div class="media align-items-end profile-head W-profile-photo-name">
                     <div class="profile mr-3">
-                        <c:choose>
-                            <c:when test="${user.image == null}">
-                                <div>
-                                    <img src="<c:url value="/resources/img/defaultUserImg.png"/> " alt="User_img" class="W-edit-profile-picture">
-                                </div>
-                            </c:when>
-                            <c:otherwise>
-                                <div>
-                                    <img src="<c:url value="/profile/${user.userName}/profileImage"/> " alt="User_img" class="W-edit-profile-picture">
-                                </div>
-                            </c:otherwise>
-                        </c:choose>
+                        <div class="W-img-and-quote-div">
+                            <c:choose>
+                                <c:when test="${user.image == null}">
+                                    <div>
+                                        <img src="<c:url value="/resources/img/defaultUserImg.png"/> " alt="User_img" class="W-edit-profile-picture">
+                                    </div>
+                                </c:when>
+                                <c:otherwise>
+                                    <div>
+                                        <img src="<c:url value="/profile/${user.userName}/profileImage"/> " alt="User_img" class="W-edit-profile-picture">
+                                    </div>
+                                </c:otherwise>
+                            </c:choose>
+                            <p class="W-quote-in-profile">${quote}</p>
+                        </div>
                         <div class="media-body mb-5 text-white">
                             <h3 class="W-username-profilepage"><c:out value="${user.userName}"/></h3>
                         </div>
