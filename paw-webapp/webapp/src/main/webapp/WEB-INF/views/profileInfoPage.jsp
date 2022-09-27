@@ -35,14 +35,17 @@
           <div class="px-4 pt-0 pb-4 cover">
             <div class="media align-items-end profile-head W-profile-photo-name">
               <div class="profile mr-3">
-                  <c:choose>
-                      <c:when test="${user.image == null}">
-                          <img src="<c:url value="/resources/img/defaultUserImg.png"/> " alt="User_img" class="W-edit-profile-picture">
-                      </c:when>
-                      <c:otherwise>
-                          <img src="<c:url value="/profile/${user.userName}/profileImage"/> " alt="User_img" class="W-edit-profile-picture">
-                      </c:otherwise>
-                  </c:choose>
+                  <div class="W-img-and-quote-div">
+                      <c:choose>
+                          <c:when test="${user.image == null}">
+                              <img src="<c:url value="/resources/img/defaultUserImg.png"/> " alt="User_img" class="W-edit-profile-picture">
+                          </c:when>
+                          <c:otherwise>
+                              <img src="<c:url value="/profile/${user.userName}/profileImage"/> " alt="User_img" class="W-edit-profile-picture">
+                          </c:otherwise>
+                      </c:choose>
+                      <p class="W-quote-in-profile">${quote}</p>
+                  </div>
                   <div class="media-body mb-5 text-white">
                       <h3 class="W-username-profilepage"><c:out value="${user.userName}"/></h3>
                   </div>
@@ -50,14 +53,14 @@
             </div>
           </div>
           <div class="bg-light p-4 d-flex text-center W-editProfileButton-and-reviewsCant">
-              <div>
+              <div class="W-edition-and-admin-buttons">
                   <c:if test="${userName==user.userName}">
                       <a href="<c:url value="/profile/edit-profile"/>" class="btn btn-outline-dark btn-block W-editProfile-button"><spring:message code="Profile.EdirProfile"/></a>
                   </c:if>
                   <c:if test="${admin==true}">
                       <c:url value="/profile/${user.userName}" var="postPath"/>
                       <form class="W-delete-form" id="<c:out value="user${user.userName}"/>" method="post" action="${postPath}">
-                          <button type="submit" class="btn btn-outline-dark btn-sm btn-block" onclick="this.form.submit(); (this).disabled = true; (this).innerText = '|'"><spring:message code="Profile.PromoteUser"/></button>
+                          <button type="submit" class="btn btn-outline-dark btn-sm btn-block W-editProfile-button" onclick="this.form.submit(); (this).disabled = true; (this).innerText = '|'"><spring:message code="Profile.PromoteUser"/></button>
                       </form>
                   </c:if>
               </div>

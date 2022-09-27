@@ -22,4 +22,5 @@ public interface ContentService {
     List<Content> getLessDuration(String type);
     List<Content> getLastAdded();
     void contentCreate(String name, String description, String releaseDate, String genre, String creator, Integer duration, String type, byte[] contentImage);
+    Optional<String> getContentQuote(String language);
 }

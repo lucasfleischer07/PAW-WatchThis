@@ -12,6 +12,7 @@ import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
 import ar.edu.itba.paw.webapp.form.EditProfile;
 import ar.edu.itba.paw.webapp.form.LoginForm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -31,10 +32,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.swing.text.html.Option;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 public class UserController {
@@ -146,9 +144,12 @@ public class UserController {
     //This path is for the logged in profile, if the person is not logged in it will fail
     @RequestMapping("/profile")
     public ModelAndView profile(@AuthenticationPrincipal PawUserDetails userDetails) {
+        final String locale = LocaleContextHolder.getLocale().getDisplayLanguage();
         final ModelAndView mav = new ModelAndView("profileInfoPage");
         String userEmail = userDetails.getUsername();
         User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
+        Optional<String> quote = cs.getContentQuote(locale);
+        mav.addObject("quote", quote.get());
         mav.addObject("user", user);
         mav.addObject("reviews",rs.getAllUserReviews(user.getUserName()));
         mav.addObject("userName",user.getUserName());
@@ -206,11 +207,16 @@ public class UserController {
     @RequestMapping(value = "/profile/watchList", method = {RequestMethod.GET})
     public ModelAndView watchList(@AuthenticationPrincipal PawUserDetails userDetails) {
         String userEmail = userDetails.getUsername();
+        final String locale = LocaleContextHolder.getLocale().getDisplayLanguage();
         User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
         List<Content> watchListContent = us.getWatchList(user);
         List<Long> userWatchListContentId = us.getUserWatchListContent(user);
         final ModelAndView mav = new ModelAndView("watchListPage");
+        Optional<String> quote = cs.getContentQuote(locale);
+        mav.addObject("quote", quote.get());
         mav.addObject("user", user);
+        mav.addObject("userName",user.getUserName());
+        mav.addObject("userId",user.getId());
         mav.addObject("watchListContent", watchListContent);
         mav.addObject("watchListSize", watchListContent.size());
         mav.addObject("userWatchListContentId",userWatchListContentId);
@@ -231,6 +237,9 @@ public class UserController {
         final ModelAndView mav = new ModelAndView("profileInfoPage");
         Optional<User> user = us.findByUserName(userName);
         if(user.isPresent()) {
+            final String locale = LocaleContextHolder.getLocale().getDisplayLanguage();
+            Optional<String> quote = cs.getContentQuote(locale);
+            mav.addObject("quote", quote.get());
             mav.addObject("user", user.get());
             mav.addObject("reviews",rs.getAllUserReviews(user.get().getUserName()));
         } else {
@@ -285,8 +294,12 @@ public class UserController {
         return new ModelAndView("redirect:" + referer);
     }
 
-    // * ----------------------------------------------------------------------------------------------------------------------
+    @RequestMapping(value = "/go/to/login", method = {RequestMethod.POST})
+    public ModelAndView goToLogin()  {
+        return new ModelAndView("redirect:/login/sign-in");
+    }
 
+    // * ----------------------------------------------------------------------------------------------------------------------
 
     @RequestMapping(value = "/profile/{userName:[a-zA-Z0-9\\s]+}",method = {RequestMethod.POST})
     public ModelAndView profileInfo(@AuthenticationPrincipal PawUserDetails userDetails,@Valid @ModelAttribute("editProfile") final EditProfile editProfile, @PathVariable("userName") final String userName,final BindingResult errors) {

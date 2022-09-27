@@ -3,7 +3,7 @@
 <div>
     <div class="card">
         <div class="card-body W-reviewText">
-            <p><c:out value="${param.commentText}"/></p>
+            <span><c:out value="${param.commentText}"/></span>
         </div>
     </div>
     <!-- <div class="W-column-display-thumbs">

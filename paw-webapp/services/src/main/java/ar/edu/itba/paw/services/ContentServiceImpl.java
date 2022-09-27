@@ -90,4 +90,9 @@ public class ContentServiceImpl implements ContentService {
 
         ContentDao.contentCreate(name,description,releaseDate,genre,creator,duration,durationString,type,contentImage);
     }
+
+    @Override
+    public Optional<String> getContentQuote(String language) {
+        return ContentDao.getContentQuote(language);
+    }
 }
