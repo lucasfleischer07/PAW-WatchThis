@@ -22,7 +22,7 @@
         <title><spring:message code="Review.Registration"/></title>
     </head>
 
-    <body>
+    <body class="W-img-background">
         <div>
             <div>
                 <jsp:include page="components/header.jsp">

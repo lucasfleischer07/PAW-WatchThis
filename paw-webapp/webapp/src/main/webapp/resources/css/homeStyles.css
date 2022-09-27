@@ -37,13 +37,13 @@
     padding-bottom: 1%;
     font-size: 1.3vw;
     font-weight: bold;
-    width: 9vw;
+    width: 13vw;
     border-color: darkred;
     background-color: white;
 }
 
 .W-dropdown-button-sorting {
-    margin: 1vw 0 1vw 62vw;
+    margin: 1vw 0 1vw 50vw;
 }
 
 .W-dropdown-button {

@@ -59,7 +59,7 @@
 
 .W-edit-profile-picture {
     margin-right: 1vw;
-    width: 8vw;
+    width: 12vw;
 }
 
 .W-edit-picture-text {
@@ -81,6 +81,24 @@
 .W-username-profilepage {
     margin-top: 1vw;
     color: white;
+}
+
+.W-quote-in-profile {
+    word-break: break-all;
+    color: white;
+    margin-left: 2vw;
+    font-size: 1.1vw;
+}
+
+.W-img-and-quote-div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.W-edition-and-admin-buttons {
+    display: flex;
+    align-items: center;
 }
 
 .W-input-profile-picture {
