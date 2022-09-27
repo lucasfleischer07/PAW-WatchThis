@@ -211,6 +211,8 @@ public class UserController {
         List<Long> userWatchListContentId = us.getUserWatchListContent(user);
         final ModelAndView mav = new ModelAndView("watchListPage");
         mav.addObject("user", user);
+        mav.addObject("userName",user.getUserName());
+        mav.addObject("userId",user.getId());
         mav.addObject("watchListContent", watchListContent);
         mav.addObject("watchListSize", watchListContent.size());
         mav.addObject("userWatchListContentId",userWatchListContentId);

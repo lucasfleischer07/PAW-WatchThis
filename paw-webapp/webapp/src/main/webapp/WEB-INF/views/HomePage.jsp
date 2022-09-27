@@ -16,7 +16,7 @@
         <link href="<c:url value="/resources/css/reviewsStyles.css"/>" rel="stylesheet" type="text/css"/>
         <link href="<c:url value="/resources/css/carrouselStyles.css"/>" rel="stylesheet" type="text/css"/>
 
-        <title>Watch This</title>
+        <title><spring:message code="WatchThisMessage"/></title>
     </head>
 
     <body>
