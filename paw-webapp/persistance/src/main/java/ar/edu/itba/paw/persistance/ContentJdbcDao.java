@@ -29,6 +29,9 @@ public class ContentJdbcDao implements ContentDao {
                     resultSet.getInt("rating")/(resultSet.getInt("reviewsAmount") ==0 ? 1 : resultSet.getInt("reviewsAmount"))
                     ,resultSet.getInt("reviewsAmount"));
 
+    private static final RowMapper<String> ENGLISH_QUOTE_ROW_MAPPER = (resultSet, rowNum) -> resultSet.getString("english");
+    private static final RowMapper<String> SPANISH_QUOTE_ROW_MAPPER = (resultSet, rowNum) -> resultSet.getString("spanish");
+
 
     private final JdbcTemplate template;
 
@@ -237,6 +240,15 @@ public class ContentJdbcDao implements ContentDao {
         template.update(
                 "INSERT INTO content(name,image,description,released,genre,creator,duration,durationNum,rating,type) VALUES(?,?,?,?,?,?,?,?,0,?)",name,contentImage,description,releaseDate,genre,creator,durationString,duration,type
         );
+    }
+
+    @Override
+    public Optional<String> getContentQuote(String language) {
+        if(Objects.equals(language, "Spanish")) {
+            return template.query("SELECT spanish FROM quotes ORDER BY RANDOM() LIMIT 1",SPANISH_QUOTE_ROW_MAPPER).stream().findFirst();
+        } else {
+            return template.query("SELECT english FROM quotes ORDER BY RANDOM() LIMIT 1",ENGLISH_QUOTE_ROW_MAPPER).stream().findFirst();
+        }
     }
 
 }
