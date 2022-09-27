@@ -1,5 +1,8 @@
 package ar.edu.itba.paw.webapp.form;
 
+import ar.edu.itba.paw.webapp.validations.ImageNotNull;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.*;
@@ -31,7 +34,7 @@ public class ContentForm {
     @NotNull
     private String type;
 
-    @NotNull
+    @ImageNotNull
     private MultipartFile contentPicture;
 
 
