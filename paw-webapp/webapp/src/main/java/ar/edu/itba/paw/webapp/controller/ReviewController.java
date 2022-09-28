@@ -39,25 +39,26 @@ public class ReviewController {
         this.rs = rs;
     }
 
-    private void HeaderSetUp(ModelAndView mav,PawUserDetails userDetails){
-        try {
-            String userEmail = userDetails.getUsername();
-            User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
-            mav.addObject("userName",user.getUserName());
-            mav.addObject("userId",user.getId());
-            if(user.getRole().equals("admin")){
-                mav.addObject("admin",true);
-            }else{
-                mav.addObject("admin",false);
-            }
+//    private void HeaderSetUp(ModelAndView mav,PawUserDetails userDetails){
+//        try {
+//            String userEmail = userDetails.getUsername();
+//            User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
+//            mav.addObject("userName",user.getUserName());
+//            mav.addObject("userId",user.getId());
+//            if(user.getRole().equals("admin")){
+//                mav.addObject("admin",true);
+//            }else{
+//                mav.addObject("admin",false);
+//            }
+//
+//        } catch (NullPointerException e) {
+//            mav.addObject("userName","null");
+//            mav.addObject("userId","null");
+//            mav.addObject("admin",false);
+//        }
+//    }
 
-        } catch (NullPointerException e) {
-            mav.addObject("userName","null");
-            mav.addObject("userId","null");
-            mav.addObject("admin",false);
-        }
-    }
-
+    // * ----------------------------------- Movies and Series Info page -----------------------------------------------
     @RequestMapping("/{type:movie|serie}/{contentId:[0-9]+}")
     public ModelAndView reviews(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("contentId")final long contentId, @PathVariable("type") final String type) {
         final ModelAndView mav = new ModelAndView("infoPage");
@@ -103,9 +104,10 @@ public class ReviewController {
         mav.addObject("reviews", reviewList);
         return mav;
     }
+    // * ---------------------------------------------------------------------------------------------------------------
 
 
-    // * ----------------------------------- Movies and Series Review -----------------------------------------------------------------------
+    // * ----------------------------------- Movies and Series Review Creation------------------------------------------
     @RequestMapping(value = "/reviewForm/{type:movie|serie}/{id:[0-9]+}/{userId:[0-9]+}", method = {RequestMethod.GET})
     public ModelAndView reviewFormCreate(@AuthenticationPrincipal PawUserDetails userDetails, @ModelAttribute("registerForm") final ReviewForm reviewForm, @PathVariable("id")final long id, @PathVariable("type")final String type) {
         final ModelAndView mav = new ModelAndView("reviewRegistration");
@@ -153,9 +155,10 @@ public class ReviewController {
         ModelMap model =new ModelMap();
         return new ModelAndView("redirect:/" + type + "/" + id, model);
     }
+    // * ---------------------------------------------------------------------------------------------------------------
 
 
-    // * ---------------------------------------------Edit and delete reviews--------------------------------------------------------------------------
+    // * ---------------------------------------------Review edition and delete-----------------------------------------
     @RequestMapping(value="/review/{reviewId:[0-9]+}/delete",method = {RequestMethod.POST})
     public ModelAndView deleteReview(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("reviewId") final long reviewId, HttpServletRequest request){
         Review review=rs.findById(reviewId).orElseThrow(PageNotFoundException::new);
@@ -230,6 +233,7 @@ public class ReviewController {
         ModelMap model =new ModelMap();
         return new ModelAndView("redirect:/" + type + "/" + contentId, model);
     }
+    // * ---------------------------------------------------------------------------------------------------------------
 
 
 

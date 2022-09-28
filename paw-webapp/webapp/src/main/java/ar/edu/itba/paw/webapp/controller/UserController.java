@@ -29,7 +29,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.swing.text.html.Option;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.*;
@@ -45,7 +44,7 @@ public class UserController {
 
     protected AuthenticationManager authenticationManager;
 
-    @Autowired  //Para indicarle que este es el constructor que quiero que use
+    @Autowired
     public UserController(final UserService us, final ContentService cs, ReviewService rs, EmailService es,AuthenticationManager authenticationManager){
         this.us = us;
         this.cs = cs;
@@ -73,7 +72,7 @@ public class UserController {
         }
     }
 
-    // * ----------------------------------- login Page -----------------------------------------------------------------------
+    // * ----------------------------------- Login ---------------------------------------------------------------------
     @RequestMapping(value = "/login/{loginStage:sign-in}", method = {RequestMethod.GET})
     public ModelAndView loginSignIn(@AuthenticationPrincipal PawUserDetails userDetails, HttpServletRequest request, @PathVariable("loginStage") final String loginStage, @RequestParam(value = "error",required = false) Optional<Boolean> error) {
         final ModelAndView mav = new ModelAndView("logInPage");
@@ -138,9 +137,10 @@ public class UserController {
         Authentication authentication = authenticationManager.authenticate(token);
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
+    // * ---------------------------------------------------------------------------------------------------------------
 
 
-    // * ------------------------------------------------Profile--------------------------------------------------------------------
+    // * ------------------------------------------------Profile View --------------------------------------------------
     //This path is for the logged in profile, if the person is not logged in it will fail
     @RequestMapping("/profile")
     public ModelAndView profile(@AuthenticationPrincipal PawUserDetails userDetails) {
@@ -167,62 +167,6 @@ public class UserController {
         }
         User user = us.findByUserName(userName).orElseThrow(PageNotFoundException::new);
         return user.getImage();
-    }
-
-
-
-    @RequestMapping(value = "/profile/edit-profile", method = {RequestMethod.GET})
-    public ModelAndView profileEdition(@AuthenticationPrincipal PawUserDetails userDetails, @Valid @ModelAttribute("editProfile") final EditProfile editProfile) {
-        String userEmail = userDetails.getUsername();
-        User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
-        final ModelAndView mav = new ModelAndView("profileEditionPage");
-        mav.addObject("user", user);
-        return mav;
-    }
-
-    @RequestMapping(value = "/profile/edit-profile", method = {RequestMethod.POST})
-    public ModelAndView profileEditionPost(@AuthenticationPrincipal PawUserDetails userDetails,@Valid @ModelAttribute("editProfile") final EditProfile editProfile, final BindingResult errors) throws IOException {
-        if(errors.hasErrors()) {
-            return profileEdition(userDetails,editProfile);
-        }
-
-        String userEmail = userDetails.getUsername();
-        User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
-        if(editProfile.getPassword() != null && (editProfile.getProfilePicture() == null) || editProfile.getProfilePicture().getSize() <= 0 ) {
-            us.setPassword(editProfile.getPassword(), user, "restore");
-        } else if(editProfile.getPassword() == null && (editProfile.getProfilePicture().getSize() > 0)) {
-            us.setProfilePicture(editProfile.getProfilePicture().getBytes(), user);
-        } else if(editProfile.getPassword() != null && editProfile.getProfilePicture().getSize() > 0) {
-            us.setPassword(editProfile.getPassword(), user, "restore");
-            us.setProfilePicture(editProfile.getProfilePicture().getBytes(), user);
-        }
-
-        return new ModelAndView("redirect:/profile");
-    }
-
-    @RequestMapping(value = "/profile/watchList", method = {RequestMethod.GET})
-    public ModelAndView watchList(@AuthenticationPrincipal PawUserDetails userDetails) {
-        String userEmail = userDetails.getUsername();
-        final String locale = LocaleContextHolder.getLocale().getDisplayLanguage();
-        User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
-        List<Content> watchListContent = us.getWatchList(user);
-        List<Long> userWatchListContentId = us.getUserWatchListContent(user);
-        final ModelAndView mav = new ModelAndView("watchListPage");
-        Optional<String> quote = cs.getContentQuote(locale);
-        mav.addObject("quote", quote.get());
-        mav.addObject("user", user);
-        mav.addObject("userName",user.getUserName());
-        mav.addObject("userId",user.getId());
-        mav.addObject("watchListContent", watchListContent);
-        mav.addObject("watchListSize", watchListContent.size());
-        mav.addObject("userWatchListContentId",userWatchListContentId);
-        
-        if(user.getRole().equals("admin")){
-            mav.addObject("admin",true);
-        }else{
-            mav.addObject("admin",false);
-        }
-        return mav;
     }
 
     @RequestMapping("/profile/{userName:[a-zA-Z0-9\\s]+}")
@@ -261,8 +205,75 @@ public class UserController {
         return mav;
     }
 
+    @RequestMapping(value = "/profile/{userName:[a-zA-Z0-9\\s]+}",method = {RequestMethod.POST})
+    public ModelAndView profileInfo(@AuthenticationPrincipal PawUserDetails userDetails,@Valid @ModelAttribute("editProfile") final EditProfile editProfile, @PathVariable("userName") final String userName,final BindingResult errors) {
+        Optional<User> user = us.findByUserName(userName);
+        us.promoteUser(user.get().getId());
 
-    // * ----------------------------------- Watch list -----------------------------------------------------------------------
+        return new ModelAndView("redirect:/profile/" + userName);
+    }
+    // * ---------------------------------------------------------------------------------------------------------------
+
+
+    // * ------------------------------------------------Profile Edition------------------------------------------------
+    @RequestMapping(value = "/profile/edit-profile", method = {RequestMethod.GET})
+    public ModelAndView profileEdition(@AuthenticationPrincipal PawUserDetails userDetails, @Valid @ModelAttribute("editProfile") final EditProfile editProfile) {
+        String userEmail = userDetails.getUsername();
+        User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
+        final ModelAndView mav = new ModelAndView("profileEditionPage");
+        mav.addObject("user", user);
+        return mav;
+    }
+
+    @RequestMapping(value = "/profile/edit-profile", method = {RequestMethod.POST})
+    public ModelAndView profileEditionPost(@AuthenticationPrincipal PawUserDetails userDetails,@Valid @ModelAttribute("editProfile") final EditProfile editProfile, final BindingResult errors) throws IOException {
+        if(errors.hasErrors()) {
+            return profileEdition(userDetails,editProfile);
+        }
+
+        String userEmail = userDetails.getUsername();
+        User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
+        if(editProfile.getPassword() != null && (editProfile.getProfilePicture() == null) || editProfile.getProfilePicture().getSize() <= 0 ) {
+            us.setPassword(editProfile.getPassword(), user, "restore");
+        } else if(editProfile.getPassword() == null && (editProfile.getProfilePicture().getSize() > 0)) {
+            us.setProfilePicture(editProfile.getProfilePicture().getBytes(), user);
+        } else if(editProfile.getPassword() != null && editProfile.getProfilePicture().getSize() > 0) {
+            us.setPassword(editProfile.getPassword(), user, "restore");
+            us.setProfilePicture(editProfile.getProfilePicture().getBytes(), user);
+        }
+
+        return new ModelAndView("redirect:/profile");
+    }
+    // * ---------------------------------------------------------------------------------------------------------------
+
+
+    // * ------------------------------------------------User Watch List------------------------------------------------
+    @RequestMapping(value = "/profile/watchList", method = {RequestMethod.GET})
+    public ModelAndView watchList(@AuthenticationPrincipal PawUserDetails userDetails) {
+        String userEmail = userDetails.getUsername();
+        final String locale = LocaleContextHolder.getLocale().getDisplayLanguage();
+        User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
+        List<Content> watchListContent = us.getWatchList(user);
+        List<Long> userWatchListContentId = us.getUserWatchListContent(user);
+        final ModelAndView mav = new ModelAndView("watchListPage");
+        Optional<String> quote = cs.getContentQuote(locale);
+        mav.addObject("quote", quote.get());
+        mav.addObject("user", user);
+        mav.addObject("userName", user.getUserName());
+        mav.addObject("userId", user.getId());
+        mav.addObject("watchListContent", watchListContent);
+        mav.addObject("watchListSize", watchListContent.size());
+        mav.addObject("userWatchListContentId", userWatchListContentId);
+
+        if (user.getRole().equals("admin")) {
+            mav.addObject("admin", true);
+        } else {
+            mav.addObject("admin", false);
+        }
+        return mav;
+    }
+
+
     @RequestMapping(value = "/watchList/add/{contentId:[0-9]+}", method = {RequestMethod.POST})
     public ModelAndView watchListAddPost(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("contentId") final Optional<Long> contentId, HttpServletRequest request) {
         if(!contentId.isPresent()) {
@@ -287,19 +298,10 @@ public class UserController {
         return new ModelAndView("redirect:" + referer);
     }
 
-    @RequestMapping(value = "/go/to/login", method = {RequestMethod.POST})
+     @RequestMapping(value = "/go/to/login", method = {RequestMethod.POST})
     public ModelAndView goToLogin()  {
         return new ModelAndView("redirect:/login/sign-in");
     }
 
-    // * ----------------------------------------------------------------------------------------------------------------------
-
-    @RequestMapping(value = "/profile/{userName:[a-zA-Z0-9\\s]+}",method = {RequestMethod.POST})
-    public ModelAndView profileInfo(@AuthenticationPrincipal PawUserDetails userDetails,@Valid @ModelAttribute("editProfile") final EditProfile editProfile, @PathVariable("userName") final String userName,final BindingResult errors) {
-        Optional<User> user = us.findByUserName(userName);
-        us.promoteUser(user.get().getId());
-
-        return new ModelAndView("redirect:/profile/" + userName);
-    }
-
+    // * ---------------------------------------------------------------------------------------------------------------
 }

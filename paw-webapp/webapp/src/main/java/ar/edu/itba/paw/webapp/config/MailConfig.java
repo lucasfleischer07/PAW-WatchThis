@@ -46,14 +46,12 @@ public class MailConfig implements ApplicationContextAware, EnvironmentAware {
     @Bean
     public JavaMailSender mailSender() throws IOException {
         final JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        // Basic mail sender configuration, based on emailconfig.properties
+
         mailSender.setHost(this.environment.getProperty(HOST));
         mailSender.setPort(Integer.parseInt(this.environment.getProperty(PORT)));
         mailSender.setProtocol(this.environment.getProperty(PROTOCOL));
         mailSender.setUsername(this.environment.getProperty(USERNAME));
         mailSender.setPassword(this.environment.getProperty(PASSWORD));
-
-        // JavaMail-specific mail sender configuration, based on javamail.properties
 
         final Properties javaMailProperties = new Properties();
         javaMailProperties.put("mail.smtp.host", "smtp.gmail.com");
@@ -65,7 +63,6 @@ public class MailConfig implements ApplicationContextAware, EnvironmentAware {
         javaMailProperties.put("mail.smtp.quitwait", "false");
         javaMailProperties.put("mail.smtp.ssl.trust", "smtp.gmail.com");
 
-//        javaMailProperties.load(this.applicationContext.getResource(JAVA_MAIL_FILE).getInputStream());
         mailSender.setJavaMailProperties(javaMailProperties);
 
         return mailSender;

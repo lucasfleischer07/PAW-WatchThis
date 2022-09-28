@@ -125,11 +125,6 @@
                 <scope>runtime</scope>
             </dependency>
     <!--      Dependencia para mandar emials-->
-          <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-mail</artifactId>
-            <version>2.5.6</version>
-          </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-context-support</artifactId>
