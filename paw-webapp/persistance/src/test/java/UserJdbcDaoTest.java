@@ -28,7 +28,7 @@ import static org.junit.Assert.*;
 @ContextConfiguration(classes = TestConfig.class)
 @Sql(scripts = "classpath:user-dao-test.sql")
 public class UserJdbcDaoTest {
-    private final static User testUser=new User(1L,"mateoperezrivera@gmail.com","brandyhuevo","secret",0L,null);
+    private final static User testUser=new User(1L,"mateoperezrivera@gmail.com","brandyhuevo","secret",0L,null,"user");
     private final static String PASSWORD = "password";
     private final static String NAME = "NAME";
     private final static String EMAIL = "e@mail.com";
@@ -113,7 +113,7 @@ public class UserJdbcDaoTest {
     }
     @Test
     public void testSetProfilePicture(){
-        byte[] image= new String("njasndasdjnian").getBytes();
+        byte[] image= new String("image").getBytes();
         dao.setProfilePicture(image,testUser);
         Optional<User> maybeUser=dao.findByUserName(testUser.getUserName());
         assertTrue(maybeUser.isPresent());

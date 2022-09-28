@@ -1,5 +1,5 @@
 create table if not exists content  (
-                          ID serial PRIMARY KEY,
+                          id serial PRIMARY KEY,
                           name VARCHAR ( 100 ) NOT NULL,
                           image VARCHAR ( 500 ) ,
                           description VARCHAR ( 500 ) NOT NULL,
@@ -10,7 +10,7 @@ create table if not exists content  (
                           durationNum integer NOT NULL,
                           rating integer NOT NULL,
                           type VARCHAR (10) NOT NULL CHECK (type = 'serie' OR type = 'movie'),
-                            reviewsAmount integer not null
+                            reviewsAmount integer default 0
 );
 
 create table if not exists  review (
@@ -47,3 +47,10 @@ CREATE TABLE if not exists  userWatchlist(
                               contentId int not null,
                               foreign key(userid) references userdata,
                               foreign key(contentid) references content);
+
+create table if not exists quotes
+(
+    id      serial,
+    english text,
+    spanish text
+);

@@ -41,10 +41,9 @@ public class UserServiceImplTest {
     @Test
     public void testCreate(){
         Mockito.when(userDao.create(eq(EMAIL),eq(USERNAME),eq(PASSWORD),eq(RATING)))
-                .thenReturn(Optional.of(new User(1L,EMAIL,USERNAME, pe.encode(PASSWORD),0L,null )));
-        final User user= us.register(new User(null,EMAIL,USERNAME,PASSWORD,0L,null)).get();
+                .thenReturn(Optional.of(new User(1L,EMAIL,USERNAME, pe.encode(PASSWORD),0L,null ,"user")));
+        final User user= us.register(new User(null,EMAIL,USERNAME,PASSWORD,0L,null,"user")).get();
         assertNotNull(user);
-        assertEquals(EMAIL,user.getEmail());
         assertEquals(pe.encode(PASSWORD),user.getPassword());
         assertEquals(USERNAME,user.getUserName());
 
