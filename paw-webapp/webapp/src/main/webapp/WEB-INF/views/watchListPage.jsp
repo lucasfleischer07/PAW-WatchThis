@@ -30,7 +30,7 @@
 
 <div class="row py-5 px-4">
     <div class="W-profile-general-div-display">
-        <div>
+        <div class="card">
             <div class="px-4 pt-0 pb-4 cover">
                 <div class="media align-items-end profile-head W-profile-photo-name">
                     <div class="profile mr-3">

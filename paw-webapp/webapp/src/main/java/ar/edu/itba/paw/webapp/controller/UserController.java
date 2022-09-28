@@ -154,11 +154,7 @@ public class UserController {
         mav.addObject("reviews",rs.getAllUserReviews(user.getUserName()));
         mav.addObject("userName",user.getUserName());
         mav.addObject("userId",user.getId());
-        if(user.getRole().equals("admin")){
-            mav.addObject("admin",true);
-        }else{
-            mav.addObject("admin",false);
-        }
+        mav.addObject("admin",false);
 
         return mav;
     }
@@ -249,8 +245,6 @@ public class UserController {
         try {
             String userEmail = userDetails.getUsername();
             User userLogged = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
-            List<Long> userWatchListContentId = us.getUserWatchListContent(userLogged);
-            mav.addObject("userWatchListContentId",userWatchListContentId);
             mav.addObject("userName",userLogged.getUserName());
             mav.addObject("userId",userLogged.getId());
             if(userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")) && !user.get().getRole().equals("admin")){
@@ -262,7 +256,6 @@ public class UserController {
         } catch (NullPointerException e) {
             mav.addObject("userName","null");
             mav.addObject("userId","null");
-            mav.addObject("userWatchListContentId","null");
             mav.addObject("admin",false);
         }
         return mav;

@@ -8,7 +8,7 @@ public class User {
     private byte[] image;
 //    //private String password;
 
-    public User(Long id, String email, String userName, String password, Long reputation, byte[] image,String role) {
+    public User(Long id, String email, String userName, String password, Long reputation, byte[] image, String role) {
         super();
         this.id = id;
         this.email = email;

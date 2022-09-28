@@ -84,7 +84,7 @@
 }
 
 .W-quote-in-profile {
-    word-break: break-all;
+    /*word-break: break-all;*/
     color: white;
     margin-left: 2vw;
     font-size: 1.1vw;
