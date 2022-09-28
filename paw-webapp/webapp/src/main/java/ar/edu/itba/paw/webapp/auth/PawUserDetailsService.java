@@ -33,11 +33,7 @@ public class PawUserDetailsService implements UserDetailsService {
         if(!user.isPresent()){
             throw new UsernameNotFoundException("Not user with email " + username);
         }
-        /*  PARA ACTUALIZAR PASSWORDS QUE NO ESTEN HASHEADAS EN LA BASE DE DATOS
-        if(!BCRYP_PATTERN.matcher(user.get().getPassword()).matches()){
-            us.updatePassword(user.get().getEmail(),user.get().getPassword());
-            return loadUserByUsername(username);
-        }*/
+
         final Set<GrantedAuthority> authorities = new HashSet<>();
        authorities.add(new SimpleGrantedAuthority(username));
        if(user.get().getRole().equals("admin")){

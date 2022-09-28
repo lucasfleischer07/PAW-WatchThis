@@ -58,7 +58,7 @@ public class ContentController {
         }
     }
 
-    // * ----------------------------------- Home Page -----------------------------------------------------------------------
+    // * ----------------------------------- Home Page -----------------------------------------------------------------
     @RequestMapping(value= {"/","page/{pageNum}"})
     public ModelAndView helloWorld(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("pageNum")final Optional<Integer> pageNum, @RequestParam(name = "query", defaultValue = "") final String query) {
         final ModelAndView mav = new ModelAndView("HomePage");
@@ -249,7 +249,7 @@ public class ContentController {
     // * ---------------------------------------------------------------------------------------------------------------
 
 
-    // * ----------------------------------- Errors Page -----------------------------------------------------------------------
+    // * ----------------------------------- Content Creation ----------------------------------------------------------
     @RequestMapping(value = "/content/create",method = {RequestMethod.POST})
     public ModelAndView createContent(@AuthenticationPrincipal PawUserDetails userDetails,@Valid @ModelAttribute("contentCreate") final ContentForm contentForm, final BindingResult errors) throws IOException {
         if(errors.hasErrors()) {
@@ -258,9 +258,10 @@ public class ContentController {
         cs.contentCreate(contentForm.getName(),contentForm.getDescription(),contentForm.getReleaseDate(),contentForm.getGenre(),contentForm.getCreator(),contentForm.getDuration(),contentForm.getType(),contentForm.getContentPicture().getBytes());
         return new ModelAndView("redirect:/");
     }
+    // * ---------------------------------------------------------------------------------------------------------------
 
 
-        // * ----------------------------------- Errors Page -----------------------------------------------------------------------
+    // * ----------------------------------- Errors Page ---------------------------------------------------------------
     @ExceptionHandler(PageNotFoundException.class)
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
     public ModelAndView PageNotFound(){
@@ -273,7 +274,7 @@ public class ContentController {
         return new ModelAndView("errorPage");
     }
 
-    // * -----------------------------------------------------------------------------------------------------------------------
+    // * ---------------------------------------------------------------------------------------------------------------
 
 
 }

@@ -3,7 +3,6 @@ package ar.edu.itba.paw.webapp.auth;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -32,9 +31,6 @@ public class RedirectionSuccessHandler
                 }else{
                     getRedirectStrategy().sendRedirect(request, response, redirectUrl);
                 }
-                // we do not forget to clean this attribute from session
-
-                // then we redirect
 
             } else {
                 super.onAuthenticationSuccess(request, response, authentication);

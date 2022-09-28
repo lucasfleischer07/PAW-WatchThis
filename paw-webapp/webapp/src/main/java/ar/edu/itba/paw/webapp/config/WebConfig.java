@@ -1,15 +1,11 @@
 package ar.edu.itba.paw.webapp.config;
 
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -21,10 +17,6 @@ import org.springframework.web.servlet.view.JstlView;
 
 import javax.sql.DataSource;
 import java.nio.charset.StandardCharsets;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 @EnableWebMvc
@@ -109,6 +101,8 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     }
 
     // * ---------------------------------------------------------------------------------------------------------------
+
+
     // * ----------------------- Para que no matchee los paths con / al final--------------------------------------------------------------
     @Override
     public void configurePathMatch(PathMatchConfigurer configurer){
