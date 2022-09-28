@@ -260,20 +260,4 @@ public class ContentController {
     }
 
 
-        // * ----------------------------------- Errors Page -----------------------------------------------------------------------
-    @ExceptionHandler(PageNotFoundException.class)
-    @ResponseStatus(code = HttpStatus.NOT_FOUND)
-    public ModelAndView PageNotFound(){
-        return new ModelAndView("errorPage");
-    }
-
-    @ExceptionHandler(MethodNotAllowedException.class)
-    @ResponseStatus(code = HttpStatus.UNAUTHORIZED)
-    public ModelAndView MethodNotAllowed(){
-        return new ModelAndView("errorPage");
-    }
-
-    // * -----------------------------------------------------------------------------------------------------------------------
-
-
 }

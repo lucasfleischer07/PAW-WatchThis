@@ -17,6 +17,7 @@ import javax.sql.DataSource;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 @Transactional
@@ -37,7 +38,7 @@ public class ContentJdbcDaoTest {
 
     @Test
     public void testGetAllContent(){
-        assertTrue(dao.getAllContent("ANY","ANY").size()==6);
+        assertEquals(6, dao.getAllContent("ANY", "ANY").size());
 
     }
 
@@ -45,39 +46,39 @@ public class ContentJdbcDaoTest {
     @Test
     public void  GetAllContentSort(){
         List<Content> contentList=dao.getAllContent("ANY","A-Z");
-        assertTrue(contentList.size()==6);
-        assertTrue(contentList.get(0).getName().equals("Avrupa Yakasi"));
+        assertEquals(6, contentList.size());
+        assertEquals("Avrupa Yakasi", contentList.get(0).getName());
     }
     @Test
     public void  GetAllContentType(){
         List<Content> contentList=dao.getAllContent("movie","ANY");
-        assertTrue(contentList.size()==4);
+        assertEquals(4, contentList.size());
     }
 
     @Test
     public void findByNameTest(){
         Optional<Content> contentOptional=dao.findByName("Toy Story 2");
         assertTrue(contentOptional.isPresent());
-        assertTrue(contentOptional.get().getId()==501);
+        assertEquals(501, contentOptional.get().getId());
     }
 
     @Test
     public void findByGenreTest(){
         List<Content> contentList=dao.findByGenre("all","Animation","ANY");
-        assertTrue(contentList.size()==2);
+        assertEquals(2, contentList.size());
     }
 
     @Test
     public void findByIdTest(){
         Optional<Content> contentOptional=dao.findById(501);
         assertTrue(contentOptional.isPresent());
-        assertTrue(contentOptional.get().getName().equals("Toy Story 2"));
+        assertEquals("Toy Story 2", contentOptional.get().getName());
     }
 
     @Test
     public void findByTypeTest(){
         List<Content> contentList=dao.findByType("movie");
-        assertTrue(contentList.size()==4);
+        assertEquals(4, contentList.size());
     }
 
     @Rollback
@@ -87,7 +88,7 @@ public class ContentJdbcDaoTest {
         dao.addContentPoints(501,3);
         Optional<Content> contentOptional=dao.findById(501);
         assertTrue(contentOptional.isPresent());
-        assertTrue(contentOptional.get().getRating()==4);
+        assertEquals(4, (int) contentOptional.get().getRating());
     }
 
     @Rollback
@@ -97,37 +98,37 @@ public class ContentJdbcDaoTest {
         dao.decreaseContentPoints(501,4);
         Optional<Content> contentOptional=dao.findById(501);
         assertTrue(contentOptional.isPresent());
-        assertTrue(contentOptional.get().getRating()==1);
+        assertEquals(1, (int) contentOptional.get().getRating());
     }
 
     @Test
     public void getBestRatedTest(){
         List<Content> contentList=dao.getBestRated();
-        assertTrue(contentList.size()==1);
-        assertTrue(contentList.get(0).getId()==172);
+        assertEquals(1, contentList.size());
+        assertEquals(172, contentList.get(0).getId());
     }
 
     @Test
     public void getLessDuration(){
         List<Content> contentList=dao.getLessDuration("movie");
-        assertTrue(contentList.size()==4);
-        assertTrue(contentList.get(0).getId()==172);
+        assertEquals(4, contentList.size());
+        assertEquals(172, contentList.get(0).getId());
     }
 
     @Test
     public void getLastAdded(){
         List<Content> contentList=dao.getLastAdded();
-        assertTrue(contentList.size()==6);
-        assertTrue(contentList.get(0).getId()==501);
+        assertEquals(6, contentList.size());
+        assertEquals(501, contentList.get(0).getId());
     }
 
     @Test
     @Rollback
     public void createContentTest(){
         dao.contentCreate("new","description","2022","Animation","brandyhuevo",100,"100","movie",null);
-        assertTrue(dao.getAllContent("ANY","ANY").size()==7);
+        assertEquals(7, dao.getAllContent("ANY", "ANY").size());
         assertTrue(dao.findByName("new").isPresent());
-        assertTrue(dao.findByGenre("all","Animation","ANY").size()==3);
+        assertEquals(3, dao.findByGenre("all", "Animation", "ANY").size());
     }
 
 

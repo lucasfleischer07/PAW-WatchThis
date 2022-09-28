@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
     @Controller
     public class ErrorController {
 
-        @RequestMapping(value = "/errorPage", method = RequestMethod.GET)
+        @RequestMapping(value = "/error", method = RequestMethod.GET)
         public ModelAndView renderErrorPage(HttpServletRequest httpRequest) {
 
             ModelAndView errorPage = new ModelAndView("errorPage");
@@ -63,5 +63,6 @@ import javax.servlet.http.HttpServletRequest;
             return (Integer) httpRequest
                     .getAttribute("javax.servlet.error.status_code");
         }
+
     }
 

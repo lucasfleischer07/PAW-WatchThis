@@ -26,11 +26,6 @@ public class UserServiceImplTest {
     private static final String USERNAME="testUser";
     private static final Long RATING=0L;
 
-
-    @Test
-    public void name() {
-    }
-
     @Before
     public void setup(){
         es=new EmailServiceImpl();

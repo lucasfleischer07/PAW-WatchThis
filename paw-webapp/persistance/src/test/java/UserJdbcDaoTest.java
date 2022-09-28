@@ -54,7 +54,8 @@ public class UserJdbcDaoTest {
         assertEquals(PASSWORD, maybeUser.get().getPassword());
         assertEquals(NAME, maybeUser.get().getUserName());
         assertEquals(EMAIL, maybeUser.get().getEmail());
-        assertEquals(null, maybeUser.get().getImage());
+        assertNull(maybeUser.get().getImage());
+        assertTrue(dao.findByUserName("brandyhuevo").isPresent());
     }
 
     @Test
@@ -65,7 +66,7 @@ public class UserJdbcDaoTest {
         assertEquals(testUser.getUserName(), maybeUser.get().getUserName());
         assertEquals(testUser.getEmail(), maybeUser.get().getEmail());
         assertEquals(testUser.getId(), maybeUser.get().getId());
-        assertEquals(null, maybeUser.get().getImage());
+        assertNull(maybeUser.get().getImage());
     }
     @Test
     public void testFindByEmailError(){
@@ -80,7 +81,7 @@ public class UserJdbcDaoTest {
         assertEquals(testUser.getUserName(), maybeUser.get().getUserName());
         assertEquals(testUser.getEmail(), maybeUser.get().getEmail());
         assertEquals(testUser.getId(), maybeUser.get().getId());
-        assertEquals(null, maybeUser.get().getImage());
+        assertNull(maybeUser.get().getImage());
     }
     @Test
     public void testFindByIdError(){
@@ -95,7 +96,7 @@ public class UserJdbcDaoTest {
         assertEquals(testUser.getUserName(), maybeUser.get().getUserName());
         assertEquals(testUser.getEmail(), maybeUser.get().getEmail());
         assertEquals(testUser.getId(), maybeUser.get().getId());
-        assertEquals(null, maybeUser.get().getImage());
+        assertNull(maybeUser.get().getImage());
     }
     @Test
     public void testFindByIdUserNameError(){
@@ -109,6 +110,8 @@ public class UserJdbcDaoTest {
         Optional<User> maybeUser=dao.findByUserName(testUser.getUserName());
         assertTrue(maybeUser.isPresent());
         assertEquals("newsecret", maybeUser.get().getPassword());
+        assertEquals(1, maybeUser.get().getId());
+        assertSame("brandyhuevo", maybeUser.get().getUserName());
 
     }
     @Test
@@ -117,6 +120,7 @@ public class UserJdbcDaoTest {
         dao.setProfilePicture(image,testUser);
         Optional<User> maybeUser=dao.findByUserName(testUser.getUserName());
         assertTrue(maybeUser.isPresent());
-        assertTrue(Arrays.equals(image,maybeUser.get().getImage()));
+        assertArrayEquals(image, maybeUser.get().getImage());
     }
+
 }

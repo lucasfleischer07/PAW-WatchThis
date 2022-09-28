@@ -1,6 +1,5 @@
 
 import ar.edu.itba.paw.models.Review;
-import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.persistance.ReviewDao;
 import config.TestConfig;
 import org.junit.Before;
@@ -33,7 +32,7 @@ public class ReviewJdbcDaoTest {
     private ReviewDao dao;
 
     private JdbcTemplate jdbcTemplate;
-    private Review testReview=new Review(3L,"movie",2L,"great movie","",5,"brandyhuevo","adventure time");
+    final private Review testReview=new Review(3L,"movie",2L,"great movie","",5,"brandyhuevo","adventure time");
 
     @Before
     public void setUp() {
@@ -52,15 +51,15 @@ public class ReviewJdbcDaoTest {
     @Test
     public void testGetAllReviews(){
         final List<Review> reviewList=dao.getAllReviews(1L);
-        assertTrue(reviewList.size()==1);
-        assertTrue(reviewList.get(0).getName().equals("great movie"));
+        assertEquals(1, reviewList.size());
+        assertEquals("great movie", reviewList.get(0).getName());
 
     }
     @Test
     public void testGetAllUserReviews(){
         final List<Review> reviewList=dao.getAllUserReviews("brandyhuevo");
-        assertTrue(reviewList.size()==1);
-        assertTrue(reviewList.get(0).getId()==1);
+        assertEquals(1, reviewList.size());
+        assertEquals(1, reviewList.get(0).getId());
     }
 
     @Test
@@ -73,13 +72,14 @@ public class ReviewJdbcDaoTest {
         assertEquals(testReview.getName(), maybeReview.get().getName());
         assertEquals(testReview.getRating(), maybeReview.get().getRating());
         assertEquals(testReview.getContentId(),maybeReview.get().getContentId());
-
+        assertEquals(2,dao.getAllReviews(testReview.getContentId()).size());
     }
     @Test
     @Rollback
     public void testDelete(){
         dao.deleteReview(1L);
         assertFalse(dao.findById(1L).isPresent());
+        assertEquals(0, dao.getAllReviews(1L).size());
     }
 
     @Test
@@ -88,8 +88,9 @@ public class ReviewJdbcDaoTest {
         dao.updateReview("not that good","i overestimated it",4,1L);
         final Optional<Review> maybeReview= dao.findById(1L);
         assertTrue(maybeReview.isPresent());
-        assertTrue(maybeReview.get().getRating()==4);
-        assertTrue(maybeReview.get().getName().equals("not that good"));
+        assertEquals(4, (int) maybeReview.get().getRating());
+        assertEquals("not that good", maybeReview.get().getName());
+        assertEquals(1, dao.getAllReviews(1L).size());
     }
 
 }
