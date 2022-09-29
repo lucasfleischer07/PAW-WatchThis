@@ -74,7 +74,7 @@
                                         <label class="form-check-label" for="flexCheckDefault"><spring:message code="Login.RememberMe"/></label>
                                     </div>
                                     <div class="W-div-login-button">
-                                        <button id="submitButton1" type="submit" class="btn btn-success W-login-button" onclick="this.form.submit(); (this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'"><spring:message code="Login.loginMessage"/></button>
+                                        <button id="submitButton1" type="submit" class="btn btn-success W-login-button" onclick="this.form.submit(); (this).disabled = true; (this).className -= ' W-login-button'; (this).className += ' spinner-border text-success'; (this).innerText = ''"><spring:message code="Login.loginMessage"/></button>
                                     </div>
                                 </div>
 
@@ -122,7 +122,7 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <button id="submitButton2" type="submit" class="btn btn-success W-login-button" onclick="this.form.submit(); (this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'"><spring:message code="Signup.SignupMessage"/></button>
+                                    <button id="submitButton2" type="submit" class="btn btn-success W-login-button" onclick="this.form.submit(); (this).disabled = true; (this).className -= ' W-login-button'; (this).className += ' spinner-border text-success'; (this).innerText = ''"><spring:message code="Signup.SignupMessage"/></button>
                                 </div>
                             </div>
                         </form:form>
@@ -147,7 +147,7 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <button id="submitButton3" type="submit" class="btn btn-success W-send-password" onclick="this.form.submit(); (this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|';"><spring:message code="Send"/></button>
+                                    <button id="submitButton3" type="submit" class="btn btn-success W-send-password" onclick="this.form.submit(); (this).className -= ' W-send-password'; (this).disabled = true; (this).className += ' spinner-border text-success'; (this).innerText = '';"><spring:message code="Send"/></button>
                                 </div>
                             </div>
                         </form:form>

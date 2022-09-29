@@ -11,7 +11,6 @@ import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
 import ar.edu.itba.paw.webapp.form.ReviewForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Controller;
@@ -118,7 +117,7 @@ public class ReviewController {
     // * ----------------------------------- Movies and Series Review Creation------------------------------------------
     @RequestMapping(value = "/reviewForm/{type:movie|serie}/{id:[0-9]+}/{userId:[0-9]+}", method = {RequestMethod.GET})
     public ModelAndView reviewFormCreate(@AuthenticationPrincipal PawUserDetails userDetails, @ModelAttribute("registerForm") final ReviewForm reviewForm, @PathVariable("id")final long id, @PathVariable("type")final String type) {
-        final ModelAndView mav = new ModelAndView("reviewRegistration");
+        final ModelAndView mav = new ModelAndView("reviewRegistrationPage");
         mav.addObject("details", cs.findById(id).orElseThrow(PageNotFoundException::new));
         try {
             String userEmail = userDetails.getUsername();
@@ -182,7 +181,7 @@ public class ReviewController {
 
     @RequestMapping(value = "/reviewForm/edit/{type:movie|serie}/{contentId:[0-9]+}/{reviewId:[0-9]+}", method = {RequestMethod.GET})
     public ModelAndView reviewFormEdition(@AuthenticationPrincipal PawUserDetails userDetails, @ModelAttribute("registerForm") final ReviewForm reviewForm, @PathVariable("contentId")final long contentId, @PathVariable("reviewId")final long reviewId, @PathVariable("type")final String type, HttpServletRequest request) {
-        final ModelAndView mav = new ModelAndView("reviewEdition");
+        final ModelAndView mav = new ModelAndView("reviewEditionPage");
         mav.addObject("details", cs.findById(contentId).orElseThrow(PageNotFoundException::new));
         Optional<Review> oldReview = rs.findById(reviewId);
         if(!oldReview.isPresent()){

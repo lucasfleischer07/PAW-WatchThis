@@ -5,11 +5,9 @@ import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.services.ContentService;
 import ar.edu.itba.paw.services.UserService;
 import ar.edu.itba.paw.webapp.auth.PawUserDetails;
-import ar.edu.itba.paw.webapp.exceptions.MethodNotAllowedException;
 import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
 import ar.edu.itba.paw.webapp.form.ContentForm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -193,7 +191,7 @@ public class ContentController {
 
     @RequestMapping(value = "/content/create",method = {RequestMethod.GET})
     public ModelAndView createContent(@AuthenticationPrincipal PawUserDetails userDetails,@ModelAttribute("contentCreate") final ContentForm contentForm) {
-        final ModelAndView mav = new ModelAndView("contentCreate");
+        final ModelAndView mav = new ModelAndView("contentCreatePage");
         HeaderSetUp(mav,userDetails);
         return mav;
     }
