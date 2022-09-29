@@ -208,8 +208,9 @@ public class UserController {
     @RequestMapping(value = "/profile/{userName:[a-zA-Z0-9\\s]+}",method = {RequestMethod.POST})
     public ModelAndView profileInfo(@AuthenticationPrincipal PawUserDetails userDetails,@Valid @ModelAttribute("editProfile") final EditProfile editProfile, @PathVariable("userName") final String userName,final BindingResult errors) {
         Optional<User> user = us.findByUserName(userName);
-        us.promoteUser(user.get().getId());
-
+        if(user.isPresent())
+            us.promoteUser(user.get().getId());
+        else throw new PageNotFoundException();
         return new ModelAndView("redirect:/profile/" + userName);
     }
     // * ---------------------------------------------------------------------------------------------------------------

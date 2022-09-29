@@ -6,7 +6,6 @@ public class User {
     private String email, userName, password,role;
 
     private byte[] image;
-//    //private String password;
 
     public User(Long id, String email, String userName, String password, Long reputation, byte[] image, String role) {
         super();

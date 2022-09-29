@@ -21,6 +21,16 @@ public class UserServiceImpl implements UserService{
     private PasswordEncoder passwordEncoder;
     private final Locale locale = LocaleContextHolder.getLocale();
 
+    private String generateRandomWord() {
+        Random r = new Random();
+        StringBuilder sb = new StringBuilder(20);
+        for(int i = 0; i < 20; i++) {
+            char tmp = (char) ('a' + r.nextInt('z' - 'a'));
+            sb.append(tmp);
+        }
+        return sb.toString();
+    }
+
     @Autowired
     public UserServiceImpl(final UserDao userDao, EmailService emailService, final PasswordEncoder passwordEncoder){
         this.userDao = userDao;
@@ -104,16 +114,6 @@ public class UserServiceImpl implements UserService{
     @Override
     public List<Long> getUserWatchListContent(User user) {
         return userDao.getUserWatchListContent(user);
-    }
-
-    private String generateRandomWord() {
-        Random r = new Random();
-        StringBuilder sb = new StringBuilder(20);
-        for(int i = 0; i < 20; i++) {
-            char tmp = (char) ('a' + r.nextInt('z' - 'a'));
-            sb.append(tmp);
-        }
-        return sb.toString();
     }
 
     @Override

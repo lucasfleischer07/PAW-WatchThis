@@ -61,7 +61,7 @@ public class ContentController {
     // * ----------------------------------- Home Page -----------------------------------------------------------------
     @RequestMapping(value= {"/","page/{pageNum}"})
     public ModelAndView helloWorld(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("pageNum")final Optional<Integer> pageNum, @RequestParam(name = "query", defaultValue = "") final String query) {
-        final ModelAndView mav = new ModelAndView("HomePage");
+        final ModelAndView mav = new ModelAndView("homePage");
         List<Content> bestRatedList = cs.getBestRated();
         List<Content> lessDurationMoviesList = cs.getLessDuration("movie");
         List<Content> lessDurationSeriesList = cs.getLessDuration("serie");
@@ -73,23 +73,17 @@ public class ContentController {
         
         mav.addObject("bestRatedListSize", bestRatedList.size());
         mav.addObject("bestRatedList", bestRatedList);
-
         mav.addObject("lessDurationMoviesList", lessDurationMoviesList);
         mav.addObject("lessDurationMoviesListSize", lessDurationMoviesList.size());
-
         mav.addObject("lessDurationSeriesList", lessDurationSeriesList);
         mav.addObject("lessDurationSeriesListSize", lessDurationSeriesList.size());
-
         mav.addObject("lastAddedList", lastAddedList);
         mav.addObject("lastAddedListSize", lastAddedList.size());
-
         mav.addObject("genre","ANY");
         mav.addObject("durationFrom","ANY");
         mav.addObject("durationTo","ANY");
         mav.addObject("sorting","ANY");
         mav.addObject("contentType", "all");
-
-
 
         HeaderSetUp(mav,userDetails);
 
@@ -103,7 +97,7 @@ public class ContentController {
     @RequestMapping(value= {"/{type:movies|series}","/{type:movies|series}/page/{pageNum}"})
     public ModelAndView contentType(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("type") final String type,@PathVariable("pageNum")final Optional<Integer> pageNum) {
         String auxType = null;
-        final ModelAndView mav = new ModelAndView("ContentPage");
+        final ModelAndView mav = new ModelAndView("contentPage");
         if(Objects.equals(type, "movies")) {
             auxType = "movie";
         } else if(Objects.equals(type, "series")) {
@@ -161,7 +155,7 @@ public class ContentController {
             auxType = "all";
         }
 
-        mav = new ModelAndView("ContentPage");
+        mav = new ModelAndView("contentPage");
         mav.addObject("genre",genre);
         mav.addObject("durationFrom",durationFrom);
         mav.addObject("durationTo",durationTo);
@@ -199,7 +193,7 @@ public class ContentController {
 
     @RequestMapping(value = "/content/create",method = {RequestMethod.GET})
     public ModelAndView createContent(@AuthenticationPrincipal PawUserDetails userDetails,@ModelAttribute("contentCreate") final ContentForm contentForm) {
-        final ModelAndView mav = new ModelAndView("ContentCreate");
+        final ModelAndView mav = new ModelAndView("contentCreate");
         HeaderSetUp(mav,userDetails);
         return mav;
     }
@@ -222,7 +216,7 @@ public class ContentController {
     // * ----------------------------------- Search bar ----------------------------------------------------------------
     @RequestMapping(value = {"/search", "/page/{pageNum}"})
     public ModelAndView search(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("pageNum")final Optional<Integer> pageNum, @RequestParam(name = "query", defaultValue = "") final String query) {
-        final ModelAndView mav = new ModelAndView("ContentPage");
+        final ModelAndView mav = new ModelAndView("contentPage");
 
         mav.addObject("query", query);
         List<Content> contentList = cs.getSearchedContent(query);

@@ -1,9 +1,7 @@
 package ar.edu.itba.paw.services;
 
 
-import ar.edu.itba.paw.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -15,7 +13,6 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Random;
 
 @Component
 public class EmailServiceImpl implements EmailService {
