@@ -40,8 +40,7 @@ public class UserJdbcDao implements UserDao{
                     resultSet.getInt("rating")/(resultSet.getInt("reviewsAmount") ==0 ? 1 : resultSet.getInt("reviewsAmount"))
                     ,resultSet.getInt("reviewsAmount"));
 
-    private static final RowMapper<Long> LONG_ROW_MAPPER = (resultSet, rowNum) ->
-            resultSet.getLong("contentid");
+    private static final RowMapper<Long> LONG_ROW_MAPPER = (resultSet, rowNum) -> resultSet.getLong("contentid");
 
 
     private final JdbcTemplate template;
@@ -113,7 +112,31 @@ public class UserJdbcDao implements UserDao{
         return template.query("SELECT contentid FROM userwatchlist WHERE userid = ?", new Object[]{user.getId()} , LONG_ROW_MAPPER);
     }
 
+    @Override
+    public void addToViewedList(User user, Long contentId) {
+        template.update("INSERT INTO userviewedlist(userid, contentid) VALUES(?,?)", user.getId(), contentId);
+    }
 
+    @Override
+    public void deleteFromViewedList(User user, Long contentId) {
+        template.update("DELETE FROM userviewedlist WHERE userid = ? and contentid = ?", user.getId(), contentId);
+    }
+
+    @Override
+    public List<Content> getUserViewedList(User user) {
+        return template.query("SELECT (content.id) AS contentId, (content.name) AS contentName, (content.image) AS contentImage, description, released, genre, creator, duration, type, rating, reviewsamount FROM (content JOIN userviewedlist ON content.id = userviewedlist.contentId) JOIN userdata ON userdata.userid = userviewedlist.userid WHERE userviewedlist.userid = ? ORDER BY userviewedlist.id desc", new Object[]{ user.getId() }, CONTENT_ROW_MAPPER);
+    }
+
+    @Override
+    public Optional<Long> searchContentInViewedList(User user, Long contentId) {
+        Optional<Long> contentIdDB = template.query("SELECT * FROM userviewedlist WHERE userid = ? AND contentid = ?", new Object[]{user.getId(), contentId} , LONG_ROW_MAPPER).stream().findFirst();
+        return contentIdDB.isPresent() ? Optional.of(contentIdDB.get()) : Optional.of((long) -1);
+    }
+
+    @Override
+    public List<Long> getUserViewedListContent(User user) {
+        return template.query("SELECT contentid FROM userwatchlist WHERE userid = ?", new Object[]{user.getId()} , LONG_ROW_MAPPER);
+    }
 
     @Override
     public void promoteUser(Long userId){

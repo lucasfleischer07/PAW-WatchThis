@@ -117,6 +117,31 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public void addToViewedList(User user, Long contentId) {
+        userDao.addToViewedList(user, contentId);
+    }
+
+    @Override
+    public void deleteFromViewedList(User user, Long contentId) {
+        userDao.deleteFromViewedList(user, contentId);
+    }
+
+    @Override
+    public List<Content> getUserViewedList(User user) {
+        return userDao.getUserViewedList(user);
+    }
+
+    @Override
+    public Optional<Long> searchContentInViewedList(User user, Long contentId) {
+        return userDao.searchContentInViewedList(user, contentId);
+    }
+
+    @Override
+    public List<Long> getUserViewedListContent(User user) {
+        return userDao.getUserViewedListContent(user);
+    }
+
+    @Override
     public void promoteUser(Long userId){
         userDao.promoteUser(userId);
     }

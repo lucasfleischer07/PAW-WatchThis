@@ -274,7 +274,6 @@ public class UserController {
         return mav;
     }
 
-
     @RequestMapping(value = "/watchList/add/{contentId:[0-9]+}", method = {RequestMethod.POST})
     public ModelAndView watchListAddPost(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("contentId") final Optional<Long> contentId, HttpServletRequest request) {
         if(!contentId.isPresent()) {
@@ -304,5 +303,58 @@ public class UserController {
         return new ModelAndView("redirect:/login/sign-in");
     }
 
+    // * ---------------------------------------------------------------------------------------------------------------
+
+
+    // * ------------------------------------------------User Viewed List------------------------------------------------
+    @RequestMapping(value = "/profile/viewedList", method = {RequestMethod.GET})
+    public ModelAndView viewedList(@AuthenticationPrincipal PawUserDetails userDetails) {
+        String userEmail = userDetails.getUsername();
+        final String locale = LocaleContextHolder.getLocale().getDisplayLanguage();
+        User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
+        List<Content> viewedListContent = us.getUserViewedList(user);
+//        List<Long> viewedListContentId = us.getUserViewedListContent(user);
+        List<Long> userWatchListContentId = us.getUserWatchListContent(user);
+        final ModelAndView mav = new ModelAndView("viewedListPage");
+        Optional<String> quote = cs.getContentQuote(locale);
+        mav.addObject("quote", quote.get());
+        mav.addObject("user", user);
+        mav.addObject("userName", user.getUserName());
+        mav.addObject("userId", user.getId());
+        mav.addObject("viewedListContent", viewedListContent);
+        mav.addObject("viewedListContentSize", viewedListContent.size());
+        mav.addObject("userWatchListContentId", userWatchListContentId);
+
+        if (user.getRole().equals("admin")) {
+            mav.addObject("admin", true);
+        } else {
+            mav.addObject("admin", false);
+        }
+        return mav;
+    }
+
+    @RequestMapping(value = "/viewedList/add/{contentId:[0-9]+}", method = {RequestMethod.POST})
+    public ModelAndView viewedListAddPost(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("contentId") final Optional<Long> contentId, HttpServletRequest request) {
+        if(!contentId.isPresent()) {
+            throw new PageNotFoundException();
+        }
+        String userEmail = userDetails.getUsername();
+        User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
+        us.addToViewedList(user, contentId.get());
+        String referer = request.getHeader("Referer");
+        return new ModelAndView("redirect:" + referer);
+    }
+
+    @RequestMapping(value = "/viewedList/delete/{contentId:[0-9]+}", method = {RequestMethod.POST})
+    public ModelAndView viewedListDeletePost(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("contentId") final Optional<Long> contentId, HttpServletRequest request) {
+        if(!contentId.isPresent()) {
+            throw new PageNotFoundException();
+        }
+        String userEmail = userDetails.getUsername();
+        User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
+        us.deleteFromViewedList(user, contentId.get());
+        String referer = request.getHeader("Referer");
+        return new ModelAndView("redirect:" + referer);
+    }
     // * ---------------------------------------------------------------------------------------------------------------
 }

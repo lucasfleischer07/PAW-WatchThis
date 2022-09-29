@@ -17,6 +17,11 @@ public interface UserService {
     void deleteFromWatchList(User user, Long contentId);
     List<Content> getWatchList(User user);
     Optional<Long> searchContentInWatchList(User user, Long contentId);
-    void promoteUser(Long userId);
     List<Long> getUserWatchListContent(User user);
+    void addToViewedList(User user, Long contentId);
+    void deleteFromViewedList(User user, Long contentId);
+    List<Content> getUserViewedList(User user);
+    Optional<Long> searchContentInViewedList(User user, Long contentId);
+    List<Long> getUserViewedListContent(User user);
+    void promoteUser(Long userId);
 }

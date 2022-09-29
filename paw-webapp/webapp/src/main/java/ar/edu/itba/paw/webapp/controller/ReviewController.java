@@ -78,22 +78,30 @@ public class ReviewController {
                 mav.addObject("isInWatchList",isInWatchList);
             } else {
                 mav.addObject("isInWatchList","null");
-
             }
-            if(user.getRole().equals("admin")){
+
+            Optional<Long> isInViewedList = us.searchContentInViewedList(user, contentId);
+            if(isInViewedList.get() != -1) {
+                mav.addObject("isInViewedList",isInViewedList);
+            } else {
+                mav.addObject("isInViewedList","null");
+            }
+
+            if(user.getRole().equals("admin")) {
                 mav.addObject("admin",true);
-            }else{
+            } else {
                 mav.addObject("admin",false);
             }
         } catch (NullPointerException e) {
             mav.addObject("userName","null");
             mav.addObject("userId","null");
             mav.addObject("isInWatchList","null");
+            mav.addObject("isInViewedList","null");
             mav.addObject("admin",false);
         }
+
         if(user!=null){
-            for (Review review:reviewList
-            ) {
+            for (Review review:reviewList) {
                 if(review.getUserName().equals(user.getUserName())){
                     reviewList.remove(review);
                     reviewList.add(0,review);

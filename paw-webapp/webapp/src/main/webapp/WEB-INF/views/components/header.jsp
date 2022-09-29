@@ -378,6 +378,7 @@
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item" href="<c:url value="/profile"/>"><spring:message code="ProfileMessage"/></a></li>
                                     <li><a class="dropdown-item" href="<c:url value="/profile/watchList"/>"><spring:message code="WatchList"/></a></li>
+                                    <li><a class="dropdown-item" href="<c:url value="/profile/viewedList"/>"><spring:message code="ViewedList.title"/></a></li>
                                     <c:if test="${param.admin == true}">
                                         <li><a class="dropdown-item" href="<c:url value="/content/create"/>"><spring:message code="CreateContentMessage"/></a></li>
                                     </c:if>
