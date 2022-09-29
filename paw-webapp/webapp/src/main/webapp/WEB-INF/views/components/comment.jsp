@@ -3,7 +3,12 @@
 <div>
     <div class="card">
         <div class="card-body W-reviewText">
-            <span><c:out value="${param.commentText}"/></span>
+            <p id="reviewDescription"><c:out value="${param.commentText}"/></p>
+            <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+            <script>
+                let previousText = document.getElementById('reviewDescription').innerHTML
+                document.getElementById('reviewDescription').innerHTML = marked.parse(previousText);
+            </script>
         </div>
     </div>
     <!-- <div class="W-column-display-thumbs">
