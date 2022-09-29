@@ -1,3 +1,4 @@
+import ar.edu.itba.paw.models.Content;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.persistance.UserDao;
 import config.TestConfig;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.sql.DataSource;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.*;
@@ -107,7 +109,7 @@ public class UserJdbcDaoTest {
         assertTrue(maybeUser.isPresent());
         assertEquals("newsecret", maybeUser.get().getPassword());
         assertEquals(1, maybeUser.get().getId());
-        assertSame("brandyhuevo", maybeUser.get().getUserName());
+        assertEquals("brandyhuevo", maybeUser.get().getUserName());
 
     }
     @Test
@@ -118,5 +120,101 @@ public class UserJdbcDaoTest {
         assertTrue(maybeUser.isPresent());
         assertArrayEquals(image, maybeUser.get().getImage());
     }
+
+    @Test
+    public void testGetWatchList(){
+        User user=dao.findByUserName("brandyhuevo").get();
+        List<Content> contentList=dao.getWatchList(user);
+        assertEquals(2,contentList.size());
+        assertEquals(172L,contentList.get(1).getId());
+
+    }
+    @Test
+    public void testSearchContentInWatchList(){
+        User user=dao.findByUserName("brandyhuevo").get();
+        Optional<Long> searchResult=dao.searchContentInWatchList(user,172L);
+        assertTrue(searchResult.isPresent());
+        assertEquals(172L, (long) searchResult.get());
+    }
+    @Test
+    public void testGetUserWatchListContent(){
+        User user=dao.findByUserName("brandyhuevo").get();
+        List<Long> idList=dao.getUserWatchListContent(user);
+        assertEquals(2, idList.size());
+        assertTrue(idList.contains(172L));
+        assertTrue(idList.contains(10L));
+    }
+
+    @Test
+    public void testGetUserViewedList(){
+        User user=dao.findByUserName("brandyhuevo").get();
+        List<Content> contentList=dao.getUserViewedList(user);
+        assertEquals(2,contentList.size());
+        assertEquals(501L,contentList.get(1).getId());
+    }
+    @Test
+    public void testSearchContentInViewedList(){
+        User user=dao.findByUserName("brandyhuevo").get();
+        Optional<Long> searchResult=dao.searchContentInViewedList(user,501L);
+        assertTrue(searchResult.isPresent());
+        assertEquals(501L, (long) searchResult.get());
+    }
+    @Test
+    public void testGetUserViewedListContent(){
+        User user=dao.findByUserName("brandyhuevo").get();
+        List<Long> idList=dao.getUserViewedListContent(user);
+        assertEquals(2, idList.size());
+        assertTrue(idList.contains(501L));
+        assertTrue(idList.contains(10L));
+    }
+    @Test
+    @Rollback
+    public void testPromoteUser(){
+        dao.promoteUser(1L);
+        assertEquals("admin",dao.findById(1).get().getRole());
+    }
+
+    @Test
+    @Rollback
+    public void testAddToWatchList(){
+        User user=dao.findByUserName("brandyhuevo").get();
+        dao.addToWatchList(user,492L);
+        List<Long> idList=dao.getUserWatchListContent(user);
+        assertEquals(3,idList.size());
+        assertTrue(idList.contains(492L));
+    }
+    @Test
+    @Rollback
+    public void testDeleteFromWatchList(){
+        User user=dao.findByUserName("brandyhuevo").get();
+        dao.deleteFromWatchList(user,172L);
+        List<Long> idList=dao.getUserWatchListContent(user);
+        assertEquals(1,idList.size());
+        assertFalse(idList.contains(172L));
+        assertTrue(idList.contains(10L));
+
+    }
+
+    @Test
+    @Rollback
+    public void testAddToViewedList(){
+        User user=dao.findByUserName("brandyhuevo").get();
+        dao.addToViewedList(user,492L);
+        List<Long> idList=dao.getUserViewedListContent(user);
+        assertEquals(3,idList.size());
+        assertTrue(idList.contains(492L));
+    }
+    @Test
+    @Rollback
+    public void testDeleteFromViewedList(){
+        User user=dao.findByUserName("brandyhuevo").get();
+        dao.deleteFromViewedList(user,501L);
+        List<Long> idList=dao.getUserViewedListContent(user);
+        assertEquals(1,idList.size());
+        assertFalse(idList.contains(501L));
+        assertTrue(idList.contains(10L));
+    }
+
+
 
 }

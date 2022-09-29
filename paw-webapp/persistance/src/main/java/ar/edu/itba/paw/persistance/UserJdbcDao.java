@@ -135,7 +135,7 @@ public class UserJdbcDao implements UserDao{
 
     @Override
     public List<Long> getUserViewedListContent(User user) {
-        return template.query("SELECT contentid FROM userwatchlist WHERE userid = ?", new Object[]{user.getId()} , LONG_ROW_MAPPER);
+        return template.query("SELECT contentid FROM userviewedlist WHERE userid = ?", new Object[]{user.getId()} , LONG_ROW_MAPPER);
     }
 
     @Override

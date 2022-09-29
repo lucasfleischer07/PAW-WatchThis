@@ -44,46 +44,46 @@ public class ContentJdbcDaoTest {
 
 
     @Test
-    public void  GetAllContentSort(){
+    public void  testGetAllContentSort(){
         List<Content> contentList=dao.getAllContent("ANY","A-Z");
         assertEquals(6, contentList.size());
         assertEquals("Avrupa Yakasi", contentList.get(0).getName());
     }
     @Test
-    public void  GetAllContentType(){
+    public void  testGetAllContentType(){
         List<Content> contentList=dao.getAllContent("movie","ANY");
         assertEquals(4, contentList.size());
     }
 
     @Test
-    public void findByNameTest(){
+    public void testFindByNameTest(){
         Optional<Content> contentOptional=dao.findByName("Toy Story 2");
         assertTrue(contentOptional.isPresent());
         assertEquals(501, contentOptional.get().getId());
     }
 
     @Test
-    public void findByGenreTest(){
+    public void testFindByGenreTest(){
         List<Content> contentList=dao.findByGenre("all","Animation","ANY");
         assertEquals(2, contentList.size());
     }
 
     @Test
-    public void findByIdTest(){
+    public void testFindByIdTest(){
         Optional<Content> contentOptional=dao.findById(501);
         assertTrue(contentOptional.isPresent());
         assertEquals("Toy Story 2", contentOptional.get().getName());
     }
 
     @Test
-    public void findByTypeTest(){
+    public void testFindByTypeTest(){
         List<Content> contentList=dao.findByType("movie");
         assertEquals(4, contentList.size());
     }
 
     @Rollback
     @Test
-    public void addPointsTest(){
+    public void testAddPoints(){
         dao.addContentPoints(501,5);
         dao.addContentPoints(501,3);
         Optional<Content> contentOptional=dao.findById(501);
@@ -93,7 +93,7 @@ public class ContentJdbcDaoTest {
 
     @Rollback
     @Test
-    public void decreasePointsTest(){
+    public void testDecreasePoints(){
         dao.addContentPoints(501,5);
         dao.decreaseContentPoints(501,4);
         Optional<Content> contentOptional=dao.findById(501);
@@ -102,21 +102,21 @@ public class ContentJdbcDaoTest {
     }
 
     @Test
-    public void getBestRatedTest(){
+    public void testGetBestRated(){
         List<Content> contentList=dao.getBestRated();
         assertEquals(1, contentList.size());
         assertEquals(172, contentList.get(0).getId());
     }
 
     @Test
-    public void getLessDuration(){
+    public void testGetLessDuration(){
         List<Content> contentList=dao.getLessDuration("movie");
         assertEquals(4, contentList.size());
         assertEquals(172, contentList.get(0).getId());
     }
 
     @Test
-    public void getLastAdded(){
+    public void testGetLastAdded(){
         List<Content> contentList=dao.getLastAdded();
         assertEquals(6, contentList.size());
         assertEquals(501, contentList.get(0).getId());
@@ -124,7 +124,7 @@ public class ContentJdbcDaoTest {
 
     @Test
     @Rollback
-    public void createContentTest(){
+    public void testCreateContent(){
         dao.contentCreate("new","description","2022","Animation","brandyhuevo",100,"100","movie",null);
         assertEquals(7, dao.getAllContent("ANY", "ANY").size());
         assertTrue(dao.findByName("new").isPresent());

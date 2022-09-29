@@ -54,3 +54,19 @@ create table if not exists quotes
     english text,
     spanish text
 );
+
+create table if not exists userviewedlist
+(
+    id        serial
+        primary key,
+    userid    integer not null
+        references userdata,
+    contentid integer not null
+        references content
+);
+
+
+
+
+
+
