@@ -11,6 +11,8 @@ import ar.edu.itba.paw.webapp.exceptions.MethodNotAllowedException;
 import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
 import ar.edu.itba.paw.webapp.form.EditProfile;
 import ar.edu.itba.paw.webapp.form.LoginForm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
@@ -42,6 +44,7 @@ public class UserController {
     private final ReviewService rs;
     private final EmailService es;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
     protected AuthenticationManager authenticationManager;
 
     @Autowired
@@ -92,6 +95,7 @@ public class UserController {
     @RequestMapping(value = "/login/{loginStage:sign-up|forgot-password}", method = {RequestMethod.GET})
     public ModelAndView LoginSingUp(@AuthenticationPrincipal PawUserDetails userDetails, @ModelAttribute("loginForm") final LoginForm loginForm, @PathVariable("loginStage") final String loginStage) {
         if(!Objects.equals(loginStage, "sign-up") && !Objects.equals(loginStage, "forgot-password") && !Objects.equals(loginStage, "sign-out")) {
+            LOGGER.warn("Wrong login path:",new PageNotFoundException());
             throw new PageNotFoundException();
         }
         final ModelAndView mav = new ModelAndView("logInPage");
@@ -113,6 +117,8 @@ public class UserController {
             }
             User newUser = new User(null, loginForm.getEmail(), loginForm.getUsername(), loginForm.getPassword(), 0L, null,"user");
             us.register(newUser);
+            LOGGER.info("Registrated a new user with email");
+
             authWithAuthManager(request,loginForm.getEmail(),loginForm.getPassword());
         } else if(Objects.equals(loginStage, "forgot-password")) {
             Optional<User> user = us.findByEmail(loginForm.getEmail());
@@ -122,6 +128,7 @@ public class UserController {
                 return LoginSingUp(userDetails, loginForm, loginStage);
             }
         } else {
+            LOGGER.warn("Wrong login path:",new PageNotFoundException());
             throw new PageNotFoundException();
         }
 
@@ -163,6 +170,7 @@ public class UserController {
     @ResponseBody
     public byte[] profileImage(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("userName") final String userName) {
         if(userName==null || userName==""){
+            LOGGER.warn("Wrong username photo request:",new PageNotFoundException());
             throw new PageNotFoundException();
         }
         User user = us.findByUserName(userName).orElseThrow(PageNotFoundException::new);
@@ -172,6 +180,7 @@ public class UserController {
     @RequestMapping("/profile/{userName:[a-zA-Z0-9\\s]+}")
     public ModelAndView profileInfo(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("userName") final String userName) {
         if(userName==null || userName==""){
+            LOGGER.warn("Wrong username photo request:",new PageNotFoundException());
             throw new PageNotFoundException();
         }
         final ModelAndView mav = new ModelAndView("profileInfoPage");
@@ -183,6 +192,7 @@ public class UserController {
             mav.addObject("user", user.get());
             mav.addObject("reviews",rs.getAllUserReviews(user.get().getUserName()));
         } else {
+            LOGGER.warn("Wrong username profile request:",new PageNotFoundException());
             throw new PageNotFoundException();
         }
 
@@ -210,7 +220,10 @@ public class UserController {
         Optional<User> user = us.findByUserName(userName);
         if(user.isPresent())
             us.promoteUser(user.get().getId());
-        else throw new PageNotFoundException();
+        else {
+            LOGGER.warn("Wrong username photo request:",new PageNotFoundException());
+            throw new PageNotFoundException();
+        }
         return new ModelAndView("redirect:/profile/" + userName);
     }
     // * ---------------------------------------------------------------------------------------------------------------
@@ -277,6 +290,7 @@ public class UserController {
     @RequestMapping(value = "/watchList/add/{contentId:[0-9]+}", method = {RequestMethod.POST})
     public ModelAndView watchListAddPost(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("contentId") final Optional<Long> contentId, HttpServletRequest request) {
         if(!contentId.isPresent()) {
+            LOGGER.warn("Wrong contentID:",new PageNotFoundException());
             throw new PageNotFoundException();
         }
         String userEmail = userDetails.getUsername();
@@ -289,6 +303,7 @@ public class UserController {
     @RequestMapping(value = "/watchList/delete/{contentId:[0-9]+}", method = {RequestMethod.POST})
     public ModelAndView watchListDeletePost(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("contentId") final Optional<Long> contentId, HttpServletRequest request) {
         if(!contentId.isPresent()) {
+            LOGGER.warn("No content Specified:",new PageNotFoundException());
             throw new PageNotFoundException();
         }
         String userEmail = userDetails.getUsername();

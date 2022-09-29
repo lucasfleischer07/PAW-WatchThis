@@ -1,5 +1,8 @@
 package ar.edu.itba.paw.webapp.config;
 
+import ar.edu.itba.paw.webapp.controller.UserController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -28,6 +31,9 @@ import java.util.concurrent.TimeUnit;
 @Configuration
 public class WebConfig extends WebMvcConfigurerAdapter {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(WebConfig.class);
+
+
     @Bean
     public ViewResolver viewResolver() {
         final InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
@@ -41,6 +47,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Bean
     public DataSource dataSource(){
 //        * Conexion a Heroku
+        LOGGER.info("Data base set up");
         String dbUrl="jdbc:postgresql://ec2-44-209-158-64.compute-1.amazonaws.com:5432/dejahu751a4sa5";
         String username = "nnsbcsmyzbkewt";
         String password = "2d3518851436a2f7f6c4367b2c79aa6f66f456a436aeaf02f44cd07a80497f27";

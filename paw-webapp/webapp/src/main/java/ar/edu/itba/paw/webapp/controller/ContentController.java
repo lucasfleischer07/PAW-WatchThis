@@ -7,6 +7,8 @@ import ar.edu.itba.paw.services.UserService;
 import ar.edu.itba.paw.webapp.auth.PawUserDetails;
 import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
 import ar.edu.itba.paw.webapp.form.ContentForm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -27,6 +29,7 @@ public class ContentController {
     private final ContentService cs;
     private final UserService us;
     private final int ELEMS_AMOUNT = 15;
+    private static final Logger LOGGER = LoggerFactory.getLogger(ContentController.class);
 
     @Autowired
     public ContentController(ContentService cs,UserService us){
@@ -66,6 +69,7 @@ public class ContentController {
         List<Content> lastAddedList = cs.getLastAdded();
 
         if(bestRatedList == null || lessDurationMoviesList == null || lessDurationSeriesList == null || lastAddedList == null) {
+            LOGGER.warn("Error bringing data from the db",new PageNotFoundException());
             throw new PageNotFoundException();
         }
         
@@ -104,6 +108,7 @@ public class ContentController {
         int page= pageNum.orElse(1);
         List<Content> contentList = cs.getAllContent(auxType, "ANY");
         if( contentList == null) {
+            LOGGER.warn("Failed at requesting content",new PageNotFoundException());
             throw new PageNotFoundException();
         } else {
             if(contentList.size() < (page)*ELEMS_AMOUNT){       //Si no llega a completar la pagina entera, que sirva los que pueda
@@ -172,6 +177,7 @@ public class ContentController {
         }
 
         if(contentListFilter == null) {
+            LOGGER.warn("Failed at requesting content",new PageNotFoundException());
             throw new PageNotFoundException();
         } else {
             if(contentListFilter.size() < (page)*ELEMS_AMOUNT){       //Si no llega a completar la pagina entera, que sirva los que pueda
@@ -202,6 +208,7 @@ public class ContentController {
     @ResponseBody
     public byte[] contentImage(@PathVariable("contentId") final Long contentId) {
         if(contentId==null || contentId < 0){
+            LOGGER.warn("Invalid",new PageNotFoundException());
             throw new PageNotFoundException();
         }
         Content content = cs.findById(contentId).orElseThrow(PageNotFoundException::new);
@@ -223,6 +230,7 @@ public class ContentController {
         int page= pageNum.orElse(1);
 
         if(contentList == null) {
+            LOGGER.warn("Failed at requesting content",new PageNotFoundException());
             throw new PageNotFoundException();
         }else {
             if(contentList.size() < (page)*ELEMS_AMOUNT){       //Si no llega a completar la pagina entera, que sirva los que pueda

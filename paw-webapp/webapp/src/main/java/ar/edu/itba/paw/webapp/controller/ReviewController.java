@@ -9,6 +9,8 @@ import ar.edu.itba.paw.webapp.auth.PawUserDetails;
 import ar.edu.itba.paw.webapp.exceptions.MethodNotAllowedException;
 import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
 import ar.edu.itba.paw.webapp.form.ReviewForm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -30,6 +32,7 @@ public class ReviewController {
     private ReviewService rs;
     private ContentService cs;
     private UserService us;
+    private static final Logger LOGGER = LoggerFactory.getLogger(ReviewController.class);
 
     @Autowired
     public ReviewController(ReviewService rs,ContentService cs,UserService us){
@@ -65,6 +68,7 @@ public class ReviewController {
         List<Review> reviewList = rs.getAllReviews(contentId);
         User user=null;
         if(reviewList == null) {
+            LOGGER.warn("Cant find a the content specified",new PageNotFoundException());
             throw new PageNotFoundException();
         }
         try {
@@ -175,7 +179,10 @@ public class ReviewController {
             cs.decreaseContentPoints(review.getContentId(),review.getRating());
             String referer = request.getHeader("Referer");
             return new ModelAndView("redirect:"+ referer);
-        } else throw new MethodNotAllowedException();
+        } else {
+            LOGGER.warn("Not allowed to delete",new MethodNotAllowedException());
+            throw new MethodNotAllowedException();
+        }
     }
 
 
@@ -185,6 +192,7 @@ public class ReviewController {
         mav.addObject("details", cs.findById(contentId).orElseThrow(PageNotFoundException::new));
         Optional<Review> oldReview = rs.findById(reviewId);
         if(!oldReview.isPresent()){
+            LOGGER.warn("Cant find a the review specified",new PageNotFoundException());
             throw new PageNotFoundException();
         }
         try {
@@ -205,6 +213,7 @@ public class ReviewController {
             mav.addObject("admin",false);
         }
         if(!oldReview.get().getUserName().equals(us.findByEmail(userDetails.getUsername()).get().getUserName())){
+            LOGGER.warn("The editor is not owner of the review",new MethodNotAllowedException());
             throw new MethodNotAllowedException();
         }
         reviewForm.setDescription(oldReview.get().getDescription());
@@ -227,11 +236,13 @@ public class ReviewController {
 
         Optional<Review> oldReview = rs.findById(reviewId);
         if(!oldReview.isPresent()){
+            LOGGER.warn("Cant find a the review specified",new PageNotFoundException());
             throw new PageNotFoundException();
         }
 
         Optional<User> user = us.findByEmail(userDetails.getUsername());
         if(!oldReview.get().getUserName().equals(user.get().getUserName())){
+            LOGGER.warn("The editor is not owner of the review",new PageNotFoundException());
             throw new MethodNotAllowedException();
         }
         rs.updateReview(form.getName(), form.getDescription(), form.getRating(), reviewId);

@@ -67,6 +67,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers("/login/sign-out").authenticated()
                     .antMatchers("/profile").authenticated()
                     .antMatchers("/profile/edit-profile").authenticated()
+                    .antMatchers("/profile/viewedList").authenticated()
+                    .antMatchers("/profile/watchList").authenticated()
                     .antMatchers("/reviewForm/edit/movie/*/*").authenticated()
                     .antMatchers("/reviewForm/edit/serie/*/*").authenticated()
                     .antMatchers(HttpMethod.POST,"/reviewForm/movie/*").authenticated()
