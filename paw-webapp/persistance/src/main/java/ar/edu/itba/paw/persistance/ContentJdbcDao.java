@@ -83,7 +83,6 @@ public class ContentJdbcDao implements ContentDao {
 
     @Override
     public List<Content> findByGenre(String type, String genre, String sort) {
-        // TODO: Ver como hacer para que, dentro de los genereos, que me agarre 1 de todos los que tiene
         if(!Objects.equals(type, "all")) {
             if (Objects.equals(sort, "ANY")) {
                 return template.query("SELECT * FROM content WHERE genre LIKE '%'||?||'%' AND type = ?", new Object[]{genre, type}, CONTENT_ROW_MAPPER);

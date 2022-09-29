@@ -22,7 +22,7 @@
         <title><spring:message code="Review.Registration"/></title>
     </head>
 
-    <body class="W-img-background">
+    <body>
         <div>
             <div>
                 <jsp:include page="components/header.jsp">
@@ -33,7 +33,7 @@
                 </jsp:include>
             </div>
 
-            <div  class="W-background">
+            <div class="W-background W-img-background">
                 <c:choose>
 <%--            * Caso en el que ESTA registrado y tiene contrasena--%>
                     <c:when test="${loginStage == 'sign-in'}">
@@ -58,7 +58,7 @@
                                               </c:when>
                                           </c:choose>
                                         <label class="form-label"><spring:message code="Login.Email"/></label>
-                                        <input name="email" type="email" class="form-control" placeholder="example@email"/>
+                                        <input name="email" type="email" class="form-control" placeholder="<spring:message code="Placeholder.emailExample"/>"/>
                                     </div>
                                     <div class="mb-3 W-input-label-login-info">
                                         <label class="form-label"><spring:message code="Login.Password"/></label>
@@ -100,14 +100,16 @@
                                             <form:errors path="username" element="p" cssStyle="color: red"/>
                                             <form:label path="username" class="form-label"><spring:message code="Signup.Username"/></form:label>
                                             <p class="W-review-registration-text"><spring:message code="Signup.CharacterLimits" arguments="4,30"/></p>
-                                            <form:input type="text" class="form-control" path="username" placeholder="Example123"/>
+                                            <spring:message code="Placeholder.emailExample" var="placeholder"/>
+                                            <form:input type="text" class="form-control" path="username" placeholder='${placeholder}'/>
                                         </div>
                                     </div>
                                     <div class="mb-3 W-input-label-login-info">
                                         <div class="mb-3 W-input-label-login-info">
                                             <form:errors path="email" element="p" cssStyle="color: red"/>
                                             <form:label path="email" class="form-label"><spring:message code="Signup.Email"/></form:label>
-                                            <form:input type="email" class="form-control" value="${loginForm.email}" path="email"  placeholder="example@email"/>
+                                            <spring:message code="Placeholder.emailExample" var="placeholder"/>
+                                            <form:input type="email" class="form-control" value="${loginForm.email}" path="email" placeholder='${placeholder}'/>
                                         </div>
                                     </div>
                                     <div class="mb-3 W-input-label-login-info">
@@ -131,50 +133,26 @@
                         <form:form modelAttribute="loginForm" action="${postPath}" method="post">
                             <div class="W-general-div-login">
                                 <div class="W-login-title">
-                                    <h4>Forgot your password? That's okey!</h4>
+                                    <h4><spring:message code="Login.forgotPass"/></h4>
                                 </div>
                                 <div class="card W-login-card">
                                     <div class="mb-3 W-input-label-login-info">
-                                        <h5 class="W-password-title">Enter your email below to reset your password!</h5>
+                                        <h5 class="W-password-title"><spring:message code="Login.forgotPass"/></h5>
                                         <div class="mb-3 W-input-label-login-info">
                                             <form:errors path="email" element="p" cssStyle="color: red"/>
                                             <form:label path="email" class="form-label">Email</form:label>
-                                            <form:input type="email" class="form-control" value="${loginForm.email}" path="email" placeholder="recoveryemail@email"/>
+                                            <spring:message code="Placeholfer.recoveryEmail" var="placeholder"/>
+                                            <form:input type="email" class="form-control" value="${loginForm.email}" path="email" placeholder='${placeholder}'/>
                                         </div>
                                     </div>
                                 </div>
                                 <div>
-                                    <button id="submitButton3" type="submit" class="btn btn-success W-send-password" onclick="this.form.submit(); (this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|';">Send</button>
+                                    <button id="submitButton3" type="submit" class="btn btn-success W-send-password" onclick="this.form.submit(); (this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|';"><spring:message code="Send"/></button>
                                 </div>
                             </div>
                         </form:form>
                     </c:when>
-
-<%--                    <c:when test="${loginStage == 'set-password'}">--%>
-<%--                        <c:url value="/login/${loginStage}" var="postPath"/>--%>
-<%--                        <form:form modelAttribute="loginForm" action="${postPath}" method="post">--%>
-<%--                            <div class="W-general-div-login">--%>
-<%--                                <div class="W-login-title">--%>
-<%--                                    <h4>Set your password!</h4>--%>
-<%--                                </div>--%>
-<%--                                <div class="card W-login-card">--%>
-<%--                                    <div class="mb-3 W-input-label-login-info">--%>
-<%--                                        <h5 class="W-password-title">Enter your password below</h5>--%>
-<%--                                        <div class="mb-3 W-input-label-login-info">--%>
-<%--                                            <form:errors path="password" element="p" cssStyle="color: red"/>--%>
-<%--                                            <form:label path="password" class="form-label">Password</form:label>--%>
-<%--                                            <form:input type="password" class="form-control" path="password" placeholder="*****"/>--%>
-<%--                                        </div>--%>
-<%--                                    </div>--%>
-<%--                                </div>--%>
-<%--                                <div>--%>
-<%--                                    <button id="submitButton4" type="submit" class="btn btn-success W-send-password" onclick="this.form.submit(); (this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'">Set</button>--%>
-<%--                                </div>--%>
-<%--                            </div--%>
-<%--                        </form:form>--%>
-<%--                    </c:when>--%>
                 </c:choose>
-
                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
             </div>
         </div>
