@@ -250,4 +250,24 @@ public class ContentJdbcDao implements ContentDao {
         }
     }
 
+    @Override
+    public void updateContent(Long id,String name, String description, String releaseDate, String genre, String creator, Integer duration,String durationString, String type){
+        template.update(
+                "UPDATE content SET name = ?,description = ?,released = ?, genre = ?, creator = ?, duration = ?, durationNum = ?, type = ?  WHERE id = ?", new Object[] {name,description,releaseDate,genre,creator,durationString,duration,type,id}
+        );
+    }
+
+    @Override
+    public void updateWithImageContent(Long id,String name, String description, String releaseDate, String genre, String creator, Integer duration,String durationString, String type,byte[] contentImage){
+        template.update(
+                "UPDATE content SET name = ?,description = ?,released = ?, genre = ?, creator = ?, duration = ?, durationNum = ?, type = ?, image = ? WHERE id = ?", new Object[] {name,description,releaseDate,genre,creator,durationString,duration,type,contentImage,id}
+        );
+    }
+
+    @Override
+    public void deleteContent(Long id){
+        template.update(
+                "DELETE FROM content WHERE id = ?", new Object[] {id});
+    }
+
 }

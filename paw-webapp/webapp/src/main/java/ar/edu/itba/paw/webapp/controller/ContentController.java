@@ -7,6 +7,7 @@ import ar.edu.itba.paw.services.UserService;
 import ar.edu.itba.paw.webapp.auth.PawUserDetails;
 import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
 import ar.edu.itba.paw.webapp.form.ContentForm;
+import ar.edu.itba.paw.webapp.form.ContentEditForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +20,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Controller
 public class ContentController {
@@ -198,6 +199,7 @@ public class ContentController {
     @RequestMapping(value = "/content/create",method = {RequestMethod.GET})
     public ModelAndView createContent(@AuthenticationPrincipal PawUserDetails userDetails,@ModelAttribute("contentCreate") final ContentForm contentForm) {
         final ModelAndView mav = new ModelAndView("contentCreatePage");
+        mav.addObject("create",true);
         HeaderSetUp(mav,userDetails);
         return mav;
     }
@@ -211,6 +213,7 @@ public class ContentController {
             LOGGER.warn("Invalid",new PageNotFoundException());
             throw new PageNotFoundException();
         }
+
         Content content = cs.findById(contentId).orElseThrow(PageNotFoundException::new);
         return content.getImage();
     }
@@ -246,7 +249,59 @@ public class ContentController {
         return mav;
     }
 
-    // * ---------------------------------------------------------------------------------------------------------------
+// * ----------------------------Content editing-----------------------------------------------------------------------------
+
+
+    @RequestMapping(value = "/content/editInfo/{contentId:[0-9]+}", method = {RequestMethod.GET})
+    public ModelAndView editContent(@AuthenticationPrincipal PawUserDetails userDetails, @ModelAttribute("contentEditForm") final ContentEditForm contentEditForm, @PathVariable("contentId")final long contentId){
+        final ModelAndView mav = new ModelAndView("contentCreatePage");
+        Optional<Content> oldContent = cs.findById(contentId);
+        if(!oldContent.isPresent()){
+            throw new PageNotFoundException();
+        }
+        mav.addObject("create",false);
+        mav.addObject("contentId",contentId);
+        contentEditForm.setName(oldContent.get().getName());
+        contentEditForm.setCreator(oldContent.get().getCreator());
+        contentEditForm.setDescription(oldContent.get().getDescription());
+        //Para obteener la duracion en minutos
+        contentEditForm.setDuration(transformDate(oldContent.get().getDuration()));
+        contentEditForm.setGenre(oldContent.get().getGenre());
+        contentEditForm.setReleaseDate(oldContent.get().getReleased());
+        contentEditForm.setType(oldContent.get().getType());
+        HeaderSetUp(mav,userDetails);
+        return mav;
+    }
+
+    private int transformDate(String str){
+        int minutes=0;
+        String[] arr= str.split(" ");
+        if(arr.length==4){
+            minutes=Integer.parseInt(arr[0])*60+Integer.parseInt(arr[2]);
+        }else if(arr.length==2){
+            minutes=Integer.parseInt(arr[0]);
+        }
+        return minutes;
+    }
+
+    @RequestMapping(value = "/content/editInfo/{contentId:[0-9]+}", method = {RequestMethod.POST})
+    public ModelAndView editContent(@AuthenticationPrincipal PawUserDetails userDetails, @Valid @ModelAttribute("contentEditForm") final ContentEditForm contentEditForm, @PathVariable("contentId")final long contentId, final BindingResult errors) throws  IOException {
+        if(errors.hasErrors()) {
+            return editContent(userDetails, contentEditForm,contentId);
+        }
+        Content oldContent = cs.findById(contentId).orElseThrow(PageNotFoundException::new);
+        cs.updateContent(contentId,contentEditForm.getName(), contentEditForm.getDescription(), contentEditForm.getReleaseDate(), contentEditForm.getGenre(), contentEditForm.getCreator(), contentEditForm.getDuration(), contentEditForm.getType(),contentEditForm.getContentPicture().getBytes());
+        return new ModelAndView("redirect:/");
+    }
+
+    // * ----------------------------------- Content Delete ----------------------------------------------------------
+
+    @RequestMapping(value = "/content/{contentId:[0-9]+}/delete", method = {RequestMethod.POST})
+    public ModelAndView deleteContent(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("contentId")final long contentId){
+        Content oldContent = cs.findById(contentId).orElseThrow(PageNotFoundException::new);
+        cs.deleteContent(contentId);
+        return new ModelAndView("redirect:/");
+    }
 
 
     // * ----------------------------------- Content Creation ----------------------------------------------------------

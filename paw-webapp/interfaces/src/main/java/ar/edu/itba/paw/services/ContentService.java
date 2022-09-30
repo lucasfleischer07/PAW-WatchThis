@@ -23,4 +23,6 @@ public interface ContentService {
     List<Content> getLastAdded();
     void contentCreate(String name, String description, String releaseDate, String genre, String creator, Integer duration, String type, byte[] contentImage);
     Optional<String> getContentQuote(String language);
+    void updateContent(Long id,String name, String description, String releaseDate, String genre, String creator, Integer duration, String type,byte[] contentImage);
+    void deleteContent(Long id);
 }

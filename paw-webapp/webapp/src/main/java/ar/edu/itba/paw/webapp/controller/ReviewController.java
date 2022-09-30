@@ -71,6 +71,7 @@ public class ReviewController {
             LOGGER.warn("Cant find a the content specified",new PageNotFoundException());
             throw new PageNotFoundException();
         }
+        mav.addObject("contentId",contentId);
         try {
             String userEmail = userDetails.getUsername();
             user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);

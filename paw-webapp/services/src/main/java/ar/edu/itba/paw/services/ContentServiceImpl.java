@@ -85,7 +85,7 @@ public class ContentServiceImpl implements ContentService {
 
     @Override
     public void contentCreate(String name, String description, String releaseDate, String genre, String creator, Integer duration, String type, byte[] contentImage){
-        String durationString = String.format("%d:%d",duration/60,duration - (duration/60)*60);
+        String durationString = String.format("%d hours %d minutes",duration/60,duration - (duration/60)*60);
 
         ContentDao.contentCreate(name,description,releaseDate,genre,creator,duration,durationString,type,contentImage);
     }
@@ -94,4 +94,29 @@ public class ContentServiceImpl implements ContentService {
     public Optional<String> getContentQuote(String language) {
         return ContentDao.getContentQuote(language);
     }
+
+    @Override
+    public void updateContent(Long id,String name, String description, String releaseDate, String genre, String creator, Integer duration, String type,byte[] contentImage){
+        String durationString = String.format("%d hours %d minutes",duration/60,duration - (duration/60)*60);
+        if(contentImage.length==0){
+            ContentDao.updateContent(id,name,description,releaseDate,genre,creator,duration,durationString,type);
+        }else{
+            ContentDao.updateWithImageContent(id,name,description,releaseDate,genre,creator,duration,durationString,type,contentImage);
+        }
+    }
+
+    private String formatDuration(int duration){
+        if(duration >= 60){
+            return String.format("%d hours %d minutes",duration/60,duration - (duration/60)*60);
+        }
+        return String.format("%d minutes",duration);
+
+    }
+
+    @Override
+    public void deleteContent(Long id){
+        ContentDao.deleteContent(id);
+    }
+
+
 }
