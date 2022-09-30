@@ -20,9 +20,9 @@
 <div class="d-flex align-items-center justify-content-center vh-100">
     <div class="text-center">
         <h1 class="display-1 fw-bold"><c:out value="${errorCode}"/></h1>
-        <p class="fs-3"> <span class="text-danger"><spring:message code="Error.Opps"/></span> <spring:message code="Error.Title${errorCode!=401 && errorCode!= 404 && errorCode!= 400 && errorCode!= 405 && errorCode!= 500? null:errorCode}" arguments="${errorCode}"/></p>
+        <p class="fs-3"> <span class="text-danger"><spring:message code="Error.Opps"/></span> <spring:message code="Error.Title${errorCode!=401 && errorCode!= 404 && errorCode!= 400 && errorCode!= 405 && errorCode!= 403 && errorCode!= 500? null:errorCode}" arguments="${errorCode}"/></p>
         <p class="lead">
-            <spring:message code="Error.Body${errorCode!=401 && errorCode!= 404 && errorCode!= 400 && errorCode!= 405 && errorCode!= 500? null:errorCode}"/>
+            <spring:message code="Error.Body${errorCode!=401 && errorCode!= 404 && errorCode!= 400 && errorCode!= 405 && errorCode!= 403 && errorCode!= 500? null:errorCode}"/>
         </p>
         <a href="<c:url value="/"/>" class="btn btn-primary"><spring:message code="Error.HomeButton"/></a>
     </div>
