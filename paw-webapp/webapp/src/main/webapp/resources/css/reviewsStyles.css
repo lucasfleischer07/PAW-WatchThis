@@ -25,6 +25,12 @@
     flex-direction: row-reverse;
 }
 
+.W-watchList-and-ViewedList-div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
 .W-div-img-and-reviewInfo {
     display: flex;
 }
@@ -35,6 +41,7 @@
 
 .W-star-style-info-page{
     width: 3%;
+    color: #ddbe1b;
 }
 
 .W-span-text-info-card-movie {
@@ -69,9 +76,6 @@
     justify-content: flex-end;
 }
 
-.W-add-review-button-add {
-    min-width: 17vw;
-}
 
 .W-card-header{
     display: flex;
@@ -108,6 +112,8 @@
     margin-top: 0;
     margin-bottom: 0;
     font-size: 1.3vw;
+    display: flex;
+    align-items: center;
 }
 
 .W-reviewScore {
@@ -119,6 +125,7 @@
     margin-right: 1%;
     margin-left: 1%;
     display: flex;
+    color: #ddbe1b;
 }
 
 .W-reviewCard-stars {
@@ -146,6 +153,7 @@
 
 .W-stars-width {
     width: 1vw;
+    color: #ddbe1b;
 }
 
 .W-row-display-thumbs {

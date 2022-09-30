@@ -65,7 +65,7 @@
                             <form:form modelAttribute="editProfile" action="${postPath}" method="post">
                                 <div>
                                     <div class="mb-3 W-input-label-edit-password">
-                                        <form:errors path="password" element="p" cssStyle="color: red"/>
+                                        <form:errors path="password" element="p" cssClass="W-form-color-red"/>
                                         <form:label path="password" class="form-label"><spring:message code="EditProfile.NewPassword"/></form:label>
                                         <spring:message code="Placeholder.Asterisk" var="placeholder"/>
                                         <form:input type="password" class="form-control" value="${editProfile.password}" path="password" placeholder="${placeholder}"/>

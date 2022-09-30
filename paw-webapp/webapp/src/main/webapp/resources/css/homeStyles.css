@@ -1,6 +1,7 @@
 .W-star-style{
     height: 1vw;
     width: 1vw;
+    color: #ddbe1b;
 }
 
 .W-star-filter-location{
@@ -219,12 +220,6 @@
     color: darkred;
 }
 
-.W-star-color{
-    height: 1.5vw;
-    width: 1.5vw;
-    color:#fbc634;
-}
-
 .W-star-location{
     margin-bottom: 5%;
 }
@@ -255,6 +250,7 @@
     height: 1vw;
     width: 1vw;
 }
+
 .W-not-found{
     height: 10vw;
     width: 10vw;
