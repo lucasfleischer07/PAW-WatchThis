@@ -56,7 +56,7 @@
                 </div>
             </div>
             <div class="bg-light p-4 d-flex text-center">
-                <h4><c:out value="${watchListSize}"/> <spring:message code="WatchList.Titles"/></h4>
+                <h4><spring:message code="WatchList.Titles" arguments="${watchListSize}"/></h4>
             </div>
 
             <c:choose>

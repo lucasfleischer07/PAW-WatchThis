@@ -246,12 +246,12 @@
             <c:choose>
                 <c:when test="${param.durationTo == '1000'}">
                     <button id="genreGroupDrop" type="button" class="W-filter-title btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                        <c:out value="${param.durationFrom}"/> <spring:message code="Duration.Or_more"/>
+                        <spring:message code="Duration.Or_more" arguments="${param.durationFrom}"/>
                     </button>
                 </c:when>
                 <c:when test="${param.durationFrom != '' &&  param.durationFrom != 'ANY'}">
                     <button id="genreGroupDrop" type="button" class="W-filter-title btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                        <c:out value="${param.durationFrom}"/>-<c:out value="${param.durationTo}"/> minutes
+                        <spring:message code="Duration.From.To" arguments="${param.durationFrom},${param.durationTo}"/>
                     </button>
                 </c:when>
                 <c:otherwise>
@@ -288,7 +288,8 @@
                                                                                     <c:param name="genre" value="${param.genre}"/>
                                                                                 </c:when>
                                                                             </c:choose>
-                                                                            <c:param name="durationFrom" value="0"/>-<c:param name="durationTo" value="90"/>
+                                                                            <c:param name="durationFrom" value="0"/>
+                                                                            <c:param name="durationTo" value="90"/>
                                                                             </c:url>" onclick="showDuration(this)"><spring:message code="Duration.0_90"/></a></li>
                 <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
                                                                             <c:choose>
@@ -303,7 +304,8 @@
                                                                                     <c:param name="genre" value="${param.genre}"/>
                                                                                 </c:when>
                                                                             </c:choose>
-                                                                            <c:param name="durationFrom" value="90"/>-<c:param name="durationTo" value="120"/>
+                                                                            <c:param name="durationFrom" value="90"/>
+                                                                            <c:param name="durationTo" value="120"/>
                                                                             </c:url>" onclick="showDuration(this)"><spring:message code="Duration.90_120"/></a></li>
                 <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
                                                                             <c:choose>
@@ -318,7 +320,8 @@
                                                                                     <c:param name="genre" value="${param.genre}"/>
                                                                                 </c:when>
                                                                             </c:choose>
-                                                                            <c:param name="durationFrom" value="120"/>-<c:param name="durationTo" value="150"/>
+                                                                            <c:param name="durationFrom" value="120"/>
+                                                                            <c:param name="durationTo" value="150"/>
                                                                             </c:url>" onclick="showDuration(this)"><spring:message code="Duration.120_150"/></a></li>
                 <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
                                                                             <c:choose>
@@ -333,7 +336,8 @@
                                                                                     <c:param name="genre" value="${param.genre}"/>
                                                                                 </c:when>
                                                                             </c:choose>
-                                                                            <c:param name="durationFrom" value="150"/>-<c:param name="durationTo" value="1000"/>
+                                                                            <c:param name="durationFrom" value="150"/>
+                                                                            <c:param name="durationTo" value="1000"/>
                                                                             </c:url>" onclick="showDuration(this)"><spring:message code="Duration.150_more"/></a></li>
             </ul>
         </div>

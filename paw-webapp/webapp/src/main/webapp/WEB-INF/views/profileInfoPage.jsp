@@ -55,7 +55,7 @@
           <div class="bg-light p-4 d-flex text-center W-editProfileButton-and-reviewsCant">
               <div class="W-edition-and-admin-buttons">
                   <c:if test="${userName==user.userName}">
-                      <a href="<c:url value="/profile/edit-profile"/>" class="btn btn-outline-dark btn-block W-editProfile-button"><spring:message code="Profile.EdirProfile"/></a>
+                      <a href="<c:url value="/profile/edit-profile"/>" class="btn btn-outline-dark btn-block W-editProfile-button"><spring:message code="Profile.EditProfile"/></a>
                   </c:if>
                   <c:if test="${admin==true}">
                       <c:url value="/profile/${user.userName}" var="postPath"/>

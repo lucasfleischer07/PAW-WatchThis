@@ -61,7 +61,7 @@
                       <div class="modal-dialog">
                         <div class="modal-content">
                           <div class="modal-header">
-                            <h5 class="modal-title" id="watchListModalLabel"><spring:message code="WatchList.title"/></h5>
+                            <h5 class="modal-title" id="watchListModalLabel"><spring:message code="WatchList.Title"/></h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                           </div>
                           <div class="modal-body">
@@ -70,7 +70,7 @@
                           </div>
                           <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><spring:message code="Close"/></button>
-                            <a href="<c:url value="/login/sign-in"/>"><button type="button" class="btn btn-success"><spring:message code="Login.loginMessage"/></button></a>
+                            <a href="<c:url value="/login/sign-in"/>"><button type="button" class="btn btn-success"><spring:message code="Login.LoginMessage"/></button></a>
                           </div>
                         </div>
                       </div>
@@ -112,7 +112,7 @@
                       <div class="modal-dialog">
                         <div class="modal-content">
                           <div class="modal-header">
-                            <h5 class="modal-title" id="viewedListModalLabel"><spring:message code="ViewedList.title"/></h5>
+                            <h5 class="modal-title" id="viewedListModalLabel"><spring:message code="ViewedList.Title"/></h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                           </div>
                           <div class="modal-body">
@@ -121,7 +121,7 @@
                           </div>
                           <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><spring:message code="Close"/></button>
-                            <a href="<c:url value="/login/sign-in"/>"><button type="button" class="btn btn-success"><spring:message code="Login.loginMessage"/></button></a>
+                            <a href="<c:url value="/login/sign-in"/>"><button type="button" class="btn btn-success"><spring:message code="Login.LoginMessage"/></button></a>
                           </div>
                         </div>
                       </div>
@@ -157,7 +157,7 @@
                         </c:choose>
                       </c:forEach>
                     </div>
-                    <p class="card-text W-subTitles-font-size">(<c:out value="${details.reviewsAmount}"/> <spring:message code="Content.reviewAmount"/>)</p>
+                    <p class="card-text W-subTitles-font-size"><spring:message code="Content.ReviewAmount" arguments="${details.reviewsAmount}"/></p>
                   </div>
                 </div>
               </div>
@@ -189,7 +189,7 @@
                       </div>
                       <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><spring:message code="Close"/></button>
-                        <a href="<c:url value="/login/sign-in"/>"><button type="button" class="btn btn-success"><spring:message code="Login.loginMessage"/></button></a>
+                        <a href="<c:url value="/login/sign-in"/>"><button type="button" class="btn btn-success"><spring:message code="Login.LoginMessage"/></button></a>
                       </div>
                     </div>
                   </div>

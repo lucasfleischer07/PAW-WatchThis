@@ -18,7 +18,7 @@
         <link href="<c:url value="/resources/css/reviewRegistrationStyles.css"/>" rel="stylesheet" type="text/css"/>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
 
-        <title>Content Create</title>
+        <title><spring:message code="CreateContentMessage"/></title>
     </head>
     <body>
         <jsp:include page="components/header.jsp">
@@ -41,37 +41,37 @@
                     </c:if>
                     <div class="mb-3 W-input-label-review-info">
                         <form:errors path="name" element="p" cssStyle="color: red"/>
-                        <form:label path="name" class="form-label"><spring:message code="CreateContent.ContentName"/> <span class="W-red-asterisco">*</span></form:label>
-                        <p class="W-review-registration-text">(Must be between 6 and 200 characters)</p>
+                        <form:label path="name" class="form-label"><spring:message code="CreateContent.ContentName"/> <span class="W-red-asterisco"><spring:message code="Asterisk"/></span></form:label>
+                        <p class="W-review-registration-text"><spring:message code="CreateContent.CharacterLimits" arguments="6,200"/></p>
                         <form:input type="text" class="form-control" path="name" placeholder="Lord of The Rings"/>
                     </div>
                     <div class="mb-3 W-input-label-review-info">
                         <form:errors path="description" element="p" cssStyle="color: red"/>
-                        <form:label path="description" class="form-label"><spring:message code="CreateContent.ContentDescription"/> <span class="W-red-asterisco">*</span></form:label>
-                        <p class="W-review-registration-text">(Must be between 20 and 2000 characters)</p>
+                        <form:label path="description" class="form-label"><spring:message code="CreateContent.ContentDescription"/> <span class="W-red-asterisco"><spring:message code="Asterisk"/></span></form:label>
+                        <p class="W-review-registration-text"><spring:message code="CreateContent.CharacterLimits" arguments="20,2000"/></p>
                         <form:textarea class="form-control" id="MyTextArea" path="description" rows="3"/>
                     </div>
                     <div class="mb-3 W-input-label-review-info">
                         <form:errors path="releaseDate" element="p" cssStyle="color: red"/>
-                        <form:label path="releaseDate" class="form-label"><spring:message code="CreateContent.ContentReleaseDate"/> <span class="W-red-asterisco">*</span></form:label>
-                        <p class="W-review-registration-text">(Must be between 20 and 2000 characters)</p>
+                        <form:label path="releaseDate" class="form-label"><spring:message code="CreateContent.ContentReleaseDate"/> <span class="W-red-asterisco"><spring:message code="Asterisk"/></span></form:label>
+                        <p class="W-review-registration-text"><spring:message code="CreateContent.CharacterLimits" arguments="20,2000"/></p>
                         <form:input type="text" class="form-control" path="releaseDate" placeholder="2002"/>
                     </div>
                     <div class="mb-3 W-input-label-review-info">
                         <form:errors path="creator" element="p" cssStyle="color: red"/>
-                        <form:label path="creator" class="form-label"><spring:message code="CreateContent.ContentCreator"/> <span class="W-red-asterisco">*</span></form:label>
-                        <p class="W-review-registration-text">(Must be between 20 and 2000 characters)</p>
+                        <form:label path="creator" class="form-label"><spring:message code="CreateContent.ContentCreator"/> <span class="W-red-asterisco"><spring:message code="Asterisk"/></span></form:label>
+                        <p class="W-review-registration-text"><spring:message code="CreateContent.CharacterLimits" arguments="20,2000"/></p>
                         <form:input type="text" class="form-control" path="creator" placeholder="Tarantino"/>
                     </div>
                     <div class="mb-3 W-input-label-review-info">
                         <form:errors path="duration" element="p" cssStyle="color: red"/>
-                        <form:label path="duration" class="form-label"><spring:message code="CreateContent.ContentDuration"/> <span class="W-red-asterisco">*</span></form:label>
-                        <p class="W-review-registration-text">(Must be between 20 and 2000 characters)</p>
+                        <form:label path="duration" class="form-label"><spring:message code="CreateContent.ContentDuration"/> <span class="W-red-asterisco"><spring:message code="Asterisk"/></span></form:label>
+                        <p class="W-review-registration-text"><spring:message code="CreateContent.CharacterLimits" arguments="20,2000"/></p>
                         <form:input type="number" class="form-control" path="duration" placeholder="120"/>
                     </div>
                     <div class="mb-3 W-input-label-review-info">
                         <form:errors path="genre" element="p" cssStyle="color: red"/>
-                        <form:label path="genre" class="form-label"><spring:message code="CreateContent.ContentGenre"/> <span class="W-red-asterisco">*</span></form:label>
+                        <form:label path="genre" class="form-label"><spring:message code="CreateContent.ContentGenre"/> <span class="W-red-asterisco"><spring:message code="Asterisk"/></span></form:label>
                         <form:select path="genre" class="form-select" aria-label="Default select example">
                             <form:option value="Action"><spring:message code="Genre.Action"/></form:option>
                             <form:option value="Science Fiction"><spring:message code="Genre.Science"/></form:option>
@@ -89,7 +89,7 @@
                     </div>
                     <div class="mb-3 W-input-label-review-info">
                         <form:errors path="type" element="p" cssStyle="color: red"/>
-                        <form:label path="type" class="form-label"><spring:message code="CreateContent.ContentType"/> <span class="W-red-asterisco">*</span></form:label>
+                        <form:label path="type" class="form-label"><spring:message code="CreateContent.ContentType"/> <span class="W-red-asterisco"><spring:message code="Asterisk"/></span></form:label>
                         <form:select path="type" class="form-select" aria-label="Default select example">
                             <form:option value="movie"><spring:message code="CreateContent.ContentType.Movie"/></form:option>
                             <form:option value="serie"><spring:message code="CreateContent.ContentType.Serie"/></form:option>
@@ -97,7 +97,7 @@
                     </div>
                     <div class="mb-3 W-input-label-review-info">
                         <form:errors path="contentPicture" element="p" cssClass="form-error-label" cssStyle="color: red"/>
-                        <form:label path="type" class="form-label"><span class="W-red-asterisco">*</span></form:label>
+                        <form:label path="type" class="form-label"><span class="W-red-asterisco"><spring:message code="Asterisk"/></span></form:label>
                         <form:input type="file" accept="image/gif, image/jpeg, image/jpg,  image/png" class="form-control" path="contentPicture" cssClass="W-input-width"/>
                     </div>
                 </div>

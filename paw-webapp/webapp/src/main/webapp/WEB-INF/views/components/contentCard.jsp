@@ -64,7 +64,7 @@
                                 </c:otherwise>
                             </c:choose>
                         </c:forEach>
-                        <p class="card-text W-movie-description W-card-details-margin">(<c:out value="${param.reviewsAmount}"/> <spring:message code="Content.reviewAmount"/> )</p>
+                        <p class="card-text W-movie-description W-card-details-margin"><spring:message code="Content.ReviewAmount" arguments="${param.reviewsAmount}"/></p>
                     </div>
                 </div>
             </div>
