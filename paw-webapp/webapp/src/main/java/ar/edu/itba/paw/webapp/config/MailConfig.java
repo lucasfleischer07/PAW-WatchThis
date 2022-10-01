@@ -34,15 +34,9 @@ public class MailConfig implements ApplicationContextAware, EnvironmentAware {
         mailSender.setProtocol(this.environment.getProperty("mail.server.protocol"));
         mailSender.setUsername(this.environment.getProperty("mail.server.username"));
         mailSender.setPassword(this.environment.getProperty("mail.server.password"));
+
         final Properties javaMailProperties = new Properties();
-        javaMailProperties.put("mail.smtp.host", "smtp.gmail.com");
-        javaMailProperties.put("mail.smtp.port", "587");
-        javaMailProperties.put("mail.smtp.auth", "true");
-        javaMailProperties.put("mail.smtp.ssl.protocols", "TLSv1.2");
-        javaMailProperties.put("mail.smtp.starttls.enable", "true");
-        javaMailProperties.put("mail.smtp.starttls.required", "true");
-        javaMailProperties.put("mail.smtp.quitwait", "false");
-        javaMailProperties.put("mail.smtp.ssl.trust", "smtp.gmail.com");
+        javaMailProperties.load(this.appContext.getResource("classpath:mail/mail.properties").getInputStream());
         mailSender.setJavaMailProperties(javaMailProperties);
         return mailSender;
 
