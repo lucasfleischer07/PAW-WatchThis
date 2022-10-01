@@ -157,7 +157,6 @@ public class ReviewController {
             Review newReview = new Review(null, type, id, form.getName(), form.getDescription(), form.getRating(), user.get().getUserName(),null);
             newReview.setId(id);
             rs.addReview(newReview);
-            cs.addContentPoints(id,(int)form.getRating());
         }
         catch(DuplicateKeyException e){
             ModelAndView mav = reviewFormCreate(userDetails,form,id,type);
@@ -180,7 +179,6 @@ public class ReviewController {
         User user=us.findByEmail(userDetails.getUsername()).get();
         if(review.getUserName().equals(user.getUserName()) || userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))){
             rs.deleteReview(reviewId);
-            cs.decreaseContentPoints(review.getContentId(),review.getRating());
             String referer = request.getHeader("Referer");
             return new ModelAndView("redirect:"+ referer);
         } else {
@@ -250,8 +248,6 @@ public class ReviewController {
             throw new MethodNotAllowedException();
         }
         rs.updateReview(form.getName(), form.getDescription(), form.getRating(), reviewId);
-        cs.decreaseContentPoints(contentId,oldReview.get().getRating());
-        cs.addContentPoints(contentId,form.getRating());
         ModelMap model =new ModelMap();
         String referer = request.getSession().getAttribute("referer").toString();
         return new ModelAndView("redirect:" + referer==null?"/":referer,model);

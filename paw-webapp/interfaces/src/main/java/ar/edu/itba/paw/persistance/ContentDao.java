@@ -17,8 +17,6 @@ public interface ContentDao {
     List<Content> getSearchedContent(String query);
     List<Content> getSearchedContentRandom(String query);
     List<Content> findByType(String type);
-    void addContentPoints(long contentId,int rating);
-    void decreaseContentPoints(long contentId,int rating);
     List<Content> getBestRated();
     List<Content> getLessDuration(String type);
     List<Content> getLastAdded();

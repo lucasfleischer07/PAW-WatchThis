@@ -228,14 +228,6 @@ public class ContentJdbcDao implements ContentDao {
         return template.query(TYPE_BASE_QUERY,new Object[]{ type }, CONTENT_ROW_MAPPER);
     }
 
-    @Override
-    public void addContentPoints(long contentId,int rating){
-        template.update("UPDATE content SET rating = rating + ?, reviewsAmount = reviewsAmount+1 WHERE id = ?", new Object[] {rating, contentId});
-    }
-    @Override
-    public void decreaseContentPoints(long contentId,int rating){
-        template.update("UPDATE content SET rating = rating - ?, reviewsAmount = reviewsAmount - 1 WHERE id = ?", new Object[] {rating, contentId});
-    }
 
     private static final String BEST_RATED = "select content.id,content.name,image,content.description,released,genre,creator,duration,content.type, sum(review.rating)/count(*) as rating,count(reviewid) as reviewsAmount\n from content left join (select * from review as r2 where r2.rating<>0) as review on content.id = review.contentid \n group by content.id,content.name,content.description,content.released,content.genre,content.creator,content.duration,content.type,content.durationNum having sum(review.rating)/count(*) > 3\n  order by sum(review.rating)/count(*) desc ";
 
