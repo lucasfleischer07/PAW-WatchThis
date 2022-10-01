@@ -18,6 +18,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.text.ParseException;
@@ -62,7 +63,7 @@ public class ContentController {
 
     // * ----------------------------------- Home Page -----------------------------------------------------------------
     @RequestMapping(value= {"/","page/{pageNum}"})
-    public ModelAndView helloWorld(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("pageNum")final Optional<Integer> pageNum, @RequestParam(name = "query", defaultValue = "") final String query) {
+    public ModelAndView helloWorld(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("pageNum")final Optional<Integer> pageNum, @RequestParam(name = "query", defaultValue = "") final String query, HttpServletRequest request) {
         final ModelAndView mav = new ModelAndView("homePage");
         List<Content> bestRatedList = cs.getBestRated();
         List<Content> lessDurationMoviesList = cs.getLessDuration("movie");
@@ -87,9 +88,9 @@ public class ContentController {
         mav.addObject("durationTo","ANY");
         mav.addObject("sorting","ANY");
         mav.addObject("contentType", "all");
-
         HeaderSetUp(mav,userDetails);
 
+        request.getSession().setAttribute("referer","/");
         return mav;
     }
 
@@ -98,7 +99,7 @@ public class ContentController {
 
     // * ----------------------------------- Movie and Series division -------------------------------------------------
     @RequestMapping(value= {"/{type:movies|series}","/{type:movies|series}/page/{pageNum}"})
-    public ModelAndView contentType(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("type") final String type,@PathVariable("pageNum")final Optional<Integer> pageNum) {
+    public ModelAndView contentType(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("type") final String type,@PathVariable("pageNum")final Optional<Integer> pageNum,HttpServletRequest request) {
         String auxType = null;
         final ModelAndView mav = new ModelAndView("contentPage");
         if(Objects.equals(type, "movies")) {
@@ -130,6 +131,8 @@ public class ContentController {
         }
 
         HeaderSetUp(mav,userDetails);
+        request.getSession().setAttribute("referer","/"+type);
+
         return mav;
     }
 
@@ -145,7 +148,8 @@ public class ContentController {
             @RequestParam(name = "durationFrom",defaultValue = "ANY",required = false)final String durationFrom,
             @RequestParam(name = "durationTo",defaultValue = "ANY",required = false)final String durationTo,
             @RequestParam(name = "genre", defaultValue = "ANY",required = false)final String genre,
-            @RequestParam(name = "sorting", defaultValue = "ANY", required = false) final String sorting) {
+            @RequestParam(name = "sorting", defaultValue = "ANY", required = false) final String sorting,
+            HttpServletRequest request) {
 
         ModelAndView mav = null;
         int page = pageNum.orElse(1);
@@ -192,7 +196,7 @@ public class ContentController {
         }
 
         HeaderSetUp(mav,userDetails);
-
+        request.getSession().setAttribute("referer","/"+type+"/filters");
         return mav;
     }
 
@@ -223,7 +227,7 @@ public class ContentController {
 
     // * ----------------------------------- Search bar ----------------------------------------------------------------
     @RequestMapping(value = {"/search", "/page/{pageNum}"})
-    public ModelAndView search(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("pageNum")final Optional<Integer> pageNum, @RequestParam(name = "query", defaultValue = "") final String query) {
+    public ModelAndView search(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("pageNum")final Optional<Integer> pageNum, @RequestParam(name = "query", defaultValue = "") final String query,HttpServletRequest request) {
         final ModelAndView mav = new ModelAndView("contentPage");
 
         mav.addObject("query", query);
@@ -246,6 +250,7 @@ public class ContentController {
         }
 
         HeaderSetUp(mav,userDetails);
+        request.getSession().setAttribute("referer","/search?=query="+query);
         return mav;
     }
 

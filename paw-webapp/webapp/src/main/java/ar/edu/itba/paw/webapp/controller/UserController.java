@@ -79,8 +79,6 @@ public class UserController {
     @RequestMapping(value = "/login/{loginStage:sign-in}", method = {RequestMethod.GET})
     public ModelAndView loginSignIn(@AuthenticationPrincipal PawUserDetails userDetails, HttpServletRequest request, @PathVariable("loginStage") final String loginStage, @RequestParam(value = "error",required = false) Optional<Boolean> error) {
         final ModelAndView mav = new ModelAndView("logInPage");
-        String referrer = request.getHeader("Referer");
-        request.getSession().setAttribute("url_prior_login", referrer);
         mav.addObject("loginStage", loginStage);
         HeaderSetUp(mav,userDetails);
         if(error.isPresent()){
@@ -132,7 +130,8 @@ public class UserController {
             throw new PageNotFoundException();
         }
 
-        return new ModelAndView("redirect:/");
+        String referer = request.getSession().getAttribute("referer").toString();
+        return new ModelAndView("redirect:" + referer==null?"/":referer);
     }
 
     private void authWithAuthManager(HttpServletRequest request,String email,String password){
@@ -150,7 +149,7 @@ public class UserController {
     // * ------------------------------------------------Profile View --------------------------------------------------
     //This path is for the logged in profile, if the person is not logged in it will fail
     @RequestMapping("/profile")
-    public ModelAndView profile(@AuthenticationPrincipal PawUserDetails userDetails) {
+    public ModelAndView profile(@AuthenticationPrincipal PawUserDetails userDetails,HttpServletRequest request) {
         final String locale = LocaleContextHolder.getLocale().getDisplayLanguage();
         final ModelAndView mav = new ModelAndView("profileInfoPage");
         String userEmail = userDetails.getUsername();
@@ -162,7 +161,7 @@ public class UserController {
         mav.addObject("userName",user.getUserName());
         mav.addObject("userId",user.getId());
         mav.addObject("admin",false);
-
+        request.getSession().setAttribute("referer","/profile");
         return mav;
     }
 
@@ -178,7 +177,7 @@ public class UserController {
     }
 
     @RequestMapping("/profile/{userName:[a-zA-Z0-9\\s]+}")
-    public ModelAndView profileInfo(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("userName") final String userName) {
+    public ModelAndView profileInfo(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("userName") final String userName,HttpServletRequest request) {
         if(userName==null || userName==""){
             LOGGER.warn("Wrong username photo request:",new PageNotFoundException());
             throw new PageNotFoundException();
@@ -212,6 +211,7 @@ public class UserController {
             mav.addObject("userId","null");
             mav.addObject("admin",false);
         }
+        request.getSession().setAttribute("referer","/profile/"+userName);
         return mav;
     }
 
@@ -263,7 +263,7 @@ public class UserController {
 
     // * ------------------------------------------------User Watch List------------------------------------------------
     @RequestMapping(value = "/profile/watchList", method = {RequestMethod.GET})
-    public ModelAndView watchList(@AuthenticationPrincipal PawUserDetails userDetails) {
+    public ModelAndView watchList(@AuthenticationPrincipal PawUserDetails userDetails,HttpServletRequest request) {
         String userEmail = userDetails.getUsername();
         final String locale = LocaleContextHolder.getLocale().getDisplayLanguage();
         User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
@@ -284,6 +284,7 @@ public class UserController {
         } else {
             mav.addObject("admin", false);
         }
+        request.getSession().setAttribute("referer","/profile/watchList");
         return mav;
     }
 
@@ -296,8 +297,8 @@ public class UserController {
         String userEmail = userDetails.getUsername();
         User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
         us.addToWatchList(user, contentId.get());
-        String referer = request.getHeader("Referer");
-        return new ModelAndView("redirect:" + referer);
+        String referer = request.getSession().getAttribute("referer").toString();
+        return new ModelAndView("redirect:" + referer==null?"/":referer);
     }
 
     @RequestMapping(value = "/watchList/delete/{contentId:[0-9]+}", method = {RequestMethod.POST})
@@ -309,8 +310,8 @@ public class UserController {
         String userEmail = userDetails.getUsername();
         User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
         us.deleteFromWatchList(user, contentId.get());
-        String referer = request.getHeader("Referer");
-        return new ModelAndView("redirect:" + referer);
+        String referer = request.getSession().getAttribute("referer").toString();
+        return new ModelAndView("redirect:" + referer==null?"/":referer);
     }
 
      @RequestMapping(value = "/go/to/login", method = {RequestMethod.POST})
@@ -323,7 +324,7 @@ public class UserController {
 
     // * ------------------------------------------------User Viewed List------------------------------------------------
     @RequestMapping(value = "/profile/viewedList", method = {RequestMethod.GET})
-    public ModelAndView viewedList(@AuthenticationPrincipal PawUserDetails userDetails) {
+    public ModelAndView viewedList(@AuthenticationPrincipal PawUserDetails userDetails,HttpServletRequest request) {
         String userEmail = userDetails.getUsername();
         final String locale = LocaleContextHolder.getLocale().getDisplayLanguage();
         User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
@@ -345,6 +346,7 @@ public class UserController {
         } else {
             mav.addObject("admin", false);
         }
+        request.getSession().setAttribute("referer","/profile/viewedList");
         return mav;
     }
 
@@ -356,8 +358,8 @@ public class UserController {
         String userEmail = userDetails.getUsername();
         User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
         us.addToViewedList(user, contentId.get());
-        String referer = request.getHeader("Referer");
-        return new ModelAndView("redirect:" + referer);
+        String referer = request.getSession().getAttribute("referer").toString();
+        return new ModelAndView("redirect:" + referer==null?"/":referer);
     }
 
     @RequestMapping(value = "/viewedList/delete/{contentId:[0-9]+}", method = {RequestMethod.POST})
@@ -368,8 +370,8 @@ public class UserController {
         String userEmail = userDetails.getUsername();
         User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
         us.deleteFromViewedList(user, contentId.get());
-        String referer = request.getHeader("Referer");
-        return new ModelAndView("redirect:" + referer);
+        String referer = request.getSession().getAttribute("referer").toString();
+        return new ModelAndView("redirect:" + referer==null?"/":referer);
     }
     // * ---------------------------------------------------------------------------------------------------------------
 }

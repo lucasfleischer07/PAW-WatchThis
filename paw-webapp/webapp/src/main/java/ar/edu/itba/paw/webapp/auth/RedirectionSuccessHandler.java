@@ -22,19 +22,9 @@ public class RedirectionSuccessHandler
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws ServletException, IOException, IOException, ServletException {
         HttpSession session = request.getSession();
-        if (session != null) {
-            String redirectUrl = (String) session.getAttribute("url_prior_login");
-            if (redirectUrl != null) {
-                session.removeAttribute("url_prior_login");
-                if(redirectUrl.contains("login/sign-up")){
-                    getRedirectStrategy().sendRedirect(request, response, getDefaultTargetUrl());
-                }else{
-                    getRedirectStrategy().sendRedirect(request, response, redirectUrl);
-                }
-
-            } else {
-                super.onAuthenticationSuccess(request, response, authentication);
-            }
+        String redirectUrl = (String) session.getAttribute("referer");
+        if (redirectUrl != null) {
+            getRedirectStrategy().sendRedirect(request, response, redirectUrl);
         } else {
             super.onAuthenticationSuccess(request, response, authentication);
         }

@@ -62,7 +62,7 @@ public class ReviewController {
 
     // * ----------------------------------- Movies and Series Info page -----------------------------------------------
     @RequestMapping("/{type:movie|serie}/{contentId:[0-9]+}")
-    public ModelAndView reviews(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("contentId")final long contentId, @PathVariable("type") final String type) {
+    public ModelAndView reviews(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("contentId")final long contentId, @PathVariable("type") final String type,HttpServletRequest request) {
         final ModelAndView mav = new ModelAndView("infoPage");
         mav.addObject("details", cs.findById(contentId).orElseThrow(PageNotFoundException::new));
         List<Review> reviewList = rs.getAllReviews(contentId);
@@ -114,6 +114,7 @@ public class ReviewController {
             }
         }
         mav.addObject("reviews", reviewList);
+        request.getSession().setAttribute("referer","/"+type+"/"+contentId);
         return mav;
     }
     // * ---------------------------------------------------------------------------------------------------------------
@@ -143,7 +144,7 @@ public class ReviewController {
     }
 
     @RequestMapping(value = "/reviewForm/{type:movie|serie}/{id:[0-9]+}/{userId:[0-9]+}", method = {RequestMethod.POST})
-    public ModelAndView reviewFormMovie(@AuthenticationPrincipal PawUserDetails userDetails, @Valid @ModelAttribute("registerForm") final ReviewForm form, final BindingResult errors, @PathVariable("id")final long id, @PathVariable("type")final String type, @PathVariable("userId")final long userId) {
+    public ModelAndView reviewFormMovie(@AuthenticationPrincipal PawUserDetails userDetails, @Valid @ModelAttribute("registerForm") final ReviewForm form, final BindingResult errors, @PathVariable("id")final long id, @PathVariable("type")final String type, @PathVariable("userId")final long userId,HttpServletRequest request) {
         if(errors.hasErrors()) {
             return reviewFormCreate(userDetails,form,id,type);
         }
@@ -165,7 +166,9 @@ public class ReviewController {
         }
 
         ModelMap model =new ModelMap();
-        return new ModelAndView("redirect:/" + type + "/" + id, model);
+        String referer = request.getSession().getAttribute("referer").toString();
+        return new ModelAndView("redirect:" + referer==null?"/":referer,model);
+
     }
     // * ---------------------------------------------------------------------------------------------------------------
 
@@ -250,7 +253,9 @@ public class ReviewController {
         cs.decreaseContentPoints(contentId,oldReview.get().getRating());
         cs.addContentPoints(contentId,form.getRating());
         ModelMap model =new ModelMap();
-        return new ModelAndView("redirect:/" + type + "/" + contentId, model);
+        String referer = request.getSession().getAttribute("referer").toString();
+        return new ModelAndView("redirect:" + referer==null?"/":referer,model);
+
     }
     // * ---------------------------------------------------------------------------------------------------------------
 
