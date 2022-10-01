@@ -33,7 +33,7 @@
                 </jsp:include>
             </div>
 
-            <div class="W-background W-img-background">
+            <div class="W-background">
                 <c:choose>
 <%--            * Caso en el que ESTA registrado y tiene contrasena--%>
                     <c:when test="${loginStage == 'sign-in'}">
@@ -108,7 +108,7 @@
                                         <div class="mb-3 W-input-label-login-info">
                                             <form:errors path="email" element="p" cssStyle="color: red"/>
                                             <form:label path="email" class="form-label"><spring:message code="Signup.Email"/></form:label>
-                                            <spring:message code="Placeholder.emailExample" var="placeholder"/>
+                                            <spring:message code="Placeholder.EmailExample" var="placeholder"/>
                                             <form:input type="email" class="form-control" value="${loginForm.email}" path="email" placeholder='${placeholder}'/>
                                         </div>
                                     </div>

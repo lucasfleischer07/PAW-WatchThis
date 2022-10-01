@@ -5,11 +5,6 @@
     width: 100%;
 }
 
-.W-img-background {
-    background: url("./resources/img/Fondo2.png") repeat round;
-    background-size: 100% 100%;
-}
-
 .W-login-title {
     display: flex;
     align-items: center;
