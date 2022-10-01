@@ -26,12 +26,11 @@ public class ContentJdbcDao implements ContentDao {
                     resultSet.getString("creator"),
                     resultSet.getString("duration"),
                     resultSet.getString("type"),
-                    resultSet.getInt("rating")/(resultSet.getInt("reviewsAmount") ==0 ? 1 : resultSet.getInt("reviewsAmount"))
-                    ,resultSet.getInt("reviewsAmount"));
+                    resultSet.getInt("rating"),
+                    resultSet.getInt("reviewsAmount"));
 
     private static final RowMapper<String> ENGLISH_QUOTE_ROW_MAPPER = (resultSet, rowNum) -> resultSet.getString("english");
     private static final RowMapper<String> SPANISH_QUOTE_ROW_MAPPER = (resultSet, rowNum) -> resultSet.getString("spanish");
-
 
     private final JdbcTemplate template;
 
@@ -40,174 +39,193 @@ public class ContentJdbcDao implements ContentDao {
         this.template = new JdbcTemplate(ds);
     }
 
+    private static final String TYPE_BASE_QUERY = "select content.id,content.name,image,content.description,released,genre,creator,duration,content.type, sum(review.rating)/count(*) as rating,count(reviewid) as reviewsAmount\n from content left join (select * from review as r2 where r2.rating<>0) as review on content.id = review.contentid\n  where content.type = ? \n group by content.id,content.name,content.description,content.released,content.genre,content.creator,content.duration,content.type,content.durationNum ";
+    private static final String BASE_QUERY = "select content.id,content.name,image,content.description,released,genre,creator,duration,content.type, sum(review.rating)/count(*) as rating,count(reviewid) as reviewsAmount\n from content left join (select * from review as r2 where r2.rating<>0) as review on content.id = review.contentid\n group by content.id,content.name,content.description,content.released,content.genre,content.creator,content.duration,content.type,content.durationNum ";
+
+
     @Override
     public List<Content> getAllContent(String type, String sort) {
         if (Objects.equals(type, "movie") || Objects.equals(type, "serie")) {
             if (Objects.equals(sort, "ANY")) {
-                return template.query("SELECT * FROM content WHERE type = ?", new Object[]{type}, CONTENT_ROW_MAPPER);
+                return template.query(TYPE_BASE_QUERY, new Object[]{type}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "Last-released")) {
-                return template.query("SELECT * FROM content WHERE type = ? ORDER BY released desc", new Object[]{type}, CONTENT_ROW_MAPPER);
+                return template.query(TYPE_BASE_QUERY +"ORDER BY released desc", new Object[]{type}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "Older-released")) {
-                return template.query("SELECT * FROM content WHERE type = ? ORDER BY released asc", new Object[]{type}, CONTENT_ROW_MAPPER);
+                return template.query(TYPE_BASE_QUERY + "ORDER BY released asc", new Object[]{type}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "Best-ratings")) {
-                return template.query("SELECT * FROM content WHERE type = ? ORDER BY rating desc", new Object[]{type}, CONTENT_ROW_MAPPER);
+                return template.query(TYPE_BASE_QUERY +"ORDER BY rating desc", new Object[]{type}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "A-Z")) {
-                return template.query("SELECT * FROM content WHERE type = ? ORDER BY name asc", new Object[]{type}, CONTENT_ROW_MAPPER);
+                return template.query(TYPE_BASE_QUERY +"BY name asc", new Object[]{type}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "Z-A")) {
-                return template.query("SELECT * FROM content WHERE type = ? ORDER BY name desc", new Object[]{type}, CONTENT_ROW_MAPPER);
+                return template.query(TYPE_BASE_QUERY +"ORDER BY name desc", new Object[]{type}, CONTENT_ROW_MAPPER);
             }
         } else {
             if (Objects.equals(sort, "ANY")) {
-                return template.query("SELECT * FROM content", CONTENT_ROW_MAPPER);
+                return template.query(BASE_QUERY, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "Last-released")) {
-                return template.query("SELECT * FROM content ORDER BY released desc", CONTENT_ROW_MAPPER);
+                return template.query(BASE_QUERY +"ORDER BY released desc", CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "Older-released")) {
-                return template.query("SELECT * FROM content ORDER BY released asc", CONTENT_ROW_MAPPER);
+                return template.query(BASE_QUERY +"ORDER BY released asc", CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "Best-ratings")) {
-                return template.query("SELECT * FROM content ORDER BY rating desc", CONTENT_ROW_MAPPER);
+                return template.query(BASE_QUERY + "ORDER BY rating desc", CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "A-Z")) {
-                return template.query("SELECT * FROM content ORDER BY name asc", CONTENT_ROW_MAPPER);
+                return template.query(BASE_QUERY + "ORDER BY name asc", CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "Z-A")) {
-                return template.query("SELECT * FROM content ORDER BY name desc", CONTENT_ROW_MAPPER);
+                return template.query(BASE_QUERY + "ORDER BY name desc", CONTENT_ROW_MAPPER);
             }
         }
         return null;
     }
+    private static final String NAME_BASE_QUERY = "select content.id,content.name,image,content.description,released,genre,creator,duration,content.type, sum(review.rating)/count(*) as rating,count(reviewid) as reviewsAmount\n from content left join (select * from review as r2 where r2.rating<>0) as review on content.id = review.contentid\n where content.name = ?\n group by content.id,content.name,content.description,content.released,content.genre,content.creator,content.duration,content.type,content.durationNum ";
+
 
     @Override
     public Optional<Content> findByName(String name) {
-        return template.query("SELECT * FROM content WHERE name = ?",
-                new Object[]{ name }, CONTENT_ROW_MAPPER
-        ).stream().findFirst();
+        return template.query(NAME_BASE_QUERY , new Object[]{ name }, CONTENT_ROW_MAPPER).stream().findFirst();
     }
+    private static final String GENRE_BASE_QUERY = "select content.id,content.name,image,content.description,released,genre,creator,duration,content.type, sum(review.rating)/count(*) as rating,count(reviewid) as reviewsAmount\n from content left join (select * from review as r2 where r2.rating<>0) as review on content.id = review.contentid\n WHERE genre LIKE '%'||?||'%' AND content.type = ?\n group by content.id,content.name,content.description,content.released,content.genre,content.creator,content.duration,content.type,content.durationNum ";
+    private static final String GENRE_BASE_QUERY_ANY = "select content.id,content.name,image,content.description,released,genre,creator,duration,content.type, sum(review.rating)/count(*) as rating,count(reviewid) as reviewsAmount\n from content left join (select * from review as r2 where r2.rating<>0) as review on content.id = review.contentid\n WHERE genre LIKE '%'||?||'%'\n group by content.id,content.name,content.description,content.released,content.genre,content.creator,content.duration,content.type,content.durationNum ";
 
     @Override
     public List<Content> findByGenre(String type, String genre, String sort) {
         if(!Objects.equals(type, "all")) {
             if (Objects.equals(sort, "ANY")) {
-                return template.query("SELECT * FROM content WHERE genre LIKE '%'||?||'%' AND type = ?", new Object[]{genre, type}, CONTENT_ROW_MAPPER);
+                return template.query(GENRE_BASE_QUERY, new Object[]{genre, type}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "Last-released")) {
-                return template.query("SELECT * FROM content WHERE genre LIKE '%'||?||'%' AND type = ? ORDER BY released desc", new Object[]{genre, type}, CONTENT_ROW_MAPPER);
+                return template.query(GENRE_BASE_QUERY+ "ORDER BY released desc", new Object[]{genre, type}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "Older-released")) {
-                return template.query("SELECT * FROM content WHERE genre LIKE '%'||?||'%' AND type = ? ORDER BY released asc", new Object[]{genre, type}, CONTENT_ROW_MAPPER);
+                return template.query(GENRE_BASE_QUERY + "ORDER BY released asc", new Object[]{genre, type}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "Best-ratings")) {
-                return template.query("SELECT * FROM content WHERE genre LIKE '%'||?||'%' AND type = ? ORDER BY rating desc", new Object[]{genre, type}, CONTENT_ROW_MAPPER);
+                return template.query(GENRE_BASE_QUERY + "ORDER BY rating desc", new Object[]{genre, type}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "A-Z")) {
-                return template.query("SELECT * FROM content WHERE genre LIKE '%'||?||'%' AND type = ? ORDER BY name asc", new Object[]{genre, type}, CONTENT_ROW_MAPPER);
+                return template.query(GENRE_BASE_QUERY + "ORDER BY name asc", new Object[]{genre, type}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "Z-A")) {
-                return template.query("SELECT * FROM content WHERE genre LIKE '%'||?||'%' AND type = ? ORDER BY name desc", new Object[]{genre, type}, CONTENT_ROW_MAPPER);
+                return template.query(GENRE_BASE_QUERY + "ORDER BY name desc", new Object[]{genre, type}, CONTENT_ROW_MAPPER);
             }
         } else {
             if (Objects.equals(sort, "ANY")) {
-                return template.query("SELECT * FROM content WHERE genre LIKE '%'||?||'%'", new Object[]{genre}, CONTENT_ROW_MAPPER);
+                return template.query(GENRE_BASE_QUERY_ANY, new Object[]{genre}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "Last-released")) {
-                return template.query("SELECT * FROM content WHERE genre LIKE '%'||?||'%' ORDER BY released desc", new Object[]{genre}, CONTENT_ROW_MAPPER);
+                return template.query(GENRE_BASE_QUERY_ANY + "ORDER BY released desc", new Object[]{genre}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "Older-released")) {
-                return template.query("SELECT * FROM content WHERE genre LIKE '%'||?||'%' ORDER BY released asc", new Object[]{genre}, CONTENT_ROW_MAPPER);
+                return template.query(GENRE_BASE_QUERY_ANY + "ORDER BY released asc", new Object[]{genre}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "Best-ratings")) {
-                return template.query("SELECT * FROM content WHERE genre LIKE '%'||?||'%' ORDER BY rating desc", new Object[]{genre}, CONTENT_ROW_MAPPER);
+                return template.query(GENRE_BASE_QUERY_ANY + "ORDER BY rating desc", new Object[]{genre}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "A-Z")) {
-                return template.query("SELECT * FROM content WHERE genre LIKE '%'||?||'%' ORDER BY name asc", new Object[]{genre}, CONTENT_ROW_MAPPER);
+                return template.query(GENRE_BASE_QUERY_ANY + "ORDER BY name asc", new Object[]{genre}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "Z-A")) {
-                return template.query("SELECT * FROM content WHERE genre LIKE '%'||?||'%' ORDER BY name desc", new Object[]{genre}, CONTENT_ROW_MAPPER);
+                return template.query(GENRE_BASE_QUERY_ANY + "ORDER BY name desc", new Object[]{genre}, CONTENT_ROW_MAPPER);
             }
         }
         return null;
     }
+    private static final String DURATION_BASE_QUERY = "select content.id,content.name,image,content.description,released,genre,creator,duration,content.type, sum(review.rating)/count(*) as rating,count(reviewid) as reviewsAmount\n from content left join (select * from review as r2 where r2.rating<>0) as review on content.id = review.contentid\n WHERE durationnum > ? AND durationnum <= ? AND content.type = ?\n group by content.id,content.name,content.description,content.released,content.genre,content.creator,content.duration,content.type,content.durationNum ";
+    private static final String DURATION_BASE_QUERY_ANY = "select content.id,content.name,image,content.description,released,genre,creator,duration,content.type, sum(review.rating)/count(*) as rating,count(reviewid) as reviewsAmount\n from content left join (select * from review as r2 where r2.rating<>0) as review on content.id = review.contentid\n WHERE durationnum > ? AND durationnum <= ?\n group by content.id,content.name,content.description,content.released,content.genre,content.creator,content.duration,content.type,content.durationNum ";
 
     @Override
     public List<Content> findByDuration(String type, int durationFrom, int durationTo, String sort) {
         if(!Objects.equals(type, "all")) {
             if (Objects.equals(sort, "ANY")) {
-                return template.query("SELECT * FROM content WHERE durationnum > ? AND durationnum <= ? AND type = ?", new Object[]{durationFrom, durationTo, type}, CONTENT_ROW_MAPPER);
+                return template.query(DURATION_BASE_QUERY, new Object[]{durationFrom, durationTo, type}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "Last-released")) {
-                return template.query("SELECT * FROM content WHERE durationnum > ? AND durationnum <= ? AND type = ? ORDER BY released desc", new Object[]{durationFrom, durationTo, type}, CONTENT_ROW_MAPPER);
+                return template.query(DURATION_BASE_QUERY + "ORDER BY released desc", new Object[]{durationFrom, durationTo, type}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "Older-released")) {
-                return template.query("SELECT * FROM content WHERE durationnum > ? AND durationnum <= ? AND type = ? ORDER BY released asc", new Object[]{durationFrom, durationTo, type}, CONTENT_ROW_MAPPER);
+                return template.query(DURATION_BASE_QUERY + "ORDER BY released asc", new Object[]{durationFrom, durationTo, type}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "Best-ratings")) {
-                return template.query("SELECT * FROM content WHERE durationnum > ? AND durationnum <= ? AND type = ? ORDER BY rating desc", new Object[]{durationFrom, durationTo, type}, CONTENT_ROW_MAPPER);
+                return template.query(DURATION_BASE_QUERY + "ORDER BY rating desc", new Object[]{durationFrom, durationTo, type}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "A-Z")) {
-                return template.query("SELECT * FROM content WHERE durationnum > ? AND durationnum <= ? AND type = ? ORDER BY name asc", new Object[]{durationFrom, durationTo, type}, CONTENT_ROW_MAPPER);
+                return template.query(DURATION_BASE_QUERY + "ORDER BY name asc", new Object[]{durationFrom, durationTo, type}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "Z-A")) {
-                return template.query("SELECT * FROM content WHERE durationnum > ? AND durationnum <= ? AND type = ? ORDER BY name desc", new Object[]{durationFrom, durationTo, type}, CONTENT_ROW_MAPPER);
+                return template.query(DURATION_BASE_QUERY + "ORDER BY name desc", new Object[]{durationFrom, durationTo, type}, CONTENT_ROW_MAPPER);
             }
         } else {
             if (Objects.equals(sort, "ANY")) {
-                return template.query("SELECT * FROM content WHERE durationnum > ? AND durationnum <= ?", new Object[]{durationFrom, durationTo}, CONTENT_ROW_MAPPER);
+                return template.query(DURATION_BASE_QUERY_ANY, new Object[]{durationFrom, durationTo}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "Last-released")) {
-                return template.query("SELECT * FROM content WHERE durationnum > ? AND durationnum <= ? ORDER BY released desc", new Object[]{durationFrom, durationTo}, CONTENT_ROW_MAPPER);
+                return template.query(DURATION_BASE_QUERY_ANY + "ORDER BY released desc", new Object[]{durationFrom, durationTo}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "Older-released")) {
-                return template.query("SELECT * FROM content WHERE durationnum > ? AND durationnum <= ? ORDER BY released asc", new Object[]{durationFrom, durationTo}, CONTENT_ROW_MAPPER);
+                return template.query(DURATION_BASE_QUERY_ANY + "ORDER BY released asc", new Object[]{durationFrom, durationTo}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "Best-ratings")) {
-                return template.query("SELECT * FROM content WHERE durationnum > ? AND durationnum <= ? ORDER BY rating desc", new Object[]{durationFrom, durationTo}, CONTENT_ROW_MAPPER);
+                return template.query(DURATION_BASE_QUERY_ANY + "ORDER BY rating desc", new Object[]{durationFrom, durationTo}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "A-Z")) {
-                return template.query("SELECT * FROM content WHERE durationnum > ? AND durationnum <= ? ORDER BY name asc", new Object[]{durationFrom, durationTo}, CONTENT_ROW_MAPPER);
+                return template.query(DURATION_BASE_QUERY_ANY + "ORDER BY name asc", new Object[]{durationFrom, durationTo}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "Z-A")) {
-                return template.query("SELECT * FROM content WHERE durationnum > ? AND durationnum <= ? ORDER BY name desc", new Object[]{durationFrom, durationTo}, CONTENT_ROW_MAPPER);
+                return template.query(DURATION_BASE_QUERY_ANY + "ORDER BY name desc", new Object[]{durationFrom, durationTo}, CONTENT_ROW_MAPPER);
             }
         }
         return null;
     }
+
+    private static final String DURATION_AND_GENRE_BASE_QUERY = "select content.id,content.name,image,content.description,released,genre,creator,duration,content.type, sum(review.rating)/count(*) as rating,count(reviewid) as reviewsAmount\n from content left join (select * from review as r2 where r2.rating<>0) as review on content.id = review.contentid\n WHERE durationnum > ? AND durationnum <= ? AND genre LIKE '%'||?||'%' AND content.type = ?\n group by content.id,content.name,content.description,content.released,content.genre,content.creator,content.duration,content.type,content.durationNum ";
+    private static final String DURATION_AND_GENRE_BASE_QUERY_ANY = "select content.id,content.name,image,content.description,released,genre,creator,duration,content.type, sum(review.rating)/count(*) as rating,count(reviewid) as reviewsAmount\n from content left join (select * from review as r2 where r2.rating<>0) as review on content.id = review.contentid\n WHERE durationnum > ? AND durationnum <= ? AND genre LIKE '%'||?||'%'\n group by content.id,content.name,content.description,content.released,content.genre,content.creator,content.duration,content.type,content.durationNum ";
+
 
     @Override
     public List<Content> findByDurationAndGenre(String type, String genre,int durationFrom, int durationTo, String sort){
         if(!Objects.equals(type, "all")) {
             if (Objects.equals(sort, "ANY")) {
-                return template.query("SELECT * FROM content WHERE durationnum > ? AND durationnum <= ? AND genre LIKE '%'||?||'%' AND type = ?", new Object[]{durationFrom, durationTo, genre, type}, CONTENT_ROW_MAPPER);
+                return template.query(DURATION_AND_GENRE_BASE_QUERY, new Object[]{durationFrom, durationTo, genre, type}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "Last-released")) {
-                return template.query("SELECT * FROM content WHERE durationnum > ? AND durationnum <= ? AND genre LIKE '%'||?||'%' AND type = ? ORDER BY released desc", new Object[]{durationFrom, durationTo, genre, type}, CONTENT_ROW_MAPPER);
+                return template.query(DURATION_AND_GENRE_BASE_QUERY + "ORDER BY released desc", new Object[]{durationFrom, durationTo, genre, type}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "Older-released")) {
-                return template.query("SELECT * FROM content WHERE durationnum > ? AND durationnum <= ? AND genre LIKE '%'||?||'%' AND type = ? ORDER BY released asc", new Object[]{durationFrom, durationTo, genre, type}, CONTENT_ROW_MAPPER);
+                return template.query(DURATION_AND_GENRE_BASE_QUERY + "ORDER BY released asc", new Object[]{durationFrom, durationTo, genre, type}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "Best-ratings")) {
-                return template.query("SELECT * FROM content WHERE durationnum > ? AND durationnum <= ? AND genre LIKE '%'||?||'%' AND type = ? ORDER BY rating desc", new Object[]{durationFrom, durationTo, genre, type}, CONTENT_ROW_MAPPER);
+                return template.query(DURATION_AND_GENRE_BASE_QUERY + "ORDER BY rating desc", new Object[]{durationFrom, durationTo, genre, type}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "A-Z")) {
-                return template.query("SELECT * FROM content WHERE durationnum > ? AND durationnum <= ? AND genre LIKE '%'||?||'%' AND type = ? ORDER BY name asc", new Object[]{durationFrom, durationTo, genre, type}, CONTENT_ROW_MAPPER);
+                return template.query(DURATION_AND_GENRE_BASE_QUERY + "ORDER BY name asc", new Object[]{durationFrom, durationTo, genre, type}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "Z-A")) {
-                return template.query("SELECT * FROM content WHERE durationnum > ? AND durationnum <= ? AND genre LIKE '%'||?||'%' AND type = ? ORDER BY name desc", new Object[]{durationFrom, durationTo, genre, type}, CONTENT_ROW_MAPPER);
+                return template.query(DURATION_AND_GENRE_BASE_QUERY + "ORDER BY name desc", new Object[]{durationFrom, durationTo, genre, type}, CONTENT_ROW_MAPPER);
             }
         } else {
             if (Objects.equals(sort, "ANY")) {
-                return template.query("SELECT * FROM content WHERE durationnum > ? AND durationnum <= ? AND genre LIKE '%'||?||'%'", new Object[]{durationFrom, durationTo, genre}, CONTENT_ROW_MAPPER);
+                return template.query(DURATION_AND_GENRE_BASE_QUERY_ANY, new Object[]{durationFrom, durationTo, genre}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "Last-released")) {
-                return template.query("SELECT * FROM content WHERE durationnum > ? AND durationnum <= ? AND genre LIKE '%'||?||'%' ORDER BY released desc", new Object[]{durationFrom, durationTo, genre}, CONTENT_ROW_MAPPER);
+                return template.query(DURATION_AND_GENRE_BASE_QUERY_ANY + "ORDER BY released desc", new Object[]{durationFrom, durationTo, genre}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "Older-released")) {
-                return template.query("SELECT * FROM content WHERE durationnum > ? AND durationnum <= ? AND genre LIKE '%'||?||'%' ORDER BY released asc", new Object[]{durationFrom, durationTo, genre}, CONTENT_ROW_MAPPER);
+                return template.query(DURATION_AND_GENRE_BASE_QUERY_ANY + "ORDER BY released asc", new Object[]{durationFrom, durationTo, genre}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "Best-ratings")) {
-                return template.query("SELECT * FROM content WHERE durationnum > ? AND durationnum <= ? AND genre LIKE '%'||?||'%' ORDER BY rating desc", new Object[]{durationFrom, durationTo, genre}, CONTENT_ROW_MAPPER);
+                return template.query(DURATION_AND_GENRE_BASE_QUERY_ANY + "ORDER BY rating desc", new Object[]{durationFrom, durationTo, genre}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "A-Z")) {
-                return template.query("SELECT * FROM content WHERE durationnum > ? AND durationnum <= ? AND genre LIKE '%'||?||'%' ORDER BY name asc", new Object[]{durationFrom, durationTo, genre}, CONTENT_ROW_MAPPER);
+                return template.query(DURATION_AND_GENRE_BASE_QUERY_ANY + "ORDER BY name asc", new Object[]{durationFrom, durationTo, genre}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "Z-A")) {
-                return template.query("SELECT * FROM content WHERE durationnum > ? AND durationnum <= ? AND genre LIKE '%'||?||'%' ORDER BY name desc", new Object[]{durationFrom, durationTo, genre}, CONTENT_ROW_MAPPER);
+                return template.query(DURATION_AND_GENRE_BASE_QUERY_ANY + "ORDER BY name desc", new Object[]{durationFrom, durationTo, genre}, CONTENT_ROW_MAPPER);
             }
         }
         return null;
     }
 
+    private static final String ID_BASE_QUERY = "select content.id,content.name,image,content.description,released,genre,creator,duration,content.type, sum(review.rating)/count(*) as rating,count(reviewid) as reviewsAmount\n from content left join (select * from review as r2 where r2.rating<>0) as review on content.id = review.contentid\n  WHERE id = ?\n group by content.id,content.name,content.description,content.released,content.genre,content.creator,content.duration,content.type,content.durationNum ";
+
+
     @Override
     public Optional<Content> findById(long id) {
-        return template.query("SELECT * FROM content WHERE id = ?",
+        return template.query(ID_BASE_QUERY,
                 new Object[]{ id }, CONTENT_ROW_MAPPER
         ).stream().findFirst();
     }
 
+    private static final String SEARCHED_BASE_QUERY = "select content.id,content.name,image,content.description,released,genre,creator,duration,content.type, sum(review.rating)/count(*) as rating,count(reviewid) as reviewsAmount\n from content left join (select * from review as r2 where r2.rating<>0) as review on content.id = review.contentid\n  WHERE (LOWER(name) LIKE ? OR LOWER(creator) LIKE ?)\n group by content.id,content.name,content.description,content.released,content.genre,content.creator,content.duration,content.type,content.durationNum ";
+
+
     @Override
     public List<Content> getSearchedContent(String query) {
-        List<Content> content =  template.query("SELECT * FROM content WHERE (LOWER(name) LIKE ? OR LOWER(creator) LIKE ?)",
+        List<Content> content =  template.query(SEARCHED_BASE_QUERY,
                 new Object[]{"%" + query.toLowerCase() + "%", "%" + query.toLowerCase() + "%"},CONTENT_ROW_MAPPER);
         return content;
     }
 
+
+
     @Override
     public List<Content> getSearchedContentRandom(String query) {
-        List<Content> content =  template.query("SELECT * FROM content WHERE LOWER(name) LIKE ? ORDER BY RANDOM()",
+        List<Content> content =  template.query( SEARCHED_BASE_QUERY + "ORDER BY RANDOM()",
                 new Object[]{"%" + query.toLowerCase() + "%"},CONTENT_ROW_MAPPER);
         return content;
     }
 
-
     @Override
     public List<Content> findByType(String type) {
-        return template.query("SELECT * FROM content where type = ?",new Object[]{ type }, CONTENT_ROW_MAPPER);
+        return template.query(TYPE_BASE_QUERY,new Object[]{ type }, CONTENT_ROW_MAPPER);
     }
 
     @Override
@@ -219,19 +237,21 @@ public class ContentJdbcDao implements ContentDao {
         template.update("UPDATE content SET rating = rating - ?, reviewsAmount = reviewsAmount - 1 WHERE id = ?", new Object[] {rating, contentId});
     }
 
+    private static final String BEST_RATED = "select content.id,content.name,image,content.description,released,genre,creator,duration,content.type, sum(review.rating)/count(*) as rating,count(reviewid) as reviewsAmount\n from content left join (select * from review as r2 where r2.rating<>0) as review on content.id = review.contentid \n group by content.id,content.name,content.description,content.released,content.genre,content.creator,content.duration,content.type,content.durationNum having sum(review.rating)/count(*) > 3\n  order by sum(review.rating)/count(*) desc ";
+
     @Override
     public List<Content> getBestRated() {
-        return template.query("SELECT * FROM content WHERE (rating > 0) AND ((rating/reviewsamount) >=3) ORDER BY (rating/reviewsAmount) DESC", CONTENT_ROW_MAPPER);
+        return template.query(BEST_RATED, CONTENT_ROW_MAPPER);
     }
 
     @Override
     public List<Content> getLessDuration(String type) {
-        return template.query("SELECT * FROM content WHERE type = ? ORDER BY durationnum asc LIMIT 20", new Object[] {type}, CONTENT_ROW_MAPPER);
+        return template.query(TYPE_BASE_QUERY + "ORDER BY durationnum asc LIMIT 20", new Object[] {type}, CONTENT_ROW_MAPPER);
     }
 
     @Override
     public List<Content> getLastAdded() {
-        return template.query("SELECT * FROM content ORDER BY id desc LIMIT 20", CONTENT_ROW_MAPPER);
+        return template.query(BASE_QUERY + "ORDER BY id desc LIMIT 20", CONTENT_ROW_MAPPER);
     }
 
     @Override
