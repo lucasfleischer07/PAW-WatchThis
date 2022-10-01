@@ -12,7 +12,7 @@
 }
 
 .W-inv-film-card-margin{
-    margin: 3%;
+    margin: 1vw 3% 3%;
 }
 
 .W-reviews-card-margins {
@@ -138,6 +138,12 @@
 
 .W-delete-edit-buttons{
     display: flex;
+    margin-left: 12.5vw;
+    margin-top: 1vw;
+}
+
+W-edit-button-review {
+    margin-right: 3vw;
 }
 
 .W-delete-edit-buttons-width {
@@ -201,7 +207,7 @@
     color: red;
 }
 .W-delete-form{
-    margin-left:3vw;
+    margin-right:3vw;
     margin-bottom: 0;
 }
 .W-accordion-card-header{
