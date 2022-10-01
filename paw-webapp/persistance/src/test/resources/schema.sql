@@ -8,9 +8,7 @@ create table if not exists content  (
                           creator VARCHAR ( 100 ) NOT NULL,
                           duration VARCHAR ( 50 ) NOT NULL,
                           durationNum integer NOT NULL,
-                          rating integer NOT NULL,
                           type VARCHAR (10) NOT NULL CHECK (type = 'serie' OR type = 'movie'),
-                            reviewsAmount integer default 0
 );
 
 create table if not exists  review (

@@ -226,7 +226,7 @@ public class ContentController {
 
 
     // * ----------------------------------- Search bar ----------------------------------------------------------------
-    @RequestMapping(value = {"/search/search", "/search/page/{pageNum}"})
+    @RequestMapping(value = {"/search", "/search/page/{pageNum}"})
     public ModelAndView search(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("pageNum")final Optional<Integer> pageNum, @RequestParam(name = "query", defaultValue = "") final String query,HttpServletRequest request) {
         final ModelAndView mav = new ModelAndView("contentPage");
 
