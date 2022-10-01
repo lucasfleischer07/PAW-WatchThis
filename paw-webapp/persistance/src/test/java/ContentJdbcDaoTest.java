@@ -85,7 +85,7 @@ public class ContentJdbcDaoTest {
     public void testGetBestRated(){
         List<Content> contentList=dao.getBestRated();
         assertEquals(1, contentList.size());
-        assertEquals(172, contentList.get(0).getId());
+        assertEquals(501, contentList.get(0).getId());
     }
 
 //    @Test
