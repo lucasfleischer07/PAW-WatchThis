@@ -60,7 +60,7 @@
                   <c:if test="${admin==true}">
                       <c:url value="/profile/${user.userName}" var="postPath"/>
                       <form class="W-delete-form" id="<c:out value="user${user.userName}"/>" method="post" action="${postPath}">
-                          <button type="submit" class="btn btn-outline-dark btn-sm btn-block W-editProfile-button" onclick="this.form.submit(); (this).disabled = true; (this).innerText = '|'"><spring:message code="Profile.PromoteUser"/></button>
+                          <button type="submit" class="btn btn-outline-dark btn-sm btn-block W-editProfile-button" onclick="this.form.submit(); (this).disabled = true; (this).className -= ' W-editProfile-button'; (this).className += ' spinner-border'; (this).innerText = ''"><spring:message code="Profile.PromoteUser"/></button>
                       </form>
                   </c:if>
               </div>
