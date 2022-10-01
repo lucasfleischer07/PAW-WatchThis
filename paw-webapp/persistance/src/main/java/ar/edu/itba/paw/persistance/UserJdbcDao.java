@@ -54,7 +54,7 @@ public class UserJdbcDao implements UserDao{
     public Optional<User> create(final String userEmail, String userName, String password, Long rating) {
         try {
             template.update("INSERT INTO userdata(name, email, password, reputation,role) VALUES(?,?,?,?,'user')", userName, userEmail, password, rating);
-        }catch(Exception e) {
+        } catch(Exception e) {
         }
         //Chequeo si el {usuario,email} existe
         return  template.query("SELECT * FROM userdata WHERE email = ? AND name = ?", new Object[]{userEmail,userName}, USER_ROW_MAPPER).stream().findFirst();
@@ -139,8 +139,8 @@ public class UserJdbcDao implements UserDao{
     }
 
     @Override
-    public void promoteUser(Long userId){
-        template.update("UPDATE userdata SET role = 'admin' WHERE userid = ?",new Object[]{userId});
+    public void promoteUser(User user){
+        template.update("UPDATE userdata SET role = 'admin' WHERE userid = ?",new Object[]{user.getId()});
     }
 
 }

@@ -166,7 +166,7 @@ public class ReviewController {
 
         ModelMap model =new ModelMap();
         String referer = request.getSession().getAttribute("referer").toString();
-        return new ModelAndView("redirect:" + referer==null?"/":referer,model);
+        return new ModelAndView("redirect:" + (referer==null?"/":referer),model);
 
     }
     // * ---------------------------------------------------------------------------------------------------------------
@@ -250,7 +250,7 @@ public class ReviewController {
         rs.updateReview(form.getName(), form.getDescription(), form.getRating(), reviewId);
         ModelMap model =new ModelMap();
         String referer = request.getSession().getAttribute("referer").toString();
-        return new ModelAndView("redirect:" + referer==null?"/":referer,model);
+        return new ModelAndView("redirect:" + (referer==null?"/":referer),model);
 
     }
     // * ---------------------------------------------------------------------------------------------------------------

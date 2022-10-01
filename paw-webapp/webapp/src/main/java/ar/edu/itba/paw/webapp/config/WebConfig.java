@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.webapp.config;
 
-import ar.edu.itba.paw.webapp.controller.UserController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
@@ -95,6 +94,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
     // * ---------------------------------------------------------------------------------------------------------------
 
+
     // * ----------------------- Para subir fotos a la BDD--------------------------------------------------------------
 
     @Bean(name = "multipartResolver")
@@ -103,14 +103,13 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         multipartResolver.setMaxUploadSize(300000);
         multipartResolver.setMaxUploadSizePerFile(100000000);
         multipartResolver.setMaxUploadSize(100000000 * 6);
-        multipartResolver.setDefaultEncoding("utf-8");
+        multipartResolver.setDefaultEncoding("UTF-8");
         return multipartResolver;
     }
-
     // * ---------------------------------------------------------------------------------------------------------------
 
 
-    // * ----------------------- Para que no matchee los paths con / al final--------------------------------------------------------------
+    // * ----------------------- Para que no matchee los paths con / al final-------------------------------------------
     @Override
     public void configurePathMatch(PathMatchConfigurer configurer){
         configurer.setUseTrailingSlashMatch(false);

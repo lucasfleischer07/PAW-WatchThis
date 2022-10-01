@@ -25,7 +25,6 @@ public interface UserDao {
     List<Content> getUserViewedList(User user);
     Optional<Long> searchContentInViewedList(User user, Long contentId);
     List<Long> getUserViewedListContent(User user);
-
-    void promoteUser(Long userId);
+    void promoteUser(User userId);
 }
 

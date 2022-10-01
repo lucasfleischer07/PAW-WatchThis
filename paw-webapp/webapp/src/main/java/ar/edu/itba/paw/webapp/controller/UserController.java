@@ -131,7 +131,7 @@ public class UserController {
         }
 
         String referer = request.getSession().getAttribute("referer").toString();
-        return new ModelAndView("redirect:" + referer==null?"/":referer);
+        return new ModelAndView("redirect:" + (referer==null?"/":referer));
     }
 
     private void authWithAuthManager(HttpServletRequest request,String email,String password){
@@ -219,7 +219,7 @@ public class UserController {
     public ModelAndView profileInfo(@AuthenticationPrincipal PawUserDetails userDetails,@Valid @ModelAttribute("editProfile") final EditProfile editProfile, @PathVariable("userName") final String userName,final BindingResult errors) {
         Optional<User> user = us.findByUserName(userName);
         if(user.isPresent())
-            us.promoteUser(user.get().getId());
+            us.promoteUser(user.get());
         else {
             LOGGER.warn("Wrong username photo request:",new PageNotFoundException());
             throw new PageNotFoundException();
@@ -298,7 +298,7 @@ public class UserController {
         User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
         us.addToWatchList(user, contentId.get());
         String referer = request.getSession().getAttribute("referer").toString();
-        return new ModelAndView("redirect:" + referer==null?"/":referer);
+        return new ModelAndView("redirect:" + (referer==null ? "/" : referer));
     }
 
     @RequestMapping(value = "/watchList/delete/{contentId:[0-9]+}", method = {RequestMethod.POST})
@@ -311,7 +311,7 @@ public class UserController {
         User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
         us.deleteFromWatchList(user, contentId.get());
         String referer = request.getSession().getAttribute("referer").toString();
-        return new ModelAndView("redirect:" + referer==null?"/":referer);
+        return new ModelAndView("redirect:" + (referer==null ? "/" : referer));
     }
 
      @RequestMapping(value = "/go/to/login", method = {RequestMethod.POST})
@@ -359,7 +359,7 @@ public class UserController {
         User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
         us.addToViewedList(user, contentId.get());
         String referer = request.getSession().getAttribute("referer").toString();
-        return new ModelAndView("redirect:" + referer==null?"/":referer);
+        return new ModelAndView("redirect:" + (referer==null?"/":referer));
     }
 
     @RequestMapping(value = "/viewedList/delete/{contentId:[0-9]+}", method = {RequestMethod.POST})
@@ -371,7 +371,7 @@ public class UserController {
         User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
         us.deleteFromViewedList(user, contentId.get());
         String referer = request.getSession().getAttribute("referer").toString();
-        return new ModelAndView("redirect:" + referer==null?"/":referer);
+        return new ModelAndView("redirect:" + (referer==null?"/":referer));
     }
     // * ---------------------------------------------------------------------------------------------------------------
 }

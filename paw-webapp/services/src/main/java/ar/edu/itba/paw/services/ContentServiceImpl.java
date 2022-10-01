@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.models.Content;
+import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.persistance.ContentDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -64,9 +65,15 @@ public class ContentServiceImpl implements ContentService {
     }
 
     @Override
-    public List<Content> getLessDuration(String type) {
-        return ContentDao.getLessDuration(type);
+    public List<Content> getUserRecommended(User user) {
+        return  ContentDao.getUserRecommended(user);
     }
+
+    @Override
+    public List<Content> getMostUserSaved() {
+        return  ContentDao.getMostUserSaved();
+    }
+
 
     @Override
     public List<Content> getLastAdded() {

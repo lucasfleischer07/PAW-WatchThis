@@ -6,6 +6,7 @@ import ar.edu.itba.paw.models.Content;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.persistance.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,8 @@ public class UserServiceImpl implements UserService{
     private final EmailService emailService;
 
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private MessageSource messageSource;
     private final Locale locale = LocaleContextHolder.getLocale();
 
     private String generateRandomWord() {
@@ -43,12 +46,10 @@ public class UserServiceImpl implements UserService{
             Map<String, Object> mailVariables = new HashMap<>();
             mailVariables.put("to", user.getEmail());
             mailVariables.put("userName", user.getUserName());
-            emailService.sendMail("registration", "Welcome to Watch This", mailVariables, locale);
-        } catch (MessagingException e) {
-
-        }
-        return userDao.create(user.getEmail(), user.getUserName(),passwordEncoder.encode(user.getPassword()), user.getReputation());
-
+            emailService.sendMail("registration", messageSource.getMessage("Mail.RegistrationSubject", new Object[]{}, locale), mailVariables, locale);
+            return userDao.create(user.getEmail(), user.getUserName(),passwordEncoder.encode(user.getPassword()), user.getReputation());
+        } catch (MessagingException e) {}
+        return Optional.empty();
     }
 
     @Override
@@ -76,14 +77,12 @@ public class UserServiceImpl implements UserService{
                 String newPassword = generateRandomWord();
                 mailVariables.put("newPassword", newPassword);
                 userDao.setPassword(passwordEncoder.encode(newPassword), user);
-                emailService.sendMail("passwordForgotten", "Restore Password", mailVariables, locale);
+                emailService.sendMail("passwordForgotten", messageSource.getMessage("Mail.PasswordRestoreSubject", new Object[]{}, locale), mailVariables, locale);
             } else {
                 userDao.setPassword(passwordEncoder.encode(password), user);
-                emailService.sendMail("passwordChangeConfirmation", "Restore password confirmation", mailVariables, locale);
+                emailService.sendMail("passwordChangeConfirmation", messageSource.getMessage("Mail.PasswordChangeSubject", new Object[]{}, locale), mailVariables, locale);
             }
-        } catch (MessagingException e) {
-
-        }
+        } catch (MessagingException e) {}
     }
 
     @Override
@@ -142,8 +141,14 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void promoteUser(Long userId){
-        userDao.promoteUser(userId);
+    public void promoteUser(User user) {
+        try {
+            Map<String, Object> mailVariables = new HashMap<>();
+            mailVariables.put("to", user.getEmail());
+            mailVariables.put("userName", user.getUserName());
+            userDao.promoteUser(user);
+            emailService.sendMail("adminConfirmation", messageSource.getMessage("Mail.AdminConfirmation", new Object[]{}, locale), mailVariables, locale);
+        } catch (MessagingException e) {}
     }
 
 }

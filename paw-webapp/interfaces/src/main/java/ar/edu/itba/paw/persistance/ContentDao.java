@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistance;
 
 import ar.edu.itba.paw.models.Content;
+import ar.edu.itba.paw.models.User;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.mail.Multipart;
@@ -18,7 +19,8 @@ public interface ContentDao {
     List<Content> getSearchedContentRandom(String query);
     List<Content> findByType(String type);
     List<Content> getBestRated();
-    List<Content> getLessDuration(String type);
+    List<Content> getUserRecommended(User user);
+    List<Content> getMostUserSaved();
     List<Content> getLastAdded();
     void contentCreate(String name, String description, String releaseDate, String genre, String creator, Integer duration,String durationString, String type, byte[] contentImage);
     Optional<String> getContentQuote(String language);

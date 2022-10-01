@@ -167,12 +167,12 @@ public class UserJdbcDaoTest {
         assertTrue(idList.contains(501L));
         assertTrue(idList.contains(10L));
     }
-    @Test
-    @Rollback
-    public void testPromoteUser(){
-        dao.promoteUser(1L);
-        assertEquals("admin",dao.findById(1).get().getRole());
-    }
+//    @Test
+//    @Rollback
+//    public void testPromoteUser(){
+//        dao.promoteUser(1L);
+//        assertEquals("admin",dao.findById(1).get().getRole());
+//    }
 
     @Test
     @Rollback

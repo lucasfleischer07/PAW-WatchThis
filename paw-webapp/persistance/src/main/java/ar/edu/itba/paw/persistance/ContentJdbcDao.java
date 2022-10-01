@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistance;
 
 import ar.edu.itba.paw.models.Content;
+import ar.edu.itba.paw.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -27,7 +28,8 @@ public class ContentJdbcDao implements ContentDao {
                     resultSet.getString("duration"),
                     resultSet.getString("type"),
                     resultSet.getInt("rating"),
-                    resultSet.getInt("reviewsAmount"));
+                    resultSet.getInt("reviewsAmount")
+            );
 
     private static final RowMapper<String> ENGLISH_QUOTE_ROW_MAPPER = (resultSet, rowNum) -> resultSet.getString("english");
     private static final RowMapper<String> SPANISH_QUOTE_ROW_MAPPER = (resultSet, rowNum) -> resultSet.getString("spanish");
@@ -76,8 +78,7 @@ public class ContentJdbcDao implements ContentDao {
         }
         return null;
     }
-    private static final String NAME_BASE_QUERY = "select content.id,content.name,image,content.description,released,genre,creator,duration,content.type, sum(review.rating)/count(*) as rating,count(reviewid) as reviewsAmount\n from content left join (select * from review as r2 where r2.rating<>0) as review on content.id = review.contentid\n where content.name = ?\n group by content.id,content.name,content.description,content.released,content.genre,content.creator,content.duration,content.type,content.durationNum ";
-
+    private static final String NAME_BASE_QUERY = "select content.id,content.name,image,content.description,released,genre,creator,duration,content.type, sum(review.rating)/count(*) as rating,count(reviewid) as reviewsAmount from content left join (select * from review as r2 where r2.rating<>0) as review on content.id = review.contentid where content.name = ? group by content.id,content.name,content.description,content.released,content.genre,content.creator,content.duration,content.type,content.durationNum ";
 
     @Override
     public Optional<Content> findByName(String name) {
@@ -194,14 +195,12 @@ public class ContentJdbcDao implements ContentDao {
         return null;
     }
 
-    private static final String ID_BASE_QUERY = "select content.id,content.name,image,content.description,released,genre,creator,duration,content.type, sum(review.rating)/count(*) as rating,count(reviewid) as reviewsAmount\n from content left join (select * from review as r2 where r2.rating<>0) as review on content.id = review.contentid\n  WHERE id = ?\n group by content.id,content.name,content.description,content.released,content.genre,content.creator,content.duration,content.type,content.durationNum ";
+    private static final String ID_BASE_QUERY = "select content.id,content.name,image,content.description,released,genre,creator,duration,content.type, sum(review.rating)/count(*) as rating,count(reviewid) as reviewsAmount\n from content left join (select * from review as r2 where r2.rating<>0) as review on content.id = review.contentid  WHERE id = ? group by content.id,content.name,content.description,content.released,content.genre,content.creator,content.duration,content.type,content.durationNum ";
 
 
     @Override
     public Optional<Content> findById(long id) {
-        return template.query(ID_BASE_QUERY,
-                new Object[]{ id }, CONTENT_ROW_MAPPER
-        ).stream().findFirst();
+        return template.query(ID_BASE_QUERY, new Object[]{ id }, CONTENT_ROW_MAPPER).stream().findFirst();
     }
 
     private static final String SEARCHED_BASE_QUERY = "select content.id,content.name,image,content.description,released,genre,creator,duration,content.type, sum(review.rating)/count(*) as rating,count(reviewid) as reviewsAmount\n from content left join (select * from review as r2 where r2.rating<>0) as review on content.id = review.contentid\n  WHERE (LOWER(content.name) LIKE ? OR LOWER(creator) LIKE ?)\n group by content.id,content.name,content.description,content.released,content.genre,content.creator,content.duration,content.type,content.durationNum ";
@@ -218,8 +217,7 @@ public class ContentJdbcDao implements ContentDao {
 
     @Override
     public List<Content> getSearchedContentRandom(String query) {
-        List<Content> content =  template.query( SEARCHED_BASE_QUERY + "ORDER BY RANDOM()",
-                new Object[]{"%" + query.toLowerCase() + "%"},CONTENT_ROW_MAPPER);
+        List<Content> content =  template.query( SEARCHED_BASE_QUERY + "ORDER BY RANDOM()", new Object[]{"%" + query.toLowerCase() + "%"},CONTENT_ROW_MAPPER);
         return content;
     }
 
@@ -229,7 +227,7 @@ public class ContentJdbcDao implements ContentDao {
     }
 
 
-    private static final String BEST_RATED = "select content.id,content.name,image,content.description,released,genre,creator,duration,content.type, sum(review.rating)/count(*) as rating,count(reviewid) as reviewsAmount\n from content left join (select * from review as r2 where r2.rating<>0) as review on content.id = review.contentid \n group by content.id,content.name,content.description,content.released,content.genre,content.creator,content.duration,content.type,content.durationNum having sum(review.rating)/count(*) > 3\n  order by sum(review.rating)/count(*) desc ";
+    private static final String BEST_RATED = "select content.id,content.name,image,content.description,released,genre,creator,duration,content.type, sum(review.rating)/count(*) as rating,count(reviewid) as reviewsAmount from content left join (select * from review as r2 where r2.rating<>0) as review on content.id = review.contentid group by content.id,content.name,content.description,content.released,content.genre,content.creator,content.duration,content.type,content.durationNum having sum(review.rating)/count(*) > 3 order by sum(review.rating)/count(*) desc";
 
     @Override
     public List<Content> getBestRated() {
@@ -237,8 +235,13 @@ public class ContentJdbcDao implements ContentDao {
     }
 
     @Override
-    public List<Content> getLessDuration(String type) {
-        return template.query(TYPE_BASE_QUERY + "ORDER BY durationnum asc LIMIT 20", new Object[] {type}, CONTENT_ROW_MAPPER);
+    public List<Content> getUserRecommended(User user) {
+        return template.query("SELECT content.id,content.name,image,content.description,released,genre,creator,duration,content.type, sum(review.rating)/count(*) AS rating,count(reviewid) AS reviewsAmount FROM content LEFT JOIN (SELECT * FROM review AS r2 WHERE r2.rating<>0) AS review ON content.id = review.contentid WHERE content.id IN (SELECT DISTINCT t2.contentid FROM userwatchlist t1 INNER JOIN userwatchlist t2 ON t1.userid = ? AND t2.userid IN (SELECT userdata.userid FROM userwatchlist t1  INNER JOIN userwatchlist t2 ON (t2.contentid = t1.contentid) INNER JOIN userdata ON userdata.userid = t2.userid INNER JOIN content ON content.id = t1.contentid WHERE t1.userid = ? AND t2.userid <> ? GROUP BY userdata.userid) AND t2.contentid NOT IN (SELECT contentid FROM userwatchlist WHERE userid = ?)) GROUP BY content.id,content.name,content.description,content.released,content.genre,content.creator,content.duration,content.type,content.durationNum", new Object[]{user.getId(), user.getId(), user.getId(), user.getId()}, CONTENT_ROW_MAPPER);
+    }
+
+    @Override
+    public List<Content> getMostUserSaved() {
+        return template.query("SELECT (content.id) AS id, MAX(content.name) AS name, (content.image) AS image, MAX(content.description) AS description, MAX(released) AS released, MAX(genre) AS genre, MAX(creator) AS creator, MAX(duration) AS duration, MAX(content.type) AS type, SUM(review.rating)/count(*) AS rating, COUNT(reviewid) AS reviewsAmount FROM (content JOIN userwatchlist ON content.id = userwatchlist.contentId) left join (select * from review as r2 where r2.rating<>0) as review on content.id = review.contentid GROUP BY content.id, content.image ORDER BY COUNT(*) DESC LIMIT 10", CONTENT_ROW_MAPPER);
     }
 
     @Override
@@ -248,9 +251,7 @@ public class ContentJdbcDao implements ContentDao {
 
     @Override
     public void contentCreate(String name, String description, String releaseDate, String genre, String creator, Integer duration,String durationString, String type, byte[] contentImage){
-        template.update(
-                "INSERT INTO content(name,image,description,released,genre,creator,duration,durationNum,rating,type) VALUES(?,?,?,?,?,?,?,?,0,?)",name,contentImage,description,releaseDate,genre,creator,durationString,duration,type
-        );
+        template.update("INSERT INTO content(name,image,description,released,genre,creator,duration,durationNum,rating,type) VALUES(?,?,?,?,?,?,?,?,0,?)",name,contentImage,description,releaseDate,genre,creator,durationString,duration,type);
     }
 
     @Override
@@ -264,22 +265,17 @@ public class ContentJdbcDao implements ContentDao {
 
     @Override
     public void updateContent(Long id,String name, String description, String releaseDate, String genre, String creator, Integer duration,String durationString, String type){
-        template.update(
-                "UPDATE content SET name = ?,description = ?,released = ?, genre = ?, creator = ?, duration = ?, durationNum = ?, type = ?  WHERE id = ?", new Object[] {name,description,releaseDate,genre,creator,durationString,duration,type,id}
-        );
+        template.update("UPDATE content SET name = ?,description = ?,released = ?, genre = ?, creator = ?, duration = ?, durationNum = ?, type = ?  WHERE id = ?", new Object[] {name,description,releaseDate,genre,creator,durationString,duration,type,id});
     }
 
     @Override
     public void updateWithImageContent(Long id,String name, String description, String releaseDate, String genre, String creator, Integer duration,String durationString, String type,byte[] contentImage){
-        template.update(
-                "UPDATE content SET name = ?,description = ?,released = ?, genre = ?, creator = ?, duration = ?, durationNum = ?, type = ?, image = ? WHERE id = ?", new Object[] {name,description,releaseDate,genre,creator,durationString,duration,type,contentImage,id}
-        );
+        template.update("UPDATE content SET name = ?,description = ?,released = ?, genre = ?, creator = ?, duration = ?, durationNum = ?, type = ?, image = ? WHERE id = ?", new Object[] {name,description,releaseDate,genre,creator,durationString,duration,type,contentImage,id});
     }
 
     @Override
     public void deleteContent(Long id){
-        template.update(
-                "DELETE FROM content WHERE id = ?", new Object[] {id});
+        template.update("DELETE FROM content WHERE id = ?", new Object[] {id});
     }
 
 }

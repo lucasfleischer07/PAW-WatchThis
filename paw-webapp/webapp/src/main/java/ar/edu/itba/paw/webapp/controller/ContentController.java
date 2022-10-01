@@ -21,8 +21,6 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
@@ -66,21 +64,15 @@ public class ContentController {
     public ModelAndView helloWorld(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("pageNum")final Optional<Integer> pageNum, @RequestParam(name = "query", defaultValue = "") final String query, HttpServletRequest request) {
         final ModelAndView mav = new ModelAndView("homePage");
         List<Content> bestRatedList = cs.getBestRated();
-        List<Content> lessDurationMoviesList = cs.getLessDuration("movie");
-        List<Content> lessDurationSeriesList = cs.getLessDuration("serie");
         List<Content> lastAddedList = cs.getLastAdded();
 
-        if(bestRatedList == null || lessDurationMoviesList == null || lessDurationSeriesList == null || lastAddedList == null) {
+        if(bestRatedList == null || lastAddedList == null) {
             LOGGER.warn("Error bringing data from the db",new PageNotFoundException());
             throw new PageNotFoundException();
         }
         
         mav.addObject("bestRatedListSize", bestRatedList.size());
         mav.addObject("bestRatedList", bestRatedList);
-        mav.addObject("lessDurationMoviesList", lessDurationMoviesList);
-        mav.addObject("lessDurationMoviesListSize", lessDurationMoviesList.size());
-        mav.addObject("lessDurationSeriesList", lessDurationSeriesList);
-        mav.addObject("lessDurationSeriesListSize", lessDurationSeriesList.size());
         mav.addObject("lastAddedList", lastAddedList);
         mav.addObject("lastAddedListSize", lastAddedList.size());
         mav.addObject("genre","ANY");
@@ -89,6 +81,18 @@ public class ContentController {
         mav.addObject("sorting","ANY");
         mav.addObject("contentType", "all");
         HeaderSetUp(mav,userDetails);
+
+        try {
+            String userEmail = userDetails.getUsername();
+            User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
+            List<Content> recommendedUserList = cs.getUserRecommended(user);
+            mav.addObject("recommendedUserList", recommendedUserList);
+            mav.addObject("recommendedUserListSize", recommendedUserList.size());
+        } catch (NullPointerException e) {
+            List<Content> mostContentSavedByUsersList = cs.getMostUserSaved();
+            mav.addObject("mostContentSavedByUsersList", mostContentSavedByUsersList);
+            mav.addObject("mostContentSavedByUsersListSize", mostContentSavedByUsersList.size());
+        }
 
         request.getSession().setAttribute("referer","/");
         return mav;

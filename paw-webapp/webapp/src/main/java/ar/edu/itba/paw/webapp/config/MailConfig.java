@@ -23,36 +23,17 @@ import java.util.Properties;
 @Configuration
 @PropertySource("classpath:mail/mailConfig.properties")
 public class MailConfig implements ApplicationContextAware, EnvironmentAware {
-
-    public static final String EMAIL_TEMPLATE_ENCODING = "UTF-8";
-    private static final String HOST = "mail.server.host";
-    private static final String PORT = "mail.server.port";
-    private static final String PROTOCOL = "mail.server.protocol";
-    private static final String USERNAME = "mail.server.username";
-    private static final String PASSWORD = "mail.server.password";
-    private ApplicationContext applicationContext;
+    private ApplicationContext appContext;
     private Environment environment;
-
-    @Override
-    public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
-    }
-
-    @Override
-    public void setEnvironment(final Environment environment) {
-        this.environment = environment;
-    }
 
     @Bean
     public JavaMailSender mailSender() throws IOException {
         final JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-
-        mailSender.setHost(this.environment.getProperty(HOST));
-        mailSender.setPort(Integer.parseInt(this.environment.getProperty(PORT)));
-        mailSender.setProtocol(this.environment.getProperty(PROTOCOL));
-        mailSender.setUsername(this.environment.getProperty(USERNAME));
-        mailSender.setPassword(this.environment.getProperty(PASSWORD));
-
+        mailSender.setHost(this.environment.getProperty("mail.server.host"));
+        mailSender.setPort(Integer.parseInt(this.environment.getProperty("mail.server.port")));
+        mailSender.setProtocol(this.environment.getProperty("mail.server.protocol"));
+        mailSender.setUsername(this.environment.getProperty("mail.server.username"));
+        mailSender.setPassword(this.environment.getProperty("mail.server.password"));
         final Properties javaMailProperties = new Properties();
         javaMailProperties.put("mail.smtp.host", "smtp.gmail.com");
         javaMailProperties.put("mail.smtp.port", "587");
@@ -62,9 +43,7 @@ public class MailConfig implements ApplicationContextAware, EnvironmentAware {
         javaMailProperties.put("mail.smtp.starttls.required", "true");
         javaMailProperties.put("mail.smtp.quitwait", "false");
         javaMailProperties.put("mail.smtp.ssl.trust", "smtp.gmail.com");
-
         mailSender.setJavaMailProperties(javaMailProperties);
-
         return mailSender;
 
     }
@@ -84,15 +63,25 @@ public class MailConfig implements ApplicationContextAware, EnvironmentAware {
         return templateEngine;
     }
 
+    @Override
+    public void setApplicationContext(final ApplicationContext appContext) throws BeansException {
+        this.appContext = appContext;
+    }
+
+    @Override
+    public void setEnvironment(final Environment environment) {
+        this.environment = environment;
+    }
+
     private ITemplateResolver htmlTemplateResolver() {
-        final ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
-        templateResolver.setOrder(2);
-        templateResolver.setPrefix("/mail/html/");
-        templateResolver.setSuffix(".html");
-        templateResolver.setTemplateMode(TemplateMode.HTML);
-        templateResolver.setCharacterEncoding(EMAIL_TEMPLATE_ENCODING);
-        templateResolver.setCacheable(false);
-        return templateResolver;
+        final ClassLoaderTemplateResolver tempResolver = new ClassLoaderTemplateResolver();
+        tempResolver.setOrder(2);
+        tempResolver.setPrefix("/mail/html/");
+        tempResolver.setSuffix(".html");
+        tempResolver.setTemplateMode(TemplateMode.HTML);
+        tempResolver.setCharacterEncoding("UTF-8");
+        tempResolver.setCacheable(false);
+        return tempResolver;
     }
 
 }

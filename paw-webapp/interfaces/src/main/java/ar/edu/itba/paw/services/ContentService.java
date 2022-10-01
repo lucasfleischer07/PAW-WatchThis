@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.models.Content;
+import ar.edu.itba.paw.models.User;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.mail.Multipart;
@@ -17,7 +18,8 @@ public interface ContentService {
     List<Content> getSearchedContent(String query);
     List<Content> getSearchedContentRandom(String query);
     List<Content> getBestRated();
-    List<Content> getLessDuration(String type);
+    List<Content> getUserRecommended(User user);
+    List<Content> getMostUserSaved();
     List<Content> getLastAdded();
     void contentCreate(String name, String description, String releaseDate, String genre, String creator, Integer duration, String type, byte[] contentImage);
     Optional<String> getContentQuote(String language);
