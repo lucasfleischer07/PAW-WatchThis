@@ -147,7 +147,6 @@ public class UserController {
 
 
     // * ------------------------------------------------Profile View --------------------------------------------------
-    //This path is for the logged in profile, if the person is not logged in it will fail
     @RequestMapping("/profile")
     public ModelAndView profile(@AuthenticationPrincipal PawUserDetails userDetails,HttpServletRequest request) {
         final String locale = LocaleContextHolder.getLocale().getDisplayLanguage();
@@ -160,11 +159,7 @@ public class UserController {
         mav.addObject("reviews",rs.getAllUserReviews(user.getUserName()));
         mav.addObject("userName",user.getUserName());
         mav.addObject("userId",user.getId());
-        if(user.getRole().equals("admin")){
-            mav.addObject("admin",true);
-        }else{
-            mav.addObject("admin",false);
-        }
+        mav.addObject("admin",false);
         request.getSession().setAttribute("referer","/profile");
         return mav;
     }

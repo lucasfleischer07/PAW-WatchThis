@@ -43,7 +43,7 @@
 
             <div class="W-carousels-div">
                 <c:choose>
-                    <c:when test="${userName != 'null' && userWatchListContentId != 'null'}">
+                    <c:when test="${userName != 'null' && userWatchListContentId != 'null' && recommendedUserList != 'null'}">
                         <h3 class="W-carousel-1-title"><spring:message code="Content.Carousel.RecommendedForYou"/></h3>
                         <div id="carouselRecommended" class="carousel slide W-margin-carousel" data-ride="carousel">
                             <div class="carousel-inner">

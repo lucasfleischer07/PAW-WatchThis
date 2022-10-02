@@ -91,18 +91,52 @@ public class ContentController {
         mav.addObject("durationTo","ANY");
         mav.addObject("sorting","ANY");
         mav.addObject("contentType", "all");
-        HeaderSetUp(mav,userDetails);
+//        HeaderSetUp(mav, userDetails);
 
         try {
             String userEmail = userDetails.getUsername();
             User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
-            List<Content> recommendedUserList = cs.getUserRecommended(user);
-            mav.addObject("recommendedUserList", recommendedUserList);
-            mav.addObject("recommendedUserListSize", recommendedUserList.size());
+            List<Long> userWatchListContentId = us.getUserWatchListContent(user);
+            mav.addObject("userName", user.getUserName());
+            mav.addObject("userId", user.getId());
+            mav.addObject("userWatchListContentId",userWatchListContentId);
+//            * Pregunto si la watch list es vacia
+            if(userWatchListContentId.size() != 0) {
+//            * Si la watch list NO es vacia, me traigo la lista de recomendaciones
+                List<Content> recommendedUserList = cs.getUserRecommended(user);
+                if(recommendedUserList.size() != 0) {
+//                    * Si la lista de recomendaciones NO es nula, la cargo
+                    mav.addObject("recommendedUserList", recommendedUserList);
+                    mav.addObject("recommendedUserListSize", recommendedUserList.size());
+                } else {
+//                    * Si la lista de recomendaciones SI ES es nula, cargo la lista de contenido mas guardado
+                    mav.addObject("recommendedUserList", "null");
+                    List<Content> mostContentSavedByUsersList = cs.getMostUserSaved();
+                    mav.addObject("mostContentSavedByUsersList", mostContentSavedByUsersList);
+                    mav.addObject("mostContentSavedByUsersListSize", mostContentSavedByUsersList.size());
+                }
+            } else {
+//                * Si la watch list es vacia (el usuario no tiene contenido en la watch list), me traigo la mas guardadas para mostrarle
+                List<Content> mostContentSavedByUsersList = cs.getMostUserSaved();
+                mav.addObject("mostContentSavedByUsersList", mostContentSavedByUsersList);
+                mav.addObject("mostContentSavedByUsersListSize", mostContentSavedByUsersList.size());
+                mav.addObject("recommendedUserList", "null");
+            }
+            if(user.getRole().equals("admin")){
+                mav.addObject("admin",true);
+            } else {
+                mav.addObject("admin",false);
+            }
         } catch (NullPointerException e) {
+            mav.addObject("userName", "null");
+            mav.addObject("userId", "null");
+            mav.addObject("admin", false);
+            mav.addObject("userWatchListContentId","null");
+//            * Si no hay usuario logueado, le muestro la lista de mas guardadas
             List<Content> mostContentSavedByUsersList = cs.getMostUserSaved();
             mav.addObject("mostContentSavedByUsersList", mostContentSavedByUsersList);
             mav.addObject("mostContentSavedByUsersListSize", mostContentSavedByUsersList.size());
+            mav.addObject("recommendedUserList", "null");
         }
 
         request.getSession().setAttribute("referer","/");

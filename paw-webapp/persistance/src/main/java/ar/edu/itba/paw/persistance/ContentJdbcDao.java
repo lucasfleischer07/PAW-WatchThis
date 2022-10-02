@@ -241,7 +241,7 @@ public class ContentJdbcDao implements ContentDao {
 
     @Override
     public List<Content> getMostUserSaved() {
-        return template.query("SELECT (content.id) AS id, MAX(content.name) AS name, (content.image) AS image, MAX(content.description) AS description, MAX(released) AS released, MAX(genre) AS genre, MAX(creator) AS creator, MAX(duration) AS duration, MAX(content.type) AS type, SUM(review.rating)/count(*) AS rating, COUNT(reviewid) AS reviewsAmount FROM (content JOIN userwatchlist ON content.id = userwatchlist.contentId) left join (select * from review as r2 where r2.rating<>0) as review on content.id = review.contentid GROUP BY content.id, content.image ORDER BY COUNT(*) DESC LIMIT 10", CONTENT_ROW_MAPPER);
+        return template.query("SELECT (content.id) AS id, MAX(content.name) AS name, (content.image) AS image, MAX(content.description) AS description, MAX(released) AS released, MAX(genre) AS genre, MAX(creator) AS creator, MAX(duration) AS duration, MAX(content.type) AS type, SUM(review.rating)/count(*) AS rating, COUNT(reviewid) AS reviewsAmount FROM (content JOIN userwatchlist ON content.id = userwatchlist.contentId) left join (select * from review as r2 where r2.rating<>0) as review on content.id = review.contentid GROUP BY content.id, content.image ORDER BY COUNT(*) DESC LIMIT 20", CONTENT_ROW_MAPPER);
     }
 
     @Override
