@@ -105,25 +105,25 @@
                         </div>
                     </c:when>
                     <c:otherwise>
-                        <h3><spring:message code="Content.Carousel.MostSaved"/></h3>
-                        <div id="mostContentSavedByUsersList" class="carousel slide W-margin-carousel" data-ride="carousel">
+                        <h3 class="W-carousel-1-title"><spring:message code="Content.Carousel.MostSaved"/></h3>
+                        <div id="mostSavedContentByUsersList" class="carousel slide W-margin-carousel" data-ride="carousel">
                             <div class="carousel-inner">
-                                <c:forEach begin="0" step="5" end="${mostContentSavedByUsersListSize-1}" var="externalIndex">
+                                <c:forEach begin="0" step="5" end="${mostSavedContentByUsersListSize-1}" var="externalIndex">
                                     <c:choose>
                                         <c:when test="${externalIndex == 0}">
                                             <div class="carousel-item active">
                                                 <div class="cards-wrapper">
-                                                    <c:forEach begin="${externalIndex}" step="1" end="${mostContentSavedByUsersListSize-1 < 4+externalIndex ? mostContentSavedByUsersListSize-1:4+externalIndex}" var="internalIndex" >
+                                                    <c:forEach begin="${externalIndex}" step="1" end="${mostSavedContentByUsersListSize-1 < 4+externalIndex ? mostSavedContentByUsersListSize-1:4+externalIndex}" var="internalIndex" >
                                                         <jsp:include page="components/carrouselContent.jsp">
-                                                            <jsp:param name="contentName" value="${mostContentSavedByUsersList.get(internalIndex).name}"/>
-                                                            <jsp:param name="contentReleased" value="${mostContentSavedByUsersList.get(internalIndex).released}"/>
-                                                            <jsp:param name="contentCreator" value="${mostContentSavedByUsersList.get(internalIndex).creator}"/>
-                                                            <jsp:param name="contentGenre" value="${mostContentSavedByUsersList.get(internalIndex).genre}"/>
-                                                            <jsp:param name="contentImage" value="${mostContentSavedByUsersList.get(internalIndex).image}"/>
-                                                            <jsp:param name="contentId" value="${mostContentSavedByUsersList.get(internalIndex).id}"/>
-                                                            <jsp:param name="contentType" value="${mostContentSavedByUsersList.get(internalIndex).type}"/>
-                                                            <jsp:param name="contentRating" value="${mostContentSavedByUsersList.get(internalIndex).rating}"/>
-                                                            <jsp:param name="reviewsAmount" value="${mostContentSavedByUsersList.get(internalIndex).reviewsAmount}"/>
+                                                            <jsp:param name="contentName" value="${mostSavedContentByUsersList.get(internalIndex).name}"/>
+                                                            <jsp:param name="contentReleased" value="${mostSavedContentByUsersList.get(internalIndex).released}"/>
+                                                            <jsp:param name="contentCreator" value="${mostSavedContentByUsersList.get(internalIndex).creator}"/>
+                                                            <jsp:param name="contentGenre" value="${mostSavedContentByUsersList.get(internalIndex).genre}"/>
+                                                            <jsp:param name="contentImage" value="${mostSavedContentByUsersList.get(internalIndex).image}"/>
+                                                            <jsp:param name="contentId" value="${mostSavedContentByUsersList.get(internalIndex).id}"/>
+                                                            <jsp:param name="contentType" value="${mostSavedContentByUsersList.get(internalIndex).type}"/>
+                                                            <jsp:param name="contentRating" value="${mostSavedContentByUsersList.get(internalIndex).rating}"/>
+                                                            <jsp:param name="reviewsAmount" value="${mostSavedContentByUsersList.get(internalIndex).reviewsAmount}"/>
                                                             <jsp:param name="userName" value="${userName}"/>
                                                             <jsp:param name="userWatchListContentId" value="${userWatchListContentId}"/>
                                                         </jsp:include>
@@ -134,17 +134,17 @@
                                         <c:otherwise>
                                             <div class="carousel-item">
                                                 <div class="cards-wrapper">
-                                                    <c:forEach begin="${externalIndex}" step="1" end="${mostContentSavedByUsersListSize-1 < 4+externalIndex ? mostContentSavedByUsersListSize-1:4+externalIndex}" var="internalIndex" >
+                                                    <c:forEach begin="${externalIndex}" step="1" end="${mostSavedContentByUsersListSize-1 < 4+externalIndex ? mostSavedContentByUsersListSize-1:4+externalIndex}" var="internalIndex" >
                                                         <jsp:include page="components/carrouselContent.jsp">
-                                                            <jsp:param name="contentName" value="${mostContentSavedByUsersList.get(internalIndex).name}"/>
-                                                            <jsp:param name="contentReleased" value="${mostContentSavedByUsersList.get(internalIndex).released}"/>
-                                                            <jsp:param name="contentCreator" value="${mostContentSavedByUsersList.get(internalIndex).creator}"/>
-                                                            <jsp:param name="contentGenre" value="${mostContentSavedByUsersList.get(internalIndex).genre}"/>
-                                                            <jsp:param name="contentImage" value="${mostContentSavedByUsersList.get(internalIndex).image}"/>
-                                                            <jsp:param name="contentId" value="${mostContentSavedByUsersList.get(internalIndex).id}"/>
-                                                            <jsp:param name="contentType" value="${mostContentSavedByUsersList.get(internalIndex).type}"/>
-                                                            <jsp:param name="contentRating" value="${mostContentSavedByUsersList.get(internalIndex).rating}"/>
-                                                            <jsp:param name="reviewsAmount" value="${mostContentSavedByUsersList.get(internalIndex).reviewsAmount}"/>
+                                                            <jsp:param name="contentName" value="${mostSavedContentByUsersList.get(internalIndex).name}"/>
+                                                            <jsp:param name="contentReleased" value="${mostSavedContentByUsersList.get(internalIndex).released}"/>
+                                                            <jsp:param name="contentCreator" value="${mostSavedContentByUsersList.get(internalIndex).creator}"/>
+                                                            <jsp:param name="contentGenre" value="${mostSavedContentByUsersList.get(internalIndex).genre}"/>
+                                                            <jsp:param name="contentImage" value="${mostSavedContentByUsersList.get(internalIndex).image}"/>
+                                                            <jsp:param name="contentId" value="${mostSavedContentByUsersList.get(internalIndex).id}"/>
+                                                            <jsp:param name="contentType" value="${mostSavedContentByUsersList.get(internalIndex).type}"/>
+                                                            <jsp:param name="contentRating" value="${mostSavedContentByUsersList.get(internalIndex).rating}"/>
+                                                            <jsp:param name="reviewsAmount" value="${mostSavedContentByUsersList.get(internalIndex).reviewsAmount}"/>
                                                             <jsp:param name="userName" value="${userName}"/>
                                                             <jsp:param name="userWatchListContentId" value="${userWatchListContentId}"/>
                                                         </jsp:include>
@@ -155,11 +155,11 @@
                                     </c:choose>
                                 </c:forEach>
                             </div>
-                            <button class="carousel-control-prev" type="button" data-bs-target="#mostContentSavedByUsersList" data-bs-slide="prev">
+                            <button class="carousel-control-prev" type="button" data-bs-target="#mostSavedContentByUsersList" data-bs-slide="prev">
                                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                                 <span class="visually-hidden"><spring:message code="Content.Carousel.PreviousButton"/></span>
                             </button>
-                            <button class="carousel-control-next" type="button" data-bs-target="#mostContentSavedByUsersList" data-bs-slide="next">
+                            <button class="carousel-control-next" type="button" data-bs-target="#mostSavedContentByUsersList" data-bs-slide="next">
                                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                 <span class="visually-hidden"><spring:message code="Content.Carousel.NextButton"/></span>
                             </button>

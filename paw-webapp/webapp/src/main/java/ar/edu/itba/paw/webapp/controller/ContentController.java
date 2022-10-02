@@ -111,15 +111,15 @@ public class ContentController {
                 } else {
 //                    * Si la lista de recomendaciones SI ES es nula, cargo la lista de contenido mas guardado
                     mav.addObject("recommendedUserList", "null");
-                    List<Content> mostContentSavedByUsersList = cs.getMostUserSaved();
-                    mav.addObject("mostContentSavedByUsersList", mostContentSavedByUsersList);
-                    mav.addObject("mostContentSavedByUsersListSize", mostContentSavedByUsersList.size());
+                    List<Content> mostSavedContentByUsersList = cs.getMostUserSaved();
+                    mav.addObject("mostSavedContentByUsersList", mostSavedContentByUsersList);
+                    mav.addObject("mostSavedContentByUsersListSize", mostSavedContentByUsersList.size());
                 }
             } else {
 //                * Si la watch list es vacia (el usuario no tiene contenido en la watch list), me traigo la mas guardadas para mostrarle
-                List<Content> mostContentSavedByUsersList = cs.getMostUserSaved();
-                mav.addObject("mostContentSavedByUsersList", mostContentSavedByUsersList);
-                mav.addObject("mostContentSavedByUsersListSize", mostContentSavedByUsersList.size());
+                List<Content> mostSavedContentByUsersList = cs.getMostUserSaved();
+                mav.addObject("mostSavedContentByUsersList", mostSavedContentByUsersList);
+                mav.addObject("mostSavedContentByUsersListSize", mostSavedContentByUsersList.size());
                 mav.addObject("recommendedUserList", "null");
             }
             if(user.getRole().equals("admin")){
@@ -133,9 +133,9 @@ public class ContentController {
             mav.addObject("admin", false);
             mav.addObject("userWatchListContentId","null");
 //            * Si no hay usuario logueado, le muestro la lista de mas guardadas
-            List<Content> mostContentSavedByUsersList = cs.getMostUserSaved();
-            mav.addObject("mostContentSavedByUsersList", mostContentSavedByUsersList);
-            mav.addObject("mostContentSavedByUsersListSize", mostContentSavedByUsersList.size());
+            List<Content> mostSavedContentByUsersList = cs.getMostUserSaved();
+            mav.addObject("mostSavedContentByUsersList", mostSavedContentByUsersList);
+            mav.addObject("mostSavedContentByUsersListSize", mostSavedContentByUsersList.size());
             mav.addObject("recommendedUserList", "null");
         }
 
