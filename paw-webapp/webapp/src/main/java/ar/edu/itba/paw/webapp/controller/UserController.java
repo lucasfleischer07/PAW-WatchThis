@@ -160,7 +160,11 @@ public class UserController {
         mav.addObject("reviews",rs.getAllUserReviews(user.getUserName()));
         mav.addObject("userName",user.getUserName());
         mav.addObject("userId",user.getId());
-        mav.addObject("admin",false);
+        if(user.getRole().equals("admin")){
+            mav.addObject("admin",true);
+        }else{
+            mav.addObject("admin",false);
+        }
         request.getSession().setAttribute("referer","/profile");
         return mav;
     }
@@ -235,6 +239,11 @@ public class UserController {
         String userEmail = userDetails.getUsername();
         User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
         final ModelAndView mav = new ModelAndView("profileEditionPage");
+        if(user.getRole().equals("admin")){
+            mav.addObject("admin",true);
+        }else{
+            mav.addObject("admin",false);
+        }
         mav.addObject("user", user);
         return mav;
     }
@@ -329,7 +338,6 @@ public class UserController {
         final String locale = LocaleContextHolder.getLocale().getDisplayLanguage();
         User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
         List<Content> viewedListContent = us.getUserViewedList(user);
-//        List<Long> viewedListContentId = us.getUserViewedListContent(user);
         List<Long> userWatchListContentId = us.getUserWatchListContent(user);
         final ModelAndView mav = new ModelAndView("viewedListPage");
         Optional<String> quote = cs.getContentQuote(locale);

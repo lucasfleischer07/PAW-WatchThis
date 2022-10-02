@@ -48,25 +48,25 @@
                             <div class="mb-3 W-input-label-review-info">
                                 <form:errors path="name" element="p" cssStyle="color: red"/>
                                 <form:label path="name" class="form-label"><spring:message code="CreateContent.ContentName"/> <span class="W-red-asterisco">*</span></form:label>
-                                <p class="W-review-registration-text"><spring:message code="CreateContent.CharactersAmount" arguments="1,100"/></p>
+                                <p class="W-review-registration-text"><spring:message code="CreateContent.CharacterLimits" arguments="1,100"/></p>
                                 <form:input type="text" class="form-control" path="name" placeholder="Lord of The Rings"/>
                             </div>
                             <div class="mb-3 W-input-label-review-info">
                                 <form:errors path="description" element="p" cssStyle="color: red"/>
                                 <form:label path="description" class="form-label"><spring:message code="CreateContent.ContentDescription"/> <span class="W-red-asterisco">*</span></form:label>
-                                <p class="W-review-registration-text"><spring:message code="CreateContent.CharactersAmount" arguments="20,500"/></p>
+                                <p class="W-review-registration-text"><spring:message code="CreateContent.CharacterLimits" arguments="20,500"/></p>
                                 <form:textarea class="form-control" id="MyTextArea" path="description" rows="3"/>
                             </div>
                             <div class="mb-3 W-input-label-review-info">
                                 <form:errors path="releaseDate" element="p" cssStyle="color: red"/>
                                 <form:label path="releaseDate" class="form-label"><spring:message code="CreateContent.ContentReleaseDate"/> <span class="W-red-asterisco">*</span></form:label>
-                                <p class="W-review-registration-text"><spring:message code="CreateContent.CharactersAmountRelease"/></p>
+                                <p class="W-review-registration-text"><spring:message code="CreateContent.CharacterLimits"/></p>
                                 <form:input type="text" class="form-control" path="releaseDate" placeholder="2002"/>
                             </div>
                             <div class="mb-3 W-input-label-review-info">
                                 <form:errors path="creator" element="p" cssStyle="color: red"/>
                                 <form:label path="creator" class="form-label"><spring:message code="CreateContent.ContentCreator"/> <span class="W-red-asterisco">*</span></form:label>
-                                <p class="W-review-registration-text"><spring:message code="CreateContent.CharactersAmount" arguments="10,100"/></p>
+                                <p class="W-review-registration-text"><spring:message code="CreateContent.CharacterLimits" arguments="10,100"/></p>
                                 <form:input type="text" class="form-control" path="creator" placeholder="Tarantino"/>
                             </div>
                             <div class="mb-3 W-input-label-review-info">

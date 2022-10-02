@@ -59,6 +59,17 @@ public class ContentController {
         }
     }
 
+    private int transformDate(String str){
+        int minutes=0;
+        String[] arr= str.split(" ");
+        if(arr.length==4){
+            minutes=Integer.parseInt(arr[0])*60+Integer.parseInt(arr[2]);
+        }else if(arr.length==2){
+            minutes=Integer.parseInt(arr[0]);
+        }
+        return minutes;
+    }
+
     // * ----------------------------------- Home Page -----------------------------------------------------------------
     @RequestMapping(value= {"/","page/{pageNum}"})
     public ModelAndView helloWorld(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("pageNum")final Optional<Integer> pageNum, @RequestParam(name = "query", defaultValue = "") final String query, HttpServletRequest request) {
@@ -280,17 +291,6 @@ public class ContentController {
         contentEditForm.setType(oldContent.get().getType());
         HeaderSetUp(mav,userDetails);
         return mav;
-    }
-
-    private int transformDate(String str){
-        int minutes=0;
-        String[] arr= str.split(" ");
-        if(arr.length==4){
-            minutes=Integer.parseInt(arr[0])*60+Integer.parseInt(arr[2]);
-        }else if(arr.length==2){
-            minutes=Integer.parseInt(arr[0]);
-        }
-        return minutes;
     }
 
     @RequestMapping(value = "/content/editInfo/{contentId:[0-9]+}", method = {RequestMethod.POST})
