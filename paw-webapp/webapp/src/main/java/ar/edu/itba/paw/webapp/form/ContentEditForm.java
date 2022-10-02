@@ -23,7 +23,7 @@ public class ContentEditForm {
     @Size(min = 10, max = 100)
     private String creator;
 
-    @Max(240)
+    @Max(300)
     @Min(20)
     private Integer duration;
 

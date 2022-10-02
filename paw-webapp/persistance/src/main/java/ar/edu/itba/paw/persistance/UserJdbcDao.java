@@ -28,17 +28,18 @@ public class UserJdbcDao implements UserDao{
                     resultSet.getString("role"));
 
     private static final RowMapper<Content> CONTENT_ROW_MAPPER = (resultSet, rowNum) ->
-            new Content(resultSet.getLong("contentid"),
-                    resultSet.getString("contentName"),
-                    resultSet.getBytes("contentImage"),
+            new Content(resultSet.getLong("id"),
+                    resultSet.getString("name"),
+                    resultSet.getBytes("image"),
                     resultSet.getString("description"),
                     resultSet.getString("released"),
                     resultSet.getString("genre"),
                     resultSet.getString("creator"),
                     resultSet.getString("duration"),
                     resultSet.getString("type"),
-                    resultSet.getInt("rating")/(resultSet.getInt("reviewsAmount") ==0 ? 1 : resultSet.getInt("reviewsAmount"))
-                    ,resultSet.getInt("reviewsAmount"));
+                    resultSet.getInt("rating"),
+                    resultSet.getInt("reviewsAmount")
+            );
 
     private static final RowMapper<Long> LONG_ROW_MAPPER = (resultSet, rowNum) -> resultSet.getLong("contentid");
 
@@ -96,9 +97,11 @@ public class UserJdbcDao implements UserDao{
         template.update("DELETE FROM userwatchlist WHERE userid = ? and contentid = ?", user.getId(), contentId);
     }
 
+    private static final String BASE_WATCHLIST_QUERY = "select content.id,content.name,content.image,content.description,released,genre,creator,duration,content.type, sum(review.rating)/count(*) as rating,count(reviewid) as reviewsAmount\n from ((content left join (select * from review as r2 where r2.rating<>0) as review on content.id = review.contentid) JOIN userwatchlist ON content.id = userwatchlist.contentId)JOIN userdata ON userdata.userid = userwatchlist.userid\n WHERE userwatchlist.userid = ? \n group by userwatchlist.id,content.id,content.name,content.description,content.released,content.genre,content.creator,content.duration,content.type,content.durationNum ";
+
     @Override
     public List<Content> getWatchList(User user) {
-        return template.query("SELECT (content.id) AS contentId, (content.name) AS contentName, (content.image) AS contentImage, description, released, genre, creator, duration, type, rating, reviewsamount FROM (content JOIN userwatchlist ON content.id = userwatchlist.contentId) JOIN userdata ON userdata.userid = userwatchlist.userid WHERE userwatchlist.userid = ? ORDER BY userwatchlist.id desc", new Object[]{ user.getId() }, CONTENT_ROW_MAPPER);
+        return template.query(  BASE_WATCHLIST_QUERY+ "ORDER BY userwatchlist.id desc", new Object[]{ user.getId() }, CONTENT_ROW_MAPPER);
     }
 
     @Override
@@ -122,9 +125,12 @@ public class UserJdbcDao implements UserDao{
         template.update("DELETE FROM userviewedlist WHERE userid = ? and contentid = ?", user.getId(), contentId);
     }
 
+    private static final String BASE_VIWED_LIST_QUERY = "select content.id,content.name,content.image,content.description,released,genre,creator,duration,content.type, sum(review.rating)/count(*) as rating,count(reviewid) as reviewsAmount\n from ((content left join (select * from review as r2 where r2.rating<>0) as review on content.id = review.contentid) JOIN userviewedlist ON content.id = userviewedlist.contentId)JOIN userdata ON userdata.userid = userviewedlist.userid\n WHERE userviewedlist.userid = ? \n group by userviewedlist.id,content.id,content.name,content.description,content.released,content.genre,content.creator,content.duration,content.type,content.durationNum ";
+
+
     @Override
     public List<Content> getUserViewedList(User user) {
-        return template.query("SELECT (content.id) AS contentId, (content.name) AS contentName, (content.image) AS contentImage, description, released, genre, creator, duration, type, rating, reviewsamount FROM (content JOIN userviewedlist ON content.id = userviewedlist.contentId) JOIN userdata ON userdata.userid = userviewedlist.userid WHERE userviewedlist.userid = ? ORDER BY userviewedlist.id desc", new Object[]{ user.getId() }, CONTENT_ROW_MAPPER);
+        return template.query( BASE_VIWED_LIST_QUERY +"ORDER BY userviewedlist.id desc", new Object[]{ user.getId() }, CONTENT_ROW_MAPPER);
     }
 
     @Override
@@ -132,6 +138,7 @@ public class UserJdbcDao implements UserDao{
         Optional<Long> contentIdDB = template.query("SELECT * FROM userviewedlist WHERE userid = ? AND contentid = ?", new Object[]{user.getId(), contentId} , LONG_ROW_MAPPER).stream().findFirst();
         return contentIdDB.isPresent() ? Optional.of(contentIdDB.get()) : Optional.of((long) -1);
     }
+
 
     @Override
     public List<Long> getUserViewedListContent(User user) {

@@ -1,10 +1,14 @@
 package ar.edu.itba.paw.webapp.form;
 
+import ar.edu.itba.paw.webapp.validations.AvailableEmail;
+import ar.edu.itba.paw.webapp.validations.AvailableUserName;
+
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class LoginForm {
 
+    @AvailableEmail
     @Size(min = 10, max = 50)
     @Pattern(regexp	= "([+\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+")
     private String email;
@@ -13,6 +17,7 @@ public class LoginForm {
     @Pattern(regexp	= "[a-zA-Z0-9!,.:;=+\n\\-_()?<>$%&#@{}\\[\\]|*\"'~/`^\\s]+")
     private String password;
 
+    @AvailableUserName
     @Size(min = 4, max = 30)
     @Pattern(regexp	= "[a-zA-Z0-9\\s]+")
     private String username;

@@ -58,7 +58,7 @@ public class ContentServiceImpl implements ContentService {
     public List<Content> getSearchedContentRandom(String query) {
         return ContentDao.getSearchedContentRandom(query);
     }
-    
+
     @Override
     public List<Content> getBestRated() {
         return ContentDao.getBestRated();
