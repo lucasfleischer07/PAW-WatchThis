@@ -77,13 +77,13 @@ public class ContentController {
         List<Content> bestRatedList = cs.getBestRated();
         List<Content> lastAddedList = cs.getLastAdded();
 
-        if(bestRatedList == null || lastAddedList == null) {
+        if(bestRatedList.size() == 0 || lastAddedList.size() == 0) {
             LOGGER.warn("Error bringing data from the db",new PageNotFoundException());
             throw new PageNotFoundException();
         }
         
-        mav.addObject("bestRatedListSize", bestRatedList.size());
         mav.addObject("bestRatedList", bestRatedList);
+        mav.addObject("bestRatedListSize", bestRatedList.size());
         mav.addObject("lastAddedList", lastAddedList);
         mav.addObject("lastAddedListSize", lastAddedList.size());
         mav.addObject("genre","ANY");
@@ -91,7 +91,6 @@ public class ContentController {
         mav.addObject("durationTo","ANY");
         mav.addObject("sorting","ANY");
         mav.addObject("contentType", "all");
-//        HeaderSetUp(mav, userDetails);
 
         try {
             String userEmail = userDetails.getUsername();
@@ -99,7 +98,7 @@ public class ContentController {
             List<Long> userWatchListContentId = us.getUserWatchListContent(user);
             mav.addObject("userName", user.getUserName());
             mav.addObject("userId", user.getId());
-            mav.addObject("userWatchListContentId",userWatchListContentId);
+            mav.addObject("userWatchListContentId", userWatchListContentId);
 //            * Pregunto si la watch list es vacia
             if(userWatchListContentId.size() != 0) {
 //            * Si la watch list NO es vacia, me traigo la lista de recomendaciones
@@ -116,7 +115,7 @@ public class ContentController {
                     mav.addObject("mostSavedContentByUsersListSize", mostSavedContentByUsersList.size());
                 }
             } else {
-//                * Si la watch list es vacia (el usuario no tiene contenido en la watch list), me traigo la mas guardadas para mostrarle
+//             * Si la watch list es vacia (el usuario no tiene contenido en la watch list), me traigo la mas guardadas para mostrarle
                 List<Content> mostSavedContentByUsersList = cs.getMostUserSaved();
                 mav.addObject("mostSavedContentByUsersList", mostSavedContentByUsersList);
                 mav.addObject("mostSavedContentByUsersListSize", mostSavedContentByUsersList.size());

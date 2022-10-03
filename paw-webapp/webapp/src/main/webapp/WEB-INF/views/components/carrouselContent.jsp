@@ -7,7 +7,7 @@
       <div class="W-img-watchList-button-div">
         <div class="d-grid gap-2 W-watchList-button-div">
           <c:choose>
-            <c:when test="${param.userName != 'null' && !param.userWatchListContentId.contains(param.contentId)}">
+            <c:when test="${param.userName != 'null' && !param.userWatchListContentId}">
               <form id="<c:out value="form${param.contentId}"/>" method="post" action="<c:url value="/watchList/add/${param.contentId}"/>">
                 <button id="buttonAddToWatchList" class="btn btn-secondary W-watchList-button" type="submit" onclick="document.getElementById('mainAtag').click(function (e) {e.stopPropagation(); this.form.submit();})">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-bookmark-plus W-watchList-icon" viewBox="0 0 16 16">
@@ -17,7 +17,7 @@
                 </button>
               </form>
             </c:when>
-            <c:when test="${param.userName != 'null' && param.userWatchListContentId.contains(param.contentId)}">
+            <c:when test="${param.userName != 'null' && param.userWatchListContentId}">
               <form id="<c:out value="form${param.contentId}"/>" method="post" action="<c:url value="/watchList/delete/${param.contentId}"/>">
                 <button class="btn btn-secondary W-watchList-button" type="submit" onclick="document.getElementById('mainAtag').click(function (e) {e.stopPropagation(); this.disabled = true; this.form.submit()})">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-bookmark-plus W-watchList-icon" viewBox="0 0 16 16">
