@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -298,9 +299,15 @@ public class UserController {
             LOGGER.warn("Wrong contentID:",new PageNotFoundException());
             throw new PageNotFoundException();
         }
-        String userEmail = userDetails.getUsername();
-        User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
-        us.addToWatchList(user, contentId.get());
+
+        try {
+            String userEmail = userDetails.getUsername();
+            User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
+            us.addToWatchList(user, contentId.get());
+        } catch (DuplicateKeyException e) {
+            throw new MethodNotAllowedException();
+        }
+
         String referer = request.getSession().getAttribute("referer").toString();
         return new ModelAndView("redirect:" + (referer==null ? "/" : referer));
     }
@@ -311,11 +318,18 @@ public class UserController {
             LOGGER.warn("No content Specified:",new PageNotFoundException());
             throw new PageNotFoundException();
         }
-        String userEmail = userDetails.getUsername();
-        User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
-        us.deleteFromWatchList(user, contentId.get());
+
+        try {
+            String userEmail = userDetails.getUsername();
+            User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
+            us.deleteFromWatchList(user, contentId.get());
+        } catch (DuplicateKeyException e) {
+            throw new MethodNotAllowedException();
+        }
+
         String referer = request.getSession().getAttribute("referer").toString();
         return new ModelAndView("redirect:" + (referer==null ? "/" : referer));
+
     }
 
      @RequestMapping(value = "/go/to/login", method = {RequestMethod.POST})
