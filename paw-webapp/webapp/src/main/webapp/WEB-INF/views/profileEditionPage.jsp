@@ -50,7 +50,7 @@
                                         <form:form modelAttribute="editProfile" action="${postPath}" method="post" enctype="multipart/form-data">
                                             <form:errors path="profilePicture" element="p" cssClass="form-error-label"/>
                                             <form:input type="file" accept="image/gif, image/jpeg, image/jpg,  image/png" class="form-control" path="profilePicture" cssClass="W-input-width"/>
-                                            <button type="submit" class="btn btn-success W-profile-picture-button" onclick="this.form.submit(); (this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'"><spring:message code="EditProfile.Upload"/></button>
+                                            <button type="submit" class="btn btn-success W-profile-picture-button" onclick="this.form.submit(); (this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'; disableButtons()"><spring:message code="EditProfile.Upload"/></button>
                                         </form:form>
                                     </div>
                                 </div>
@@ -72,7 +72,7 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <button type="submit" class="btn btn-success" onclick="this.form.submit(); (this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'"><spring:message code="EditProfile.Change"/></button>
+                                    <button type="submit" class="btn btn-success" onclick="this.form.submit(); (this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'; disableButtons()"><spring:message code="EditProfile.Change"/></button>
                                 </div>
                             </form:form>
                         </div>
@@ -80,6 +80,8 @@
                 </div>
             </div>
         </div>
+
+        <script src="<c:url value="/resources/js/disableAllButtonsAndLinks.js"/>"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
     </body>
 </html>

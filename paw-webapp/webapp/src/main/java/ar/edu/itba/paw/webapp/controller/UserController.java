@@ -276,7 +276,7 @@ public class UserController {
 
         String userEmail = userDetails.getName();
         User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
-        if(editProfile.getPassword() != null && (editProfile.getProfilePicture() == null) || editProfile.getProfilePicture().getSize() <= 0 ) {
+        if(editProfile.getPassword() != null && ((editProfile.getProfilePicture() == null) || editProfile.getProfilePicture().getSize() <= 0 )) {
             us.setPassword(editProfile.getPassword(), user, "restore");
         } else if(editProfile.getPassword() == null && (editProfile.getProfilePicture().getSize() > 0)) {
             us.setProfilePicture(editProfile.getProfilePicture().getBytes(), user);

@@ -34,7 +34,7 @@
             </svg>
           </button>
         </form>
-        <a class="W-edit-button-review" href="<c:url value="/content/editInfo/${contentId} "/>" onclick="(this).disabled = true; (this).className += ' spinner-border text-dark'; (this).innerText = ''; document.getElementById('deleteReviewButton').disabled=true; document.getElementById('editReviewButton').disabled=true">
+        <a class="W-edit-button-review" href="<c:url value="/content/editInfo/${contentId} "/>" onclick="(this).disabled = true; (this).className += ' spinner-border text-dark'; (this).innerText = ''; disableButtons()">
           <button id="editReviewButton" class="btn btn-dark text-nowrap" >
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
               <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
@@ -54,7 +54,7 @@
                   <c:choose>
                     <c:when test="${userName != 'null' && isInWatchList == 'null'}">
                       <form id="<c:out value="form${details.id}"/>" method="post" action="<c:url value="/watchList/add/${details.id}"/>">
-                        <button id="watchListButton" class="btn btn-white W-watchlist-button-infopage" type="submit" onclick="this.form.submit(); (this).disabled = true; (this).className -= ' W-watchlist-button-infopage'; (this).className += ' spinner-border'; (this).innerText = ''; document.getElementById('viewedListButton').disabled=true">
+                        <button id="watchListButton" class="btn btn-white W-watchlist-button-infopage" type="submit" onclick="this.form.submit(); (this).disabled = true; (this).className -= ' W-watchlist-button-infopage'; (this).className += ' spinner-border'; (this).innerText = ''; document.getElementById('viewedListButton').disabled=true; disableButtons()">
                           <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-bookmark-plus W-watchList-icon" viewBox="0 0 16 16">
                             <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"/>
                             <path d="M8 4a.5.5 0 0 1 .5.5V6H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V7H6a.5.5 0 0 1 0-1h1.5V4.5A.5.5 0 0 1 8 4z"/>
@@ -64,7 +64,7 @@
                     </c:when>
                     <c:when test="${userName != 'null' && isInWatchList != 'null'}">
                       <form id="<c:out value="form${details.id}"/>" method="post" action="<c:url value="/watchList/delete/${details.id}"/>">
-                        <button id="watchListButton" class="btn btn-white W-watchlist-button-infopage" type="submit" onclick="this.form.submit(); (this).disabled = true; (this).className -= ' W-watchlist-button-infopage'; (this).className += ' spinner-border'; (this).innerText = ''; document.getElementById('viewedListButton').disabled=true">
+                        <button id="watchListButton" class="btn btn-white W-watchlist-button-infopage" type="submit" onclick="this.form.submit(); (this).disabled = true; (this).className -= ' W-watchlist-button-infopage'; (this).className += ' spinner-border'; (this).innerText = ''; document.getElementById('viewedListButton').disabled=true; disableButtons()">
                           <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-bookmark-plus W-watchList-icon" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M2 15.5V2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.74.439L8 13.069l-5.26 2.87A.5.5 0 0 1 2 15.5zM6.854 5.146a.5.5 0 1 0-.708.708L7.293 7 6.146 8.146a.5.5 0 1 0 .708.708L8 7.707l1.146 1.147a.5.5 0 1 0 .708-.708L8.707 7l1.147-1.146a.5.5 0 0 0-.708-.708L8 6.293 6.854 5.146z"/>
                           </svg>
@@ -91,7 +91,7 @@
                             </div>
                             <div class="modal-footer">
                               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><spring:message code="Close"/></button>
-                              <a href="<c:url value="/login/sign-in"/>"><button type="button" class="btn btn-success"><spring:message code="Login.LoginMessage"/></button></a>
+                              <a href="<c:url value="/login/sign-in"/>" onclick="disableButtons()"><button type="button" class="btn btn-success"><spring:message code="Login.LoginMessage"/></button></a>
                             </div>
                           </div>
                         </div>
@@ -104,7 +104,7 @@
                   <c:choose>
                     <c:when test="${userName != 'null' && isInViewedList == 'null'}">
                       <form id="<c:out value="form${details.id}"/>" method="post" class="W-form-zero-margin" action="<c:url value="/viewedList/add/${details.id}"/>">
-                        <button id="viewedListButton" class="btn btn-white W-watchlist-button-infopage" type="submit" onclick="this.form.submit(); (this).disabled = true; (this).className -= ' W-watchlist-button-infopage'; (this).className += ' spinner-border'; (this).innerText = ''; document.getElementById('watchListButton').disabled=true">
+                        <button id="viewedListButton" class="btn btn-white W-watchlist-button-infopage" type="submit" onclick="this.form.submit(); (this).disabled = true; (this).className -= ' W-watchlist-button-infopage'; (this).className += ' spinner-border'; (this).innerText = ''; document.getElementById('watchListButton').disabled=true; disableButtons()">
                           <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-bookmark-plus W-watchList-icon" viewBox="0 0 16 16">
                             <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
                             <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
@@ -114,7 +114,7 @@
                     </c:when>
                     <c:when test="${userName != 'null' && isInViewedList != 'null'}">
                       <form id="<c:out value="form${details.id}"/>" method="post" class="W-form-zero-margin" action="<c:url value="/viewedList/delete/${details.id}"/>">
-                        <button id="viewedListButton" class="btn btn-white W-watchlist-button-infopage" type="submit" onclick="this.form.submit(); (this).disabled = true; (this).className -= ' W-watchlist-button-infopage'; (this).className += ' spinner-border'; (this).innerText = ''; document.getElementById('watchListButton').disabled=true">
+                        <button id="viewedListButton" class="btn btn-white W-watchlist-button-infopage" type="submit" onclick="this.form.submit(); (this).disabled = true; (this).className -= ' W-watchlist-button-infopage'; (this).className += ' spinner-border'; (this).innerText = ''; document.getElementById('watchListButton').disabled=true; disableButtons()">
                           <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-bookmark-plus W-watchList-icon" viewBox="0 0 16 16">
                             <path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7.029 7.029 0 0 0 2.79-.588zM5.21 3.088A7.028 7.028 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474L5.21 3.089z"/>
                             <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829l-2.83-2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12-.708.708z"/>
@@ -142,7 +142,7 @@
                             </div>
                             <div class="modal-footer">
                               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><spring:message code="Close"/></button>
-                              <a href="<c:url value="/login/sign-in"/>"><button type="button" class="btn btn-success"><spring:message code="Login.LoginMessage"/></button></a>
+                              <a href="<c:url value="/login/sign-in"/>" onclick="disableButtons()"><button type="button" class="btn btn-success" onclick="disableButtons()"><spring:message code="Login.LoginMessage"/></button></a>
                             </div>
                           </div>
                         </div>
@@ -219,10 +219,10 @@
               <c:choose>
                 <c:when test="${userName != 'null' && reviews[0].userName==userName}"/>
                 <c:when test="${userName != 'null'}">
-                  <a href="<c:url value="/reviewForm/${details.type}/${details.id}/${userId}"/>"><button type="button" class="btn btn-dark W-add-review-button W-reviewText"><spring:message code="Content.AddReview"/></button></a>
+                  <a href="<c:url value="/reviewForm/${details.type}/${details.id}/${userId}"/>" onclick="disableButtons()"><button type="button" class="btn btn-dark W-add-review-button W-reviewText" onclick="disableButtons()"><spring:message code="Content.AddReview"/></button></a>
                 </c:when>
                 <c:otherwise>
-                  <button type="button" class="btn btn-dark W-add-review-button W-reviewText" data-bs-toggle="modal" data-bs-target="#exampleModal"><spring:message code="Content.AddReview"/></button>
+                  <button type="button" class="btn btn-dark W-add-review-button W-reviewText" data-bs-toggle="modal" data-bs-target="#exampleModal""><spring:message code="Content.AddReview"/></button>
                   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                       <div class="modal-content">
@@ -236,7 +236,7 @@
                         </div>
                         <div class="modal-footer">
                           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><spring:message code="Close"/></button>
-                          <a href="<c:url value="/login/sign-in"/>"><button type="button" class="btn btn-success"><spring:message code="Login.LoginMessage"/></button></a>
+                          <a href="<c:url value="/login/sign-in"/>" onclick="disableButtons()"><button type="button" class="btn btn-success" onclick="disableButtons()"><spring:message code="Login.LoginMessage"/></button></a>
                         </div>
                       </div>
                     </div>
@@ -262,8 +262,8 @@
             </c:forEach>
             <c:if test="${pageSelected<amountPages}">
               <div class="W-readMore-button" >
-                <a id="readMore" class="W-readMore-a" data-toggle="collapse" href="<c:url value="/${type}/${contentId}/page/${pageSelected+1}"/>">
-                  <button type="button" class="btn btn-dark W-add-review-button W-reviewText"><spring:message code="Reviews.ReadMore"/></button>
+                <a id="readMore" class="W-readMore-a" data-toggle="collapse" href="<c:url value="/${type}/${contentId}/page/${pageSelected+1}"/>" onclick="disableButtons()">
+                  <button type="button" class="btn btn-dark W-add-review-button W-reviewText" onclick="disableButtons()"><spring:message code="Reviews.ReadMore"/></button>
                 </a>
               </div>
 
@@ -298,12 +298,13 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><spring:message code="No"/></button>
-            <button type="submit" form="<c:out value="formDelete"/>" class="btn btn-primary"><spring:message code="Yes"/></button>
+            <button type="submit" form="<c:out value="formDelete"/>" class="btn btn-primary" onclick="disableButtons()"><spring:message code="Yes"/></button>
           </div>
         </div>
       </div>
     </div>
 
+    <script src="<c:url value="/resources/js/disableAllButtonsAndLinks.js"/>"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
   </body>
 </html>

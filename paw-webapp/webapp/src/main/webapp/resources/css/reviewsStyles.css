@@ -130,6 +130,10 @@ W-read-button {
     text-align: center;
 }
 
+.disabled {
+    pointer-events: none;
+}
+
 .W-title-review {
     margin-top: 0;
     margin-bottom: 0;
