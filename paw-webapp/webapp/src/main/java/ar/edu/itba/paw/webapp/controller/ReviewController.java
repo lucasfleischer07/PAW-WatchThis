@@ -34,7 +34,7 @@ public class ReviewController {
     private UserService us;
     private static final Logger LOGGER = LoggerFactory.getLogger(ReviewController.class);
 
-    private static final int ELEMS_AMOUNT = 5;
+    private static final int ELEMS_AMOUNT = 3;
 
     @Autowired
     public ReviewController(ReviewService rs,ContentService cs,UserService us){
