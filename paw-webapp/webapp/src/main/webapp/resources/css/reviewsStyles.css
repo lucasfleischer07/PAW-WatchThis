@@ -17,11 +17,16 @@ W-read-button {
     margin-left: 10vw;
 }
 
-.W-ReadMore-a{
+.W-readMore-a{
     display: flex;
     align-items: center;
     justify-content: center;
     text-decoration: none;
+}
+
+.W-readMore-button {
+    display: flex;
+    justify-content: space-around;
 }
 
 .W-inv-film-card-margin{
