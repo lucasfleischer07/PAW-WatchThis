@@ -13,8 +13,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -23,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,27 +45,7 @@ public class ReviewController {
         this.cs = cs;
         this.rs = rs;
     }
-
-//    private void HeaderSetUp(ModelAndView mav,PawUserDetails userDetails){
-//        try {
-//            String userEmail = userDetails.getUsername();
-//            User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
-//            mav.addObject("userName",user.getUserName());
-//            mav.addObject("userId",user.getId());
-//            if(user.getRole().equals("admin")){
-//                mav.addObject("admin",true);
-//            }else{
-//                mav.addObject("admin",false);
-//            }
-//
-//        } catch (NullPointerException e) {
-//            mav.addObject("userName","null");
-//            mav.addObject("userId","null");
-//            mav.addObject("admin",false);
-//        }
-//    }
-
-    // * ----------------------------------- Movies and Series Info page -----------------------------------------------
+    
     private void paginationSetup(ModelAndView mav,int page,List<Review> reviewList){
         if(reviewList.size()==0){
             mav.addObject("reviews",reviewList);
@@ -79,8 +62,9 @@ public class ReviewController {
 
     }
 
+    // * ----------------------------------- Movies and Series Info page -----------------------------------------------
     @RequestMapping(value={"/{type:movie|serie}/{contentId:[0-9]+}","/{type:movie|serie}/{contentId:[0-9]+}/page/{pageNum:[0-9]+}"})
-    public ModelAndView reviews(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("contentId")final long contentId, @PathVariable("type") final String type,@PathVariable("pageNum")final Optional<Integer> pageNum,HttpServletRequest request) {
+    public ModelAndView reviews(Principal userDetails, @PathVariable("contentId")final long contentId, @PathVariable("type") final String type,@PathVariable("pageNum")final Optional<Integer> pageNum,HttpServletRequest request) {
         final ModelAndView mav = new ModelAndView("infoPage");
         mav.addObject("details", cs.findById(contentId).orElseThrow(PageNotFoundException::new));
         List<Review> reviewList = rs.getAllReviews(contentId);
@@ -91,9 +75,9 @@ public class ReviewController {
         }
         mav.addObject("contentId",contentId);
         mav.addObject("type",type);
-
-        try {
-            String userEmail = userDetails.getUsername();
+        
+        if(userDetails != null) {
+            String userEmail = userDetails.getName();
             user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
             mav.addObject("userName",user.getUserName());
             mav.addObject("userId",user.getId());
@@ -116,7 +100,7 @@ public class ReviewController {
             } else {
                 mav.addObject("admin",false);
             }
-        } catch (NullPointerException e) {
+        } else {
             mav.addObject("userName","null");
             mav.addObject("userId","null");
             mav.addObject("isInWatchList","null");
@@ -142,11 +126,11 @@ public class ReviewController {
 
     // * ----------------------------------- Movies and Series Review Creation------------------------------------------
     @RequestMapping(value = "/reviewForm/{type:movie|serie}/{id:[0-9]+}/{userId:[0-9]+}", method = {RequestMethod.GET})
-    public ModelAndView reviewFormCreate(@AuthenticationPrincipal PawUserDetails userDetails, @ModelAttribute("registerForm") final ReviewForm reviewForm, @PathVariable("id")final long id, @PathVariable("type")final String type) {
+    public ModelAndView reviewFormCreate(Principal userDetails, @ModelAttribute("registerForm") final ReviewForm reviewForm, @PathVariable("id")final long id, @PathVariable("type")final String type) {
         final ModelAndView mav = new ModelAndView("reviewRegistrationPage");
         mav.addObject("details", cs.findById(id).orElseThrow(PageNotFoundException::new));
-        try {
-            String userEmail = userDetails.getUsername();
+        if(userDetails != null) {
+            String userEmail = userDetails.getName();
             User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
             mav.addObject("userName",user.getUserName());
             mav.addObject("userId",user.getId());
@@ -155,7 +139,7 @@ public class ReviewController {
             }else{
                 mav.addObject("admin",false);
             }
-        } catch (NullPointerException e) {
+        } else {
             mav.addObject("userName","null");
             mav.addObject("userId","null");
             mav.addObject("admin",false);
@@ -164,7 +148,7 @@ public class ReviewController {
     }
 
     @RequestMapping(value = "/reviewForm/{type:movie|serie}/{id:[0-9]+}/{userId:[0-9]+}", method = {RequestMethod.POST})
-    public ModelAndView reviewFormMovie(@AuthenticationPrincipal PawUserDetails userDetails, @Valid @ModelAttribute("registerForm") final ReviewForm form, final BindingResult errors, @PathVariable("id")final long id, @PathVariable("type")final String type, @PathVariable("userId")final long userId,HttpServletRequest request) {
+    public ModelAndView reviewFormMovie(Principal userDetails, @Valid @ModelAttribute("registerForm") final ReviewForm form, final BindingResult errors, @PathVariable("id")final long id, @PathVariable("type")final String type, @PathVariable("userId")final long userId,HttpServletRequest request) {
         if(errors.hasErrors()) {
             return reviewFormCreate(userDetails,form,id,type);
         }
@@ -172,7 +156,7 @@ public class ReviewController {
             return reviewFormCreate(userDetails,form,id,type);
         }
 
-        Optional<User> user = us.findByEmail(userDetails.getUsername());
+        Optional<User> user = us.findByEmail(userDetails.getName());
         try {
             Review newReview = new Review(null, type, id, form.getName(), form.getDescription(), form.getRating(), user.get().getUserName(),null);
             newReview.setId(id);
@@ -194,10 +178,11 @@ public class ReviewController {
 
     // * ---------------------------------------------Review edition and delete-----------------------------------------
     @RequestMapping(value="/review/{reviewId:[0-9]+}/delete",method = {RequestMethod.POST})
-    public ModelAndView deleteReview(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("reviewId") final long reviewId, HttpServletRequest request){
+    public ModelAndView deleteReview(Principal userDetails, @PathVariable("reviewId") final long reviewId, HttpServletRequest request){
         Review review=rs.findById(reviewId).orElseThrow(PageNotFoundException::new);
-        User user=us.findByEmail(userDetails.getUsername()).get();
-        if(review.getUserName().equals(user.getUserName()) || userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))){
+        User user=us.findByEmail(userDetails.getName()).get();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if(review.getUserName().equals(user.getUserName()) || auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ADMIN"))){
             rs.deleteReview(reviewId);
             String referer = request.getHeader("Referer");
             return new ModelAndView("redirect:"+ referer);
@@ -209,7 +194,7 @@ public class ReviewController {
 
 
     @RequestMapping(value = "/reviewForm/edit/{type:movie|serie}/{contentId:[0-9]+}/{reviewId:[0-9]+}", method = {RequestMethod.GET})
-    public ModelAndView reviewFormEdition(@AuthenticationPrincipal PawUserDetails userDetails, @ModelAttribute("registerForm") final ReviewForm reviewForm, @PathVariable("contentId")final long contentId, @PathVariable("reviewId")final long reviewId, @PathVariable("type")final String type, HttpServletRequest request) {
+    public ModelAndView reviewFormEdition(Principal userDetails, @ModelAttribute("registerForm") final ReviewForm reviewForm, @PathVariable("contentId")final long contentId, @PathVariable("reviewId")final long reviewId, @PathVariable("type")final String type, HttpServletRequest request) {
         final ModelAndView mav = new ModelAndView("reviewEditionPage");
         mav.addObject("details", cs.findById(contentId).orElseThrow(PageNotFoundException::new));
         Optional<Review> oldReview = rs.findById(reviewId);
@@ -217,27 +202,29 @@ public class ReviewController {
             LOGGER.warn("Cant find a the review specified",new PageNotFoundException());
             throw new PageNotFoundException();
         }
-        try {
-            String userEmail = userDetails.getUsername();
+        if(userDetails != null) {
+            String userEmail = userDetails.getName();
             User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
             mav.addObject("user",user);
             mav.addObject("userName",user.getUserName());
             mav.addObject("userId",user.getId());
             if(user.getRole().equals("admin")){
                 mav.addObject("admin",true);
-            }else{
+            } else {
                 mav.addObject("admin",false);
             }
 
-        } catch (NullPointerException e) {
+            if(!oldReview.get().getUserName().equals(us.findByEmail(userDetails.getName()).get().getUserName())){
+                LOGGER.warn("The editor is not owner of the review",new MethodNotAllowedException());
+                throw new MethodNotAllowedException();
+            }
+
+        } else {
             mav.addObject("userName","null");
             mav.addObject("userId","null");
             mav.addObject("admin",false);
         }
-        if(!oldReview.get().getUserName().equals(us.findByEmail(userDetails.getUsername()).get().getUserName())){
-            LOGGER.warn("The editor is not owner of the review",new MethodNotAllowedException());
-            throw new MethodNotAllowedException();
-        }
+
         reviewForm.setDescription(oldReview.get().getDescription());
         reviewForm.setRating(oldReview.get().getRating());
         reviewForm.setName(oldReview.get().getName());
@@ -248,7 +235,7 @@ public class ReviewController {
     }
 
     @RequestMapping(value = "/reviewForm/edit/{type:movie|serie}/{contentId:[0-9]+}/{reviewId:[0-9]+}", method = {RequestMethod.POST})
-    public ModelAndView reviewFormEditionPost(@AuthenticationPrincipal PawUserDetails userDetails, @Valid @ModelAttribute("registerForm") final ReviewForm form, final BindingResult errors, @PathVariable("type")final String type, @PathVariable("contentId")final long contentId, @PathVariable("reviewId")final long reviewId, HttpServletRequest request) {
+    public ModelAndView reviewFormEditionPost(Principal userDetails, @Valid @ModelAttribute("registerForm") final ReviewForm form, final BindingResult errors, @PathVariable("type")final String type, @PathVariable("contentId")final long contentId, @PathVariable("reviewId")final long reviewId, HttpServletRequest request) {
         if(errors.hasErrors()) {
             return reviewFormEdition(userDetails,form,contentId,reviewId,type,request);
         }
@@ -262,7 +249,7 @@ public class ReviewController {
             throw new PageNotFoundException();
         }
 
-        Optional<User> user = us.findByEmail(userDetails.getUsername());
+        Optional<User> user = us.findByEmail(userDetails.getName());
         if(!oldReview.get().getUserName().equals(user.get().getUserName())){
             LOGGER.warn("The editor is not owner of the review",new PageNotFoundException());
             throw new MethodNotAllowedException();
