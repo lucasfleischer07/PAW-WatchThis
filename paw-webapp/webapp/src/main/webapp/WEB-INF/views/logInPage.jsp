@@ -74,7 +74,7 @@
                                         <label class="form-check-label" for="flexCheckDefault"><spring:message code="Login.RememberMe"/></label>
                                     </div>
                                     <div class="W-div-login-button">
-                                        <button id="submitButton1" type="submit" class="btn btn-success W-login-button" onclick="this.form.submit(); (this).disabled = true; (this).className -= ' W-login-button'; (this).className += ' spinner-border text-success'; (this).innerText = ''"><spring:message code="Login.LoginMessage"/></button>
+                                        <button id="submitButton1" type="submit" class="btn btn-success W-login-button" onclick="this.form.submit(); (this).disabled = true; (this).className -= ' W-login-button'; (this).className += ' spinner-border text-success'; (this).innerText = ''; disableButtons()"><spring:message code="Login.LoginMessage"/></button>
                                     </div>
                                 </div>
 
