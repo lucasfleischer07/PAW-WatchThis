@@ -96,6 +96,19 @@
                     <jsp:param name="isAdmin" value="${admin}"/>
                   </jsp:include>
                 </c:forEach>
+                  <c:choose>
+                      <c:when test="${userProfile!=null}">
+                          <c:set var="readMorepath" value="/profile/${userProfile}"/>
+                      </c:when>
+                      <c:otherwise>
+                          <c:set var="readMorepath" value="/profile"/>
+                      </c:otherwise>
+                  </c:choose>
+                  <c:if test="${pageSelected<amountPages}">
+                      <a id="readMore" class="W-ReadMore-a" data-toggle="collapse" href="<c:url value="${readMorepath}/page/${pageSelected+1}"/>">
+                          <button type="button" class="btn btn-dark W-add-review-button W-reviewText"><spring:message code="Reviews.ReadMore"/></button>
+                      </a>
+                  </c:if>
               </div>
             </div>
           </div>

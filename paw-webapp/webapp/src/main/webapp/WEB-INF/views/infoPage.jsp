@@ -260,6 +260,11 @@
                 <jsp:param name="isAdmin" value="${admin}"/>
               </jsp:include>
             </c:forEach>
+            <c:if test="${pageSelected<amountPages}">
+              <a id="readMore" class="W-ReadMore-a" data-toggle="collapse" href="<c:url value="/${type}/${contentId}/page/${pageSelected+1}"/>">
+                <button type="button" class="btn btn-dark W-add-review-button W-reviewText"><spring:message code="Reviews.ReadMore"/></button>
+              </a>
+            </c:if>
             <c:if test="${reviews==null || reviews.size()==0}">
                 <div>
                   <div class="W-no-reviews-icon">

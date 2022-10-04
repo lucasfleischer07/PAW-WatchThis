@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.models.Content;
+import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.services.ContentService;
 import ar.edu.itba.paw.services.EmailService;
@@ -47,7 +48,7 @@ public class UserController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
     protected AuthenticationManager authenticationManager;
-
+    private static final int ELEMS_AMOUNT = 5;
     @Autowired
     public UserController(final UserService us, final ContentService cs, ReviewService rs, EmailService es,AuthenticationManager authenticationManager){
         this.us = us;
@@ -148,8 +149,24 @@ public class UserController {
 
 
     // * ------------------------------------------------Profile View --------------------------------------------------
-    @RequestMapping("/profile")
-    public ModelAndView profile(@AuthenticationPrincipal PawUserDetails userDetails,HttpServletRequest request) {
+    private void paginationSetup(ModelAndView mav,int page,List<Review> reviewList){
+        if(reviewList.size()==0){
+            mav.addObject("reviews",reviewList);
+            mav.addObject("pageSelected",1);
+            mav.addObject("amountPages",1);
+            return;
+        }
+        if(reviewList.size()>=page*ELEMS_AMOUNT)
+            mav.addObject("reviews",reviewList.subList(0,page*ELEMS_AMOUNT));
+        else
+            mav.addObject("reviews",reviewList.subList(0, reviewList.size()-1));
+        mav.addObject("pageSelected",page);
+        mav.addObject("amountPages",Math.ceil((double)reviewList.size()/(double)ELEMS_AMOUNT));
+
+    }
+
+    @RequestMapping(value={"/profile","/profile/page/{pageNum:[0-9]+}"})
+    public ModelAndView profile(@AuthenticationPrincipal PawUserDetails userDetails,@PathVariable("pageNum")final Optional<Integer> pageNum,HttpServletRequest request) {
         final String locale = LocaleContextHolder.getLocale().getDisplayLanguage();
         final ModelAndView mav = new ModelAndView("profileInfoPage");
         String userEmail = userDetails.getUsername();
@@ -157,10 +174,12 @@ public class UserController {
         Optional<String> quote = cs.getContentQuote(locale);
         mav.addObject("quote", quote.get());
         mav.addObject("user", user);
-        mav.addObject("reviews",rs.getAllUserReviews(user.getUserName()));
         mav.addObject("userName",user.getUserName());
         mav.addObject("userId",user.getId());
         mav.addObject("admin",false);
+
+        paginationSetup(mav,pageNum.orElse(1),rs.getAllUserReviews(user.getUserName()));
+
         request.getSession().setAttribute("referer","/profile");
         return mav;
     }
@@ -176,20 +195,23 @@ public class UserController {
         return user.getImage();
     }
 
-    @RequestMapping("/profile/{userName:[a-zA-Z0-9\\s]+}")
-    public ModelAndView profileInfo(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("userName") final String userName,HttpServletRequest request) {
+    @RequestMapping(value = {"/profile/{userName:[a-zA-Z0-9\\s]+}","/profile/{userName:[a-zA-Z0-9\\s]+}/page/{pageNum:[0-9]+}"},method = {RequestMethod.GET})
+    public ModelAndView profileInfo(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("userName") final String userName,@PathVariable("pageNum")final Optional<Integer> pageNum,HttpServletRequest request) {
         if(userName==null || userName==""){
             LOGGER.warn("Wrong username photo request:",new PageNotFoundException());
             throw new PageNotFoundException();
         }
         final ModelAndView mav = new ModelAndView("profileInfoPage");
         Optional<User> user = us.findByUserName(userName);
+        mav.addObject("userProfile",userName);
         if(user.isPresent()) {
             final String locale = LocaleContextHolder.getLocale().getDisplayLanguage();
             Optional<String> quote = cs.getContentQuote(locale);
             mav.addObject("quote", quote.get());
             mav.addObject("user", user.get());
-            mav.addObject("reviews",rs.getAllUserReviews(user.get().getUserName()));
+
+            paginationSetup(mav,pageNum.orElse(1),rs.getAllUserReviews(user.get().getUserName()));
+
         } else {
             LOGGER.warn("Wrong username profile request:",new PageNotFoundException());
             throw new PageNotFoundException();

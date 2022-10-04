@@ -34,6 +34,8 @@ public class ReviewController {
     private UserService us;
     private static final Logger LOGGER = LoggerFactory.getLogger(ReviewController.class);
 
+    private static final int ELEMS_AMOUNT = 5;
+
     @Autowired
     public ReviewController(ReviewService rs,ContentService cs,UserService us){
         this.us = us;
@@ -61,8 +63,24 @@ public class ReviewController {
 //    }
 
     // * ----------------------------------- Movies and Series Info page -----------------------------------------------
-    @RequestMapping("/{type:movie|serie}/{contentId:[0-9]+}")
-    public ModelAndView reviews(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("contentId")final long contentId, @PathVariable("type") final String type,HttpServletRequest request) {
+    private void paginationSetup(ModelAndView mav,int page,List<Review> reviewList){
+        if(reviewList.size()==0){
+            mav.addObject("reviews",reviewList);
+            mav.addObject("pageSelected",1);
+            mav.addObject("amountPages",1);
+            return;
+        }
+        if(reviewList.size()>=page*ELEMS_AMOUNT)
+            mav.addObject("reviews",reviewList.subList(0,page*ELEMS_AMOUNT));
+        else
+            mav.addObject("reviews",reviewList.subList(0, reviewList.size()));
+        mav.addObject("pageSelected",page);
+        mav.addObject("amountPages",Math.ceil((double)reviewList.size()/(double)ELEMS_AMOUNT));
+
+    }
+
+    @RequestMapping(value={"/{type:movie|serie}/{contentId:[0-9]+}","/{type:movie|serie}/{contentId:[0-9]+}/page/{pageNum:[0-9]+}"})
+    public ModelAndView reviews(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("contentId")final long contentId, @PathVariable("type") final String type,@PathVariable("pageNum")final Optional<Integer> pageNum,HttpServletRequest request) {
         final ModelAndView mav = new ModelAndView("infoPage");
         mav.addObject("details", cs.findById(contentId).orElseThrow(PageNotFoundException::new));
         List<Review> reviewList = rs.getAllReviews(contentId);
@@ -72,6 +90,8 @@ public class ReviewController {
             throw new PageNotFoundException();
         }
         mav.addObject("contentId",contentId);
+        mav.addObject("type",type);
+
         try {
             String userEmail = userDetails.getUsername();
             user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
@@ -113,7 +133,7 @@ public class ReviewController {
                 }
             }
         }
-        mav.addObject("reviews", reviewList);
+        paginationSetup(mav,pageNum.orElse(1),reviewList);
         request.getSession().setAttribute("referer","/"+type+"/"+contentId);
         return mav;
     }
