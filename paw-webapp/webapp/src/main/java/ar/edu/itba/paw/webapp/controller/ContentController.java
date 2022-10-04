@@ -12,7 +12,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.security.Principal;
 import java.util.*;
 
 @Controller
@@ -37,25 +40,25 @@ public class ContentController {
         this.us=us;
     }
 
-    private void HeaderSetUp(ModelAndView mav,PawUserDetails userDetails) {
-        try {
-            String userEmail = userDetails.getUsername();
+    private void HeaderSetUp(ModelAndView mav,Principal userDetails) {
+        if(userDetails != null) {
+            String userEmail = userDetails.getName();
             User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
             List<Long> userWatchListContentId = us.getUserWatchListContent(user);
             mav.addObject("userName", user.getUserName());
             mav.addObject("userId", user.getId());
             mav.addObject("userWatchListContentId",userWatchListContentId);
-            if(user.getRole().equals("admin")){
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            if(auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ADMIN"))){
                 mav.addObject("admin",true);
             }else{
                 mav.addObject("admin",false);
             }
-        } catch (NullPointerException e) {
+        } else {
             mav.addObject("userName", "null");
             mav.addObject("userId", "null");
             mav.addObject("admin", false);
-            mav.addObject("userWatchListContentId","null");
-
+            mav.addObject("userWatchListContentId",new ArrayList<Long>());
         }
     }
 
@@ -72,7 +75,7 @@ public class ContentController {
 
     // * ----------------------------------- Home Page -----------------------------------------------------------------
     @RequestMapping(value= {"/","page/{pageNum}"})
-    public ModelAndView helloWorld(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("pageNum")final Optional<Integer> pageNum, @RequestParam(name = "query", defaultValue = "") final String query, HttpServletRequest request) {
+    public ModelAndView helloWorld(Principal userDetails, @PathVariable("pageNum")final Optional<Integer> pageNum, @RequestParam(name = "query", defaultValue = "") final String query, HttpServletRequest request) {
         final ModelAndView mav = new ModelAndView("homePage");
         List<Content> bestRatedList = cs.getBestRated();
         List<Content> lastAddedList = cs.getLastAdded();
@@ -92,30 +95,25 @@ public class ContentController {
         mav.addObject("sorting","ANY");
         mav.addObject("contentType", "all");
 
-        try {
-            String userEmail = userDetails.getUsername();
+        if(userDetails != null) {
+            String userEmail = userDetails.getName();
             User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
             List<Long> userWatchListContentId = us.getUserWatchListContent(user);
             mav.addObject("userName", user.getUserName());
             mav.addObject("userId", user.getId());
             mav.addObject("userWatchListContentId", userWatchListContentId);
-//            * Pregunto si la watch list es vacia
             if(userWatchListContentId.size() != 0) {
-//            * Si la watch list NO es vacia, me traigo la lista de recomendaciones
                 List<Content> recommendedUserList = cs.getUserRecommended(user);
                 if(recommendedUserList.size() != 0) {
-//                    * Si la lista de recomendaciones NO es nula, la cargo
                     mav.addObject("recommendedUserList", recommendedUserList);
                     mav.addObject("recommendedUserListSize", recommendedUserList.size());
                 } else {
-//                    * Si la lista de recomendaciones SI ES es nula, cargo la lista de contenido mas guardado
                     mav.addObject("recommendedUserList", "null");
                     List<Content> mostSavedContentByUsersList = cs.getMostUserSaved();
                     mav.addObject("mostSavedContentByUsersList", mostSavedContentByUsersList);
                     mav.addObject("mostSavedContentByUsersListSize", mostSavedContentByUsersList.size());
                 }
             } else {
-//             * Si la watch list es vacia (el usuario no tiene contenido en la watch list), me traigo la mas guardadas para mostrarle
                 List<Content> mostSavedContentByUsersList = cs.getMostUserSaved();
                 mav.addObject("mostSavedContentByUsersList", mostSavedContentByUsersList);
                 mav.addObject("mostSavedContentByUsersListSize", mostSavedContentByUsersList.size());
@@ -126,12 +124,11 @@ public class ContentController {
             } else {
                 mav.addObject("admin",false);
             }
-        } catch (NullPointerException e) {
+        } else {
             mav.addObject("userName", "null");
             mav.addObject("userId", "null");
             mav.addObject("admin", false);
-            mav.addObject("userWatchListContentId","null");
-//            * Si no hay usuario logueado, le muestro la lista de mas guardadas
+            mav.addObject("userWatchListContentId", new ArrayList<Long>());
             List<Content> mostSavedContentByUsersList = cs.getMostUserSaved();
             mav.addObject("mostSavedContentByUsersList", mostSavedContentByUsersList);
             mav.addObject("mostSavedContentByUsersListSize", mostSavedContentByUsersList.size());
@@ -147,7 +144,7 @@ public class ContentController {
 
     // * ----------------------------------- Movie and Series division -------------------------------------------------
     @RequestMapping(value= {"/{type:movies|series}","/{type:movies|series}/page/{pageNum}"})
-    public ModelAndView contentType(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("type") final String type,@PathVariable("pageNum")final Optional<Integer> pageNum,HttpServletRequest request) {
+    public ModelAndView contentType(Principal userDetails, @PathVariable("type") final String type,@PathVariable("pageNum")final Optional<Integer> pageNum,HttpServletRequest request) {
         String auxType = null;
         final ModelAndView mav = new ModelAndView("contentPage");
         if(Objects.equals(type, "movies")) {
@@ -190,7 +187,7 @@ public class ContentController {
     // *  ----------------------------------- Movies and Serie Filters -------------------------------------------------
     @RequestMapping(value = {"/{type:movies|series|all}/filters" , "/{type:movies|series|all}/filters/page/{pageNum}"})
     public ModelAndView moviesWithFilters(
-            @AuthenticationPrincipal PawUserDetails userDetails,
+            Principal userDetails,
             @PathVariable("type") final String type,
             @PathVariable("pageNum")final Optional<Integer> pageNum,
             @RequestParam(name = "durationFrom",defaultValue = "ANY",required = false)final String durationFrom,
@@ -249,7 +246,7 @@ public class ContentController {
     }
 
     @RequestMapping(value = "/content/create",method = {RequestMethod.GET})
-    public ModelAndView createContent(@AuthenticationPrincipal PawUserDetails userDetails,@ModelAttribute("contentCreate") final ContentForm contentForm) {
+    public ModelAndView createContent(Principal userDetails,@ModelAttribute("contentCreate") final ContentForm contentForm) {
         final ModelAndView mav = new ModelAndView("contentCreatePage");
         mav.addObject("create",true);
         HeaderSetUp(mav,userDetails);
@@ -275,7 +272,7 @@ public class ContentController {
 
     // * ----------------------------------- Search bar ----------------------------------------------------------------
     @RequestMapping(value = {"/search", "/search/page/{pageNum}"})
-    public ModelAndView search(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("pageNum")final Optional<Integer> pageNum, @RequestParam(name = "query", defaultValue = "") final String query,HttpServletRequest request) {
+    public ModelAndView search(Principal userDetails, @PathVariable("pageNum")final Optional<Integer> pageNum, @RequestParam(name = "query", defaultValue = "") final String query,HttpServletRequest request) {
         final ModelAndView mav = new ModelAndView("contentPage");
 
         mav.addObject("query", query);
@@ -306,7 +303,7 @@ public class ContentController {
 
 
     @RequestMapping(value = "/content/editInfo/{contentId:[0-9]+}", method = {RequestMethod.GET})
-    public ModelAndView editContent(@AuthenticationPrincipal PawUserDetails userDetails, @ModelAttribute("contentEditForm") final ContentEditForm contentEditForm, @PathVariable("contentId")final long contentId){
+    public ModelAndView editContent(Principal userDetails, @ModelAttribute("contentEditForm") final ContentEditForm contentEditForm, @PathVariable("contentId")final long contentId){
         final ModelAndView mav = new ModelAndView("contentCreatePage");
         Optional<Content> oldContent = cs.findById(contentId);
         if(!oldContent.isPresent()){
@@ -327,7 +324,7 @@ public class ContentController {
     }
 
     @RequestMapping(value = "/content/editInfo/{contentId:[0-9]+}", method = {RequestMethod.POST})
-    public ModelAndView editContent(@AuthenticationPrincipal PawUserDetails userDetails, @Valid @ModelAttribute("contentEditForm") final ContentEditForm contentEditForm, @PathVariable("contentId")final long contentId, final BindingResult errors) throws  IOException {
+    public ModelAndView editContent(Principal userDetails, @Valid @ModelAttribute("contentEditForm") final ContentEditForm contentEditForm, @PathVariable("contentId")final long contentId, final BindingResult errors) throws  IOException {
         if(errors.hasErrors()) {
             return editContent(userDetails, contentEditForm,contentId);
         }
@@ -339,7 +336,7 @@ public class ContentController {
     // * ----------------------------------- Content Delete ----------------------------------------------------------
 
     @RequestMapping(value = "/content/{contentId:[0-9]+}/delete", method = {RequestMethod.POST})
-    public ModelAndView deleteContent(@AuthenticationPrincipal PawUserDetails userDetails, @PathVariable("contentId")final long contentId){
+    public ModelAndView deleteContent(Principal userDetails, @PathVariable("contentId")final long contentId){
         Content oldContent = cs.findById(contentId).orElseThrow(PageNotFoundException::new);
         cs.deleteContent(contentId);
         return new ModelAndView("redirect:/");
@@ -348,7 +345,7 @@ public class ContentController {
 
     // * ----------------------------------- Content Creation ----------------------------------------------------------
     @RequestMapping(value = "/content/create",method = {RequestMethod.POST})
-    public ModelAndView createContent(@AuthenticationPrincipal PawUserDetails userDetails,@Valid @ModelAttribute("contentCreate") final ContentForm contentForm, final BindingResult errors) throws IOException {
+    public ModelAndView createContent(Principal userDetails,@Valid @ModelAttribute("contentCreate") final ContentForm contentForm, final BindingResult errors) throws IOException {
         if(errors.hasErrors()) {
             return createContent(userDetails,contentForm);
         }
