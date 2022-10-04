@@ -1,7 +1,7 @@
 create table if not exists content  (
                           id serial PRIMARY KEY,
                           name VARCHAR ( 100 ) NOT NULL,
-                          image VARCHAR ( 500 ) ,
+                          image BIT ( 500 ) ,
                           description VARCHAR ( 500 ) NOT NULL,
                           released VARCHAR ( 50 ) NOT NULL,
                           genre VARCHAR ( 100 ) NOT NULL,
@@ -44,7 +44,7 @@ CREATE TABLE if not exists  userWatchlist(
                               userId int not null,
                               contentId int not null,
                               foreign key(userid) references userdata,
-                              foreign key(contentid) references content);
+                              foreign key(contentid) references content on delete cascade );
 
 create table if not exists quotes
 (
@@ -60,7 +60,7 @@ create table if not exists userviewedlist
     userid    integer not null
         references userdata,
     contentid integer not null
-        references content
+        references content on delete cascade
 );
 
 

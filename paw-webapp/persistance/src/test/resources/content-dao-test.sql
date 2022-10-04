@@ -5,4 +5,9 @@ insert into content(id,name,description,released,genre,creator,duration,duration
 insert into content(id,name,description,released,genre,creator,duration,durationnum,type,image) values (497,'Queer Eye','description','2018–','Reality-T V','David Collins','45 minutes',45,'serie',null);
 insert into content(id,name,description,released,genre,creator,duration,durationnum,type,image) values (1,'The Shawshank Redemption','description','1994','Drama','Frank Darabont','2 hours 22 minutes',142,'movie',null);
 insert into userdata(userid,name,email,password,reputation,image,role) values(1,'brandyhuevo','mateoperezrivera@gmail.com','secret',0,null ,'user');
+insert into userdata(userid,name,email,password,reputation,image,role) values(2,'brandyhuevo2','mateoperezrivera2@gmail.com','secret',0,null ,'user');
+insert into userwatchlist(id,userid,contentid) values (1,1,172);
+insert into userwatchlist(id,userid,contentid) values (2,2,172);
+insert into userwatchlist(id,userid,contentid) values (3,1,10);
+insert into userwatchlist(id,userid,contentid) values (4,2,1);
 insert into review (reviewId,type,contentId,userId,name,description,rating) values (1,'movie',501,1,'great movie','loved it! great actors',5);

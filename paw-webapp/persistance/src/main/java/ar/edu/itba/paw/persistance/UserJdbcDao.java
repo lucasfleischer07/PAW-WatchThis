@@ -97,7 +97,7 @@ public class UserJdbcDao implements UserDao{
         template.update("DELETE FROM userwatchlist WHERE userid = ? and contentid = ?", user.getId(), contentId);
     }
 
-    private static final String BASE_WATCHLIST_QUERY = "select content.id,content.name,content.image,content.description,released,genre,creator,duration,content.type, sum(review.rating)/count(*) as rating,count(reviewid) as reviewsAmount\n from ((content left join (select * from review as r2 where r2.rating<>0) as review on content.id = review.contentid) JOIN userwatchlist ON content.id = userwatchlist.contentId)JOIN userdata ON userdata.userid = userwatchlist.userid\n WHERE userwatchlist.userid = ? \n group by userwatchlist.id,content.id,content.name,content.description,content.released,content.genre,content.creator,content.duration,content.type,content.durationNum ";
+    private static final String BASE_WATCHLIST_QUERY = "select content.id,content.name,content.image,content.description,released,genre,creator,duration,content.type, sum(review.rating)/count(*) as rating,count(reviewid) as reviewsAmount\n from ((content left join (select * from review as r2 where r2.rating<>0) as review on content.id = review.contentid) JOIN userwatchlist ON content.id = userwatchlist.contentId)JOIN userdata ON userdata.userid = userwatchlist.userid\n WHERE userwatchlist.userid = ? \n group by userwatchlist.id,content.id,content.name,content.description,content.released,content.genre,content.creator,content.duration,content.type,content.durationNum,content.image ";
 
     @Override
     public List<Content> getWatchList(User user) {
@@ -125,7 +125,7 @@ public class UserJdbcDao implements UserDao{
         template.update("DELETE FROM userviewedlist WHERE userid = ? and contentid = ?", user.getId(), contentId);
     }
 
-    private static final String BASE_VIWED_LIST_QUERY = "select content.id,content.name,content.image,content.description,released,genre,creator,duration,content.type, sum(review.rating)/count(*) as rating,count(reviewid) as reviewsAmount\n from ((content left join (select * from review as r2 where r2.rating<>0) as review on content.id = review.contentid) JOIN userviewedlist ON content.id = userviewedlist.contentId)JOIN userdata ON userdata.userid = userviewedlist.userid\n WHERE userviewedlist.userid = ? \n group by userviewedlist.id,content.id,content.name,content.description,content.released,content.genre,content.creator,content.duration,content.type,content.durationNum ";
+    private static final String BASE_VIWED_LIST_QUERY = "select content.id,content.name,content.image,content.description,released,genre,creator,duration,content.type, sum(review.rating)/count(*) as rating,count(reviewid) as reviewsAmount\n from ((content left join (select * from review as r2 where r2.rating<>0) as review on content.id = review.contentid) JOIN userviewedlist ON content.id = userviewedlist.contentId)JOIN userdata ON userdata.userid = userviewedlist.userid\n WHERE userviewedlist.userid = ? \n group by userviewedlist.id,content.id,content.name,content.description,content.released,content.genre,content.creator,content.duration,content.type,content.durationNum,content.image ";
 
 
     @Override
