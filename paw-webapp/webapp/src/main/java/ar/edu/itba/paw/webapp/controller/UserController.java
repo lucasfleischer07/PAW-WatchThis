@@ -8,7 +8,7 @@ import ar.edu.itba.paw.services.EmailService;
 import ar.edu.itba.paw.services.ReviewService;
 import ar.edu.itba.paw.services.UserService;
 import ar.edu.itba.paw.webapp.auth.PawUserDetails;
-import ar.edu.itba.paw.webapp.exceptions.MethodNotAllowedException;
+import ar.edu.itba.paw.webapp.exceptions.ForbiddenException;
 import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
 import ar.edu.itba.paw.webapp.form.EditProfile;
 import ar.edu.itba.paw.webapp.form.LoginForm;
@@ -331,7 +331,7 @@ public class UserController {
             us.addToWatchList(user, contentId.get());}
             catch (DuplicateKeyException ignore){}
         } else {
-            throw new MethodNotAllowedException();
+            throw new ForbiddenException();
         }
 
         String referer = request.getSession().getAttribute("referer").toString();
@@ -350,7 +350,7 @@ public class UserController {
             User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
             us.deleteFromWatchList(user, contentId.get());
         } else {
-            throw new MethodNotAllowedException();
+            throw new ForbiddenException();
         }
 
         String referer = request.getSession().getAttribute("referer").toString();

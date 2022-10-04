@@ -6,7 +6,7 @@ import ar.edu.itba.paw.services.ContentService;
 import ar.edu.itba.paw.services.ReviewService;
 import ar.edu.itba.paw.services.UserService;
 import ar.edu.itba.paw.webapp.auth.PawUserDetails;
-import ar.edu.itba.paw.webapp.exceptions.MethodNotAllowedException;
+import ar.edu.itba.paw.webapp.exceptions.ForbiddenException;
 import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
 import ar.edu.itba.paw.webapp.form.ReviewForm;
 import org.slf4j.Logger;
@@ -187,8 +187,8 @@ public class ReviewController {
             String referer = request.getHeader("Referer");
             return new ModelAndView("redirect:"+ referer);
         } else {
-            LOGGER.warn("Not allowed to delete",new MethodNotAllowedException());
-            throw new MethodNotAllowedException();
+            LOGGER.warn("Not allowed to delete",new ForbiddenException());
+            throw new ForbiddenException();
         }
     }
 
@@ -215,8 +215,8 @@ public class ReviewController {
             }
 
             if(!oldReview.get().getUserName().equals(us.findByEmail(userDetails.getName()).get().getUserName())){
-                LOGGER.warn("The editor is not owner of the review",new MethodNotAllowedException());
-                throw new MethodNotAllowedException();
+                LOGGER.warn("The editor is not owner of the review",new ForbiddenException());
+                throw new ForbiddenException();
             }
 
         } else {
@@ -252,7 +252,7 @@ public class ReviewController {
         Optional<User> user = us.findByEmail(userDetails.getName());
         if(!oldReview.get().getUserName().equals(user.get().getUserName())){
             LOGGER.warn("The editor is not owner of the review",new PageNotFoundException());
-            throw new MethodNotAllowedException();
+            throw new ForbiddenException();
         }
         rs.updateReview(form.getName(), form.getDescription(), form.getRating(), reviewId);
         ModelMap model =new ModelMap();
