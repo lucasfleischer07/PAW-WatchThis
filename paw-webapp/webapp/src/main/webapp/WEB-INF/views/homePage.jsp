@@ -64,7 +64,7 @@
                                                             <jsp:param name="contentRating" value="${recommendedUserList.get(internalIndex).rating}"/>
                                                             <jsp:param name="reviewsAmount" value="${recommendedUserList.get(internalIndex).reviewsAmount}"/>
                                                             <jsp:param name="userName" value="${userName}"/>
-                                                            <jsp:param name="userWatchListContentId" value="${userWatchListContentId.contains(recommendedUserList.get(internalIndex).id)}"/>
+                                                            <jsp:param name="userWatchListContentId1" value="${userWatchListContentId.contains(recommendedUserList.get(internalIndex).id)}"/>
                                                         </jsp:include>
                                                     </c:forEach>
                                                 </div>
@@ -85,7 +85,7 @@
                                                             <jsp:param name="contentRating" value="${recommendedUserList.get(internalIndex).rating}"/>
                                                             <jsp:param name="reviewsAmount" value="${recommendedUserList.get(internalIndex).reviewsAmount}"/>
                                                             <jsp:param name="userName" value="${userName}"/>
-                                                            <jsp:param name="userWatchListContentId" value="${userWatchListContentId.contains(recommendedUserList.get(internalIndex).id)}"/>
+                                                            <jsp:param name="userWatchListContentId1" value="${userWatchListContentId.contains(recommendedUserList.get(internalIndex).id)}"/>
                                                         </jsp:include>
                                                     </c:forEach>
                                                 </div>
@@ -125,7 +125,7 @@
                                                             <jsp:param name="contentRating" value="${mostSavedContentByUsersList.get(internalIndex).rating}"/>
                                                             <jsp:param name="reviewsAmount" value="${mostSavedContentByUsersList.get(internalIndex).reviewsAmount}"/>
                                                             <jsp:param name="userName" value="${userName}"/>
-                                                            <jsp:param name="userWatchListContentId" value="${userWatchListContentId.contains(mostSavedContentByUsersList.get(internalIndex).id)}"/>
+                                                            <jsp:param name="userWatchListContentId1" value="${userWatchListContentId.contains(mostSavedContentByUsersList.get(internalIndex).id)}"/>
                                                         </jsp:include>
                                                     </c:forEach>
                                                 </div>
@@ -146,7 +146,7 @@
                                                             <jsp:param name="contentRating" value="${mostSavedContentByUsersList.get(internalIndex).rating}"/>
                                                             <jsp:param name="reviewsAmount" value="${mostSavedContentByUsersList.get(internalIndex).reviewsAmount}"/>
                                                             <jsp:param name="userName" value="${userName}"/>
-                                                            <jsp:param name="userWatchListContentId" value="${userWatchListContentId.contains(mostSavedContentByUsersList.get(internalIndex).id)}"/>
+                                                            <jsp:param name="userWatchListContentId1" value="${userWatchListContentId.contains(mostSavedContentByUsersList.get(internalIndex).id)}"/>
                                                         </jsp:include>
                                                     </c:forEach>
                                                 </div>
@@ -187,7 +187,7 @@
                                                     <jsp:param name="contentRating" value="${bestRatedList.get(internalIndex).rating}"/>
                                                     <jsp:param name="reviewsAmount" value="${bestRatedList.get(internalIndex).reviewsAmount}"/>
                                                     <jsp:param name="userName" value="${userName}"/>
-                                                    <jsp:param name="userWatchListContentId" value="${userWatchListContentId.contains(bestRatedList.get(internalIndex).id)}"/>
+                                                    <jsp:param name="userWatchListContentId1" value="${userWatchListContentId.contains(bestRatedList.get(internalIndex).id)}"/>
                                                 </jsp:include>
                                             </c:forEach>
                                         </div>
@@ -208,7 +208,7 @@
                                                     <jsp:param name="contentRating" value="${bestRatedList.get(internalIndex).rating}"/>
                                                     <jsp:param name="reviewsAmount" value="${bestRatedList.get(internalIndex).reviewsAmount}"/>
                                                     <jsp:param name="userName" value="${userName}"/>
-                                                    <jsp:param name="userWatchListContentId" value="${userWatchListContentId.contains(bestRatedList.get(internalIndex).id)}"/>
+                                                    <jsp:param name="userWatchListContentId1" value="${userWatchListContentId.contains(bestRatedList.get(internalIndex).id)}"/>
                                                 </jsp:include>
                                             </c:forEach>
                                         </div>
@@ -248,7 +248,7 @@
                                                     <jsp:param name="contentRating" value="${lastAddedList.get(internalIndex).rating}"/>
                                                     <jsp:param name="reviewsAmount" value="${lastAddedList.get(internalIndex).reviewsAmount}"/>
                                                     <jsp:param name="userName" value="${userName}"/>
-                                                    <jsp:param name="userWatchListContentId" value="${userWatchListContentId.contains(lastAddedList.get(internalIndex).id)}"/>
+                                                    <jsp:param name="userWatchListContentId1" value="${userWatchListContentId.contains(lastAddedList.get(internalIndex).id)}"/>
                                                 </jsp:include>
                                             </c:forEach>
                                         </div>
@@ -269,7 +269,7 @@
                                                     <jsp:param name="contentRating" value="${lastAddedList.get(internalIndex).rating}"/>
                                                     <jsp:param name="reviewsAmount" value="${lastAddedList.get(internalIndex).reviewsAmount}"/>
                                                     <jsp:param name="userName" value="${userName}"/>
-                                                    <jsp:param name="userWatchListContentId" value="${userWatchListContentId.contains(lastAddedList.get(internalIndex).id)}"/>
+                                                    <jsp:param name="userWatchListContentId1" value="${userWatchListContentId.contains(lastAddedList.get(internalIndex).id)}"/>
                                                 </jsp:include>
                                             </c:forEach>
                                         </div>
