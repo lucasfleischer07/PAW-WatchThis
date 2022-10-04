@@ -295,7 +295,7 @@ public class ContentController {
         }
 
         HeaderSetUp(mav,userDetails);
-        request.getSession().setAttribute("referer","/search?=query="+query);
+        request.getSession().setAttribute("referer","/search?query="+query);
         return mav;
     }
 

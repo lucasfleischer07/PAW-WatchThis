@@ -327,7 +327,9 @@ public class UserController {
         if(userDetails != null) {
             String userEmail = userDetails.getName();
             User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
-            us.addToWatchList(user, contentId.get());
+            try {
+            us.addToWatchList(user, contentId.get());}
+            catch (DuplicateKeyException ignore){}
         } else {
             throw new MethodNotAllowedException();
         }
@@ -398,7 +400,9 @@ public class UserController {
         }
         String userEmail = userDetails.getName();
         User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
-        us.addToViewedList(user, contentId.get());
+        try{
+        us.addToViewedList(user, contentId.get());}
+        catch (DuplicateKeyException ignore){}
         String referer = request.getSession().getAttribute("referer").toString();
         return new ModelAndView("redirect:" + (referer==null?"/":referer));
     }
