@@ -91,7 +91,7 @@
                                     <jsp:param name="contentType" value="${content.type}"/>
                                     <jsp:param name="contentRating" value="${content.rating}"/>
                                     <jsp:param name="reviewsAmount" value="${content.reviewsAmount}"/>
-                                    <jsp:param name="userWatchListContentId" value="${userWatchListContentId}"/>
+                                    <jsp:param name="userWatchListContentId" value="${userWatchListContentId.contains(content.id)}"/>
                                 </jsp:include>
                             </c:forEach>
                         </div>

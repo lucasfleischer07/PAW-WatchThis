@@ -45,7 +45,7 @@ public class ReviewController {
         this.cs = cs;
         this.rs = rs;
     }
-    
+
     private void paginationSetup(ModelAndView mav,int page,List<Review> reviewList){
         if(reviewList.size()==0){
             mav.addObject("reviews",reviewList);
