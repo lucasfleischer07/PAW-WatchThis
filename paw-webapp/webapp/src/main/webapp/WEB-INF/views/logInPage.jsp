@@ -81,7 +81,7 @@
                                 <hr class="d-flex W-line-style-login"/>
                                 <div class="W-alignment-signup-div">
                                     <h5><spring:message code="Login.NoAccountMessage"/></h5>
-                                    <a href="<c:url value="/login/sign-up"/>"><button type="button" class="btn btn-secondary W-sign-up-button-link"><spring:message code="Login.SignUpMessage"/></button></a>
+                                    <a href="<c:url value="/login/sign-up"/>" onclick="disableButtons()"><button type="button" class="btn btn-secondary W-sign-up-button-link" onclick="disableButtons()"><spring:message code="Login.SignUpMessage"/></button></a>
                                 </div>
                             </div>
                         </form>
@@ -123,7 +123,7 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <button id="submitButton2" type="submit" class="btn btn-success W-login-button" onclick="this.form.submit(); (this).disabled = true; (this).className -= ' W-login-button'; (this).className += ' spinner-border text-success'; (this).innerText = ''"><spring:message code="Signup.SignupMessage"/></button>
+                                    <button id="submitButton2" type="submit" class="btn btn-success W-login-button" onclick="this.form.submit(); (this).disabled = true; (this).className -= ' W-login-button'; (this).className += ' spinner-border text-success'; (this).innerText = ''; disableButtons()"><spring:message code="Signup.SignupMessage"/></button>
                                 </div>
                             </div>
                         </form:form>
@@ -148,12 +148,14 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <button id="submitButton3" type="submit" class="btn btn-success W-send-password" onclick="this.form.submit(); (this).className -= ' W-send-password'; (this).disabled = true; (this).className += ' spinner-border text-success'; (this).innerText = '';"><spring:message code="Send"/></button>
+                                    <button id="submitButton3" type="submit" class="btn btn-success W-send-password" onclick="this.form.submit(); (this).className -= ' W-send-password'; (this).disabled = true; (this).className += ' spinner-border text-success'; (this).innerText = ''; disableButtons()"><spring:message code="Send"/></button>
                                 </div>
                             </div>
                         </form:form>
                     </c:when>
                 </c:choose>
+
+                <script src="<c:url value="/resources/js/disableAllButtonsAndLinks.js"/>"></script>
                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
             </div>
         </div>
