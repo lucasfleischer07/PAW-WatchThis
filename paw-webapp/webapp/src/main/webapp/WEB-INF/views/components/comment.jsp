@@ -3,11 +3,12 @@
 <div>
     <div class="card">
         <div class="card-body W-reviewText">
-            <p id="reviewDescription"><c:out value="${param.commentText}"/></p>
+            <p id="<c:out value="reviewDescription${param.id}"/>"><c:out value="${param.commentText}"/></p>
             <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
             <script>
-                let previousText = document.getElementById('reviewDescription').innerHTML
-                document.getElementById('reviewDescription').innerHTML = marked.parse(previousText);
+                console.log('reviewDescription'+'${param.id}')
+                document.getElementById('reviewDescription'+'${param.id}').innerHTML = marked.parse(document.getElementById('reviewDescription'+'${param.id}').innerHTML);
             </script>
         </div>
     </div>

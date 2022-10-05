@@ -79,6 +79,7 @@
             <div class="accordion-body">
                 <jsp:include page="comment.jsp">
                     <jsp:param name="commentText" value="${param.reviewDescription}"/>
+                    <jsp:param name="id" value="${param.reviewId}"/>
                 </jsp:include>
             </div>
         </div>
