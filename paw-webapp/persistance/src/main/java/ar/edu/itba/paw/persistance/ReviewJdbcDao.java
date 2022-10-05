@@ -35,8 +35,7 @@ public class ReviewJdbcDao implements ReviewDao{
     public void addReview(Review review){
         template.update(
                 "INSERT INTO review(type, contentid, userid, name, description, rating)" +
-                        "(SELECT ?,?,userid,?,?,? FROM userdata" +
-                        "WHERE userdata.name=?)",
+                        "(SELECT ?,?,userid,?,?,? FROM userdata WHERE userdata.name=?)",
                 review.getType(), review.getContentId(), review.getName(), review.getDescription(), review.getRating(),review.getUserName());
     }
 
