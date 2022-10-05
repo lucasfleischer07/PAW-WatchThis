@@ -126,6 +126,10 @@ W-read-button {
     display: flex;
 }
 
+.W-no-reviews-image{
+    max-width: 4vw;
+}
+
 .W-no-reviews-text{
     text-align: center;
 }

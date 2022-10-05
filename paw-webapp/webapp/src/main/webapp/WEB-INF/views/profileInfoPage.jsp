@@ -80,6 +80,20 @@
             </div>
             <div class="card">
               <div class="card-body">
+                <c:if test="${reviews==null || reviews.size() == 0}">
+                    <div class="W-no-reviews-icon">
+                        <img class="W-no-reviews-image"  src="<c:url value="/resources/img/noReviews.png"/>" alt="No_Review_Img"/>
+                    </div>
+                    <c:choose>
+                        <c:when test="${userName==user.userName}">
+                            <h4 class="W-no-reviews-text" ><spring:message code="Profile.NoReviews.Owner"/></h4>
+                        </c:when>
+                        <c:otherwise>
+                            <h4 class="W-no-reviews-text" ><spring:message code="Profile.NoReviews.NotOwner"/></h4>
+                        </c:otherwise>
+                    </c:choose>
+
+                </c:if>
                 <c:forEach var="review" items="${reviews}">
                     <a class="W-movie-title" href="<c:url value="/${review.type}/${review.contentId}"/>" onclick="disableButtons()">
                         <h5><c:out value="${review.contentName}"/></h5>
