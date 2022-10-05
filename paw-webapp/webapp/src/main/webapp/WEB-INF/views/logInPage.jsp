@@ -35,7 +35,6 @@
 
             <div class="W-background">
                 <c:choose>
-<%--            * Caso en el que ESTA registrado y tiene contrasena--%>
                     <c:when test="${loginStage == 'sign-in'}">
                         <c:url value="/login/sign-in" var="postPath"/>
                         <form action="<c:url value="/login/sign-in"/>" method="post" name="loginForm">
@@ -86,7 +85,6 @@
                             </div>
                         </form>
                     </c:when>
-<%--            * En el caso de que el NO tenga mail registrado NI ESTE REGISTRADO--%>
                     <c:when test="${loginStage == 'sign-up'}">
                         <c:url value="/login/${loginStage}" var="postPath"/>
                         <form:form modelAttribute="loginForm" action="${postPath}" method="post">

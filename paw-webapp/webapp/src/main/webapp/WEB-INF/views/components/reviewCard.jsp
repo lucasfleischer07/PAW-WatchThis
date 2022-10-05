@@ -46,9 +46,6 @@
                 </div>
                 <div class="card-body W-accordion-card-body">
                     <button id="<c:out value="button${param.reviewId}"/>" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="<c:out value="#collapse${param.reviewId}"/>" aria-expanded="false" aria-controls="<c:out value="#collapse${param.reviewId}"/>">
-                        <%--<c:if test="${param.reviewScore!=null}">
-                        <p class="W-reviewScore"><c:out value="${param.reviewScore==null?0:param.reviewScore}"/></p>
-                        </c:if>--%>
                         <div class="W-stars">
                             <c:if test="${param.reviewRating!= null && param.reviewRating != 0}">
                                 <c:forEach  begin="1" step="1" end="5" var="var">
@@ -96,7 +93,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><spring:message code="No"/></button>
-                    <button type="submit" form="<c:out value="form${param.reviewId}"/>" class="btn btn-primary" onclick="disableButtons()"><spring:message code="Yes"/></button>
+                    <button type="submit" form="<c:out value="form${param.reviewId}"/>" class="btn btn-primary" ><spring:message code="Yes"/></button>
                 </div>
             </div>
         </div>

@@ -13,8 +13,6 @@ public class ContentEditForm {
     @Pattern(regexp	= "[a-zA-Z0-9!,.:;=+\n\\-_()?<>$%&#@{}\\[\\]|*\"'~/`^\\s]+")
     private String description;
 
-    @Size(min = 4, max = 4)
-    @Pattern(regexp	= "[1-2][90][0-9][0-9]")
     private String releaseDate;
 
     @NotNull
@@ -24,7 +22,6 @@ public class ContentEditForm {
     private String creator;
 
     @Max(300)
-    @Min(20)
     private Integer duration;
 
     @NotNull

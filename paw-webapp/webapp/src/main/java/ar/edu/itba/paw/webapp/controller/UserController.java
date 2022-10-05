@@ -162,10 +162,11 @@ public class UserController {
         Authentication authentication = authenticationManager.authenticate(token);
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
-    // * ---------------------------------------------------------------------------------------------------------------
 
 
     // * ------------------------------------------------Profile View --------------------------------------------------
+
+
     private void paginationSetup(ModelAndView mav,int page,List<Review> reviewList){
         if(reviewList.size()==0){
             mav.addObject("reviews",reviewList);
@@ -266,10 +267,11 @@ public class UserController {
         }
         return new ModelAndView("redirect:/profile/" + userName);
     }
-    // * ---------------------------------------------------------------------------------------------------------------
 
 
     // * ------------------------------------------------Profile Edition------------------------------------------------
+
+
     @RequestMapping(value = "/profile/edit-profile", method = {RequestMethod.GET})
     public ModelAndView profileEdition(Principal userDetails, @Valid @ModelAttribute("editProfile") final EditProfile editProfile) {
         String userEmail = userDetails.getName();
@@ -303,10 +305,11 @@ public class UserController {
 
         return new ModelAndView("redirect:/profile");
     }
-    // * ---------------------------------------------------------------------------------------------------------------
 
 
     // * ------------------------------------------------User Watch List------------------------------------------------
+
+
     @RequestMapping(value = "/profile/watchList", method = {RequestMethod.GET})
     public ModelAndView watchList(Principal userDetails,HttpServletRequest request) {
         String userEmail = userDetails.getName();
@@ -379,10 +382,11 @@ public class UserController {
         return new ModelAndView("redirect:/login/sign-in");
     }
 
-    // * ---------------------------------------------------------------------------------------------------------------
 
 
     // * ------------------------------------------------User Viewed List------------------------------------------------
+
+
     @RequestMapping(value = "/profile/viewedList", method = {RequestMethod.GET})
     public ModelAndView viewedList(Principal userDetails,HttpServletRequest request) {
         String userEmail = userDetails.getName();

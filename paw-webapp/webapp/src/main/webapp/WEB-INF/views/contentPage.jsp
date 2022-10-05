@@ -108,8 +108,6 @@
                         </li>
                     </c:otherwise>
                 </c:choose>
-                    <%--Si hay menos de 10 paginas, se muestran todas, si hay mas se muestran las 4 antes --%>
-                    <%--de la actual, la actual y las 5 proximas, con los bordes ... --%>
                 <c:choose>
                     <c:when test="${amountPages > 10 }">
                         <c:forEach var="page" begin="1" end="${amountPages}">

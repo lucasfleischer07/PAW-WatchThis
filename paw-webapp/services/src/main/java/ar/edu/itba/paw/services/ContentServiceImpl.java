@@ -82,7 +82,7 @@ public class ContentServiceImpl implements ContentService {
 
     @Override
     public void contentCreate(String name, String description, String releaseDate, String genre, String creator, Integer duration, String type, byte[] contentImage){
-        String durationString = String.format("%d hours %d minutes",duration/60,duration - (duration/60)*60);
+        String durationString = formatDuration(duration);
 
         ContentDao.contentCreate(name,description,releaseDate,genre,creator,duration,durationString,type,contentImage);
     }
@@ -94,7 +94,7 @@ public class ContentServiceImpl implements ContentService {
 
     @Override
     public void updateContent(Long id,String name, String description, String releaseDate, String genre, String creator, Integer duration, String type,byte[] contentImage){
-        String durationString = String.format("%d hours %d minutes",duration/60,duration - (duration/60)*60);
+        String durationString = formatDuration(duration);
         if(contentImage.length==0){
             ContentDao.updateContent(id,name,description,releaseDate,genre,creator,duration,durationString,type);
         }else{

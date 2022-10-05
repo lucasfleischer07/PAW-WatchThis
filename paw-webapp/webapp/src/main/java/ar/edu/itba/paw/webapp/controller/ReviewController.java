@@ -118,7 +118,6 @@ public class ReviewController {
         request.getSession().setAttribute("referer","/"+type+"/"+contentId);
         return mav;
     }
-    // * ---------------------------------------------------------------------------------------------------------------
 
 
     // * ----------------------------------- Movies and Series Review Creation------------------------------------------
@@ -170,10 +169,10 @@ public class ReviewController {
         return new ModelAndView("redirect:" + (referer==null?"/":referer),model);
 
     }
-    // * ---------------------------------------------------------------------------------------------------------------
 
 
     // * ---------------------------------------------Review edition and delete-----------------------------------------
+
     @RequestMapping(value="/review/{reviewId:[0-9]+}/delete",method = {RequestMethod.POST})
     public ModelAndView deleteReview(Principal userDetails, @PathVariable("reviewId") final long reviewId, HttpServletRequest request){
         Review review=rs.findById(reviewId).orElseThrow(PageNotFoundException::new);
@@ -257,7 +256,6 @@ public class ReviewController {
         return new ModelAndView("redirect:" + (referer==null?"/":referer),model);
 
     }
-    // * ---------------------------------------------------------------------------------------------------------------
 
 
 

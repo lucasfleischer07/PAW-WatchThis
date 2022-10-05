@@ -69,9 +69,6 @@
                     <h4 class="font-weight-bold mb-0 d-block"><c:out value="${reviews.size()}"/></h4>
                       <medium class="text-muted"><i class="fas fa-image mr-1"></i><spring:message code="Profile.Reviews"/></medium>
                   </li>
-    <%--              <li class="list-inline-item">--%>
-    <%--                <h5 class="font-weight-bold mb-0 d-block"><c:out value="${user.get().reputation}"/></h5>--%>
-    <%--                <small class="text-muted"><i class="fas fa-user mr-1"></i>Reputation</small></li>--%>
               </ul>
           </div>
           <div class="py-4 px-4">
