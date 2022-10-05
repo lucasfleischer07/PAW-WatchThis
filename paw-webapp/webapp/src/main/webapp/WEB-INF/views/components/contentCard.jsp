@@ -3,7 +3,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <div class="W-movie-card-size">
-    <a id="mainAtag2" class="card-group W-card-text W-films-margin" href="<c:url value='/${param.contentType}/${param.contentId}'/>" onclick="disableButtons()">
+    <a id="mainAtag2" class="card-group W-card-text W-films-margin" href="<c:url value='/${param.contentType}/${param.contentId}'/>"">
         <div class="col">
             <div class="card W-films-card-body W-more-style">
                 <div class="W-img-watchList-button-div">
@@ -11,7 +11,7 @@
                         <c:choose>
                             <c:when test="${param.userName != 'null' && !param.userWatchListContentId1}">
                                 <form id="<c:out value="form${param.contentId}"/>" method="post" action="<c:url value="/watchList/add/${param.contentId}"/>">
-                                    <button class="btn btn-secondary W-watchList-button" type="submit" onclick="document.getElementById('mainAtag2').click(function (e) {e.stopPropagation();this.disabled = true; this.form.submit()})">
+                                    <button class="btn btn-secondary W-watchList-button" type="submit" onclick="document.getElementById('mainAtag2').click(function (e) {e.stopPropagation(); this.form.submit()})">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-bookmark-plus W-watchList-icon" viewBox="0 0 16 16">
                                             <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"/>
                                             <path d="M8 4a.5.5 0 0 1 .5.5V6H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V7H6a.5.5 0 0 1 0-1h1.5V4.5A.5.5 0 0 1 8 4z"/>
@@ -21,7 +21,7 @@
                             </c:when>
                             <c:when test="${param.userName != 'null' && param.userWatchListContentId1}">
                                 <form id="<c:out value="form${param.contentId}"/>" method="post" action="<c:url value="/watchList/delete/${param.contentId}"/>">
-                                    <button class="btn btn-secondary W-watchList-button" type="submit" onclick="document.getElementById('mainAtag2').click(function (e) {e.stopPropagation();this.disabled = true; this.form.submit()})">
+                                    <button class="btn btn-secondary W-watchList-button" type="submit" onclick="document.getElementById('mainAtag2').click(function (e) {e.stopPropagation(); this.form.submit()})">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-bookmark-plus W-watchList-icon" viewBox="0 0 16 16">
                                             <path fill-rule="evenodd" d="M2 15.5V2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.74.439L8 13.069l-5.26 2.87A.5.5 0 0 1 2 15.5zM6.854 5.146a.5.5 0 1 0-.708.708L7.293 7 6.146 8.146a.5.5 0 1 0 .708.708L8 7.707l1.146 1.147a.5.5 0 1 0 .708-.708L8.707 7l1.147-1.146a.5.5 0 0 0-.708-.708L8 6.293 6.854 5.146z"/>
                                         </svg>
@@ -30,7 +30,7 @@
                             </c:when>
                             <c:otherwise>
                                 <form id="<c:out value="login${param.contentId}"/>" method="post" action="<c:url value="/go/to/login"/>">
-                                    <button class="btn btn-secondary W-watchList-button" type="submit" onclick="document.getElementById('mainAtag').click(function (e) {e.stopPropagation();this.disabled = true; this.form.submit(); disableButtons()})">
+                                    <button class="btn btn-secondary W-watchList-button" type="submit" onclick="document.getElementById('mainAtag').click(function (e) {e.stopPropagation(); this.form.submit()})">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-bookmark-plus W-watchList-icon" viewBox="0 0 16 16">
                                             <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"/>
                                             <path d="M8 4a.5.5 0 0 1 .5.5V6H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V7H6a.5.5 0 0 1 0-1h1.5V4.5A.5.5 0 0 1 8 4z"/>
