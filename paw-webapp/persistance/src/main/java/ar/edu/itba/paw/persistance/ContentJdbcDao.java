@@ -55,7 +55,7 @@ public class ContentJdbcDao implements ContentDao {
             } else if (Objects.equals(sort, "Older-released")) {
                 return template.query(TYPE_BASE_QUERY + "ORDER BY released asc", new Object[]{type}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "Best-ratings")) {
-                return template.query(TYPE_BASE_QUERY +"ORDER BY rating desc", new Object[]{type}, CONTENT_ROW_MAPPER);
+                return template.query(TYPE_BASE_QUERY +"ORDER BY rating desc NULLS LAST", new Object[]{type}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "A-Z")) {
                 return template.query(TYPE_BASE_QUERY +"BY content.name asc", new Object[]{type}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "Z-A")) {
@@ -69,7 +69,7 @@ public class ContentJdbcDao implements ContentDao {
             } else if (Objects.equals(sort, "Older-released")) {
                 return template.query(BASE_QUERY +"ORDER BY released asc", CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "Best-ratings")) {
-                return template.query(BASE_QUERY + "ORDER BY rating desc", CONTENT_ROW_MAPPER);
+                return template.query(BASE_QUERY + "ORDER BY rating desc NULLS LAST", CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "A-Z")) {
                 return template.query(BASE_QUERY + "ORDER BY content.name asc", CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "Z-A")) {
@@ -97,7 +97,7 @@ public class ContentJdbcDao implements ContentDao {
             } else if (Objects.equals(sort, "Older-released")) {
                 return template.query(GENRE_BASE_QUERY + "ORDER BY released asc", new Object[]{genre, type}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "Best-ratings")) {
-                return template.query(GENRE_BASE_QUERY + "ORDER BY rating desc", new Object[]{genre, type}, CONTENT_ROW_MAPPER);
+                return template.query(GENRE_BASE_QUERY + "ORDER BY rating desc NULLS LAST", new Object[]{genre, type}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "A-Z")) {
                 return template.query(GENRE_BASE_QUERY + "ORDER BY content.name asc", new Object[]{genre, type}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "Z-A")) {
@@ -111,7 +111,7 @@ public class ContentJdbcDao implements ContentDao {
             } else if (Objects.equals(sort, "Older-released")) {
                 return template.query(GENRE_BASE_QUERY_ANY + "ORDER BY released asc", new Object[]{genre}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "Best-ratings")) {
-                return template.query(GENRE_BASE_QUERY_ANY + "ORDER BY rating desc", new Object[]{genre}, CONTENT_ROW_MAPPER);
+                return template.query(GENRE_BASE_QUERY_ANY + "ORDER BY rating desc NULLS LAST", new Object[]{genre}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "A-Z")) {
                 return template.query(GENRE_BASE_QUERY_ANY + "ORDER BY content.name asc", new Object[]{genre}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "Z-A")) {
@@ -133,7 +133,7 @@ public class ContentJdbcDao implements ContentDao {
             } else if (Objects.equals(sort, "Older-released")) {
                 return template.query(DURATION_BASE_QUERY + "ORDER BY released asc", new Object[]{durationFrom, durationTo, type}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "Best-ratings")) {
-                return template.query(DURATION_BASE_QUERY + "ORDER BY rating desc", new Object[]{durationFrom, durationTo, type}, CONTENT_ROW_MAPPER);
+                return template.query(DURATION_BASE_QUERY + "ORDER BY rating desc NULLS LAST", new Object[]{durationFrom, durationTo, type}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "A-Z")) {
                 return template.query(DURATION_BASE_QUERY + "ORDER BY content.name asc", new Object[]{durationFrom, durationTo, type}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "Z-A")) {
@@ -147,7 +147,7 @@ public class ContentJdbcDao implements ContentDao {
             } else if (Objects.equals(sort, "Older-released")) {
                 return template.query(DURATION_BASE_QUERY_ANY + "ORDER BY released asc", new Object[]{durationFrom, durationTo}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "Best-ratings")) {
-                return template.query(DURATION_BASE_QUERY_ANY + "ORDER BY rating desc", new Object[]{durationFrom, durationTo}, CONTENT_ROW_MAPPER);
+                return template.query(DURATION_BASE_QUERY_ANY + "ORDER BY rating desc NULLS LAST", new Object[]{durationFrom, durationTo}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "A-Z")) {
                 return template.query(DURATION_BASE_QUERY_ANY + "ORDER BY content.name asc", new Object[]{durationFrom, durationTo}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "Z-A")) {
@@ -171,7 +171,7 @@ public class ContentJdbcDao implements ContentDao {
             } else if (Objects.equals(sort, "Older-released")) {
                 return template.query(DURATION_AND_GENRE_BASE_QUERY + "ORDER BY released asc", new Object[]{durationFrom, durationTo, genre, type}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "Best-ratings")) {
-                return template.query(DURATION_AND_GENRE_BASE_QUERY + "ORDER BY rating desc", new Object[]{durationFrom, durationTo, genre, type}, CONTENT_ROW_MAPPER);
+                return template.query(DURATION_AND_GENRE_BASE_QUERY + "ORDER BY rating desc NULLS LAST", new Object[]{durationFrom, durationTo, genre, type}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "A-Z")) {
                 return template.query(DURATION_AND_GENRE_BASE_QUERY + "ORDER BY content.name asc", new Object[]{durationFrom, durationTo, genre, type}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "Z-A")) {
@@ -185,7 +185,7 @@ public class ContentJdbcDao implements ContentDao {
             } else if (Objects.equals(sort, "Older-released")) {
                 return template.query(DURATION_AND_GENRE_BASE_QUERY_ANY + "ORDER BY released asc", new Object[]{durationFrom, durationTo, genre}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "Best-ratings")) {
-                return template.query(DURATION_AND_GENRE_BASE_QUERY_ANY + "ORDER BY rating desc", new Object[]{durationFrom, durationTo, genre}, CONTENT_ROW_MAPPER);
+                return template.query(DURATION_AND_GENRE_BASE_QUERY_ANY + "ORDER BY rating desc NULLS LAST", new Object[]{durationFrom, durationTo, genre}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "A-Z")) {
                 return template.query(DURATION_AND_GENRE_BASE_QUERY_ANY + "ORDER BY content.name asc", new Object[]{durationFrom, durationTo, genre}, CONTENT_ROW_MAPPER);
             } else if (Objects.equals(sort, "Z-A")) {
