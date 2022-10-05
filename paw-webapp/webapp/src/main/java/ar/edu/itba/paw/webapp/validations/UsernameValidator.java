@@ -11,8 +11,9 @@ import java.util.Optional;
 public class UsernameValidator implements ConstraintValidator<AvailableUserName, String> {
 
     private final UserService us;
+
     @Autowired
-    public UsernameValidator(final UserService us){
+    public UsernameValidator(final UserService us) {
         this.us = us;
     }
 
@@ -24,11 +25,8 @@ public class UsernameValidator implements ConstraintValidator<AvailableUserName,
     @Override
     public boolean isValid(String username, ConstraintValidatorContext constraintValidatorContext) {
         Optional<User> existingEmail = us.findByUserName(username);
-        if(existingEmail.isPresent())
+        if (existingEmail.isPresent())
             return false;
         return true;
     }
-
-
-
 }

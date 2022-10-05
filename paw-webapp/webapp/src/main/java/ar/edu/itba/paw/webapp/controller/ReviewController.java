@@ -39,7 +39,7 @@ public class ReviewController {
 
     private static final int ELEMS_AMOUNT = 3;
 
-    @Autowired
+   @Autowired
     public ReviewController(ReviewService rs,ContentService cs,UserService us){
         this.us = us;
         this.cs = cs;

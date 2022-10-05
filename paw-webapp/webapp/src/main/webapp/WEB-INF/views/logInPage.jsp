@@ -19,7 +19,7 @@
         <link href="<c:url value="/resources/css/reviewsStyles.css"/>" rel="stylesheet" type="text/css"/>
         <link href="<c:url value="/resources/css/loginStyles.css"/>" rel="stylesheet" type="text/css"/>
         <link href="<c:url value="/resources/css/reviewRegistrationStyles.css"/>" rel="stylesheet" type="text/css"/>
-        <title><spring:message code="Review.Registration"/></title>
+        <title><spring:message code="Login.LoginMessage"/></title>
     </head>
 
     <body>
