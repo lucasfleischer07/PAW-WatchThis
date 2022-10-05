@@ -11,6 +11,7 @@ import ar.edu.itba.paw.webapp.auth.PawUserDetails;
 import ar.edu.itba.paw.webapp.exceptions.ForbiddenException;
 import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
 import ar.edu.itba.paw.webapp.form.EditProfile;
+import ar.edu.itba.paw.webapp.form.ForgotPasswordForm;
 import ar.edu.itba.paw.webapp.form.LoginForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -93,7 +94,32 @@ public class UserController {
     }
 
 
-    @RequestMapping(value = "/login/{loginStage:sign-up|forgot-password}", method = {RequestMethod.GET})
+    @RequestMapping(value = "/login/forgot-password", method = {RequestMethod.GET})
+    public ModelAndView LoginForgotPassword(Principal userDetails, @ModelAttribute("forgotPasswordForm") final ForgotPasswordForm loginForm) {
+        final ModelAndView mav = new ModelAndView("logInPage");
+        mav.addObject("loginStage", "forgot-password");
+        HeaderSetUp(mav,userDetails);
+        return mav;
+    }
+
+    @RequestMapping(value = "/login/forgot-password", method = {RequestMethod.POST})
+    public ModelAndView LoginForgotPassword(Principal userDetails, @Valid @ModelAttribute("forgotPasswordForm") final ForgotPasswordForm forgotPasswordForm, final BindingResult errors, RedirectAttributes redirectAttributes, HttpServletRequest request) {
+        if(errors.hasErrors()) {
+            return LoginForgotPassword(userDetails, forgotPasswordForm);
+        }
+
+        Optional<User> user = us.findByEmail(forgotPasswordForm.getEmail());
+        if(user.isPresent()) {
+            us.setPassword(null, user.get(), "forgotten");
+        } else {
+            return LoginForgotPassword(userDetails, forgotPasswordForm);
+        }
+
+        String referer = request.getSession().getAttribute("referer").toString();
+        return new ModelAndView("redirect:" + (referer==null?"/":referer));
+    }
+
+    @RequestMapping(value = "/login/{loginStage:sign-up}", method = {RequestMethod.GET})
     public ModelAndView LoginSingUp(Principal userDetails, @ModelAttribute("loginForm") final LoginForm loginForm, @PathVariable("loginStage") final String loginStage) {
         if(!Objects.equals(loginStage, "sign-up") && !Objects.equals(loginStage, "forgot-password") && !Objects.equals(loginStage, "sign-out")) {
             LOGGER.warn("Wrong login path:",new PageNotFoundException());
@@ -105,7 +131,7 @@ public class UserController {
         return mav;
     }
 
-    @RequestMapping(value = "/login/{loginStage:sign-up|forgot-password|sign-out}", method = {RequestMethod.POST})
+    @RequestMapping(value = "/login/{loginStage:sign-up|sign-out}", method = {RequestMethod.POST})
     public ModelAndView LoginSingUp(Principal userDetails, @Valid @ModelAttribute("loginForm") final LoginForm loginForm, final BindingResult errors, RedirectAttributes redirectAttributes, @PathVariable("loginStage") final String loginStage, HttpServletRequest request) {
         if(errors.hasErrors()) {
             return LoginSingUp(userDetails, loginForm, loginStage);
@@ -121,13 +147,6 @@ public class UserController {
             LOGGER.info("Registrated a new user with email");
 
             authWithAuthManager(request,loginForm.getEmail(),loginForm.getPassword());
-        } else if(Objects.equals(loginStage, "forgot-password")) {
-            Optional<User> user = us.findByEmail(loginForm.getEmail());
-            if(user.isPresent()) {
-                us.setPassword(null, user.get(), "forgotten");
-            } else {
-                return LoginSingUp(userDetails, loginForm, loginStage);
-            }
         } else {
             LOGGER.warn("Wrong login path:",new PageNotFoundException());
             throw new PageNotFoundException();

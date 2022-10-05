@@ -131,7 +131,7 @@
 
                     <c:when test="${loginStage == 'forgot-password'}">
                         <c:url value="/login/${loginStage}" var="postPath"/>
-                        <form:form modelAttribute="loginForm" action="${postPath}" method="post">
+                        <form:form modelAttribute="forgotPasswordForm" action="${postPath}" method="post">
                             <div class="W-general-div-login">
                                 <div class="W-login-title">
                                     <h4><spring:message code="Login.ForgotPass"/></h4>
