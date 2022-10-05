@@ -266,7 +266,6 @@
                   <button type="button" class="btn btn-dark W-add-review-button W-reviewText" onclick="disableButtons()"><spring:message code="Reviews.ReadMore"/></button>
                 </a>
               </div>
-
             </c:if>
             <c:if test="${reviews==null || reviews.size()==0}">
                 <div>

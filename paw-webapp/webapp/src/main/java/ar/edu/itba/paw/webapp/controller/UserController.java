@@ -49,7 +49,7 @@ public class UserController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
     protected AuthenticationManager authenticationManager;
-    private static final int ELEMS_AMOUNT = 5;
+    private static final int ELEMS_AMOUNT = 3;
     @Autowired
     public UserController(final UserService us, final ContentService cs, ReviewService rs, EmailService es,AuthenticationManager authenticationManager){
         this.us = us;

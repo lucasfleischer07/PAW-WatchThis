@@ -105,9 +105,11 @@
                       </c:otherwise>
                   </c:choose>
                   <c:if test="${pageSelected<amountPages}">
-                      <a id="readMore" class="W-ReadMore-a" data-toggle="collapse" href="<c:url value="${readMorepath}/page/${pageSelected+1}"/>" onclick="disableButtons()">
-                          <button type="button" class="btn btn-dark W-add-review-button W-reviewText" onclick="disableButtons()"><spring:message code="Reviews.ReadMore"/></button>
-                      </a>
+                      <div class="W-readMore-button">
+                          <a id="readMore" class="W-readMore-a" data-toggle="collapse" href="<c:url value="${readMorepath}/page/${pageSelected+1}"/>" onclick="disableButtons()">
+                              <button type="button" class="btn btn-dark W-add-review-button W-reviewText" onclick="disableButtons()"><spring:message code="Reviews.ReadMore"/></button>
+                          </a>
+                      </div>
                   </c:if>
               </div>
             </div>
