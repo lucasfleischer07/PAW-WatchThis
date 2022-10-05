@@ -86,10 +86,10 @@
                     </div>
                     <c:choose>
                         <c:when test="${userName==user.userName}">
-                            <h4 class="W-no-reviews-text" ><spring:message code="Profile.NoReviews.Owner"/></h4>
+                            <h4 class="W-no-reviews-text" ><spring:message code="Profile.NoReviews.Owner" /></h4>
                         </c:when>
                         <c:otherwise>
-                            <h4 class="W-no-reviews-text" ><spring:message code="Profile.NoReviews.NotOwner"/></h4>
+                            <h4 class="W-no-reviews-text" ><spring:message code="Profile.NoReviews.NotOwner" arguments="${user.userName}"/></h4>
                         </c:otherwise>
                     </c:choose>
 
