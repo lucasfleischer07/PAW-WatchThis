@@ -110,8 +110,8 @@
                         </div>
                     </div>
                     <div class="W-submit-cancel-buttons">
-                        <a href="<c:url value="/"/>" onclick="disableButtons()"><button type="button" class="btn btn-danger" id="cancelButton" onclick="(this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'; disableButtons()"><spring:message code="Form.Cancel"/></button></a>
-                        <button id="submitButton" type="submit" class="btn btn-success" onclick="this.form.submit(); (this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'; disableButtons()"><spring:message code="Form.Submit"/></button>
+                        <a href="<c:url value="/"/>"><button type="button" class="btn btn-danger" id="cancelButton" onclick="(this).className += ' spinner-border'; (this).innerText = '|'"><spring:message code="Form.Cancel"/></button></a>
+                        <button id="submitButton" type="submit" class="btn btn-success" onclick="this.form.submit(); (this).className += ' spinner-border'; (this).innerText = '|'"><spring:message code="Form.Submit"/></button>
                     </div>
                 </form:form>
             </c:when>
@@ -193,15 +193,13 @@
                         </div>
                     </div>
                     <div class="W-submit-cancel-buttons">
-                        <a href="<c:url value="/"/>" onclick="disableButtons()"><button type="button" class="btn btn-danger" id="cancelButton" onclick="(this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'; disableButtons()"><spring:message code="Form.Cancel"/></button></a>
-                        <button id="submitButton" type="submit" class="btn btn-success" onclick="this.form.submit(); (this).disabled = true; (this).className += ' spinner-border'; (this).innerText = '|'; disableButtons()"><spring:message code="Form.Submit"/></button>
+                        <a href="<c:url value="/"/>"><button type="button" class="btn btn-danger" id="cancelButton" onclick="(this).className += ' spinner-border'; (this).innerText = '|'"><spring:message code="Form.Cancel"/></button></a>
+                        <button id="submitButton" type="submit" class="btn btn-success" onclick="this.form.submit(); (this).className += ' spinner-border'; (this).innerText = '|'"><spring:message code="Form.Submit"/></button>
                     </div>
                 </form:form>
             </c:when>
         </c:choose>
 
-
-        <script src="<c:url value="/resources/js/disableAllButtonsAndLinks.js"/>"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
         <script>const simplemde = new SimpleMDE({ element: document.getElementById("MyTextArea")});</script>

@@ -4,7 +4,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top W-header-height">
     <div class="container-fluid">
         <div class="W-logo-div">
-            <a class="navbar-brand W-logo-style" href="<c:url value="/"/>" onclick="disableButtons()">
+            <a class="navbar-brand W-logo-style" href="<c:url value="/"/>">
                 <img src="<c:url value="/resources/img/WatchThisLogo.png"/>" alt="WatchThisLogo" class="W-img-size2">
             </a>
         </div>
@@ -29,35 +29,35 @@
                         <c:choose>
                             <c:when test="${param.type == 'movies' || param.type == 'movie'}">
                                 <li class="nav-item W-home-button-hamburger-button" style="display: none">
-                                    <a class="nav-link" aria-current="page" href="<c:url value="/"/>" onclick="disableButtons()"><spring:message code="HomeMessage"/></a>
+                                    <a class="nav-link" aria-current="page" href="<c:url value="/"/>"><spring:message code="HomeMessage"/></a>
                                 </li>
                                 <li class="nav-item W-nav-item">
-                                    <a class="nav-link active" aria-current="page" href="<c:url value="/movies"/>" onclick="disableButtons()"><spring:message code="MovieMessage"/></a>
+                                    <a class="nav-link active" aria-current="page" href="<c:url value="/movies"/>"><spring:message code="MovieMessage"/></a>
                                 </li>
                                 <li class="nav-item W-nav-item">
-                                    <a class="nav-link" href="<c:url value="/series"/>" onclick="disableButtons()"><spring:message code="SerieMessage"/></a>
+                                    <a class="nav-link" href="<c:url value="/series"/>"><spring:message code="SerieMessage"/></a>
                                 </li>
                             </c:when>
                             <c:when test="${param.type == 'series' || param.type == 'serie'}">
                                 <li class="nav-item W-home-button-hamburger-button" style="display: none">
-                                    <a class="nav-link" aria-current="page" href="<c:url value="/"/>" onclick="disableButtons()"><spring:message code="HomeMessage"/></a>
+                                    <a class="nav-link" aria-current="page" href="<c:url value="/"/>"><spring:message code="HomeMessage"/></a>
                                 </li>
                                 <li class="nav-item W-nav-item">
-                                    <a class="nav-link" aria-current="page" href="<c:url value="/movies"/>" onclick="disableButtons()"><spring:message code="MovieMessage"/></a>
+                                    <a class="nav-link" aria-current="page" href="<c:url value="/movies"/>"><spring:message code="MovieMessage"/></a>
                                 </li>
                                 <li class="nav-item W-nav-item">
-                                    <a class="nav-link active" href="<c:url value="/series"/>" onclick="disableButtons()"><spring:message code="SerieMessage"/></a>
+                                    <a class="nav-link active" href="<c:url value="/series"/>"><spring:message code="SerieMessage"/></a>
                                 </li>
                             </c:when>
                             <c:otherwise>
                                 <li class="nav-item W-home-button-hamburger-button" style="display: none">
-                                    <a class="nav-link" aria-current="page" href="<c:url value="/"/>" onclick="disableButtons()"><spring:message code="HomeMessage"/></a>
+                                    <a class="nav-link" aria-current="page" href="<c:url value="/"/>"><spring:message code="HomeMessage"/></a>
                                 </li>
                                 <li class="nav-item W-nav-item">
-                                    <a class="nav-link" aria-current="page" href="<c:url value="/movies"/>" onclick="disableButtons()"><spring:message code="MovieMessage"/></a>
+                                    <a class="nav-link" aria-current="page" href="<c:url value="/movies"/>"><spring:message code="MovieMessage"/></a>
                                 </li>
                                 <li class="nav-item W-nav-item">
-                                    <a class="nav-link" href="<c:url value="/series"/>" onclick="disableButtons()"><spring:message code="SerieMessage"/></a>
+                                    <a class="nav-link" href="<c:url value="/series"/>"><spring:message code="SerieMessage"/></a>
                                 </li>
                             </c:otherwise>
                         </c:choose>
@@ -396,7 +396,6 @@
         </div>
     </div>
 
-    <script src="<c:url value="/resources/js/disableAllButtonsAndLinks.js"/>"></script>
     <script src="<c:url value="/resources/js/dropDownBehaviour.js"/>"></script>
 </nav>
 

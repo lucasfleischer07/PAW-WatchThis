@@ -55,12 +55,12 @@
           <div class="bg-light p-4 d-flex text-center W-editProfileButton-and-reviewsCant">
               <div class="W-edition-and-admin-buttons">
                   <c:if test="${userName==user.userName}">
-                      <a href="<c:url value="/profile/edit-profile"/>" class="btn btn-outline-dark btn-block W-editProfile-button" onclick="disableButtons()"><spring:message code="Profile.EditProfile"/></a>
+                      <a href="<c:url value="/profile/edit-profile"/>" class="btn btn-outline-dark btn-block W-editProfile-button"><spring:message code="Profile.EditProfile"/></a>
                   </c:if>
                   <c:if test="${admin==true}">
                       <c:url value="/profile/${user.userName}" var="postPath"/>
                       <form class="W-delete-form" id="<c:out value="user${user.userName}"/>" method="post" action="${postPath}">
-                          <button type="submit" class="btn btn-outline-dark btn-sm btn-block W-editProfile-button" onclick="this.form.submit(); (this).disabled = true; (this).className -= ' W-editProfile-button'; (this).className += ' spinner-border'; (this).innerText = ''; disableButtons()"><spring:message code="Profile.PromoteUser"/></button>
+                          <button type="submit" class="btn btn-outline-dark btn-sm btn-block W-editProfile-button" onclick="this.form.submit(); (this).className -= ' W-editProfile-button'; (this).className += ' spinner-border'; (this).innerText = ''"><spring:message code="Profile.PromoteUser"/></button>
                       </form>
                   </c:if>
               </div>
@@ -92,7 +92,7 @@
 
                 </c:if>
                 <c:forEach var="review" items="${reviews}">
-                    <a class="W-movie-title" href="<c:url value="/${review.type}/${review.contentId}"/>" onclick="disableButtons()">
+                    <a class="W-movie-title" href="<c:url value="/${review.type}/${review.contentId}"/>">
                         <h5><c:out value="${review.contentName}"/></h5>
                     </a>
                     <jsp:include page="components/reviewCard.jsp">
@@ -117,8 +117,8 @@
                   </c:choose>
                   <c:if test="${pageSelected<amountPages}">
                       <div class="W-readMore-button">
-                          <a id="readMore" class="W-readMore-a" data-toggle="collapse" href="<c:url value="${readMorepath}/page/${pageSelected+1}"/>" onclick="disableButtons()">
-                              <button type="button" class="btn btn-dark W-add-review-button W-reviewText" onclick="disableButtons()"><spring:message code="Reviews.ReadMore"/></button>
+                          <a id="readMore" class="W-readMore-a" data-toggle="collapse" href="<c:url value="${readMorepath}/page/${pageSelected+1}"/>">
+                              <button type="button" class="btn btn-dark W-add-review-button W-reviewText"><spring:message code="Reviews.ReadMore"/></button>
                           </a>
                       </div>
                   </c:if>
@@ -129,7 +129,6 @@
       </div>
     </div>
 
-    <script src="<c:url value="/resources/js/disableAllButtonsAndLinks.js"/>"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
   </body>
 </html>
