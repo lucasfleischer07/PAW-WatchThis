@@ -2,12 +2,13 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top W-header-height">
-    <div class="container-fluid">
-        <div class="W-logo-div">
-            <a class="navbar-brand W-logo-style" href="<c:url value="/"/>">
-                <img src="<c:url value="/resources/img/WatchThisLogo.png"/>" alt="WatchThisLogo" class="W-img-size2">
-            </a>
-        </div>
+    <div class="W-container-fluid">
+
+        <a class="navbar-brand" href="<c:url value="/"/>">
+            <div class="W-logo-div">
+                    <img src="<c:url value="/resources/img/WatchThisLogo.png"/>" alt="WatchThisLogo" class="W-img-size2">
+            </div>
+        </a>
 
         <div>
             <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar">
@@ -361,7 +362,7 @@
                         <spring:message var="searchPlaceholder" />
                             <input name="query" class="form-control me-2" type="search" placeholder="<spring:message code="SearchMessage"/>" aria-label="Search" >
                         <button class="btn btn-success W-search-button-color" type="submit">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                            <svg xmlns="http://www.w3.org/2000/svg"  fill="currentColor" class="bi bi-search W-search-icon" viewBox="0 0 16 16">
                                 <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
                             </svg>
                         </button>

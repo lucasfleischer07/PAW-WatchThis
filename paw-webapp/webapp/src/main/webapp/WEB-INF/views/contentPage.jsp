@@ -61,11 +61,16 @@
             <c:if test="${allContent == null || allContent.size() == 0}">
                 <div class="card W-not-found-card">
                     <div class="card-body W-row-display" >
-                        <div>
+                        <div class="W-search-notFound-image">
                             <img class="W-not-found" src="<c:url value="/resources/img/noResults.png"/>" alt="Not_Found_Ing"/>
                         </div>
-                        <div>
-                            <h4 class="W-not-found-message"><spring:message code="Content.NoContent"/></h4>
+                        <div class="W-search-notFound-text">
+                            <div>
+                                <p class="W-not-found-message"><spring:message code="Content.NoContent"/></p>
+                            </div>
+                            <div>
+                                <h5 class="W-search-notFound-text2"><a href="<c:url value="/"/>"><spring:message code="WatchList.Recomendation"/></a></h5>
+                            </div>
                         </div>
                     </div>
                 </div>

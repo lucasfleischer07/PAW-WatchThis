@@ -25,6 +25,17 @@
 .W-row-display {
     display: flex;
     flex-direction: row;
+    align-items: center;
+}
+
+.W-search-notFound-image {
+    margin-right: 5vw;
+}
+
+.W-search-notFound-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .W-filter-title {
@@ -256,7 +267,11 @@
     margin-left: 15vw;
 }
 .W-not-found-message{
-    font-size: 2.5vw;
+    font-size: 2vw;
+}
+
+.W-search-notFound-text2 {
+    margin-top: 2vw;
 }
 
 @media (max-width: 1800px) {

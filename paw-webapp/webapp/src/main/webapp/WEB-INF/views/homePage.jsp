@@ -44,8 +44,8 @@
             <div class="W-carousels-div">
                 <c:choose>
                     <c:when test="${userName != 'null' && userWatchListContentId != 'null' && recommendedUserList != 'null'}">
-                        <h3 class="W-carousel-1-title"><spring:message code="Content.Carousel.RecommendedForYou"/></h3>
-                        <div id="carouselRecommended" class="carousel slide W-margin-carousel" data-ride="carousel">
+                        <h3 class="W-carousel-title"><spring:message code="Content.Carousel.RecommendedForYou"/></h3>
+                        <div id="carouselRecommended" class="carousel slide " data-ride="carousel">
                             <div class="carousel-inner">
                                 <c:forEach begin="0" step="5" end="${recommendedUserListSize-1}" var="externalIndex">
                                     <c:choose>
@@ -105,8 +105,8 @@
                         </div>
                     </c:when>
                     <c:otherwise>
-                        <h3 class="W-carousel-1-title"><spring:message code="Content.Carousel.MostSaved"/></h3>
-                        <div id="mostSavedContentByUsersList" class="carousel slide W-margin-carousel" data-ride="carousel">
+                        <h3 class="W-carousel-title"><spring:message code="Content.Carousel.MostSaved"/></h3>
+                        <div id="mostSavedContentByUsersList" class="carousel slide" data-ride="carousel">
                             <div class="carousel-inner">
                                 <c:forEach begin="0" step="5" end="${mostSavedContentByUsersListSize-1}" var="externalIndex">
                                     <c:choose>
@@ -167,8 +167,8 @@
                     </c:otherwise>
                 </c:choose>
 
-                <h3 class="W-carousel-1-title"><spring:message code="Content.Carousel.BestRatedContent"/></h3>
-                <div id="carouselMostReviewed" class="carousel slide W-margin-carousel" data-ride="carousel">
+                <h3 class="W-carousel-title"><spring:message code="Content.Carousel.BestRatedContent"/></h3>
+                <div id="carouselMostReviewed" class="carousel slide " data-ride="carousel">
                     <div class="carousel-inner">
                         <c:forEach begin="0" step="5" end="${bestRatedListSize-1}" var="externalIndex">
                             <c:choose>
@@ -228,8 +228,8 @@
                 </div>
 
 
-                <h3><spring:message code="Content.Carousel.LastAdded"/></h3>
-                <div id="getLastAddedList" class="carousel slide W-margin-carousel" data-ride="carousel">
+                <h3 class="W-carousel-title"><spring:message code="Content.Carousel.LastAdded"/></h3>
+                <div id="getLastAddedList" class="carousel slide " data-ride="carousel">
                     <div class="carousel-inner">
                         <c:forEach begin="0" step="5" end="${lastAddedListSize-1}" var="externalIndex">
                             <c:choose>
