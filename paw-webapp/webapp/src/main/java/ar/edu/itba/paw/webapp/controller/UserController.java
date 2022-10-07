@@ -280,6 +280,9 @@ public class UserController {
         String userEmail = userDetails.getName();
         User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
         final ModelAndView mav = new ModelAndView("profileEditionPage");
+        final String locale = LocaleContextHolder.getLocale().getDisplayLanguage();
+        Optional<String> quote = cs.getContentQuote(locale);
+        mav.addObject("quote", quote.get());
         if(user.getRole().equals("admin")){
             mav.addObject("admin",true);
         }else{

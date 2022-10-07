@@ -34,15 +34,18 @@
                 <div class="bg-white shadow rounded overflow-hidden">
                     <div class="px-4 pt-0 pb-4 W-profile-background-color">
                         <div class="profile-head W-profile-photo-name">
-                            <div class="W-picture-upload profile mr-3">
-                                <c:choose>
-                                    <c:when test="${user.image == null}">
-                                        <img src="<c:url value="/resources/img/defaultUserImg.png"/> " alt="User_img" class="W-edit-profile-picture">
-                                    </c:when>
-                                    <c:otherwise>
-                                        <img src="<c:url value="/profile/${user.userName}/profileImage"/> " alt="User_img" class="W-edit-profile-picture">
-                                    </c:otherwise>
-                                </c:choose>
+                            <div class="profile mr-3">
+                                <div class="W-img-and-quote-div">
+                                    <c:choose>
+                                        <c:when test="${user.image == null}">
+                                            <img src="<c:url value="/resources/img/defaultUserImg.png"/> " alt="User_img" class="W-edit-profile-picture">
+                                        </c:when>
+                                        <c:otherwise>
+                                            <img src="<c:url value="/profile/${user.userName}/profileImage"/> " alt="User_img" class="W-edit-profile-picture">
+                                        </c:otherwise>
+                                    </c:choose>
+                                    <p class="W-quote-in-profile">${quote}</p>
+                                </div>
                             </div>
                             <h4 class="W-username-profilepage"><c:out value="${user.userName}"/></h4>
                         </div>
@@ -64,6 +67,14 @@
                             <div class="bg-light d-flex justify-content-end text-center W-edit-divs-display">
                                 <c:url value="/profile/edit-profile" var="postPath"/>
                                 <form:form modelAttribute="editProfile" action="${postPath}" method="post">
+                                    <div>
+                                        <div class="mb-3 W-input-label-edit-password">
+                                            <form:errors path="currentPassword" element="p" cssClass="W-form-color-red"/>
+                                            <form:label path="currentPassword" class="form-label"><spring:message code="EditProfile.CurrentPassword"/></form:label>
+                                            <spring:message code="Placeholder.Asterisk" var="placeholder"/>
+                                            <form:input type="password" class="form-control" path="currentPassword" placeholder="${placeholder}"/>
+                                        </div>
+                                    </div>
                                     <div>
                                         <div class="mb-3 W-input-label-edit-password">
                                             <form:errors path="password" element="p" cssClass="W-form-color-red"/>

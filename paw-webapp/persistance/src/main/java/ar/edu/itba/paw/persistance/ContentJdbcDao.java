@@ -203,13 +203,12 @@ public class ContentJdbcDao implements ContentDao {
         return template.query(ID_BASE_QUERY, new Object[]{ id }, CONTENT_ROW_MAPPER).stream().findFirst();
     }
 
-    private static final String SEARCHED_BASE_QUERY = "SELECT content.id,content.name,image,content.description,released,genre,creator,duration,content.type, sum(review.rating)/count(*) AS rating,count(reviewid) AS reviewsAmount FROM content LEFT JOIN (SELECT * FROM review AS r2 WHERE r2.rating<>0) AS review ON content.id = review.contentid  WHERE (LOWER(content.name) LIKE ? OR LOWER(creator) LIKE ?) GROUP BY content.id,content.name,content.description,content.released,content.genre,content.creator,content.duration,content.type,content.durationNum ";
-
+    private static final String SEARCHED_BASE_QUERY = "SELECT content.id,content.name,image,content.description,released,genre,creator,duration,content.type, sum(review.rating)/count(*) AS rating,count(reviewid) AS reviewsAmount FROM content LEFT JOIN (SELECT * FROM review AS r2 WHERE r2.rating<>0) AS review ON content.id = review.contentid  WHERE (LOWER(content.name) LIKE ? OR LOWER(creator) LIKE ? OR LOWER(released) LIKE ?) GROUP BY content.id,content.name,content.description,content.released,content.genre,content.creator,content.duration,content.type,content.durationNum ";
 
     @Override
     public List<Content> getSearchedContent(String query) {
         List<Content> content =  template.query(SEARCHED_BASE_QUERY,
-                new Object[]{"%" + query.toLowerCase() + "%", "%" + query.toLowerCase() + "%"},CONTENT_ROW_MAPPER);
+                new Object[]{"%" + query.toLowerCase() + "%", "%" + query.toLowerCase() + "%", "%" + query.toLowerCase() + "%"},CONTENT_ROW_MAPPER);
         return content;
     }
 

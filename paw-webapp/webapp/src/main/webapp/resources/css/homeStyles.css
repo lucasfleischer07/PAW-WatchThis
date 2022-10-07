@@ -52,6 +52,10 @@
     height: 2vw;
     border-color: darkred;
     background-color: white;
+    display: flex;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
 }
 
 .W-dropdown-button-sorting {
