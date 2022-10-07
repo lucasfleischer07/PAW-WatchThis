@@ -139,6 +139,9 @@ public class UserController {
             if(existUserEmail.isPresent() || existUserName.isPresent()) {
                 return LoginSingUp(userDetails, loginForm, loginStage);
             }
+            if(!Objects.equals(loginForm.getPassword(), loginForm.getConfirmPassword())) {
+                return LoginSingUp(userDetails, loginForm, loginStage);
+            }
             User newUser = new User(null, loginForm.getEmail(), loginForm.getUsername(), loginForm.getPassword(), 0L, null,"user");
             us.register(newUser);
             LOGGER.info("Registrated a new user with email");

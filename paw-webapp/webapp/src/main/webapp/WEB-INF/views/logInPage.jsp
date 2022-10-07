@@ -96,7 +96,7 @@
                                     <div class="mb-3 W-input-label-login-info">
                                         <div class="mb-3 W-input-label-login-info">
                                             <form:errors path="username" element="p" cssStyle="color: red"/>
-                                            <form:label path="username" class="form-label"><spring:message code="Signup.Username"/></form:label>
+                                            <form:label path="username" class="form-label"><spring:message code="Signup.Username"/> <span class="W-red-asterisco">*</span></form:label>
                                             <p class="W-review-registration-text"><spring:message code="Signup.CharacterLimits" arguments="4,30"/></p>
                                             <spring:message code="Placeholder.UserExample" var="placeholder"/>
                                             <form:input type="text" class="form-control" path="username" placeholder='${placeholder}'/>
@@ -105,7 +105,7 @@
                                     <div class="mb-3 W-input-label-login-info">
                                         <div class="mb-3 W-input-label-login-info">
                                             <form:errors path="email" element="p" cssStyle="color: red"/>
-                                            <form:label path="email" class="form-label"><spring:message code="Signup.Email"/></form:label>
+                                            <form:label path="email" class="form-label"><spring:message code="Signup.Email"/> <span class="W-red-asterisco">*</span></form:label>
                                             <spring:message code="Placeholder.EmailExample" var="placeholder"/>
                                             <form:input type="email" class="form-control" value="${loginForm.email}" path="email" placeholder='${placeholder}'/>
                                         </div>
@@ -113,10 +113,18 @@
                                     <div class="mb-3 W-input-label-login-info">
                                         <div class="mb-3 W-input-label-login-info">
                                             <form:errors path="password" element="p" cssStyle="color: red"/>
-                                            <form:label path="password" class="form-label"><spring:message code="Signup.Password"/></form:label>
+                                            <form:label path="password" class="form-label"><spring:message code="Signup.Password"/> <span class="W-red-asterisco">*</span></form:label>
                                             <p class="W-review-registration-text"><spring:message code="Signup.CharacterLimits" arguments="6,50"/></p>
                                             <spring:message code="Placeholder.Asterisk" var="placeholder"/>
                                             <form:input type="password" class="form-control" path="password" placeholder="${placeholder}"/>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 W-input-label-login-info">
+                                        <div class="mb-3 W-input-label-login-info">
+                                            <form:errors path="confirmPassword" element="p" cssStyle="color: red"/>
+                                            <form:label path="confirmPassword" class="form-label"><spring:message code="Signup.ConfirmPassword"/> <span class="W-red-asterisco">*</span></form:label>
+                                            <spring:message code="Placeholder.Asterisk" var="placeholder"/>
+                                            <form:input type="password" class="form-control" path="confirmPassword" placeholder="${placeholder}"/>
                                         </div>
                                     </div>
                                 </div>
@@ -139,7 +147,7 @@
                                         <h5 class="W-password-title"><spring:message code="Login.ForgotPass.msg"/></h5>
                                         <div class="mb-3 W-input-label-login-info">
                                             <form:errors path="email" element="p" cssStyle="color: red"/>
-                                            <form:label path="email" class="form-label">Email</form:label>
+                                            <form:label path="email" class="form-label"><spring:message code="Login.Email"/> <span class="W-red-asterisco">*</span></form:label>
                                             <spring:message code="Placeholder.RecoveryEmail" var="placeholder"/>
                                             <form:input type="email" class="form-control" value="${loginForm.email}" path="email" placeholder='${placeholder}'/>
                                         </div>

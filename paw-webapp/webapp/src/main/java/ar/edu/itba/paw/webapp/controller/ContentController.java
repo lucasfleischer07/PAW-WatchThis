@@ -276,6 +276,7 @@ public class ContentController {
         mav.addObject("query", query);
         List<Content> contentList = cs.getSearchedContent(query);
         mav.addObject("contentType", "all");
+        mav.addObject("query", query);
 
         int page= pageNum.orElse(1);
 

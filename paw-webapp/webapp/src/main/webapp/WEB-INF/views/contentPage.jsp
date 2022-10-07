@@ -37,6 +37,9 @@
                 <jsp:param name="type" value="${contentType}"/>
                 <jsp:param name="sorting" value="${sorting}"/>
             </jsp:include>
+            <c:if test="${query != null && allContent.size() > 0}">
+                <h3 class="W-search-context-title"><spring:message code="Search.Title" arguments="${query}"/></h3>
+            </c:if>
 
             <div class="W-films-div">
                 <div class="row row-cols-1 row-cols-md-2 g-2">
@@ -66,7 +69,7 @@
                         </div>
                         <div class="W-search-notFound-text">
                             <div>
-                                <p class="W-not-found-message"><spring:message code="Content.NoContent"/></p>
+                                <p class="W-not-found-message"><spring:message code="Content.NoContent" arguments="${query}"/></p>
                             </div>
                             <div>
                                 <h5 class="W-search-notFound-text2"><a href="<c:url value="/"/>"><spring:message code="WatchList.Recomendation"/></a></h5>

@@ -17,6 +17,10 @@ public class LoginForm {
     @Pattern(regexp	= "[a-zA-Z0-9!,.:;=+\n\\-_()?<>$%&#@{}\\[\\]|*\"'~/`^\\s]+")
     private String password;
 
+    @Size(min = 6, max = 50)
+    @Pattern(regexp	= "[a-zA-Z0-9!,.:;=+\n\\-_()?<>$%&#@{}\\[\\]|*\"'~/`^\\s]+")
+    private String confirmPassword;
+
     @AvailableUserName
     @Size(min = 4, max = 30)
     @Pattern(regexp	= "[a-zA-Z0-9\\s]+")
@@ -44,5 +48,13 @@ public class LoginForm {
 
     public void setUsername(String userName) {
         this.username = userName;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 }
