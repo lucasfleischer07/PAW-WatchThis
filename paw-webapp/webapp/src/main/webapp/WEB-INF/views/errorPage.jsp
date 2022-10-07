@@ -24,7 +24,7 @@
         <p class="lead">
             <spring:message code="Error.Body${errorCode!=401 && errorCode!= 404 && errorCode!= 400 && errorCode!= 405 && errorCode!= 403 && errorCode!= 500? null:errorCode}"/>
         </p>
-        <a href="<c:url value="/"/>" class="btn btn-primary"><spring:message code="Error.HomeButton"/></a>
+        <a href="<c:url value="/"/>" class="btn btn-success"><spring:message code="Error.HomeButton"/></a>
     </div>
 </div>
 

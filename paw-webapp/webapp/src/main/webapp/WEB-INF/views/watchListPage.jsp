@@ -31,7 +31,7 @@
 <div class="row py-5 px-4">
     <div class="W-profile-general-div-display">
         <div class="card">
-            <div class="px-4 pt-0 pb-4 cover">
+            <div class="px-4 pt-0 pb-4 W-profile-background-color">
                 <div class="media align-items-end profile-head W-profile-photo-name">
                     <div class="profile mr-3">
                         <div class="W-img-and-quote-div">

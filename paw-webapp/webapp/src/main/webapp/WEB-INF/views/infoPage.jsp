@@ -203,7 +203,7 @@
                   <a href="<c:url value="/reviewForm/${details.type}/${details.id}/${userId}"/>"><button type="button" class="btn btn-dark W-add-review-button W-reviewText"><spring:message code="Content.AddReview"/></button></a>
                 </c:when>
                 <c:otherwise>
-                  <button type="button" class="btn btn-dark W-add-review-button W-reviewText" data-bs-toggle="modal" data-bs-target="#exampleModal""><spring:message code="Content.AddReview"/></button>
+                  <button type="button" class="btn btn-dark W-add-review-button W-reviewText" data-bs-toggle="modal" data-bs-target="#exampleModal"><spring:message code="Content.AddReview"/></button>
                   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                       <div class="modal-content">
@@ -278,7 +278,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><spring:message code="No"/></button>
-            <button type="submit" form="<c:out value="formDelete"/>" class="btn btn-primary"><spring:message code="Yes"/></button>
+            <button type="submit" form="<c:out value="formDelete"/>" class="btn btn-success"><spring:message code="Yes"/></button>
           </div>
         </div>
       </div>

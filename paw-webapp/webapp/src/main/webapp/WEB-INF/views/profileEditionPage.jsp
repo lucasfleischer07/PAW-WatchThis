@@ -30,9 +30,9 @@
         </jsp:include>
 
         <div class="row py-5 px-4">
-            <div class="col-md-5 mx-auto">
+            <div class="col-md-5 mx-auto W-edit-profile-width">
                 <div class="bg-white shadow rounded overflow-hidden">
-                    <div class="px-4 pt-0 pb-4 cover">
+                    <div class="px-4 pt-0 pb-4 W-profile-background-color">
                         <div class="profile-head W-profile-photo-name">
                             <div class="W-picture-upload profile mr-3">
                                 <c:choose>
@@ -43,38 +43,40 @@
                                         <img src="<c:url value="/profile/${user.userName}/profileImage"/> " alt="User_img" class="W-edit-profile-picture">
                                     </c:otherwise>
                                 </c:choose>
-                                <div class="W-picture-upload-button-text">
-                                    <h6 class="W-edit-picture-text"><spring:message code="EditProfile.EditPicture"/></h6>
-                                    <div class="W-input-profile-picture">
-                                        <c:url value="/profile/edit-profile" var="postPath"/>
-                                        <form:form modelAttribute="editProfile" action="${postPath}" method="post" enctype="multipart/form-data">
-                                            <form:errors path="profilePicture" element="p" cssClass="form-error-label"/>
-                                            <form:input type="file" accept="image/gif, image/jpeg, image/jpg,  image/png" class="form-control" path="profilePicture" cssClass="W-input-width"/>
-                                            <button type="submit" class="btn btn-success W-profile-picture-button" onclick="this.form.submit(); (this).className += ' spinner-border'; (this).innerText = '|'"><spring:message code="EditProfile.Upload"/></button>
-                                        </form:form>
-                                    </div>
-                                </div>
                             </div>
                             <h4 class="W-username-profilepage"><c:out value="${user.userName}"/></h4>
                         </div>
                     </div>
-                    <div>
-                        <h6 class="W-change-pass-text"><spring:message code="EditProfile.ChangePassword"/></h6>
-                        <div class="bg-light d-flex justify-content-end text-center W-edit-divs-display">
-                            <c:url value="/profile/edit-profile" var="postPath"/>
-                            <form:form modelAttribute="editProfile" action="${postPath}" method="post">
-                                <div>
-                                    <div class="mb-3 W-input-label-edit-password">
-                                        <form:errors path="password" element="p" cssClass="W-form-color-red"/>
-                                        <form:label path="password" class="form-label"><spring:message code="EditProfile.NewPassword"/></form:label>
-                                        <spring:message code="Placeholder.Asterisk" var="placeholder"/>
-                                        <form:input type="password" class="form-control" value="${editProfile.password}" path="password" placeholder="${placeholder}"/>
+                    <div class="W-edit-profile-div">
+                        <div class="W-picture-upload-button-text">
+                            <div class="W-input-profile-picture">
+                                <h6 class="W-edit-picture-text"><spring:message code="EditProfile.EditPicture"/></h6>
+                                <c:url value="/profile/edit-profile" var="postPath"/>
+                                <form:form modelAttribute="editProfile" action="${postPath}" method="post" enctype="multipart/form-data">
+                                    <form:errors path="profilePicture" element="p" cssClass="form-error-label"/>
+                                    <form:input type="file" accept="image/gif, image/jpeg, image/jpg,  image/png" class="form-control" path="profilePicture" cssClass="W-input-width"/>
+                                    <button type="submit" class="btn btn-success W-profile-picture-button" onclick="this.form.submit(); (this).className += ' spinner-border'; (this).innerText = '|'"><spring:message code="EditProfile.Upload"/></button>
+                                </form:form>
+                            </div>
+                        </div>
+                        <div>
+                            <h6 class="W-change-pass-text"><spring:message code="EditProfile.ChangePassword"/></h6>
+                            <div class="bg-light d-flex justify-content-end text-center W-edit-divs-display">
+                                <c:url value="/profile/edit-profile" var="postPath"/>
+                                <form:form modelAttribute="editProfile" action="${postPath}" method="post">
+                                    <div>
+                                        <div class="mb-3 W-input-label-edit-password">
+                                            <form:errors path="password" element="p" cssClass="W-form-color-red"/>
+                                            <form:label path="password" class="form-label"><spring:message code="EditProfile.NewPassword"/></form:label>
+                                            <spring:message code="Placeholder.Asterisk" var="placeholder"/>
+                                            <form:input type="password" class="form-control" value="${editProfile.password}" path="password" placeholder="${placeholder}"/>
+                                        </div>
                                     </div>
-                                </div>
-                                <div>
-                                    <button type="submit" class="btn btn-success" onclick="this.form.submit(); (this).className += ' spinner-border'; (this).innerText = '|'"><spring:message code="EditProfile.Change"/></button>
-                                </div>
-                            </form:form>
+                                    <div>
+                                        <button type="submit" class="btn btn-success" onclick="this.form.submit(); (this).className += ' spinner-border'; (this).innerText = '|'"><spring:message code="EditProfile.Change"/></button>
+                                    </div>
+                                </form:form>
+                            </div>
                         </div>
                     </div>
                 </div>

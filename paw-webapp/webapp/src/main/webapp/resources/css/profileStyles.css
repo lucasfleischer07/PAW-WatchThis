@@ -23,6 +23,14 @@
     flex-direction: column;
 }
 
+.W-edit-profile-width {
+    width: 60%;
+}
+
+.W-profile-background-color {
+    background-color: black;
+}
+
 .W-profile-photo-name {
     margin-bottom: 6vw;
 }
@@ -60,10 +68,16 @@
 .W-edit-profile-picture {
     margin-right: 1vw;
     width: 12vw;
+    height: 12vw;
 }
 
 .W-edit-picture-text {
-    color: white;
+    color: black;
+}
+
+.W-edit-profile-div {
+    display: flex;
+    flex-direction: column;
 }
 
 .W-picture-upload-button-text {
@@ -71,6 +85,7 @@
     position: relative;
     margin-top: 1vw;
     flex-wrap: wrap;
+    margin-left: 1vw;
 }
 
 .W-change-pass-text {
@@ -103,6 +118,7 @@
 
 .W-input-profile-picture {
     display: flex;
+    flex-direction: column;
     flex-direction: row;
 }
 
@@ -129,5 +145,5 @@
 }
 
 .W-form-color-red {
-    color: red;
+    color: #b21e26;
 }

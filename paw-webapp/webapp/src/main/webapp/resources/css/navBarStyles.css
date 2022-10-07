@@ -3,7 +3,7 @@
 }
 
 .W-header-height {
-    height: 10%;
+    height: 9%;
 }
 
 .W-home-button-hamburger-button {
@@ -65,7 +65,7 @@
 }
 
 .W-filter-hamburger-button {
-    border-color: red;
+    border-color: #b21e26;
 }
 
 .W-confirm-filters-button {
@@ -81,10 +81,6 @@
 }
 
 @media (max-width: 992px) {
-    /*.W-logo-div {*/
-    /*  width: 25%;*/
-    /*}*/
-
     .W-header-height {
         height: 15%;
         margin-top: 0;
@@ -145,10 +141,6 @@
 }
 
 @media (max-width: 591px) {
-    /*.W-logo-div {*/
-    /*  width: 35%;*/
-    /*}*/
-
     .W-header-height {
         height: 15%;
         margin-top: 0;
@@ -191,10 +183,6 @@
     }
 }
 @media (max-width: 291px) {
-    /*.W-logo-div {*/
-    /*  width: 65%;*/
-    /*}*/
-
     .W-home-button-hamburger-button {
         display: flex;
     }
@@ -250,7 +238,7 @@
 .W-search-button-color:hover {
     color: white;
     background-color: rgb(104, 19, 19);
-    border-color: red;
+    border-color: #b21e26;
 }
 
 .W-navbar-padding {

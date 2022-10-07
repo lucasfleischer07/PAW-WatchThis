@@ -47,19 +47,19 @@
                         </div>
                     </c:if>
                     <div class="mb-3 W-input-label-review-info">
-                        <form:errors path="name" element="p" cssStyle="color: red"/>
+                        <form:errors path="name" element="p" cssStyle="color: #b21e26"/>
                         <form:label path="name" class="form-label"><spring:message code="CreateReview.ReviewName"/> <span class="W-red-asterisco">*</span></form:label>
                         <p class="W-review-registration-text"><spring:message code="CreateReview.CharacterLimits" arguments="6,200"/></p>
                         <form:input type="text" class="form-control" path="name" placeholder="My review"/>
                     </div>
                     <div class="mb-3 W-input-label-review-info">
-                        <form:errors path="description" element="p" cssStyle="color: red"/>
+                        <form:errors path="description" element="p" cssStyle="color: #b21e26"/>
                         <form:label path="description" class="form-label"><spring:message code="CreateReview.ReviewDescription"/> <span class="W-red-asterisco">*</span></form:label>
                         <p class="W-review-registration-text"><spring:message code="CreateReview.CharacterLimits" arguments="20,2000"/></p>
                         <form:textarea class="form-control" id="MyTextArea" path="description" rows="3"/>
                     </div>
                     <div class="mb-3 W-input-label-review-info">
-                        <form:errors path="rating" element="p" cssStyle="color: red"/>
+                        <form:errors path="rating" element="p" cssStyle="color: #b21e26"/>
                         <form:label path="rating" class="form-label"><spring:message code="CreateReview.ReviewRating"/> <span class="W-red-asterisco">*</span></form:label>
                         <form:select path="rating" class="form-select" aria-label="Default select example">
                             <form:option value="1"><spring:message code="Stars.quantity.1"/></form:option>

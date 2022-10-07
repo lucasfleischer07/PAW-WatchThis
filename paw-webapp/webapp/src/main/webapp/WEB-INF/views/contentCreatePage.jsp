@@ -42,40 +42,40 @@
                                 </div>
                             </c:if>
                             <div class="mb-3 W-input-label-review-info">
-                                <form:errors path="name" element="p" cssStyle="color: red"/>
+                                <form:errors path="name" element="p" cssStyle="color: #b21e26"/>
                                 <form:label path="name" class="form-label"><spring:message code="CreateContent.ContentName"/> <span class="W-red-asterisco"><spring:message code="Asterisk"/></span></form:label>
                                 <p class="W-review-registration-text"><spring:message code="CreateContent.CharacterLimits" arguments="1,100"/></p>
                                 <spring:message code="Placeholder.FilmEx" var="placeholder"/>
                                 <form:input type="text" class="form-control" path="name" placeholder="${placeholder}"/>
                             </div>
                             <div class="mb-3 W-input-label-review-info">
-                                <form:errors path="description" element="p" cssStyle="color: red"/>
+                                <form:errors path="description" element="p" cssStyle="color: #b21e26"/>
                                 <form:label path="description" class="form-label"><spring:message code="CreateContent.ContentDescription"/> <span class="W-red-asterisco"><spring:message code="Asterisk"/></span></form:label>
                                 <p class="W-review-registration-text"><spring:message code="CreateContent.CharacterLimits" arguments="20,500"/></p>
                                 <form:textarea class="form-control" id="MyTextArea" path="description" rows="3"/>
                             </div>
                             <div class="mb-3 W-input-label-review-info">
-                                <form:errors path="releaseDate" element="p" cssStyle="color: red"/>
+                                <form:errors path="releaseDate" element="p" cssStyle="color: #b21e26"/>
                                 <form:label path="releaseDate" class="form-label"><spring:message code="CreateContent.ContentReleaseDate"/> <span class="W-red-asterisco"><spring:message code="Asterisk"/></span></form:label>
                                 <p class="W-review-registration-text"><spring:message code="CreateContent.CharacterLimits"/></p>
                                 <spring:message code="Placeholder.YearEx" var="placeholder"/>
                                 <form:input type="text" class="form-control" path="releaseDate" placeholder="${placeholder}"/>
                             </div>
                             <div class="mb-3 W-input-label-review-info">
-                                <form:errors path="creator" element="p" cssStyle="color: red"/>
+                                <form:errors path="creator" element="p" cssStyle="color: #b21e26"/>
                                 <form:label path="creator" class="form-label"><spring:message code="CreateContent.ContentCreator"/> <span class="W-red-asterisco"><spring:message code="Asterisk"/></span></form:label>
                                 <p class="W-review-registration-text"><spring:message code="CreateContent.CharacterLimits" arguments="10,100"/></p>
                                 <spring:message code="Placeholder.CreatorEx" var="placeholder"/>
                                 <form:input type="text" class="form-control" path="creator" placeholder="${placeholder}"/>
                             </div>
                             <div class="mb-3 W-input-label-review-info">
-                                <form:errors path="duration" element="p" cssStyle="color: red"/>
+                                <form:errors path="duration" element="p" cssStyle="color: #b21e26"/>
                                 <form:label path="duration" class="form-label"><spring:message code="CreateContent.ContentDuration"/> <span class="W-red-asterisco"><spring:message code="Asterisk"/></span></form:label>
                                 <spring:message code="Placeholder.DurationEx" var="placeholder"/>
                                 <form:input type="number" class="form-control" path="duration" placeholder="${placeholder}"/>
                             </div>
                             <div class="mb-3 W-input-label-review-info">
-                                <form:errors path="genre" element="p" cssStyle="color: red"/>
+                                <form:errors path="genre" element="p" cssStyle="color: #b21e26"/>
                                 <form:label path="genre" class="form-label"><spring:message code="CreateContent.ContentGenre"/> <span class="W-red-asterisco"><spring:message code="Asterisk"/></span></form:label>
                                 <form:select path="genre" class="form-select" aria-label="Default select example">
                                     <form:option value="Action"><spring:message code="Genre.Action"/></form:option>
@@ -93,7 +93,7 @@
                                 </form:select>
                             </div>
                             <div class="mb-3 W-input-label-review-info">
-                                <form:errors path="type" element="p" cssStyle="color: red"/>
+                                <form:errors path="type" element="p" cssStyle="color: #b21e26"/>
                                 <form:label path="type" class="form-label"><spring:message code="CreateContent.ContentType"/>
                                     <span class="W-red-asterisco"><spring:message code="Asterisk"/></span></form:label>
                                 <form:select path="type" class="form-select" aria-label="Default select example">
@@ -102,7 +102,7 @@
                                 </form:select>
                             </div>
                             <div class="mb-3 W-input-label-review-info">
-                                <form:errors path="contentPicture" element="p" cssClass="form-error-label" cssStyle="color: red"/>
+                                <form:errors path="contentPicture" element="p" cssClass="form-error-label" cssStyle="color: #b21e26"/>
                                 <form:label path="type" class="form-label"><span class="W-red-asterisco"><spring:message code="Asterisk"/></span></span></form:label>
                                 <form:input type="file" accept="image/gif, image/jpeg, image/jpg,  image/png" class="form-control" path="contentPicture" cssClass="W-input-width"/>
                             </div>
@@ -127,40 +127,40 @@
                                 </div>
                             </c:if>
                             <div class="mb-3 W-input-label-review-info">
-                                <form:errors path="name" element="p" cssStyle="color: red"/>
+                                <form:errors path="name" element="p" cssStyle="color: #b21e26"/>
                                 <form:label path="name" class="form-label"><spring:message code="CreateContent.ContentName"/> <span class="W-red-asterisco"><spring:message code="Asterisk"/></span></form:label>
                                 <p class="W-review-registration-text"><spring:message code="CreateContent.CharacterLimits" arguments="1,100"/></p>
                                 <spring:message code="Placeholder.FilmEx" var="placeholder"/>
                                 <form:input type="text" class="form-control" path="name" placeholder="${placeholder}"/>
                             </div>
                             <div class="mb-3 W-input-label-review-info">
-                                <form:errors path="description" element="p" cssStyle="color: red"/>
+                                <form:errors path="description" element="p" cssStyle="color: #b21e26"/>
                                 <form:label path="description" class="form-label"><spring:message code="CreateContent.ContentDescription"/> <span class="W-red-asterisco"><spring:message code="Asterisk"/></span></form:label>
                                 <p class="W-review-registration-text"><spring:message code="CreateContent.CharacterLimits" arguments="20,500"/></p>
                                 <form:textarea class="form-control" id="MyTextArea" path="description" rows="3"/>
                             </div>
                             <div class="mb-3 W-input-label-review-info">
-                                <form:errors path="releaseDate" element="p" cssStyle="color: red"/>
+                                <form:errors path="releaseDate" element="p" cssStyle="color: #b21e26"/>
                                 <form:label path="releaseDate" class="form-label"><spring:message code="CreateContent.ContentReleaseDate"/> <span class="W-red-asterisco"><spring:message code="Asterisk"/></span></form:label>
                                 <p class="W-review-registration-text"><spring:message code="CreateContent.CharacterLimitsRelease"/></p>
                                 <spring:message code="Placeholder.YearEx" var="placeholder"/>
                                 <form:input type="text" class="form-control" path="releaseDate" placeholder="${placeholder}"/>
                             </div>
                             <div class="mb-3 W-input-label-review-info">
-                                <form:errors path="creator" element="p" cssStyle="color: red"/>
+                                <form:errors path="creator" element="p" cssStyle="color: #b21e26"/>
                                 <form:label path="creator" class="form-label"><spring:message code="CreateContent.ContentCreator"/> <span class="W-red-asterisco"><spring:message code="Asterisk"/></span></form:label>
                                 <p class="W-review-registration-text"><spring:message code="CreateContent.CharacterLimits" arguments="10,100"/></p>
                                 <spring:message code="Placeholder.CreatorEx" var="placeholder"/>
                                 <form:input type="text" class="form-control" path="creator" placeholder="${placeholder}"/>
                             </div>
                             <div class="mb-3 W-input-label-review-info">
-                                <form:errors path="duration" element="p" cssStyle="color: red"/>
+                                <form:errors path="duration" element="p" cssStyle="color: #b21e26"/>
                                 <form:label path="duration" class="form-label"><spring:message code="CreateContent.ContentDuration"/> <span class="W-red-asterisco"><spring:message code="Asterisk"/></span></form:label>
                                 <spring:message code="Placeholder.DurationEx" var="placeholder"/>
                                 <form:input type="number" class="form-control" path="duration" placeholder="${placeholder}"/>
                             </div>
                             <div class="mb-3 W-input-label-review-info">
-                                <form:errors path="genre" element="p" cssStyle="color: red"/>
+                                <form:errors path="genre" element="p" cssStyle="color: #b21e26"/>
                                 <form:label path="genre" class="form-label"><spring:message code="CreateContent.ContentGenre"/> <span class="W-red-asterisco"><spring:message code="Asterisk"/></span></form:label>
                                 <form:select path="genre" class="form-select" aria-label="Default select example">
                                     <form:option value="Action"><spring:message code="Genre.Action"/></form:option>
@@ -178,7 +178,7 @@
                                 </form:select>
                             </div>
                             <div class="mb-3 W-input-label-review-info">
-                                <form:errors path="type" element="p" cssStyle="color: red"/>
+                                <form:errors path="type" element="p" cssStyle="color: #b21e26"/>
                                 <form:label path="type" class="form-label"><spring:message code="CreateContent.ContentType"/> <span class="W-red-asterisco"><spring:message code="Asterisk"/></span></form:label>
                                 <form:select path="type" class="form-select" aria-label="Default select example">
                                     <form:option value="movie"><spring:message code="CreateContent.ContentType.Movie"/></form:option>
@@ -186,7 +186,7 @@
                                 </form:select>
                             </div>
                             <div class="mb-3 W-input-label-review-info">
-                                <form:errors path="contentPicture" element="p" cssClass="form-error-label" cssStyle="color: red"/>
+                                <form:errors path="contentPicture" element="p" cssClass="form-error-label" cssStyle="color: #b21e26"/>
                                 <form:input type="file" accept="image/gif, image/jpeg, image/jpg,  image/png" class="form-control" path="contentPicture" cssClass="W-input-width"/>
                             </div>
                         </div>

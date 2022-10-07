@@ -32,7 +32,7 @@
     <div class="row py-5 px-4">
       <div class="col-md-5 mx-auto W-profile-general-div-display">
           <div class="bg-white shadow rounded overflow-hidden W-profile-general-div">
-          <div class="px-4 pt-0 pb-4 cover">
+          <div class="px-4 pt-0 pb-4 W-profile-background-color">
             <div class="media align-items-end profile-head W-profile-photo-name">
               <div class="profile mr-3">
                   <div class="W-img-and-quote-div">
