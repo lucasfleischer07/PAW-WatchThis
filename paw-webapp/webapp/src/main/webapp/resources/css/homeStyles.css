@@ -242,6 +242,16 @@
     color: #b21e26;
 }
 
+.W-pagination-color {
+    color: #212529 !important;
+}
+
+.pagination {
+    --bs-pagination-active-bg: #6c757d;
+    --bs-pagination-active-border-color: #212529;
+    --bs-pagination-color: #212529;
+}
+
 .accordion {
     margin-left: 5%;
     margin-bottom: 5%;
