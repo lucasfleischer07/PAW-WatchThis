@@ -9,7 +9,7 @@
                     <a href="<c:url value="/profile/${param.userName}"/>" class="W-creator-review"><c:out value="${param.userName}"/></a>
                     <c:choose>
                         <c:when test="${param.userName.equals(param.loggedUserName)}">
-                            <div >
+                            <div>
                                 <div class="W-delete-edit-buttons">
                                     <a class="W-edit-button-review" href="<c:url value="/reviewForm/edit/${param.contentType}/${param.contentId}/${param.reviewId}"/>" onclick="(this).className += ' spinner-border text-dark'; (this).innerText = ''">
                                         <button id="editReviewButton" class="btn btn-dark text-nowrap" >

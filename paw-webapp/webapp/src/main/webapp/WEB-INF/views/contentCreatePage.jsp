@@ -22,12 +22,11 @@
     </head>
     <body>
         <jsp:include page="components/header.jsp">
-            <jsp:param name="type" value="${details.type}"/>
             <jsp:param name="userName" value="${userName}"/>
             <jsp:param name="userId" value="${userId}"/>
             <jsp:param name="admin" value="${admin}"/>
         </jsp:include>
-
+        <h3 class="W-creating-content-title"><spring:message code="CreateContent.Title"/></h3>
         <c:url value="/content/editInfo/${contentId}" var="postPath"/>
         <c:choose>
             <c:when test="${create==true}">

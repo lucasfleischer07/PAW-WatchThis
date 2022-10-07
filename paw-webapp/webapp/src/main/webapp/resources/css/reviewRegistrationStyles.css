@@ -12,6 +12,12 @@
     width: 100%;
 }
 
+.W-creating-content-title {
+    display: flex;
+    justify-content: center;
+    margin-top: 2vw;
+}
+
 .W-review-card {
     width: 60%;
 }

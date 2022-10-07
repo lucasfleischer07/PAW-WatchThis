@@ -47,7 +47,7 @@ public class ContentController {
             mav.addObject("userId", user.getId());
             mav.addObject("userWatchListContentId",userWatchListContentId);
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            if(auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ADMIN"))){
+            if(auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))){
                 mav.addObject("admin",true);
             }else{
                 mav.addObject("admin",false);
@@ -298,8 +298,6 @@ public class ContentController {
     }
 
 // * ----------------------------Content editing-----------------------------------------------------------------------------
-
-
     @RequestMapping(value = "/content/editInfo/{contentId:[0-9]+}", method = {RequestMethod.GET})
     public ModelAndView editContent(Principal userDetails, @ModelAttribute("contentEditForm") final ContentEditForm contentEditForm, @PathVariable("contentId")final long contentId){
         final ModelAndView mav = new ModelAndView("contentCreatePage");

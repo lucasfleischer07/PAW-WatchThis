@@ -241,7 +241,7 @@ public class UserController {
             mav.addObject("userName",userLogged.getUserName());
             mav.addObject("userId",userLogged.getId());
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            if(auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ADMIN")) && !user.get().getRole().equals("admin")){
+            if(auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN")) && !user.get().getRole().equals("admin")){
                 mav.addObject("admin",true);
             }else{
                 mav.addObject("admin",false);
