@@ -226,7 +226,7 @@ public class ContentJdbcDao implements ContentDao {
     }
 
 
-    private static final String BEST_RATED = "SELECT content.id,content.name,image,content.description,released,genre,creator,duration,content.type, sum(review.rating)/count(*) AS rating,count(reviewid) AS reviewsAmount FROM content LEFT JOIN (SELECT * FROM review AS r2 WHERE r2.rating<>0) AS review ON content.id = review.contentid GROUP BY content.id,content.name,content.description,content.released,content.genre,content.creator,content.duration,content.type,content.durationNum HAVING sum(review.rating)/count(*) > 3 ORDER BY sum(review.rating)/count(*) DESC LIMIT 20 ";
+    private static final String BEST_RATED = "SELECT content.id,content.name,image,content.description,released,genre,creator,duration,content.type, sum(review.rating)/count(*) AS rating,count(reviewid) AS reviewsAmount FROM content LEFT JOIN (SELECT * FROM review AS r2 WHERE r2.rating<>0) AS review ON content.id = review.contentid GROUP BY content.id,content.name,content.description,content.released,content.genre,content.creator,content.duration,content.type,content.durationNum HAVING sum(review.rating)/count(*) > 3 ORDER BY sum(review.rating)/count(*) DESC,count(*) DESC LIMIT 20 ";
 
     @Override
     public List<Content> getBestRated() {

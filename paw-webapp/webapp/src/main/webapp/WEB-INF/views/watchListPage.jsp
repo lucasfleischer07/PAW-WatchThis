@@ -100,6 +100,92 @@
         </div>
     </div>
 </div>
+<c:if test="${amountPages > 1}">
+    <div>
+        <ul class="pagination justify-content-center W-pagination">
+            <c:set var = "baseUrl" scope = "session" value = "/profile/watchList"/>
+            <c:choose>
+                <c:when test="${pageSelected > 1}">
+                    <li class="page-item">
+                        <a class="page-link W-pagination-color" href="<c:url value="${baseUrl}/page/${pageSelected-1}"/>"><spring:message code="Pagination.Prev"/></a>
+                    </li>
+                </c:when>
+                <c:otherwise>
+                    <li class="page-item disabled">
+                        <a class="page-link W-pagination-color" href="#"><spring:message code="Pagination.Prev"/></a>
+                    </li>
+                </c:otherwise>
+            </c:choose>
+            <c:choose>
+                <c:when test="${amountPages > 10 }">
+                    <c:forEach var="page" begin="1" end="${amountPages}">
+                        <c:choose>
+                            <c:when test="${page != pageSelected && ((page > pageSelected - 4 && page<pageSelected) || (page < pageSelected+5 && page > pageSelected))}">
+                                <li class="page-item">
+                                    <a class="page-link W-pagination-color" href="<c:url value="${baseUrl}/page/${page}"/>">
+                                        <c:out value="${page}"/>
+                                    </a>
+                                </li>
+                            </c:when>
+                            <c:when test="${page == pageSelected - 4 || page == pageSelected + 5 }">
+                                <li class="page-item">
+                                    <a class="page-link W-pagination-color" href="<c:url value="${baseUrl}/page/${page}"/>">
+                                        ...
+                                    </a>
+                                </li>
+                            </c:when>
+                            <c:when test="${page == pageSelected}">
+                                <li class="page-item active">
+                                    <a class="page-link W-pagination-color" href="<c:url value="${baseUrl}/page/${page}"/>">
+                                        <c:out value="${page}"/>
+                                    </a>
+                                </li>
+                            </c:when>
+
+                            <c:otherwise>
+
+                            </c:otherwise>
+                        </c:choose>
+                    </c:forEach>
+                </c:when>
+                <c:otherwise>
+                    <c:forEach var="page" begin="1" end="${amountPages}">
+                        <c:choose>
+                            <c:when test="${page == pageSelected}">
+                                <li class="page-item active">
+                                    <a class="page-link W-pagination-color" href="<c:url value="${baseUrl}/page/${page}"/>">
+                                        <c:out value="${page}"/>
+                                    </a>
+                                </li>
+                            </c:when>
+                            <c:otherwise>
+                                <li class="page-item">
+                                    <a class="page-link W-pagination-color" href="<c:url value="${baseUrl}/page/${page}"/>">
+                                        <c:out value="${page}"/>
+                                    </a>
+                                </li>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:forEach>
+                </c:otherwise>
+            </c:choose>
+
+
+            <c:choose>
+                <c:when test="${pageSelected < amountPages}">
+                    <li class="page-item">
+                        <a class="page-link W-pagination-color" href="<c:url value="${baseUrl}/page/${pageSelected+1}"/>"><spring:message code="Pagination.Next"/></a>
+                    </li>
+                </c:when>
+                <c:otherwise>
+                    <li class="page-item disabled">
+                        <a class="page-link W-pagination-color" href="#"><spring:message code="Pagination.Next"/></a>
+                    </li>
+                </c:otherwise>
+            </c:choose>
+        </ul>
+    </div>
+</c:if>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
 </body>
 </html>

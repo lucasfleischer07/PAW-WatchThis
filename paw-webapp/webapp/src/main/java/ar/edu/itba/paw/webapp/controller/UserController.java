@@ -48,6 +48,7 @@ public class UserController {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
     protected AuthenticationManager authenticationManager;
     private static final int ELEMS_AMOUNT = 3;
+    private static final int MOVIES_AMOUNT = 2;
     @Autowired
     public UserController(final UserService us, final ContentService cs, ReviewService rs, EmailService es,AuthenticationManager authenticationManager){
         this.us = us;
@@ -75,6 +76,20 @@ public class UserController {
             mav.addObject("admin",false);
         }
     }
+
+    private void listPaginationSetup(ModelAndView mav,String name,List<Content> contentList,int page){
+        if(contentList.size()>page*MOVIES_AMOUNT){
+            mav.addObject(name, contentList.subList((page - 1) * MOVIES_AMOUNT, page * MOVIES_AMOUNT));
+        }else{
+            mav.addObject(name,contentList.subList((page-1)*MOVIES_AMOUNT,contentList.size()));
+        }
+        mav.addObject("pageSelected",page);
+        mav.addObject("amountPages",Math.ceil((double)contentList.size()/(double)MOVIES_AMOUNT));
+    }
+
+
+
+
 
     // * ----------------------------------- Login ---------------------------------------------------------------------
     @RequestMapping(value = "/login/{loginStage:sign-in}", method = {RequestMethod.GET})
@@ -315,9 +330,8 @@ public class UserController {
 
     // * ------------------------------------------------User Watch List------------------------------------------------
 
-
-    @RequestMapping(value = "/profile/watchList", method = {RequestMethod.GET})
-    public ModelAndView watchList(Principal userDetails,HttpServletRequest request) {
+    @RequestMapping(value = {"/profile/watchList","/profile/watchList/page/{pageNum:[0-9]+}"}, method = {RequestMethod.GET})
+    public ModelAndView watchList(Principal userDetails,@PathVariable("pageNum")final Optional<Integer> pageNum,HttpServletRequest request) {
         String userEmail = userDetails.getName();
         final String locale = LocaleContextHolder.getLocale().getDisplayLanguage();
         User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
@@ -329,7 +343,7 @@ public class UserController {
         mav.addObject("user", user);
         mav.addObject("userName", user.getUserName());
         mav.addObject("userId", user.getId());
-        mav.addObject("watchListContent", watchListContent);
+        listPaginationSetup(mav,"watchListContent",watchListContent,pageNum.orElse(1));
         mav.addObject("watchListSize", watchListContent.size());
         mav.addObject("userWatchListContentId", userWatchListContentId);
 
@@ -393,8 +407,8 @@ public class UserController {
     // * ------------------------------------------------User Viewed List------------------------------------------------
 
 
-    @RequestMapping(value = "/profile/viewedList", method = {RequestMethod.GET})
-    public ModelAndView viewedList(Principal userDetails,HttpServletRequest request) {
+    @RequestMapping(value = {"/profile/viewedList","/profile/viewedList/page/{pageNum:[0-9]+}"}, method = {RequestMethod.GET})
+    public ModelAndView viewedList(Principal userDetails,@PathVariable("pageNum")final Optional<Integer> pageNum,HttpServletRequest request) {
         String userEmail = userDetails.getName();
         final String locale = LocaleContextHolder.getLocale().getDisplayLanguage();
         User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
@@ -406,7 +420,7 @@ public class UserController {
         mav.addObject("user", user);
         mav.addObject("userName", user.getUserName());
         mav.addObject("userId", user.getId());
-        mav.addObject("viewedListContent", viewedListContent);
+        listPaginationSetup(mav,"viewedListContent",viewedListContent,pageNum.orElse(1));
         mav.addObject("viewedListContentSize", viewedListContent.size());
         mav.addObject("userWatchListContentId", userWatchListContentId);
 

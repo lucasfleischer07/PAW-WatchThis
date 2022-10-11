@@ -107,7 +107,7 @@
                                                                                 <c:param name="durationTo" value="${durationTo}"/>
                                                                             </c:if>
                                                                             <c:if test="${sorting != 'ANY' && sorting!=null}">
-                                                                                <c:param name="sorting" value="${sorting}"/>
+                                                                                  <c:param name="sorting" value="${sorting}"/>
                                                                             </c:if>
                                         </c:url>"><spring:message code="Pagination.Prev"/></a>
                             </li>
@@ -266,8 +266,6 @@
                             </li>
                         </c:otherwise>
                     </c:choose>
-
-                    </li>
                 </ul>
             </div>
         </c:if>
