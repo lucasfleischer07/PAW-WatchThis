@@ -23,6 +23,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -44,18 +45,21 @@ public class UserController {
     private final ContentService cs;
     private final ReviewService rs;
     private final EmailService es;
+    private final PasswordEncoder passwordEncoder;
+
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
     protected AuthenticationManager authenticationManager;
     private static final int ELEMS_AMOUNT = 3;
-    private static final int MOVIES_AMOUNT = 2;
+    private static final int MOVIES_AMOUNT = 15;
     @Autowired
-    public UserController(final UserService us, final ContentService cs, ReviewService rs, EmailService es,AuthenticationManager authenticationManager){
+    public UserController(final UserService us, final ContentService cs, ReviewService rs, EmailService es,AuthenticationManager authenticationManager,PasswordEncoder passwordEncoder){
         this.us = us;
         this.cs = cs;
         this.rs = rs;
         this.es = es;
         this.authenticationManager=authenticationManager;
+        this.passwordEncoder=passwordEncoder;
     }
 
     private void HeaderSetUp(ModelAndView mav, Principal userDetails){
@@ -77,7 +81,11 @@ public class UserController {
         }
     }
 
-    private void listPaginationSetup(ModelAndView mav,String name,List<Content> contentList,int page){
+    private void listPaginationSetup(ModelAndView mav,String name,List<Content> contentList,int page) throws PageNotFoundException{
+        if((page-1)*MOVIES_AMOUNT >= contentList.size()) {
+            LOGGER.warn("Wrong login path:", new PageNotFoundException());
+            throw new PageNotFoundException();
+        }
         if(contentList.size()>page*MOVIES_AMOUNT){
             mav.addObject(name, contentList.subList((page - 1) * MOVIES_AMOUNT, page * MOVIES_AMOUNT));
         }else{
@@ -293,7 +301,7 @@ public class UserController {
     // * ------------------------------------------------Profile Edition------------------------------------------------
 
 
-    @RequestMapping(value = "/profile/editProfile", method = {RequestMethod.GET})
+    @RequestMapping(value = "/profile/edit-profile", method = {RequestMethod.GET})
     public ModelAndView profileEdition(Principal userDetails, @Valid @ModelAttribute("editProfile") final EditProfile editProfile) {
         String userEmail = userDetails.getName();
         User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
@@ -310,7 +318,7 @@ public class UserController {
         return mav;
     }
 
-    @RequestMapping(value = "/profile/editProfile", method = {RequestMethod.POST})
+    @RequestMapping(value = "/profile/edit-profile", method = {RequestMethod.POST})
     public ModelAndView profileEditionPost(Principal userDetails,@Valid @ModelAttribute("editProfile") final EditProfile editProfile, final BindingResult errors) throws IOException {
         if(errors.hasErrors()) {
             return profileEdition(userDetails,editProfile);
@@ -318,11 +326,26 @@ public class UserController {
 
         String userEmail = userDetails.getName();
         User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
-        if((editProfile.getPassword() != null && editProfile.getConfirmPassword() != null && Objects.equals(editProfile.getPassword(), editProfile.getConfirmPassword())) && ((editProfile.getProfilePicture() == null) || editProfile.getProfilePicture().getSize() <= 0 )) {
+        if(editProfile.getPassword() != null && ((editProfile.getProfilePicture() == null) || editProfile.getProfilePicture().getSize() <= 0 )) {
+
+            if(!passwordEncoder.matches(editProfile.getCurrentPassword(),user.getPassword())){
+                errors.rejectValue("currentPassword","EditProfile.IncorrectOldPassword");
+                return profileEdition(userDetails,editProfile);
+            }else if(!editProfile.getPassword().equals(editProfile.getConfirmPassword())){
+                errors.rejectValue("confirmPassword","EditProfile.NotSamePassword");
+                return profileEdition(userDetails,editProfile);
+            }
             us.setPassword(editProfile.getPassword(), user, "restore");
         } else if(editProfile.getPassword() == null && (editProfile.getProfilePicture().getSize() > 0)) {
             us.setProfilePicture(editProfile.getProfilePicture().getBytes(), user);
-        } else if((editProfile.getPassword() != null && editProfile.getConfirmPassword() != null && Objects.equals(editProfile.getPassword(), editProfile.getConfirmPassword())) && editProfile.getProfilePicture().getSize() > 0) {
+        } else if(editProfile.getPassword() != null && editProfile.getProfilePicture().getSize() > 0) {
+            if(!passwordEncoder.matches(editProfile.getCurrentPassword(),user.getPassword())){
+                errors.rejectValue("currentPassword","EditProfile.IncorrectOldPassword");
+                return profileEdition(userDetails,editProfile);
+            }else if(!editProfile.getPassword().equals(editProfile.getConfirmPassword())){
+                errors.rejectValue("confirmPassword","EditProfile.NotSamePassword");
+                return profileEdition(userDetails,editProfile);
+            }
             us.setPassword(editProfile.getPassword(), user, "restore");
             us.setProfilePicture(editProfile.getProfilePicture().getBytes(), user);
         }

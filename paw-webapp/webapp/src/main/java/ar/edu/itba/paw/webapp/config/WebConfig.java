@@ -114,4 +114,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     public void configurePathMatch(PathMatchConfigurer configurer){
         configurer.setUseTrailingSlashMatch(false);
     }
+
+
 }

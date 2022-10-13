@@ -90,7 +90,7 @@
                                     <div>
                                         <div class="mb-3 W-input-label-edit-password">
                                             <form:errors path="confirmPassword" element="p" cssStyle="color: red"/>
-                                            <form:label path="confirmPassword" class="form-label"><spring:message code="Signup.ConfirmPassword"/> <span class="W-red-asterisco"><spring:message code="Asterisk"/></span></form:label>
+                                            <form:label path="confirmPassword" class="form-label"><spring:message code="EditProfile.ConfirmPassword"/> <span class="W-red-asterisco"><spring:message code="Asterisk"/></span></form:label>
                                             <spring:message code="Placeholder.Asterisk" var="placeholder"/>
                                             <form:input type="password" class="form-control" path="confirmPassword" placeholder="${placeholder}"/>
                                         </div>

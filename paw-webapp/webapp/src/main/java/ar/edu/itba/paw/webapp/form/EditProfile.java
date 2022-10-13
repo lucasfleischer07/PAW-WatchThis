@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.form;
 
+import ar.edu.itba.paw.webapp.validations.CorrectOldPassword;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Pattern;
@@ -10,6 +11,10 @@ public class EditProfile {
     @Size(min = 6, max = 50)
     @Pattern(regexp	= "[a-zA-Z0-9!,.:;=+\n\\-_()?<>$%&#@{}\\[\\]|*\"'~/`^\\s]+")
     private String password;
+
+    @Size(min = 6, max = 50)
+    @Pattern(regexp	= "[a-zA-Z0-9!,.:;=+\n\\-_()?<>$%&#@{}\\[\\]|*\"'~/`^\\s]+")
+    private String confirmPassword;
 
     @Size(min = 6, max = 50)
     @Pattern(regexp	= "[a-zA-Z0-9!,.:;=+\n\\-_()?<>$%&#@{}\\[\\]|*\"'~/`^\\s]+")
@@ -36,6 +41,14 @@ public class EditProfile {
 
     public String getCurrentPassword() {
         return currentPassword;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 
     public void setCurrentPassword(String currentPassword) {
