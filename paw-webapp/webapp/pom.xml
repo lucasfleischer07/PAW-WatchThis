@@ -20,7 +20,11 @@
       <groupId>org.springframework</groupId>
       <artifactId>spring-webmvc</artifactId>
     </dependency>
-
+    <!--Para hibernate-->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-orm</artifactId>
+    </dependency>
     <!--Para JDBC-->
     <dependency>
       <groupId>org.springframework</groupId>
