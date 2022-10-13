@@ -301,7 +301,7 @@ public class UserController {
     // * ------------------------------------------------Profile Edition------------------------------------------------
 
 
-    @RequestMapping(value = "/profile/edit-profile", method = {RequestMethod.GET})
+    @RequestMapping(value = "/profile/editProfile", method = {RequestMethod.GET})
     public ModelAndView profileEdition(Principal userDetails, @Valid @ModelAttribute("editProfile") final EditProfile editProfile) {
         String userEmail = userDetails.getName();
         User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
@@ -318,7 +318,7 @@ public class UserController {
         return mav;
     }
 
-    @RequestMapping(value = "/profile/edit-profile", method = {RequestMethod.POST})
+    @RequestMapping(value = "/profile/editProfile", method = {RequestMethod.POST})
     public ModelAndView profileEditionPost(Principal userDetails,@Valid @ModelAttribute("editProfile") final EditProfile editProfile, final BindingResult errors) throws IOException {
         if(errors.hasErrors()) {
             return profileEdition(userDetails,editProfile);
