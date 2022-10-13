@@ -29,7 +29,7 @@ public class ContentController {
 
     private final ContentService cs;
     private final UserService us;
-    private final int ELEMS_AMOUNT = 15;
+    private final int ELEMS_AMOUNT = 18;
     private static final Logger LOGGER = LoggerFactory.getLogger(ContentController.class);
 
     @Autowired

@@ -168,64 +168,67 @@
                 </c:choose>
 
                 <h3 class="W-carousel-title"><spring:message code="Content.Carousel.BestRatedContent"/></h3>
-                <div id="carouselMostReviewed" class="carousel slide " data-ride="carousel">
-                    <div class="carousel-inner">
-                        <c:forEach begin="0" step="5" end="${bestRatedListSize-1}" var="externalIndex">
-                            <c:choose>
-                                <c:when test="${externalIndex == 0}">
-                                    <div class="carousel-item active">
-                                        <div class="cards-wrapper">
-                                            <c:forEach begin="${externalIndex}" step="1" end="${bestRatedListSize-1 < 4+externalIndex ? bestRatedListSize-1:4+externalIndex}" var="internalIndex" >
-                                                <jsp:include page="components/carrouselContent.jsp">
-                                                    <jsp:param name="contentName" value="${bestRatedList.get(internalIndex).name}"/>
-                                                    <jsp:param name="contentReleased" value="${bestRatedList.get(internalIndex).released}"/>
-                                                    <jsp:param name="contentCreator" value="${bestRatedList.get(internalIndex).creator}"/>
-                                                    <jsp:param name="contentGenre" value="${bestRatedList.get(internalIndex).genre}"/>
-                                                    <jsp:param name="contentImage" value="${bestRatedList.get(internalIndex).image}"/>
-                                                    <jsp:param name="contentId" value="${bestRatedList.get(internalIndex).id}"/>
-                                                    <jsp:param name="contentType" value="${bestRatedList.get(internalIndex).type}"/>
-                                                    <jsp:param name="contentRating" value="${bestRatedList.get(internalIndex).rating}"/>
-                                                    <jsp:param name="reviewsAmount" value="${bestRatedList.get(internalIndex).reviewsAmount}"/>
-                                                    <jsp:param name="userName" value="${userName}"/>
-                                                    <jsp:param name="userWatchListContentId1" value="${userWatchListContentId.contains(bestRatedList.get(internalIndex).id)}"/>
-                                                </jsp:include>
-                                            </c:forEach>
+                <div>
+                    <div id="carouselMostReviewed" class="carousel slide " data-ride="carousel">
+                        <div class="carousel-inner">
+                            <c:forEach begin="0" step="5" end="${bestRatedListSize-1}" var="externalIndex">
+                                <c:choose>
+                                    <c:when test="${externalIndex == 0}">
+                                        <div class="carousel-item active">
+                                            <div class="cards-wrapper">
+                                                <c:forEach begin="${externalIndex}" step="1" end="${bestRatedListSize-1 < 4+externalIndex ? bestRatedListSize-1:4+externalIndex}" var="internalIndex" >
+                                                    <jsp:include page="components/carrouselContent.jsp">
+                                                        <jsp:param name="contentName" value="${bestRatedList.get(internalIndex).name}"/>
+                                                        <jsp:param name="contentReleased" value="${bestRatedList.get(internalIndex).released}"/>
+                                                        <jsp:param name="contentCreator" value="${bestRatedList.get(internalIndex).creator}"/>
+                                                        <jsp:param name="contentGenre" value="${bestRatedList.get(internalIndex).genre}"/>
+                                                        <jsp:param name="contentImage" value="${bestRatedList.get(internalIndex).image}"/>
+                                                        <jsp:param name="contentId" value="${bestRatedList.get(internalIndex).id}"/>
+                                                        <jsp:param name="contentType" value="${bestRatedList.get(internalIndex).type}"/>
+                                                        <jsp:param name="contentRating" value="${bestRatedList.get(internalIndex).rating}"/>
+                                                        <jsp:param name="reviewsAmount" value="${bestRatedList.get(internalIndex).reviewsAmount}"/>
+                                                        <jsp:param name="userName" value="${userName}"/>
+                                                        <jsp:param name="userWatchListContentId1" value="${userWatchListContentId.contains(bestRatedList.get(internalIndex).id)}"/>
+                                                    </jsp:include>
+                                                </c:forEach>
+                                            </div>
                                         </div>
-                                    </div>
-                                </c:when>
-                                <c:otherwise>
-                                    <div class="carousel-item">
-                                        <div class="cards-wrapper">
-                                             <c:forEach begin="${externalIndex}" step="1" end="${bestRatedListSize-1 < 4+externalIndex ? bestRatedListSize-1:4+externalIndex}" var="internalIndex" >
-                                                <jsp:include page="components/carrouselContent.jsp">
-                                                    <jsp:param name="contentName" value="${bestRatedList.get(internalIndex).name}"/>
-                                                    <jsp:param name="contentReleased" value="${bestRatedList.get(internalIndex).released}"/>
-                                                    <jsp:param name="contentCreator" value="${bestRatedList.get(internalIndex).creator}"/>
-                                                    <jsp:param name="contentGenre" value="${bestRatedList.get(internalIndex).genre}"/>
-                                                    <jsp:param name="contentImage" value="${bestRatedList.get(internalIndex).image}"/>
-                                                    <jsp:param name="contentId" value="${bestRatedList.get(internalIndex).id}"/>
-                                                    <jsp:param name="contentType" value="${bestRatedList.get(internalIndex).type}"/>
-                                                    <jsp:param name="contentRating" value="${bestRatedList.get(internalIndex).rating}"/>
-                                                    <jsp:param name="reviewsAmount" value="${bestRatedList.get(internalIndex).reviewsAmount}"/>
-                                                    <jsp:param name="userName" value="${userName}"/>
-                                                    <jsp:param name="userWatchListContentId1" value="${userWatchListContentId.contains(bestRatedList.get(internalIndex).id)}"/>
-                                                </jsp:include>
-                                            </c:forEach>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <div class="carousel-item">
+                                            <div class="cards-wrapper">
+                                                <c:forEach begin="${externalIndex}" step="1" end="${bestRatedListSize-1 < 4+externalIndex ? bestRatedListSize-1:4+externalIndex}" var="internalIndex" >
+                                                    <jsp:include page="components/carrouselContent.jsp">
+                                                        <jsp:param name="contentName" value="${bestRatedList.get(internalIndex).name}"/>
+                                                        <jsp:param name="contentReleased" value="${bestRatedList.get(internalIndex).released}"/>
+                                                        <jsp:param name="contentCreator" value="${bestRatedList.get(internalIndex).creator}"/>
+                                                        <jsp:param name="contentGenre" value="${bestRatedList.get(internalIndex).genre}"/>
+                                                        <jsp:param name="contentImage" value="${bestRatedList.get(internalIndex).image}"/>
+                                                        <jsp:param name="contentId" value="${bestRatedList.get(internalIndex).id}"/>
+                                                        <jsp:param name="contentType" value="${bestRatedList.get(internalIndex).type}"/>
+                                                        <jsp:param name="contentRating" value="${bestRatedList.get(internalIndex).rating}"/>
+                                                        <jsp:param name="reviewsAmount" value="${bestRatedList.get(internalIndex).reviewsAmount}"/>
+                                                        <jsp:param name="userName" value="${userName}"/>
+                                                        <jsp:param name="userWatchListContentId1" value="${userWatchListContentId.contains(bestRatedList.get(internalIndex).id)}"/>
+                                                    </jsp:include>
+                                                </c:forEach>
+                                            </div>
                                         </div>
-                                    </div>
-                                </c:otherwise>
-                            </c:choose>
-                        </c:forEach>
+                                    </c:otherwise>
+                                </c:choose>
+                            </c:forEach>
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselMostReviewed" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden"><spring:message code="Content.Carousel.PreviousButton"/></span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselMostReviewed" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden"><spring:message code="Content.Carousel.NextButton"/></span>
+                        </button>
                     </div>
-                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselMostReviewed" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden"><spring:message code="Content.Carousel.PreviousButton"/></span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#carouselMostReviewed" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden"><spring:message code="Content.Carousel.NextButton"/></span>
-                    </button>
                 </div>
+
 
 
                 <h3 class="W-carousel-title"><spring:message code="Content.Carousel.LastAdded"/></h3>
