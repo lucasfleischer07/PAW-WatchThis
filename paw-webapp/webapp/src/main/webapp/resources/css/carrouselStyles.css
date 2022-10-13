@@ -11,7 +11,7 @@
     text-decoration: none;
     color: black;
     transition: 0.1s;
-    width: 22%;
+    width: 15%;
 }
 
 .W-card-text-carousel:hover {
@@ -57,6 +57,7 @@
 
 .cards-wrapper {
     display: flex;
+    justify-content: space-around;
 }
 
 .card img {
@@ -83,6 +84,6 @@
 }
 @media (min-width: 768px) {
     .card img {
-        height: 20em;
+        height: 15vw;
     }
 }

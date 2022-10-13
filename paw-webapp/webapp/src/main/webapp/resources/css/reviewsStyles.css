@@ -161,6 +161,11 @@ W-read-button {
 .W-delete-edit-buttons{
     display: flex;
     margin-left: 12.5vw;
+}
+
+.W-delete-edit-buttons-content {
+    display: flex;
+    margin-left: 12.5vw;
     margin-top: 1vw;
 }
 
@@ -228,15 +233,19 @@ W-read-button {
     text-decoration: none;
     color: #b21e26;
 }
+
 .W-delete-form{
     margin-right:3vw;
     margin-bottom: 0;
 }
+
 .W-accordion-card-header{
     justify-content: space-between;
     display: flex;
     padding: 0.5vw;
+    align-items: center;
 }
+
 .W-accordion-card-body{
     display: flex;
     padding: 0vw;

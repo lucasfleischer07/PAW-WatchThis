@@ -23,16 +23,20 @@
     flex-direction: column;
 }
 
+.W-submit-changes-edit-profile {
+    display: flex;
+    justify-content: center;
+}
+
 .W-edit-profile-width {
     width: 60%;
 }
 
 .W-profile-background-color {
-    background-color: black;
-}
-
-.W-profile-photo-name {
-    margin-bottom: 6vw;
+    height: 35%;
+    padding: 1vw;
+    display: flex;
+    align-items: center;
 }
 
 .W-profile-general-div {
@@ -41,7 +45,7 @@
 }
 
 .W-editProfile-button {
-   font-size: 1.3vw;
+   font-size: 1vw;
 }
 
 .W-profile-general-div-display {
@@ -56,7 +60,6 @@
 .W-edit-divs-display {
     display: flex;
     flex-direction: column;
-    margin: 1vw;
 }
 
 .W-picture-upload {
@@ -67,13 +70,21 @@
 
 .W-edit-profile-picture {
     margin-right: 1vw;
-    width: 12vw;
-    height: 12vw;
+    width: 9vw;
+    height: 9vw;
 }
 
 .W-edit-picture-text {
     color: black;
     margin-right: 1vw;
+}
+
+.W-div-img-username {
+    display: flex;
+    flex-direction: row;
+    padding-bottom: 1vw;
+    padding-right: 1vw;
+    padding-top: 1vw;
 }
 
 .W-edit-profile-div {
@@ -87,11 +98,7 @@
     margin-top: 1vw;
     flex-wrap: wrap;
     margin-left: 1vw;
-}
-
-.W-change-pass-text {
-    margin-left: 1vw;
-    margin-top: 1.5vw;
+    margin-right: 1vw;
 }
 
 .W-username-profilepage {
@@ -99,8 +106,19 @@
     color: white;
 }
 
+.W-div-margin {
+    margin: 1vw;
+}
+
+.W-margin-bottom {
+    margin-bottom: 1vw;
+}
+
+.W-margin-left-label {
+    margin-left: 22vw;
+}
+
 .W-quote-in-profile {
-    /*word-break: break-all;*/
     color: white;
     margin-left: 2vw;
     font-size: 1.1vw;
@@ -110,6 +128,12 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-direction: row;
+}
+
+.W-div-img-quote {
+    display: flex;
+    flex-direction: column;
 }
 
 .W-edition-and-admin-buttons {
@@ -119,13 +143,14 @@
 
 .W-input-profile-picture {
     display: flex;
-    align-items: baseline;
-    flex-direction: row;
+    flex-direction: column;
+    margin-bottom: 1vw;
 }
 
 .W-input-width {
-    width: 15vw;
+    width: 20vw;
     background-color: #e9ecef;
+    font-size: 1vw;
 }
 
 .W-profile-picture-button {

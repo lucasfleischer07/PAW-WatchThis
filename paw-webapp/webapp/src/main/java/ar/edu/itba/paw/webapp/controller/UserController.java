@@ -188,16 +188,19 @@ public class UserController {
     private void paginationSetup(ModelAndView mav,int page,List<Review> reviewList){
         if(reviewList.size()==0){
             mav.addObject("reviews",reviewList);
+            mav.addObject("reviewsAmount",reviewList.size());
             mav.addObject("pageSelected",1);
             mav.addObject("amountPages",1);
             return;
         }
-        if(reviewList.size()>=page*ELEMS_AMOUNT)
-            mav.addObject("reviews",reviewList.subList(0,page*ELEMS_AMOUNT));
-        else
-            mav.addObject("reviews",reviewList.subList(0, reviewList.size()));
+        if(reviewList.size()>=page*ELEMS_AMOUNT) {
+            mav.addObject("reviews", reviewList.subList(0, page * ELEMS_AMOUNT));
+        } else {
+            mav.addObject("reviews", reviewList.subList(0, reviewList.size()));
+        }
         mav.addObject("pageSelected",page);
         mav.addObject("amountPages",Math.ceil((double)reviewList.size()/(double)ELEMS_AMOUNT));
+        mav.addObject("reviewsAmount",reviewList.size());
 
     }
 
@@ -290,7 +293,7 @@ public class UserController {
     // * ------------------------------------------------Profile Edition------------------------------------------------
 
 
-    @RequestMapping(value = "/profile/edit-profile", method = {RequestMethod.GET})
+    @RequestMapping(value = "/profile/editProfile", method = {RequestMethod.GET})
     public ModelAndView profileEdition(Principal userDetails, @Valid @ModelAttribute("editProfile") final EditProfile editProfile) {
         String userEmail = userDetails.getName();
         User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
@@ -307,7 +310,7 @@ public class UserController {
         return mav;
     }
 
-    @RequestMapping(value = "/profile/edit-profile", method = {RequestMethod.POST})
+    @RequestMapping(value = "/profile/editProfile", method = {RequestMethod.POST})
     public ModelAndView profileEditionPost(Principal userDetails,@Valid @ModelAttribute("editProfile") final EditProfile editProfile, final BindingResult errors) throws IOException {
         if(errors.hasErrors()) {
             return profileEdition(userDetails,editProfile);
@@ -315,11 +318,11 @@ public class UserController {
 
         String userEmail = userDetails.getName();
         User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
-        if(editProfile.getPassword() != null && ((editProfile.getProfilePicture() == null) || editProfile.getProfilePicture().getSize() <= 0 )) {
+        if((editProfile.getPassword() != null && editProfile.getConfirmPassword() != null && Objects.equals(editProfile.getPassword(), editProfile.getConfirmPassword())) && ((editProfile.getProfilePicture() == null) || editProfile.getProfilePicture().getSize() <= 0 )) {
             us.setPassword(editProfile.getPassword(), user, "restore");
         } else if(editProfile.getPassword() == null && (editProfile.getProfilePicture().getSize() > 0)) {
             us.setProfilePicture(editProfile.getProfilePicture().getBytes(), user);
-        } else if(editProfile.getPassword() != null && editProfile.getProfilePicture().getSize() > 0) {
+        } else if((editProfile.getPassword() != null && editProfile.getConfirmPassword() != null && Objects.equals(editProfile.getPassword(), editProfile.getConfirmPassword())) && editProfile.getProfilePicture().getSize() > 0) {
             us.setPassword(editProfile.getPassword(), user, "restore");
             us.setProfilePicture(editProfile.getProfilePicture().getBytes(), user);
         }

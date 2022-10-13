@@ -32,22 +32,24 @@
     <div class="row py-5 px-4">
       <div class="col-md-5 mx-auto W-profile-general-div-display">
           <div class="bg-white shadow rounded overflow-hidden W-profile-general-div">
-          <div class="px-4 pt-0 pb-4 W-profile-background-color">
-            <div class="media align-items-end profile-head W-profile-photo-name">
+          <div class="W-profile-background-color bg-dark">
+            <div class="media align-items-end">
               <div class="profile mr-3">
                   <div class="W-img-and-quote-div">
-                      <c:choose>
-                          <c:when test="${user.image == null}">
-                              <img src="<c:url value="/resources/img/defaultUserImg.png"/> " alt="User_img" class="W-edit-profile-picture">
-                          </c:when>
-                          <c:otherwise>
-                              <img src="<c:url value="/profile/${user.userName}/profileImage"/> " alt="User_img" class="W-edit-profile-picture">
-                          </c:otherwise>
-                      </c:choose>
-                      <p class="W-quote-in-profile">${quote}</p>
-                  </div>
-                  <div class="media-body mb-5 text-white">
-                      <h3 class="W-username-profilepage"><c:out value="${user.userName}"/></h3>
+                      <div>
+                          <c:choose>
+                              <c:when test="${user.image == null}">
+                                  <img src="<c:url value="/resources/img/defaultUserImg.png"/> " alt="User_img" class="W-edit-profile-picture">
+                              </c:when>
+                              <c:otherwise>
+                                  <img src="<c:url value="/profile/${user.userName}/profileImage"/> " alt="User_img" class="W-edit-profile-picture">
+                              </c:otherwise>
+                          </c:choose>
+                          <h4 class="W-username-profilepage"><c:out value="${user.userName}"/></h4>
+                      </div>
+                      <div class="W-margin-left-label">
+                          <p class="W-quote-in-profile">${quote}</p>
+                      </div>
                   </div>
               </div>
             </div>
@@ -55,7 +57,7 @@
           <div class="bg-light p-4 d-flex text-center W-editProfileButton-and-reviewsCant">
               <div class="W-edition-and-admin-buttons">
                   <c:if test="${userName==user.userName}">
-                      <a href="<c:url value="/profile/edit-profile"/>" class="btn btn-outline-dark btn-block W-editProfile-button"><spring:message code="Profile.EditProfile"/></a>
+                      <a href="<c:url value="/profile/editProfile"/>" class="btn btn-outline-dark btn-block W-editProfile-button"><spring:message code="Profile.EditProfile"/></a>
                   </c:if>
                   <c:if test="${admin==true || admin=='true'}">
                       <c:url value="/profile/${user.userName}" var="postPath"/>
@@ -66,7 +68,7 @@
               </div>
               <ul class="list-inline mb-0">
                   <li class="list-inline-item">
-                    <h4 class="font-weight-bold mb-0 d-block"><c:out value="${reviews.size()}"/></h4>
+                    <h4 class="font-weight-bold mb-0 d-block"><c:out value="${reviewsAmount}"/></h4>
                       <medium class="text-muted"><i class="fas fa-image mr-1"></i><spring:message code="Profile.Reviews"/></medium>
                   </li>
               </ul>
@@ -77,7 +79,7 @@
             </div>
             <div class="card">
               <div class="card-body">
-                <c:if test="${reviews==null || reviews.size() == 0}">
+                <c:if test="${reviews==null || reviewsAmount == 0}">
                     <div class="W-no-reviews-icon">
                         <img class="W-no-reviews-image"  src="<c:url value="/resources/img/noReviews.png"/>" alt="No_Review_Img"/>
                     </div>

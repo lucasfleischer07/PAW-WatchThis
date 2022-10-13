@@ -15,6 +15,10 @@ public class EditProfile {
     @Pattern(regexp	= "[a-zA-Z0-9!,.:;=+\n\\-_()?<>$%&#@{}\\[\\]|*\"'~/`^\\s]+")
     private String currentPassword;
 
+    @Size(min = 6, max = 50)
+    @Pattern(regexp	= "[a-zA-Z0-9!,.:;=+\n\\-_()?<>$%&#@{}\\[\\]|*\"'~/`^\\s]+")
+    private String confirmPassword;
+
     private MultipartFile profilePicture;
 
     public MultipartFile getProfilePicture() {
@@ -36,5 +40,13 @@ public class EditProfile {
 
     public void setCurrentPassword(String currentPassword) {
         this.currentPassword = currentPassword;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 }

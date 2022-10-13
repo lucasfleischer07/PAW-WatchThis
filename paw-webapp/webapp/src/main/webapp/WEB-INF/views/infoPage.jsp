@@ -26,7 +26,7 @@
     </jsp:include>
 
     <c:if test="${admin==true}">
-      <div class="W-delete-edit-buttons">
+      <div class="W-delete-edit-buttons-content">
         <form  class="W-delete-form" id="<c:out value="formDelete"/>" method="post" action="<c:url value="/content/${contentId}/delete"/>">
           <button class="btn btn-danger text-nowrap"  type="button" data-bs-toggle="modal" data-bs-target="#<c:out value="modalDelete"/>" >
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
@@ -248,7 +248,7 @@
                 </a>
               </div>
             </c:if>
-            <c:if test="${reviews==null || reviews.size()==0}">
+            <c:if test="${reviews==null || reviewsAmount==0}">
                 <div>
                   <div class="W-no-reviews-icon">
                   <img src="<c:url value="/resources/img/noReviews.png"/>" alt="No_Review_Img"/>
