@@ -4,10 +4,11 @@ import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.persistance.ReviewDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-
+@Transactional
 @Service
 public class ReviewServiceImpl implements ReviewService{
     private final ReviewDao reviewDao;

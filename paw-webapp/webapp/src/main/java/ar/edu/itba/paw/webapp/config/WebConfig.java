@@ -82,7 +82,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
 
     }
-
+/*
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(){
         final LocalContainerEntityManagerFactoryBean factoryBean=new LocalContainerEntityManagerFactoryBean();
@@ -101,7 +101,27 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Bean
     public PlatformTransactionManager transactionManager(final EntityManagerFactory emf)
     {return new JpaTransactionManager(emf);}
+*/
+@Bean
+public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+    final LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
+    factoryBean.setPackagesToScan("ar.edu.itba.paw.models");
+    factoryBean.setDataSource(dataSource());
+    final JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+    factoryBean.setJpaVendorAdapter(vendorAdapter);
+    final Properties properties = new Properties();
+    properties.setProperty("hibernate.hbm2ddl.auto", "update");
+    properties.setProperty("hibernate.dialect","org.hibernate.dialect.PostgreSQL92Dialect");
+// Si ponen esto en prod, hay tabla!!!properties.setProperty("hibernate.show_sql", "true");
+    properties.setProperty("format_sql", "true");
+    factoryBean.setJpaProperties(properties);
+    return factoryBean;
+}
 
+    @Bean
+    public PlatformTransactionManager transactionManager(final EntityManagerFactory emf) {
+    return new JpaTransactionManager(emf);
+}
     @Override
     public void addResourceHandlers(final ResourceHandlerRegistry registry) {
         super.addResourceHandlers(registry);

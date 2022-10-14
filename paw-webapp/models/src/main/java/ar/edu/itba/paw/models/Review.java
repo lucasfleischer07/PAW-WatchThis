@@ -16,6 +16,17 @@ public class Review {
         this.contentName=contentName;
 
     }
+    public Review(String type, Long contentId, String name, String description, Integer rating,String userName,String contentName) {
+        this.name = name;
+        this.description = description;
+        this.id=id;
+        this.type = type;
+        this.contentId=contentId;
+        this.rating = rating;
+        this.userName=userName;
+        this.contentName=contentName;
+
+    }
 
 
     public String getName() {
