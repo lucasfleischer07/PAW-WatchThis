@@ -42,34 +42,36 @@ public class UserJpaDao implements UserDao{
 
         final TypedQuery<User> query=em.createQuery( "FROM User WHERE userName = :userName",User.class);
         query.setParameter("userName",userName);
-        query.
         return query.getResultList().stream().findFirst();
     }
 
     @Override
     public void setPassword(String password, User user) {
-        Optional<User> maybeUser=findByEmail(user.getEmail());
-        if(!maybeUser.isPresent()){
-            return;}
-        User maybe=maybeUser.get();
-        maybe.setPassword(password);
+        user.setPassword(password);
         em.persist(user);
 
     }
 
     @Override
     public void setProfilePicture(byte[] profilePicture, User user) {
-        Optional<User> maybeUser=findByEmail(user.getEmail());
-        if(!maybeUser.isPresent()){
-            return;}
-        User maybe=maybeUser.get();
-        maybe.setImage(profilePicture);
+        user.setImage(profilePicture);
         em.persist(user);
     }
 
     @Override
     public void addToWatchList(User user, Long contentId) {
+        List<Content> watchlist=user.getWatchlist();
+        boolean found=false;
+        for (Content content:watchlist
+             ) {
+            if (content.getId()==contentId){
+                found=true;
+                break;
+            }
+        }
+        if(!found){
 
+        }
     }
 
     @Override
@@ -118,7 +120,11 @@ public class UserJpaDao implements UserDao{
     }
 
     @Override
-    public void promoteUser(User userId) {
-
+    public void promoteUser(User user) {
+        Optional<User> maybeUser= findById(user.getId());
+        if(maybeUser.isPresent()){
+            maybeUser.get().setRole("admin");
+            em.persist(maybeUser.get());
+        }
     }
 }

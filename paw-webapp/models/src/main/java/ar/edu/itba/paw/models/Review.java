@@ -1,8 +1,27 @@
 package ar.edu.itba.paw.models;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name="review")
 public class Review {
-    private String name, description, type,userName,contentName;
-    private Long id, contentId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "review_reviewid_seq1")
+    @SequenceGenerator(name= "review_reviewid_seq1",sequenceName = "review_reviewid_seq1",allocationSize = 1)
+    private Long id;
+    @Column(nullable = false)
+    private Long contentId;
+    @Column(nullable = false)
+    private String name;
+    @Column(nullable = false)
+    private String description;
+    @Column(nullable = false)
+    private String type;
+    @Column(nullable = false)
+    private String userName;
+    @Column(nullable = false)
+    private String contentName;
+    @Column(nullable = false)
     private Integer rating;
 
     public Review(Long id, String type, Long contentId, String name, String description, Integer rating,String userName,String contentName) {
@@ -19,13 +38,17 @@ public class Review {
     public Review(String type, Long contentId, String name, String description, Integer rating,String userName,String contentName) {
         this.name = name;
         this.description = description;
-        this.id=id;
+        this.id=null;
         this.type = type;
         this.contentId=contentId;
         this.rating = rating;
         this.userName=userName;
         this.contentName=contentName;
 
+    }
+
+    /* package */ Review() {
+// Just for Hibernate, we love you!
     }
 
 

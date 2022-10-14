@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.models;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -23,6 +24,25 @@ public class User {
     @Column
     private byte[] image;
 
+    @OneToMany
+    @JoinColumn(name = "userid")
+    private List<Review> userReviews;
+
+    @ManyToMany
+    @JoinTable(
+            name = "userwatchlist",
+            joinColumns = @JoinColumn(name = "userid"),
+            inverseJoinColumns = @JoinColumn(name = "contentid"))
+    List<Content> watchlist;
+
+    @ManyToMany
+    @JoinTable(
+            name = "userviewedlist",
+            joinColumns = @JoinColumn(name = "userid"),
+            inverseJoinColumns = @JoinColumn(name = "contentid"))
+    List<Content> viewedlist;
+
+
     public User(Long id, String email, String userName, String password, Long reputation, byte[] image, String role) {
         this.id = id;
         this.email = email;
@@ -41,8 +61,7 @@ public class User {
 // Just for Hibernate, we love you!
     }
 
-    @ManyToMany
-    private Set<Review> userReviews;
+
 
     public String getRole() {
         return role;
@@ -64,6 +83,18 @@ public class User {
         return reputation;
     }
 
+    public List<Content> getViewedlist() {
+        return viewedlist;
+    }
+
+    public List<Content> getWatchlist() {
+        return watchlist;
+    }
+
+    public List<Review> getUserReviews() {
+        return userReviews;
+    }
+
     public String getPassword() {
         return password;
     }
@@ -73,7 +104,7 @@ public class User {
     public void setImage(byte[] image) {
         this.image=image;
     }
-
+    public void setRole(String role){this.role=role;}
 
     public byte[] getImage(){ return image;}
 

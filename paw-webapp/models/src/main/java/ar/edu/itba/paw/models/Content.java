@@ -1,12 +1,39 @@
 package ar.edu.itba.paw.models;
 
+import javax.persistence.*;
+import java.util.List;
+
+@Entity
+@Table(name = "content")
 public class Content {
-    private long id;
-    private String name, description, released, genre, creator, duration, type;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "content_id_seq")
+    @SequenceGenerator(name= "content_id_seq",sequenceName = "content_id_seq",allocationSize = 1)
+    private Long id;
+    @Column(nullable = false)
+    private String name;
+    @Column(nullable = false)
+    private String description;
+    @Column(nullable = false)
+    private String released;
+    @Column(nullable = false)
+    private String genre;
+    @Column(nullable = false)
+    private String creator;
+    @Column(nullable = false)
+    private String duration;
+    @Column(nullable = false)
+    private String type;
+    @Column
     private byte[] image;
+    @Column(nullable = false)
     private Integer rating;
+    @Column(nullable = false)
     private Integer reviewsAmount;
 
+    @OneToMany
+    @JoinColumn(name = "contentid")
+    private List<Review> contentReviews;
 
     public Content(long id, String name, byte[] image, String description, String released, String genre, String creator, String duration,String type,Integer rating,Integer reviewsAmount) {
         this.id = id;
