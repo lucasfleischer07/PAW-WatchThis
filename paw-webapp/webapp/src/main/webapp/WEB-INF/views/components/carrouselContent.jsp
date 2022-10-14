@@ -43,7 +43,7 @@
       </div>
 
       <div class="card-body W-films-card-body-div">
-        <div>
+        <div style="margin: 1vw">
           <h4 class="card-title W-movie-title-carousel"><c:out value="${param.contentName}"/></h4>
           <p class="card-text W-movie-description W-card-details-margin"><span class="W-span-text-info-card-movie W-card-details-color"><spring:message code="Content.Released"/> </span><c:out value="${param.contentReleased}"/></p>
           <p class="card-text W-movie-description W-card-details-margin"><span class="W-span-text-info-card-movie W-card-details-color"><spring:message code="Content.Genre"/> </span><c:out value="${param.contentGenre}"/></p>

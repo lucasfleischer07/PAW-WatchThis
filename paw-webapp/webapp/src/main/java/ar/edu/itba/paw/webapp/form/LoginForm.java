@@ -10,20 +10,20 @@ public class LoginForm {
 
     @AvailableEmail
     @Size(min = 10, max = 50)
-    @Pattern(regexp	= "([+\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+")
+    @Pattern(regexp	= "((([+\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3}))+)?")
     private String email;
 
     @Size(min = 6, max = 50)
-    @Pattern(regexp	= "[a-zA-Z0-9!,.:;=+\n\\-_()?<>$%&#@{}\\[\\]|*\"'~/`^\\s]+")
+    @Pattern(regexp	= "([a-zA-Z0-9ñ!,.:;=+\n\\-_()?<>$%&#@{}\\[\\]|*\"'~/`^\\s]+)?")
     private String password;
 
     @Size(min = 6, max = 50)
-    @Pattern(regexp	= "[a-zA-Z0-9!,.:;=+\n\\-_()?<>$%&#@{}\\[\\]|*\"'~/`^\\s]+")
+    @Pattern(regexp	= "([a-zA-Z0-9ñ!,.:;=+\n\\-_()?<>$%&#@{}\\[\\]|*\"'~/`^\\s]+)?")
     private String confirmPassword;
 
     @AvailableUserName
     @Size(min = 4, max = 30)
-    @Pattern(regexp	= "[a-zA-Z0-9\\s]+")
+    @Pattern(regexp	= "([a-zA-Z0-9ñ\\s]+)?")
     private String username;
 
     public String getEmail() {

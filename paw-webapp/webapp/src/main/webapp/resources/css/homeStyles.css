@@ -130,7 +130,7 @@
 }
 
 .W-films-card-body-div {
-    display: flex;
+    display: contents;
     flex-direction: column;
     justify-content: space-between;
 }
