@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.services;
 
+import java.security.Principal;
 import java.util.*;
 
 import ar.edu.itba.paw.models.Content;
@@ -103,6 +104,7 @@ public class UserServiceImpl implements UserService{
     public void addToWatchList(User user, Long contentId) {
         userDao.addToWatchList(user, contentId);
     }
+
 
     @Override
     public void deleteFromWatchList(User user, Long contentId) {

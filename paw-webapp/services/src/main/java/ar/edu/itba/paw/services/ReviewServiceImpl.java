@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.models.Review;
+import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.persistance.ReviewDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,5 +42,19 @@ public class ReviewServiceImpl implements ReviewService{
     @Override
     public void updateReview(String name, String description, Integer rating, Long id) {
         reviewDao.updateReview(name, description, rating, id);
+    }
+
+    @Override
+    public List<Review> sortReviews(User user, List<Review> reviewList){
+        if(user!=null){
+            for (Review review:reviewList) {
+                if(review.getUserName().equals(user.getUserName())){
+                    reviewList.remove(review);
+                    reviewList.add(0,review);
+                    break;
+                }
+            }
+        }
+        return reviewList;
     }
 }

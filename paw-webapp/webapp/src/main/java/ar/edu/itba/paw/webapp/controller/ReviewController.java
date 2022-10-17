@@ -106,15 +106,8 @@ public class ReviewController {
             mav.addObject("admin",false);
         }
 
-        if(user!=null){
-            for (Review review:reviewList) {
-                if(review.getUserName().equals(user.getUserName())){
-                    reviewList.remove(review);
-                    reviewList.add(0,review);
-                    break;
-                }
-            }
-        }
+
+        reviewList = rs.sortReviews(user,reviewList);
         paginationSetup(mav,pageNum.orElse(1),reviewList);
         request.getSession().setAttribute("referer","/"+type+"/"+contentId);
         return mav;
