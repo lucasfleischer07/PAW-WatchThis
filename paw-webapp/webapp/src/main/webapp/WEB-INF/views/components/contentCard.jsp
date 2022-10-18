@@ -45,8 +45,8 @@
                 </div>
 
                 <div class="card-body W-films-card-body-div">
-                    <div>
-                        <h4 class="card-title W-movie-title"><c:out value="${param.contentName}"/></h4>
+                    <div style="margin: 1vw">
+                        <h6 class="card-title W-movie-title"><c:out value="${param.contentName}"/></h6>
                         <p class="card-text W-movie-description W-card-details-margin"><span class="W-span-text-info-card-movie W-card-details-color"><spring:message code="Content.Released"/> </span><c:out value="${param.contentReleased}"/></p>
                         <p class="card-text W-movie-description W-card-details-margin"><span class="W-span-text-info-card-movie W-card-details-color"><spring:message code="Content.Genre"/> </span><c:out value="${param.contentGenre}"/></p>
                         <p class="card-text W-movie-description W-card-details-margin"><span class="W-span-text-info-card-movie W-card-details-color"><spring:message code="Content.Creator"/> </span> <c:out value="${param.contentCreator}"/></p>

@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.models.Content;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.services.ContentService;
+import ar.edu.itba.paw.services.PaginationService;
 import ar.edu.itba.paw.services.UserService;
 import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
 import ar.edu.itba.paw.webapp.form.ContentForm;
@@ -29,13 +30,14 @@ public class ContentController {
 
     private final ContentService cs;
     private final UserService us;
-    private final int ELEMS_AMOUNT = 15;
+    private final PaginationService ps;
     private static final Logger LOGGER = LoggerFactory.getLogger(ContentController.class);
 
     @Autowired
-    public ContentController(ContentService cs,UserService us){
-        this.cs=cs;
-        this.us=us;
+    public ContentController(ContentService cs,UserService us, PaginationService ps){
+        this.cs = cs;
+        this.us = us;
+        this.ps = ps;
     }
 
     private void HeaderSetUp(ModelAndView mav,Principal userDetails) {
@@ -151,21 +153,20 @@ public class ContentController {
         }
         int page= pageNum.orElse(1);
         List<Content> contentList = cs.getAllContent(auxType, "ANY");
-        if( contentList == null) {
+        if(contentList == null) {
             LOGGER.warn("Failed at requesting content",new PageNotFoundException());
             throw new PageNotFoundException();
         } else {
-            if(contentList.size() < (page)*ELEMS_AMOUNT){       //Si no llega a completar la pagina entera, que sirva los que pueda
-                mav.addObject("allContent", contentList.subList((page-1)*ELEMS_AMOUNT,contentList.size()));
-            }else {
-                mav.addObject("allContent", contentList.subList((page - 1) * ELEMS_AMOUNT, (page - 1) * ELEMS_AMOUNT + ELEMS_AMOUNT));
-            }
+
+            List<Content> contentListPaginated = ps.contentPagination(contentList, page);
+            mav.addObject("allContent", contentListPaginated);
             if(Objects.equals(type, "movies") || Objects.equals(type, "series")){
                 mav.addObject("contentType", type);
-            }else {
+            } else {
                 mav.addObject("contentType", "all");
             }
-            mav.addObject("amountPages",(int)Math.ceil((double) contentList.size()/(double)ELEMS_AMOUNT));
+            int amountOfPages = ps.amountOfContentPages(contentList.size());
+            mav.addObject("amountPages", amountOfPages);
             mav.addObject("pageSelected",page);
             mav.addObject("genre","ANY");
             mav.addObject("durationFrom","ANY");
@@ -227,12 +228,11 @@ public class ContentController {
             LOGGER.warn("Failed at requesting content",new PageNotFoundException());
             throw new PageNotFoundException();
         } else {
-            if(contentListFilter.size() < (page)*ELEMS_AMOUNT){       //Si no llega a completar la pagina entera, que sirva los que pueda
-                mav.addObject("allContent", contentListFilter.subList((page-1)*ELEMS_AMOUNT,contentListFilter.size()));
-            }else {
-                mav.addObject("allContent", contentListFilter.subList((page-1)*ELEMS_AMOUNT,(page-1)*ELEMS_AMOUNT + ELEMS_AMOUNT));
-            }
-            mav.addObject("amountPages",Math.ceil((double)contentListFilter.size()/(double)ELEMS_AMOUNT));
+            List<Content> contentListFilterPaginated = ps.contentPagination(contentListFilter, page);
+            mav.addObject("allContent", contentListFilterPaginated);
+
+            int amountOfPages = ps.amountOfContentPages(contentListFilter.size());
+            mav.addObject("amountPages", amountOfPages);
             mav.addObject("pageSelected",page);
             mav.addObject("contentType", type);
         }
@@ -282,13 +282,12 @@ public class ContentController {
         if(contentList == null) {
             LOGGER.warn("Failed at requesting content",new PageNotFoundException());
             throw new PageNotFoundException();
-        }else {
-            if(contentList.size() < (page)*ELEMS_AMOUNT){       //Si no llega a completar la pagina entera, que sirva los que pueda
-                mav.addObject("allContent", contentList.subList((page-1)*ELEMS_AMOUNT,contentList.size()));
-            }else {
-                mav.addObject("allContent", contentList.subList((page - 1) * ELEMS_AMOUNT, (page - 1) * ELEMS_AMOUNT + ELEMS_AMOUNT));
-            }
-            mav.addObject("amountPages", (int) Math.ceil((double) contentList.size() / (double) ELEMS_AMOUNT));
+        } else {
+            List<Content> contentListPaginated = ps.contentPagination(contentList, page);
+            mav.addObject("allContent", contentListPaginated);
+
+            int amountOfPages = ps.amountOfContentPages(contentList.size());
+            mav.addObject("amountPages", amountOfPages);
             mav.addObject("pageSelected", page);
         }
 

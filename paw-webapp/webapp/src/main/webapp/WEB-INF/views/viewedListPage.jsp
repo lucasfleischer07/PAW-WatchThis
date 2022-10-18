@@ -30,27 +30,25 @@
 
 <div class="row py-5 px-4">
     <div class="W-profile-general-div-display">
-        <div class="card">
-            <div class="px-4 pt-0 pb-4 W-profile-background-color">
-                <div class="media align-items-end profile-head W-profile-photo-name">
+        <div class="bg-white shadow rounded overflow-hidden W-viewed-watch-list-general-div">
+            <div class="W-profile-background-color bg-dark">
+                <div class="media align-items-end">
                     <div class="profile mr-3">
                         <div class="W-img-and-quote-div">
-                            <c:choose>
-                                <c:when test="${user.image == null}">
-                                    <div>
+                            <div>
+                                <c:choose>
+                                    <c:when test="${user.image == null}">
                                         <img src="<c:url value="/resources/img/defaultUserImg.png"/> " alt="User_img" class="W-edit-profile-picture">
-                                    </div>
-                                </c:when>
-                                <c:otherwise>
-                                    <div>
+                                    </c:when>
+                                    <c:otherwise>
                                         <img src="<c:url value="/profile/${user.userName}/profileImage"/> " alt="User_img" class="W-edit-profile-picture">
-                                    </div>
-                                </c:otherwise>
-                            </c:choose>
-                            <p class="W-quote-in-profile">${quote}</p>
-                        </div>
-                        <div class="media-body mb-5 text-white">
-                            <h3 class="W-username-profilepage"><c:out value="${user.userName}"/></h3>
+                                    </c:otherwise>
+                                </c:choose>
+                                <h4 class="W-username-profilepage"><c:out value="${user.userName}"/></h4>
+                            </div>
+                            <div class="W-margin-left-label-viewed-watch-list">
+                                <p class="W-quote-in-profile">${quote}</p>
+                            </div>
                         </div>
                     </div>
                 </div>

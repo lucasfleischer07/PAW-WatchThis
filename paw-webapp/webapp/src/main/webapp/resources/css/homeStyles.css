@@ -16,11 +16,14 @@
     align-items: center;
 }
 
-
 .W-films-div{
     padding-right: 7%;
     padding-left: 7%;
     margin-top: 2vw;
+}
+
+.W-content-alignment {
+    justify-content: center;
 }
 
 .W-search-context-title {
@@ -79,7 +82,6 @@
     border-color: green;
 }
 
-
 .W-films-margin{
     margin: 7%;
     width: 100% ;
@@ -98,6 +100,12 @@
     display: flex;
     align-items: flex-start;
     height: 100%;
+}
+
+.W-films-card-body-carousel {
+    display: flex;
+    align-items: flex-start;
+    height: 31vw;
 }
 
 .W-img-watchList-button-div {
@@ -122,18 +130,15 @@
 
 .W-watchList-button:hover {
     height: 4vw;
-    background-color: #a9a9a9d1;
+    background-color: #665e5ef2;
 }
 
 .W-films-card-body-div {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    display: contents;
 }
 
 .W-more-style {
-    display: flex;
-    align-items: stretch;
+    display: block;
 }
 
 .W-card-design{
@@ -162,15 +167,16 @@
 }
 
 .W-movie-card-size {
-    width: 20%;
+    width: 15%;
     margin: 1vm;
     height: auto;
     display: flex;
+    word-break: break-word;
 }
 
 .card-img-top {
     width: 100%;
-    height: 20vw;
+    height: 15vw;
     object-fit: cover;
 }
 
@@ -218,12 +224,12 @@
 }
 
 .W-movie-title {
-    font-size: 2vw;
     color: black;
+    font-size: 1.3vw;
 }
 
 .W-movie-description {
-    font-size: 1vw;
+    font-size: 0.8vw;
 }
 
 .W-card-details-color {
@@ -233,7 +239,6 @@
 .W-star-location{
     margin-bottom: 5%;
 }
-
 
 .W-filter-items-text-style{
     margin-top: 0.5%;
@@ -323,6 +328,10 @@
 
     .W-line-style {
         display: none;
+    }
+
+    .W-films-card-body-carousel {
+        height: 34vw;
     }
 
 }

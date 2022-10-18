@@ -15,5 +15,5 @@ public interface ReviewService {
     Optional<Review> findById(Long reviewId);
     void updateReview(String name, String description, Integer rating, Long id);
     List<Review> getAllUserReviews(User user);
-
+    List<Review> sortReviews(User user,List<Review> reviewList);
 }

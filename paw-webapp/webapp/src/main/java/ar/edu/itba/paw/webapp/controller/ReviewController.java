@@ -4,6 +4,7 @@ import ar.edu.itba.paw.models.Content;
 import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.services.ContentService;
+import ar.edu.itba.paw.services.PaginationService;
 import ar.edu.itba.paw.services.ReviewService;
 import ar.edu.itba.paw.services.UserService;
 import ar.edu.itba.paw.webapp.exceptions.ForbiddenException;
@@ -34,15 +35,15 @@ public class ReviewController {
     private ReviewService rs;
     private ContentService cs;
     private UserService us;
+    private PaginationService ps;
     private static final Logger LOGGER = LoggerFactory.getLogger(ReviewController.class);
 
-    private static final int ELEMS_AMOUNT = 3;
-
    @Autowired
-    public ReviewController(ReviewService rs,ContentService cs,UserService us){
+    public ReviewController(ReviewService rs,ContentService cs,UserService us, PaginationService ps){
         this.us = us;
         this.cs = cs;
         this.rs = rs;
+        this.ps = ps;
     }
 
     private void paginationSetup(ModelAndView mav,int page,List<Review> reviewList){
@@ -52,13 +53,13 @@ public class ReviewController {
             mav.addObject("amountPages",1);
             return;
         }
-        if(reviewList.size()>=page*ELEMS_AMOUNT)
-            mav.addObject("reviews",reviewList.subList(0,page*ELEMS_AMOUNT));
-        else
-            mav.addObject("reviews",reviewList.subList(0, reviewList.size()));
-        mav.addObject("pageSelected",page);
-        mav.addObject("amountPages",Math.ceil((double)reviewList.size()/(double)ELEMS_AMOUNT));
 
+        List<Review> reviewListPaginated = ps.reviewPagination(reviewList, page);
+        mav.addObject("reviews", reviewListPaginated);
+
+        int amountOfPages = ps.amountOfContentPages(reviewList.size());
+        mav.addObject("amountPages", amountOfPages);
+        mav.addObject("pageSelected",page);
     }
 
     // * ----------------------------------- Movies and Series Info page -----------------------------------------------
@@ -107,15 +108,8 @@ public class ReviewController {
             mav.addObject("isInViewedList","null");
             mav.addObject("admin",false);
         }
-        if(user!=null){
-            for (Review review:reviewList) {
-                if(review.getCreator().getUserName().equals(user.getUserName())){
-                    reviewList.remove(review);
-                    reviewList.add(0,review);
-                    break;
-                }
-            }
-        }
+
+        reviewList = rs.sortReviews(user,reviewList);
         paginationSetup(mav,pageNum.orElse(1),reviewList);
         request.getSession().setAttribute("referer","/"+type+"/"+contentId);
         return mav;
@@ -132,9 +126,9 @@ public class ReviewController {
             User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
             mav.addObject("userName",user.getUserName());
             mav.addObject("userId",user.getId());
-            if(user.getRole().equals("admin")){
+            if(user.getRole().equals("admin")) {
                 mav.addObject("admin",true);
-            }else{
+            } else {
                 mav.addObject("admin",false);
             }
         } else {
@@ -196,7 +190,7 @@ public class ReviewController {
         mav.addObject("details", cs.findById(contentId).orElseThrow(PageNotFoundException::new));
         Optional<Review> oldReview = rs.findById(reviewId);
         if(!oldReview.isPresent()){
-            LOGGER.warn("Cant find a the review specified",new PageNotFoundException());
+            LOGGER.warn("Cant find a the review specified", new PageNotFoundException());
             throw new PageNotFoundException();
         }
         if(userDetails != null) {
@@ -257,7 +251,5 @@ public class ReviewController {
         return new ModelAndView("redirect:" + (referer==null?"/":referer),model);
 
     }
-
-
 
 }

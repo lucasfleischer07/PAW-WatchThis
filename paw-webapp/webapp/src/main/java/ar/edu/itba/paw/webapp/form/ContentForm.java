@@ -10,11 +10,11 @@ import javax.validation.constraints.*;
 public class ContentForm {
 
     @Size(min = 1, max = 100)
-    @Pattern(regexp	= "[a-zA-Z0-9!,.:;=+\n\\-_()?<>$%&#@{}\\[\\]|*\"'~/`^\\s]+")
+    @Pattern(regexp	= "([a-zA-Z0-9ñ!,.:;=+\n\\-_()?<>$%&#@{}\\[\\]|*\"'~/`^\\s]+)?")
     private String name;
 
     @Size(min = 20, max = 500)
-    @Pattern(regexp	= "[a-zA-Z0-9!,.:;=+\n\\-_()?<>$%&#@{}\\[\\]|*\"'~/`^\\s]+")
+    @Pattern(regexp	= "([a-zA-Z0-9ñ!,.:;=+\n\\-_()?<>$%&#@{}\\[\\]|*\"'~/`^\\s]+)?")
     private String description;
 
     @Size(min = 4, max = 4)
