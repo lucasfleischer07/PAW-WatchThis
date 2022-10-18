@@ -265,8 +265,8 @@ public class ContentJpaDao implements ContentDao{
     public Optional<String> getContentQuote(String language) {
         Query query;
         if(Objects.equals(language, "Spanish")) {
-        query=em.createQuery( "SELECT spanish FROM quotes ORDER BY RANDOM() LIMIT 1");}
-        else{query=em.createQuery( "SELECT english FROM quotes ORDER BY RANDOM() LIMIT 1");}
+        query=em.createNativeQuery( "SELECT spanish FROM quotes ORDER BY RANDOM() LIMIT 1");}
+        else{query=em.createNativeQuery( "SELECT english FROM quotes ORDER BY RANDOM() LIMIT 1");}
         String res=(String) query.getResultList().stream().findFirst().get();
         return Optional.of(res);
     }

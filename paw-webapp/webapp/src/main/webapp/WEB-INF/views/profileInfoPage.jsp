@@ -92,16 +92,16 @@
 
                 </c:if>
                 <c:forEach var="review" items="${reviews}">
-                    <a class="W-movie-title" href="<c:url value="/${review.type}/${review.contentId}"/>">
-                        <h5><c:out value="${review.contentName}"/></h5>
+                    <a class="W-movie-title" href="<c:url value="/${review.type}/${review.content.id}"/>">
+                        <h5><c:out value="${review.content.name}"/></h5>
                     </a>
                     <jsp:include page="components/reviewCard.jsp">
                     <jsp:param name="reviewTitle" value="${review.name}" />
                     <jsp:param name="reviewDescription" value="${review.description}" />
                     <jsp:param name="reviewRating" value="${review.rating}"/>
                     <jsp:param name="reviewId" value="${review.id}" />
-                    <jsp:param name="userName" value="${review.userName}"/>
-                    <jsp:param name="contentId" value="${review.contentId}"/>
+                    <jsp:param name="userName" value="${review.creator.userName}"/>
+                    <jsp:param name="contentId" value="${review.content.id}"/>
                     <jsp:param name="contentType" value="${review.type}"/>
                     <jsp:param name="loggedUserName" value="${userName}"/>
                     <jsp:param name="isAdmin" value="${admin}"/>

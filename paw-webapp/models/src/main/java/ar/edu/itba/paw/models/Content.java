@@ -31,7 +31,7 @@ public class Content {
     @Column
     private Integer durationNum;
 
-    @OneToMany(orphanRemoval = true,fetch = FetchType.EAGER)
+    @OneToMany(orphanRemoval = true,fetch = FetchType.LAZY)
     @JoinColumn(name = "contentid")
     List<Review> contentReviews;
 

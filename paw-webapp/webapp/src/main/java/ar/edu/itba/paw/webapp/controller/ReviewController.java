@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.orm.hibernate3.HibernateAccessor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -65,7 +66,7 @@ public class ReviewController {
     public ModelAndView reviews(Principal userDetails, @PathVariable("contentId")final long contentId, @PathVariable("type") final String type,@PathVariable("pageNum")final Optional<Integer> pageNum,HttpServletRequest request) {
         final ModelAndView mav = new ModelAndView("infoPage");
         Content content=cs.findById(contentId).orElseThrow(PageNotFoundException::new);
-        mav.addObject("details", cs);
+        mav.addObject("details", content);
         List<Review> reviewList = rs.getAllReviews(content);
         User user=null;
         if(reviewList == null) {
@@ -106,7 +107,6 @@ public class ReviewController {
             mav.addObject("isInViewedList","null");
             mav.addObject("admin",false);
         }
-
         if(user!=null){
             for (Review review:reviewList) {
                 if(review.getCreator().getUserName().equals(user.getUserName())){
