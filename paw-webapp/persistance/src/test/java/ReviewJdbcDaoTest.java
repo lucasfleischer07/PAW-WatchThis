@@ -1,6 +1,10 @@
 
+import ar.edu.itba.paw.models.Content;
 import ar.edu.itba.paw.models.Review;
+import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.persistance.ContentDao;
 import ar.edu.itba.paw.persistance.ReviewDao;
+import ar.edu.itba.paw.persistance.UserDao;
 import config.TestConfig;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,9 +15,12 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
+import java.io.Console;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,66 +38,82 @@ public class ReviewJdbcDaoTest {
     @Autowired
     private ReviewDao dao;
 
+    @Autowired
+    private UserDao userDao;
+
+    @Autowired
+    private ContentDao contentDao;
+
+
     private JdbcTemplate jdbcTemplate;
-    final private Review testReview=new Review(3L,"movie",2L,"great movie","",5,"brandyhuevo","adventure time");
+
+
+    private Content testContent;
+
+    private User testUser;
 
     @Before
     public void setUp() {
         this.jdbcTemplate = new JdbcTemplate(ds);
+        testUser=userDao.findById(1L).get();
+        testContent=contentDao.findById(2L).get();
     }
 
     @Test
     public void testFindById(){
-        final Optional<Review> maybeReview=dao.findById(1L);
+        final Optional<Review> maybeReview=dao.findById(2L);
         assertTrue(maybeReview.isPresent());
-        assertEquals(1L, maybeReview.get().getId());
+        assertEquals(2L, maybeReview.get().getId());
         assertEquals("great movie", maybeReview.get().getName());
         assertEquals("movie",maybeReview.get().getType());
     }
 
     @Test
     public void testGetAllReviews(){
-        final List<Review> reviewList=dao.getAllReviews(1L);
+        Content content=contentDao.findById(1L).get();
+        final List<Review> reviewList=dao.getAllReviews(content);
         assertEquals(1, reviewList.size());
         assertEquals("great movie", reviewList.get(0).getName());
-
     }
     @Test
     public void testGetAllUserReviews(){
-        final List<Review> reviewList=dao.getAllUserReviews("brandyhuevo");
+        final List<Review> reviewList=dao.getAllUserReviews(testUser);
         assertEquals(1, reviewList.size());
-        assertEquals(1, reviewList.get(0).getId());
+        assertEquals(2, reviewList.get(0).getId());
     }
 
     @Test
     @Rollback
     public void testCreate(){
-        dao.addReview(testReview);
-        final Optional<Review> maybeReview= dao.findById(testReview.getId());
+        assertEquals(1,dao.getAllReviews(contentDao.findById(2L).get()).size());
+        User user=userDao.findByUserName("brandyhuevo").get();
+        Content content=contentDao.findById(2L).get();
+        final Optional<Review> maybeReview=dao.addReview("muy buena peli", "", 4, "serie", user,content);
         assertTrue(maybeReview.isPresent());
-        assertEquals(testReview.getId(), maybeReview.get().getId());
-        assertEquals(testReview.getName(), maybeReview.get().getName());
-        assertEquals(testReview.getRating(), maybeReview.get().getRating());
-        assertEquals(testReview.getContentId(),maybeReview.get().getContentId());
-        assertEquals(2,dao.getAllReviews(testReview.getContentId()).size());
+        assertEquals("muy buena peli", maybeReview.get().getName());
+        assertEquals(contentDao.findById(2L).get(),maybeReview.get().getContent());
+        assertEquals(2,dao.getAllUserReviews(userDao.findByUserName("brandyhuevo").get()).size());
+        assertEquals(2,dao.getAllReviews(contentDao.findById(2L).get()).size());
     }
     @Test
     @Rollback
     public void testDelete(){
-        dao.deleteReview(1L);
-        assertFalse(dao.findById(1L).isPresent());
-        assertEquals(0, dao.getAllReviews(1L).size());
+        dao.deleteReview(2L);
+        assertFalse(dao.findById(2L).isPresent());
+        Content content=contentDao.findById(1L).get();
+        assertEquals(0,content.getContentReviews().size());
     }
 
     @Test
     @Rollback
     public void testUpdate(){
-        dao.updateReview("not that good","i overestimated it",4,1L);
-        final Optional<Review> maybeReview= dao.findById(1L);
+        dao.updateReview("not that good","i overestimated it",4,2L);
+        final Optional<Review> maybeReview= dao.findById(2L);
         assertTrue(maybeReview.isPresent());
         assertEquals(4, (int) maybeReview.get().getRating());
         assertEquals("not that good", maybeReview.get().getName());
-        assertEquals(1, dao.getAllReviews(1L).size());
+        assertEquals(1, dao.getAllReviews(contentDao.findById(1L).get()).size());
+        assertEquals("not that good", maybeReview.get().getCreator().getUserReviews().get(0).getName());
     }
 
 }

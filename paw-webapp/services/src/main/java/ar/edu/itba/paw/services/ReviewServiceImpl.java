@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.services;
 
+import ar.edu.itba.paw.models.Content;
 import ar.edu.itba.paw.models.Review;
+import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.persistance.ReviewDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,13 +21,13 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     @Override
-    public void addReview(Review review) {
-        reviewDao.addReview(review);
+    public void addReview(String name,String description,int rating,String type,User creator,Content content) {
+        reviewDao.addReview(name, description, rating, type, creator, content);
     }
 
     @Override
-    public List<Review> getAllReviews(Long contentId) {
-        return reviewDao.getAllReviews(contentId);
+    public List<Review> getAllReviews(Content content) {
+        return reviewDao.getAllReviews(content);
     }
 
     @Override
@@ -37,7 +39,7 @@ public class ReviewServiceImpl implements ReviewService{
     public Optional<Review> findById(Long reviewId) {return reviewDao.findById(reviewId);}
 
     @Override
-    public List<Review> getAllUserReviews(String username){return reviewDao.getAllUserReviews(username);}
+    public List<Review> getAllUserReviews(User user){return reviewDao.getAllUserReviews(user);}
     
     @Override
     public void updateReview(String name, String description, Integer rating, Long id) {

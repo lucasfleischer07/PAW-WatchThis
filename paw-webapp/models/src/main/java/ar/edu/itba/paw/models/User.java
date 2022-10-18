@@ -7,6 +7,7 @@ import java.util.Set;
 @Entity
 @Table(name = "userdata")
 public class User {
+    @Column(name = "userid")
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "userdata_userid_seq")
     @SequenceGenerator(name= "userdata_userid_seq",sequenceName = "userdata_userid_seq",allocationSize = 1)
@@ -15,7 +16,7 @@ public class User {
     private Long reputation;
     @Column(unique = true,nullable = false)
     private String email;
-    @Column(unique = true,nullable = false)
+    @Column(name = "name",unique = true,nullable = false)
     private String userName;
     @Column(nullable = false)
     private String password;
@@ -24,23 +25,23 @@ public class User {
     @Column
     private byte[] image;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "userid")
     private List<Review> userReviews;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "userwatchlist",
-            joinColumns = @JoinColumn(name = "userid"),
-            inverseJoinColumns = @JoinColumn(name = "contentid"))
-    List<Content> watchlist;
+            joinColumns = @JoinColumn(name = "userid",referencedColumnName = "userid"),
+            inverseJoinColumns = @JoinColumn(name = "contentid",referencedColumnName = "id"))
+    private List<Content> watchlist;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "userviewedlist",
-            joinColumns = @JoinColumn(name = "userid"),
-            inverseJoinColumns = @JoinColumn(name = "contentid"))
-    List<Content> viewedlist;
+            joinColumns = @JoinColumn(name = "userid",referencedColumnName = "userid"),
+            inverseJoinColumns = @JoinColumn(name = "contentid",referencedColumnName = "id"))
+    private List<Content> viewedlist;
 
 
     public User(Long id, String email, String userName, String password, Long reputation, byte[] image, String role) {
@@ -83,7 +84,7 @@ public class User {
         return reputation;
     }
 
-    public List<Content> getViewedlist() {
+    public List<Content> getViewedList() {
         return viewedlist;
     }
 

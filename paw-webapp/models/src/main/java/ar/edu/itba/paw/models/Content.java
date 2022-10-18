@@ -24,18 +24,31 @@ public class Content {
     private String duration;
     @Column(nullable = false)
     private String type;
-    @Column
+    @Column(nullable = true)
     private byte[] image;
-    @Column(nullable = false)
-    private Integer rating;
-    @Column(nullable = false)
-    private Integer reviewsAmount;
+    @Column
+    private Integer durationNum;
 
-    @OneToMany
+    @OneToMany(orphanRemoval = true,fetch = FetchType.LAZY)
     @JoinColumn(name = "contentid")
-    private List<Review> contentReviews;
+    List<Review> contentReviews;
 
-    public Content(long id, String name, byte[] image, String description, String released, String genre, String creator, String duration,String type,Integer rating,Integer reviewsAmount) {
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "userwatchlist",
+            joinColumns = @JoinColumn(name = "contentid",referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "userid",referencedColumnName = "userid"))
+    private List<User> watchlist;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "userviewedlist",
+            joinColumns = @JoinColumn(name = "contentid",referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "userid",referencedColumnName = "userid"))
+    private List<User> viewedlist;
+
+
+    public Content(Long id, String name, byte[] image, String description, String released, String genre, String creator, String duration,int durationNum,String type) {
         this.id = id;
         this.name = name;
         this.image = image;
@@ -45,15 +58,32 @@ public class Content {
         this.creator = creator;
         this.duration = duration;
         this.type= type;
-        this.rating = rating;
-        this.reviewsAmount=reviewsAmount;
+        this.durationNum=durationNum;
+
+    }
+
+    public Content(String name, byte[] image, String description, String released, String genre, String creator, String duration,int durationNum,String type) {
+        this(null,name,image,description,released,genre,creator,duration,durationNum,type);
+    }
+
+    /* package */ Content() {
+// Just for Hibernate, we love you!
     }
     public Integer getReviewsAmount(){
-        return reviewsAmount;
+        return contentReviews.size();
     }
 
     public Integer getRating(){
-        return rating;
+        int count=0;
+        int num=0;
+        for (Review review:contentReviews
+             ) {
+            if(review.getRating()>0){
+                count++;
+                num+=review.getRating();
+            }
+        }
+        return num/count;
     }
 
     public long getId() {
@@ -90,5 +120,45 @@ public class Content {
 
     public String getType() {
         return type;
+    }
+
+    public Integer getDurationNum() {
+        return durationNum;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setReleased(String released) {
+        this.released = released;
+    }
+
+    public void setDurationNum(Integer durationNum) {
+        this.durationNum = durationNum;
+    }
+
+    public List<Review> getContentReviews() {
+        return contentReviews;
     }
 }

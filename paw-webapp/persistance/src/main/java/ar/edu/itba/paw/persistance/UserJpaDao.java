@@ -4,6 +4,7 @@ import ar.edu.itba.paw.models.Content;
 import ar.edu.itba.paw.models.User;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -13,6 +14,7 @@ import java.util.Optional;
 
 @Primary
 @Repository
+@Transactional
 public class UserJpaDao implements UserDao{
     @PersistenceContext
     private EntityManager em;
@@ -48,83 +50,99 @@ public class UserJpaDao implements UserDao{
     @Override
     public void setPassword(String password, User user) {
         user.setPassword(password);
-        em.persist(user);
+        em.merge(user);
 
     }
 
     @Override
     public void setProfilePicture(byte[] profilePicture, User user) {
         user.setImage(profilePicture);
-        em.persist(user);
+        em.merge(user);
     }
 
     @Override
-    public void addToWatchList(User user, Long contentId) {
+    public void addToWatchList(User user, Content toAdd) {
         List<Content> watchlist=user.getWatchlist();
         boolean found=false;
         for (Content content:watchlist
              ) {
-            if (content.getId()==contentId){
+            if (content.getId()==toAdd.getId()){
                 found=true;
                 break;
             }
         }
         if(!found){
-
+            watchlist.add(toAdd);
         }
     }
 
     @Override
-    public void deleteFromWatchList(User user, Long contentId) {
+    public void deleteFromWatchList(User user, Content toDelete) {
+        List<Content> watchlist=user.getWatchlist();
+        watchlist.remove(toDelete);
 
     }
 
     @Override
     public List<Content> getWatchList(User user) {
-        return null;
+        return user.getWatchlist();
     }
 
     @Override
     public Optional<Long> searchContentInWatchList(User user, Long contentId) {
-        return Optional.empty();
+        for (Content content:user.getWatchlist()
+             ) {
+            if (content.getId()==contentId)
+                return Optional.of(contentId);
+        };
+        return Optional.of(-1L);
     }
 
     @Override
-    public List<Long> getUserWatchListContent(User user) {
-        return null;
+    public void addToViewedList(User user, Content toAdd) {
+        List<Content> viewedList=user.getViewedList();
+        boolean found=false;
+        for (Content content:viewedList
+        ) {
+            if (content.getId()==toAdd.getId()){
+                found=true;
+                break;
+            }
+        }
+        if(!found){
+            viewedList.add(toAdd);
+
+        }
     }
 
     @Override
-    public void addToViewedList(User user, Long contentId) {
-
-    }
-
-    @Override
-    public void deleteFromViewedList(User user, Long contentId) {
-
+    public void deleteFromViewedList(User user, Content toDelete) {
+        List<Content> viewedList=user.getViewedList();
+        viewedList.remove(toDelete);
     }
 
     @Override
     public List<Content> getUserViewedList(User user) {
-        return null;
+        return user.getViewedList();
     }
 
     @Override
     public Optional<Long> searchContentInViewedList(User user, Long contentId) {
-        return Optional.empty();
+        for (Content content:user.getViewedList()
+        ) {
+            if (content.getId()==contentId)
+                return Optional.of(contentId);
+        };
+        return Optional.of(-1L);
     }
 
-    @Override
-    public List<Long> getUserViewedListContent(User user) {
-        return null;
-    }
 
     @Override
     public void promoteUser(User user) {
         Optional<User> maybeUser= findById(user.getId());
         if(maybeUser.isPresent()){
             maybeUser.get().setRole("admin");
-            em.persist(maybeUser.get());
+            em.merge(maybeUser.get());
         }
     }
 }

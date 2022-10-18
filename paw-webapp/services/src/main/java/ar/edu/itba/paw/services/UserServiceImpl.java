@@ -92,13 +92,13 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void addToWatchList(User user, Long contentId) {
-        userDao.addToWatchList(user, contentId);
+    public void addToWatchList(User user, Content toAdd) {
+        userDao.addToWatchList(user, toAdd);
     }
 
     @Override
-    public void deleteFromWatchList(User user, Long contentId) {
-        userDao.deleteFromWatchList(user, contentId);
+    public void deleteFromWatchList(User user, Content toDelete) {
+        userDao.deleteFromWatchList(user, toDelete);
     }
 
     @Override
@@ -111,19 +111,15 @@ public class UserServiceImpl implements UserService{
         return userDao.searchContentInWatchList(user, contentId);
     }
 
+
     @Override
-    public List<Long> getUserWatchListContent(User user) {
-        return userDao.getUserWatchListContent(user);
+    public void addToViewedList(User user, Content toAdd) {
+        userDao.addToViewedList(user, toAdd);
     }
 
     @Override
-    public void addToViewedList(User user, Long contentId) {
-        userDao.addToViewedList(user, contentId);
-    }
-
-    @Override
-    public void deleteFromViewedList(User user, Long contentId) {
-        userDao.deleteFromViewedList(user, contentId);
+    public void deleteFromViewedList(User user, Content toDelete) {
+        userDao.deleteFromViewedList(user, toDelete);
     }
 
     @Override
@@ -136,10 +132,6 @@ public class UserServiceImpl implements UserService{
         return userDao.searchContentInViewedList(user, contentId);
     }
 
-    @Override
-    public List<Long> getUserViewedListContent(User user) {
-        return userDao.getUserViewedListContent(user);
-    }
 
     @Override
     public void promoteUser(User user) {
