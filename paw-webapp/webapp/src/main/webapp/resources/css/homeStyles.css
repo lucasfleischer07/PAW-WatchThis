@@ -16,7 +16,6 @@
     align-items: center;
 }
 
-
 .W-films-div{
     padding-right: 7%;
     padding-left: 7%;
@@ -24,7 +23,7 @@
 }
 
 .W-content-alignment {
-    justify-content: space-between;
+    justify-content: center;
 }
 
 .W-search-context-title {
@@ -83,7 +82,6 @@
     border-color: green;
 }
 
-
 .W-films-margin{
     margin: 7%;
     width: 100% ;
@@ -99,6 +97,12 @@
 }
 
 .W-films-card-body {
+    display: flex;
+    align-items: flex-start;
+    height: 100%;
+}
+
+.W-films-card-body-carousel {
     display: flex;
     align-items: flex-start;
     height: 31vw;
@@ -126,18 +130,15 @@
 
 .W-watchList-button:hover {
     height: 4vw;
-    background-color: #a9a9a9d1;
+    background-color: #665e5ef2;
 }
 
 .W-films-card-body-div {
     display: contents;
-    flex-direction: column;
-    justify-content: space-between;
 }
 
 .W-more-style {
-    display: flex;
-    align-items: stretch;
+    display: block;
 }
 
 .W-card-design{
@@ -170,6 +171,7 @@
     margin: 1vm;
     height: auto;
     display: flex;
+    word-break: break-word;
 }
 
 .card-img-top {
@@ -223,6 +225,7 @@
 
 .W-movie-title {
     color: black;
+    font-size: 1.3vw;
 }
 
 .W-movie-description {
@@ -236,7 +239,6 @@
 .W-star-location{
     margin-bottom: 5%;
 }
-
 
 .W-filter-items-text-style{
     margin-top: 0.5%;
@@ -326,6 +328,10 @@
 
     .W-line-style {
         display: none;
+    }
+
+    .W-films-card-body-carousel {
+        height: 34vw;
     }
 
 }

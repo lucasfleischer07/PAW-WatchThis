@@ -3,7 +3,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <a id="mainAtag" class="card-group W-card-text-carousel W-films-margin-carrousel" href="<c:url value='/${param.contentType}/${param.contentId}'/>">
   <div class="col">
-    <div class="card W-films-card-body W-more-style">
+    <div class="card W-films-card-body-carousel W-more-style">
       <div class="W-img-watchList-button-div">
         <div class="d-grid gap-2 W-watchList-button-div">
           <c:choose>
@@ -43,7 +43,7 @@
       </div>
 
       <div class="card-body W-films-card-body-div">
-        <div style="margin: 1vw">
+        <div style="margin: 1vw;">
           <h4 class="card-title W-movie-title-carousel"><c:out value="${param.contentName}"/></h4>
           <p class="card-text W-movie-description W-card-details-margin"><span class="W-span-text-info-card-movie W-card-details-color"><spring:message code="Content.Released"/> </span><c:out value="${param.contentReleased}"/></p>
           <p class="card-text W-movie-description W-card-details-margin"><span class="W-span-text-info-card-movie W-card-details-color"><spring:message code="Content.Genre"/> </span><c:out value="${param.contentGenre}"/></p>

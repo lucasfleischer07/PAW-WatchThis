@@ -44,6 +44,11 @@
     width: 60vw;
 }
 
+.W-viewed-watch-list-general-div {
+    display: inline-block;
+    width: 100%;
+}
+
 .W-editProfile-button {
    font-size: 1vw;
 }
@@ -118,10 +123,18 @@
     margin-left: 22vw;
 }
 
+.W-margin-left-label-viewed-watch-list {
+    margin-left: 54vw;
+}
+
 .W-quote-in-profile {
     color: white;
     margin-left: 2vw;
     font-size: 1.1vw;
+}
+
+.W-profile-photo-name-viewed {
+    display: contents;
 }
 
 .W-img-and-quote-div {

@@ -75,7 +75,7 @@ public class UserController {
     }
 
     private void listPaginationSetup(ModelAndView mav,String name,List<Content> contentList,int page) throws PageNotFoundException{
-        if(ps.checkPagination(page, contentList.size())) {
+        if(ps.checkPagination(contentList.size(), page)) {
             LOGGER.warn("Wrong login path:", new PageNotFoundException());
             throw new PageNotFoundException();
         }
