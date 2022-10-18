@@ -17,12 +17,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 
+@Transactional
 @Service
 public class UserServiceImpl implements UserService{
 
@@ -101,14 +103,14 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void addToWatchList(User user, Long contentId) {
-        userDao.addToWatchList(user, contentId);
+    public void addToWatchList(User user, Content toAdd) {
+        userDao.addToWatchList(user, toAdd);
     }
 
 
     @Override
-    public void deleteFromWatchList(User user, Long contentId) {
-        userDao.deleteFromWatchList(user, contentId);
+    public void deleteFromWatchList(User user, Content toDelete) {
+        userDao.deleteFromWatchList(user, toDelete);
     }
 
     @Override
@@ -121,19 +123,15 @@ public class UserServiceImpl implements UserService{
         return userDao.searchContentInWatchList(user, contentId);
     }
 
+
     @Override
-    public List<Long> getUserWatchListContent(User user) {
-        return userDao.getUserWatchListContent(user);
+    public void addToViewedList(User user, Content toAdd) {
+        userDao.addToViewedList(user, toAdd);
     }
 
     @Override
-    public void addToViewedList(User user, Long contentId) {
-        userDao.addToViewedList(user, contentId);
-    }
-
-    @Override
-    public void deleteFromViewedList(User user, Long contentId) {
-        userDao.deleteFromViewedList(user, contentId);
+    public void deleteFromViewedList(User user, Content toDelete) {
+        userDao.deleteFromViewedList(user, toDelete);
     }
 
     @Override
@@ -146,10 +144,6 @@ public class UserServiceImpl implements UserService{
         return userDao.searchContentInViewedList(user, contentId);
     }
 
-    @Override
-    public List<Long> getUserViewedListContent(User user) {
-        return userDao.getUserViewedListContent(user);
-    }
 
     @Override
     public void promoteUser(User user) {
@@ -161,6 +155,25 @@ public class UserServiceImpl implements UserService{
             emailService.sendMail("adminConfirmation", messageSource.getMessage("Mail.AdminConfirmation", new Object[]{}, locale), mailVariables, locale);
         } catch (MessagingException ignored) {}
     }
+
+    @Override
+    public List<Long>getUserWatchListContent(User user) {
+        List<Long> contentIdList = new ArrayList<>();
+        for(Content content: getWatchList(user)) {
+            contentIdList.add(content.getId());
+        }
+        return contentIdList;
+    }
+
+    @Override
+    public List<Long>getUserViewedListContent(User user) {
+        List<Long> contentIdList = new ArrayList<>();
+        for(Content content: getUserViewedList(user)) {
+            contentIdList.add(content.getId());
+        }
+        return contentIdList;
+    }
+
 
     @Override
     public void authWithAuthManager(HttpServletRequest request, String email, String password, AuthenticationManager authenticationManager){

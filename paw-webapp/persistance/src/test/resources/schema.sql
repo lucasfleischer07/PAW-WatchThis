@@ -1,3 +1,13 @@
+create table if not exists userdata(
+                                       userid     serial PRIMARY KEY,
+                                       name       VARCHAR ( 50 ) unique NOT NULL,
+                                        email      VARCHAR ( 50 ) unique NOT NULL,
+                                        password   VARCHAR ( 50 ) NOT NULL,
+                                        reputation numeric default 0.00                   not null,
+                                        image BIT ( 500 ) ,
+                                        role VARCHAR ( 50 ) NOT NULL
+                                        );
+
 create table if not exists content  (
                           id serial PRIMARY KEY,
                           name VARCHAR ( 100 ) NOT NULL,
@@ -12,7 +22,7 @@ create table if not exists content  (
 );
 
 create table if not exists  review (
-                        reviewId serial primary key,
+                        reviewId serial PRIMARY KEY,
                         type VARCHAR (10) NOT NULL CHECK (type = 'serie' OR type = 'movie'),
                         contentid INT NOT NULL,
                         useriD INT NOT NULL,
@@ -23,23 +33,9 @@ create table if not exists  review (
                         UNIQUE(userID, contentid)
 );
 
-create table if not exists userdata
-(
-    userid     serial,
-    name       varchar(50)                            not null,
-    email      varchar(50)                            not null,
-    password   varchar(50) not null,
-    reputation numeric default 0.00                   not null,
-    image      varbinary(2048),
-    role varchar(10),
-    primary key (userid),
-    unique (name),
-    unique (email)
-    );
 
 
-
-CREATE TABLE if not exists  userWatchlist(
+CREATE TABLE if not exists  userwatchlist(
                               id serial primary key,
                               userId int not null,
                               contentId int not null,

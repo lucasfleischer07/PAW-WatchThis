@@ -1,20 +1,50 @@
 package ar.edu.itba.paw.models;
 
-public class Review {
-    private String name, description, type,userName,contentName;
-    private Long id, contentId;
-    private Integer rating;
+import javax.persistence.*;
 
-    public Review(Long id, String type, Long contentId, String name, String description, Integer rating,String userName,String contentName) {
+@Entity
+@Table(name="review")
+public class Review {
+    @Column(name = "reviewid",columnDefinition = "INT")
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "review_reviewid_seq1")
+    @SequenceGenerator(name= "review_reviewid_seq1",sequenceName = "review_reviewid_seq1",allocationSize = 1)
+    private Long id;
+    @Column(nullable = false)
+    private String name;
+    @Column(nullable = false)
+    private String description;
+    @Column(nullable = false)
+    private String type;
+    @Column(nullable = false)
+    private int rating;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userid")
+    User creator;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "contentid")
+    Content content;
+
+
+
+    public Review(Long id, String type, String name, String description, Integer rating,User creator,Content content) {
         this.name = name;
         this.description = description;
         this.id=id;
         this.type = type;
-        this.contentId=contentId;
+        this.content=content;
         this.rating = rating;
-        this.userName=userName;
-        this.contentName=contentName;
+        this.creator=creator;
 
+    }
+    public Review(String type, String name, String description, Integer rating,User creator,Content content) {
+        this(null,type,name,description,rating,creator,content);
+
+    }
+
+    /* package */ Review() {
+// Just for Hibernate, we love you!
     }
 
 
@@ -50,12 +80,12 @@ public class Review {
         this.id = id;
     }
 
-    public Long getContentId() {
-        return contentId;
+    public Content getContent() {
+        return content;
     }
 
-    public void setContentId(Long contentId) {
-        this.contentId = contentId;
+    public void setContentId(Content content) {
+        this.content = content;
     }
 
     public Integer getRating() {
@@ -66,10 +96,7 @@ public class Review {
         this.rating = rating;
     }
 
-    public String getUserName(){return this.userName;}
-    public void setUserName(String userName){this.userName=userName;}
-
-    public String getContentName(){return this.contentName;}
-    public void setContentName(String contentName){this.contentName=contentName;}
+    public User getCreator(){return this.creator;}
+    public void setCreator(User user){this.creator=user;}
 
 }

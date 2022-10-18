@@ -7,7 +7,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.JpaVendorAdapter;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -17,10 +25,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.nio.charset.StandardCharsets;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
-
+@EnableTransactionManagement
+@EnableAsync
 @EnableWebMvc
 @ComponentScan({
         "ar.edu.itba.paw.webapp.controller",
@@ -70,7 +82,48 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
 
     }
+/*
+    @Bean
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(){
+        final LocalContainerEntityManagerFactoryBean factoryBean=new LocalContainerEntityManagerFactoryBean();
+        factoryBean.setPackagesToScan("ar.edu.itba.paw.models");
+        factoryBean.setDataSource(dataSource());
+        final JpaVendorAdapter vendorAdapter=new HibernateJpaVendorAdapter();
+        factoryBean.setJpaVendorAdapter(vendorAdapter);
+        final Properties properties=new Properties();
+        properties.setProperty("hibernate.hbm2ddl.auto","update");
+        properties.setProperty("hibernate.dialect","org.hibernate.dialect.PostgreSQL92Dialect");
 
+        factoryBean.setJpaProperties(properties);
+        return factoryBean;
+    }
+
+    @Bean
+    public PlatformTransactionManager transactionManager(final EntityManagerFactory emf)
+    {return new JpaTransactionManager(emf);}
+*/
+@Bean
+public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+    final LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
+    factoryBean.setPackagesToScan("ar.edu.itba.paw.models");
+    factoryBean.setDataSource(dataSource());
+    final JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+    factoryBean.setJpaVendorAdapter(vendorAdapter);
+    final Properties properties = new Properties();
+    properties.setProperty("hibernate.hbm2ddl.auto", "update");
+    properties.setProperty("hibernate.dialect","org.hibernate.dialect.PostgreSQL92Dialect");
+    properties.setProperty("hibernate.enable_lazy_load_no_trans","true");
+// Si ponen esto en prod, hay tabla!!!
+    properties.setProperty("hibernate.show_sql", "true");
+    properties.setProperty("format_sql", "true");
+    factoryBean.setJpaProperties(properties);
+    return factoryBean;
+}
+
+    @Bean
+    public PlatformTransactionManager transactionManager(final EntityManagerFactory emf) {
+    return new JpaTransactionManager(emf);
+}
     @Override
     public void addResourceHandlers(final ResourceHandlerRegistry registry) {
         super.addResourceHandlers(registry);

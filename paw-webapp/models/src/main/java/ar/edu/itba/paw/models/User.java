@@ -1,14 +1,50 @@
 package ar.edu.itba.paw.models;
 
+import javax.persistence.*;
+import java.util.List;
+import java.util.Set;
+
+@Entity
+@Table(name = "userdata")
 public class User {
-
-    private Long id, reputation;
-    private String email, userName, password,role;
-
+    @Column(name = "userid",columnDefinition = "INT")
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "userdata_userid_seq")
+    @SequenceGenerator(name= "userdata_userid_seq",sequenceName = "userdata_userid_seq",allocationSize = 1)
+    private Long id;
+    @Column
+    private Long reputation;
+    @Column(unique = true,nullable = false)
+    private String email;
+    @Column(name = "name",unique = true,nullable = false)
+    private String userName;
+    @Column(nullable = false)
+    private String password;
+    @Column(nullable = false)
+    private String role;
+    @Column
     private byte[] image;
 
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userid")
+    private List<Review> userReviews;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "userwatchlist",
+            joinColumns = @JoinColumn(name = "userid",referencedColumnName = "userid"),
+            inverseJoinColumns = @JoinColumn(name = "contentid",referencedColumnName = "id"))
+    private List<Content> watchlist;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "userviewedlist",
+            joinColumns = @JoinColumn(name = "userid",referencedColumnName = "userid"),
+            inverseJoinColumns = @JoinColumn(name = "contentid",referencedColumnName = "id"))
+    private List<Content> viewedlist;
+
+
     public User(Long id, String email, String userName, String password, Long reputation, byte[] image, String role) {
-        super();
         this.id = id;
         this.email = email;
         this.userName = userName;
@@ -17,6 +53,16 @@ public class User {
         this.image = image;
         this.role=role;
     }
+
+    public User(String userName,String userEmail,String password){
+        this(null,userEmail,userName,password,null,null,"user");
+    }
+
+    /* package */ User() {
+// Just for Hibernate, we love you!
+    }
+
+
 
     public String getRole() {
         return role;
@@ -38,9 +84,28 @@ public class User {
         return reputation;
     }
 
+    public List<Content> getViewedList() {
+        return viewedlist;
+    }
+
+    public List<Content> getWatchlist() {
+        return watchlist;
+    }
+
+    public List<Review> getUserReviews() {
+        return userReviews;
+    }
+
     public String getPassword() {
         return password;
     }
+    public void setPassword(String password) {
+        this.password=password;
+    }
+    public void setImage(byte[] image) {
+        this.image=image;
+    }
+    public void setRole(String role){this.role=role;}
 
     public byte[] getImage(){ return image;}
 

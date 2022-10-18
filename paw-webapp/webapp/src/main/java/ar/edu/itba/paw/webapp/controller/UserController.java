@@ -202,7 +202,7 @@ public class UserController {
         mav.addObject("userId",user.getId());
         mav.addObject("admin",false);
 
-        paginationSetup(mav,pageNum.orElse(1),rs.getAllUserReviews(user.getUserName()));
+        paginationSetup(mav,pageNum.orElse(1),rs.getAllUserReviews(user));
 
         request.getSession().setAttribute("referer","/profile");
         return mav;
@@ -234,7 +234,7 @@ public class UserController {
             mav.addObject("quote", quote.get());
             mav.addObject("user", user.get());
 
-            paginationSetup(mav,pageNum.orElse(1),rs.getAllUserReviews(user.get().getUserName()));
+            paginationSetup(mav,pageNum.orElse(1),rs.getAllUserReviews(user.get()));
 
         } else {
             LOGGER.warn("Wrong username profile request:",new PageNotFoundException());
@@ -373,7 +373,8 @@ public class UserController {
             String userEmail = userDetails.getName();
             User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
             try {
-                us.addToWatchList(user, contentId.get());
+                Content content = cs.findById(contentId.get()).orElseThrow(PageNotFoundException::new);
+                us.addToWatchList(user, content);
             } catch (DuplicateKeyException ignore){}
         } else {
             throw new ForbiddenException();
@@ -393,7 +394,8 @@ public class UserController {
         if(userDetails != null) {
             String userEmail = userDetails.getName();
             User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
-            us.deleteFromWatchList(user, contentId.get());
+            Content content = cs.findById(contentId.get()).orElseThrow(PageNotFoundException::new);
+            us.deleteFromWatchList(user, content);
         } else {
             throw new ForbiddenException();
         }
@@ -447,9 +449,9 @@ public class UserController {
         String userEmail = userDetails.getName();
         User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
         try{
-            us.addToViewedList(user, contentId.get());
+            Content content = cs.findById(contentId.get()).orElseThrow(PageNotFoundException::new);
+            us.addToViewedList(user, content);
         } catch (DuplicateKeyException ignore) {}
-
         String referer = request.getSession().getAttribute("referer").toString();
         return new ModelAndView("redirect:" + (referer==null?"/":referer));
     }
@@ -461,7 +463,8 @@ public class UserController {
         }
         String userEmail = userDetails.getName();
         User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
-        us.deleteFromViewedList(user, contentId.get());
+        Content content = cs.findById(contentId.get()).orElseThrow(PageNotFoundException::new);
+        us.deleteFromViewedList(user, content);
         String referer = request.getSession().getAttribute("referer").toString();
         return new ModelAndView("redirect:" + (referer==null?"/":referer));
     }
