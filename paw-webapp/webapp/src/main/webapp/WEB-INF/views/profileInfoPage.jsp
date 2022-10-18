@@ -95,7 +95,7 @@
                     </c:if>
                     <c:forEach var="review" items="${reviews}">
                         <a class="W-movie-title" href="<c:url value="/${review.type}/${review.id}"/>">
-                            <h5><c:out value="${review.content}"/></h5>
+                            <h5><c:out value="${review.content.name}"/></h5>
                         </a>
                         <jsp:include page="components/reviewCard.jsp">
                         <jsp:param name="reviewTitle" value="${review.name}" />
