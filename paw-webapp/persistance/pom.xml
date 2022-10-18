@@ -52,6 +52,10 @@
     </dependency>
     <!--Para hibernate-->
     <dependency>
+      <groupId>org.jboss.logging</groupId>
+      <artifactId>jboss-logging</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-orm</artifactId>
     </dependency>

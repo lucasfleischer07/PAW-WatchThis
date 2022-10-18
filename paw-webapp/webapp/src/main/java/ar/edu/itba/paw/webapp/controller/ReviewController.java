@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.models.Content;
 import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.services.ContentService;
@@ -63,8 +64,9 @@ public class ReviewController {
     @RequestMapping(value={"/{type:movie|serie}/{contentId:[0-9]+}","/{type:movie|serie}/{contentId:[0-9]+}/page/{pageNum:[0-9]+}"})
     public ModelAndView reviews(Principal userDetails, @PathVariable("contentId")final long contentId, @PathVariable("type") final String type,@PathVariable("pageNum")final Optional<Integer> pageNum,HttpServletRequest request) {
         final ModelAndView mav = new ModelAndView("infoPage");
-        mav.addObject("details", cs.findById(contentId).orElseThrow(PageNotFoundException::new));
-        List<Review> reviewList = rs.getAllReviews(contentId);
+        Content content=cs.findById(contentId).orElseThrow(PageNotFoundException::new);
+        mav.addObject("details", cs);
+        List<Review> reviewList = rs.getAllReviews(content);
         User user=null;
         if(reviewList == null) {
             LOGGER.warn("Cant find a the content specified",new PageNotFoundException());
@@ -107,7 +109,7 @@ public class ReviewController {
 
         if(user!=null){
             for (Review review:reviewList) {
-                if(review.getUserName().equals(user.getUserName())){
+                if(review.getCreator().getUserName().equals(user.getUserName())){
                     reviewList.remove(review);
                     reviewList.add(0,review);
                     break;
@@ -154,9 +156,8 @@ public class ReviewController {
 
         Optional<User> user = us.findByEmail(userDetails.getName());
         try {
-            Review newReview = new Review(null, type, id, form.getName(), form.getDescription(), form.getRating(), user.get().getUserName(),null);
-            newReview.setId(id);
-            rs.addReview(newReview);
+            Content content= cs.findById(id).orElseThrow(PageNotFoundException ::new);
+            rs.addReview(form.getName(),form.getDescription(), form.getRating(), type,user.get(),content);
         }
         catch(DuplicateKeyException e){
             ModelAndView mav = reviewFormCreate(userDetails,form,id,type);
@@ -178,7 +179,7 @@ public class ReviewController {
         Review review=rs.findById(reviewId).orElseThrow(PageNotFoundException::new);
         User user=us.findByEmail(userDetails.getName()).get();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if(review.getUserName().equals(user.getUserName()) || auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))){
+        if(review.getCreator().getUserName().equals(user.getUserName()) || auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))){
             rs.deleteReview(reviewId);
             String referer = request.getHeader("Referer");
             return new ModelAndView("redirect:"+ referer);
@@ -210,7 +211,7 @@ public class ReviewController {
                 mav.addObject("admin",false);
             }
 
-            if(!oldReview.get().getUserName().equals(us.findByEmail(userDetails.getName()).get().getUserName())){
+            if(!oldReview.get().getCreator().getUserName().equals(us.findByEmail(userDetails.getName()).get().getUserName())){
                 LOGGER.warn("The editor is not owner of the review",new ForbiddenException());
                 throw new ForbiddenException();
             }
@@ -246,7 +247,7 @@ public class ReviewController {
         }
 
         Optional<User> user = us.findByEmail(userDetails.getName());
-        if(!oldReview.get().getUserName().equals(user.get().getUserName())){
+        if(!oldReview.get().getCreator().getUserName().equals(user.get().getUserName())){
             LOGGER.warn("The editor is not owner of the review",new PageNotFoundException());
             throw new ForbiddenException();
         }

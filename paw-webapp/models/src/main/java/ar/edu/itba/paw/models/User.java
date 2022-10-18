@@ -7,7 +7,7 @@ import java.util.Set;
 @Entity
 @Table(name = "userdata")
 public class User {
-    @Column(name = "userid")
+    @Column(name = "userid",columnDefinition = "INT")
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "userdata_userid_seq")
     @SequenceGenerator(name= "userdata_userid_seq",sequenceName = "userdata_userid_seq",allocationSize = 1)
@@ -25,18 +25,18 @@ public class User {
     @Column
     private byte[] image;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "userid")
     private List<Review> userReviews;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "userwatchlist",
             joinColumns = @JoinColumn(name = "userid",referencedColumnName = "userid"),
             inverseJoinColumns = @JoinColumn(name = "contentid",referencedColumnName = "id"))
     private List<Content> watchlist;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "userviewedlist",
             joinColumns = @JoinColumn(name = "userid",referencedColumnName = "userid"),

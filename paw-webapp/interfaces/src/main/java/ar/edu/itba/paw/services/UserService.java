@@ -3,6 +3,7 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.models.Content;
 import ar.edu.itba.paw.models.User;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,4 +23,6 @@ public interface UserService {
     List<Content> getUserViewedList(User user);
     Optional<Long> searchContentInViewedList(User user, Long contentId);
     void promoteUser(User userId);
+    List<Long>getUserWatchListContent(User user);
+    List<Long>getUserViewedListContent(User user);
 }

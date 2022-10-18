@@ -5,7 +5,7 @@ import javax.persistence.*;
 @Entity
 @Table(name="review")
 public class Review {
-    @Column(name = "reviewid")
+    @Column(name = "reviewid",columnDefinition = "INT")
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "review_reviewid_seq1")
     @SequenceGenerator(name= "review_reviewid_seq1",sequenceName = "review_reviewid_seq1",allocationSize = 1)
@@ -19,10 +19,10 @@ public class Review {
     @Column(nullable = false)
     private int rating;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userid")
     User creator;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "contentid")
     Content content;
 

@@ -144,4 +144,23 @@ public class UserServiceImpl implements UserService{
         } catch (MessagingException e) {}
     }
 
+    @Override
+    public List<Long>getUserWatchListContent(User user) {
+        List<Long> contentIdList = new ArrayList<>();
+        for(Content content: getWatchList(user)) {
+            contentIdList.add(content.getId());
+        }
+        return contentIdList;
+    }
+
+    @Override
+    public List<Long>getUserViewedListContent(User user) {
+        List<Long> contentIdList = new ArrayList<>();
+        for(Content content: getUserViewedList(user)) {
+            contentIdList.add(content.getId());
+        }
+        return contentIdList;
+    }
+
+
 }

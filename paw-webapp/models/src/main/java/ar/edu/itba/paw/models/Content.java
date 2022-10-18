@@ -1,11 +1,13 @@
 package ar.edu.itba.paw.models;
 
 import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 @Entity
 @Table(name = "content")
 public class Content {
+    @Column(columnDefinition = "INT")
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "content_id_seq")
     @SequenceGenerator(name= "content_id_seq",sequenceName = "content_id_seq",allocationSize = 1)
@@ -29,7 +31,7 @@ public class Content {
     @Column
     private Integer durationNum;
 
-    @OneToMany(orphanRemoval = true,fetch = FetchType.LAZY)
+    @OneToMany(orphanRemoval = true,fetch = FetchType.EAGER)
     @JoinColumn(name = "contentid")
     List<Review> contentReviews;
 
@@ -46,6 +48,10 @@ public class Content {
             joinColumns = @JoinColumn(name = "contentid",referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "userid",referencedColumnName = "userid"))
     private List<User> viewedlist;
+
+    private Integer reviewsAmount;
+
+    private Integer rating;
 
 
     public Content(Long id, String name, byte[] image, String description, String released, String genre, String creator, String duration,int durationNum,String type) {
@@ -69,20 +75,23 @@ public class Content {
     /* package */ Content() {
 // Just for Hibernate, we love you!
     }
-    public Integer getReviewsAmount(){
+
+
+    public Integer getReviewsAmount() {
         return contentReviews.size();
     }
 
     public Integer getRating(){
         int count=0;
         int num=0;
-        for (Review review:contentReviews
-             ) {
+        for (Review review:contentReviews) {
             if(review.getRating()>0){
                 count++;
                 num+=review.getRating();
             }
         }
+        if(count==0)
+            return 0;
         return num/count;
     }
 

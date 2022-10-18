@@ -89,8 +89,8 @@
                                     <jsp:param name="contentImage" value="${content.image}"/>
                                     <jsp:param name="contentId" value="${content.id}"/>
                                     <jsp:param name="contentType" value="${content.type}"/>
-                                    <jsp:param name="contentRating" value="${content.rating}"/>
-                                    <jsp:param name="reviewsAmount" value="${content.reviewsAmount}"/>
+                                    <jsp:param name="contentRating" value="${content.getRating()}"/>
+                                    <jsp:param name="reviewsAmount" value="${content.getReviewsAmount()}"/>
                                     <jsp:param name="userWatchListContentId1" value="${userWatchListContentId.contains(content.id)}"/>
                                 </jsp:include>
                             </c:forEach>

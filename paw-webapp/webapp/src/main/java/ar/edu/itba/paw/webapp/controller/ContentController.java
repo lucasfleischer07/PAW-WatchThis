@@ -77,7 +77,6 @@ public class ContentController {
         final ModelAndView mav = new ModelAndView("homePage");
         List<Content> bestRatedList = cs.getBestRated();
         List<Content> lastAddedList = cs.getLastAdded();
-
         if(bestRatedList.size() == 0 || lastAddedList.size() == 0) {
             LOGGER.warn("Error bringing data from the db",new PageNotFoundException());
             throw new PageNotFoundException();
