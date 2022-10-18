@@ -72,7 +72,7 @@ public class UserJpaDao implements UserDao{
             }
         }
         if(!found){
-            watchlist.add(toAdd);
+            user.getWatchlist().add(toAdd);
         }
     }
 
@@ -110,7 +110,7 @@ public class UserJpaDao implements UserDao{
             }
         }
         if(!found){
-            viewedList.add(toAdd);
+            user.getViewedList().add(toAdd);
 
         }
     }

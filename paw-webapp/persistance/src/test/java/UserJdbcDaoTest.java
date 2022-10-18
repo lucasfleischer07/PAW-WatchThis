@@ -191,7 +191,9 @@ public class UserJdbcDaoTest {
     @Test
     @Rollback
     public void testAddToViewedList(){
+
         User user=dao.findByUserName("brandyhuevo").get();
+        assertEquals(2,user.getViewedList().size());
         Content content=contentDao.findById(492L).get();
         dao.addToViewedList(user,content);
         List<Content> contentList=user.getViewedList();
