@@ -201,7 +201,13 @@ public class UserController {
         mav.addObject("user", user);
         mav.addObject("userName",user.getUserName());
         mav.addObject("userId",user.getId());
-        mav.addObject("admin",false);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if(auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN")))
+            mav.addObject("admin",true);
+        else
+            mav.addObject("admin",false);
+        mav.addObject("canPromote",false);
+
 
         paginationSetup(mav,pageNum.orElse(1),rs.getAllUserReviews(user));
 
@@ -241,15 +247,18 @@ public class UserController {
             LOGGER.warn("Wrong username profile request:",new PageNotFoundException());
             throw new PageNotFoundException();
         }
-
+        mav.addObject("canPromote",false);
         if(userDetails != null) {
             String userEmail = userDetails.getName();
             User userLogged = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
             mav.addObject("userName",userLogged.getUserName());
             mav.addObject("userId",userLogged.getId());
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            if(auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN")) && !user.get().getRole().equals("admin")){
+
+            if(auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))){
                 mav.addObject("admin",true);
+                if(!user.get().getRole().equals("admin"))
+                    mav.addObject("canPromote",true);
             }else{
                 mav.addObject("admin",false);
             }

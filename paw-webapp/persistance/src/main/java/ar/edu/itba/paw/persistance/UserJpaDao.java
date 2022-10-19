@@ -64,8 +64,7 @@ public class UserJpaDao implements UserDao{
     public void addToWatchList(User user, Content toAdd) {
         List<Content> watchlist=user.getWatchlist();
         boolean found=false;
-        for (Content content:watchlist
-             ) {
+        for (Content content:watchlist) {
             if (content.getId()==toAdd.getId()){
                 found=true;
                 break;

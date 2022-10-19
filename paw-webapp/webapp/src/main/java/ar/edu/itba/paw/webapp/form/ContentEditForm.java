@@ -18,7 +18,7 @@ public class ContentEditForm {
     @NotNull
     private String genre;
 
-    @Size(min = 10, max = 100)
+    @Size(min = 4, max = 100)
     private String creator;
 
     @Max(300)

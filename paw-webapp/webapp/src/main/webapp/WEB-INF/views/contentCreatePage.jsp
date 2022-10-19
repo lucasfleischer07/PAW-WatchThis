@@ -57,14 +57,14 @@
                             <div class="mb-3 W-input-label-review-info">
                                 <form:errors path="releaseDate" element="p" cssStyle="color: #b21e26"/>
                                 <form:label path="releaseDate" class="form-label"><spring:message code="CreateContent.ContentReleaseDate"/> <span class="W-red-asterisco"><spring:message code="Asterisk"/></span></form:label>
-                                <p class="W-review-registration-text"><spring:message code="CreateContent.CharacterLimits"/></p>
+                                <p class="W-review-registration-text"><spring:message code="CreateContent.YearCharacterLimits"/></p>
                                 <spring:message code="Placeholder.YearEx" var="placeholder"/>
                                 <form:input type="text" class="form-control" path="releaseDate" placeholder="${placeholder}"/>
                             </div>
                             <div class="mb-3 W-input-label-review-info">
                                 <form:errors path="creator" element="p" cssStyle="color: #b21e26"/>
                                 <form:label path="creator" class="form-label"><spring:message code="CreateContent.ContentCreator"/> <span class="W-red-asterisco"><spring:message code="Asterisk"/></span></form:label>
-                                <p class="W-review-registration-text"><spring:message code="CreateContent.CharacterLimits" arguments="10,100"/></p>
+                                <p class="W-review-registration-text"><spring:message code="CreateContent.CharacterLimits" arguments="4,100"/></p>
                                 <spring:message code="Placeholder.CreatorEx" var="placeholder"/>
                                 <form:input type="text" class="form-control" path="creator" placeholder="${placeholder}"/>
                             </div>
@@ -142,14 +142,14 @@
                             <div class="mb-3 W-input-label-review-info">
                                 <form:errors path="releaseDate" element="p" cssStyle="color: #b21e26"/>
                                 <form:label path="releaseDate" class="form-label"><spring:message code="CreateContent.ContentReleaseDate"/> <span class="W-red-asterisco"><spring:message code="Asterisk"/></span></form:label>
-                                <p class="W-review-registration-text"><spring:message code="CreateContent.CharacterLimitsRelease"/></p>
+                                <p class="W-review-registration-text"><spring:message code="CreateContent.YearCharacterLimits"/></p>
                                 <spring:message code="Placeholder.YearEx" var="placeholder"/>
                                 <form:input type="text" class="form-control" path="releaseDate" placeholder="${placeholder}"/>
                             </div>
                             <div class="mb-3 W-input-label-review-info">
                                 <form:errors path="creator" element="p" cssStyle="color: #b21e26"/>
                                 <form:label path="creator" class="form-label"><spring:message code="CreateContent.ContentCreator"/> <span class="W-red-asterisco"><spring:message code="Asterisk"/></span></form:label>
-                                <p class="W-review-registration-text"><spring:message code="CreateContent.CharacterLimits" arguments="10,100"/></p>
+                                <p class="W-review-registration-text"><spring:message code="CreateContent.CharacterLimits" arguments="4,100"/></p>
                                 <spring:message code="Placeholder.CreatorEx" var="placeholder"/>
                                 <form:input type="text" class="form-control" path="creator" placeholder="${placeholder}"/>
                             </div>
@@ -201,7 +201,7 @@
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
-        <script>const simplemde = new SimpleMDE({ element: document.getElementById("MyTextArea"),showIcons: ["strikethrough"],hideIcons: ["link", "image","table","preview","fullscreen","guide","side-by-side"]});</script>
+        <script>const simplemde = new SimpleMDE({ element: document.getElementById("MyTextArea"),showIcons: ["strikethrough"],hideIcons: ["link", "image","table","preview","fullscreen","guide","side-by-side","quote"]});</script>
 
     </body>
 </html>
