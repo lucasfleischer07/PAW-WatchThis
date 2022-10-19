@@ -42,6 +42,8 @@ public class PaginationServiceImpl implements PaginationService{
 
     @Override
     public boolean checkPagination(int listSize, int page) {
+        if(page==1 && listSize==0)
+            return false;
         return (page-1)*CONTENT_AMOUNT >= listSize;
     }
 

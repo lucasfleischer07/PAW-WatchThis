@@ -6,6 +6,7 @@ import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.services.*;
 import ar.edu.itba.paw.webapp.exceptions.ForbiddenException;
 import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
+import ar.edu.itba.paw.webapp.exceptions.ServerErrorException;
 import ar.edu.itba.paw.webapp.form.EditProfile;
 import ar.edu.itba.paw.webapp.form.ForgotPasswordForm;
 import ar.edu.itba.paw.webapp.form.LoginForm;
@@ -340,7 +341,7 @@ public class UserController {
     public ModelAndView watchList(Principal userDetails,@PathVariable("pageNum")final Optional<Integer> pageNum,HttpServletRequest request) {
         String userEmail = userDetails.getName();
         final String locale = LocaleContextHolder.getLocale().getDisplayLanguage();
-        User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
+        User user = us.findByEmail(userEmail).orElseThrow(ServerErrorException::new);
         List<Content> watchListContent = us.getWatchList(user);
         List<Long> userWatchListContentId = us.getUserWatchListContent(user);
         final ModelAndView mav = new ModelAndView("watchListPage");
