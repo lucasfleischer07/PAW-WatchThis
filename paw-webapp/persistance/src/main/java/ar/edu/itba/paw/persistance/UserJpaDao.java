@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
@@ -78,9 +79,11 @@ public class UserJpaDao implements UserDao{
 
     @Override
     public void deleteFromWatchList(User user, Content toDelete) {
-        List<Content> watchlist=user.getWatchlist();
-        watchlist.remove(toDelete);
-        em.merge(user);
+        Query query=em.createNativeQuery("DELETE from userwatchlist where userid = :userid AND contentid= :contentid");
+        query.setParameter("userid",user.getId());
+        query.setParameter("contentid",toDelete.getId());
+        query.executeUpdate();
+
 
     }
 
@@ -118,9 +121,10 @@ public class UserJpaDao implements UserDao{
 
     @Override
     public void deleteFromViewedList(User user, Content toDelete) {
-        List<Content> viewedList=user.getViewedList();
-        viewedList.remove(toDelete);
-        em.merge(user);
+        Query query=em.createNativeQuery("DELETE from userviewedlist where userid = :userid AND contentid= :contentid");
+        query.setParameter("userid",user.getId());
+        query.setParameter("contentid",toDelete.getId());
+        query.executeUpdate();
     }
 
     @Override

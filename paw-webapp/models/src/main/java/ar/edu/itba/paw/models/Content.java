@@ -38,8 +38,8 @@ public class Content {
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "userwatchlist",
-            joinColumns = @JoinColumn(name = "contentid",referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "userid",referencedColumnName = "userid"))
+            joinColumns = @JoinColumn(name = "contentid"),
+            inverseJoinColumns = @JoinColumn(name = "userid"))
     private List<User> watchlist;
 
     @ManyToMany(fetch = FetchType.LAZY)
