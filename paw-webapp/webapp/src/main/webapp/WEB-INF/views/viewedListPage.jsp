@@ -29,7 +29,7 @@
 </jsp:include>
 
 <div>
-    <h2 class="bg-dark W-watch-viewed-list-title"><spring:message code="ViewedList.Your"/></h2>
+    <h2 class="W-watch-viewed-list-title"><spring:message code="ViewedList.Your"/></h2>
 </div>
 
 <div class="row px-4">
