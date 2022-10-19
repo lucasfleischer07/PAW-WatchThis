@@ -79,7 +79,7 @@
                 </div>
                 <div class="card">
                   <div class="card-body">
-                    <c:if test="${reviews==null || reviewsAmount == 0}">
+                    <c:if test="${reviews==null || reviews.size() == 0}">
                         <div class="W-no-reviews-icon">
                             <img class="W-no-reviews-image"  src="<c:url value="/resources/img/noReviews.png"/>" alt="No_Review_Img"/>
                         </div>

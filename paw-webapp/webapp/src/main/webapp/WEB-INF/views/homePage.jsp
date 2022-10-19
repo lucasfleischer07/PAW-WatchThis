@@ -62,7 +62,7 @@
                                                             <jsp:param name="contentId" value="${recommendedUserList.get(internalIndex).id}"/>
                                                             <jsp:param name="contentType" value="${recommendedUserList.get(internalIndex).type}"/>
                                                             <jsp:param name="contentRating" value="${recommendedUserList.get(internalIndex).rating}"/>
-                                                            <jsp:param name="reviewsAmount" value="${recommendedUserList.get(internalIndex).reviewsAmount}"/>
+                                                            <jsp:param name="reviewsAmount" value="${recommendedUserList.get(internalIndex).contentReviews.size()}"/>
                                                             <jsp:param name="userName" value="${userName}"/>
                                                             <jsp:param name="userWatchListContentId1" value="${userWatchListContentId.contains(recommendedUserList.get(internalIndex).id)}"/>
                                                         </jsp:include>
