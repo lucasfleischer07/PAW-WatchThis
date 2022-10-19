@@ -98,10 +98,13 @@ public class ReviewJdbcDaoTest {
     @Test
     @Rollback
     public void testDelete(){
+        Review review=dao.findById(2L).get();
+        User user=review.getCreator();
         dao.deleteReview(2L);
         assertFalse(dao.findById(2L).isPresent());
         Content content=contentDao.findById(1L).get();
         assertEquals(0,content.getContentReviews().size());
+        assertEquals(0,user.getUserReviews().size());
     }
 
     @Test

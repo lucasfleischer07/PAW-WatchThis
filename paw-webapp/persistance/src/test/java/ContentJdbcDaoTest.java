@@ -159,7 +159,6 @@ public class ContentJdbcDaoTest {
     @Test
     @Rollback
     public void testDeleteContent(){
-        assertEquals(6,dao.getAllContent("ANY","ANY").size());
         dao.deleteContent(2L);
         List<Content> contentList=dao.getAllContent("ANY","ANY");
         assertEquals(5,dao.getAllContent("ANY","ANY").size());
