@@ -89,7 +89,7 @@
                                     </div>
                                     <div>
                                         <div class="mb-3 W-input-label-edit-password">
-                                            <form:errors path="confirmPassword" element="p" cssStyle="W-form-color-red"/>
+                                            <form:errors path="confirmPassword" element="p" cssClass="W-form-color-red"/>
                                             <form:label path="confirmPassword" class="form-label"><spring:message code="EditProfile.ConfirmPassword"/> <span class="W-form-color-red"><spring:message code="Asterisk"/></span></form:label>
                                             <spring:message code="Placeholder.Asterisk" var="placeholder"/>
                                             <form:input type="password" class="form-control" path="confirmPassword" placeholder="${placeholder}"/>
