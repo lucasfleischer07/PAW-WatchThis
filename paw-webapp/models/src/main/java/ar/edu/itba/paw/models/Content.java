@@ -31,8 +31,8 @@ public class Content {
     @Column
     private Integer durationNum;
 
-    @OneToMany(orphanRemoval = true,fetch = FetchType.LAZY)
-    @JoinColumn(name = "contentid")
+    @OneToMany(orphanRemoval = true,fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinColumn(name = "contentid",referencedColumnName = "id")
     List<Review> contentReviews;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -169,5 +169,13 @@ public class Content {
 
     public List<Review> getContentReviews() {
         return contentReviews;
+    }
+
+    public List<User> getWatchlist() {
+        return watchlist;
+    }
+
+    public List<User> getViewedlist() {
+        return viewedlist;
     }
 }

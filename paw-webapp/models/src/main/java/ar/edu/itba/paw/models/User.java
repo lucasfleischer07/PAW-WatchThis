@@ -25,22 +25,22 @@ public class User {
     @Column
     private byte[] image;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY,orphanRemoval = true,cascade = CascadeType.ALL)
     @JoinColumn(name = "userid")
     private List<Review> userReviews;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "userwatchlist",
-            joinColumns = @JoinColumn(name = "userid",referencedColumnName = "userid"),
-            inverseJoinColumns = @JoinColumn(name = "contentid",referencedColumnName = "id"))
+            joinColumns = @JoinColumn(name = "userid"),
+            inverseJoinColumns = @JoinColumn(name = "contentid"))
     private List<Content> watchlist;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "userviewedlist",
-            joinColumns = @JoinColumn(name = "userid",referencedColumnName = "userid"),
-            inverseJoinColumns = @JoinColumn(name = "contentid",referencedColumnName = "id"))
+            joinColumns = @JoinColumn(name = "userid"),
+            inverseJoinColumns = @JoinColumn(name = "contentid"))
     private List<Content> viewedlist;
 
 

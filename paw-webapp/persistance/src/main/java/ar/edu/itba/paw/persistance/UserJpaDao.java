@@ -73,6 +73,7 @@ public class UserJpaDao implements UserDao{
         }
         if(!found){
             user.getWatchlist().add(toAdd);
+            em.merge(user);
         }
     }
 
@@ -80,6 +81,7 @@ public class UserJpaDao implements UserDao{
     public void deleteFromWatchList(User user, Content toDelete) {
         List<Content> watchlist=user.getWatchlist();
         watchlist.remove(toDelete);
+        em.merge(user);
 
     }
 
@@ -111,7 +113,7 @@ public class UserJpaDao implements UserDao{
         }
         if(!found){
             user.getViewedList().add(toAdd);
-
+            em.merge(user);
         }
     }
 
@@ -119,6 +121,7 @@ public class UserJpaDao implements UserDao{
     public void deleteFromViewedList(User user, Content toDelete) {
         List<Content> viewedList=user.getViewedList();
         viewedList.remove(toDelete);
+        em.merge(user);
     }
 
     @Override

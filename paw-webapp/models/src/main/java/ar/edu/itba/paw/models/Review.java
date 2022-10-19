@@ -99,4 +99,7 @@ public class Review {
     public User getCreator(){return this.creator;}
     public void setCreator(User user){this.creator=user;}
 
+    public void setContent(Content content) {
+        this.content = content;
+    }
 }
