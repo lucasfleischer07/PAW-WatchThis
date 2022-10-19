@@ -3,10 +3,7 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.models.Content;
 import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.User;
-import ar.edu.itba.paw.services.ContentService;
-import ar.edu.itba.paw.services.EmailService;
-import ar.edu.itba.paw.services.ReviewService;
-import ar.edu.itba.paw.services.UserService;
+import ar.edu.itba.paw.services.*;
 import ar.edu.itba.paw.webapp.exceptions.ForbiddenException;
 import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
 import ar.edu.itba.paw.webapp.form.EditProfile;
@@ -23,6 +20,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -38,24 +36,23 @@ import java.util.*;
 
 @Controller
 public class UserController {
-
-
     private final UserService us;
     private final ContentService cs;
     private final ReviewService rs;
+    private final PaginationService ps;
     private final EmailService es;
-
+    private final PasswordEncoder passwordEncoder;
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
     protected AuthenticationManager authenticationManager;
-    private static final int ELEMS_AMOUNT = 3;
-    private static final int MOVIES_AMOUNT = 2;
     @Autowired
-    public UserController(final UserService us, final ContentService cs, ReviewService rs, EmailService es,AuthenticationManager authenticationManager){
+    public UserController(final UserService us, final ContentService cs, ReviewService rs, EmailService es, PaginationService ps,AuthenticationManager authenticationManager,PasswordEncoder passwordEncoder){
         this.us = us;
         this.cs = cs;
         this.rs = rs;
         this.es = es;
-        this.authenticationManager=authenticationManager;
+        this.ps = ps;
+        this.authenticationManager = authenticationManager;
+        this.passwordEncoder = passwordEncoder;
     }
 
     private void HeaderSetUp(ModelAndView mav, Principal userDetails){
@@ -77,18 +74,39 @@ public class UserController {
         }
     }
 
-    private void listPaginationSetup(ModelAndView mav,String name,List<Content> contentList,int page){
-        if(contentList.size()>page*MOVIES_AMOUNT){
-            mav.addObject(name, contentList.subList((page - 1) * MOVIES_AMOUNT, page * MOVIES_AMOUNT));
-        }else{
-            mav.addObject(name,contentList.subList((page-1)*MOVIES_AMOUNT,contentList.size()));
+    private void listPaginationSetup(ModelAndView mav,String name,List<Content> contentList,int page) throws PageNotFoundException{
+        if(ps.checkPagination(contentList.size(), page)) {
+            LOGGER.warn("Wrong login path:", new PageNotFoundException());
+            throw new PageNotFoundException();
         }
+
+        List<Content> contentListFilterPaginated = ps.contentPagination(contentList, page);
+        mav.addObject(name, contentListFilterPaginated);
+
+        int amountOfPages = ps.amountOfContentPages(contentList.size());
+        mav.addObject("amountPages", amountOfPages);
         mav.addObject("pageSelected",page);
-        mav.addObject("amountPages",Math.ceil((double)contentList.size()/(double)MOVIES_AMOUNT));
+
     }
 
+    private void paginationSetup(ModelAndView mav,int page,List<Review> reviewList){
+        if(reviewList.size()==0){
+            mav.addObject("reviews",reviewList);
+            mav.addObject("reviewsAmount",reviewList.size());
+            mav.addObject("pageSelected",1);
+            mav.addObject("amountPages",1);
+            return;
+        }
 
+        List<Review> reviewListPaginated = ps.reviewPagination(reviewList, page);
+        mav.addObject("reviews", reviewListPaginated);
 
+        int amountOfPages = ps.amountOfReviewPages(reviewList.size());
+        mav.addObject("amountPages", amountOfPages);
+        mav.addObject("pageSelected",page);
+        mav.addObject("reviewsAmount",reviewList.size());
+
+    }
 
 
     // * ----------------------------------- Login ---------------------------------------------------------------------
@@ -151,17 +169,15 @@ public class UserController {
         if(Objects.equals(loginStage, "sign-up")) {
             Optional<User> existUserEmail = us.findByEmail(loginForm.getEmail());
             Optional<User> existUserName = us.findByUserName(loginForm.getUsername());
-            if(existUserEmail.isPresent() || existUserName.isPresent()) {
-                return LoginSingUp(userDetails, loginForm, loginStage);
-            }
             if(!Objects.equals(loginForm.getPassword(), loginForm.getConfirmPassword())) {
+                errors.rejectValue("confirmPassword","EditProfile.NotSamePassword");
                 return LoginSingUp(userDetails, loginForm, loginStage);
             }
+
             User newUser = new User(null, loginForm.getEmail(), loginForm.getUsername(), loginForm.getPassword(), 0L, null,"user");
             us.register(newUser);
-            LOGGER.info("Registrated a new user with email");
-
-            authWithAuthManager(request,loginForm.getEmail(),loginForm.getPassword());
+            LOGGER.info("Registered a new user with email");
+            us.authWithAuthManager(request, loginForm.getEmail(), loginForm.getPassword(), authenticationManager);
         } else {
             LOGGER.warn("Wrong login path:",new PageNotFoundException());
             throw new PageNotFoundException();
@@ -171,36 +187,8 @@ public class UserController {
         return new ModelAndView("redirect:" + (referer==null?"/":referer));
     }
 
-    private void authWithAuthManager(HttpServletRequest request,String email,String password){
-        List<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();
-        request.getSession();
-        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(email, password, authorities);
-        token.setDetails(new WebAuthenticationDetails(request));
-        Authentication authentication = authenticationManager.authenticate(token);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-    }
-
 
     // * ------------------------------------------------Profile View --------------------------------------------------
-
-
-    private void paginationSetup(ModelAndView mav,int page,List<Review> reviewList){
-        if(reviewList.size()==0){
-            mav.addObject("reviews",reviewList);
-            mav.addObject("pageSelected",1);
-            mav.addObject("amountPages",1);
-            return;
-        }
-        if(reviewList.size()>=page*ELEMS_AMOUNT)
-            mav.addObject("reviews",reviewList.subList(0,page*ELEMS_AMOUNT));
-        else
-            mav.addObject("reviews",reviewList.subList(0, reviewList.size()));
-        mav.addObject("pageSelected",page);
-        mav.addObject("amountPages",Math.ceil((double)reviewList.size()/(double)ELEMS_AMOUNT));
-
-    }
-
     @RequestMapping(value={"/profile","/profile/page/{pageNum:[0-9]+}"})
     public ModelAndView profile(Principal userDetails,@PathVariable("pageNum")final Optional<Integer> pageNum,HttpServletRequest request) {
         final String locale = LocaleContextHolder.getLocale().getDisplayLanguage();
@@ -290,7 +278,7 @@ public class UserController {
     // * ------------------------------------------------Profile Edition------------------------------------------------
 
 
-    @RequestMapping(value = "/profile/edit-profile", method = {RequestMethod.GET})
+    @RequestMapping(value = "/profile/editProfile", method = {RequestMethod.GET})
     public ModelAndView profileEdition(Principal userDetails, @Valid @ModelAttribute("editProfile") final EditProfile editProfile) {
         String userEmail = userDetails.getName();
         User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
@@ -307,19 +295,37 @@ public class UserController {
         return mav;
     }
 
-    @RequestMapping(value = "/profile/edit-profile", method = {RequestMethod.POST})
+    @RequestMapping(value = "/profile/editProfile", method = {RequestMethod.POST})
     public ModelAndView profileEditionPost(Principal userDetails,@Valid @ModelAttribute("editProfile") final EditProfile editProfile, final BindingResult errors) throws IOException {
+        String userEmail = userDetails.getName();
+        User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
+
+        if(Objects.equals(editProfile.getPassword(), "") && (editProfile.getProfilePicture().getSize() > 0)) {
+            us.setProfilePicture(editProfile.getProfilePicture().getBytes(), user);
+            return new ModelAndView("redirect:/profile");
+        }
+
         if(errors.hasErrors()) {
             return profileEdition(userDetails,editProfile);
         }
 
-        String userEmail = userDetails.getName();
-        User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
-        if(editProfile.getPassword() != null && ((editProfile.getProfilePicture() == null) || editProfile.getProfilePicture().getSize() <= 0 )) {
+        if(!Objects.equals(editProfile.getPassword(), "")  && ((editProfile.getProfilePicture() == null) || editProfile.getProfilePicture().getSize() <= 0 )) {
+            if(!passwordEncoder.matches(editProfile.getCurrentPassword(),user.getPassword())) {
+                errors.rejectValue("currentPassword","EditProfile.IncorrectOldPassword");
+                return profileEdition(userDetails,editProfile);
+            } else if(!editProfile.getPassword().equals(editProfile.getConfirmPassword())){
+                errors.rejectValue("confirmPassword","EditProfile.NotSamePassword");
+                return profileEdition(userDetails,editProfile);
+            }
             us.setPassword(editProfile.getPassword(), user, "restore");
-        } else if(editProfile.getPassword() == null && (editProfile.getProfilePicture().getSize() > 0)) {
-            us.setProfilePicture(editProfile.getProfilePicture().getBytes(), user);
-        } else if(editProfile.getPassword() != null && editProfile.getProfilePicture().getSize() > 0) {
+        } else if(!Objects.equals(editProfile.getPassword(), "")  && editProfile.getProfilePicture().getSize() > 0) {
+            if(!passwordEncoder.matches(editProfile.getCurrentPassword(),user.getPassword())) {
+                errors.rejectValue("currentPassword","EditProfile.IncorrectOldPassword");
+                return profileEdition(userDetails,editProfile);
+            } else if(!editProfile.getPassword().equals(editProfile.getConfirmPassword())) {
+                errors.rejectValue("confirmPassword","EditProfile.NotSamePassword");
+                return profileEdition(userDetails,editProfile);
+            }
             us.setPassword(editProfile.getPassword(), user, "restore");
             us.setProfilePicture(editProfile.getProfilePicture().getBytes(), user);
         }

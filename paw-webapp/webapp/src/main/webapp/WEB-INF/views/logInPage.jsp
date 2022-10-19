@@ -18,6 +18,7 @@
         <link href="<c:url value="/resources/css/navBarStyles.css"/>" rel="stylesheet" type="text/css"/>
         <link href="<c:url value="/resources/css/reviewsStyles.css"/>" rel="stylesheet" type="text/css"/>
         <link href="<c:url value="/resources/css/loginStyles.css"/>" rel="stylesheet" type="text/css"/>
+        <link href="<c:url value="/resources/css/profileStyles.css"/>" rel="stylesheet" type="text/css"/>
         <link href="<c:url value="/resources/css/reviewRegistrationStyles.css"/>" rel="stylesheet" type="text/css"/>
         <title><spring:message code="Login.LoginMessage"/></title>
     </head>
@@ -78,7 +79,7 @@
                                 </div>
 
                                 <hr class="d-flex W-line-style-login"/>
-                                <div class="W-alignment-signup-div">
+                                <div class="W-alignment-signup-div W-margin-bottom">
                                     <h5><spring:message code="Login.NoAccountMessage"/></h5>
                                     <a href="<c:url value="/login/sign-up"/>"><button type="button" class="btn btn-secondary W-sign-up-button-link"><spring:message code="Login.SignUpMessage"/></button></a>
                                 </div>
@@ -96,7 +97,7 @@
                                     <div class="mb-3 W-input-label-login-info">
                                         <div class="mb-3 W-input-label-login-info">
                                             <form:errors path="username" element="p" cssStyle="color: #b21e26"/>
-                                            <form:label path="username" class="form-label"><spring:message code="Signup.Username"/></form:label>
+                                            <form:label path="username" class="form-label"><spring:message code="Signup.Username"/> <span class="W-red-asterisco"><spring:message code="Asterisk"/></span></form:label>
                                             <p class="W-review-registration-text"><spring:message code="Signup.CharacterLimits" arguments="4,30"/></p>
                                             <spring:message code="Placeholder.UserExample" var="placeholder"/>
                                             <form:input type="text" class="form-control" path="username" placeholder='${placeholder}'/>
@@ -105,7 +106,7 @@
                                     <div class="mb-3 W-input-label-login-info">
                                         <div class="mb-3 W-input-label-login-info">
                                             <form:errors path="email" element="p" cssStyle="color: #b21e26"/>
-                                            <form:label path="email" class="form-label"><spring:message code="Signup.Email"/></form:label>
+                                            <form:label path="email" class="form-label"><spring:message code="Signup.Email"/> <span class="W-red-asterisco"><spring:message code="Asterisk"/></span></form:label>
                                             <spring:message code="Placeholder.EmailExample" var="placeholder"/>
                                             <form:input type="email" class="form-control" value="${loginForm.email}" path="email" placeholder='${placeholder}'/>
                                         </div>
@@ -113,7 +114,7 @@
                                     <div class="mb-3 W-input-label-login-info">
                                         <div class="mb-3 W-input-label-login-info">
                                             <form:errors path="password" element="p" cssStyle="color: #b21e26"/>
-                                            <form:label path="password" class="form-label"><spring:message code="Signup.Password"/></form:label>
+                                            <form:label path="password" class="form-label"><spring:message code="Signup.Password"/> <span class="W-red-asterisco"><spring:message code="Asterisk"/></span></form:label>
                                             <p class="W-review-registration-text"><spring:message code="Signup.CharacterLimits" arguments="6,50"/></p>
                                             <spring:message code="Placeholder.Asterisk" var="placeholder"/>
                                             <form:input type="password" class="form-control" path="password" placeholder="${placeholder}"/>
@@ -121,14 +122,14 @@
                                     </div>
                                     <div class="mb-3 W-input-label-login-info">
                                         <div class="mb-3 W-input-label-login-info">
-                                            <form:errors path="confirmPassword" element="p" cssStyle="color: red"/>
-                                            <form:label path="confirmPassword" class="form-label"><spring:message code="Signup.ConfirmPassword"/> <span class="W-red-asterisco">*</span></form:label>
+                                            <form:errors path="confirmPassword" element="p" cssStyle="color: #b21e26"/>
+                                            <form:label path="confirmPassword" class="form-label"><spring:message code="Signup.ConfirmPassword"/> <span class="W-red-asterisco"><spring:message code="Asterisk"/></span></form:label>
                                             <spring:message code="Placeholder.Asterisk" var="placeholder"/>
                                             <form:input type="password" class="form-control" path="confirmPassword" placeholder="${placeholder}"/>
                                         </div>
                                     </div>
                                 </div>
-                                <div>
+                                <div class="W-margin-bottom">
                                     <button id="submitButton2" type="submit" class="btn btn-success W-login-button" onclick="this.form.submit(); (this).className -= ' W-login-button'; (this).className += ' spinner-border text-success'; (this).innerText = ''"><spring:message code="Signup.SignupMessage"/></button>
                                 </div>
                             </div>
@@ -147,13 +148,13 @@
                                         <h5 class="W-password-title"><spring:message code="Login.ForgotPass.msg"/></h5>
                                         <div class="mb-3 W-input-label-login-info">
                                             <form:errors path="email" element="p" cssStyle="color: #b21e26"/>
-                                            <form:label path="email" class="form-label">Email</form:label>
+                                            <form:label path="email" class="form-label"><spring:message code="Signup.Email"/> <span class="W-red-asterisco"><spring:message code="Asterisk"/></span></form:label>
                                             <spring:message code="Placeholder.RecoveryEmail" var="placeholder"/>
                                             <form:input type="email" class="form-control" value="${loginForm.email}" path="email" placeholder='${placeholder}'/>
                                         </div>
                                     </div>
                                 </div>
-                                <div>
+                                <div class="W-margin-bottom">
                                     <button id="submitButton3" type="submit" class="btn btn-success W-send-password" onclick="this.form.submit(); (this).className -= ' W-send-password'; (this).className += ' spinner-border text-success'; (this).innerText = ''"><spring:message code="Send"/></button>
                                 </div>
                             </div>

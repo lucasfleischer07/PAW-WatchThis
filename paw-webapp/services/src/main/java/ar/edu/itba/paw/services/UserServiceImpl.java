@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.services;
 
+import java.security.Principal;
 import java.util.*;
 
 import ar.edu.itba.paw.models.Content;
@@ -8,11 +9,21 @@ import ar.edu.itba.paw.persistance.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
+
 
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
+
 @Transactional
 @Service
 public class UserServiceImpl implements UserService{
@@ -96,6 +107,7 @@ public class UserServiceImpl implements UserService{
         userDao.addToWatchList(user, toAdd);
     }
 
+
     @Override
     public void deleteFromWatchList(User user, Content toDelete) {
         userDao.deleteFromWatchList(user, toDelete);
@@ -141,7 +153,7 @@ public class UserServiceImpl implements UserService{
             mailVariables.put("userName", user.getUserName());
             userDao.promoteUser(user);
             emailService.sendMail("adminConfirmation", messageSource.getMessage("Mail.AdminConfirmation", new Object[]{}, locale), mailVariables, locale);
-        } catch (MessagingException e) {}
+        } catch (MessagingException ignored) {}
     }
 
     @Override
@@ -162,5 +174,16 @@ public class UserServiceImpl implements UserService{
         return contentIdList;
     }
 
+
+    @Override
+    public void authWithAuthManager(HttpServletRequest request, String email, String password, AuthenticationManager authenticationManager){
+        List<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();
+        request.getSession();
+        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(email, password, authorities);
+        token.setDetails(new WebAuthenticationDetails(request));
+        Authentication authentication = authenticationManager.authenticate(token);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+    }
 
 }

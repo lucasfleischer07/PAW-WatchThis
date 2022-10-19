@@ -7,21 +7,19 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 
+@Controller
+public class ErrorController {
 
-    @Controller
-    public class ErrorController {
-
-        @RequestMapping(value = "/error")
-        public ModelAndView renderErrorPage(HttpServletRequest httpRequest) {
-            ModelAndView errorPage = new ModelAndView("errorPage");
-            errorPage.addObject("errorCode",getErrorCode(httpRequest));
-            return errorPage;
-        }
-
-        private int getErrorCode(HttpServletRequest httpRequest) {
-            return (Integer) httpRequest
-                    .getAttribute("javax.servlet.error.status_code");
-        }
-
+    @RequestMapping(value = "/error")
+    public ModelAndView renderErrorPage(HttpServletRequest httpRequest) {
+        ModelAndView errorPage = new ModelAndView("errorPage");
+        errorPage.addObject("errorCode",getErrorCode(httpRequest));
+        return errorPage;
     }
+
+    private int getErrorCode(HttpServletRequest httpRequest) {
+        return (Integer) httpRequest.getAttribute("javax.servlet.error.status_code");
+    }
+
+}
 

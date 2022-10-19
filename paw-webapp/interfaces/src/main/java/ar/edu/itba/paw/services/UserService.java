@@ -2,7 +2,9 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.models.Content;
 import ar.edu.itba.paw.models.User;
+import org.springframework.security.authentication.AuthenticationManager;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -25,4 +27,5 @@ public interface UserService {
     void promoteUser(User userId);
     List<Long>getUserWatchListContent(User user);
     List<Long>getUserViewedListContent(User user);
+    void authWithAuthManager(HttpServletRequest request, String email, String password, AuthenticationManager authenticationManager);
 }

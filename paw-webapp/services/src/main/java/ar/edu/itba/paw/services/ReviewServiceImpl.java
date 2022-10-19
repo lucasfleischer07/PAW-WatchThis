@@ -45,4 +45,18 @@ public class ReviewServiceImpl implements ReviewService{
     public void updateReview(String name, String description, Integer rating, Long id) {
         reviewDao.updateReview(name, description, rating, id);
     }
+
+    @Override
+    public List<Review> sortReviews(User user, List<Review> reviewList){
+        if(user!=null){
+            for (Review review:reviewList) {
+                if(review.getCreator().getUserName().equals(user.getUserName())){
+                    reviewList.remove(review);
+                    reviewList.add(0,review);
+                    break;
+                }
+            }
+        }
+        return reviewList;
+    }
 }
