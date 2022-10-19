@@ -28,6 +28,10 @@
     <jsp:param name="admin" value="${admin}"/>
 </jsp:include>
 
+<div>
+    <h2 class="bg-dark W-watch-viewed-list-title"><spring:message code="WatchList.Your"/></h2>
+</div>
+
 <div class="row py-5 px-4">
     <div class="W-profile-general-div-display">
         <div class="bg-white shadow rounded overflow-hidden W-viewed-watch-list-general-div">

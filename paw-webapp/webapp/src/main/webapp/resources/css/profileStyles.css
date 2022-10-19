@@ -53,6 +53,12 @@
    font-size: 1vw;
 }
 
+.W-watch-viewed-list-title {
+    display: flex;
+    align-items: center;
+    margin: 1vw 1vw 1vw 2vw;
+}
+
 .W-profile-general-div-display {
     display: table;
 }
