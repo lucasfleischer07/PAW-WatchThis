@@ -59,4 +59,20 @@ public class ReviewServiceImpl implements ReviewService{
         }
         return reviewList;
     }
+
+    @Override
+    public void thumbUpReview(Review review) {
+        reviewDao.thumbUpReview(review);
+    }
+
+    @Override
+    public void thumbDownReview(Review review) {
+        reviewDao.thumbDownReview(review);
+    }
+
+    @Override
+    public Optional<Review> getReview(Long reviewId) {
+        return reviewDao.getReview(reviewId);
+    }
+
 }

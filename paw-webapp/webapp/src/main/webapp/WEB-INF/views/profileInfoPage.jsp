@@ -71,6 +71,10 @@
                         <h4 class="font-weight-bold mb-0 d-block"><c:out value="${reviewsAmount}"/></h4>
                           <medium class="text-muted"><i class="fas fa-image mr-1"></i><spring:message code="Profile.Reviews"/></medium>
                       </li>
+                      <li class="list-inline-item">
+                          <h4 class="font-weight-bold mb-0 d-block"><c:out value="${reputationAmount}"/></h4>
+                          <medium class="text-muted"><i class="fas fa-image mr-1"></i><spring:message code="Profile.Reputation"/></medium>
+                      </li>
                   </ul>
               </div>
               <div class="py-4 px-4">
@@ -98,16 +102,17 @@
                             <h5><c:out value="${review.content.name}"/></h5>
                         </a>
                         <jsp:include page="components/reviewCard.jsp">
-                        <jsp:param name="reviewTitle" value="${review.name}" />
-                        <jsp:param name="reviewDescription" value="${review.description}" />
-                        <jsp:param name="reviewRating" value="${review.rating}"/>
-                        <jsp:param name="reviewId" value="${review.id}" />
-                        <jsp:param name="userName" value="${review.creator.userName}"/>
-                        <jsp:param name="contentId" value="${review.id}"/>
-                        <jsp:param name="contentType" value="${review.type}"/>
-                        <jsp:param name="loggedUserName" value="${userName}"/>
-                        <jsp:param name="isAdmin" value="${admin}"/>
-                      </jsp:include>
+                            <jsp:param name="reviewTitle" value="${review.name}" />
+                            <jsp:param name="reviewDescription" value="${review.description}" />
+                            <jsp:param name="reviewRating" value="${review.rating}"/>
+                            <jsp:param name="reviewId" value="${review.id}" />
+                            <jsp:param name="userName" value="${review.creator.userName}"/>
+                            <jsp:param name="contentId" value="${review.id}"/>
+                            <jsp:param name="reviewReputation" value="${review.reputation}" />
+                            <jsp:param name="contentType" value="${review.type}"/>
+                            <jsp:param name="loggedUserName" value="${userName}"/>
+                            <jsp:param name="isAdmin" value="${admin}"/>
+                        </jsp:include>
                     </c:forEach>
                       <c:choose>
                           <c:when test="${userProfile!=null}">

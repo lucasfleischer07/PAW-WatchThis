@@ -200,14 +200,16 @@ public class UserController {
         mav.addObject("quote", quote.get());
         mav.addObject("user", user);
         mav.addObject("userName",user.getUserName());
+        mav.addObject("reputationAmount",user.getReputation());
         mav.addObject("userId",user.getId());
+//        TODO: Agregar el reputationAmount
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if(auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN")))
-            mav.addObject("admin",true);
-        else
-            mav.addObject("admin",false);
+        if(auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+            mav.addObject("admin", true);
+        } else {
+            mav.addObject("admin", false);
+        }
         mav.addObject("canPromote",false);
-
 
         paginationSetup(mav,pageNum.orElse(1),rs.getAllUserReviews(user));
 
@@ -235,14 +237,13 @@ public class UserController {
         final ModelAndView mav = new ModelAndView("profileInfoPage");
         Optional<User> user = us.findByUserName(userName);
         mav.addObject("userProfile",userName);
+//        TODO: Agregar el reputationAmount
         if(user.isPresent()) {
             final String locale = LocaleContextHolder.getLocale().getDisplayLanguage();
             Optional<String> quote = cs.getContentQuote(locale);
             mav.addObject("quote", quote.get());
             mav.addObject("user", user.get());
-
             paginationSetup(mav,pageNum.orElse(1),rs.getAllUserReviews(user.get()));
-
         } else {
             LOGGER.warn("Wrong username profile request:",new PageNotFoundException());
             throw new PageNotFoundException();
@@ -257,9 +258,10 @@ public class UserController {
 
             if(auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))){
                 mav.addObject("admin",true);
-                if(!user.get().getRole().equals("admin"))
-                    mav.addObject("canPromote",true);
-            }else{
+                if(!user.get().getRole().equals("admin")) {
+                    mav.addObject("canPromote", true);
+                }
+            } else {
                 mav.addObject("admin",false);
             }
 

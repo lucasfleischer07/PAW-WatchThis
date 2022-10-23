@@ -252,4 +252,38 @@ public class ReviewController {
 
     }
 
+    // * ---------------------------------------------------------------------------------------------------------------
+
+
+    // * ---------------------------------------------Review reputation-------------------------------------------------
+    @RequestMapping(value = "/reviewReputation/thumbUp/{reviewId:[0-9]+}", method = {RequestMethod.GET})
+    public ModelAndView reviewReputationThumbUpPost(Principal userDetails, @PathVariable("reviewId")final long reviewId, HttpServletRequest request) {
+       if(us.findByEmail(userDetails.getName()).isPresent()) {
+            Review review = rs.getReview(reviewId).orElseThrow(PageNotFoundException ::new);
+            rs.thumbUpReview(review);
+        } else {
+            LOGGER.warn("Not allowed to thumb up the review",new ForbiddenException());
+            throw new ForbiddenException();
+        }
+
+        String referer = request.getHeader("Referer");
+        return new ModelAndView("redirect:"+ referer);
+    }
+
+    @RequestMapping(value = "/reviewReputation/thumbDown/{reviewId:[0-9]+}", method = {RequestMethod.GET})
+    public ModelAndView reviewReputationThumbDownPost(Principal userDetails, @PathVariable("reviewId")final long reviewId, HttpServletRequest request) {
+        if(us.findByEmail(userDetails.getName()).isPresent()){
+            Review review = rs.getReview(reviewId).orElseThrow(PageNotFoundException ::new);
+            rs.thumbDownReview(review);
+            String referer = request.getHeader("Referer");
+            return new ModelAndView("redirect:"+ referer);
+        } else {
+            LOGGER.warn("Not allowed to thumb down the review",new ForbiddenException());
+            throw new ForbiddenException();
+        }
+    }
+
+    // * ---------------------------------------------------------------------------------------------------------------
+
+
 }

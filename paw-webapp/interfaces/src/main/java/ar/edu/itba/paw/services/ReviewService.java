@@ -16,4 +16,8 @@ public interface ReviewService {
     void updateReview(String name, String description, Integer rating, Long id);
     List<Review> getAllUserReviews(User user);
     List<Review> sortReviews(User user,List<Review> reviewList);
+    void thumbUpReview(Review review);
+    void thumbDownReview(Review review);
+    Optional<Review> getReview(Long reviewId);
+
 }

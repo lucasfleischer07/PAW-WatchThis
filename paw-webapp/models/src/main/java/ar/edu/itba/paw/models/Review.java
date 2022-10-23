@@ -19,6 +19,9 @@ public class Review {
     @Column(nullable = false)
     private int rating;
 
+    @Column(nullable = false)
+    private int reputation;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userid")
     User creator;
@@ -101,5 +104,13 @@ public class Review {
 
     public void setContent(Content content) {
         this.content = content;
+    }
+
+    public int getReputation() {
+        return reputation;
+    }
+
+    public void setReputation(int reputation) {
+        this.reputation = reputation;
     }
 }

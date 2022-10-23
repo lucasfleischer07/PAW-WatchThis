@@ -12,7 +12,6 @@ public class User {
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "userdata_userid_seq")
     @SequenceGenerator(name= "userdata_userid_seq",sequenceName = "userdata_userid_seq",allocationSize = 1)
     private Long id;
-    @Column
     private Long reputation;
     @Column(unique = true,nullable = false)
     private String email;
@@ -81,6 +80,15 @@ public class User {
     }
 
     public Long getReputation() {
+        List<Review> userReviews = getUserReviews();
+        long reputation = 0L;
+        for(Review review : userReviews) {
+            reputation += (review.getReputation());
+        }
+        if(reputation == 0) {
+            return 0L;
+        }
+        reputation /= userReviews.size();
         return reputation;
     }
 

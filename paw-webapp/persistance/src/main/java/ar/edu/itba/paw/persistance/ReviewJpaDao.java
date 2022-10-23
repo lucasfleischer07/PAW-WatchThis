@@ -42,9 +42,6 @@ public class ReviewJpaDao implements ReviewDao{
         em.remove(toDelete);
         em.merge(user);
         em.merge(content);
-
-
-
     }
 
     @Override
@@ -65,4 +62,22 @@ public class ReviewJpaDao implements ReviewDao{
     public List<Review> getAllUserReviews(User user) {
         return user.getUserReviews();
     }
+
+    @Override
+    public void thumbUpReview(Review review) {
+        review.setReputation(review.getReputation() + 1);
+        em.merge(review);
+    }
+
+    @Override
+    public void thumbDownReview(Review review) {
+        review.setReputation(review.getReputation() - 1);
+        em.merge(review);
+    }
+
+    @Override
+    public Optional<Review> getReview(Long reviewId) {
+        return Optional.ofNullable(em.find(Review.class, reviewId));
+    }
+
 }

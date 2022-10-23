@@ -204,10 +204,29 @@ W-read-button {
 
 .W-thumbs-buttons-and-text {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
 }
+
+.W-movie-description-and-thumb-buttons {
+    display: flex;
+    flex-direction: row;
+}
+
+.W-column-display-thumbs {
+    margin-right: 1.5vw;
+}
+
+.W-card-width {
+    width: 100%;
+}
+
+.W-reply-button {
+    display: flex;
+    justify-content: flex-end;
+}
+
 .W-hands-style{
     height: 2vw;
     width: 2vw;

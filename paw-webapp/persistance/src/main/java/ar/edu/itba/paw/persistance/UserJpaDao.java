@@ -83,8 +83,6 @@ public class UserJpaDao implements UserDao{
         query.setParameter("userid",user.getId());
         query.setParameter("contentid",toDelete.getId());
         query.executeUpdate();
-
-
     }
 
     @Override
@@ -134,8 +132,7 @@ public class UserJpaDao implements UserDao{
 
     @Override
     public Optional<Long> searchContentInViewedList(User user, Long contentId) {
-        for (Content content:user.getViewedList()
-        ) {
+        for (Content content : user.getViewedList()) {
             if (content.getId()==contentId)
                 return Optional.of(contentId);
         };
