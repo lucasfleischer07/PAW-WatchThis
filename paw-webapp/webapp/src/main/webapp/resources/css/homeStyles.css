@@ -224,7 +224,6 @@
 }
 
 .W-movie-title {
-    color: black;
     font-size: 1.3vw;
 }
 
@@ -253,6 +252,19 @@
 
 .W-pagination-color {
     color: #212529 !important;
+}
+
+.W-card-link-style {
+    text-decoration: none;
+    color: black;
+}
+
+.W-card-link-style:hover {
+    color: #0d6efd;
+}
+
+.W-margin-one {
+    margin: 1vw;
 }
 
 .pagination {

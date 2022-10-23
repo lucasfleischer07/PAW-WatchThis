@@ -12,6 +12,10 @@
     width: 100%;
 }
 
+.CodeMirror {
+    max-height: 15vw;
+}
+
 .W-creating-content-title {
     display: flex;
     justify-content: center;
@@ -20,6 +24,10 @@
 
 .W-review-card {
     width: 60%;
+}
+
+.CodeMirror {
+    max-height: 15vw;
 }
 
 .W-input-label-review-info {
