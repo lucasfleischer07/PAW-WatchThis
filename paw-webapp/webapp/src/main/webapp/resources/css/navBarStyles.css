@@ -1,9 +1,11 @@
 .W-logo-div {
     margin-top: 1%;
+    width: 150px;
 }
 
 .W-header-height {
-    height: 9%;
+    height: 65px;
+    position: static;
 }
 
 .W-home-button-hamburger-button {
@@ -11,8 +13,8 @@
 }
 
 .W-img-size2 {
-    width:100%;
-    height:100%;
+    width: 100%;
+    height: 50px;
 }
 
 .W-navbar-hamburger-margin {
@@ -227,6 +229,7 @@
 
 .W-search-icon {
     height: 100%;
+    width: 20px;
 }
 
 .W-search-button-color {

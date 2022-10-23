@@ -37,6 +37,7 @@
     padding: 1vw;
     display: flex;
     align-items: center;
+    background-color: #b21e26;
 }
 
 .W-profile-general-div {
@@ -47,6 +48,7 @@
 .W-viewed-watch-list-general-div {
     display: inline-block;
     width: 100%;
+    margin-top: 2vw;
 }
 
 .W-editProfile-button {

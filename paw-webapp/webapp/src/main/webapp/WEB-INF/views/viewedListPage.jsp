@@ -28,35 +28,17 @@
     <jsp:param name="admin" value="${admin}"/>
 </jsp:include>
 
-<div>
-    <h2 class="W-watch-viewed-list-title"><spring:message code="ViewedList.Your"/></h2>
-</div>
+
 
 <div class="row px-4">
     <div class="W-profile-general-div-display">
         <div class="bg-white shadow rounded overflow-hidden W-viewed-watch-list-general-div">
-            <div class="W-profile-background-color bg-dark">
-                <div class="media align-items-end">
-                    <div class="profile mr-3">
-                        <div class="W-img-and-quote-div">
-                            <div>
-                                <c:choose>
-                                    <c:when test="${user.image == null}">
-                                        <img src="<c:url value="/resources/img/defaultUserImg.png"/> " alt="User_img" class="W-edit-profile-picture">
-                                    </c:when>
-                                    <c:otherwise>
-                                        <img src="<c:url value="/profile/${user.userName}/profileImage"/> " alt="User_img" class="W-edit-profile-picture">
-                                    </c:otherwise>
-                                </c:choose>
-                                <h4 class="W-username-profilepage"><c:out value="${user.userName}"/></h4>
-                            </div>
-                            <div class="W-margin-left-label-viewed-watch-list">
-                                <p class="W-quote-in-profile">${quote}</p>
-                            </div>
-                        </div>
-                    </div>
+            <div class="W-profile-background-color">
+                <div>
+                    <h2 class="W-watch-viewed-list-title"><spring:message code="ViewedList.Your"/></h2>
                 </div>
             </div>
+        </div>
             <div class="bg-light p-4 d-flex text-center">
                 <h4><spring:message code="WatchList.Titles" arguments="${viewedListContentSize}"/></h4>
             </div>
