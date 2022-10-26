@@ -81,7 +81,7 @@ public class User {
 
     public Long getReputation() {
         List<Review> userReviews = getUserReviews();
-        long reputation = 0L;
+        Long reputation = 0L;
         for(Review review : userReviews) {
             reputation += (review.getReputation());
         }

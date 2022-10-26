@@ -6,11 +6,11 @@ import javax.validation.constraints.*;
 
 public class ContentEditForm {
     @Size(min = 1, max = 100)
-    @Pattern(regexp	= "([a-zA-Z0-9ñ!,.:;=+\n\\-_()?<>$%&#@{}\\[\\]|*\"'~/`^\\s]+)?")
+    @Pattern(regexp	= "([a-zA-Z0-9ñáéíóú!,.:;=+\n\\-_()?<>$%&#@{}\\[\\]|*\"'~/`^\\s]+)?")
     private String name;
 
     @Size(min = 20, max = 500)
-    @Pattern(regexp	= "([a-zA-Z0-9ñ!,.:;=+\n\\-_()?<>$%&#@{}\\[\\]|*\"'~/`^\\s]+)?")
+    @Pattern(regexp	= "([a-zA-Z0-9ñáéíóú!,.:;=+\n\\-_()?<>$%&#@{}\\[\\]|*\"'~/`^\\s]+)?")
     private String description;
 
     private String releaseDate;

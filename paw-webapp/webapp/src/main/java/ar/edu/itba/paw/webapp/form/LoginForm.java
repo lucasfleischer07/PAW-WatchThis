@@ -14,11 +14,11 @@ public class LoginForm {
     private String email;
 
     @Size(min = 6, max = 50)
-    @Pattern(regexp	= "([a-zA-Z0-9ñ!,.:;=+\n\\-_()?<>$%&#@{}\\[\\]|*\"'~/`^\\s]+)?")
+    @Pattern(regexp	= "([a-zA-Z0-9ñáéíóú!,.:;=+\n\\-_()?<>$%&#@{}\\[\\]|*\"'~/`^\\s]+)?")
     private String password;
 
     @Size(min = 6, max = 50)
-    @Pattern(regexp	= "([a-zA-Z0-9ñ!,.:;=+\n\\-_()?<>$%&#@{}\\[\\]|*\"'~/`^\\s]+)?")
+    @Pattern(regexp	= "([a-zA-Z0-9ñáéíóú!,.:;=+\n\\-_()?<>$%&#@{}\\[\\]|*\"'~/`^\\s]+)?")
     private String confirmPassword;
 
     @AvailableUserName
