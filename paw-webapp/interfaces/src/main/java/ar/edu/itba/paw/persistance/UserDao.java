@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface UserDao {
 
-    Optional<User> create(String userEmail, String userName, String password, Long rating);
+    Optional<User> create(String userEmail, String userName, String password);
 
     Optional<User> findByEmail(String email);
     Optional<User> findById(long userId);
