@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 @Transactional
 @Service
@@ -18,6 +19,27 @@ public class ContentServiceImpl implements ContentService {
     @Autowired
     public ContentServiceImpl(final ContentDao ContentDao) {
         this.ContentDao = ContentDao;
+    }
+
+    @Override
+    public List<Content> getMasterContent(String type, String genre, String durationFrom, String durationTo, String sort,String queryUser){
+        if (!Objects.equals(genre, "ANY") && Objects.equals(durationFrom, "ANY") && Objects.equals(queryUser, "ANY")) {
+            return findByGenre(type, genre, sort);
+        } else if (Objects.equals(genre, "ANY") && !Objects.equals(durationFrom, "ANY") && Objects.equals(queryUser, "ANY")) {
+            return findByDuration(type, Integer.parseInt(durationFrom), Integer.parseInt(durationTo), sort);
+        } else if(Objects.equals(genre, "ANY") && Objects.equals(durationFrom, "ANY") && !Objects.equals(queryUser, "ANY")){
+            return getSearchedContent(type, queryUser);
+        } else if (!Objects.equals(durationFrom, "ANY") && !Objects.equals(genre, "ANY") && Objects.equals(queryUser, "ANY")) {    // Caso de que si los filtros estan vacios
+            return findByDurationAndGenre(type, genre, Integer.parseInt(durationFrom), Integer.parseInt(durationTo), sort);
+        } else if (!Objects.equals(genre, "ANY") && Objects.equals(durationFrom, "ANY") && !Objects.equals(queryUser, "ANY")) {
+            return getSearchedContentByGenre(type, genre, sort, queryUser);
+        } else if (Objects.equals(genre, "ANY") && !Objects.equals(durationFrom, "ANY") && !Objects.equals(queryUser, "ANY")) {
+            return getSearchedContentByDuration(type, Integer.parseInt(durationFrom), Integer.parseInt(durationTo), sort, queryUser);
+        } else if(!Objects.equals(genre, "ANY") && !Objects.equals(durationFrom, "ANY") && !Objects.equals(queryUser, "ANY")){
+            return getSearchedContentByDurationAndGenre(type,genre, Integer.parseInt(durationFrom), Integer.parseInt(durationTo), sort, queryUser);
+        } else{
+            return getAllContent(type, sort);
+        }
     }
 
     @Override
@@ -51,9 +73,25 @@ public class ContentServiceImpl implements ContentService {
     }
 
     @Override
-    public List<Content> getSearchedContent(String query) {
-        return ContentDao.getSearchedContent(query);
+    public List<Content> getSearchedContent(String type,String query) {
+        return ContentDao.getSearchedContent(type,query);
     }
+
+    @Override
+    public List<Content> getSearchedContentByGenre(String type, String genre, String sort,String queryUser){
+        return ContentDao.getSearchedContentByGenre(type,genre,sort,queryUser);
+    }
+
+    @Override
+    public List<Content> getSearchedContentByDuration(String type, int durationFrom, int durationTo, String sort,String queryUser){
+        return ContentDao.getSearchedContentByDuration(type,durationFrom,durationTo,sort,queryUser);
+    }
+
+    @Override
+    public List<Content> getSearchedContentByDurationAndGenre(String type, String genre, int durationFrom, int durationTo, String sort,String queryUser){
+        return ContentDao.getSearchedContentByDurationAndGenre(type,genre,durationFrom,durationTo,sort,queryUser);
+    }
+
 
     @Override
     public List<Content> getSearchedContentRandom(String query) {
@@ -115,6 +153,7 @@ public class ContentServiceImpl implements ContentService {
     public void deleteContent(Long id){
         ContentDao.deleteContent(id);
     }
+
 
 
 }

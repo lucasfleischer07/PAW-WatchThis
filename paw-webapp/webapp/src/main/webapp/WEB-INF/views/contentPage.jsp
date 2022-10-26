@@ -31,13 +31,14 @@
 
         <div class="W-column-display">
             <jsp:include page="components/filter.jsp">
+                <jsp:param name="query" value="${query}"/>
                 <jsp:param name="genre" value="${genre}"/>
                 <jsp:param name="durationFrom" value="${durationFrom}"/>
                 <jsp:param name="durationTo" value="${durationTo}"/>
                 <jsp:param name="type" value="${contentType}"/>
                 <jsp:param name="sorting" value="${sorting}"/>
             </jsp:include>
-            <c:if test="${query != null && allContent.size() > 0}">
+            <c:if test="${(query != null && query!='ANY') && allContent.size() > 0}">
                 <h3 class="W-search-context-title"><spring:message code="Search.Title" arguments="${query}"/></h3>
             </c:if>
 
@@ -84,14 +85,7 @@
         <c:if test="${amountPages > 1}">
             <div>
                 <ul class="pagination justify-content-center W-pagination">
-                    <c:choose>
-                        <c:when test="${query != null}">
-                            <c:set var = "baseUrl" scope = "session" value = "/search"/>
-                        </c:when>
-                        <c:otherwise>
-                            <c:set var = "baseUrl" scope = "session" value = "/${contentType}/filters"/>
-                        </c:otherwise>
-                    </c:choose>
+                    <c:set var = "baseUrl" scope = "session" value = "/${contentType}/filters"/>
                     <c:choose>
                         <c:when test="${pageSelected > 1}">
                             <li class="page-item">

@@ -193,37 +193,29 @@ public class ContentController {
             @RequestParam(name = "durationTo",defaultValue = "ANY",required = false)final String durationTo,
             @RequestParam(name = "genre", defaultValue = "ANY",required = false)final String genre,
             @RequestParam(name = "sorting", defaultValue = "ANY", required = false) final String sorting,
+            @RequestParam(name = "query", defaultValue = "ANY") final String query,
             HttpServletRequest request) {
 
         ModelAndView mav = null;
         int page = pageNum.orElse(1);
         String auxType = null;
 
-        if(Objects.equals(type, "movies")) {
+        if (Objects.equals(type, "movies")) {
             auxType = "movie";
-        } else if(Objects.equals(type, "series")) {
+        } else if (Objects.equals(type, "series")) {
             auxType = "serie";
         } else {
             auxType = "all";
         }
 
         mav = new ModelAndView("contentPage");
-        mav.addObject("genre",genre);
-        mav.addObject("durationFrom",durationFrom);
-        mav.addObject("durationTo",durationTo);
+        mav.addObject("genre", genre);
+        mav.addObject("durationFrom", durationFrom);
+        mav.addObject("durationTo", durationTo);
         mav.addObject("sorting", sorting);
+        mav.addObject("query", query);
 
-        List<Content> contentListFilter;
-
-        if(!Objects.equals(genre, "ANY") && Objects.equals(durationFrom, "ANY")) {
-            contentListFilter = cs.findByGenre(auxType, genre, sorting) ;
-        } else if(Objects.equals(genre, "ANY") && !Objects.equals(durationFrom, "ANY")) {
-            contentListFilter = cs.findByDuration(auxType, Integer.parseInt(durationFrom), Integer.parseInt(durationTo), sorting);
-        } else if(!Objects.equals(durationFrom, "ANY") && !Objects.equals(genre, "ANY")) {    // Caso de que si los filtros estan vacios
-            contentListFilter = cs.findByDurationAndGenre(auxType, genre, Integer.parseInt(durationFrom), Integer.parseInt(durationTo), sorting);
-        } else{
-            contentListFilter = cs.getAllContent(auxType, sorting);
-        }
+        List<Content> contentListFilter =cs.getMasterContent(type,genre,durationFrom,durationTo,sorting,query);
 
         if(contentListFilter == null) {
             LOGGER.warn("Failed at requesting content",new PageNotFoundException());

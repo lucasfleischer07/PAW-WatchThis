@@ -6,7 +6,7 @@
 
         <a class="navbar-brand" href="<c:url value="/"/>">
             <div class="W-logo-div">
-                    <img src="<c:url value="/resources/img/WatchThisLogo.png"/>" alt="WatchThisLogo" class="W-img-size2">
+                <img src="<c:url value="/resources/img/WatchThisLogo.png"/>" alt="WatchThisLogo" class="W-img-size2">
             </div>
         </a>
 
@@ -358,9 +358,19 @@
                     </c:choose>
                 </div>
                 <div class="d-flex W-navbar-search">
-                    <form class="form-inline my-2 my-lg-0 W-searchbar" method="GET" action="<c:url value="/search"/>">
+                    <form class="form-inline my-2 my-lg-0 W-searchbar" method="GET" action="<c:url value="/${param.type}/filters"/>">
                         <spring:message var="searchPlaceholder" />
-                            <input name="query" class="form-control me-2" type="search" placeholder="<spring:message code="SearchMessage"/>" aria-label="Search" >
+                        <input name="query" class="form-control me-2" type="search" placeholder="<spring:message code="SearchMessage"/>" aria-label="Search" >
+                        <c:if test="${param.genre != 'ANY' && param.genre!=null}">
+                            <input type="hidden" id="thisField" name="genre" value="${param.genre}">
+                        </c:if>
+                        <c:if test="${param.durationFrom != 'ANY' && param.durationFrom!=null}">
+                            <input type="hidden" id="thisField" name="durationFrom" value="${param.durationFrom}">
+                            <input type="hidden" id="thisField" name="durationTo" value="${param.durationTo}">
+                        </c:if>
+                        <c:if test="${param.sorting != 'ANY' && param.sorting!=null}">
+                            <input type="hidden" id="thisField" name="sorting" value="${param.sorting}">
+                        </c:if>
                         <button class="btn btn-success W-search-button-color" type="submit">
                             <svg xmlns="http://www.w3.org/2000/svg"  fill="currentColor" class="bi bi-search W-search-icon" viewBox="0 0 16 16">
                                 <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
@@ -374,7 +384,7 @@
                         <c:when test="${param.userName != 'null' && param.userName!= ''}">
                             <div class="btn-group">
                                 <button type="button" class="btn btn-dark dropdown-toggle W-border-color-user-btn" data-bs-toggle="dropdown" aria-expanded="false">
-                                    ${param.userName}
+                                        ${param.userName}
                                 </button>
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item" href="<c:url value="/profile"/>"><spring:message code="Profile"/></a></li>

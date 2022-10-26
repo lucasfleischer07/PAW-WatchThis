@@ -15,8 +15,11 @@ public interface ContentDao {
     List<Content> findByDuration(String type, int durationFrom, int durationTo, String sort);
     List<Content> findByDurationAndGenre(String type, String genre,int durationFrom, int durationTo, String sort);
     Optional<Content> findById(long id);
-    List<Content> getSearchedContent(String query);
+    List<Content> getSearchedContent(String type,String queryUser);
     List<Content> getSearchedContentRandom(String query);
+    List<Content> getSearchedContentByGenre(String type, String genre, String sort,String queryUser);
+    List<Content> getSearchedContentByDuration(String type, int durationFrom, int durationTo, String sort,String queryUser);
+    List<Content> getSearchedContentByDurationAndGenre(String type, String genre, int durationFrom, int durationTo, String sort,String queryUser);
     List<Content> findByType(String type);
     List<Content> getBestRated();
     List<Content> getUserRecommended(User user);

@@ -187,11 +187,138 @@ public class ContentJpaDao implements ContentDao{
     }
 
     @Override
-    public List<Content> getSearchedContent(String queryUser) {
-        TypedQuery<Content> query= em.createQuery("From Content WHERE (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)",Content.class);
+    public List<Content> getSearchedContent(String type,String queryUser) {
+        TypedQuery<Content> query;
+        if(Objects.equals(type, "movie") || Objects.equals(type, "serie")){
+            query= em.createQuery("From Content WHERE type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)",Content.class);
+            query.setParameter("type",type);
+        } else{
+            query= em.createQuery("From Content WHERE (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)",Content.class);
+
+        }
         query.setParameter("query","%" + queryUser.toLowerCase() + "%");
         return query.getResultList();
     }
+
+
+    @Override
+    public List<Content> getSearchedContentByGenre(String type, String genre, String sort,String queryUser) {
+        TypedQuery<Content> query= em.createQuery("From Content",Content.class);
+        if (Objects.equals(type, "movie") || Objects.equals(type, "serie")) {
+            if (Objects.equals(sort, "ANY")) {
+                query= em.createQuery("FROM Content WHERE type = :type and genre LIKE '%'|| :genre ||'%' and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)",Content.class);
+            } else if (Objects.equals(sort, "Last-released")) {
+                query= em.createQuery("FROM Content WHERE type = :type and genre LIKE '%'|| :genre ||'%' and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) ORDER BY released DESC",Content.class);
+            } else if (Objects.equals(sort, "Older-released")) {
+                query= em.createQuery("FROM Content WHERE type = :type and genre LIKE '%'|| :genre ||'%' and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) ORDER BY released ASC",Content.class);
+            } else if (Objects.equals(sort, "Best-ratings")) {
+                query= em.createQuery("FROM Content WHERE type = :type and genre LIKE '%'|| :genre ||'%' and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) ORDER BY rating DESC NULLS LAST",Content.class);
+            } else if (Objects.equals(sort, "A-Z")) {
+                query= em.createQuery("FROM Content WHERE type = :type and genre LIKE '%'|| :genre ||'%' and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) ORDER BY name ASC",Content.class);
+            } else if (Objects.equals(sort, "Z-A")) {
+                query= em.createQuery("FROM Content WHERE type = :type and genre LIKE '%'|| :genre ||'%' and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) ORDER BY name DESC",Content.class);
+            }
+            query.setParameter("type",type);
+        } else {
+            if (Objects.equals(sort, "ANY")) {
+                query= em.createQuery("FROM Content WHERE genre LIKE '%'|| :genre ||'%' and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)",Content.class);
+            } else if (Objects.equals(sort, "Last-released")) {
+                query= em.createQuery("FROM Content WHERE genre LIKE '%'|| :genre ||'%' and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) ORDER BY released DESC",Content.class);
+            } else if (Objects.equals(sort, "Older-released")) {
+                query= em.createQuery("FROM Content WHERE genre LIKE '%'|| :genre ||'%' and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) ORDER BY released ASC",Content.class);
+            } else if (Objects.equals(sort, "Best-ratings")) {
+                query= em.createQuery("FROM Content WHERE genre LIKE '%'|| :genre ||'%' and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) ORDER BY rating DESC NULLS LAST",Content.class);
+            } else if (Objects.equals(sort, "A-Z")) {
+                query= em.createQuery("FROM Content WHERE genre LIKE '%'|| :genre ||'%' and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) ORDER BY name ASC",Content.class);
+            } else if (Objects.equals(sort, "Z-A")) {
+                query= em.createQuery("FROM Content WHERE genre LIKE '%'|| :genre ||'%' and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) ORDER BY name DESC",Content.class);
+            }
+        }
+        query.setParameter("query","%" + queryUser.toLowerCase() + "%");
+        query.setParameter("genre",genre);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<Content> getSearchedContentByDuration(String type, int durationFrom, int durationTo, String sort,String queryUser) {
+        TypedQuery<Content> query= em.createQuery("From Content",Content.class);
+        if(!Objects.equals(type, "all")) {
+            if (Objects.equals(sort, "ANY")) {
+                query = em.createQuery("FROM Content WHERE durationnum > :durationFrom  AND durationnum <= :durationTo AND type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)",Content.class);
+            } else if (Objects.equals(sort, "Last-released")) {
+                query = em.createQuery("FROM Content WHERE durationnum > :durationFrom  AND durationnum <= :durationTo AND type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) ORDER BY released DESC",Content.class);
+            } else if (Objects.equals(sort, "Older-released")) {
+                query = em.createQuery("FROM Content WHERE durationnum > :durationFrom  AND durationnum <= :durationTo AND type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) ORDER BY released ASC",Content.class);
+            } else if (Objects.equals(sort, "Best-ratings")) {
+                query = em.createQuery("FROM Content WHERE durationnum > :durationFrom  AND durationnum <= :durationTo AND type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) ORDER BY rating DESC NULLS LAST",Content.class);
+            } else if (Objects.equals(sort, "A-Z")) {
+                query = em.createQuery("FROM Content WHERE durationnum > :durationFrom  AND durationnum <= :durationTo AND type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) ORDER BY name ASC",Content.class);
+            } else if (Objects.equals(sort, "Z-A")) {
+                query = em.createQuery("FROM Content WHERE durationnum > :durationFrom  AND durationnum <= :durationTo AND type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) ORDER BY name DESC",Content.class);
+            }
+            query.setParameter("type",type);
+        } else {
+            if (Objects.equals(sort, "ANY")) {
+                query = em.createQuery("FROM Content WHERE durationnum > :durationFrom  AND durationnum <= :durationTo",Content.class);
+            } else if (Objects.equals(sort, "Last-released")) {
+                query = em.createQuery("FROM Content WHERE durationnum > :durationFrom  AND durationnum <= :durationTo and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) ORDER BY released DESC",Content.class);
+            } else if (Objects.equals(sort, "Older-released")) {
+                query = em.createQuery("FROM Content WHERE durationnum > :durationFrom  AND durationnum <= :durationTo and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) ORDER BY released ASC",Content.class);
+            } else if (Objects.equals(sort, "Best-ratings")) {
+                query = em.createQuery("FROM Content WHERE durationnum > :durationFrom  AND durationnum <= :durationTo and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) ORDER BY rating DESC NULLS LAST",Content.class);
+            } else if (Objects.equals(sort, "A-Z")) {
+                query = em.createQuery("FROM Content WHERE durationnum > :durationFrom  AND durationnum <= :durationTo and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) ORDER BY name ASC",Content.class);
+            } else if (Objects.equals(sort, "Z-A")) {
+                query = em.createQuery("FROM Content WHERE durationnum > :durationFrom  AND durationnum <= :durationTo and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) ORDER BY name DESC",Content.class);
+            }
+        }
+        query.setParameter("query","%" + queryUser.toLowerCase() + "%");
+        query.setParameter("durationFrom",durationFrom);
+        query.setParameter("durationTo",durationTo);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<Content> getSearchedContentByDurationAndGenre(String type, String genre, int durationFrom, int durationTo, String sort,String queryUser) {
+        TypedQuery<Content> query= em.createQuery("From Content",Content.class);
+        if (Objects.equals(type, "movie") || Objects.equals(type, "serie")) {
+            if (Objects.equals(sort, "ANY")) {
+                query= em.createQuery("FROM Content WHERE type = :type and genre LIKE '%'|| :genre ||'%' and durationnum > :durationFrom  AND durationnum <= :durationTo and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)",Content.class);
+            } else if (Objects.equals(sort, "Last-released")) {
+                query= em.createQuery("FROM Content WHERE type = :type and genre LIKE '%'|| :genre ||'%' and durationnum > :durationFrom  AND durationnum <= :durationTo and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) ORDER BY released DESC",Content.class);
+            } else if (Objects.equals(sort, "Older-released")) {
+                query= em.createQuery("FROM Content WHERE type = :type and genre LIKE '%'|| :genre ||'%' and durationnum > :durationFrom  AND durationnum <= :durationTo and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) ORDER BY released ASC",Content.class);
+            } else if (Objects.equals(sort, "Best-ratings")) {
+                query= em.createQuery("FROM Content WHERE type = :type and genre LIKE '%'|| :genre ||'%' and durationnum > :durationFrom  AND durationnum <= :durationTo and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) ORDER BY rating DESC NULLS LAST",Content.class);
+            } else if (Objects.equals(sort, "A-Z")) {
+                query= em.createQuery("FROM Content WHERE type = :type and genre LIKE '%'|| :genre ||'%' and durationnum > :durationFrom  AND durationnum <= :durationTo and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) ORDER BY name ASC",Content.class);
+            } else if (Objects.equals(sort, "Z-A")) {
+                query= em.createQuery("FROM Content WHERE type = :type and genre LIKE '%'|| :genre ||'%' and durationnum > :durationFrom  AND durationnum <= :durationTo and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) ORDER BY name DESC",Content.class);
+            }
+            query.setParameter("type",type);
+        } else {
+            if (Objects.equals(sort, "ANY")) {
+                query= em.createQuery("FROM Content WHERE genre LIKE '%'|| :genre ||'%' and durationnum > :durationFrom  AND durationnum <= :durationTo and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) ",Content.class);
+            } else if (Objects.equals(sort, "Last-released")) {
+                query= em.createQuery("FROM Content WHERE genre LIKE '%'|| :genre ||'%' and durationnum > :durationFrom  AND durationnum <= :durationTo and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) ORDER BY released DESC",Content.class);
+            } else if (Objects.equals(sort, "Older-released")) {
+                query= em.createQuery("FROM Content WHERE genre LIKE '%'|| :genre ||'%' and durationnum > :durationFrom  AND durationnum <= :durationTo and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) ORDER BY released ASC",Content.class);
+            } else if (Objects.equals(sort, "Best-ratings")) {
+                query= em.createQuery("FROM Content WHERE genre LIKE '%'|| :genre ||'%' and durationnum > :durationFrom  AND durationnum <= :durationTo and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) ORDER BY rating DESC NULLS LAST",Content.class);
+            } else if (Objects.equals(sort, "A-Z")) {
+                query= em.createQuery("FROM Content WHERE genre LIKE '%'|| :genre ||'%' and durationnum > :durationFrom  AND durationnum <= :durationTo and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) ORDER BY name ASC",Content.class);
+            } else if (Objects.equals(sort, "Z-A")) {
+                query= em.createQuery("FROM Content WHERE genre LIKE '%'|| :genre ||'%' and durationnum > :durationFrom  AND durationnum <= :durationTo and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) ORDER BY name DESC",Content.class);
+            }
+        }
+        query.setParameter("query","%" + queryUser.toLowerCase() + "%");
+        query.setParameter("genre",genre);
+        query.setParameter("durationFrom",durationFrom);
+        query.setParameter("durationTo",durationTo);
+        return query.getResultList();
+    }
+
+
 
     @Override
     public List<Content> getSearchedContentRandom(String queryUser) {
