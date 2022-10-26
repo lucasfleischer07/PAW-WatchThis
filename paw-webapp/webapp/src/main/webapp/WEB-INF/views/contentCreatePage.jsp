@@ -26,7 +26,14 @@
             <jsp:param name="userId" value="${userId}"/>
             <jsp:param name="admin" value="${admin}"/>
         </jsp:include>
-        <h3 class="W-creating-content-title"><spring:message code="CreateContent.Title"/></h3>
+        <c:choose>
+            <c:when test="${create == true}">
+                <h3 class="W-creating-content-title"><spring:message code="CreateContent.Title"/></h3>
+            </c:when>
+            <c:otherwise>
+                <h3 class="W-creating-content-title"><spring:message code="EditContent.Title"/></h3>
+            </c:otherwise>
+        </c:choose>
         <c:url value="/content/editInfo/${contentId}" var="postPath"/>
         <c:choose>
             <c:when test="${create==true}">

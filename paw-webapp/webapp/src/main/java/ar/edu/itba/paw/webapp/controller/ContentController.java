@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -242,14 +243,6 @@ public class ContentController {
         return mav;
     }
 
-    @RequestMapping(value = "/content/create",method = {RequestMethod.GET})
-    public ModelAndView createContent(Principal userDetails,@ModelAttribute("contentCreate") final ContentForm contentForm) {
-        final ModelAndView mav = new ModelAndView("contentCreatePage");
-        mav.addObject("create",true);
-        HeaderSetUp(mav,userDetails);
-        return mav;
-    }
-
 
     // * ----------------------------------- Get img from database -----------------------------------------------------
     @RequestMapping(path = "/contentImage/{contentId:[0-9]+}", method = RequestMethod.GET, produces = {MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
@@ -319,13 +312,14 @@ public class ContentController {
     }
 
     @RequestMapping(value = "/content/editInfo/{contentId:[0-9]+}", method = {RequestMethod.POST})
-    public ModelAndView editContent(Principal userDetails, @Valid @ModelAttribute("contentEditForm") final ContentEditForm contentEditForm, @PathVariable("contentId")final long contentId, final BindingResult errors) throws  IOException {
+    public ModelAndView editContent(Principal userDetails, @Valid @ModelAttribute("contentEditForm") final ContentEditForm contentEditForm, @PathVariable("contentId")final long contentId, final BindingResult errors, HttpServletRequest request) throws  IOException {
         if(errors.hasErrors()) {
             return editContent(userDetails, contentEditForm,contentId);
         }
         Content oldContent = cs.findById(contentId).orElseThrow(PageNotFoundException::new);
         cs.updateContent(contentId,contentEditForm.getName(), contentEditForm.getDescription(), contentEditForm.getReleaseDate(), contentEditForm.getGenre(), contentEditForm.getCreator(), contentEditForm.getDuration(), contentEditForm.getType(),contentEditForm.getContentPicture().getBytes());
-        return new ModelAndView("redirect:/");
+        String referer = request.getSession().getAttribute("referer").toString();
+        return new ModelAndView("redirect:" + (referer==null?"/":referer));
     }
 
     // * ----------------------------------- Content Delete ----------------------------------------------------------
@@ -339,6 +333,14 @@ public class ContentController {
 
 
     // * ----------------------------------- Content Creation ----------------------------------------------------------
+    @RequestMapping(value = "/content/create",method = {RequestMethod.GET})
+    public ModelAndView createContent(Principal userDetails,@ModelAttribute("contentCreate") final ContentForm contentForm) {
+        final ModelAndView mav = new ModelAndView("contentCreatePage");
+        mav.addObject("create",true);
+        HeaderSetUp(mav,userDetails);
+        return mav;
+    }
+
     @RequestMapping(value = "/content/create",method = {RequestMethod.POST})
     public ModelAndView createContent(Principal userDetails,@Valid @ModelAttribute("contentCreate") final ContentForm contentForm, final BindingResult errors) throws IOException {
         if(errors.hasErrors()) {
