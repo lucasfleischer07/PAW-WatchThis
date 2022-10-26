@@ -53,13 +53,13 @@ public class UserServiceImpl implements UserService{
         this.passwordEncoder = passwordEncoder;
     }
     @Override
-    public Optional<User> register(User user) {
+    public Optional<User> register(String userEmail, String userName, String password) {
         try {
             Map<String, Object> mailVariables = new HashMap<>();
-            mailVariables.put("to", user.getEmail());
-            mailVariables.put("userName", user.getUserName());
+            mailVariables.put("to", userEmail);
+            mailVariables.put("userName", userName);
             emailService.sendMail("registration", messageSource.getMessage("Mail.RegistrationSubject", new Object[]{}, locale), mailVariables, locale);
-            return userDao.create(user.getEmail(), user.getUserName(),passwordEncoder.encode(user.getPassword()), user.getReputation());
+            return userDao.create(userEmail, userName,passwordEncoder.encode(password));
         } catch (MessagingException e) {}
         return Optional.empty();
     }

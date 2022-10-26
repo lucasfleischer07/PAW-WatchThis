@@ -51,7 +51,7 @@ public class UserJdbcDaoTest {
     @Test
     @Rollback
     public void testCreate(){
-        final Optional<User> maybeUser= dao.create(EMAIL,NAME,PASSWORD,0L);
+        final Optional<User> maybeUser= dao.create(EMAIL,NAME,PASSWORD);
         assertTrue(maybeUser.isPresent());
         assertEquals(PASSWORD, maybeUser.get().getPassword());
         assertEquals(NAME, maybeUser.get().getUserName());

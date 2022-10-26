@@ -21,7 +21,7 @@ public class UserJpaDao implements UserDao{
     private EntityManager em;
 
     @Override
-    public Optional<User> create(String userEmail, String userName, String password, Long rating) {
+    public Optional<User> create(String userEmail, String userName, String password) {
         final User user = new User(userName,userEmail,password);
         em.persist(user);
         return Optional.of(user);

@@ -172,9 +172,7 @@ public class UserController {
                 errors.rejectValue("confirmPassword","EditProfile.NotSamePassword");
                 return LoginSingUp(userDetails, loginForm, loginStage);
             }
-
-            User newUser = new User(null, loginForm.getEmail(), loginForm.getUsername(), loginForm.getPassword(), 0L, null,"user");
-            us.register(newUser);
+            us.register( loginForm.getEmail(), loginForm.getUsername(), loginForm.getPassword());
             LOGGER.info("Registered a new user with email");
             us.authWithAuthManager(request, loginForm.getEmail(), loginForm.getPassword(), authenticationManager);
         } else {
