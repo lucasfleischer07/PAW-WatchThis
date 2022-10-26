@@ -234,6 +234,7 @@ public class UserController {
         }
         final ModelAndView mav = new ModelAndView("profileInfoPage");
         Optional<User> user = us.findByUserName(userName);
+        mav.addObject("reputationAmount",user.get().getReputation());
         mav.addObject("userProfile",userName);
 //        TODO: Agregar el reputationAmount
         if(user.isPresent()) {
