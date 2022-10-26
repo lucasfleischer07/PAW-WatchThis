@@ -309,7 +309,8 @@ public class ContentController {
             return createContent(userDetails,contentForm);
         }
         cs.contentCreate(contentForm.getName(),contentForm.getDescription(),contentForm.getReleaseDate(),contentForm.getGenre(),contentForm.getCreator(),contentForm.getDuration(),contentForm.getType(),contentForm.getContentPicture().getBytes());
-        return new ModelAndView("redirect:/");
+        Optional<Content> newContent = cs.findByName(contentForm.getName());
+        return new ModelAndView("redirect:/" + newContent.get().getType() + "/" + newContent.get().getId());
     }
     // * ---------------------------------------------------------------------------------------------------------------
 

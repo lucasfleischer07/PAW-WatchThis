@@ -168,8 +168,6 @@ public class UserController {
             return LoginSingUp(userDetails, loginForm, loginStage);
         }
         if(Objects.equals(loginStage, "sign-up")) {
-            Optional<User> existUserEmail = us.findByEmail(loginForm.getEmail());
-            Optional<User> existUserName = us.findByUserName(loginForm.getUsername());
             if(!Objects.equals(loginForm.getPassword(), loginForm.getConfirmPassword())) {
                 errors.rejectValue("confirmPassword","EditProfile.NotSamePassword");
                 return LoginSingUp(userDetails, loginForm, loginStage);
