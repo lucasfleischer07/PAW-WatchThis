@@ -29,7 +29,7 @@
             <jsp:param name="admin" value="${admin}"/>
         </jsp:include>
 
-        <div class="W-column-display">
+        <hr class="W-column-display">
             <jsp:include page="components/filter.jsp">
                 <jsp:param name="query" value="${query}"/>
                 <jsp:param name="genre" value="${genre}"/>
@@ -38,9 +38,11 @@
                 <jsp:param name="type" value="${contentType}"/>
                 <jsp:param name="sorting" value="${sorting}"/>
             </jsp:include>
-            <c:if test="${(query != null || query != '') && (genre == '' || durationFrom == 'ANY') && allContent.size() > 0}">
+
+            <c:if test="${(query != null && query != '' && query != 'ANY') && (genre == '' || durationFrom == 'ANY') && allContent.size() > 0}">
                 <h3 class="W-search-context-title"><spring:message code="Search.Title" arguments="${query}"/></h3>
             </c:if>
+
 
             <div class="W-films-div">
                 <div class="row row-cols-1 row-cols-md-2 g-2 W-content-alignment">

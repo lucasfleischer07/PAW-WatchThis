@@ -228,12 +228,12 @@ public class ContentController {
                     genreFilterDao = genreFilterDao + " genre LIKE '%'|| '" + genreFilterForm.getGenre()[i] + "' ||'%'";
                 }
             }
-        } else if(genreFilterForm.getGenre().length == 1) {
+        }  else if(genreFilterForm.getGenre().length == 1) {
             genreFilter = genreFilterForm.getGenre()[0];
             genreFilterDao = "'%'|| '" + genreFilterForm.getGenre()[0] + "' ||'%'";
         } else {
             genreFilter = "ANY";
-            genreFilterDao = "'%'|| " + " " + " ||'%'";
+            genreFilterDao = "'%'|| '' ||'%'";
         }
 
         mav = new ModelAndView("contentPage");
@@ -308,7 +308,8 @@ public class ContentController {
     public ModelAndView editContent(Principal userDetails,
                                     @Valid @ModelAttribute("contentEditForm") final ContentEditForm contentEditForm,
                                     @PathVariable("contentId")final long contentId,
-                                    final BindingResult errors) throws  IOException {
+                                    final BindingResult errors,
+                                    HttpServletRequest request) throws  IOException {
         if(errors.hasErrors()) {
             return editContent(userDetails, contentEditForm,contentId);
         }
