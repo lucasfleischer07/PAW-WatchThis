@@ -63,7 +63,7 @@
                 </c:when>
                 <c:otherwise>
                     <div class="W-films-div">
-                        <div class="row row-cols-1 row-cols-md-2 g-2">
+                        <div class="row row-cols-1 row-cols-md-2 g-2 W-content-alignment">
                             <c:forEach var="content" items="${viewedListContent}">
                                 <jsp:include page="components/contentCard.jsp">
                                     <jsp:param name="contentName" value="${content.name}"/>

@@ -112,7 +112,10 @@ public class UserController {
 
     // * ----------------------------------- Login ---------------------------------------------------------------------
     @RequestMapping(value = "/login/{loginStage:sign-in}", method = {RequestMethod.GET})
-    public ModelAndView loginSignIn(Principal userDetails, HttpServletRequest request, @PathVariable("loginStage") final String loginStage, @RequestParam(value = "error",required = false) Optional<Boolean> error) {
+    public ModelAndView loginSignIn(Principal userDetails,
+                                    HttpServletRequest request,
+                                    @PathVariable("loginStage") final String loginStage,
+                                    @RequestParam(value = "error",required = false) Optional<Boolean> error) {
         final ModelAndView mav = new ModelAndView("logInPage");
         mav.addObject("loginStage", loginStage);
         HeaderSetUp(mav,userDetails);
@@ -126,7 +129,8 @@ public class UserController {
 
 
     @RequestMapping(value = "/login/forgot-password", method = {RequestMethod.GET})
-    public ModelAndView LoginForgotPassword(Principal userDetails, @ModelAttribute("forgotPasswordForm") final ForgotPasswordForm loginForm) {
+    public ModelAndView LoginForgotPassword(Principal userDetails,
+                                            @ModelAttribute("forgotPasswordForm") final ForgotPasswordForm loginForm) {
         final ModelAndView mav = new ModelAndView("logInPage");
         mav.addObject("loginStage", "forgot-password");
         HeaderSetUp(mav,userDetails);
@@ -134,7 +138,10 @@ public class UserController {
     }
 
     @RequestMapping(value = "/login/forgot-password", method = {RequestMethod.POST})
-    public ModelAndView LoginForgotPassword(Principal userDetails, @Valid @ModelAttribute("forgotPasswordForm") final ForgotPasswordForm forgotPasswordForm, final BindingResult errors, RedirectAttributes redirectAttributes, HttpServletRequest request) {
+    public ModelAndView LoginForgotPassword(Principal userDetails,
+                                            @Valid @ModelAttribute("forgotPasswordForm") final ForgotPasswordForm forgotPasswordForm, final BindingResult errors,
+                                            RedirectAttributes redirectAttributes,
+                                            HttpServletRequest request) {
         if(errors.hasErrors()) {
             return LoginForgotPassword(userDetails, forgotPasswordForm);
         }
@@ -151,7 +158,9 @@ public class UserController {
     }
 
     @RequestMapping(value = "/login/{loginStage:sign-up}", method = {RequestMethod.GET})
-    public ModelAndView LoginSingUp(Principal userDetails, @ModelAttribute("loginForm") final LoginForm loginForm, @PathVariable("loginStage") final String loginStage) {
+    public ModelAndView LoginSingUp(Principal userDetails,
+                                    @ModelAttribute("loginForm") final LoginForm loginForm,
+                                    @PathVariable("loginStage") final String loginStage) {
         if(!Objects.equals(loginStage, "sign-up") && !Objects.equals(loginStage, "forgot-password") && !Objects.equals(loginStage, "sign-out")) {
             LOGGER.warn("Wrong login path:",new PageNotFoundException());
             throw new PageNotFoundException();
@@ -163,7 +172,11 @@ public class UserController {
     }
 
     @RequestMapping(value = "/login/{loginStage:sign-up|sign-out}", method = {RequestMethod.POST})
-    public ModelAndView LoginSingUp(Principal userDetails, @Valid @ModelAttribute("loginForm") final LoginForm loginForm, final BindingResult errors, RedirectAttributes redirectAttributes, @PathVariable("loginStage") final String loginStage, HttpServletRequest request) {
+    public ModelAndView LoginSingUp(Principal userDetails,
+                                    @Valid @ModelAttribute("loginForm") final LoginForm loginForm,
+                                    final BindingResult errors, RedirectAttributes redirectAttributes,
+                                    @PathVariable("loginStage") final String loginStage,
+                                    HttpServletRequest request) {
         if(errors.hasErrors()) {
             return LoginSingUp(userDetails, loginForm, loginStage);
         }
@@ -187,7 +200,9 @@ public class UserController {
 
     // * ------------------------------------------------Profile View --------------------------------------------------
     @RequestMapping(value={"/profile","/profile/page/{pageNum:[0-9]+}"})
-    public ModelAndView profile(Principal userDetails,@PathVariable("pageNum")final Optional<Integer> pageNum,HttpServletRequest request) {
+    public ModelAndView profile(Principal userDetails,
+                                @PathVariable("pageNum")final Optional<Integer> pageNum,
+                                HttpServletRequest request) {
         final String locale = LocaleContextHolder.getLocale().getDisplayLanguage();
         final ModelAndView mav = new ModelAndView("profileInfoPage");
         String userEmail = userDetails.getName();
@@ -198,7 +213,6 @@ public class UserController {
         mav.addObject("userName",user.getUserName());
         mav.addObject("reputationAmount",user.getReputation());
         mav.addObject("userId",user.getId());
-//        TODO: Agregar el reputationAmount
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if(auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
             mav.addObject("admin", true);
@@ -225,7 +239,10 @@ public class UserController {
     }
 
     @RequestMapping(value = {"/profile/{userName:[a-zA-Z0-9\\s]+}","/profile/{userName:[a-zA-Z0-9\\s]+}/page/{pageNum:[0-9]+}"},method = {RequestMethod.GET})
-    public ModelAndView profileInfo(Principal userDetails, @PathVariable("userName") final String userName,@PathVariable("pageNum")final Optional<Integer> pageNum,HttpServletRequest request) {
+    public ModelAndView profileInfo(Principal userDetails,
+                                    @PathVariable("userName") final String userName,
+                                    @PathVariable("pageNum")final Optional<Integer> pageNum,
+                                    HttpServletRequest request) {
         if(userName==null || userName==""){
             LOGGER.warn("Wrong username photo request:",new PageNotFoundException());
             throw new PageNotFoundException();
@@ -272,7 +289,9 @@ public class UserController {
     }
 
     @RequestMapping(value = "/profile/{userName:[a-zA-Z0-9\\s]+}",method = {RequestMethod.POST})
-    public ModelAndView profileInfo(@Valid @ModelAttribute("editProfile") final EditProfile editProfile, @PathVariable("userName") final String userName,final BindingResult errors) {
+    public ModelAndView profileInfo(@Valid @ModelAttribute("editProfile") final EditProfile editProfile,
+                                    @PathVariable("userName") final String userName,
+                                    final BindingResult errors) {
         Optional<User> user = us.findByUserName(userName);
         if(user.isPresent())
             us.promoteUser(user.get());
@@ -288,7 +307,8 @@ public class UserController {
 
 
     @RequestMapping(value = "/profile/editProfile", method = {RequestMethod.GET})
-    public ModelAndView profileEdition(Principal userDetails, @Valid @ModelAttribute("editProfile") final EditProfile editProfile) {
+    public ModelAndView profileEdition(Principal userDetails,
+                                       @Valid @ModelAttribute("editProfile") final EditProfile editProfile) {
         String userEmail = userDetails.getName();
         User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
         final ModelAndView mav = new ModelAndView("profileEditionPage");
@@ -305,7 +325,9 @@ public class UserController {
     }
 
     @RequestMapping(value = "/profile/editProfile", method = {RequestMethod.POST})
-    public ModelAndView profileEditionPost(Principal userDetails,@Valid @ModelAttribute("editProfile") final EditProfile editProfile, final BindingResult errors) throws IOException {
+    public ModelAndView profileEditionPost(Principal userDetails,
+                                           @Valid @ModelAttribute("editProfile") final EditProfile editProfile,
+                                           final BindingResult errors) throws IOException {
         String userEmail = userDetails.getName();
         User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
 
@@ -346,7 +368,9 @@ public class UserController {
     // * ------------------------------------------------User Watch List------------------------------------------------
 
     @RequestMapping(value = {"/profile/watchList","/profile/watchList/page/{pageNum:[0-9]+}"}, method = {RequestMethod.GET})
-    public ModelAndView watchList(Principal userDetails,@PathVariable("pageNum")final Optional<Integer> pageNum,HttpServletRequest request) {
+    public ModelAndView watchList(Principal userDetails,
+                                  @PathVariable("pageNum")final Optional<Integer> pageNum,
+                                  HttpServletRequest request) {
         String userEmail = userDetails.getName();
         final String locale = LocaleContextHolder.getLocale().getDisplayLanguage();
         User user = us.findByEmail(userEmail).orElseThrow(ServerErrorException::new);
@@ -372,7 +396,9 @@ public class UserController {
     }
 
     @RequestMapping(value = "/watchList/add/{contentId:[0-9]+}", method = {RequestMethod.POST})
-    public ModelAndView watchListAddPost(Principal userDetails, @PathVariable("contentId") final Optional<Long> contentId, HttpServletRequest request) {
+    public ModelAndView watchListAddPost(Principal userDetails,
+                                         @PathVariable("contentId") final Optional<Long> contentId,
+                                         HttpServletRequest request) {
         if(!contentId.isPresent()) {
             LOGGER.warn("Wrong contentID:",new PageNotFoundException());
             throw new PageNotFoundException();
@@ -394,7 +420,9 @@ public class UserController {
     }
 
     @RequestMapping(value = "/watchList/delete/{contentId:[0-9]+}", method = {RequestMethod.POST})
-    public ModelAndView watchListDeletePost(Principal userDetails, @PathVariable("contentId") final Optional<Long> contentId, HttpServletRequest request) {
+    public ModelAndView watchListDeletePost(Principal userDetails,
+                                            @PathVariable("contentId") final Optional<Long> contentId,
+                                            HttpServletRequest request) {
         if(!contentId.isPresent()) {
             LOGGER.warn("No content Specified:",new PageNotFoundException());
             throw new PageNotFoundException();
@@ -422,10 +450,10 @@ public class UserController {
 
 
     // * ------------------------------------------------User Viewed List------------------------------------------------
-
-
     @RequestMapping(value = {"/profile/viewedList","/profile/viewedList/page/{pageNum:[0-9]+}"}, method = {RequestMethod.GET})
-    public ModelAndView viewedList(Principal userDetails,@PathVariable("pageNum")final Optional<Integer> pageNum,HttpServletRequest request) {
+    public ModelAndView viewedList(Principal userDetails,
+                                   @PathVariable("pageNum")final Optional<Integer> pageNum,
+                                   HttpServletRequest request) {
         String userEmail = userDetails.getName();
         final String locale = LocaleContextHolder.getLocale().getDisplayLanguage();
         User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
@@ -451,7 +479,9 @@ public class UserController {
     }
 
     @RequestMapping(value = "/viewedList/add/{contentId:[0-9]+}", method = {RequestMethod.POST})
-    public ModelAndView viewedListAddPost(Principal userDetails, @PathVariable("contentId") final Optional<Long> contentId, HttpServletRequest request) {
+    public ModelAndView viewedListAddPost(Principal userDetails,
+                                          @PathVariable("contentId") final Optional<Long> contentId,
+                                          HttpServletRequest request) {
         if(!contentId.isPresent()) {
             throw new PageNotFoundException();
         }
@@ -466,7 +496,9 @@ public class UserController {
     }
 
     @RequestMapping(value = "/viewedList/delete/{contentId:[0-9]+}", method = {RequestMethod.POST})
-    public ModelAndView viewedListDeletePost(Principal userDetails, @PathVariable("contentId") final Optional<Long> contentId, HttpServletRequest request) {
+    public ModelAndView viewedListDeletePost(Principal userDetails,
+                                             @PathVariable("contentId") final Optional<Long> contentId,
+                                             HttpServletRequest request) {
         if(!contentId.isPresent()) {
             throw new PageNotFoundException();
         }

@@ -68,39 +68,86 @@ public class ContentJpaDao implements ContentDao{
 
     @Override
     public List<Content> findByGenre(String type, String genre, String sort) {
-        TypedQuery<Content> query= em.createQuery("From Content",Content.class);
+        Query inQuery = null;
+
         if (Objects.equals(type, "movie") || Objects.equals(type, "serie")) {
             if (Objects.equals(sort, "ANY")) {
-                query= em.createQuery("FROM Content WHERE type = :type and genre LIKE '%'|| :genre ||'%'",Content.class);
+                String sql = "SELECT id FROM content WHERE type = " + type +" genre LIKE " + genre;
+                inQuery= em.createNativeQuery(sql);
+//                inQuery= em.createNativeQuery("SELECT id FROM content WHERE type = :type AND genre LIKE :genre");
             } else if (Objects.equals(sort, "Last-released")) {
-                query= em.createQuery("FROM Content WHERE type = :type and genre LIKE '%'|| :genre ||'%' ORDER BY released DESC",Content.class);
+                String sql = "SELECT id FROM content WHERE type = " + type +" genre LIKE " + genre + " ORDER BY released DESC";
+                inQuery= em.createNativeQuery(sql);
+//                inQuery= em.createQuery("FROM Content WHERE type = :type and genre LIKE :genre ORDER BY released DESC",Content.class);
+//                inQuery= em.createNativeQuery("SELECT id FROM content WHERE type = :type AND genre LIKE :genre ORDER BY released DESC");
             } else if (Objects.equals(sort, "Older-released")) {
-                query= em.createQuery("FROM Content WHERE type = :type and genre LIKE '%'|| :genre ||'%' ORDER BY released ASC",Content.class);
+                String sql = "SELECT id FROM content WHERE type = " + type +" genre LIKE " + genre + " ORDER BY released ASC";
+                inQuery= em.createNativeQuery(sql);
+//                inQuery= em.createQuery("FROM Content WHERE type = :type and genre LIKE :genre ORDER BY released ASC",Content.class);
+//                inQuery= em.createNativeQuery("SELECT id FROM content WHERE type = :type AND genre LIKE :genre ORDER BY released ASC");
             } else if (Objects.equals(sort, "Best-ratings")) {
-                query= em.createQuery("FROM Content WHERE type = :type and genre LIKE '%'|| :genre ||'%' ORDER BY rating DESC NULLS LAST",Content.class);
+                String sql = "SELECT id FROM content WHERE type = " + type +" genre LIKE " + genre + " ORDER BY rating DESC NULLS LAST";
+                inQuery= em.createNativeQuery(sql);
+//                inQuery= em.createQuery("FROM Content WHERE type = :type and genre LIKE :genre ORDER BY rating DESC NULLS LAST",Content.class);
+//                inQuery= em.createNativeQuery("SELECT id FROM content WHERE type = :type AND genre LIKE :genre ORDER BY rating DESC NULLS LAST");
             } else if (Objects.equals(sort, "A-Z")) {
-                query= em.createQuery("FROM Content WHERE type = :type and genre LIKE '%'|| :genre ||'%' ORDER BY name ASC",Content.class);
+                String sql = "SELECT id FROM content WHERE type = " + type +" genre LIKE " + genre + " ORDER BY name ASC";
+                inQuery= em.createNativeQuery(sql);
+//                inQuery= em.createQuery("FROM Content WHERE type = :type and genre LIKE :genre ORDER BY name ASC",Content.class);
+//                inQuery= em.createNativeQuery("SELECT id FROM content WHERE type = :type AND genre LIKE :genre ORDER BY name ASC");
             } else if (Objects.equals(sort, "Z-A")) {
-                query= em.createQuery("FROM Content WHERE type = :type and genre LIKE '%'|| :genre ||'%' ORDER BY name DESC",Content.class);
+                String sql = "SELECT id FROM content WHERE type = " + type +" genre LIKE " + genre + " ORDER BY name DESC";
+                inQuery= em.createNativeQuery(sql);
+//                inQuery= em.createQuery("FROM Content WHERE type = :type and genre LIKE :genre ORDER BY name DESC",Content.class);
+//                inQuery= em.createNativeQuery("SELECT id FROM content WHERE type = :type AND genre LIKE :genre ORDER BY name DESC");
             }
-            query.setParameter("type",type);
+//            inQuery.setParameter("type",type);
+//            inQuery.setParameter("genre",genre);
         } else {
             if (Objects.equals(sort, "ANY")) {
-                query= em.createQuery("FROM Content WHERE genre LIKE '%'|| :genre ||'%'",Content.class);
+//                inQuery= em.createQuery("FROM Content WHERE genre LIKE :genre",Content.class);
+                String sql = "SELECT id FROM content WHERE genre LIKE " + genre;
+                inQuery= em.createNativeQuery(sql);
             } else if (Objects.equals(sort, "Last-released")) {
-                query= em.createQuery("FROM Content WHERE genre LIKE '%'|| :genre ||'%' ORDER BY released DESC",Content.class);
+                String sql = "SELECT id FROM content WHERE genre LIKE " + genre + " ORDER BY released DESC";
+                inQuery= em.createNativeQuery(sql);
+//                inQuery= em.createQuery("FROM Content WHERE genre LIKE :genre ORDER BY released DESC",Content.class);
+//                inQuery= em.createNativeQuery("SELECT id FROM content WHERE genre LIKE :genre ORDER BY released DESC");
             } else if (Objects.equals(sort, "Older-released")) {
-                query= em.createQuery("FROM Content WHERE genre LIKE '%'|| :genre ||'%' ORDER BY released ASC",Content.class);
+                String sql = "SELECT id FROM content WHERE genre LIKE " + genre + " ORDER BY released ASC";
+                inQuery= em.createNativeQuery(sql);
+//                inQuery= em.createQuery("FROM Content WHERE genre LIKE :genre ORDER BY released ASC",Content.class);
+//                inQuery= em.createNativeQuery("SELECT id FROM content WHERE genre LIKE :genre ORDER BY released ASC");
             } else if (Objects.equals(sort, "Best-ratings")) {
-                query= em.createQuery("FROM Content WHERE genre LIKE '%'|| :genre ||'%' ORDER BY rating DESC NULLS LAST",Content.class);
+                String sql = "SELECT id FROM content WHERE genre LIKE " + genre + " ORDER BY rating DESC NULLS LAST";
+                inQuery= em.createNativeQuery(sql);
+//                inQuery= em.createQuery("FROM Content WHERE genre LIKE :genre ORDER BY rating DESC NULLS LAST",Content.class);
+//                inQuery= em.createNativeQuery("SELECT id FROM content WHERE genre LIKE :genre ORDER BY rating DESC NULLS LAST");
             } else if (Objects.equals(sort, "A-Z")) {
-                query= em.createQuery("FROM Content WHERE genre LIKE '%'|| :genre ||'%' ORDER BY name ASC",Content.class);
+                String sql = "SELECT id FROM content WHERE genre LIKE " + genre + " ORDER BY name ASC";
+                inQuery= em.createNativeQuery(sql);
+//                inQuery= em.createQuery("FROM Content WHERE genre LIKE :genre ORDER BY name ASC",Content.class);
+//                inQuery= em.createNativeQuery("SELECT id FROM content WHERE genre LIKE :genre ORDER BY name ASC");
+
             } else if (Objects.equals(sort, "Z-A")) {
-                query= em.createQuery("FROM Content WHERE genre LIKE '%'|| :genre ||'%' ORDER BY name DESC",Content.class);
+                String sql = "SELECT id FROM content WHERE genre LIKE " + genre + " ORDER BY name DESC";
+                inQuery= em.createNativeQuery(sql);
+//                inQuery= em.createQuery("FROM Content WHERE genre LIKE :genre ORDER BY name DESC",Content.class);
+//                inQuery= em.createNativeQuery("SELECT id FROM content WHERE genre LIKE :genre ORDER BY name DESC");
             }
         }
-        query.setParameter("genre",genre);
+
+        List<Integer> resulList = inQuery.getResultList();
+        List<Long> longList = new ArrayList<>();
+        for (Integer big:resulList) {
+            longList.add(big.longValue());
+        }
+        TypedQuery<Content> query= em.createQuery(" FROM Content WHERE id IN ( :resultList ) ",Content.class);
+        query.setParameter("resultList",longList);
         return query.getResultList();
+
+//        query.setParameter("genre",genre);
+//        return query.getResultList();
     }
 
     @Override
@@ -143,41 +190,75 @@ public class ContentJpaDao implements ContentDao{
 
     @Override
     public List<Content> findByDurationAndGenre(String type, String genre, int durationFrom, int durationTo, String sort) {
-        TypedQuery<Content> query= em.createQuery("From Content",Content.class);
+        Query inQuery = null;
+
         if (Objects.equals(type, "movie") || Objects.equals(type, "serie")) {
             if (Objects.equals(sort, "ANY")) {
-                query= em.createQuery("FROM Content WHERE type = :type and genre LIKE '%'|| :genre ||'%' and durationnum > :durationFrom  AND durationnum <= :durationTo",Content.class);
+                String sql = "SELECT id FROM content WHERE type = " + type +" genre LIKE " + genre + " AND durationnum > " + durationFrom + " AND durationnum <= " + durationTo;
+                inQuery= em.createNativeQuery(sql);
+//                query= em.createQuery("FROM Content WHERE type = :type and genre LIKE :genre and durationnum > :durationFrom  AND durationnum <= :durationTo",Content.class);
             } else if (Objects.equals(sort, "Last-released")) {
-                query= em.createQuery("FROM Content WHERE type = :type and genre LIKE '%'|| :genre ||'%' and durationnum > :durationFrom  AND durationnum <= :durationTo ORDER BY released DESC",Content.class);
+                String sql = "SELECT id FROM content WHERE type = " + type +" genre LIKE " + genre + " AND durationnum > " + durationFrom + " AND durationnum <= " + durationTo + " ORDER BY released DESC";
+                inQuery= em.createNativeQuery(sql);
+//                query= em.createQuery("FROM Content WHERE type = :type and genre LIKE :genre and durationnum > :durationFrom  AND durationnum <= :durationTo ORDER BY released DESC",Content.class);
             } else if (Objects.equals(sort, "Older-released")) {
-                query= em.createQuery("FROM Content WHERE type = :type and genre LIKE '%'|| :genre ||'%' and durationnum > :durationFrom  AND durationnum <= :durationTo ORDER BY released ASC",Content.class);
+                String sql = "SELECT id FROM content WHERE type = " + type +" genre LIKE " + genre + " AND durationnum > " + durationFrom + " AND durationnum <= " + durationTo + " ORDER BY released ASC";
+                inQuery= em.createNativeQuery(sql);
+//                query= em.createQuery("FROM Content WHERE type = :type and genre LIKE :genre and durationnum > :durationFrom  AND durationnum <= :durationTo ORDER BY released ASC",Content.class);
             } else if (Objects.equals(sort, "Best-ratings")) {
-                query= em.createQuery("FROM Content WHERE type = :type and genre LIKE '%'|| :genre ||'%' and durationnum > :durationFrom  AND durationnum <= :durationTo ORDER BY rating DESC NULLS LAST",Content.class);
+                String sql = "SELECT id FROM content WHERE type = " + type +" genre LIKE " + genre + " AND durationnum > " + durationFrom + " AND durationnum <= " + durationTo + " ORDER BY rating DESC NULLS LAST";
+                inQuery= em.createNativeQuery(sql);
+//                query= em.createQuery("FROM Content WHERE type = :type and genre LIKE :genre and durationnum > :durationFrom  AND durationnum <= :durationTo ORDER BY rating DESC NULLS LAST",Content.class);
             } else if (Objects.equals(sort, "A-Z")) {
-                query= em.createQuery("FROM Content WHERE type = :type and genre LIKE '%'|| :genre ||'%' and durationnum > :durationFrom  AND durationnum <= :durationTo ORDER BY name ASC",Content.class);
+                String sql = "SELECT id FROM content WHERE type = " + type +" genre LIKE " + genre + " AND durationnum > " + durationFrom + " AND durationnum <= " + durationTo + " ORDER BY name ASC";
+                inQuery= em.createNativeQuery(sql);
+//                query= em.createQuery("FROM Content WHERE type = :type and genre LIKE :genre and durationnum > :durationFrom  AND durationnum <= :durationTo ORDER BY name ASC",Content.class);
             } else if (Objects.equals(sort, "Z-A")) {
-                query= em.createQuery("FROM Content WHERE type = :type and genre LIKE '%'|| :genre ||'%' and durationnum > :durationFrom  AND durationnum <= :durationTo ORDER BY name DESC",Content.class);
+                String sql = "SELECT id FROM content WHERE type = " + type +" genre LIKE " + genre + " AND durationnum > " + durationFrom + " AND durationnum <= " + durationTo + " ORDER BY name ASC";
+                inQuery= em.createNativeQuery(sql);
+//                query= em.createQuery("FROM Content WHERE type = :type and genre LIKE :genre and durationnum > :durationFrom  AND durationnum <= :durationTo ORDER BY name DESC",Content.class);
             }
-            query.setParameter("type",type);
+//            query.setParameter("type",type);
         } else {
             if (Objects.equals(sort, "ANY")) {
-                query= em.createQuery("FROM Content WHERE genre LIKE '%'|| :genre ||'%' and durationnum > :durationFrom  AND durationnum <= :durationTo ",Content.class);
+                String sql = "SELECT id FROM content WHERE genre LIKE " + genre + " AND durationnum > " + durationFrom + " AND durationnum <= " + durationTo;
+                inQuery= em.createNativeQuery(sql);
+//                query= em.createQuery("FROM Content WHERE genre LIKE :genre and durationnum > :durationFrom  AND durationnum <= :durationTo ",Content.class);
             } else if (Objects.equals(sort, "Last-released")) {
-                query= em.createQuery("FROM Content WHERE genre LIKE '%'|| :genre ||'%' and durationnum > :durationFrom  AND durationnum <= :durationTo ORDER BY released DESC",Content.class);
+                String sql = "SELECT id FROM content WHERE genre LIKE " + genre + " AND durationnum > " + durationFrom + " AND durationnum <= " + durationTo + " ORDER BY released DESC";
+                inQuery= em.createNativeQuery(sql);
+//                query= em.createQuery("FROM Content WHERE genre LIKE :genre and durationnum > :durationFrom  AND durationnum <= :durationTo ORDER BY released DESC",Content.class);
             } else if (Objects.equals(sort, "Older-released")) {
-                query= em.createQuery("FROM Content WHERE genre LIKE '%'|| :genre ||'%' and durationnum > :durationFrom  AND durationnum <= :durationTo ORDER BY released ASC",Content.class);
+                String sql = "SELECT id FROM content WHERE genre LIKE " + genre + " AND durationnum > " + durationFrom + " AND durationnum <= " + durationTo + " ORDER BY released ASC";
+                inQuery= em.createNativeQuery(sql);
+//                query= em.createQuery("FROM Content WHERE genre LIKE :genre and durationnum > :durationFrom  AND durationnum <= :durationTo ORDER BY released ASC",Content.class);
             } else if (Objects.equals(sort, "Best-ratings")) {
-                query= em.createQuery("FROM Content WHERE genre LIKE '%'|| :genre ||'%' and durationnum > :durationFrom  AND durationnum <= :durationTo ORDER BY rating DESC NULLS LAST",Content.class);
+                String sql = "SELECT id FROM content WHERE genre LIKE " + genre + " AND durationnum > " + durationFrom + " AND durationnum <= " + durationTo + " ORDER BY rating DESC NULLS LAST";
+                inQuery= em.createNativeQuery(sql);
+//                query= em.createQuery("FROM Content WHERE genre LIKE :genre and durationnum > :durationFrom  AND durationnum <= :durationTo ORDER BY rating DESC NULLS LAST",Content.class);
             } else if (Objects.equals(sort, "A-Z")) {
-                query= em.createQuery("FROM Content WHERE genre LIKE '%'|| :genre ||'%' and durationnum > :durationFrom  AND durationnum <= :durationTo ORDER BY name ASC",Content.class);
+                String sql = "SELECT id FROM content WHERE genre LIKE " + genre + " AND durationnum > " + durationFrom + " AND durationnum <= " + durationTo + " ORDER BY name ASC";
+                inQuery= em.createNativeQuery(sql);
+//                query= em.createQuery("FROM Content WHERE genre LIKE :genre and durationnum > :durationFrom  AND durationnum <= :durationTo ORDER BY name ASC",Content.class);
             } else if (Objects.equals(sort, "Z-A")) {
-                query= em.createQuery("FROM Content WHERE genre LIKE '%'|| :genre ||'%' and durationnum > :durationFrom  AND durationnum <= :durationTo ORDER BY name DESC",Content.class);
+                String sql = "SELECT id FROM content WHERE genre LIKE " + genre + " AND durationnum > " + durationFrom + " AND durationnum <= " + durationTo + " ORDER BY name DESC";
+                inQuery= em.createNativeQuery(sql);
+//                query= em.createQuery("FROM Content WHERE genre LIKE :genre and durationnum > :durationFrom  AND durationnum <= :durationTo ORDER BY name DESC",Content.class);
             }
         }
-        query.setParameter("genre",genre);
-        query.setParameter("durationFrom",durationFrom);
-        query.setParameter("durationTo",durationTo);
+
+        List<Integer> resulList = inQuery.getResultList();
+        List<Long> longList = new ArrayList<>();
+        for (Integer big:resulList) {
+            longList.add(big.longValue());
+        }
+        TypedQuery<Content> query= em.createQuery(" FROM Content WHERE id IN ( :resultList ) ",Content.class);
+        query.setParameter("resultList",longList);
         return query.getResultList();
+//        query.setParameter("genre",genre);
+//        query.setParameter("durationFrom",durationFrom);
+//        query.setParameter("durationTo",durationTo);
+//        return query.getResultList();
     }
 
     @Override

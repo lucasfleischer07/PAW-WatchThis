@@ -64,7 +64,11 @@ public class ReviewController {
 
     // * ----------------------------------- Movies and Series Info page -----------------------------------------------
     @RequestMapping(value={"/{type:movie|serie}/{contentId:[0-9]+}","/{type:movie|serie}/{contentId:[0-9]+}/page/{pageNum:[0-9]+}"})
-    public ModelAndView reviews(Principal userDetails, @PathVariable("contentId")final long contentId, @PathVariable("type") final String type,@PathVariable("pageNum")final Optional<Integer> pageNum,HttpServletRequest request) {
+    public ModelAndView reviews(Principal userDetails,
+                                @PathVariable("contentId")final long contentId,
+                                @PathVariable("type") final String type,
+                                @PathVariable("pageNum")final Optional<Integer> pageNum,
+                                HttpServletRequest request) {
         final ModelAndView mav = new ModelAndView("infoPage");
         Content content=cs.findById(contentId).orElseThrow(PageNotFoundException::new);
         mav.addObject("details", content);
@@ -118,7 +122,10 @@ public class ReviewController {
 
     // * ----------------------------------- Movies and Series Review Creation------------------------------------------
     @RequestMapping(value = "/reviewForm/{type:movie|serie}/{id:[0-9]+}/{userId:[0-9]+}", method = {RequestMethod.GET})
-    public ModelAndView reviewFormCreate(Principal userDetails, @ModelAttribute("registerForm") final ReviewForm reviewForm, @PathVariable("id")final long id, @PathVariable("type")final String type) {
+    public ModelAndView reviewFormCreate(Principal userDetails,
+                                         @ModelAttribute("registerForm") final ReviewForm reviewForm,
+                                         @PathVariable("id")final long id,
+                                         @PathVariable("type")final String type) {
         final ModelAndView mav = new ModelAndView("reviewRegistrationPage");
         mav.addObject("details", cs.findById(id).orElseThrow(PageNotFoundException::new));
         if(userDetails != null) {
@@ -140,7 +147,13 @@ public class ReviewController {
     }
 
     @RequestMapping(value = "/reviewForm/{type:movie|serie}/{id:[0-9]+}/{userId:[0-9]+}", method = {RequestMethod.POST})
-    public ModelAndView reviewFormMovie(Principal userDetails, @Valid @ModelAttribute("registerForm") final ReviewForm form, final BindingResult errors, @PathVariable("id")final long id, @PathVariable("type")final String type, @PathVariable("userId")final long userId,HttpServletRequest request) {
+    public ModelAndView reviewFormMovie(Principal userDetails,
+                                        @Valid @ModelAttribute("registerForm") final ReviewForm form,
+                                        final BindingResult errors,
+                                        @PathVariable("id")final long id,
+                                        @PathVariable("type")final String type,
+                                        @PathVariable("userId")final long userId,
+                                        HttpServletRequest request) {
         if(errors.hasErrors()) {
             return reviewFormCreate(userDetails,form,id,type);
         }
@@ -185,7 +198,12 @@ public class ReviewController {
 
 
     @RequestMapping(value = "/reviewForm/edit/{type:movie|serie}/{contentId:[0-9]+}/{reviewId:[0-9]+}", method = {RequestMethod.GET})
-    public ModelAndView reviewFormEdition(Principal userDetails, @ModelAttribute("registerForm") final ReviewForm reviewForm, @PathVariable("contentId")final long contentId, @PathVariable("reviewId")final long reviewId, @PathVariable("type")final String type, HttpServletRequest request) {
+    public ModelAndView reviewFormEdition(Principal userDetails,
+                                          @ModelAttribute("registerForm") final ReviewForm reviewForm,
+                                          @PathVariable("contentId")final long contentId,
+                                          @PathVariable("reviewId")final long reviewId,
+                                          @PathVariable("type")final String type,
+                                          HttpServletRequest request) {
         final ModelAndView mav = new ModelAndView("reviewEditionPage");
         mav.addObject("details", cs.findById(contentId).orElseThrow(PageNotFoundException::new));
         Optional<Review> oldReview = rs.findById(reviewId);
@@ -226,7 +244,12 @@ public class ReviewController {
     }
 
     @RequestMapping(value = "/reviewForm/edit/{type:movie|serie}/{contentId:[0-9]+}/{reviewId:[0-9]+}", method = {RequestMethod.POST})
-    public ModelAndView reviewFormEditionPost(Principal userDetails, @Valid @ModelAttribute("registerForm") final ReviewForm form, final BindingResult errors, @PathVariable("type")final String type, @PathVariable("contentId")final long contentId, @PathVariable("reviewId")final long reviewId, HttpServletRequest request) {
+    public ModelAndView reviewFormEditionPost(Principal userDetails,
+                                              @Valid @ModelAttribute("registerForm") final ReviewForm form,
+                                              final BindingResult errors, @PathVariable("type")final String type,
+                                              @PathVariable("contentId")final long contentId,
+                                              @PathVariable("reviewId")final long reviewId,
+                                              HttpServletRequest request) {
         if(errors.hasErrors()) {
             return reviewFormEdition(userDetails,form,contentId,reviewId,type,request);
         }
@@ -257,7 +280,9 @@ public class ReviewController {
 
     // * ---------------------------------------------Review reputation-------------------------------------------------
     @RequestMapping(value = "/reviewReputation/thumbUp/{reviewId:[0-9]+}", method = {RequestMethod.GET})
-    public ModelAndView reviewReputationThumbUpPost(Principal userDetails, @PathVariable("reviewId")final long reviewId, HttpServletRequest request) {
+    public ModelAndView reviewReputationThumbUpPost(Principal userDetails,
+                                                    @PathVariable("reviewId")final long reviewId,
+                                                    HttpServletRequest request) {
        if(us.findByEmail(userDetails.getName()).isPresent()) {
             Review review = rs.getReview(reviewId).orElseThrow(PageNotFoundException ::new);
             rs.thumbUpReview(review);
@@ -271,7 +296,9 @@ public class ReviewController {
     }
 
     @RequestMapping(value = "/reviewReputation/thumbDown/{reviewId:[0-9]+}", method = {RequestMethod.GET})
-    public ModelAndView reviewReputationThumbDownPost(Principal userDetails, @PathVariable("reviewId")final long reviewId, HttpServletRequest request) {
+    public ModelAndView reviewReputationThumbDownPost(Principal userDetails,
+                                                      @PathVariable("reviewId")final long reviewId,
+                                                      HttpServletRequest request) {
         if(us.findByEmail(userDetails.getName()).isPresent()){
             Review review = rs.getReview(reviewId).orElseThrow(PageNotFoundException ::new);
             rs.thumbDownReview(review);

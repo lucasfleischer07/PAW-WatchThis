@@ -69,7 +69,7 @@ public class ContentJdbcDaoTest {
 
     @Test
     public void testFindByGenreTest(){
-        List<Content> contentList=dao.findByGenre("all","Animation","ANY");
+        List<Content> contentList=dao.findByGenre("all"," '%'|| " + "Animation" + " ||'%'","ANY");
         assertEquals(2, contentList.size());
     }
 

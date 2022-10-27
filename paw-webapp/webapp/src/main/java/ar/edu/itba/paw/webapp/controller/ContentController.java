@@ -8,6 +8,7 @@ import ar.edu.itba.paw.services.UserService;
 import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
 import ar.edu.itba.paw.webapp.form.ContentForm;
 import ar.edu.itba.paw.webapp.form.ContentEditForm;
+import ar.edu.itba.paw.webapp.form.GenreFilterForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,7 +77,11 @@ public class ContentController {
 
     // * ----------------------------------- Home Page -----------------------------------------------------------------
     @RequestMapping(value= {"/","page/{pageNum}"})
-    public ModelAndView helloWorld(Principal userDetails, @PathVariable("pageNum")final Optional<Integer> pageNum, @RequestParam(name = "query", defaultValue = "") final String query, HttpServletRequest request) {
+    public ModelAndView helloWorld(Principal userDetails,
+                                   @ModelAttribute("genreFilterForm") final GenreFilterForm genreFilterForm,
+                                   @PathVariable("pageNum")final Optional<Integer> pageNum,
+                                   @RequestParam(name = "query", defaultValue = "") final String query,
+                                   HttpServletRequest request) {
         final ModelAndView mav = new ModelAndView("homePage");
         List<Content> bestRatedList = cs.getBestRated();
         List<Content> lastAddedList = cs.getLastAdded();
@@ -144,7 +149,11 @@ public class ContentController {
 
     // * ----------------------------------- Movie and Series division -------------------------------------------------
     @RequestMapping(value= {"/{type:movies|series}","/{type:movies|series}/page/{pageNum}"})
-    public ModelAndView contentType(Principal userDetails, @PathVariable("type") final String type,@PathVariable("pageNum")final Optional<Integer> pageNum,HttpServletRequest request) {
+    public ModelAndView contentType(Principal userDetails,
+                                    @ModelAttribute("genreFilterForm") final GenreFilterForm genreFilterForm,
+                                    @PathVariable("type") final String type,
+                                    @PathVariable("pageNum")final Optional<Integer> pageNum,
+                                    HttpServletRequest request) {
         String auxType = null;
         final ModelAndView mav = new ModelAndView("contentPage");
         if(Objects.equals(type, "movies")) {
@@ -158,7 +167,6 @@ public class ContentController {
             LOGGER.warn("Failed at requesting content",new PageNotFoundException());
             throw new PageNotFoundException();
         } else {
-
             List<Content> contentListPaginated = ps.contentPagination(contentList, page);
             mav.addObject("allContent", contentListPaginated);
             if(Objects.equals(type, "movies") || Objects.equals(type, "series")){
@@ -187,11 +195,11 @@ public class ContentController {
     @RequestMapping(value = {"/{type:movies|series|all}/filters" , "/{type:movies|series|all}/filters/page/{pageNum}"})
     public ModelAndView moviesWithFilters(
             Principal userDetails,
+            @ModelAttribute("genreFilterForm") final GenreFilterForm genreFilterForm,
             @PathVariable("type") final String type,
             @PathVariable("pageNum")final Optional<Integer> pageNum,
             @RequestParam(name = "durationFrom",defaultValue = "ANY",required = false)final String durationFrom,
             @RequestParam(name = "durationTo",defaultValue = "ANY",required = false)final String durationTo,
-            @RequestParam(name = "genre", defaultValue = "ANY",required = false)final String genre,
             @RequestParam(name = "sorting", defaultValue = "ANY", required = false) final String sorting,
             @RequestParam(name = "query", defaultValue = "ANY") final String query,
             HttpServletRequest request) {
@@ -199,6 +207,8 @@ public class ContentController {
         ModelAndView mav = null;
         int page = pageNum.orElse(1);
         String auxType = null;
+        String genreFilter = "";
+        String genreFilterDao = "";
 
         if (Objects.equals(type, "movies")) {
             auxType = "movie";
@@ -207,15 +217,33 @@ public class ContentController {
         } else {
             auxType = "all";
         }
+        if(genreFilterForm.getGenre().length > 1) {
+            for(int i = 0; i < genreFilterForm.getGenre().length; i++) {
+                genreFilter = genreFilter + genreFilterForm.getGenre()[i] + " ";
+                if(i == 0) {
+                    genreFilterDao = "'%'|| '" + genreFilterForm.getGenre()[i] + "' ||'%' OR";
+                } else if(i != genreFilterForm.getGenre().length - 1) {
+                    genreFilterDao = genreFilterDao + " genre LIKE '%'|| '" + genreFilterForm.getGenre()[i] + "' ||'%' OR";
+                } else {
+                    genreFilterDao = genreFilterDao + " genre LIKE '%'|| '" + genreFilterForm.getGenre()[i] + "' ||'%'";
+                }
+            }
+        } else if(genreFilterForm.getGenre().length == 1) {
+            genreFilter = genreFilterForm.getGenre()[0];
+            genreFilterDao = "'%'|| '" + genreFilterForm.getGenre()[0] + "' ||'%'";
+        } else {
+            genreFilter = "ANY";
+            genreFilterDao = "'%'|| " + " " + " ||'%'";
+        }
 
         mav = new ModelAndView("contentPage");
-        mav.addObject("genre", genre);
-        mav.addObject("durationFrom", durationFrom);
-        mav.addObject("durationTo", durationTo);
+        mav.addObject("genre", genreFilter);
+        mav.addObject("durationFrom",durationFrom);
+        mav.addObject("durationTo",durationTo);
         mav.addObject("sorting", sorting);
         mav.addObject("query", query);
 
-        List<Content> contentListFilter =cs.getMasterContent(type,genre,durationFrom,durationTo,sorting,query);
+        List<Content> contentListFilter =cs.getMasterContent(type,genreFilterDao,durationFrom,durationTo,sorting,query);
 
         if(contentListFilter == null) {
             LOGGER.warn("Failed at requesting content",new PageNotFoundException());
@@ -230,6 +258,7 @@ public class ContentController {
             mav.addObject("contentType", type);
         }
 
+        mav.addObject("query", "");
         HeaderSetUp(mav,userDetails);
         request.getSession().setAttribute("referer","/"+type+"/filters");
         return mav;
@@ -253,7 +282,9 @@ public class ContentController {
 
 // * ----------------------------Content editing-----------------------------------------------------------------------------
     @RequestMapping(value = "/content/editInfo/{contentId:[0-9]+}", method = {RequestMethod.GET})
-    public ModelAndView editContent(Principal userDetails, @ModelAttribute("contentEditForm") final ContentEditForm contentEditForm, @PathVariable("contentId")final long contentId){
+    public ModelAndView editContent(Principal userDetails,
+                                    @ModelAttribute("contentEditForm") final ContentEditForm contentEditForm,
+                                    @PathVariable("contentId")final long contentId) {
         final ModelAndView mav = new ModelAndView("contentCreatePage");
         Optional<Content> oldContent = cs.findById(contentId);
         if(!oldContent.isPresent()){
@@ -264,7 +295,7 @@ public class ContentController {
         contentEditForm.setName(oldContent.get().getName());
         contentEditForm.setCreator(oldContent.get().getCreator());
         contentEditForm.setDescription(oldContent.get().getDescription());
-        //Para obteener la duracion en minutos
+        //Para obtener la duracion en minutos
         contentEditForm.setDuration(transformDate(oldContent.get().getDuration()));
         contentEditForm.setGenre(oldContent.get().getGenre());
         contentEditForm.setReleaseDate(oldContent.get().getReleased());
@@ -274,7 +305,10 @@ public class ContentController {
     }
 
     @RequestMapping(value = "/content/editInfo/{contentId:[0-9]+}", method = {RequestMethod.POST})
-    public ModelAndView editContent(Principal userDetails, @Valid @ModelAttribute("contentEditForm") final ContentEditForm contentEditForm, @PathVariable("contentId")final long contentId, final BindingResult errors, HttpServletRequest request) throws  IOException {
+    public ModelAndView editContent(Principal userDetails,
+                                    @Valid @ModelAttribute("contentEditForm") final ContentEditForm contentEditForm,
+                                    @PathVariable("contentId")final long contentId,
+                                    final BindingResult errors) throws  IOException {
         if(errors.hasErrors()) {
             return editContent(userDetails, contentEditForm,contentId);
         }
@@ -287,7 +321,8 @@ public class ContentController {
     // * ----------------------------------- Content Delete ----------------------------------------------------------
 
     @RequestMapping(value = "/content/{contentId:[0-9]+}/delete", method = {RequestMethod.POST})
-    public ModelAndView deleteContent(Principal userDetails, @PathVariable("contentId")final long contentId){
+    public ModelAndView deleteContent(Principal userDetails,
+                                      @PathVariable("contentId")final long contentId){
         Content oldContent = cs.findById(contentId).orElseThrow(PageNotFoundException::new);
         cs.deleteContent(contentId);
         return new ModelAndView("redirect:/");
@@ -304,7 +339,9 @@ public class ContentController {
     }
 
     @RequestMapping(value = "/content/create",method = {RequestMethod.POST})
-    public ModelAndView createContent(Principal userDetails,@Valid @ModelAttribute("contentCreate") final ContentForm contentForm, final BindingResult errors) throws IOException {
+    public ModelAndView createContent(Principal userDetails,
+                                      @Valid @ModelAttribute("contentCreate") final ContentForm contentForm,
+                                      final BindingResult errors) throws IOException {
         if(errors.hasErrors()) {
             return createContent(userDetails,contentForm);
         }

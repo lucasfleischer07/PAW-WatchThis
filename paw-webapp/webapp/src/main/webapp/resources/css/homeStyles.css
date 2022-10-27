@@ -24,6 +24,7 @@
 }
 
 .W-content-alignment {
+    display: flex;
     justify-content: center;
 }
 
@@ -70,6 +71,13 @@
     margin-top: 1vw;
     margin-right: 4vw;
     margin-bottom: 1vw;
+}
+
+.W-apply-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1vw;
 }
 
 .W-dropdown-button-genre-duration-sort {
@@ -304,7 +312,7 @@
     margin-left: 15vw;
 }
 .W-not-found-message{
-    word-break: break-all;
+    word-break: break-word;
     font-size: 2vw;
 }
 

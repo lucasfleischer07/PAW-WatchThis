@@ -38,7 +38,7 @@
                 <jsp:param name="type" value="${contentType}"/>
                 <jsp:param name="sorting" value="${sorting}"/>
             </jsp:include>
-            <c:if test="${(query != null && query!='ANY') && allContent.size() > 0}">
+            <c:if test="${(query != null || query != '') && (genre == '' || durationFrom == 'ANY') && allContent.size() > 0}">
                 <h3 class="W-search-context-title"><spring:message code="Search.Title" arguments="${query}"/></h3>
             </c:if>
 
@@ -70,7 +70,14 @@
                         </div>
                         <div class="W-search-notFound-text">
                             <div>
-                                <p class="W-not-found-message"><spring:message code="Content.NoContent" arguments="${query}"/></p>
+                                <c:choose>
+                                    <c:when test="${(query == null || query == '') && (genre != '' || durationFrom != 'ANY')}">
+                                        <p class="W-not-found-message"><spring:message code="Content.NoContent.Filters"/></p>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <p class="W-not-found-message"><spring:message code="Content.NoContent" arguments="${query}"/></p>
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
                             <div>
                                 <h5 class="W-search-notFound-text2"><a href="<c:url value="/"/>"><spring:message code="WatchList.Recomendation"/></a></h5>
