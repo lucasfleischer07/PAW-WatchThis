@@ -41,7 +41,7 @@
                     </li>
 
                     <li class="mb-1 px-2">
-                        <label><form:checkbox cssClass="px-2" path="genre" value="Science"/> <spring:message code="Genre.Science"/></label>
+                        <label><form:checkbox cssClass="px-2" path="genre" value="Sci-Fi"/> <spring:message code="Genre.Science"/></label>
                     </li>
 
                     <li class="mb-1 px-2">
