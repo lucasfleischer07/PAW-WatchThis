@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ContentService {
-    List<Content> getMasterContent(String type, String genre, String durationFrom, String durationTo, String sort,String queryUser);
+    List<Content> getMasterContent(String type, List<String> genres, String durationFrom, String durationTo, String sort,String queryUser);
     List<Content> getAllContent(String type, String sort);
     Optional<Content> findByName(String name);
     List<Content> findByGenre(String type, String genre, String sort);
@@ -29,4 +29,5 @@ public interface ContentService {
     Optional<String> getContentQuote(String language);
     void updateContent(Long id,String name, String description, String releaseDate, String genre, String creator, Integer duration, String type,byte[] contentImage);
     void deleteContent(Long id);
+    String getGenreString(List<String> genres);
 }

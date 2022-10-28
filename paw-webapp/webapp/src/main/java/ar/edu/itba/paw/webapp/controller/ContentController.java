@@ -9,6 +9,7 @@ import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
 import ar.edu.itba.paw.webapp.form.ContentForm;
 import ar.edu.itba.paw.webapp.form.ContentEditForm;
 import ar.edu.itba.paw.webapp.form.GenreFilterForm;
+import com.sun.corba.se.impl.oa.toa.TOA;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -202,13 +203,13 @@ public class ContentController {
             @RequestParam(name = "durationTo",defaultValue = "ANY",required = false)final String durationTo,
             @RequestParam(name = "sorting", defaultValue = "ANY", required = false) final String sorting,
             @RequestParam(name = "query", defaultValue = "ANY") final String query,
+            @RequestParam(name = "genre",required = false)final List<String> genre,
             HttpServletRequest request) {
 
         ModelAndView mav = null;
         int page = pageNum.orElse(1);
         String auxType = null;
-        String genreFilter = "";
-        String genreFilterDao = "";
+
 
         if (Objects.equals(type, "movies")) {
             auxType = "movie";
@@ -217,33 +218,17 @@ public class ContentController {
         } else {
             auxType = "all";
         }
-        if(genreFilterForm.getGenre().length > 1) {
-            for(int i = 0; i < genreFilterForm.getGenre().length; i++) {
-                genreFilter = genreFilter + genreFilterForm.getGenre()[i] + " ";
-                if(i == 0) {
-                    genreFilterDao = "'%'|| '" + genreFilterForm.getGenre()[i] + "' ||'%' OR";
-                } else if(i != genreFilterForm.getGenre().length - 1) {
-                    genreFilterDao = genreFilterDao + " genre LIKE '%'|| '" + genreFilterForm.getGenre()[i] + "' ||'%' OR";
-                } else {
-                    genreFilterDao = genreFilterDao + " genre LIKE '%'|| '" + genreFilterForm.getGenre()[i] + "' ||'%'";
-                }
-            }
-        }  else if(genreFilterForm.getGenre().length == 1) {
-            genreFilter = genreFilterForm.getGenre()[0];
-            genreFilterDao = "'%'|| '" + genreFilterForm.getGenre()[0] + "' ||'%'";
-        } else {
-            genreFilter = "ANY";
-            genreFilterDao = "'%'|| '' ||'%'";
+
+
+
+
+        List<String> genreList = genreFilterForm.getFormGenre() != null ? Arrays.asList(genreFilterForm.getFormGenre()) : genre;
+        if(genreList!=null){
+            genreFilterForm.setFormGenre(genreList.toArray(new String[0]));
         }
+        List<Content> contentListFilter =cs.getMasterContent(auxType,genreList,durationFrom,durationTo,sorting,query);
 
         mav = new ModelAndView("contentPage");
-        mav.addObject("genre", genreFilter);
-        mav.addObject("durationFrom",durationFrom);
-        mav.addObject("durationTo",durationTo);
-        mav.addObject("sorting", sorting);
-        mav.addObject("query", query);
-
-        List<Content> contentListFilter =cs.getMasterContent(type,genreFilterDao,durationFrom,durationTo,sorting,query);
 
         if(contentListFilter == null) {
             LOGGER.warn("Failed at requesting content",new PageNotFoundException());
@@ -258,7 +243,11 @@ public class ContentController {
             mav.addObject("contentType", type);
         }
 
-        mav.addObject("query", "");
+        mav.addObject("genre", cs.getGenreString(genreList));
+        mav.addObject("durationFrom",durationFrom);
+        mav.addObject("durationTo",durationTo);
+        mav.addObject("sorting", sorting);
+        mav.addObject("query", query);
         HeaderSetUp(mav,userDetails);
         request.getSession().setAttribute("referer","/"+type+"/filters");
         return mav;

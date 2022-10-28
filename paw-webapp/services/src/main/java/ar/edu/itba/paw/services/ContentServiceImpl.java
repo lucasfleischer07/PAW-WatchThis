@@ -21,8 +21,30 @@ public class ContentServiceImpl implements ContentService {
         this.ContentDao = ContentDao;
     }
 
+    private String getGenreQuery(List<String> genreList){
+        String genreFilterDao = "";
+
+        if(genreList!=null && genreList.size() > 1) {
+            for(int i = 0; i < genreList.size(); i++) {
+                if(i == 0) {
+                    genreFilterDao = "'%'|| '" + genreList.get(i) + "' ||'%' OR";
+                } else if(i != genreList.size() - 1) {
+                    genreFilterDao = genreFilterDao + " genre LIKE '%'|| '" + genreList.get(i) + "' ||'%' OR";
+                } else {
+                    genreFilterDao = genreFilterDao + " genre LIKE '%'|| '" + genreList.get(i) + "' ||'%'";
+                }
+            }
+        } else if(genreList!=null && genreList.size() == 1) {
+            genreFilterDao = "'%'|| '" + genreList.get(0) + "' ||'%'";
+        } else {
+            genreFilterDao = "ANY";
+        }
+        return genreFilterDao;
+    }
+
     @Override
-    public List<Content> getMasterContent(String type, String genre, String durationFrom, String durationTo, String sort,String queryUser){
+    public List<Content> getMasterContent(String type, List<String> genres, String durationFrom, String durationTo, String sort,String queryUser){
+        String genre = getGenreQuery(genres);
         if (!Objects.equals(genre, "ANY") && Objects.equals(durationFrom, "ANY") && Objects.equals(queryUser, "ANY")) {
             return findByGenre(type, genre, sort);
         } else if (Objects.equals(genre, "ANY") && !Objects.equals(durationFrom, "ANY") && Objects.equals(queryUser, "ANY")) {
@@ -154,6 +176,17 @@ public class ContentServiceImpl implements ContentService {
         ContentDao.deleteContent(id);
     }
 
-
+    @Override
+    public String getGenreString(List<String> genres){
+        if(genres==null || genres.size()==0)
+            return "ANY";
+        StringBuilder genresBuilder = new StringBuilder();
+        for (String subGenre : genres) {
+            genresBuilder.append(subGenre);
+            genresBuilder.append(",");
+        }
+        genresBuilder.deleteCharAt(genresBuilder.length()-1);
+        return genresBuilder.toString();
+    }
 
 }

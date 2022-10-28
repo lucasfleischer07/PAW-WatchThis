@@ -73,7 +73,7 @@
                         <div class="W-search-notFound-text">
                             <div>
                                 <c:choose>
-                                    <c:when test="${(query == null || query == '') && (genre != '' || durationFrom != 'ANY')}">
+                                    <c:when test="${(query == null || query == '') && (genre != null || durationFrom != 'ANY')}">
                                         <p class="W-not-found-message"><spring:message code="Content.NoContent.Filters"/></p>
                                     </c:when>
                                     <c:otherwise>

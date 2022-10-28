@@ -3,6 +3,8 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 
+
+
 <div class="W-filter-div">
     <div class="list-group">
         <div class="dropdown W-dropdown-button">
@@ -20,24 +22,20 @@
             </c:choose>
             <ul class="dropdown-menu">
                 <c:url value="/${param.type}/filters" var="postPath">
-                    <c:choose>
-                        <c:when test="${param.durationFrom!= 'ANY' && param.sorting!='ANY'}">
-                            <c:param name="durationFrom" value="${param.durationFrom}"/>
-                            <c:param name="durationTo" value="${param.durationTo}"/>
-                            <c:param name="sorting" value="${param.sorting}"/>
-                        </c:when>
-                        <c:when test="${param.durationFrom== 'ANY' && param.sorting!='ANY'}">
-                            <c:param name="sorting" value="${param.sorting}"/>
-                        </c:when>
-                        <c:when test="${param.durationFrom!= 'ANY' && param.sorting =='ANY'}">
-                            <c:param name="durationFrom" value="${param.durationFrom}"/>
-                            <c:param name="durationTo" value="${param.durationTo}"/>
-                        </c:when>
-                    </c:choose>
+                    <c:if test="${query != 'ANY' && query!=null}">
+                        <c:param name="query" value="${query}"/>
+                    </c:if>
+                    <c:if test="${durationFrom != 'ANY' && durationFrom!=null}">
+                        <c:param name="durationFrom" value="${durationFrom}"/>
+                        <c:param name="durationTo" value="${durationTo}"/>
+                    </c:if>
+                    <c:if test="${sorting != 'ANY' && sorting!=null}">
+                        <c:param name="sorting" value="${sorting}"/>
+                    </c:if>
                 </c:url>
                 <form:form modelAttribute="genreFilterForm" action="${postPath}" method="post" enctype="multipart/form-data">
                     <li class="mb-1 px-2">
-                        <label><form:checkbox cssClass="px-2" path="genre" value="Action"/> <spring:message code="Genre.Action"/></label>
+                        <label><form:checkbox cssClass="px-2" path="formGenre" value="Action"/> <spring:message code="Genre.Action"/></label>
                     </li>
 
                     <li class="mb-1 px-2">
@@ -45,43 +43,43 @@
                     </li>
 
                     <li class="mb-1 px-2">
-                        <label><form:checkbox cssClass="px-2" path="genre" value="Comedy"/> <spring:message code="Genre.Comedy"/></label>
+                        <label><form:checkbox cssClass="px-2" path="formGenre" value="Comedy"/> <spring:message code="Genre.Comedy"/></label>
                     </li>
 
                     <li class="mb-1 px-2">
-                        <label><form:checkbox cssClass="px-2" path="genre" value="Adventure"/> <spring:message code="Genre.Adventure"/></label>
+                        <label><form:checkbox cssClass="px-2" path="formGenre" value="Adventure"/> <spring:message code="Genre.Adventure"/></label>
                     </li>
 
                     <li class="mb-1 px-2">
-                        <label><form:checkbox cssClass="px-2" path="genre" value="Drama"/> <spring:message code="Genre.Drama"/></label>
+                        <label><form:checkbox cssClass="px-2" path="formGenre" value="Drama"/> <spring:message code="Genre.Drama"/></label>
                     </li>
 
                     <li class="mb-1 px-2">
-                        <form:checkbox cssClass="px-2" path="genre" value="Horror"/> <spring:message code="Genre.Horror"/>
+                        <form:checkbox cssClass="px-2" path="formGenre" value="Horror"/> <spring:message code="Genre.Horror"/>
                     </li>
 
                     <li class="mb-1 px-2">
-                        <label><form:checkbox cssClass="px-2" path="genre" value="Animation"/> <spring:message code="Genre.Animation"/></label>
+                        <label><form:checkbox cssClass="px-2" path="formGenre" value="Animation"/> <spring:message code="Genre.Animation"/></label>
                     </li>
 
                     <li class="mb-1 px-2">
-                        <label><form:checkbox cssClass="px-2" path="genre" value="Thriller"/> <spring:message code="Genre.Thriller"/></label>
+                        <label><form:checkbox cssClass="px-2" path="formGenre" value="Thriller"/> <spring:message code="Genre.Thriller"/></label>
                     </li>
 
                     <li class="mb-1 px-2">
-                        <label><form:checkbox cssClass="px-2" path="genre" value="Mystery"/> <spring:message code="Genre.Mystery"/></label>
+                        <label><form:checkbox cssClass="px-2" path="formGenre" value="Mystery"/> <spring:message code="Genre.Mystery"/></label>
                     </li>
 
                     <li class="mb-1 px-2">
-                        <label><form:checkbox cssClass="px-2" path="genre" value="Crime"/> <spring:message code="Genre.Crime"/></label>
+                        <label><form:checkbox cssClass="px-2" path="formGenre" value="Crime"/> <spring:message code="Genre.Crime"/></label>
                     </li>
 
                     <li class="mb-1 px-2">
-                        <label><form:checkbox cssClass="px-2" path="genre" value="Fantasy"/> <spring:message code="Genre.Fantasy"/></label>
+                        <label><form:checkbox cssClass="px-2" path="formGenre" value="Fantasy"/> <spring:message code="Genre.Fantasy"/></label>
                     </li>
 
                     <li class="mb-1 px-2">
-                        <label><form:checkbox cssClass="px-2" path="genre" value="Romance"/> <spring:message code="Genre.Romance"/></label>
+                        <label><form:checkbox cssClass="px-2" path="formGenre" value="Romance"/> <spring:message code="Genre.Romance"/></label>
                     </li>
 
                     <div class="W-apply-button">
