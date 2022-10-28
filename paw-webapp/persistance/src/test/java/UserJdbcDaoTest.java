@@ -101,7 +101,7 @@ public class UserJdbcDaoTest {
         assertNull(maybeUser.get().getImage());
     }
     @Test
-    public void testFindByIdUserNameError(){
+    public void testFindByUserNameError(){
         Optional<User> maybeUser=dao.findByUserName(NAME);
         assertFalse(maybeUser.isPresent());
     }
@@ -119,10 +119,11 @@ public class UserJdbcDaoTest {
 
     }
     @Test
+    @Rollback
     public void testSetProfilePicture(){
-        byte[] image= new String("image").getBytes();
-        dao.setProfilePicture(image,testUser);
         Optional<User> maybeUser=dao.findByUserName(testUser.getUserName());
+        byte[] image= new String("image").getBytes();
+        dao.setProfilePicture(image,maybeUser.get());
         assertTrue(maybeUser.isPresent());
         assertArrayEquals(image, maybeUser.get().getImage());
     }

@@ -58,7 +58,7 @@ create table if not exists userviewedlist
     contentid integer not null
         references content on delete cascade
 );
-
+create table if not exists Reputation (reviewid bigint not null, userid bigint not null, downvote boolean not null, upvote boolean not null, primary key (reviewid, userid))
 
 
 

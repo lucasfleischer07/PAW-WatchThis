@@ -24,7 +24,7 @@ public class User {
     @Column
     private byte[] image;
 
-    @OneToMany(fetch = FetchType.LAZY,orphanRemoval = true,cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY,orphanRemoval = true)
     @JoinColumn(name = "userid")
     private List<Review> userReviews;
 
@@ -41,6 +41,9 @@ public class User {
             joinColumns = @JoinColumn(name = "userid"),
             inverseJoinColumns = @JoinColumn(name = "contentid"))
     private List<Content> viewedlist;
+
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
+    private Set<Reputation> userVotes;
 
 
     public User(Long id, String email, String userName, String password, Long reputation, byte[] image, String role) {
@@ -102,6 +105,10 @@ public class User {
 
     public List<Review> getUserReviews() {
         return userReviews;
+    }
+
+    public Set<Reputation> getUserVotes() {
+        return userVotes;
     }
 
     public String getPassword() {

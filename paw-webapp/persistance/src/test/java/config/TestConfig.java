@@ -28,7 +28,7 @@ import java.util.Properties;
 @EnableTransactionManagement
 @Configuration
 public class TestConfig {
-    /*@Value("classpath:hsqldb.sql")
+    @Value("classpath:hsqldb.sql")
     private Resource hsqldbSql;
     @Value("classpath:schema.sql")
     private Resource schemaSql;
@@ -49,7 +49,7 @@ public class TestConfig {
 
         return dbp;
     }
-*/
+
     @Bean
     public DataSource dataSource() {
 

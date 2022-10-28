@@ -61,13 +61,13 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     @Override
-    public void thumbUpReview(Review review) {
-        reviewDao.thumbUpReview(review);
+    public void thumbUpReview(Review review,User user) {
+        reviewDao.thumbUpReview(review,user);
     }
 
     @Override
-    public void thumbDownReview(Review review) {
-        reviewDao.thumbDownReview(review);
+    public void thumbDownReview(Review review,User user) {
+        reviewDao.thumbDownReview(review,user);
     }
 
     @Override
