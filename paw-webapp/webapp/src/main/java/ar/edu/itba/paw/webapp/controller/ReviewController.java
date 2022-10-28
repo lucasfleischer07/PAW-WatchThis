@@ -285,7 +285,8 @@ public class ReviewController {
                                                     HttpServletRequest request) {
        if(us.findByEmail(userDetails.getName()).isPresent()) {
             Review review = rs.getReview(reviewId).orElseThrow(PageNotFoundException ::new);
-            rs.thumbUpReview(review);
+            User loggedUser=us.findByEmail(userDetails.getName()).get();
+            rs.thumbUpReview(review,loggedUser);
         } else {
             LOGGER.warn("Not allowed to thumb up the review",new ForbiddenException());
             throw new ForbiddenException();
@@ -301,7 +302,8 @@ public class ReviewController {
                                                       HttpServletRequest request) {
         if(us.findByEmail(userDetails.getName()).isPresent()){
             Review review = rs.getReview(reviewId).orElseThrow(PageNotFoundException ::new);
-            rs.thumbDownReview(review);
+            User loggedUser=us.findByEmail(userDetails.getName()).get();
+            rs.thumbDownReview(review,loggedUser);
             String referer = request.getHeader("Referer");
             return new ModelAndView("redirect:"+ referer);
         } else {

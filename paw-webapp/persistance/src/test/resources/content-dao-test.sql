@@ -11,4 +11,4 @@ insert into userwatchlist(userid,contentid) values (1,172);
 insert into userwatchlist(userid,contentid) values (2,172);
 insert into userwatchlist(userid,contentid) values (1,10);
 insert into userwatchlist(userid,contentid) values (2,2);
-insert into review (reviewId,type,contentId,userId,name,description,rating) values (1,'movie',501,1,'great movie','loved it! great actors',5);
+insert into review (reviewId,type,contentId,userId,name,description,rating,reputation) values (1,'movie',501,1,'great movie','loved it! great actors',5,0);

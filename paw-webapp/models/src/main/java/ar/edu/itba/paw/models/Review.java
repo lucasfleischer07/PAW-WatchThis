@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.models;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name="review")
@@ -24,11 +25,13 @@ public class Review {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userid")
-    User creator;
+    private User creator;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "contentid")
-    Content content;
+    private Content content;
 
+    @OneToMany(mappedBy = "review")
+    private Set<Reputation> userVotes;
 
 
     public Review(Long id, String type, String name, String description, Integer rating,User creator,Content content) {
@@ -107,10 +110,22 @@ public class Review {
     }
 
     public int getReputation() {
-        return reputation;
+        int count=0;
+        for (Reputation rep:getUserVotes()
+             ) {
+            if(rep.isUpvote())
+                count++;
+            else count--;
+
+        }
+        return count;
     }
 
     public void setReputation(int reputation) {
         this.reputation = reputation;
+    }
+
+    public Set<Reputation> getUserVotes() {
+        return userVotes;
     }
 }

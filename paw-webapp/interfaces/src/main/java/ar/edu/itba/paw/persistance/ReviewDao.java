@@ -15,8 +15,8 @@ public interface ReviewDao {
     Optional<Review> findById(Long reviewId);
     void updateReview(String name, String description, int rating,Long id);
     List<Review> getAllUserReviews(User user);
-    void thumbUpReview(Review review);
-    void thumbDownReview(Review review);
+    void thumbUpReview(Review review,User user);
+    void thumbDownReview(Review review,User user);
     Optional<Review> getReview(Long reviewId);
 
 }

@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistance;
 
 import ar.edu.itba.paw.models.Content;
+import ar.edu.itba.paw.models.Reputation;
 import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.User;
 import org.springframework.context.annotation.Primary;
@@ -37,8 +38,6 @@ public class ReviewJpaDao implements ReviewDao{
         Review toDelete=findById(reviewId).get();
         User user=toDelete.getCreator();
         Content content=toDelete.getContent();
-        List<Review> contentList=toDelete.getContent().getContentReviews();
-        List<Review> userList=toDelete.getCreator().getUserReviews();
         em.remove(toDelete);
         em.merge(user);
         em.merge(content);
@@ -64,14 +63,51 @@ public class ReviewJpaDao implements ReviewDao{
     }
 
     @Override
-    public void thumbUpReview(Review review) {
-        review.setReputation(review.getReputation() + 1);
+    public void thumbUpReview(Review review,User user) {
+        for (Reputation reputation:review.getUserVotes()
+             ) {
+            if(reputation.getUser().getId()== user.getId())
+            {
+                if(reputation.isUpvote()){
+                    em.remove(reputation);
+                    em.merge(user);
+                    em.merge(review);
+                }
+                else{
+                    reputation.setUpvote(true);
+                    reputation.setDownvote(false);
+                    em.merge(reputation);
+                }
+                return;
+            }
+        }
+        em.persist(new Reputation(user,review,true));
+        em.merge(user);
         em.merge(review);
     }
 
     @Override
-    public void thumbDownReview(Review review) {
-        review.setReputation(review.getReputation() - 1);
+    public void thumbDownReview(Review review,User user) {
+
+        for (Reputation reputation:review.getUserVotes()
+        ) {
+            if(reputation.getUser().getId()== user.getId())
+            {
+                if(reputation.isDownvote()){
+                    em.remove(reputation);
+                    em.merge(user);
+                    em.merge(review);
+                }
+                else{
+                    reputation.setDownvote(true);
+                    reputation.setUpvote(false);
+                    em.merge(reputation);
+                }
+                return;
+            }
+        }
+        em.persist(new Reputation(user,review,false));
+        em.merge(user);
         em.merge(review);
     }
 
