@@ -90,11 +90,15 @@ public class ContentController {
             LOGGER.warn("Error bringing data from the db",new PageNotFoundException());
             throw new PageNotFoundException();
         }
-        
+
+//        List<String> genreList = new ArrayList<>();
+
         mav.addObject("bestRatedList", bestRatedList);
         mav.addObject("bestRatedListSize", bestRatedList.size());
         mav.addObject("lastAddedList", lastAddedList);
         mav.addObject("lastAddedListSize", lastAddedList.size());
+//        mav.addObject("genre",genreList.add("ANY"));
+
         mav.addObject("genre","ANY");
         mav.addObject("durationFrom","ANY");
         mav.addObject("durationTo","ANY");

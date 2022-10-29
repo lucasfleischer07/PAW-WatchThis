@@ -29,7 +29,6 @@
             <jsp:param name="admin" value="${admin}"/>
         </jsp:include>
 
-        <hr class="W-column-display">
             <jsp:include page="components/filter.jsp">
                 <jsp:param name="query" value="${query}"/>
                 <jsp:param name="genre" value="${genre}"/>

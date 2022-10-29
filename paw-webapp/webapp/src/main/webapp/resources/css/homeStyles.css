@@ -13,7 +13,7 @@
     height: 3vw;
     z-index: 1;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     background-color: #a9a9a9d1;
 }
 
@@ -54,24 +54,29 @@
 .W-filter-title {
     font-size: 1vw;
     font-weight: bold;
-    width: 10vw;
+    width: fit-content;
+    min-width: 6vw;
     height: 2vw;
-    border-color: darkred;
+    border-color: black;
     background-color: white;
     display: flex;
     align-items: center;
-    align-content: center;
     justify-content: center;
 }
 
 .W-dropdown-button-sorting {
-    margin: 1vw 0 1vw 50vw;
+    margin-right: 1vw;
 }
 
 .W-dropdown-button {
     margin-top: 1vw;
     margin-right: 4vw;
     margin-bottom: 1vw;
+}
+
+.W-genre-duration-div {
+    display: flex;
+    margin-left: 1vw;
 }
 
 .W-apply-button {
