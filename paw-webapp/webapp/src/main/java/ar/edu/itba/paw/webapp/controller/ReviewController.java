@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.models.Content;
+import ar.edu.itba.paw.models.Reputation;
 import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.services.ContentService;
@@ -26,6 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -86,6 +88,10 @@ public class ReviewController {
             user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
             mav.addObject("userName",user.getUserName());
             mav.addObject("userId",user.getId());
+            rs.userLikeAndDislikeReviewsId(user.getUserVotes());
+            mav.addObject("userLikeReviews", rs.getUserLikeReviews());
+            mav.addObject("userDislikeReviews", rs.getUserDislikeReviews());
+
             Optional<Long> isInWatchList = us.searchContentInWatchList(user, contentId);
             if(isInWatchList.get() != -1) {
                 mav.addObject("isInWatchList",isInWatchList);
@@ -111,6 +117,8 @@ public class ReviewController {
             mav.addObject("isInWatchList","null");
             mav.addObject("isInViewedList","null");
             mav.addObject("admin",false);
+            mav.addObject("userLikeReviews", rs.getUserLikeReviews());
+            mav.addObject("userDislikeReviews", rs.getUserDislikeReviews());
         }
 
         reviewList = rs.sortReviews(user,reviewList);

@@ -14,7 +14,7 @@
     z-index: 1;
     align-items: center;
     justify-content: center;
-    background-color: #6364643d;
+    background-color: #a9a9a9d1;
 }
 
 .W-films-div{
@@ -235,6 +235,7 @@
 
 .W-movie-title {
     font-size: 1.3vw;
+   color: black;
 }
 
 .W-movie-description {

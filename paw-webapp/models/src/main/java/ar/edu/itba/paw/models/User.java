@@ -88,9 +88,9 @@ public class User {
         for(Review review : userReviews) {
             reputation += (review.getReputation());
         }
-        if(reputation == 0) {
-            return 0L;
-        }
+//        if(reputation == 0) {
+//            return 0L;
+//        }
         reputation /= userReviews.size();
         return reputation;
     }

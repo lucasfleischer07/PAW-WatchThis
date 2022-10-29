@@ -78,7 +78,9 @@
                     <jsp:param name="commentText" value="${param.reviewDescription}"/>
                     <jsp:param name="reviewId" value="${param.reviewId}"/>
                     <jsp:param name="loggedUserName" value="${param.loggedUserName}"/>
-                    <jsp:param name="reviewReputation" value="${param.reviewReputation}" />
+                    <jsp:param name="reviewReputation" value="${param.reviewReputation}"/>
+                    <jsp:param name="isLikeReviews" value="${param.isLikeReviews}"/>
+                    <jsp:param name="isDislikeReviews" value="${param.isDislikeReviews}"/>
                 </jsp:include>
             </div>
         </div>

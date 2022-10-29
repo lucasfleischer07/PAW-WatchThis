@@ -64,16 +64,13 @@ public class ReviewJpaDao implements ReviewDao{
 
     @Override
     public void thumbUpReview(Review review,User user) {
-        for (Reputation reputation:review.getUserVotes()
-             ) {
-            if(reputation.getUser().getId()== user.getId())
-            {
+        for (Reputation reputation:review.getUserVotes()) {
+            if(reputation.getUser().getId()== user.getId()) {
                 if(reputation.isUpvote()){
                     em.remove(reputation);
                     em.merge(user);
                     em.merge(review);
-                }
-                else{
+                } else{
                     reputation.setUpvote(true);
                     reputation.setDownvote(false);
                     em.merge(reputation);
@@ -88,17 +85,13 @@ public class ReviewJpaDao implements ReviewDao{
 
     @Override
     public void thumbDownReview(Review review,User user) {
-
-        for (Reputation reputation:review.getUserVotes()
-        ) {
-            if(reputation.getUser().getId()== user.getId())
-            {
+        for (Reputation reputation:review.getUserVotes()) {
+            if(reputation.getUser().getId()== user.getId()) {
                 if(reputation.isDownvote()){
                     em.remove(reputation);
                     em.merge(user);
                     em.merge(review);
-                }
-                else{
+                } else{
                     reputation.setDownvote(true);
                     reputation.setUpvote(false);
                     em.merge(reputation);

@@ -213,6 +213,11 @@ public class UserController {
         mav.addObject("userName",user.getUserName());
         mav.addObject("reputationAmount",user.getReputation());
         mav.addObject("userId",user.getId());
+
+        rs.userLikeAndDislikeReviewsId(user.getUserVotes());
+        mav.addObject("userLikeReviews", rs.getUserLikeReviews());
+        mav.addObject("userDislikeReviews", rs.getUserDislikeReviews());
+
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if(auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
             mav.addObject("admin", true);
@@ -268,6 +273,11 @@ public class UserController {
             User userLogged = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
             mav.addObject("userName",userLogged.getUserName());
             mav.addObject("userId",userLogged.getId());
+
+            rs.userLikeAndDislikeReviewsId(userLogged.getUserVotes());
+            mav.addObject("userLikeReviews", rs.getUserLikeReviews());
+            mav.addObject("userDislikeReviews", rs.getUserDislikeReviews());
+
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
             if(auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))){
@@ -283,6 +293,8 @@ public class UserController {
             mav.addObject("userName","null");
             mav.addObject("userId","null");
             mav.addObject("admin",false);
+            mav.addObject("userLikeReviews", rs.getUserLikeReviews());
+            mav.addObject("userDislikeReviews", rs.getUserDislikeReviews());
         }
         request.getSession().setAttribute("referer","/profile/"+userName);
         return mav;

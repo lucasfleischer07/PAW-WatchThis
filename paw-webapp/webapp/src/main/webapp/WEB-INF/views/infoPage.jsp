@@ -240,6 +240,9 @@
                 <jsp:param name="contentType" value="${review.type}"/>
                 <jsp:param name="loggedUserName" value="${userName}"/>
                 <jsp:param name="isAdmin" value="${admin}"/>
+                <jsp:param name="isLikeReviews" value="${userLikeReviews.contains(review.id)}"/>
+                <jsp:param name="isDislikeReviews" value="${userDislikeReviews.contains(review.id)}"/>
+
               </jsp:include>
             </c:forEach>
             <c:if test="${pageSelected<amountPages}">

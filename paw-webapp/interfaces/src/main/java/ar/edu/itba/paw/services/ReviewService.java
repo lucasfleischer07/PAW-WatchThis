@@ -1,11 +1,13 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.models.Content;
+import ar.edu.itba.paw.models.Reputation;
 import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.User;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface ReviewService {
 
@@ -19,5 +21,9 @@ public interface ReviewService {
     void thumbUpReview(Review review,User user);
     void thumbDownReview(Review review,User user);
     Optional<Review> getReview(Long reviewId);
+    void userLikeAndDislikeReviewsId(Set<Reputation> reputationList);
+    List<Long> getUserLikeReviews();
+    List<Long> getUserDislikeReviews();
+
 
 }

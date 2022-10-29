@@ -71,7 +71,7 @@
                         <h4 class="font-weight-bold mb-0 d-block"><c:out value="${reviewsAmount}"/></h4>
                           <medium class="text-muted"><i class="fas fa-image mr-1"></i><spring:message code="Profile.Reviews"/></medium>
                       </li>
-                      <li class="list-inline-item">
+                      <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="<spring:message code="Reputation.Tooltip"/>">
                           <h4 class="font-weight-bold mb-0 d-block"><c:out value="${reputationAmount}"/></h4>
                           <medium class="text-muted"><i class="fas fa-image mr-1"></i><spring:message code="Profile.Reputation"/></medium>
                       </li>
@@ -112,6 +112,8 @@
                             <jsp:param name="contentType" value="${review.type}"/>
                             <jsp:param name="loggedUserName" value="${userName}"/>
                             <jsp:param name="isAdmin" value="${admin}"/>
+                            <jsp:param name="isLikeReviews" value="${userLikeReviews.contains(review.id)}"/>
+                            <jsp:param name="isDislikeReviews" value="${userDislikeReviews.contains(review.id)}"/>
                         </jsp:include>
                     </c:forEach>
                       <c:choose>
@@ -137,5 +139,9 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+    <script>
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    </script>
   </body>
 </html>

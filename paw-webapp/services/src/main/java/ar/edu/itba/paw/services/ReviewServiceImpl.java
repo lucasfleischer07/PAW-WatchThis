@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.models.Content;
+import ar.edu.itba.paw.models.Reputation;
 import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.persistance.ReviewDao;
@@ -8,12 +9,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+
 @Transactional
 @Service
 public class ReviewServiceImpl implements ReviewService{
     private final ReviewDao reviewDao;
+
+    private List<Long> userLikeReviews = new ArrayList<>();
+    private List<Long> userDislikeReviews = new ArrayList<>();
 
     @Autowired
     public ReviewServiceImpl(final ReviewDao reviewDao) {
@@ -75,4 +82,25 @@ public class ReviewServiceImpl implements ReviewService{
         return reviewDao.getReview(reviewId);
     }
 
+    @Override
+    public void userLikeAndDislikeReviewsId(Set<Reputation> reputationList) {
+        userLikeReviews.clear();
+        userDislikeReviews.clear();
+        for(Reputation reputation : reputationList) {
+            if(reputation.isUpvote()) {
+                userLikeReviews.add(reputation.getReview().getId());
+            } else if(reputation.isDownvote()) {
+                userDislikeReviews.add(reputation.getReview().getId());
+            }
+        }
+    }
+
+    @Override
+    public List<Long> getUserLikeReviews() {
+        return userLikeReviews;
+    }
+    @Override
+    public List<Long> getUserDislikeReviews() {
+        return userDislikeReviews;
+    }
 }
