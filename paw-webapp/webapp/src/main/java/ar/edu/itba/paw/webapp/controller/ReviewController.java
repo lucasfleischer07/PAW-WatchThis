@@ -9,6 +9,7 @@ import ar.edu.itba.paw.services.ReviewService;
 import ar.edu.itba.paw.services.UserService;
 import ar.edu.itba.paw.webapp.exceptions.ForbiddenException;
 import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
+import ar.edu.itba.paw.webapp.form.CommentForm;
 import ar.edu.itba.paw.webapp.form.ReviewForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -239,6 +240,52 @@ public class ReviewController {
     }
 
     // * ---------------------------------------------------------------------------------------------------------------
+
+
+    // * ---------------------------------------------Comments-------------------------------------------------
+
+    @RequestMapping(value = "/review/add/comment/{reviewId:[0-9]+}", method = {RequestMethod.POST})
+    public ModelAndView commentReview(Principal userDetails,
+                                        @Valid @ModelAttribute("commentForm") final CommentForm commentForm,
+                                        final BindingResult errors,
+                                        @PathVariable("reviewId")final long reviewId,
+                                        HttpServletRequest request) {
+//        if(errors.hasErrors()) {
+//            return reviewFormCreate(userDetails,form,id,type);
+//        }
+        if(!rs.getReview(reviewId).isPresent()) {
+            throw new PageNotFoundException();
+        }
+
+//        if(form.getRating() < 0 || form.getRating() > 5) {
+//            return reviewFormCreate(userDetails,form,id,type);
+//        }
+//        if(commentForm.getComment() == null || Objects.equals(commentForm.getComment(), "")) {
+//            return
+//        }
+
+        Optional<User> user = us.findByEmail(userDetails.getName());
+
+//        if(user.isPresent()){
+//
+//        }
+
+
+//        try {
+//            Content content= cs.findById(id).orElseThrow(PageNotFoundException ::new);
+//            rs.addReview(form.getName(),form.getDescription(), form.getRating(), type,user.get(),content);
+//        }
+//        catch(DuplicateKeyException e){
+//            ModelAndView mav = reviewFormCreate(userDetails,form,id,type);
+//            mav.addObject("errorMsg","You have already written a review for this " + type + ".");
+//            return mav;
+//        }
+
+        ModelMap model =new ModelMap();
+        String referer = request.getSession().getAttribute("referer").toString();
+        return new ModelAndView("redirect:" + (referer==null?"/":referer),model);
+
+    }
 
 
 }

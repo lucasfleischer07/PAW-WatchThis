@@ -222,9 +222,38 @@ W-read-button {
     width: 100%;
 }
 
-.W-reply-button {
+.W-reply-button-div {
     display: flex;
     justify-content: flex-end;
+}
+
+.W-reply-button {
+    border-color: transparent;
+}
+
+.W-reply-button:hover {
+    border-color: transparent;
+}
+
+.W-comment-general-div {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.W-comment-form-div {
+    margin-top: 1vw;
+    width: 80%;
+}
+
+.W-comment-form {
+    display: none;
+}
+
+.W-submit-comment-button {
+    display: flex;
+    justify-content: center;
+    margin-top: 1vw;
 }
 
 .W-hands-style{

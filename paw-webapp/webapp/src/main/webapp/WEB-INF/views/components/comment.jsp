@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <div class="W-movie-description-and-thumb-buttons">
     <div class="W-column-display-thumbs">
         <div class="W-thumbs-buttons-and-text">
@@ -90,11 +91,26 @@
     </div>
 </div>
 
-
-<div class="W-reply-button">
-    <a href="#" class="W-bottom-buttons-size">
+<div class="W-reply-button-div">
+    <button class="W-reply-button btn btn-white" id="commentButton" onclick="showCommentForm('commentInput${param.reviewId}')">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-reply" viewBox="0 0 16 16">
             <path d="M6.598 5.013a.144.144 0 0 1 .202.134V6.3a.5.5 0 0 0 .5.5c.667 0 2.013.005 3.3.822.984.624 1.99 1.76 2.595 3.876-1.02-.983-2.185-1.516-3.205-1.799a8.74 8.74 0 0 0-1.921-.306 7.404 7.404 0 0 0-.798.008h-.013l-.005.001h-.001L7.3 9.9l-.05-.498a.5.5 0 0 0-.45.498v1.153c0 .108-.11.176-.202.134L2.614 8.254a.503.503 0 0 0-.042-.028.147.147 0 0 1 0-.252.499.499 0 0 0 .042-.028l3.984-2.933zM7.8 10.386c.068 0 .143.003.223.006.434.02 1.034.086 1.7.271 1.326.368 2.896 1.202 3.94 3.08a.5.5 0 0 0 .933-.305c-.464-3.71-1.886-5.662-3.46-6.66-1.245-.79-2.527-.942-3.336-.971v-.66a1.144 1.144 0 0 0-1.767-.96l-3.994 2.94a1.147 1.147 0 0 0 0 1.946l3.994 2.94a1.144 1.144 0 0 0 1.767-.96v-.667z"></path>
         </svg>
-    </a>
+    </button>
 </div>
+
+<div class="W-comment-general-div">
+    <div class="W-comment-form-div">
+        <c:url value="/review/add/comment/${param.reviewId}" var="postPath"/>
+        <form:form modelAttribute="commentForm" action="${postPath}" method="post" id="commentInput${param.reviewId}" class="W-comment-form">
+            <spring:message code="Comment.Placeholder" var="placeholder"/>
+            <form:textarea type="text" class="form-control" placeholder="${placeholder}" path="comment"/>
+            <div class="W-submit-comment-button">
+                <button type="submit" class="btn btn-success" onclick="this.form.submit(); (this).className += ' spinner-border'; (this).innerText = '|'"><spring:message code="Comment.Title"/></button>
+            </div>
+        </form:form>
+    </div>
+</div>
+
+
+<script src="<c:url value="/resources/js/commentVisibility.js"/>"></script>

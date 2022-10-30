@@ -118,7 +118,7 @@ public class ContentJpaDao implements ContentDao{
 
     @Override
     public List<Content> findByDuration(String type, int durationFrom, int durationTo, String sort) {
-        TypedQuery<Content> query= em.createQuery("From Content",Content.class);
+        TypedQuery<Content> query= em.createQuery("FROM Content",Content.class);
         if(!Objects.equals(type, "all")) {
             if (Objects.equals(sort, "ANY")) {
                 query = em.createQuery("FROM Content WHERE durationnum > :durationFrom  AND durationnum <= :durationTo AND type = :type",Content.class);
