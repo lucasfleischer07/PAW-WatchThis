@@ -254,13 +254,12 @@ public class UserController {
         }
         final ModelAndView mav = new ModelAndView("profileInfoPage");
         Optional<User> user = us.findByUserName(userName);
-        mav.addObject("reputationAmount",user.get().getReputation());
         mav.addObject("userProfile",userName);
-//        TODO: Agregar el reputationAmount
         if(user.isPresent()) {
             final String locale = LocaleContextHolder.getLocale().getDisplayLanguage();
             Optional<String> quote = cs.getContentQuote(locale);
             mav.addObject("quote", quote.get());
+            mav.addObject("reputationAmount",user.get().getReputation());
             mav.addObject("user", user.get());
             paginationSetup(mav,pageNum.orElse(1),rs.getAllUserReviews(user.get()));
         } else {
