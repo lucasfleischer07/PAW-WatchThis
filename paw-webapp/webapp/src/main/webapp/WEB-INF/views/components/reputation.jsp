@@ -113,4 +113,26 @@
 </div>
 
 
+<div class="W-comment-section-general-div">
+    <jsp:include page="comments.jsp"/>
+
+
+<%--    <c:forEach var="content" items="${comments}">--%>
+<%--        <jsp:include page="comments.jsp">--%>
+<%--            <jsp:param name="contentName" value="${content.name}"/>--%>
+<%--            <jsp:param name="contentReleased" value="${content.released}"/>--%>
+<%--            <jsp:param name="contentCreator" value="${content.creator}"/>--%>
+<%--            <jsp:param name="contentGenre" value="${content.genre}"/>--%>
+<%--            <jsp:param name="contentImage" value="${content.image}"/>--%>
+<%--            <jsp:param name="contentId" value="${content.id}"/>--%>
+<%--            <jsp:param name="contentType" value="${content.type}"/>--%>
+<%--            <jsp:param name="contentRating" value="${content.rating}"/>--%>
+<%--            <jsp:param name="reviewsAmount" value="${content.reviewsAmount}"/>--%>
+<%--            <jsp:param name="userName" value="${userName}"/>--%>
+<%--            <jsp:param name="userWatchListContentId1" value="${userWatchListContentId.contains(content.id)}"/>--%>
+<%--        </jsp:include>--%>
+<%--    </c:forEach>--%>
+</div>
+
+
 <script src="<c:url value="/resources/js/commentVisibility.js"/>"></script>

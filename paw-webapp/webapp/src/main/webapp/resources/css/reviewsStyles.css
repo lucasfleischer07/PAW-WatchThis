@@ -6,7 +6,7 @@
     flex-direction: column;
 }
 
-W-read-button {
+.W-read-button {
     height: 5%;
     width: 60%;
     font-size: 2vw;
@@ -312,6 +312,17 @@ W-read-button {
 }
 .W-bottom-buttons-size {
     width: 2vw;
+}
+
+.W-comment-section-general-div {
+    display: flex;
+    justify-content: center;
+}
+
+.W-comment-profile-picture {
+    width: 7vw;
+    height: 7vw;
+    border-radius: 50%;
 }
 
 @media (max-width: 1300px) {
