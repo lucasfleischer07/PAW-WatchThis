@@ -185,7 +185,14 @@
                         </c:choose>
                       </c:forEach>
                     </div>
-                    <p class="card-text W-subTitles-font-size"><spring:message code="Content.ReviewAmount" arguments="${details.reviewsAmount}"/></p>
+                    <c:choose>
+                      <c:when test="${details.reviewsAmount == 1}">
+                        <p class="card-text W-subTitles-font-size"><spring:message code="Content.Review.Amount.One" arguments="${details.reviewsAmount}"/></p>
+                      </c:when>
+                      <c:otherwise>
+                        <p class="card-text W-subTitles-font-size"><spring:message code="Content.ReviewAmount" arguments="${details.reviewsAmount}"/></p>
+                      </c:otherwise>
+                    </c:choose>
                   </div>
                 </div>
               </div>

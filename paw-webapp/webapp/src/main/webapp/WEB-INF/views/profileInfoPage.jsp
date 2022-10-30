@@ -69,7 +69,14 @@
                   <ul class="list-inline mb-0">
                       <li class="list-inline-item">
                         <h4 class="font-weight-bold mb-0 d-block"><c:out value="${reviewsAmount}"/></h4>
-                          <medium class="text-muted"><i class="fas fa-image mr-1"></i><spring:message code="Profile.Reviews"/></medium>
+                          <c:choose>
+                              <c:when test="${reviewsAmount == 1}">
+                                  <medium class="text-muted"><i class="fas fa-image mr-1"></i><spring:message code="Profile.Review"/></medium>
+                              </c:when>
+                              <c:otherwise>
+                                  <medium class="text-muted"><i class="fas fa-image mr-1"></i><spring:message code="Profile.Reviews"/></medium>
+                              </c:otherwise>
+                          </c:choose>
                       </li>
                       <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="<spring:message code="Reputation.Tooltip"/>">
                           <h4 class="font-weight-bold mb-0 d-block"><c:out value="${reputationAmount}"/></h4>

@@ -391,7 +391,7 @@
                                     <li><a class="dropdown-item" href="<c:url value="/profile/watchList"/>"><spring:message code="WatchList"/></a></li>
                                     <li><a class="dropdown-item" href="<c:url value="/profile/viewedList"/>"><spring:message code="ViewedList.Title"/></a></li>
                                     <c:if test="${param.admin == true || param.admin == 'true'}">
-                                        <li><a class="dropdown-item" href="<c:url value="/content/create"/>"><spring:message code="CreateContentMessage"/></a></li>
+                                        <li><a class="dropdown-item" href="<c:url value="/content/create"/>"><spring:message code="CreateContent.Message"/></a></li>
                                     </c:if>
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item" href="<c:url value="/login/sign-out"/>"><spring:message code="LogOutMessage"/></a></li>
