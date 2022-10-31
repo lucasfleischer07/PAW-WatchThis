@@ -27,6 +27,7 @@
             <jsp:param name="userName" value="${userName}"/>
             <jsp:param name="userId" value="${userId}"/>
             <jsp:param name="admin" value="${admin}"/>
+            <jsp:param name="query" value="${query}"/>
         </jsp:include>
 
             <jsp:include page="components/filter.jsp">
