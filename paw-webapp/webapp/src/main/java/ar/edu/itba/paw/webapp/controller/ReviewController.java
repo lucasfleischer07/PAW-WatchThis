@@ -25,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.Objects;
 import java.util.Optional;
 
 @Controller
@@ -50,6 +51,11 @@ public class ReviewController {
                                          @PathVariable("type")final String type) {
         final ModelAndView mav = new ModelAndView("reviewRegistrationPage");
         mav.addObject("details", cs.findById(id).orElseThrow(PageNotFoundException::new));
+        if(Objects.equals(type, "movie")) {
+            mav.addObject("type", "movies");
+        } else if(Objects.equals(type, "serie")) {
+            mav.addObject("type", "series");
+        }
         if(userDetails != null) {
             String userEmail = userDetails.getName();
             User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
@@ -132,6 +138,11 @@ public class ReviewController {
                                           HttpServletRequest request) {
         final ModelAndView mav = new ModelAndView("reviewEditionPage");
         mav.addObject("details", cs.findById(contentId).orElseThrow(PageNotFoundException::new));
+        if(Objects.equals(type, "movie")) {
+            mav.addObject("type", "movies");
+        } else if(Objects.equals(type, "serie")) {
+            mav.addObject("type", "series");
+        }
         Optional<Review> oldReview = rs.findById(reviewId);
         if(!oldReview.isPresent()){
             LOGGER.warn("Cant find a the review specified", new PageNotFoundException());

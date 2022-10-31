@@ -79,6 +79,7 @@ public class UserController {
         mav.addObject("userName",user.getUserName());
         mav.addObject("reputationAmount",user.getReputation());
         mav.addObject("userId",user.getId());
+        mav.addObject("type","all");
 
         rs.userLikeAndDislikeReviewsId(user.getUserVotes());
         mav.addObject("userLikeReviews", rs.getUserLikeReviews());

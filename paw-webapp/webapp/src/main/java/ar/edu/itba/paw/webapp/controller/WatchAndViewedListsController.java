@@ -69,6 +69,7 @@ public class WatchAndViewedListsController {
         Optional<String> quote = cs.getContentQuote(locale);
         mav.addObject("quote", quote.get());
         mav.addObject("user", user);
+        mav.addObject("type","all");
         mav.addObject("userName", user.getUserName());
         mav.addObject("userId", user.getId());
         listPaginationSetup(mav,"watchListContent",watchListContent,pageNum.orElse(1));
@@ -154,6 +155,7 @@ public class WatchAndViewedListsController {
         mav.addObject("user", user);
         mav.addObject("userName", user.getUserName());
         mav.addObject("userId", user.getId());
+        mav.addObject("type","all");
         listPaginationSetup(mav,"viewedListContent",viewedListContent,pageNum.orElse(1));
         mav.addObject("viewedListContentSize", viewedListContent.size());
         mav.addObject("userWatchListContentId", userWatchListContentId);

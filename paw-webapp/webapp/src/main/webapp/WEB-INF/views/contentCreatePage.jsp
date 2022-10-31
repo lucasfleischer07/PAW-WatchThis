@@ -18,10 +18,11 @@
         <link href="<c:url value="/resources/css/reviewRegistrationStyles.css"/>" rel="stylesheet" type="text/css"/>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
 
-        <title><spring:message code="CreateContentMessage"/></title>
+        <title><spring:message code="CreateContent.Message"/></title>
     </head>
     <body>
         <jsp:include page="components/header.jsp">
+            <jsp:param name="type" value="${type}"/>
             <jsp:param name="userName" value="${userName}"/>
             <jsp:param name="userId" value="${userId}"/>
             <jsp:param name="admin" value="${admin}"/>

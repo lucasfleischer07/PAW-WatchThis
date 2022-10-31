@@ -169,6 +169,7 @@ public class ContentController {
         }
         mav.addObject("create",false);
         mav.addObject("contentId",contentId);
+        mav.addObject("type","all");
         contentEditForm.setName(oldContent.get().getName());
         contentEditForm.setCreator(oldContent.get().getCreator());
         contentEditForm.setDescription(oldContent.get().getDescription());
@@ -213,6 +214,7 @@ public class ContentController {
     public ModelAndView createContent(Principal userDetails,@ModelAttribute("contentCreate") final ContentForm contentForm) {
         final ModelAndView mav = new ModelAndView("contentCreatePage");
         mav.addObject("create",true);
+        mav.addObject("type","all");
         HeaderSetUp(mav,userDetails);
         return mav;
     }

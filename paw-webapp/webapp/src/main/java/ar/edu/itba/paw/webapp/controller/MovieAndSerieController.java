@@ -189,7 +189,7 @@ public class MovieAndSerieController {
 
 
     // *  ----------------------------------- Movies and Serie Filters -------------------------------------------------
-    @RequestMapping(value = {"/{type:movies|series|all}/filters" , "/{type:movies|series|all}/filters/page/{pageNum}"})
+    @RequestMapping(value = {"/{type:movies|series|all|profile}/filters" , "/{type:movies|series|all|profile}/filters/page/{pageNum}"})
     public ModelAndView moviesWithFilters(
             Principal userDetails,
             @ModelAttribute("genreFilterForm") final GenreFilterForm genreFilterForm,
@@ -218,7 +218,7 @@ public class MovieAndSerieController {
         if(genreList!=null){
             genreFilterForm.setFormGenre(genreList.toArray(new String[0]));
         }
-        List<Content> contentListFilter =cs.getMasterContent(auxType,genreList,durationFrom,durationTo,sorting,query);
+        List<Content> contentListFilter = cs.getMasterContent(auxType,genreList,durationFrom,durationTo,sorting,query);
 
         mav = new ModelAndView("contentPage");
 

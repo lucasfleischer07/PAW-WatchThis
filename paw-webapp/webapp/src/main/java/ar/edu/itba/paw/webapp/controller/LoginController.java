@@ -53,6 +53,7 @@ public class LoginController {
             mav.addObject("userId","null");
             mav.addObject("admin",false);
         }
+        mav.addObject("type","all");
     }
 
     // * ----------------------------------- Login ---------------------------------------------------------------------
