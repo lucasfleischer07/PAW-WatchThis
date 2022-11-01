@@ -139,8 +139,18 @@ public class MovieAndSerieController {
             LOGGER.warn("Cant find a the content specified",new PageNotFoundException());
             throw new PageNotFoundException();
         }
+
+        String auxType;
+        if (Objects.equals(type, "movie")) {
+            auxType = "movies";
+        } else if (Objects.equals(type, "serie")) {
+            auxType = "series";
+        } else {
+            auxType = "all";
+        }
+
         mav.addObject("contentId",contentId);
-        mav.addObject("type",type);
+        mav.addObject("type",auxType);
 
         if(userDetails != null) {
             String userEmail = userDetails.getName();
