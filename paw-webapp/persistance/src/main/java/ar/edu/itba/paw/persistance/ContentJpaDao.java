@@ -275,7 +275,7 @@ public class ContentJpaDao implements ContentDao{
             query.setParameter("type",type);
         } else {
             if (Objects.equals(sort, "ANY")) {
-                query = em.createQuery("FROM Content WHERE durationnum > :durationFrom  AND durationnum <= :durationTo",Content.class);
+                query = em.createQuery("FROM Content WHERE durationnum > :durationFrom  AND durationnum <= :durationTo and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)",Content.class);
             } else if (Objects.equals(sort, "Last-released")) {
                 query = em.createQuery("FROM Content WHERE durationnum > :durationFrom  AND durationnum <= :durationTo and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) ORDER BY released DESC",Content.class);
             } else if (Objects.equals(sort, "Older-released")) {
