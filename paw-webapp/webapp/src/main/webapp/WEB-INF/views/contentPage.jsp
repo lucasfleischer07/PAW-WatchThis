@@ -30,66 +30,64 @@
             <jsp:param name="query" value="${query}"/>
         </jsp:include>
 
-            <jsp:include page="components/filter.jsp">
-                <jsp:param name="query" value="${query}"/>
-                <jsp:param name="genre" value="${genre}"/>
-                <jsp:param name="durationFrom" value="${durationFrom}"/>
-                <jsp:param name="durationTo" value="${durationTo}"/>
-                <jsp:param name="type" value="${contentType}"/>
-                <jsp:param name="sorting" value="${sorting}"/>
-            </jsp:include>
+        <jsp:include page="components/filter.jsp">
+            <jsp:param name="query" value="${query}"/>
+            <jsp:param name="genre" value="${genre}"/>
+            <jsp:param name="durationFrom" value="${durationFrom}"/>
+            <jsp:param name="durationTo" value="${durationTo}"/>
+            <jsp:param name="type" value="${contentType}"/>
+            <jsp:param name="sorting" value="${sorting}"/>
+        </jsp:include>
 
-            <c:if test="${(query != null && query != '' && query != 'ANY') && (genre == '' || durationFrom == 'ANY') && allContent.size() > 0}">
-                <h3 class="W-search-context-title"><spring:message code="Search.Title" arguments="${query}"/></h3>
-            </c:if>
+        <c:if test="${(query != null && query != '' && query != 'ANY') && allContent.size() > 0}">
+            <h3 class="W-search-context-title"><spring:message code="Search.Title" arguments="${query}"/></h3>
+        </c:if>
 
 
-            <div class="W-films-div">
-                <div class="row row-cols-1 row-cols-md-2 g-2 W-content-alignment">
-                    <c:forEach var="content" items="${allContent}">
-                        <jsp:include page="components/contentCard.jsp">
-                            <jsp:param name="contentName" value="${content.name}"/>
-                            <jsp:param name="contentReleased" value="${content.released}"/>
-                            <jsp:param name="contentCreator" value="${content.creator}"/>
-                            <jsp:param name="contentGenre" value="${content.genre}"/>
-                            <jsp:param name="contentImage" value="${content.image}"/>
-                            <jsp:param name="contentId" value="${content.id}"/>
-                            <jsp:param name="contentType" value="${content.type}"/>
-                            <jsp:param name="contentRating" value="${content.rating}"/>
-                            <jsp:param name="reviewsAmount" value="${content.reviewsAmount}"/>
-                            <jsp:param name="userName" value="${userName}"/>
-                            <jsp:param name="userWatchListContentId1" value="${userWatchListContentId.contains(content.id)}"/>
-                        </jsp:include>
-                    </c:forEach>
-                </div>
+        <div class="W-films-div">
+            <div class="row row-cols-1 row-cols-md-2 g-2 W-content-alignment">
+                <c:forEach var="content" items="${allContent}">
+                    <jsp:include page="components/contentCard.jsp">
+                        <jsp:param name="contentName" value="${content.name}"/>
+                        <jsp:param name="contentReleased" value="${content.released}"/>
+                        <jsp:param name="contentCreator" value="${content.creator}"/>
+                        <jsp:param name="contentGenre" value="${content.genre}"/>
+                        <jsp:param name="contentImage" value="${content.image}"/>
+                        <jsp:param name="contentId" value="${content.id}"/>
+                        <jsp:param name="contentType" value="${content.type}"/>
+                        <jsp:param name="contentRating" value="${content.rating}"/>
+                        <jsp:param name="reviewsAmount" value="${content.reviewsAmount}"/>
+                        <jsp:param name="userName" value="${userName}"/>
+                        <jsp:param name="userWatchListContentId1" value="${userWatchListContentId.contains(content.id)}"/>
+                    </jsp:include>
+                </c:forEach>
             </div>
+        </div>
 
-            <c:if test="${allContent == null || allContent.size() == 0}">
-                <div class="card W-not-found-card">
-                    <div class="card-body W-row-display" >
-                        <div class="W-search-notFound-image">
-                            <img class="W-not-found" src="<c:url value="/resources/img/noResults.png"/>" alt="Not_Found_Ing"/>
+        <c:if test="${allContent == null || allContent.size() == 0}">
+            <div class="card W-not-found-card">
+                <div class="card-body W-row-display" >
+                    <div class="W-search-notFound-image">
+                        <img class="W-not-found" src="<c:url value="/resources/img/noResults.png"/>" alt="Not_Found_Ing"/>
+                    </div>
+                    <div class="W-search-notFound-text">
+                        <div>
+                            <c:choose>
+                                <c:when test="${(query == null || query == '' || query == 'ANY') && (genre != null || durationFrom != 'ANY')}">
+                                    <p class="W-not-found-message"><spring:message code="Content.NoContent.Filters"/></p>
+                                </c:when>
+                                <c:otherwise>
+                                    <p class="W-not-found-message"><spring:message code="Content.NoContent" arguments="${query}"/></p>
+                                </c:otherwise>
+                            </c:choose>
                         </div>
-                        <div class="W-search-notFound-text">
-                            <div>
-                                <c:choose>
-                                    <c:when test="${(query == null || query == '') && (genre != null || durationFrom != 'ANY')}">
-                                        <p class="W-not-found-message"><spring:message code="Content.NoContent.Filters"/></p>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <p class="W-not-found-message"><spring:message code="Content.NoContent" arguments="${query}"/></p>
-                                    </c:otherwise>
-                                </c:choose>
-                            </div>
-                            <div>
-                                <h5 class="W-search-notFound-text2"><a href="<c:url value="/"/>"><spring:message code="WatchList.Recomendation"/></a></h5>
-                            </div>
+                        <div>
+                            <h5 class="W-search-notFound-text2"><a href="<c:url value="/"/>"><spring:message code="WatchList.Recomendation"/></a></h5>
                         </div>
                     </div>
                 </div>
-            </c:if>
-
-        </div>
+            </div>
+        </c:if>
 
         <c:if test="${amountPages > 1}">
             <div>
