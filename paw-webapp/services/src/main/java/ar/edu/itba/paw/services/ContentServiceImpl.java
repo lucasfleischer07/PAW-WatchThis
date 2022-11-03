@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.models.Content;
+import ar.edu.itba.paw.models.Sorting;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.persistance.ContentDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,7 @@ public class ContentServiceImpl implements ContentService {
     }
 
     @Override
-    public List<Content> getMasterContent(String type, List<String> genres, String durationFrom, String durationTo, String sort,String queryUser){
+    public List<Content> getMasterContent(String type, List<String> genres, String durationFrom, String durationTo, Sorting sort, String queryUser){
         String genre = getGenreQuery(genres);
         if (!Objects.equals(genre, "ANY") && Objects.equals(durationFrom, "ANY") && Objects.equals(queryUser, "ANY")) {
             return findByGenre(type, genre, sort);
@@ -65,7 +66,7 @@ public class ContentServiceImpl implements ContentService {
     }
 
     @Override
-    public List<Content> getAllContent(String type, String sort) {
+    public List<Content> getAllContent(String type, Sorting sort) {
         return ContentDao.getAllContent(type, sort);
     }
 
@@ -75,17 +76,17 @@ public class ContentServiceImpl implements ContentService {
     }
 
     @Override
-    public List<Content> findByGenre(String type, String genre, String sort) {
+    public List<Content> findByGenre(String type, String genre, Sorting sort) {
         return ContentDao.findByGenre(type, genre, sort);
     }
 
     @Override
-    public List<Content> findByDuration(String type, int durationFrom, int durationTo, String sort) {
+    public List<Content> findByDuration(String type, int durationFrom, int durationTo, Sorting sort) {
         return ContentDao.findByDuration(type, durationFrom, durationTo, sort);
     }
 
     @Override
-    public List<Content> findByDurationAndGenre(String type, String genre,int durationFrom, int durationTo, String sort){
+    public List<Content> findByDurationAndGenre(String type, String genre,int durationFrom, int durationTo, Sorting sort){
         return ContentDao.findByDurationAndGenre(type, genre,durationFrom,durationTo, sort);
     }
 
@@ -100,17 +101,17 @@ public class ContentServiceImpl implements ContentService {
     }
 
     @Override
-    public List<Content> getSearchedContentByGenre(String type, String genre, String sort,String queryUser){
+    public List<Content> getSearchedContentByGenre(String type, String genre, Sorting sort,String queryUser){
         return ContentDao.getSearchedContentByGenre(type,genre,sort,queryUser);
     }
 
     @Override
-    public List<Content> getSearchedContentByDuration(String type, int durationFrom, int durationTo, String sort,String queryUser){
+    public List<Content> getSearchedContentByDuration(String type, int durationFrom, int durationTo, Sorting sort,String queryUser){
         return ContentDao.getSearchedContentByDuration(type,durationFrom,durationTo,sort,queryUser);
     }
 
     @Override
-    public List<Content> getSearchedContentByDurationAndGenre(String type, String genre, int durationFrom, int durationTo, String sort,String queryUser){
+    public List<Content> getSearchedContentByDurationAndGenre(String type, String genre, int durationFrom, int durationTo, Sorting sort,String queryUser){
         return ContentDao.getSearchedContentByDurationAndGenre(type,genre,durationFrom,durationTo,sort,queryUser);
     }
 

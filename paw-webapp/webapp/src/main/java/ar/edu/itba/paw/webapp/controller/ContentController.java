@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.models.Content;
+import ar.edu.itba.paw.models.Sorting;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.services.ContentService;
 import ar.edu.itba.paw.services.UserService;
@@ -95,7 +96,7 @@ public class ContentController {
         mav.addObject("durationTo","ANY");
         mav.addObject("sorting","ANY");
         mav.addObject("contentType", "all");
-
+        mav.addObject("sortingTypes", Sorting.values());
         if(userDetails != null) {
             String userEmail = userDetails.getName();
             User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
