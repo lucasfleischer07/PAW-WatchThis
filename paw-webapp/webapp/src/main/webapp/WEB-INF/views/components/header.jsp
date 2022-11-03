@@ -358,25 +358,57 @@
                     </c:choose>
                 </div>
                 <div class="d-flex W-navbar-search">
-                    <form class="form-inline my-2 my-lg-0 W-searchbar" method="GET" action="<c:url value="/${param.type}/filters"/>">
-                        <spring:message var="searchPlaceholder" />
-                        <input name="query" class="form-control me-2" type="search" placeholder="<spring:message code="SearchMessage"/>" aria-label="Search" >
-                        <c:if test="${param.genre != 'ANY' && param.genre!=null}">
-                            <input type="hidden" id="thisField" name="genre" value="${param.genre}">
-                        </c:if>
-                        <c:if test="${param.durationFrom != 'ANY' && param.durationFrom!=null}">
-                            <input type="hidden" id="thisField" name="durationFrom" value="${param.durationFrom}">
-                            <input type="hidden" id="thisField" name="durationTo" value="${param.durationTo}">
-                        </c:if>
-                        <c:if test="${param.sorting != 'ANY' && param.sorting!=null}">
-                            <input type="hidden" id="thisField" name="sorting" value="${param.sorting}">
-                        </c:if>
-                        <button class="btn btn-success W-search-button-color" type="submit">
-                            <svg xmlns="http://www.w3.org/2000/svg"  fill="currentColor" class="bi bi-search W-search-icon" viewBox="0 0 16 16">
-                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-                            </svg>
-                        </button>
-                    </form>
+                    <c:choose>
+                        <c:when test="${param.type == 'profile'}">
+                            <form class="form-inline my-2 my-lg-0 W-searchbar" method="GET" action="<c:url value="/all/filters"/>">
+                                <spring:message var="searchPlaceholder" />
+                                <input name="query" class="form-control me-2" type="search" placeholder="<spring:message code="SearchMessage"/>" aria-label="Search" >
+                                <c:if test="${param.genre != 'ANY' && param.genre!=null}">
+                                    <input type="hidden" id="thisField" name="genre" value="${param.genre}">
+                                </c:if>
+                                <c:if test="${param.durationFrom != 'ANY' && param.durationFrom!=null}">
+                                    <input type="hidden" id="thisField" name="durationFrom" value="${param.durationFrom}">
+                                    <input type="hidden" id="thisField" name="durationTo" value="${param.durationTo}">
+                                </c:if>
+                                <c:if test="${param.sorting != 'ANY' && param.sorting!=null}">
+                                    <input type="hidden" id="thisField" name="sorting" value="${param.sorting}">
+                                </c:if>
+                                <button class="btn btn-success W-search-button-color" type="submit">
+                                    <svg xmlns="http://www.w3.org/2000/svg"  fill="currentColor" class="bi bi-search W-search-icon" viewBox="0 0 16 16">
+                                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                                    </svg>
+                                </button>
+                            </form>
+                        </c:when>
+                        <c:otherwise>
+                            <form class="form-inline my-2 my-lg-0 W-searchbar" method="GET" action="<c:url value="/${param.type}/filters"/>">
+                                <spring:message var="searchPlaceholder" />
+                                <c:choose>
+                                    <c:when test="${param.query != 'ANY'}">
+                                        <input name="query" class="form-control me-2" type="search" placeholder="<spring:message code="SearchMessage"/>" aria-label="Search" value="${param.query}" >
+                                    </c:when>
+                                    <c:otherwise>
+                                        <input name="query" class="form-control me-2" type="search" placeholder="<spring:message code="SearchMessage"/>" aria-label="Search" >
+                                    </c:otherwise>
+                                </c:choose>
+                                <c:if test="${param.genre != 'ANY' && param.genre!=null}">
+                                    <input type="hidden" id="thisField" name="genre" value="${param.genre}">
+                                </c:if>
+                                <c:if test="${param.durationFrom != 'ANY' && param.durationFrom!=null}">
+                                    <input type="hidden" id="thisField" name="durationFrom" value="${param.durationFrom}">
+                                    <input type="hidden" id="thisField" name="durationTo" value="${param.durationTo}">
+                                </c:if>
+                                <c:if test="${param.sorting != 'ANY' && param.sorting!=null}">
+                                    <input type="hidden" id="thisField" name="sorting" value="${param.sorting}">
+                                </c:if>
+                                <button class="btn btn-success W-search-button-color" type="submit">
+                                    <svg xmlns="http://www.w3.org/2000/svg"  fill="currentColor" class="bi bi-search W-search-icon" viewBox="0 0 16 16">
+                                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                                    </svg>
+                                </button>
+                            </form>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
 
                 <div class="W-nav-login-button">
@@ -391,7 +423,7 @@
                                     <li><a class="dropdown-item" href="<c:url value="/profile/watchList"/>"><spring:message code="WatchList"/></a></li>
                                     <li><a class="dropdown-item" href="<c:url value="/profile/viewedList"/>"><spring:message code="ViewedList.Title"/></a></li>
                                     <c:if test="${param.admin == true || param.admin == 'true'}">
-                                        <li><a class="dropdown-item" href="<c:url value="/content/create"/>"><spring:message code="CreateContentMessage"/></a></li>
+                                        <li><a class="dropdown-item" href="<c:url value="/content/create"/>"><spring:message code="CreateContent.Message"/></a></li>
                                     </c:if>
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item" href="<c:url value="/login/sign-out"/>"><spring:message code="LogOutMessage"/></a></li>

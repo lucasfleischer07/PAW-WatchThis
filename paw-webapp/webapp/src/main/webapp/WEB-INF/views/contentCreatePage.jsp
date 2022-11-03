@@ -18,10 +18,11 @@
         <link href="<c:url value="/resources/css/reviewRegistrationStyles.css"/>" rel="stylesheet" type="text/css"/>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
 
-        <title><spring:message code="CreateContentMessage"/></title>
+        <title><spring:message code="CreateContent.Message"/></title>
     </head>
     <body>
         <jsp:include page="components/header.jsp">
+            <jsp:param name="type" value="${type}"/>
             <jsp:param name="userName" value="${userName}"/>
             <jsp:param name="userId" value="${userId}"/>
             <jsp:param name="admin" value="${admin}"/>
@@ -199,7 +200,8 @@
                         </div>
                     </div>
                     <div class="W-submit-cancel-buttons">
-                        <a href="<c:url value="/"/>"><button type="button" class="btn btn-danger" id="cancelButton" onclick="(this).className += ' spinner-border'; (this).innerText = '|'"><spring:message code="Form.Cancel"/></button></a>
+                        <a href="<c:url value="/"/>" onclick="(this).className += ' spinner-border text-danger'; (this).innerText = ''">
+                            <button type="button" class="btn btn-danger" id="cancelButton"><spring:message code="Form.Cancel"/></button></a>
                         <button id="submitButton" type="submit" class="btn btn-success" onclick="this.form.submit(); (this).className += ' spinner-border'; (this).innerText = '|'"><spring:message code="Form.Submit"/></button>
                     </div>
                 </form:form>

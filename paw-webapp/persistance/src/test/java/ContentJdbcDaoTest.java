@@ -1,4 +1,5 @@
 import ar.edu.itba.paw.models.Content;
+import ar.edu.itba.paw.models.Sorting;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.persistance.ContentDao;
 import ar.edu.itba.paw.persistance.UserDao;
@@ -43,20 +44,20 @@ public class ContentJdbcDaoTest {
 
     @Test
     public void testGetAllContent(){
-        assertEquals(6, dao.getAllContent("ANY", "ANY").size());
+        assertEquals(6, dao.getAllContent("ANY", null).size());
 
     }
 
 
     @Test
     public void  testGetAllContentSort(){
-        List<Content> contentList=dao.getAllContent("ANY","A-Z");
+        List<Content> contentList=dao.getAllContent("ANY", Sorting.NameAsc);
         assertEquals(6, contentList.size());
         assertEquals("Avrupa Yakasi", contentList.get(0).getName());
     }
     @Test
     public void  testGetAllContentType(){
-        List<Content> contentList=dao.getAllContent("movie","ANY");
+        List<Content> contentList=dao.getAllContent("movie",null);
         assertEquals(4, contentList.size());
     }
 
@@ -69,7 +70,7 @@ public class ContentJdbcDaoTest {
 
     @Test
     public void testFindByGenreTest(){
-        List<Content> contentList=dao.findByGenre("all"," '%'|| " + "Animation" + " ||'%'","ANY");
+        List<Content> contentList=dao.findByGenre("all"," '%'|| " + "Animation" + " ||'%'",null);
         assertEquals(2, contentList.size());
     }
 
@@ -127,9 +128,9 @@ public class ContentJdbcDaoTest {
     @Rollback
     public void testCreateContent(){
         dao.contentCreate("new","description","2022","Animation","brandyhuevo",100,"100","movie",null);
-        dao.getAllContent("ANY", "ANY");
+        dao.getAllContent("ANY", null);
         assertTrue(dao.findByName("new").isPresent());
-        assertEquals(3, dao.findByGenre("all", "Animation", "ANY").size());
+        assertEquals(3, dao.findByGenre("all", "Animation", null).size());
     }
 
     @Test
@@ -160,8 +161,8 @@ public class ContentJdbcDaoTest {
     @Rollback
     public void testDeleteContent(){
         dao.deleteContent(2L);
-        List<Content> contentList=dao.getAllContent("ANY","ANY");
-        assertEquals(5,dao.getAllContent("ANY","ANY").size());
+        List<Content> contentList=dao.getAllContent("ANY",null);
+        assertEquals(5,dao.getAllContent("ANY",null).size());
     }
 
 

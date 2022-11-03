@@ -214,7 +214,7 @@
             <c:choose>
                 <c:when test="${param.sorting != '' && param.sorting != 'ANY'}">
                     <button id="sortingGroupDrop" type="button" class="W-filter-title btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                        <c:out value="${param.sorting}"/>
+                        <spring:message code="Sort.${param.sorting}"/>
                     </button>
                 </c:when>
                 <c:otherwise>
@@ -224,107 +224,29 @@
                 </c:otherwise>
             </c:choose>
             <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
-                                                                                        <c:param name="sorting" value="Last-released"/>
-                                                                                        <c:if test="${param.query != 'ANY' && param.query!=null}">
-                                                                                            <c:param name="query" value="${param.query}"/>
-                                                                                        </c:if>
-                                                                                        <c:choose>
-                                                                                            <c:when test="${param.genre!= 'ANY' && param.durationFrom!='ANY'}">
-                                                                                                <c:param name="genre" value="${param.genre}"/>
-                                                                                                <c:param name="durationFrom" value="${param.durationFrom}"/>
-                                                                                                <c:param name="durationTo" value="${param.durationTo}"/>
-                                                                                            </c:when>
-                                                                                            <c:when test="${param.genre== 'ANY' && param.durationFrom!='ANY'}">
-                                                                                                <c:param name="durationFrom" value="${param.durationFrom}"/>
-                                                                                                <c:param name="durationTo" value="${param.durationTo}"/>
-                                                                                            </c:when>
-                                                                                            <c:when test="${param.genre!= 'ANY' && param.durationFrom =='ANY'}">
-                                                                                                <c:param name="genre" value="${param.genre}"/>
-                                                                                            </c:when>
-                                                                                        </c:choose>
-                                                                                        </c:url>" onclick="showSorting(this)"><spring:message code="Sort.Last"/></a></li>
-                <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
-                                                                                        <c:param name="sorting" value="Older-released"/>
-                                                                                        <c:if test="${param.query != 'ANY' && param.query!=null}">
-                                                                                            <c:param name="query" value="${param.query}"/>
-                                                                                        </c:if>
-                                                                                        <c:choose>
-                                                                                            <c:when test="${param.genre!= 'ANY' && param.durationFrom!='ANY'}">
-                                                                                                <c:param name="genre" value="${param.genre}"/>
-                                                                                                <c:param name="durationFrom" value="${param.durationFrom}"/>
-                                                                                                <c:param name="durationTo" value="${param.durationTo}"/>
-                                                                                            </c:when>
-                                                                                            <c:when test="${param.genre== 'ANY' && param.durationFrom!='ANY'}">
-                                                                                                <c:param name="durationFrom" value="${param.durationFrom}"/>
-                                                                                                <c:param name="durationTo" value="${param.durationTo}"/>
-                                                                                            </c:when>
-                                                                                            <c:when test="${param.genre!= 'ANY' && param.durationFrom =='ANY'}">
-                                                                                                <c:param name="genre" value="${param.genre}"/>
-                                                                                            </c:when>
-                                                                                        </c:choose>
-                                                                                        </c:url>" onclick="showSorting(this)"><spring:message code="Sort.Older"/></a></li>
-                <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
-                                                                                        <c:param name="sorting" value="Best-ratings"/>
-                                                                                        <c:if test="${param.query != 'ANY' && param.query!=null}">
-                                                                                            <c:param name="query" value="${param.query}"/>
-                                                                                        </c:if>
-                                                                                        <c:choose>
-                                                                                            <c:when test="${param.genre!= 'ANY' && param.durationFrom!='ANY'}">
-                                                                                                <c:param name="genre" value="${param.genre}"/>
-                                                                                                <c:param name="durationFrom" value="${param.durationFrom}"/>
-                                                                                                <c:param name="durationTo" value="${param.durationTo}"/>
-                                                                                            </c:when>
-                                                                                            <c:when test="${param.genre== 'ANY' && param.durationFrom!='ANY'}">
-                                                                                                <c:param name="durationFrom" value="${param.durationFrom}"/>
-                                                                                                <c:param name="durationTo" value="${param.durationTo}"/>
-                                                                                            </c:when>
-                                                                                            <c:when test="${param.genre!= 'ANY' && param.durationFrom =='ANY'}">
-                                                                                                <c:param name="genre" value="${param.genre}"/>
-                                                                                            </c:when>
-                                                                                        </c:choose>
-                                                                                        </c:url>" onclick="showSorting(this)"><spring:message code="Sort.Best"/></a></li>
-                <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
-                                                                                        <c:param name="sorting" value="A-Z"/>
-                                                                                        <c:if test="${param.query != 'ANY' && param.query!=null}">
-                                                                                            <c:param name="query" value="${param.query}"/>
-                                                                                        </c:if>
-                                                                                        <c:choose>
-                                                                                            <c:when test="${param.genre!= 'ANY' && param.durationFrom!='ANY'}">
-                                                                                                <c:param name="genre" value="${param.genre}"/>
-                                                                                                <c:param name="durationFrom" value="${param.durationFrom}"/>
-                                                                                                <c:param name="durationTo" value="${param.durationTo}"/>
-                                                                                            </c:when>
-                                                                                            <c:when test="${param.genre== 'ANY' && param.durationFrom!='ANY'}">
-                                                                                                <c:param name="durationFrom" value="${param.durationFrom}"/>
-                                                                                                <c:param name="durationTo" value="${param.durationTo}"/>
-                                                                                            </c:when>
-                                                                                            <c:when test="${param.genre!= 'ANY' && param.durationFrom =='ANY'}">
-                                                                                                <c:param name="genre" value="${param.genre}"/>
-                                                                                            </c:when>
-                                                                                        </c:choose>
-                                                                                        </c:url>" onclick="showSorting(this)"><spring:message code="Sort.A_Z"/></a></li>
-                <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
-                                                                                        <c:param name="sorting" value="Z-A"/>
-                                                                                        <c:if test="${param.query != 'ANY' && param.query!=null}">
-                                                                                            <c:param name="query" value="${param.query}"/>
-                                                                                        </c:if>
-                                                                                        <c:choose>
-                                                                                            <c:when test="${param.genre!= 'ANY' && param.durationFrom!='ANY'}">
-                                                                                                <c:param name="genre" value="${param.genre}"/>
-                                                                                                <c:param name="durationFrom" value="${param.durationFrom}"/>
-                                                                                                <c:param name="durationTo" value="${param.durationTo}"/>
-                                                                                            </c:when>
-                                                                                            <c:when test="${param.genre== 'ANY' && param.durationFrom!='ANY'}">
-                                                                                                <c:param name="durationFrom" value="${param.durationFrom}"/>
-                                                                                                <c:param name="durationTo" value="${param.durationTo}"/>
-                                                                                            </c:when>
-                                                                                            <c:when test="${param.genre!= 'ANY' && param.durationFrom =='ANY'}">
-                                                                                                <c:param name="genre" value="${param.genre}"/>
-                                                                                            </c:when>
-                                                                                        </c:choose>
-                                                                                        </c:url>" onclick="showSorting(this)"><spring:message code="Sort.Z-A"/></a></li>
-
+                <jsp:useBean id="sortingTypes" scope="request" type="ar.edu.itba.paw.models.Sorting[]"/>
+                <c:forEach var="sortingType" items="${sortingTypes}">
+                    <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
+                        <c:param name="sorting" value="${sortingType.toString()}"/>
+                        <c:if test="${param.query != 'ANY' && param.query!=null}">
+                            <c:param name="query" value="${param.query}"/>
+                        </c:if>
+                        <c:choose>
+                            <c:when test="${param.genre!= 'ANY' && param.durationFrom!='ANY'}">
+                                <c:param name="genre" value="${param.genre}"/>
+                                <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                <c:param name="durationTo" value="${param.durationTo}"/>
+                            </c:when>
+                            <c:when test="${param.genre== 'ANY' && param.durationFrom!='ANY'}">
+                                <c:param name="durationFrom" value="${param.durationFrom}"/>
+                                <c:param name="durationTo" value="${param.durationTo}"/>
+                            </c:when>
+                            <c:when test="${param.genre!= 'ANY' && param.durationFrom =='ANY'}">
+                                <c:param name="genre" value="${param.genre}"/>
+                            </c:when>
+                        </c:choose>
+                        </c:url>" onclick="showSorting(this)"><spring:message code="Sort.${sortingType.toString()}"/></a></li>
+                </c:forEach>
             </ul>
         </div>
     </div>

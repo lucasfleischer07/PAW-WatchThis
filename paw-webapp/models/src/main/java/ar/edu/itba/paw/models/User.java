@@ -85,12 +85,12 @@ public class User {
     public Long getReputation() {
         List<Review> userReviews = getUserReviews();
         Long reputation = 0L;
+        if(userReviews.size() == 0) {
+            return 0L;
+        }
         for(Review review : userReviews) {
             reputation += (review.getReputation());
         }
-//        if(reputation == 0) {
-//            return 0L;
-//        }
         reputation /= userReviews.size();
         return reputation;
     }
