@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.models;
 
+import org.hibernate.annotations.Formula;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -19,8 +21,7 @@ public class Review {
     private String type;
     @Column(nullable = false)
     private int rating;
-
-    @Column(nullable = false)
+    @Formula(value = "(SELECT coalesce(count(CASE WHEN r.upvote THEN 1 END),0) - coalesce(count(CASE WHEN r.downvote THEN 1 END),0) FROM reputation  r where r.reviewid=reviewid)")
     private int reputation;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -109,17 +110,8 @@ public class Review {
         this.content = content;
     }
 
-    public int getReputation() {
-        int count=0;
-        for (Reputation rep:getUserVotes()
-             ) {
-            if(rep.isUpvote())
-                count++;
-            else count--;
-
-        }
-        return count;
-    }
+    @Transient
+    public int getReputation() {return reputation;}
 
     public void setReputation(int reputation) {
         this.reputation = reputation;

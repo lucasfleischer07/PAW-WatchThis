@@ -361,7 +361,7 @@ public class ContentJpaDao implements ContentDao{
         for (Integer big:resulList) {
             longList.add(big.longValue());
         }
-        TypedQuery<Content> query= em.createQuery(" FROM Content WHERE id IN ( :resultList ) ",Content.class);
+        TypedQuery<Content> query= em.createQuery(" FROM Content WHERE id IN ( :resultList ) ORDER BY rating DESC",Content.class);
         query.setParameter("resultList",longList);
         return query.getResultList();
     }

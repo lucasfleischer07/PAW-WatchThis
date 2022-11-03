@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.models;
 
+import org.hibernate.annotations.Formula;
+
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
@@ -49,8 +51,10 @@ public class Content {
             inverseJoinColumns = @JoinColumn(name = "userid",referencedColumnName = "userid"))
     private List<User> viewedlist;
 
+    @Formula(value = "(select coalesce(count(*),0) from review where review.contentid=id)")
     private Integer reviewsAmount;
 
+    @Formula(value="(select coalesce(avg(review.rating),0) from review where review.contentid=id and review.rating <> 0)")
     private Integer rating;
 
 
@@ -76,23 +80,14 @@ public class Content {
 // Just for Hibernate, we love you!
     }
 
-
+    @Transient
     public Integer getReviewsAmount() {
-        return contentReviews.size();
+        return reviewsAmount;
     }
 
+    @Transient
     public Integer getRating(){
-        int count=0;
-        int num=0;
-        for (Review review:contentReviews) {
-            if(review.getRating()>0){
-                count++;
-                num+=review.getRating();
-            }
-        }
-        if(count==0)
-            return 0;
-        return num/count;
+        return rating;
     }
 
     public long getId() {

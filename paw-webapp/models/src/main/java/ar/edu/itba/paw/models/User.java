@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.models;
 
+import org.hibernate.annotations.Formula;
+
 import javax.persistence.*;
 import java.util.List;
 import java.util.Set;
@@ -12,6 +14,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "userdata_userid_seq")
     @SequenceGenerator(name= "userdata_userid_seq",sequenceName = "userdata_userid_seq",allocationSize = 1)
     private Long id;
+
+    @Formula(value = "(SELECT coalesce(count(CASE WHEN r.upvote THEN 1 END),0) - coalesce(count(CASE WHEN r.downvote THEN 1 END),0) FROM reputation r join review r2 on r2.reviewid = r.reviewid  where r2.userid=userid)")
     private Long reputation;
     @Column(unique = true,nullable = false)
     private String email;
@@ -82,16 +86,8 @@ public class User {
         return userName;
     }
 
+    @Transient
     public Long getReputation() {
-        List<Review> userReviews = getUserReviews();
-        Long reputation = 0L;
-        if(userReviews.size() == 0) {
-            return 0L;
-        }
-        for(Review review : userReviews) {
-            reputation += (review.getReputation());
-        }
-        reputation /= userReviews.size();
         return reputation;
     }
 
