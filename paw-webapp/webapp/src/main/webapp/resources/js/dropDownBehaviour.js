@@ -15,4 +15,9 @@
         document.getElementById("sortingGroupDrop").innerHTML = item.innerHTML;
     }
 
-
+    function dropDownStay() {
+        const ul = document.getElementById('test');
+        ul.addEventListener('click', function (event) {
+            event.stopPropagation();
+        });
+    }

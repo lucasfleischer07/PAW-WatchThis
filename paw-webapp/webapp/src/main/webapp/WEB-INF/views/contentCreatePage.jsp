@@ -59,7 +59,7 @@
                             <div class="mb-3 W-input-label-review-info">
                                 <form:errors path="description" element="p" cssStyle="color: #b21e26"/>
                                 <form:label path="description" class="form-label"><spring:message code="CreateContent.ContentDescription"/> <span class="W-red-asterisco"><spring:message code="Asterisk"/></span></form:label>
-                                <p class="W-review-registration-text"><spring:message code="CreateContent.CharacterLimits" arguments="20,500"/></p>
+                                <p class="W-review-registration-text"><spring:message code="CreateContent.CharacterLimits" arguments="20,2000"/></p>
                                 <form:textarea class="form-control" id="MyTextArea" path="description" rows="3"/>
                             </div>
                             <div class="mb-3 W-input-label-review-info">

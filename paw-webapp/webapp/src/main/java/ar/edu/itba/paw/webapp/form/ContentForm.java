@@ -13,7 +13,7 @@ public class ContentForm {
     @Pattern(regexp	= "([a-zA-Z0-9ñáéíóú!,.:;=+\n\\-_()?<>$%&#@{}\\[\\]|*\"'~/`^\\s]+)?")
     private String name;
 
-    @Size(min = 20, max = 500)
+    @Size(min = 20, max = 2000)
     @Pattern(regexp	= "([a-zA-Z0-9ñáéíóú!,.:;=+\n\\-_()?<>$%&#@{}\\[\\]|*\"'~/`^\\s]+)?")
     private String description;
 

@@ -9,85 +9,86 @@
     <div class="W-genre-duration-div">
         <div class="list-group">
             <div class="dropdown W-dropdown-button">
-                <c:choose>
-                    <c:when test="${param.genre != '' && param.genre != 'ANY'}">
-                        <button id="genreGroupDrop" type="button" class="W-filter-title btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                            <c:out value="${param.genre}"/>
-                        </button>
-                    </c:when>
-                    <c:otherwise>
-                        <button id="genreGroupDrop" type="button" class="W-filter-title btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                            <spring:message code="GenreMessage"/>
-                        </button>
-                    </c:otherwise>
-                </c:choose>
-                <ul class="dropdown-menu">
-                    <c:url value="/${param.type}/filters" var="postPath">
-                        <c:if test="${query != 'ANY' && query!=null}">
-                            <c:param name="query" value="${query}"/>
-                        </c:if>
-                        <c:if test="${durationFrom != 'ANY' && durationFrom!=null}">
-                            <c:param name="durationFrom" value="${durationFrom}"/>
-                            <c:param name="durationTo" value="${durationTo}"/>
-                        </c:if>
-                        <c:if test="${sorting != 'ANY' && sorting!=null}">
-                            <c:param name="sorting" value="${sorting}"/>
-                        </c:if>
-                    </c:url>
-                    <form:form modelAttribute="genreFilterForm" action="${postPath}" method="post" enctype="multipart/form-data">
-                        <li class="mb-1 px-2">
-                            <label><form:checkbox cssClass="px-2" path="formGenre" value="Action"/> <spring:message code="Genre.Action"/></label>
-                        </li>
+                    <c:choose>
+                        <c:when test="${param.genre != '' && param.genre != 'ANY'}">
+                            <button id="genreGroupDrop" type="button" onclick="dropDownStay()" class="W-filter-title btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                <c:out value="${param.genre}"/>
+                            </button>
+                        </c:when>
+                        <c:otherwise>
+                            <button id="genreGroupDrop" onclick="dropDownStay()" type="button" class="W-filter-title btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" >
+                                <spring:message code="GenreMessage"/>
+                            </button>
+                        </c:otherwise>
+                    </c:choose>
+                    <ul class="dropdown-menu" id="test">
 
-                        <li class="mb-1 px-2">
-                            <label><form:checkbox cssClass="px-2" path="formGenre" value="Sci-Fi"/> <spring:message code="Genre.Science"/></label>
-                        </li>
+                        <c:url value="/${param.type}/filters" var="postPath">
+                            <c:if test="${query != 'ANY' && query!=null}">
+                                <c:param name="query" value="${query}"/>
+                            </c:if>
+                            <c:if test="${durationFrom != 'ANY' && durationFrom!=null}">
+                                <c:param name="durationFrom" value="${durationFrom}"/>
+                                <c:param name="durationTo" value="${durationTo}"/>
+                            </c:if>
+                            <c:if test="${sorting != 'ANY' && sorting!=null}">
+                                <c:param name="sorting" value="${sorting}"/>
+                            </c:if>
+                        </c:url>
+                        <form:form modelAttribute="genreFilterForm" action="${postPath}" method="post" enctype="multipart/form-data">
+                            <li class="mb-1 px-2">
+                                <label><form:checkbox cssClass="px-2" path="formGenre" value="Action"/> <spring:message code="Genre.Action"/></label>
+                            </li>
 
-                        <li class="mb-1 px-2">
-                            <label><form:checkbox cssClass="px-2" path="formGenre" value="Comedy"/> <spring:message code="Genre.Comedy"/></label>
-                        </li>
+                            <li class="mb-1 px-2">
+                                <label><form:checkbox cssClass="px-2" path="formGenre" value="Sci-Fi"/> <spring:message code="Genre.Science"/></label>
+                            </li>
 
-                        <li class="mb-1 px-2">
-                            <label><form:checkbox cssClass="px-2" path="formGenre" value="Adventure"/> <spring:message code="Genre.Adventure"/></label>
-                        </li>
+                            <li class="mb-1 px-2">
+                                <label><form:checkbox cssClass="px-2" path="formGenre" value="Comedy"/> <spring:message code="Genre.Comedy"/></label>
+                            </li>
 
-                        <li class="mb-1 px-2">
-                            <label><form:checkbox cssClass="px-2" path="formGenre" value="Drama"/> <spring:message code="Genre.Drama"/></label>
-                        </li>
+                            <li class="mb-1 px-2">
+                                <label><form:checkbox cssClass="px-2" path="formGenre" value="Adventure"/> <spring:message code="Genre.Adventure"/></label>
+                            </li>
 
-                        <li class="mb-1 px-2">
-                            <form:checkbox cssClass="px-2" path="formGenre" value="Horror"/> <spring:message code="Genre.Horror"/>
-                        </li>
+                            <li class="mb-1 px-2">
+                                <label><form:checkbox cssClass="px-2" path="formGenre" value="Drama"/> <spring:message code="Genre.Drama"/></label>
+                            </li>
 
-                        <li class="mb-1 px-2">
-                            <label><form:checkbox cssClass="px-2" path="formGenre" value="Animation"/> <spring:message code="Genre.Animation"/></label>
-                        </li>
+                            <li class="mb-1 px-2">
+                                <label><form:checkbox cssClass="px-2" path="formGenre" value="Horror"/> <spring:message code="Genre.Horror"/></label>
+                            </li>
 
-                        <li class="mb-1 px-2">
-                            <label><form:checkbox cssClass="px-2" path="formGenre" value="Thriller"/> <spring:message code="Genre.Thriller"/></label>
-                        </li>
+                            <li class="mb-1 px-2">
+                                <label><form:checkbox cssClass="px-2" path="formGenre" value="Animation"/> <spring:message code="Genre.Animation"/></label>
+                            </li>
 
-                        <li class="mb-1 px-2">
-                            <label><form:checkbox cssClass="px-2" path="formGenre" value="Mystery"/> <spring:message code="Genre.Mystery"/></label>
-                        </li>
+                            <li class="mb-1 px-2">
+                                <label><form:checkbox cssClass="px-2" path="formGenre" value="Thriller"/> <spring:message code="Genre.Thriller"/></label>
+                            </li>
 
-                        <li class="mb-1 px-2">
-                            <label><form:checkbox cssClass="px-2" path="formGenre" value="Crime"/> <spring:message code="Genre.Crime"/></label>
-                        </li>
+                            <li class="mb-1 px-2">
+                                <label><form:checkbox cssClass="px-2" path="formGenre" value="Mystery"/> <spring:message code="Genre.Mystery"/></label>
+                            </li>
 
-                        <li class="mb-1 px-2">
-                            <label><form:checkbox cssClass="px-2" path="formGenre" value="Fantasy"/> <spring:message code="Genre.Fantasy"/></label>
-                        </li>
+                            <li class="mb-1 px-2">
+                                <label><form:checkbox cssClass="px-2" path="formGenre" value="Crime"/> <spring:message code="Genre.Crime"/></label>
+                            </li>
 
-                        <li class="mb-1 px-2">
-                            <label><form:checkbox cssClass="px-2" path="formGenre" value="Romance"/> <spring:message code="Genre.Romance"/></label>
-                        </li>
+                            <li class="mb-1 px-2">
+                                <label><form:checkbox cssClass="px-2" path="formGenre" value="Fantasy"/> <spring:message code="Genre.Fantasy"/></label>
+                            </li>
 
-                        <div class="W-apply-button">
-                            <button type="submit" class="btn btn-danger mb-1 px-2"> <spring:message code="Apply"/></button>
-                        </div>
-                    </form:form>
-                </ul>
+                            <li class="mb-1 px-2">
+                                <label><form:checkbox cssClass="px-2" path="formGenre" value="Romance"/> <spring:message code="Genre.Romance"/></label>
+                            </li>
+
+                            <div class="W-apply-button">
+                                <button type="submit" class="btn btn-danger mb-1 px-2"> <spring:message code="Apply"/></button>
+                            </div>
+                        </form:form>
+                    </ul>
             </div>
         </div>
 
@@ -254,3 +255,9 @@
 </div>
 
 <script src="<c:url value="/resources/js/dropDownBehaviour.js"/>"></script>
+<%--<script>--%>
+<%--    document.getElementById("myDropdown").addEventListener('click', function (event) {--%>
+<%--        event.stopPropagation();--%>
+<%--    });--%>
+<%--</script>--%>
+
