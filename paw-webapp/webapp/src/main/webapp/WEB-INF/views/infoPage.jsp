@@ -19,7 +19,7 @@
 
   <body>
     <jsp:include page="components/header.jsp">
-      <jsp:param name="type" value="${details.type}"/>
+      <jsp:param name="type" value="${type}"/>
       <jsp:param name="userName" value="${userName}"/>
       <jsp:param name="userId" value="${userId}"/>
       <jsp:param name="admin" value="${admin}"/>
@@ -207,7 +207,7 @@
               <c:choose>
                 <c:when test="${userName != 'null' && reviews[0].creator.userName==userName}"/>
                 <c:when test="${userName != 'null'}">
-                  <a href="<c:url value="/reviewForm/${details.type}/${details.id}/${userId}"/>"><button type="button" class="btn btn-dark W-add-review-button W-reviewText"><spring:message code="Content.AddReview"/></button></a>
+                  <a href="<c:url value="/reviewForm/${details.type}/${details.id}/${userId}"/>" onclick="(this).className += ' spinner-border text-dark'; (this).innerText = ''"><button type="button" class="btn btn-dark W-add-review-button W-reviewText"><spring:message code="Content.AddReview"/></button></a>
                 </c:when>
                 <c:otherwise>
                   <button type="button" class="btn btn-dark W-add-review-button W-reviewText" data-bs-toggle="modal" data-bs-target="#exampleModal"><spring:message code="Content.AddReview"/></button>

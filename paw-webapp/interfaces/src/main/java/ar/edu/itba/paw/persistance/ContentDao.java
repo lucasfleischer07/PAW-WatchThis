@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistance;
 
 import ar.edu.itba.paw.models.Content;
+import ar.edu.itba.paw.models.Sorting;
 import ar.edu.itba.paw.models.User;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -9,17 +10,17 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ContentDao {
-    List<Content> getAllContent(String type, String sort);
+    List<Content> getAllContent(String type, Sorting sort);
     Optional<Content> findByName(String name);
-    List<Content> findByGenre(String type, String genre, String sort);
-    List<Content> findByDuration(String type, int durationFrom, int durationTo, String sort);
-    List<Content> findByDurationAndGenre(String type, String genre,int durationFrom, int durationTo, String sort);
+    List<Content> findByGenre(String type, String genre, Sorting sort);
+    List<Content> findByDuration(String type, int durationFrom, int durationTo, Sorting sort);
+    List<Content> findByDurationAndGenre(String type, String genre,int durationFrom, int durationTo, Sorting sort);
     Optional<Content> findById(long id);
     List<Content> getSearchedContent(String type,String queryUser);
     List<Content> getSearchedContentRandom(String query);
-    List<Content> getSearchedContentByGenre(String type, String genre, String sort,String queryUser);
-    List<Content> getSearchedContentByDuration(String type, int durationFrom, int durationTo, String sort,String queryUser);
-    List<Content> getSearchedContentByDurationAndGenre(String type, String genre, int durationFrom, int durationTo, String sort,String queryUser);
+    List<Content> getSearchedContentByGenre(String type, String genre, Sorting sort,String queryUser);
+    List<Content> getSearchedContentByDuration(String type, int durationFrom, int durationTo, Sorting sort,String queryUser);
+    List<Content> getSearchedContentByDurationAndGenre(String type, String genre, int durationFrom, int durationTo, Sorting sort,String queryUser);
     List<Content> findByType(String type);
     List<Content> getBestRated();
     List<Content> getUserRecommended(User user);

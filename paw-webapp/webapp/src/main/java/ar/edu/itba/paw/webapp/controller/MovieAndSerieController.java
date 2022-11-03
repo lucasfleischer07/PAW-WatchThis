@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.models.Content;
 import ar.edu.itba.paw.models.Review;
+import ar.edu.itba.paw.models.Sorting;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.services.ContentService;
 import ar.edu.itba.paw.services.PaginationService;
@@ -94,7 +95,7 @@ public class MovieAndSerieController {
             auxType = "serie";
         }
         int page= pageNum.orElse(1);
-        List<Content> contentList = cs.getAllContent(auxType, "ANY");
+        List<Content> contentList = cs.getAllContent(auxType, null);
         if(contentList == null) {
             LOGGER.warn("Failed at requesting content",new PageNotFoundException());
             throw new PageNotFoundException();
@@ -112,8 +113,9 @@ public class MovieAndSerieController {
             mav.addObject("genre","ANY");
             mav.addObject("durationFrom","ANY");
             mav.addObject("durationTo","ANY");
+            mav.addObject("sorting","ANY");
         }
-
+        mav.addObject("sortingTypes", Sorting.values());
         HeaderSetUp(mav,userDetails);
         request.getSession().setAttribute("referer","/"+type);
 
@@ -139,8 +141,18 @@ public class MovieAndSerieController {
             LOGGER.warn("Cant find a the content specified",new PageNotFoundException());
             throw new PageNotFoundException();
         }
+
+        String auxType;
+        if (Objects.equals(type, "movie")) {
+            auxType = "movies";
+        } else if (Objects.equals(type, "serie")) {
+            auxType = "series";
+        } else {
+            auxType = "all";
+        }
+
         mav.addObject("contentId",contentId);
-        mav.addObject("type",type);
+        mav.addObject("type",auxType);
 
         if(userDetails != null) {
             String userEmail = userDetails.getName();
@@ -197,7 +209,7 @@ public class MovieAndSerieController {
             @PathVariable("pageNum")final Optional<Integer> pageNum,
             @RequestParam(name = "durationFrom",defaultValue = "ANY",required = false)final String durationFrom,
             @RequestParam(name = "durationTo",defaultValue = "ANY",required = false)final String durationTo,
-            @RequestParam(name = "sorting", defaultValue = "ANY", required = false) final String sorting,
+            @RequestParam(name = "sorting", required = false) final Optional<Sorting> sorting,
             @RequestParam(name = "query", defaultValue = "ANY") final String query,
             @RequestParam(name = "genre",required = false)final List<String> genre,
             HttpServletRequest request) {
@@ -218,7 +230,7 @@ public class MovieAndSerieController {
         if(genreList!=null){
             genreFilterForm.setFormGenre(genreList.toArray(new String[0]));
         }
-        List<Content> contentListFilter = cs.getMasterContent(auxType,genreList,durationFrom,durationTo,sorting,query);
+        List<Content> contentListFilter = cs.getMasterContent(auxType,genreList,durationFrom,durationTo,sorting.orElse(null),query);
 
         mav = new ModelAndView("contentPage");
 
@@ -238,8 +250,9 @@ public class MovieAndSerieController {
         mav.addObject("genre", cs.getGenreString(genreList));
         mav.addObject("durationFrom",durationFrom);
         mav.addObject("durationTo",durationTo);
-        mav.addObject("sorting", sorting);
+        mav.addObject("sorting", sorting.isPresent()? sorting.get().toString() : "ANY");
         mav.addObject("query", query);
+        mav.addObject("sortingTypes", Sorting.values());
         HeaderSetUp(mav,userDetails);
         request.getSession().setAttribute("referer","/"+type+"/filters");
         return mav;

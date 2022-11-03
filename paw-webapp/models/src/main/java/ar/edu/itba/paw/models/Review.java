@@ -31,7 +31,7 @@ public class Review {
     @JoinColumn(name = "contentid")
     private Content content;
 
-    @OneToMany(mappedBy = "review")
+    @OneToMany(mappedBy = "review",orphanRemoval = true)
     private Set<Reputation> userVotes;
 
 
