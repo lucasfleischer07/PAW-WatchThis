@@ -31,8 +31,7 @@ public class Content {
     @Column
     private Integer durationNum;
 
-    @OneToMany(orphanRemoval = true,fetch = FetchType.LAZY)
-    @JoinColumn(name = "contentid",referencedColumnName = "id")
+    @OneToMany(orphanRemoval = true,fetch = FetchType.LAZY,mappedBy = "content")
     private List<Review> contentReviews;
 
     @ManyToMany(fetch = FetchType.LAZY)

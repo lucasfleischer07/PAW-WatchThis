@@ -446,6 +446,7 @@ public class ContentJpaDao implements ContentDao{
 
     @Override
     public void deleteContent(Long id) {
+
         Content toDelete =findById(id).get();
         em.remove(toDelete);
     }
