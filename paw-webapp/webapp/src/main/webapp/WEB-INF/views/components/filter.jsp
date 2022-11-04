@@ -22,7 +22,6 @@
                         </c:otherwise>
                     </c:choose>
                     <ul class="dropdown-menu" id="test">
-
                         <c:url value="/${param.type}/filters" var="postPath">
                             <c:if test="${query != 'ANY' && query!=null}">
                                 <c:param name="query" value="${query}"/>

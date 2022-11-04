@@ -218,6 +218,30 @@
     margin-right: 1.5vw;
 }
 
+.W-comment-username-report-description-div {
+    width: 100%;
+}
+
+.W-comment-username-and-report {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.W-no-bullets-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.W-delete-edit-report-review-buttons {
+    display: flex;
+}
+
+.W-background-color-report {
+    background-color: transparent;
+    border-color: transparent;
+}
+
 .W-card-width {
     width: 100%;
 }

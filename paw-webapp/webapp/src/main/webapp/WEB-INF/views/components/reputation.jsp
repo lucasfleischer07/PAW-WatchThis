@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+
 <div class="W-movie-description-and-thumb-buttons">
     <div class="W-column-display-thumbs">
         <div class="W-thumbs-buttons-and-text">
@@ -114,7 +115,10 @@
 
 
 <div class="W-comment-section-general-div">
-    <jsp:include page="comments.jsp"/>
+    <jsp:include page="comments.jsp">
+        <jsp:param name="loggedUserName" value="${param.loggedUserName}"/>
+        <jsp:param name="reviewId" value="${param.reviewId}"/>
+    </jsp:include>
 
 
 <%--    <c:forEach var="content" items="${comments}">--%>

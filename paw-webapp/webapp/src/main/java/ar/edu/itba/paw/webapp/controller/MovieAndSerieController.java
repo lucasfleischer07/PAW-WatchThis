@@ -11,6 +11,7 @@ import ar.edu.itba.paw.services.UserService;
 import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
 import ar.edu.itba.paw.webapp.form.CommentForm;
 import ar.edu.itba.paw.webapp.form.GenreFilterForm;
+import ar.edu.itba.paw.webapp.form.ReportCommentForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -133,6 +134,8 @@ public class MovieAndSerieController {
                                 @PathVariable("contentId")final long contentId,
                                 @PathVariable("type") final String type,
                                 @Valid @ModelAttribute("commentForm") final CommentForm commentForm,
+                                @ModelAttribute("reportReviewForm") final ReportCommentForm reportReviewForm,
+                                @ModelAttribute("reportCommentForm") final ReportCommentForm reportCommentForm,
                                 @PathVariable("pageNum")final Optional<Integer> pageNum,
                                 HttpServletRequest request) {
         final ModelAndView mav = new ModelAndView("infoPage");
