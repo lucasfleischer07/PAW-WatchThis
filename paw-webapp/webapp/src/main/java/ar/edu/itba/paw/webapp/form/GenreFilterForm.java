@@ -6,7 +6,6 @@ public class GenreFilterForm {
     public String[] getFormGenre() {
         return formGenre;
     }
-
     public void setFormGenre(String[] formGenre) {
         this.formGenre = formGenre;
     }

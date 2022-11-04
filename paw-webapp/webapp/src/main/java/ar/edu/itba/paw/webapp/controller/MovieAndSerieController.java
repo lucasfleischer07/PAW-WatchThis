@@ -9,6 +9,7 @@ import ar.edu.itba.paw.services.PaginationService;
 import ar.edu.itba.paw.services.ReviewService;
 import ar.edu.itba.paw.services.UserService;
 import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
+import ar.edu.itba.paw.webapp.form.CommentForm;
 import ar.edu.itba.paw.webapp.form.GenreFilterForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.*;
 
@@ -130,6 +132,7 @@ public class MovieAndSerieController {
     public ModelAndView reviews(Principal userDetails,
                                 @PathVariable("contentId")final long contentId,
                                 @PathVariable("type") final String type,
+                                @Valid @ModelAttribute("commentForm") final CommentForm commentForm,
                                 @PathVariable("pageNum")final Optional<Integer> pageNum,
                                 HttpServletRequest request) {
         final ModelAndView mav = new ModelAndView("infoPage");

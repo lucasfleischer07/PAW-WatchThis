@@ -74,7 +74,7 @@
         </div>
         <div id="<c:out value="collapse${param.reviewId}"/>" class="accordion-collapse collapse" aria-labelledby="<c:out value="heading${param.reviewId}"/>" data-bs-parent="<c:out value="#accordion${param.reviewId}"/>">
             <div class="accordion-body">
-                <jsp:include page="comment.jsp">
+                <jsp:include page="reputation.jsp">
                     <jsp:param name="commentText" value="${param.reviewDescription}"/>
                     <jsp:param name="reviewId" value="${param.reviewId}"/>
                     <jsp:param name="loggedUserName" value="${param.loggedUserName}"/>
