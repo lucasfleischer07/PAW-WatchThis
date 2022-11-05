@@ -3,18 +3,18 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <div class="card" style="width: 80%">
-    <div class="card-body" style="display: flex">
+    <div class="card-body W-general-div-comment">
         <div>
             <%--            <c:choose>--%>
             <%--                <c:when test="${user.image == null}">--%>
-            <img src="<c:url value="/resources/img/defaultUserImg.png"/> " alt="User_img" class="W-comment-profile-picture">
+            <img src="<c:url value="/resources/img/backgorundImage.png"/> " alt="User_img" class="W-comment-profile-picture">
             <%--                </c:when>--%>
             <%--                <c:otherwise>--%>
             <%--                    <img src="<c:url value="/profile/${user.userName}/profileImage"/> " alt="User_img" class="W-edit-profile-picture">--%>
             <%--                </c:otherwise>--%>
             <%--            </c:choose>        --%>
         </div>
-        <div class="W-comment-username-report-description-div">
+        <div class="W-comment-username-report-description-div ">
             <div class="W-comment-username-and-report">
                 <div>
                     <a href="<c:url value="/"/>" class="W-creator-review">Holaaaa</a>
@@ -104,8 +104,8 @@
                     </c:choose>
                 </div>
             </div>
-            <div>
-                <p id="floatingTextarea2"></p>
+            <div class="W-comment-text">
+                <p id="floatingTextarea2"> hola este es un comentario</p>
             </div>
         </div>
     </div>
