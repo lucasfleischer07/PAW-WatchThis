@@ -6,6 +6,7 @@ import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.services.*;
 import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
 import ar.edu.itba.paw.webapp.form.EditProfile;
+import ar.edu.itba.paw.webapp.form.ReportCommentForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,6 +69,8 @@ public class UserController {
     @RequestMapping(value={"/profile","/profile/page/{pageNum:[0-9]+}"})
     public ModelAndView profile(Principal userDetails,
                                 @PathVariable("pageNum")final Optional<Integer> pageNum,
+                                @ModelAttribute("reportReviewForm") final ReportCommentForm reportReviewForm,
+                                @ModelAttribute("reportCommentForm") final ReportCommentForm reportCommentForm,
                                 HttpServletRequest request) {
         final String locale = LocaleContextHolder.getLocale().getDisplayLanguage();
         final ModelAndView mav = new ModelAndView("profileInfoPage");
@@ -114,6 +117,8 @@ public class UserController {
     public ModelAndView profileInfo(Principal userDetails,
                                     @PathVariable("userName") final String userName,
                                     @PathVariable("pageNum")final Optional<Integer> pageNum,
+                                    @ModelAttribute("reportReviewForm") final ReportCommentForm reportReviewForm,
+                                    @ModelAttribute("reportCommentForm") final ReportCommentForm reportCommentForm,
                                     HttpServletRequest request) {
         if(userName==null || userName.equals("")){
             LOGGER.warn("Wrong username photo request:",new PageNotFoundException());
@@ -169,6 +174,8 @@ public class UserController {
     @RequestMapping(value = "/profile/{userName:[a-zA-Z0-9\\s]+}",method = {RequestMethod.POST})
     public ModelAndView profileInfo(@Valid @ModelAttribute("editProfile") final EditProfile editProfile,
                                     @PathVariable("userName") final String userName,
+                                    @ModelAttribute("reportReviewForm") final ReportCommentForm reportReviewForm,
+                                    @ModelAttribute("reportCommentForm") final ReportCommentForm reportCommentForm,
                                     final BindingResult errors) {
         Optional<User> user = us.findByUserName(userName);
         if(user.isPresent()) {
