@@ -1,0 +1,69 @@
+.W-reported-div {
+    margin-top: 2vw;
+    justify-content: space-around;
+}
+
+.W-report-content-alignment {
+    display: flex;
+    justify-content: center;
+}
+
+.W-card-reported-width {
+    width: 50%;
+}
+
+
+.W-amount-reports-and-delete-button {
+    width: 30%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.W-margin-right-reports {
+    margin-right: 3vw;
+}
+
+.W-report-description-paragraph {
+    margin-top: 1rem;
+}
+
+.W-type-of-report {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    margin-right: 1vw;
+}
+
+.W-delete-button-report {
+    display: flex;
+}
+
+.W-username-report-description-div {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.W-general-div-reports {
+    display: flex;
+    align-items: center;
+    padding-right: 0;
+}
+
+.W-delete-form-reported {
+    margin-right:1vw;
+    margin-bottom: 0;
+}
+
+.W-delete-form-reported {
+    display: flex;
+}
+
+.W-report-margin-zero {
+    margin: 0;
+}
+
+.W-color-report-type {
+    font-size: 1vw;
+    color: #636464;
+}

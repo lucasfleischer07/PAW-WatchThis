@@ -42,19 +42,19 @@
                                                 <div>
                                                     <ul class="W-no-bullets-list">
                                                         <li>
-                                                            <form:radiobutton path="reportType" value="Spam"/> <spring:message code="Genre.Drama"/>
+                                                            <form:radiobutton path="reportType" value="Spam"/> <spring:message code="Report.Spam"/>
                                                         </li>
                                                         <li>
-                                                            <form:radiobutton path="reportType" value="Insult"/> <spring:message code="Genre.Drama"/>
+                                                            <form:radiobutton path="reportType" value="Insult"/> <spring:message code="Report.Insult"/>
                                                         </li>
                                                         <li>
-                                                            <form:radiobutton path="reportType" value="Inappropiate"/> <spring:message code="Genre.Drama"/>
+                                                            <form:radiobutton path="reportType" value="Inappropiate"/> <spring:message code="Report.Inappropriate"/>
                                                         </li>
                                                         <li>
-                                                            <form:radiobutton path="reportType" value="Unrelated"/> <spring:message code="Genre.Drama"/>
+                                                            <form:radiobutton path="reportType" value="Unrelated"/> <spring:message code="Report.Unrelated"/>
                                                         </li>
                                                         <li>
-                                                            <form:radiobutton path="reportType" value="Others"/> <spring:message code="Genre.Drama"/>
+                                                            <form:radiobutton path="reportType" value="Others"/> <spring:message code="Report.Other"/>
                                                         </li>
                                                     </ul>
                                                 </div>
