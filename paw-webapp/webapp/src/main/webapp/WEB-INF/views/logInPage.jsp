@@ -19,6 +19,7 @@
         <link href="<c:url value="/resources/css/reviewsStyles.css"/>" rel="stylesheet" type="text/css"/>
         <link href="<c:url value="/resources/css/loginStyles.css"/>" rel="stylesheet" type="text/css"/>
         <link href="<c:url value="/resources/css/profileStyles.css"/>" rel="stylesheet" type="text/css"/>
+        <link href="<c:url value="/resources/css/snackbarStyles.css"/>" rel="stylesheet" type="text/css"/>
         <link href="<c:url value="/resources/css/reviewRegistrationStyles.css"/>" rel="stylesheet" type="text/css"/>
         <title><spring:message code="Login.LoginMessage"/></title>
     </head>
@@ -37,6 +38,9 @@
             <div class="W-background">
                 <c:choose>
                     <c:when test="${loginStage == 'sign-in'}">
+                        <c:if test="${param.forgotPasswordBoolean}">
+                            <div id="snackbar"><spring:message code="Login.ForgotPass.Snackbar"/></div>
+                        </c:if>
                         <c:url value="/login/sign-in" var="postPath"/>
                         <form action="<c:url value="/login/sign-in"/>" method="post" name="loginForm">
                             <div class="W-general-div-login">
@@ -155,15 +159,16 @@
                                     </div>
                                 </div>
                                 <div class="W-margin-bottom">
-                                    <button id="submitButton3" type="submit" class="btn btn-success W-send-password" onclick="this.form.submit(); (this).className -= ' W-send-password'; (this).className += ' spinner-border text-success'; (this).innerText = ''"><spring:message code="Send"/></button>
+                                    <button id="submitButton3" type="submit" class="btn btn-success W-send-password" onclick="this.form.submit(); (this).className -= ' W-send-password'; (this).className += ' spinner-border text-success'; (this).innerText = ''; document.getElementById('snackbar').className = 'show';"><spring:message code="Send"/></button>
                                 </div>
                             </div>
                         </form:form>
                     </c:when>
                 </c:choose>
-
-                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
             </div>
         </div>
+
+        <script src='<c:url value="/resources/js/showSnackbar.js"/>'></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
     </body>
 </html>

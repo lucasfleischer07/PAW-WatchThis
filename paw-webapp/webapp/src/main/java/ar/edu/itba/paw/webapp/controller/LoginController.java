@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.swing.text.Document;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.Objects;
@@ -59,11 +60,12 @@ public class LoginController {
     // * ----------------------------------- Login ---------------------------------------------------------------------
     @RequestMapping(value = "/login/{loginStage:sign-in}", method = {RequestMethod.GET})
     public ModelAndView loginSignIn(Principal userDetails,
-                                    HttpServletRequest request,
                                     @PathVariable("loginStage") final String loginStage,
+                                    Optional<Boolean> forgotPasswordBoolean,
                                     @RequestParam(value = "error",required = false) Optional<Boolean> error) {
         final ModelAndView mav = new ModelAndView("logInPage");
         mav.addObject("loginStage", loginStage);
+        mav.addObject("forgotPasswordBoolean", forgotPasswordBoolean.isPresent());
         HeaderSetUp(mav,userDetails);
         if(error.isPresent()){
             mav.addObject("error",true);
@@ -84,9 +86,8 @@ public class LoginController {
 
     @RequestMapping(value = "/login/forgot-password", method = {RequestMethod.POST})
     public ModelAndView LoginForgotPassword(Principal userDetails,
-                                            @Valid @ModelAttribute("forgotPasswordForm") final ForgotPasswordForm forgotPasswordForm, final BindingResult errors,
-                                            RedirectAttributes redirectAttributes,
-                                            HttpServletRequest request) {
+                                            @Valid @ModelAttribute("forgotPasswordForm") final ForgotPasswordForm forgotPasswordForm,
+                                            final BindingResult errors) {
         if(errors.hasErrors()) {
             return LoginForgotPassword(userDetails, forgotPasswordForm);
         }
@@ -98,8 +99,9 @@ public class LoginController {
             return LoginForgotPassword(userDetails, forgotPasswordForm);
         }
 
-        String referer = request.getSession().getAttribute("referer").toString();
-        return new ModelAndView("redirect:" + (referer==null?"/":referer));
+        ModelAndView mav = new ModelAndView("redirect:" + "/login/sign-in");
+        mav.addObject("forgotPasswordBoolean", true);
+        return mav;
     }
 
     @RequestMapping(value = "/login/{loginStage:sign-up}", method = {RequestMethod.GET})
@@ -119,7 +121,7 @@ public class LoginController {
     @RequestMapping(value = "/login/{loginStage:sign-up|sign-out}", method = {RequestMethod.POST})
     public ModelAndView LoginSingUp(Principal userDetails,
                                     @Valid @ModelAttribute("loginForm") final LoginForm loginForm,
-                                    final BindingResult errors, RedirectAttributes redirectAttributes,
+                                    final BindingResult errors,
                                     @PathVariable("loginStage") final String loginStage,
                                     HttpServletRequest request) {
         if(errors.hasErrors()) {
