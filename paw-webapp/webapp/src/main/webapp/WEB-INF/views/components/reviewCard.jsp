@@ -84,13 +84,6 @@
                                                                 </li>
                                                             </ul>
                                                         </div>
-                                                        <div>
-                                                            <form:errors path="descriptionReport" element="p" cssStyle="color: #b21e26"/>
-                                                            <form:label path="descriptionReport" class="form-label"><spring:message code="Report.Review.Reason"/></form:label>
-<%--                                                    <p class="W-review-registration-text"><spring:message code="CreateContent.CharacterLimits" arguments="1,100"/></p>--%>
-                                                            <spring:message code="Report.Review.WriteHere" var="placeholder"/>
-                                                            <form:input type="text" class="form-control" path="descriptionReport" placeholder="${placeholder}"/>
-                                                        </div>
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><spring:message code="Close"/></button>

@@ -95,7 +95,7 @@ public class ReportsController {
                                       HttpServletRequest request){
         Review review=rs.findById(reviewId).orElseThrow(PageNotFoundException::new);
         User user=us.findByEmail(userDetails.getName()).get();
-//        rs.addReport(user, review, reportReviewForm.getReportType(), reportReviewForm.getDescriptionReport());
+//        rs.addReport(user, review, reportReviewForm.getReportType());
         String referer = request.getHeader("Referer");
         return new ModelAndView("redirect:"+ referer);
     }
@@ -111,7 +111,7 @@ public class ReportsController {
                                      HttpServletRequest request){
         Review review=rs.findById(reviewId).orElseThrow(PageNotFoundException::new);
         User user=us.findByEmail(userDetails.getName()).get();
-//        rs.addReport(user, review, reportCommentForm.getReportType(), reportCommentForm.getDescriptionReport());
+//        rs.addReport(user, review, reportCommentForm.getReportType());
         String referer = request.getHeader("Referer");
         return new ModelAndView("redirect:"+ referer);
     }
