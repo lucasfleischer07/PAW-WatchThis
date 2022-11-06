@@ -5,19 +5,19 @@ import javax.persistence.Embeddable;
 import java.io.Serializable;
 
 @Embeddable
-public class ReputationKey implements Serializable {
+public class CommentKey implements Serializable {
     @Column(name = "userid")
     private Long userId;
 
     @Column(name = "reviewid")
     private Long reviewId;
 
-    ReputationKey(Long userId, Long reviewId){
+    CommentKey(Long userId, Long reviewId){
         this.userId=userId;
         this.reviewId=reviewId;
     }
 
-    /* package */ ReputationKey() {
+    /* package */ CommentKey() {
 // Just for Hibernate, we love you!
     }
 }

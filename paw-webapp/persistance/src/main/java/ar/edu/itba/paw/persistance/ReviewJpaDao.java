@@ -1,15 +1,13 @@
 package ar.edu.itba.paw.persistance;
 
-import ar.edu.itba.paw.models.Content;
-import ar.edu.itba.paw.models.Reputation;
-import ar.edu.itba.paw.models.Review;
-import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.models.*;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -108,5 +106,23 @@ public class ReviewJpaDao implements ReviewDao{
     public Optional<Review> getReview(Long reviewId) {
         return Optional.ofNullable(em.find(Review.class, reviewId));
     }
+
+    @Override
+    public void addComment(Review review, User user, String text) {
+        Comment toAdd=new Comment(user,review,text, LocalDateTime.now());
+        em.persist(toAdd);
+        em.merge(review);
+        em.merge(user);
+    }
+
+    @Override
+    public void deleteComment(Comment comment) {
+        User user=comment.getUser();
+        Review review=comment.getReview();
+        em.remove(comment);
+        em.merge(user);
+        em.merge(review);
+    }
+
 
 }

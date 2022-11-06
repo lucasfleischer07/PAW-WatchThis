@@ -34,6 +34,11 @@ public class Review {
     @OneToMany(mappedBy = "review",orphanRemoval = true)
     private Set<Reputation> userVotes;
 
+    @OneToMany(mappedBy = "review",orphanRemoval = true)
+    private Set<Comment> comments;
+
+    @OneToMany(mappedBy = "review",orphanRemoval = true)
+    private Set<Report> reports;
 
     public Review(Long id, String type, String name, String description, Integer rating,User creator,Content content) {
         this.name = name;
@@ -97,6 +102,14 @@ public class Review {
 
     public Integer getRating() {
         return rating;
+    }
+
+    public Set<Comment> getComments() {
+        return comments;
+    }
+
+    public Set<Report> getReports() {
+        return reports;
     }
 
     public void setRating(Integer rating) {

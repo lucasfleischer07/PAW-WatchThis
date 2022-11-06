@@ -1,9 +1,6 @@
 package ar.edu.itba.paw.services;
 
-import ar.edu.itba.paw.models.Content;
-import ar.edu.itba.paw.models.Reputation;
-import ar.edu.itba.paw.models.Review;
-import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.persistance.ReviewDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -102,5 +99,15 @@ public class ReviewServiceImpl implements ReviewService{
     @Override
     public List<Long> getUserDislikeReviews() {
         return userDislikeReviews;
+    }
+
+    @Override
+    public void addComment(Review review, User user, String text) {
+        reviewDao.addComment(review,user,text);
+    }
+
+    @Override
+    public void deleteComment(Comment comment) {
+        reviewDao.deleteComment(comment);
     }
 }
