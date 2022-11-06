@@ -56,7 +56,7 @@ public class UserController {
         List<Review> reviewListPaginated = ps.reviewPagination(reviewList, page);
         mav.addObject("reviews", reviewListPaginated);
 
-        int amountOfPages = ps.amountOfReviewPages(reviewList.size());
+        int amountOfPages = ps.amountOfPages(reviewList.size());
         mav.addObject("amountPages", amountOfPages);
         mav.addObject("pageSelected",page);
         mav.addObject("reviewsAmount",reviewList.size());

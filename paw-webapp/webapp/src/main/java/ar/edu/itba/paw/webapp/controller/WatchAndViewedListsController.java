@@ -4,7 +4,6 @@ import ar.edu.itba.paw.models.Content;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.services.ContentService;
 import ar.edu.itba.paw.services.PaginationService;
-import ar.edu.itba.paw.services.ReviewService;
 import ar.edu.itba.paw.services.UserService;
 import ar.edu.itba.paw.webapp.exceptions.ForbiddenException;
 import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
@@ -49,7 +48,7 @@ public class WatchAndViewedListsController {
         List<Content> contentListFilterPaginated = ps.contentPagination(contentList, page);
         mav.addObject(name, contentListFilterPaginated);
 
-        int amountOfPages = ps.amountOfContentPages(contentList.size());
+        int amountOfPages = ps.amountOfPages(contentList.size());
         mav.addObject("amountPages", amountOfPages);
         mav.addObject("pageSelected",page);
 

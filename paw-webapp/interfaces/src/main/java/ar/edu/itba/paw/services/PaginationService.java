@@ -8,10 +8,9 @@ import java.util.List;
 public interface PaginationService {
 
     List<Content> contentPagination(List<Content> contentList, int page);
-    int amountOfContentPages(int contentListSize);
+    int amountOfPages(int contentListSize);
 
     List<Review> reviewPagination(List<Review> reviewList, int page);
-    int amountOfReviewPages(int reviewListSize);
 
     boolean checkPagination(int listSize, int page);
 

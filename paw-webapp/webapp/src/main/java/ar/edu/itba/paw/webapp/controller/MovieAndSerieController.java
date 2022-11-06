@@ -78,7 +78,7 @@ public class MovieAndSerieController {
         List<Review> reviewListPaginated = ps.reviewPagination(reviewList, page);
         mav.addObject("reviews", reviewListPaginated);
 
-        int amountOfPages = ps.amountOfContentPages(reviewList.size());
+        int amountOfPages = ps.amountOfPages(reviewList.size());
         mav.addObject("amountPages", amountOfPages);
         mav.addObject("pageSelected",page);
     }
@@ -110,7 +110,7 @@ public class MovieAndSerieController {
             } else {
                 mav.addObject("contentType", "all");
             }
-            int amountOfPages = ps.amountOfContentPages(contentList.size());
+            int amountOfPages = ps.amountOfPages(contentList.size());
             mav.addObject("amountPages", amountOfPages);
             mav.addObject("pageSelected",page);
             mav.addObject("genre","ANY");
@@ -247,7 +247,7 @@ public class MovieAndSerieController {
             List<Content> contentListFilterPaginated = ps.contentPagination(contentListFilter, page);
             mav.addObject("allContent", contentListFilterPaginated);
 
-            int amountOfPages = ps.amountOfContentPages(contentListFilter.size());
+            int amountOfPages = ps.amountOfPages(contentListFilter.size());
             mav.addObject("amountPages", amountOfPages);
             mav.addObject("pageSelected",page);
             mav.addObject("contentType", type);

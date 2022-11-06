@@ -14,6 +14,8 @@ public class PaginationServiceImpl implements PaginationService{
 
     @Override
     public List<Content> contentPagination(List<Content> contentList, int page) {
+        if(contentList == null)
+            return null;
         if(contentList.size() < (page)*CONTENT_AMOUNT) {       //Si no llega a completar la pagina entera, que sirva los que pueda
             return contentList.subList((page-1)*CONTENT_AMOUNT,contentList.size());
         } else {
@@ -22,22 +24,19 @@ public class PaginationServiceImpl implements PaginationService{
     }
 
     @Override
-    public int amountOfContentPages(int contentListSize) {
+    public int amountOfPages(int contentListSize) {
         return (int)Math.ceil((double) contentListSize/(double)CONTENT_AMOUNT);
     }
 
     @Override
     public List<Review> reviewPagination(List<Review> reviewList, int page) {
+        if(reviewList == null)
+            return null;
         if(reviewList.size() >= page*REVIEW_AMOUNT) {
             return reviewList.subList(0, page * REVIEW_AMOUNT);
         } else {
             return reviewList.subList(0, reviewList.size());
         }
-    }
-
-    @Override
-    public int amountOfReviewPages(int reviewListSize) {
-        return (int) Math.ceil((double)reviewListSize/(double)REVIEW_AMOUNT);
     }
 
     @Override
