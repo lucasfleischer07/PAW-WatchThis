@@ -11,6 +11,7 @@ public interface ReviewService {
     void addReview(String name,String description,int rating,String type,User creator,Content content);          //No se si retornar bool
     List<Review> getAllReviews(Content content);
     void deleteReview(Long reviewId);
+    void adminDeleteReview(Review deletedReview,String reasonsOfDelete);
     Optional<Review> findById(Long reviewId);
     void updateReview(String name, String description, Integer rating, Long id);
     List<Review> getAllUserReviews(User user);
@@ -21,8 +22,11 @@ public interface ReviewService {
     void userLikeAndDislikeReviewsId(Set<Reputation> reputationList);
     List<Long> getUserLikeReviews();
     List<Long> getUserDislikeReviews();
+    void reportReview(Review review,User reporterUser,ReportReason reasons,String description);
+    void reportComment(Comment Comment,User reporterUser,ReportReason reasons,String description);
     void addComment(Review review, User user, String text);
     void deleteComment(Comment comment);
+    public void adminDeleteComment(Comment comment,String reason);
 
 
 }
