@@ -42,4 +42,23 @@ public class Report {
     private ReportReason reportReason;
 
 
+    public Comment getComment() {
+        return comment;
+    }
+
+    public Review getReview() {
+        return review;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public ReportReason getReportReason() {
+        return reportReason;
+    }
 }
