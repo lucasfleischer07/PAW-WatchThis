@@ -5,6 +5,7 @@ import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.services.*;
 import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
+import ar.edu.itba.paw.webapp.form.CommentForm;
 import ar.edu.itba.paw.webapp.form.EditProfile;
 import ar.edu.itba.paw.webapp.form.ReportCommentForm;
 import org.slf4j.Logger;
@@ -70,6 +71,7 @@ public class UserController {
     public ModelAndView profile(Principal userDetails,
                                 @PathVariable("pageNum")final Optional<Integer> pageNum,
                                 @ModelAttribute("reportReviewForm") final ReportCommentForm reportReviewForm,
+                                @Valid @ModelAttribute("commentForm") final CommentForm commentForm,
                                 @ModelAttribute("reportCommentForm") final ReportCommentForm reportCommentForm,
                                 HttpServletRequest request) {
         final String locale = LocaleContextHolder.getLocale().getDisplayLanguage();
@@ -118,6 +120,7 @@ public class UserController {
                                     @PathVariable("userName") final String userName,
                                     @PathVariable("pageNum")final Optional<Integer> pageNum,
                                     @ModelAttribute("reportReviewForm") final ReportCommentForm reportReviewForm,
+                                    @Valid @ModelAttribute("commentForm") final CommentForm commentForm,
                                     @ModelAttribute("reportCommentForm") final ReportCommentForm reportCommentForm,
                                     HttpServletRequest request) {
         if(userName==null || userName.equals("")){
@@ -175,6 +178,7 @@ public class UserController {
     public ModelAndView profileInfo(@Valid @ModelAttribute("editProfile") final EditProfile editProfile,
                                     @PathVariable("userName") final String userName,
                                     @ModelAttribute("reportReviewForm") final ReportCommentForm reportReviewForm,
+                                    @Valid @ModelAttribute("commentForm") final CommentForm commentForm,
                                     @ModelAttribute("reportCommentForm") final ReportCommentForm reportCommentForm,
                                     final BindingResult errors) {
         Optional<User> user = us.findByUserName(userName);

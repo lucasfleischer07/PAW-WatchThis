@@ -5,20 +5,19 @@
 <div class="card" style="width: 80%">
     <div class="card-body W-general-div-comment">
         <div>
-            <%--            <c:choose>--%>
-            <%--                <c:when test="${user.image == null}">--%>
-            <img src="<c:url value="/resources/img/backgorundImage.png"/> " alt="User_img" class="W-comment-profile-picture">
-            <%--                </c:when>--%>
-            <%--                <c:otherwise>--%>
-            <%--                    <img src="<c:url value="/profile/${user.userName}/profileImage"/> " alt="User_img" class="W-edit-profile-picture">--%>
-            <%--                </c:otherwise>--%>
-            <%--            </c:choose>        --%>
+            <c:choose>
+                <c:when test="${param.user.image == null}">
+                    <img src="<c:url value="/resources/img/backgorundImage.png"/> " alt="User_img" class="W-comment-profile-picture">
+                </c:when>
+                <c:otherwise>
+                    <img src="<c:url value="/profile/${param.user.userName}/profileImage"/> " alt="User_img" class="W-edit-profile-picture">
+                </c:otherwise>
+            </c:choose>
         </div>
         <div class="W-comment-username-report-description-div ">
             <div class="W-comment-username-and-report">
                 <div>
-                    <a href="<c:url value="/"/>" class="W-creator-review">Holaaaa</a>
-                    <%--                <a href="<c:url value="/"/>" class="W-creator-review"><c:out value="${param.userName}"/></a>--%>
+                    <a href="<c:url value="/profile/${param.user.userName}"/>" class="W-creator-review"><c:url value="${param.user.userName}"/></a>
                 </div>
                 <div>
                     <c:choose>
@@ -31,7 +30,7 @@
                             </button>
                             <div class="modal fade" id="reportCommentModal" tabindex="-1" aria-labelledby="reportCommentModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
-                                    <c:url value="/report/comment/${param.reviewId}" var="postPath"/>
+                                    <c:url value="/report/comment/${param.commentId}" var="postPath"/>
                                     <form:form id="reportCommentForm" modelAttribute="reportCommentForm" action="${postPath}" method="post" enctype="multipart/form-data">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -42,19 +41,19 @@
                                                 <div>
                                                     <ul class="W-no-bullets-list">
                                                         <li>
-                                                            <form:radiobutton path="reportType" value="Spam"/> <spring:message code="Report.Spam"/>
+                                                            <form:radiobutton path="reportType" value="SPAM"/> <spring:message code="Report.Spam"/>
                                                         </li>
                                                         <li>
-                                                            <form:radiobutton path="reportType" value="Insult"/> <spring:message code="Report.Insult"/>
+                                                            <form:radiobutton path="reportType" value="INSULT"/> <spring:message code="Report.Insult"/>
                                                         </li>
                                                         <li>
-                                                            <form:radiobutton path="reportType" value="Inappropiate"/> <spring:message code="Report.Inappropriate"/>
+                                                            <form:radiobutton path="reportType" value="INAPPROPIATE"/> <spring:message code="Report.Inappropriate"/>
                                                         </li>
                                                         <li>
-                                                            <form:radiobutton path="reportType" value="Unrelated"/> <spring:message code="Report.Unrelated"/>
+                                                            <form:radiobutton path="reportType" value="UNRELATED"/> <spring:message code="Report.Unrelated"/>
                                                         </li>
                                                         <li>
-                                                            <form:radiobutton path="reportType" value="Others"/> <spring:message code="Report.Other"/>
+                                                            <form:radiobutton path="reportType" value="OTHER"/> <spring:message code="Report.Other"/>
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -98,7 +97,7 @@
                 </div>
             </div>
             <div class="W-comment-text">
-                <p id="floatingTextarea2"> hola este es un comentario</p>
+                <p id="floatingTextarea2"><c:out value="${param.commentDescription}"/></p>
             </div>
         </div>
     </div>

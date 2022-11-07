@@ -76,4 +76,8 @@ public class Comment {
     public void setDate(LocalDateTime date) {
         this.date = date;
     }
+
+    public long getCommentId() {
+        return commentId;
+    }
 }

@@ -1,12 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.models.Content;
-import ar.edu.itba.paw.models.Review;
-import ar.edu.itba.paw.models.User;
-import ar.edu.itba.paw.services.ContentService;
-import ar.edu.itba.paw.services.PaginationService;
-import ar.edu.itba.paw.services.ReviewService;
-import ar.edu.itba.paw.services.UserService;
+import ar.edu.itba.paw.models.*;
+import ar.edu.itba.paw.services.*;
 import ar.edu.itba.paw.webapp.exceptions.ForbiddenException;
 import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
 import ar.edu.itba.paw.webapp.form.CommentForm;
@@ -34,13 +29,17 @@ public class ReviewController {
     private final ReviewService rs;
     private final ContentService cs;
     private final UserService us;
+    private final CommentService ccs;
+    private final ReportService rrs;
     private static final Logger LOGGER = LoggerFactory.getLogger(ReviewController.class);
 
    @Autowired
-    public ReviewController(ReviewService rs,ContentService cs,UserService us) {
+    public ReviewController(ReviewService rs,ContentService cs,UserService us, CommentService ccs, ReportService rrs) {
         this.us = us;
         this.cs = cs;
         this.rs = rs;
+        this.ccs = ccs;
+        this.rrs = rrs;
     }
 
 
@@ -263,78 +262,52 @@ public class ReviewController {
 //        if(errors.hasErrors()) {
 //            return reviewFormCreate(userDetails,form,id,type);
 //        }
-        if(!rs.getReview(reviewId).isPresent()) {
+
+        Optional<User> user = us.findByEmail(userDetails.getName());
+        Optional<Review> review = rs.getReview(reviewId);
+
+        if(!review.isPresent() || !user.isPresent()) {
             throw new PageNotFoundException();
         }
 
-//        if(form.getRating() < 0 || form.getRating() > 5) {
-//            return reviewFormCreate(userDetails,form,id,type);
-//        }
-//        if(commentForm.getComment() == null || Objects.equals(commentForm.getComment(), "")) {
+        if(commentForm.getComment() == null || Objects.equals(commentForm.getComment(), "")) {
 //            return
-//        }
+        }
 
-        Optional<User> user = us.findByEmail(userDetails.getName());
-
-//        if(user.isPresent()){
-//
-//        }
-
-
-//        try {
-//            Content content= cs.findById(id).orElseThrow(PageNotFoundException ::new);
-//            rs.addReview(form.getName(),form.getDescription(), form.getRating(), type,user.get(),content);
-//        }
-//        catch(DuplicateKeyException e){
-//            ModelAndView mav = reviewFormCreate(userDetails,form,id,type);
-//            mav.addObject("errorMsg","You have already written a review for this " + type + ".");
-//            return mav;
-//        }
+        ccs.addComment(review.get(), user.get(), commentForm.getComment());
 
         String referer = request.getHeader("Referer");
         return new ModelAndView("redirect:"+ referer);
-
     }
 
     // * ---------------------------------------------------------------------------------------------------------------
 
-    // * ---------------------------------------------Comments add -----------------------------------------------------
+
+    // * ---------------------------------------------Comments delete---------------------------------------------------
     @RequestMapping(value = "/comment/{reviewId:[0-9]+}/delete", method = {RequestMethod.POST})
     public ModelAndView commentReviewDelete(Principal userDetails,
                                       @Valid @ModelAttribute("commentForm") final CommentForm commentForm,
-                                      final BindingResult errors,
                                       @PathVariable("reviewId")final long reviewId,
                                       HttpServletRequest request) {
-//        if(errors.hasErrors()) {
-//            return reviewFormCreate(userDetails,form,id,type);
-//        }
-        if(!rs.getReview(reviewId).isPresent()) {
+
+        Optional<User> user = us.findByEmail(userDetails.getName());
+        Optional<Review> review = rs.getReview(reviewId);
+
+        if(!review.isPresent() || !user.isPresent()) {
             throw new PageNotFoundException();
         }
 
-//        if(form.getRating() < 0 || form.getRating() > 5) {
-//            return reviewFormCreate(userDetails,form,id,type);
-//        }
-//        if(commentForm.getComment() == null || Objects.equals(commentForm.getComment(), "")) {
-//            return
-//        }
-
-        Optional<User> user = us.findByEmail(userDetails.getName());
-
-//        if(user.isPresent()){
-//
-//        }
+        Optional<Comment> deleteComment = ccs.getComment(reviewId);
+        if(!deleteComment.isPresent()) {
+            throw new PageNotFoundException();
+        }
 
 
-//        try {
-//            Content content= cs.findById(id).orElseThrow(PageNotFoundException ::new);
-//            rs.addReview(form.getName(),form.getDescription(), form.getRating(), type,user.get(),content);
-//        }
-//        catch(DuplicateKeyException e){
-//            ModelAndView mav = reviewFormCreate(userDetails,form,id,type);
-//            mav.addObject("errorMsg","You have already written a review for this " + type + ".");
-//            return mav;
-//        }
+        if(user.get().getUserName().equals(deleteComment.get().getUser().getUserName())) {
+            ccs.deleteComment(deleteComment.get());
+        } else {
+            rrs.delete(deleteComment, deleteComment.get().getReports());
+        }
 
         String referer = request.getHeader("Referer");
         return new ModelAndView("redirect:"+ referer);

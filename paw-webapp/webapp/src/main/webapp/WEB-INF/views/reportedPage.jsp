@@ -39,7 +39,6 @@
           </div>
         </div>
         <div class="bg-light p-4 d-flex text-center">
-<%--          <h4><spring:message code="WatchList.Titles" arguments="${viewedListContentSize}"/></h4>--%>
             <ul class="list-inline mb-0">
                 <li class="list-inline-item">
                     <h4 class="font-weight-bold mb-0 d-block"><c:out value="${reviewReportedAmount}"/></h4>
@@ -66,36 +65,52 @@
             </ul>
         </div>
 
-<%--        <c:choose>--%>
-<%--          <c:when test="${viewedListContent == null || viewedListContentSize == 0}">--%>
-<%--            <div class="W-watchlist-div-info-empty">--%>
-<%--              <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-bookmark-x-fill W-watchlist-empty-icon" viewBox="0 0 16 16">--%>
-<%--                <path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7.029 7.029 0 0 0 2.79-.588zM5.21 3.088A7.028 7.028 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474L5.21 3.089z"/>--%>
-<%--                <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829l-2.83-2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12-.708.708z"/>--%>
-<%--              </svg>--%>
-<%--              <div>--%>
-<%--                <p><spring:message code="Report.Empty"/></p>--%>
-<%--              </div>--%>
-<%--              <div>--%>
-<%--                <a href="<c:url value="/"/>"><spring:message code="WatchList.Recomendation"/></a>--%>
-<%--              </div>--%>
-<%--            </div>--%>
-<%--          </c:when>--%>
-<%--          <c:otherwise>--%>
-            <div class="W-reported-div">
-              <div class="row row-cols-1 row-cols-md-2 g-2 W-report-content-alignment">
-<%--                <c:forEach var="content" items="${reportedListContent}">--%>
-                  <jsp:include page="components/reportedContent.jsp">
-                    <jsp:param name="userName" value="Juan"/>
-                    <jsp:param name="contentId" value="1"/>
-                    <jsp:param name="contentType" value="review"/>
-                    <jsp:param name="reportsAmount" value="3"/>
-                  </jsp:include>
-<%--                </c:forEach>--%>
+        <c:choose>
+          <c:when test="${commentsAndReviewsReportedList == null || commentsAndReviewsReportedAmount == 0}">
+            <div class="W-watchlist-div-info-empty">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-bookmark-x-fill W-watchlist-empty-icon" viewBox="0 0 16 16">
+                <path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7.029 7.029 0 0 0 2.79-.588zM5.21 3.088A7.028 7.028 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474L5.21 3.089z"/>
+                <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829l-2.83-2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12-.708.708z"/>
+              </svg>
+              <div>
+                <p><spring:message code="Report.Empty"/></p>
+              </div>
+              <div>
+                <a href="<c:url value="/"/>"><spring:message code="WatchList.Recomendation"/></a>
               </div>
             </div>
-<%--          </c:otherwise>--%>
-<%--        </c:choose>--%>
+          </c:when>
+          <c:otherwise>
+            <div class="W-reported-div">
+              <div class="row row-cols-1 row-cols-md-2 g-2 W-report-content-alignment">
+                <c:forEach var="content" items="${commentsAndReviewsReportedList}">
+                    <c:choose>
+                        <c:when test="${commentsAndReviewsReportedList.type == 'comment'}">
+                            <jsp:include page="components/reportedContent.jsp">
+                                <jsp:param name="userName" value="${content.user.userName}"/>
+                                <jsp:param name="contentId" value="${content.comment.review.content}"/>
+                                <jsp:param name="contentName" value="${content.comment.review.content}"/>
+                                <jsp:param name="reportDescription" value="${content.comment.text}"/>
+                                <jsp:param name="typeId" value="${content.comment.id}"/>
+                                <jsp:param name="reportType" value="${content.type}"/>
+                            </jsp:include>
+                        </c:when>
+                        <c:otherwise>
+                            <jsp:include page="components/reportedContent.jsp">
+                                <jsp:param name="userName" value="${content.user.userName}"/>
+                                <jsp:param name="contentId" value="${content.review.content}"/>
+                                <jsp:param name="contentName" value="${content.comment.review.content}"/>
+                                <jsp:param name="reportDescription" value="${content.review.description}"/>
+                                <jsp:param name="typeId" value="${content.comment.id}"/>
+                                <jsp:param name="reportType" value="${content.type}"/>
+                            </jsp:include>
+                        </c:otherwise>
+                    </c:choose>
+                </c:forEach>
+              </div>
+            </div>
+          </c:otherwise>
+        </c:choose>
       </div>
     </div>
 
