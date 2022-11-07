@@ -28,8 +28,10 @@ public class ReportServiceImpl implements ReportService{
     @Override
     public void delete(Object reviewOrComment, Set<CommentReport> reasonsOfDelete) {
         String reasons = "";
-        for(CommentReport string : reasonsOfDelete) {
-            reasons = reasons + ", " + string.toString();
+        if(reasonsOfDelete != null) {
+            for(CommentReport string : reasonsOfDelete) {
+                reasons = reasons + ", " + string.toString();
+            }
         }
         if(reviewOrComment instanceof Review)
             adminDeleteReview((Review) reviewOrComment,reasons);
@@ -38,7 +40,7 @@ public class ReportServiceImpl implements ReportService{
         } else throw new IllegalArgumentException();
     }
 
-    public void adminDeleteComment(Comment comment, String reason){
+    private void adminDeleteComment(Comment comment, String reason){
         try {
             reportDao.delete(comment);
             Map<String, Object> mailVariables = new HashMap<>();
@@ -54,11 +56,9 @@ public class ReportServiceImpl implements ReportService{
         } catch (MessagingException e) {
             //algo
         }
-
-
     }
 
-    public void adminDeleteReview(Review deletedReview, String reasonsOfDelete) {
+    private void adminDeleteReview(Review deletedReview, String reasonsOfDelete) {
         try{
             reportDao.delete(deletedReview);
             Map<String, Object> mailVariables = new HashMap<>();

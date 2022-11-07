@@ -116,8 +116,12 @@ public class ReviewController {
         Review review=rs.findById(reviewId).orElseThrow(PageNotFoundException::new);
         User user=us.findByEmail(userDetails.getName()).get();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if(review.getUser().getUserName().equals(user.getUserName()) || auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))){
+        if(review.getUser().getUserName().equals(user.getUserName())){
             rs.deleteReview(reviewId);
+            String referer = request.getHeader("Referer");
+            return new ModelAndView("redirect:"+ referer);
+        } else if(auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+            rrs.delete(review, null);
             String referer = request.getHeader("Referer");
             return new ModelAndView("redirect:"+ referer);
         } else {
