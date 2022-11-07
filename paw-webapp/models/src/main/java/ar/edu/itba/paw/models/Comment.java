@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
+@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "userid", "reviewid" }) })
+
 public class Comment {
     /* package */ Comment() {
 // Just for Hibernate, we love you!
@@ -16,18 +18,17 @@ public class Comment {
         this.text=text;
     }
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "comment_id_seq")
+    @SequenceGenerator(allocationSize = 1,sequenceName = "comment_id_seq",name = "comment_id_seq")
+    @Column(name = "commentid")
     private long commentId;
 
-    @ManyToOne
-    @MapsId
-    @JoinColumn(name="userid")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "userid")
     private User user;
 
-
-    @ManyToOne
-    @MapsId
-    @JoinColumn(name="reviewid")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "reviewid")
     private Review review;
 
     @OneToMany(orphanRemoval = true,fetch = FetchType.LAZY,mappedBy = "comment")
@@ -38,6 +39,10 @@ public class Comment {
 
     public User getUser() {
         return user;
+    }
+
+    public long getCommentId() {
+        return commentId;
     }
 
     public Review getReview() {

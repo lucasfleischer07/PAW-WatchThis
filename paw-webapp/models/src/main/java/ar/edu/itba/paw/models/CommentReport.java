@@ -1,27 +1,32 @@
 package ar.edu.itba.paw.models;
 
+import org.hibernate.annotations.Generated;
+
 import javax.persistence.*;
 
 @Entity
+@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "userid", "commentid" }) })
 public class CommentReport  {
         /* package */ CommentReport() {
 // Just for Hibernate, we love you!
         }
         public CommentReport(User user, Comment comment, ReportReason reportReason){
-            this.comment=comment;
             this.reportReason=reportReason;
             this.comment=comment;
+            this.user=user;
         }
 
-        @GeneratedValue
         @Id
+        @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "commentreport_id_seq")
+        @SequenceGenerator(allocationSize = 1,sequenceName = "commentreport_id_seq",name = "commentreport_id_seq")
         private long id;
-        @ManyToOne
-        @MapsId("userId")
+
+        @ManyToOne(optional = false)
+        @JoinColumn(name = "userid")
         private User user;
 
-        @ManyToOne
-        @MapsId("commentId")
+        @ManyToOne(optional = false)
+        @JoinColumn(name = "commentid")
         private Comment comment;
 
         @Transient

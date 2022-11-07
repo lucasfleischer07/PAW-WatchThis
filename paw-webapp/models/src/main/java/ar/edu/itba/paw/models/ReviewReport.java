@@ -3,6 +3,7 @@ package ar.edu.itba.paw.models;
 import javax.persistence.*;
 
 @Entity
+@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "userid", "reviewid" }) })
 public class ReviewReport {
     /* package */ ReviewReport() {
 // Just for Hibernate, we love you!
@@ -11,16 +12,15 @@ public class ReviewReport {
             this.review=review;
         }
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "reviewreport_id_seq")
+    @SequenceGenerator(allocationSize = 1,sequenceName = "reviewreport_id_seq",name = "reviewreport_id_seq")
     private long id;
-    @ManyToOne
-    @MapsId
+    @ManyToOne(optional = false)
     @JoinColumn(name = "userid")
     private User user;
 
-    @ManyToOne
-    @MapsId
-    @JoinColumn(name="reviewid")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "reviewid")
     private Review review;
 
 
