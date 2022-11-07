@@ -9,10 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 @Transactional
 @Service
@@ -29,11 +26,15 @@ public class ReportServiceImpl implements ReportService{
         this.reportDao=reportDao;
         this.emailService=emailService;}
     @Override
-    public void delete(Object reviewOrComment,String reasonsOfDelete) {
+    public void delete(Object reviewOrComment, Set<CommentReport> reasonsOfDelete) {
+        String reasons = "";
+        for(CommentReport string : reasonsOfDelete) {
+            reasons = reasons + ", " + string.toString();
+        }
         if(reviewOrComment instanceof Review)
-            adminDeleteReview((Review) reviewOrComment,reasonsOfDelete);
+            adminDeleteReview((Review) reviewOrComment,reasons);
         else if(reviewOrComment instanceof Comment){
-            adminDeleteComment((Comment) reviewOrComment,reasonsOfDelete);
+            adminDeleteComment((Comment) reviewOrComment,reasons);
         } else throw new IllegalArgumentException();
     }
 
@@ -83,22 +84,60 @@ public class ReportServiceImpl implements ReportService{
     }
 
     @Override
-    public void addReport(Object reviewOrComment, ReportReason reason, String text) {
-        if(reviewOrComment instanceof Review)
-            reportReview((Review) reviewOrComment,((Review) reviewOrComment).getCreator(),reason,text);
-        else if(reviewOrComment instanceof Comment){
-            reportComment((Comment) reviewOrComment, ((Comment) reviewOrComment).getUser(),reason,text );
-        } else throw new IllegalArgumentException();
+    public void addReport(Object reviewOrComment, String reason) {
+        if(reason.equals(ReportReason.SPAM.toString())) {
+            if(reviewOrComment instanceof Review)
+                reportReview((Review) reviewOrComment,((Review) reviewOrComment).getCreator(), ReportReason.SPAM);
+            else if(reviewOrComment instanceof Comment){
+                reportComment((Comment) reviewOrComment, ((Comment) reviewOrComment).getUser(), ReportReason.SPAM);
+            } else {
+                throw new IllegalArgumentException();
+            }
+        } else if(reason.equals(ReportReason.INSULT.toString())) {
+            if(reviewOrComment instanceof Review)
+                reportReview((Review) reviewOrComment,((Review) reviewOrComment).getCreator(), ReportReason.INSULT);
+            else if(reviewOrComment instanceof Comment){
+                reportComment((Comment) reviewOrComment, ((Comment) reviewOrComment).getUser(), ReportReason.INSULT);
+            } else {
+                throw new IllegalArgumentException();
+            }
+        } else if(reason.equals(ReportReason.INAPPROPRIATE.toString())) {
+            if(reviewOrComment instanceof Review)
+                reportReview((Review) reviewOrComment,((Review) reviewOrComment).getCreator(), ReportReason.INAPPROPRIATE);
+            else if(reviewOrComment instanceof Comment){
+                reportComment((Comment) reviewOrComment, ((Comment) reviewOrComment).getUser(), ReportReason.INAPPROPRIATE);
+            } else {
+                throw new IllegalArgumentException();
+            }
+        } else if(reason.equals(ReportReason.UNRELATED.toString())) {
+            if(reviewOrComment instanceof Review)
+                reportReview((Review) reviewOrComment,((Review) reviewOrComment).getCreator(), ReportReason.UNRELATED);
+            else if(reviewOrComment instanceof Comment){
+                reportComment((Comment) reviewOrComment, ((Comment) reviewOrComment).getUser(), ReportReason.UNRELATED);
+            } else {
+                throw new IllegalArgumentException();
+            }
+        } else if(reason.equals(ReportReason.OTHER.toString())) {
+            if(reviewOrComment instanceof Review)
+                reportReview((Review) reviewOrComment,((Review) reviewOrComment).getCreator(), ReportReason.OTHER);
+            else if(reviewOrComment instanceof Comment){
+                reportComment((Comment) reviewOrComment, ((Comment) reviewOrComment).getUser(), ReportReason.OTHER);
+            } else {
+                throw new IllegalArgumentException();
+            }
+        } else {
+            throw new IllegalArgumentException();
+        }
     }
 
 
-    public void reportReview(Review review, User reportedUser, ReportReason reasons, String description){
+    public void reportReview(Review review, User reportedUser, ReportReason reasons){
         try{
-            reportDao.addReport(review,reasons,description);
+            reportDao.addReport(review,reasons);
             Map<String, Object> mailVariables = new HashMap<>();
-            mailVariables.put("to",reportedUser.getEmail());    // Email del creador del comentario
-            mailVariables.put("userName", reportedUser.getUserName());  // userName del creador del comentario
-            mailVariables.put("reportedReview", review.getName());  // Esto seria la review, onda lo que decia la review
+            mailVariables.put("to",reportedUser.getEmail());
+            mailVariables.put("userName", reportedUser.getUserName());
+            mailVariables.put("reportedReview", review.getName());
             emailService.sendMail("reportReview", messageSource.getMessage("Mail.ReviewReported", new Object[]{}, locale), mailVariables, locale);
         }catch (MessagingException e){
             //algo
@@ -106,9 +145,9 @@ public class ReportServiceImpl implements ReportService{
 
     }
 
-    public void reportComment(Comment comment,User reportedUser,ReportReason reasons,String description){
+    public void reportComment(Comment comment,User reportedUser,ReportReason reasons){
         try{
-            reportDao.addReport(comment,reasons,description);
+            reportDao.addReport(comment,reasons);
             Map<String, Object> mailVariables = new HashMap<>();
             mailVariables.put("to",reportedUser.getEmail());    // Email del creador del comentario
             mailVariables.put("userName", reportedUser.getUserName());  // userName del creador del comentario

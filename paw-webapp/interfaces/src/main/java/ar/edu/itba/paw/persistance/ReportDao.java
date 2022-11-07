@@ -10,7 +10,7 @@ public interface ReportDao {
 
     void delete(Object reviewOrComment);
     void removeReports(Object reviewOrComment);
-    void addReport(Object reviewOrComment, ReportReason reason, String text);
+    void addReport(Object reviewOrComment, ReportReason reason);
     List<ReviewReport> getReportedReviews();
     List<CommentReport> getReportedComments();
 }
