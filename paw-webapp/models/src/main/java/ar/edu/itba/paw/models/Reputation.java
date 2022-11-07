@@ -19,10 +19,12 @@ public class Reputation {
 
     @ManyToOne
     @MapsId("userId")
+    @JoinColumn(name = "userid")
     private User user;
 
     @ManyToOne
     @MapsId("reviewId")
+    @JoinColumn(name = "reviewid")
     private Review review;
 
 

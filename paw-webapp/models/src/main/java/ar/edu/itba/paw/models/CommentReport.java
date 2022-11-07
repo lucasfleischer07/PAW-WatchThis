@@ -9,11 +9,13 @@ public class CommentReport  {
         }
         public CommentReport(User user, Comment comment, ReportReason reportReason){
             this.comment=comment;
-            this.id=new CommentReportKey(user.getId(), null);
+            this.reportReason=reportReason;
+            this.comment=comment;
         }
-        @EmbeddedId
-        private CommentReportKey id;
 
+        @GeneratedValue
+        @Id
+        private long id;
         @ManyToOne
         @MapsId("userId")
         private User user;
@@ -45,7 +47,7 @@ public class CommentReport  {
                 return reportReason;
         }
 
-        public CommentReportKey getId() {
+        public long getId() {
                 return id;
         }
 }
