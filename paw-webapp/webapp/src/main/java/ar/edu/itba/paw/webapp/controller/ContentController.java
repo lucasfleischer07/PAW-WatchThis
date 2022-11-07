@@ -227,7 +227,13 @@ public class ContentController {
         if(errors.hasErrors()) {
             return createContent(userDetails,contentForm);
         }
-        cs.contentCreate(contentForm.getName(),contentForm.getDescription(),contentForm.getReleaseDate(),contentForm.getGenre(),contentForm.getCreator(),contentForm.getDuration(),contentForm.getType(),contentForm.getContentPicture().getBytes());
+
+        String auxGenre = "";
+        for(String genre : contentForm.getGenre()) {
+            auxGenre = auxGenre + " " + genre;
+        }
+
+        cs.contentCreate(contentForm.getName(),contentForm.getDescription(),contentForm.getReleaseDate(),auxGenre,contentForm.getCreator(),contentForm.getDuration(),contentForm.getType(),contentForm.getContentPicture().getBytes());
         Optional<Content> newContent = cs.findByName(contentForm.getName());
         return new ModelAndView("redirect:/" + newContent.get().getType() + "/" + newContent.get().getId());
     }

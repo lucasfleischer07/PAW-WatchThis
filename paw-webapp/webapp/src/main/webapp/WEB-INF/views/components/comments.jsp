@@ -2,9 +2,9 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<div class="card" style="width: 80%">
-    <div class="card-body W-general-div-comment">
-        <div>
+<div class="card W-general-div-comment">
+    <div class="card-body W-div-position-comment">
+        <div class="W-comment-image">
             <%--            <c:choose>--%>
             <%--                <c:when test="${user.image == null}">--%>
             <img src="<c:url value="/resources/img/backgorundImage.png"/> " alt="User_img" class="W-comment-profile-picture">
