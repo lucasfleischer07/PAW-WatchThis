@@ -91,7 +91,6 @@
                                     <spring:message code="GenreMessage"/>
                                 </button>
 
-
                                 <ul class="dropdown-menu" id="test">
                                     <li class="mb-1 px-2">
                                         <label><form:checkbox cssClass="px-2" path="genre" value="Action"/> <spring:message code="Genre.Action"/></label>
