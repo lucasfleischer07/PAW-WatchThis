@@ -233,6 +233,10 @@
     padding: 0;
 }
 
+.W-modal-comment-desc {
+    color: #6c757d;
+}
+
 .W-delete-edit-report-review-buttons {
     display: flex;
 }

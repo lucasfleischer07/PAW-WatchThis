@@ -41,20 +41,34 @@
                                                 <div>
                                                     <ul class="W-no-bullets-list">
                                                         <li>
-                                                            <form:radiobutton path="reportType" value="SPAM"/> <spring:message code="Report.Spam"/>
-                                                            <p><spring:message code="Report.Spam.Description"/></p>
+                                                            <label>
+                                                                <form:radiobutton path="reportType" value="Spam"/> <spring:message code="Report.Spam"/>
+                                                                <p class="W-modal-comment-desc"><spring:message code="Report.Spam.Description"/></p>
+                                                            </label>
                                                         </li>
                                                         <li>
-                                                            <form:radiobutton path="reportType" value="INSULT"/> <spring:message code="Report.Insult"/>
+                                                            <label>
+                                                                <form:radiobutton path="reportType" value="Insult"/> <spring:message code="Report.Insult"/>
+                                                                <p class="W-modal-comment-desc"><spring:message code="Report.Spam.Description"/></p>
+                                                            </label>
                                                         </li>
                                                         <li>
-                                                            <form:radiobutton path="reportType" value="INAPPROPIATE"/> <spring:message code="Report.Inappropriate"/>
+                                                            <label>
+                                                                <form:radiobutton path="reportType" value="Inappropiate"/> <spring:message code="Report.Inappropriate"/>
+                                                                <p class="W-modal-comment-desc"><spring:message code="Report.Spam.Description"/></p>
+                                                            </label>
                                                         </li>
                                                         <li>
-                                                            <form:radiobutton path="reportType" value="UNRELATED"/> <spring:message code="Report.Unrelated"/>
+                                                            <label>
+                                                                <form:radiobutton path="reportType" value="Unrelated"/> <spring:message code="Report.Unrelated"/>
+                                                                <p class="W-modal-comment-desc"><spring:message code="Report.Spam.Description"/></p>
+                                                            </label>
                                                         </li>
                                                         <li>
-                                                            <form:radiobutton path="reportType" value="OTHER"/> <spring:message code="Report.Other"/>
+                                                            <label>
+                                                                <form:radiobutton path="reportType" value="Others"/> <spring:message code="Report.Other"/>
+                                                                <p class="W-modal-comment-desc"><spring:message code="Report.Spam.Description"/></p>
+                                                            </label>
                                                         </li>
                                                     </ul>
                                                 </div>
