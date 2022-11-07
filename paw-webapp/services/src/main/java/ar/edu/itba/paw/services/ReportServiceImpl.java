@@ -62,8 +62,8 @@ public class ReportServiceImpl implements ReportService{
         try{
             reportDao.delete(deletedReview);
             Map<String, Object> mailVariables = new HashMap<>();
-            mailVariables.put("to",deletedReview.getCreator().getEmail());
-            mailVariables.put("userName", deletedReview.getCreator().getUserName());
+            mailVariables.put("to",deletedReview.getUser().getEmail());
+            mailVariables.put("userName", deletedReview.getUser().getUserName());
             mailVariables.put("deletedReview", deletedReview.getName());
             if(reasonsOfDelete!=null){
                 mailVariables.put("reasonsOfDelete", reasonsOfDelete);
@@ -133,7 +133,7 @@ public class ReportServiceImpl implements ReportService{
 
     public void reportReview(Review review, User reporterUser, ReportReason reasons){
         try{
-            User reportedUser=review.getCreator();
+            User reportedUser=review.getUser();
             reportDao.addReport(review,reporterUser,reasons);
             Map<String, Object> mailVariables = new HashMap<>();
             mailVariables.put("to",reportedUser.getEmail());

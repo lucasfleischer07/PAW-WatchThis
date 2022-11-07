@@ -26,7 +26,7 @@ public class Review {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userid")
-    private User creator;
+    private User user;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "contentid")
     private Content content;
@@ -47,7 +47,7 @@ public class Review {
         this.type = type;
         this.content=content;
         this.rating = rating;
-        this.creator=creator;
+        this.user=creator;
 
     }
     public Review(String type, String name, String description, Integer rating,User creator,Content content) {
@@ -116,8 +116,8 @@ public class Review {
         this.rating = rating;
     }
 
-    public User getCreator(){return this.creator;}
-    public void setCreator(User user){this.creator=user;}
+    public User getUser(){return this.user;}
+    public void setUser(User user){this.user=user;}
 
     public void setContent(Content content) {
         this.content = content;

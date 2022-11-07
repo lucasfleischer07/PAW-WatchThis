@@ -117,7 +117,7 @@ public class ReviewController {
         Review review=rs.findById(reviewId).orElseThrow(PageNotFoundException::new);
         User user=us.findByEmail(userDetails.getName()).get();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if(review.getCreator().getUserName().equals(user.getUserName()) || auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))){
+        if(review.getUser().getUserName().equals(user.getUserName()) || auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))){
             rs.deleteReview(reviewId);
             String referer = request.getHeader("Referer");
             return new ModelAndView("redirect:"+ referer);
@@ -161,7 +161,7 @@ public class ReviewController {
                 mav.addObject("admin",false);
             }
 
-            if(!oldReview.get().getCreator().getUserName().equals(us.findByEmail(userDetails.getName()).get().getUserName())){
+            if(!oldReview.get().getUser().getUserName().equals(us.findByEmail(userDetails.getName()).get().getUserName())){
                 LOGGER.warn("The editor is not owner of the review",new ForbiddenException());
                 throw new ForbiddenException();
             }
@@ -202,7 +202,7 @@ public class ReviewController {
         }
 
         Optional<User> user = us.findByEmail(userDetails.getName());
-        if(!oldReview.get().getCreator().getUserName().equals(user.get().getUserName())){
+        if(!oldReview.get().getUser().getUserName().equals(user.get().getUserName())){
             LOGGER.warn("The editor is not owner of the review",new PageNotFoundException());
             throw new ForbiddenException();
         }

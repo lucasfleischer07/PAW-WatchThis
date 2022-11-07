@@ -60,7 +60,7 @@ public class ReviewServiceImpl implements ReviewService{
     public List<Review> sortReviews(User user, List<Review> reviewList){
         if(user!=null){
             for (Review review:reviewList) {
-                if(review.getCreator().getUserName().equals(user.getUserName())){
+                if(review.getUser().getUserName().equals(user.getUserName())){
                     reviewList.remove(review);
                     reviewList.add(0,review);
                     break;

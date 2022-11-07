@@ -205,7 +205,7 @@
             <h3 class="W-title-review"><spring:message code="Content.Review"/></h3>
             <div class="W-add-review">
               <c:choose>
-                <c:when test="${userName != 'null' && reviews[0].creator.userName==userName}"/>
+                <c:when test="${userName != 'null' && reviews[0].user.userName==userName}"/>
                 <c:when test="${userName != 'null'}">
                   <a href="<c:url value="/reviewForm/${details.type}/${details.id}/${userId}"/>" onclick="(this).className += ' spinner-border text-dark'; (this).innerText = ''"><button type="button" class="btn btn-dark W-add-review-button W-reviewText"><spring:message code="Content.AddReview"/></button></a>
                 </c:when>
@@ -242,7 +242,7 @@
                 <jsp:param name="reviewRating" value="${review.rating}"/>
                 <jsp:param name="reviewId" value="${review.id}" />
                 <jsp:param name="reviewReputation" value="${review.reputation}" />
-                <jsp:param name="userName" value="${review.creator.userName}"/>
+                <jsp:param name="userName" value="${review.user.userName}"/>
                 <jsp:param name="contentId" value="${contentId}"/>
                 <jsp:param name="contentType" value="${review.type}"/>
                 <jsp:param name="loggedUserName" value="${userName}"/>
