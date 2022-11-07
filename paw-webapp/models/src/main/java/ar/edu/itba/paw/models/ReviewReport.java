@@ -7,7 +7,7 @@ public class ReviewReport {
     /* package */ ReviewReport() {
 // Just for Hibernate, we love you!
     }
-    public ReviewReport(User user, Review review, String text, ReportReason reportReason){
+    public ReviewReport(User user, Review review, ReportReason reportReason){
             this.review=review;
         }
     @Id
@@ -24,9 +24,10 @@ public class ReviewReport {
     private Review review;
 
 
-    private String text;
     @Enumerated(EnumType.STRING)
     private ReportReason reportReason;
+    @Transient
+    private final String type="review";
 
     public Review getReview() {
         return review;
@@ -36,18 +37,10 @@ public class ReviewReport {
         return user;
     }
 
-    public String getText() {
-        return text;
-    }
-
     public ReportReason getReportReason() {
         return reportReason;
     }
 
-
-    public void setText(String text) {
-        this.text = text;
-    }
 
     public void setUser(User user) {
         this.user = user;
@@ -57,6 +50,13 @@ public class ReviewReport {
         this.review = review;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public long getId() {
+        return id;
+    }
 
     public void setReportReason(ReportReason reportReason) {
         this.reportReason = reportReason;

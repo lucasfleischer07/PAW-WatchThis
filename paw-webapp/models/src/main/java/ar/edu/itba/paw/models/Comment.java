@@ -9,10 +9,9 @@ public class Comment {
     /* package */ Comment() {
 // Just for Hibernate, we love you!
     }
-    public Comment(User user, Review review, String text, LocalDateTime date){
+    public Comment(User user, Review review, LocalDateTime date){
         this.user=user;
         this.review=review;
-        this.text=text;
         this.date=date;
     }
     @Id

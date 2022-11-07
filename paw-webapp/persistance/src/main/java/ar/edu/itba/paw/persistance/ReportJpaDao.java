@@ -47,15 +47,15 @@ public class ReportJpaDao implements ReportDao{
     }
 
     @Override
-    public void addReport(Object reviewOrComment, ReportReason reason, String text) {
+    public void addReport(Object reviewOrComment,User user, ReportReason reason) {
         if(reviewOrComment instanceof Review){
             Review review=(Review) reviewOrComment;
-            ReviewReport toAdd =new ReviewReport(review.getCreator(),review,text,reason);
+            ReviewReport toAdd =new ReviewReport(user,review,reason);
             em.persist(toAdd);
             em.merge(review);
         } else if(reviewOrComment instanceof Comment){
             Comment comment=(Comment) reviewOrComment;
-            CommentReport toAdd =new CommentReport(comment.getUser(),comment,text,reason);
+            CommentReport toAdd =new CommentReport(user,comment,reason);
             em.persist(toAdd);
             em.merge(comment);
         }

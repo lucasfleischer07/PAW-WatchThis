@@ -84,44 +84,44 @@ public class ReportServiceImpl implements ReportService{
     }
 
     @Override
-    public void addReport(Object reviewOrComment, String reason) {
+    public void addReport(Object reviewOrComment,User reporterUser, String reason) {
         if(reason.equals(ReportReason.SPAM.toString())) {
             if(reviewOrComment instanceof Review)
-                reportReview((Review) reviewOrComment,((Review) reviewOrComment).getCreator(), ReportReason.SPAM);
+                reportReview((Review) reviewOrComment,reporterUser, ReportReason.SPAM);
             else if(reviewOrComment instanceof Comment){
-                reportComment((Comment) reviewOrComment, ((Comment) reviewOrComment).getUser(), ReportReason.SPAM);
+                reportComment((Comment) reviewOrComment, reporterUser, ReportReason.SPAM);
             } else {
                 throw new IllegalArgumentException();
             }
         } else if(reason.equals(ReportReason.INSULT.toString())) {
             if(reviewOrComment instanceof Review)
-                reportReview((Review) reviewOrComment,((Review) reviewOrComment).getCreator(), ReportReason.INSULT);
+                reportReview((Review) reviewOrComment,reporterUser, ReportReason.INSULT);
             else if(reviewOrComment instanceof Comment){
-                reportComment((Comment) reviewOrComment, ((Comment) reviewOrComment).getUser(), ReportReason.INSULT);
+                reportComment((Comment) reviewOrComment, reporterUser, ReportReason.INSULT);
             } else {
                 throw new IllegalArgumentException();
             }
         } else if(reason.equals(ReportReason.INAPPROPRIATE.toString())) {
             if(reviewOrComment instanceof Review)
-                reportReview((Review) reviewOrComment,((Review) reviewOrComment).getCreator(), ReportReason.INAPPROPRIATE);
+                reportReview((Review) reviewOrComment,reporterUser, ReportReason.INAPPROPRIATE);
             else if(reviewOrComment instanceof Comment){
-                reportComment((Comment) reviewOrComment, ((Comment) reviewOrComment).getUser(), ReportReason.INAPPROPRIATE);
+                reportComment((Comment) reviewOrComment, reporterUser, ReportReason.INAPPROPRIATE);
             } else {
                 throw new IllegalArgumentException();
             }
         } else if(reason.equals(ReportReason.UNRELATED.toString())) {
             if(reviewOrComment instanceof Review)
-                reportReview((Review) reviewOrComment,((Review) reviewOrComment).getCreator(), ReportReason.UNRELATED);
+                reportReview((Review) reviewOrComment,reporterUser, ReportReason.UNRELATED);
             else if(reviewOrComment instanceof Comment){
-                reportComment((Comment) reviewOrComment, ((Comment) reviewOrComment).getUser(), ReportReason.UNRELATED);
+                reportComment((Comment) reviewOrComment, reporterUser, ReportReason.UNRELATED);
             } else {
                 throw new IllegalArgumentException();
             }
         } else if(reason.equals(ReportReason.OTHER.toString())) {
             if(reviewOrComment instanceof Review)
-                reportReview((Review) reviewOrComment,((Review) reviewOrComment).getCreator(), ReportReason.OTHER);
+                reportReview((Review) reviewOrComment,reporterUser, ReportReason.OTHER);
             else if(reviewOrComment instanceof Comment){
-                reportComment((Comment) reviewOrComment, ((Comment) reviewOrComment).getUser(), ReportReason.OTHER);
+                reportComment((Comment) reviewOrComment, reporterUser, ReportReason.OTHER);
             } else {
                 throw new IllegalArgumentException();
             }
@@ -131,9 +131,10 @@ public class ReportServiceImpl implements ReportService{
     }
 
 
-    public void reportReview(Review review, User reportedUser, ReportReason reasons){
+    public void reportReview(Review review, User reporterUser, ReportReason reasons){
         try{
-            reportDao.addReport(review,reasons);
+            User reportedUser=review.getCreator();
+            reportDao.addReport(review,reporterUser,reasons);
             Map<String, Object> mailVariables = new HashMap<>();
             mailVariables.put("to",reportedUser.getEmail());
             mailVariables.put("userName", reportedUser.getUserName());
@@ -145,9 +146,10 @@ public class ReportServiceImpl implements ReportService{
 
     }
 
-    public void reportComment(Comment comment,User reportedUser,ReportReason reasons){
+    public void reportComment(Comment comment,User reporterUser,ReportReason reasons){
         try{
-            reportDao.addReport(comment,reasons);
+            User reportedUser=comment.getUser();
+            reportDao.addReport(comment,reporterUser,reasons);
             Map<String, Object> mailVariables = new HashMap<>();
             mailVariables.put("to",reportedUser.getEmail());    // Email del creador del comentario
             mailVariables.put("userName", reportedUser.getUserName());  // userName del creador del comentario
