@@ -34,7 +34,7 @@ public class ReviewJpaDao implements ReviewDao{
     @Override
     public void deleteReview(Long reviewId) {
         Review toDelete=findById(reviewId).get();
-        User user=toDelete.getCreator();
+        User user=toDelete.getUser();
         Content content=toDelete.getContent();
         em.remove(toDelete);
         em.merge(user);
