@@ -3,25 +3,23 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 
-
-
 <div class="W-filter-div">
     <div class="W-genre-duration-div">
         <div class="list-group">
             <div class="dropdown W-dropdown-button">
                     <c:choose>
                         <c:when test="${param.genre != '' && param.genre != 'ANY'}">
-                            <button id="genreGroupDrop" type="button" onclick="dropDownStay()" class="W-filter-title btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            <button id="genreGroupDrop" type="button" onclick="dropDownStay()" class="W-filter-title W-genre-filter btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                 <c:out value="${param.genre}"/>
                             </button>
                         </c:when>
                         <c:otherwise>
-                            <button id="genreGroupDrop" onclick="dropDownStay()" type="button" class="W-filter-title btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" >
+                            <button id="genreGroupDrop" type="button" onclick="dropDownStay()" class="W-filter-title W-genre-filter btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" >
                                 <spring:message code="GenreMessage"/>
                             </button>
                         </c:otherwise>
                     </c:choose>
-                    <ul class="dropdown-menu" id="test">
+                    <ul class="dropdown-menu" id="drop1">
                         <c:url value="/${param.type}/filters" var="postPath">
                             <c:if test="${query != 'ANY' && query!=null}">
                                 <c:param name="query" value="${query}"/>
@@ -254,9 +252,5 @@
 </div>
 
 <script src="<c:url value="/resources/js/dropDownBehaviour.js"/>"></script>
-<%--<script>--%>
-<%--    document.getElementById("myDropdown").addEventListener('click', function (event) {--%>
-<%--        event.stopPropagation();--%>
-<%--    });--%>
-<%--</script>--%>
+
 

@@ -16,8 +16,12 @@
     }
 
     function dropDownStay() {
-        const ul = document.getElementById('test');
+        const ul = document.getElementById('drop1');
+        const ul2= document.getElementById('drop2');
         ul.addEventListener('click', function (event) {
+            event.stopPropagation();
+        });
+        ul2.addEventListener('click', function (event) {
             event.stopPropagation();
         });
     }
