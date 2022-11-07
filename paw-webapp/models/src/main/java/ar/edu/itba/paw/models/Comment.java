@@ -39,8 +39,8 @@ public class Comment {
     private String text;
     private LocalDateTime date;
 
-    @Formula(value = "(SELECT count(*) from commentreport r where r.commentid=commentid)")
-    private Integer reportAmount;
+    @Formula(value = "(SELECT coalesce(count(*),0) from commentreport r where r.commentid=commentid)")
+    private int reportAmount;
     public User getUser() {
         return user;
     }

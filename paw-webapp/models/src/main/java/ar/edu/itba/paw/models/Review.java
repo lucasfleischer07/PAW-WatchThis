@@ -40,8 +40,8 @@ public class Review {
     @OneToMany(mappedBy = "review",orphanRemoval = true,fetch = FetchType.LAZY)
     private Set<ReviewReport> reviewReports;
 
-    @Formula(value = "(SELECT count(*) from reviewreport r where r.reviewid=id)")
-    private Integer reportAmount;
+    @Formula(value = "(SELECT coalesce(count(*),0) from reviewreport r where r.reviewid=reviewid)")
+    private int reportAmount;
 
     public Review(Long id, String type, String name, String description, Integer rating,User creator,Content content) {
         this.name = name;
