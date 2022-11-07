@@ -41,9 +41,6 @@ public class Comment {
         return user;
     }
 
-    public long getCommentId() {
-        return commentId;
-    }
 
     public Review getReview() {
         return review;
