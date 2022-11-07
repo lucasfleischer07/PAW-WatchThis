@@ -1,41 +1,44 @@
 package ar.edu.itba.paw.models;
 
-
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 
 @Embeddable
-public  class CommentKey implements Serializable {
-
+public class ReviewReportKey implements Serializable {
     @Column(name = "userid")
     private Long userId;
 
     @Column(name = "reviewid")
     private Long reviewId;
 
-    CommentKey(Long userId, Long reviewId){
+
+
+    ReviewReportKey(Long userId, Long reviewId){
         this.userId=userId;
         this.reviewId=reviewId;
     }
 
-    /* package */ CommentKey() {
+    /* package */ ReviewReportKey() {
 // Just for Hibernate, we love you!
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
 
-    public void setReviewId(Long reviewId) {
-        this.reviewId = reviewId;
+    public Long getReviewId() {
+        return reviewId;
     }
 
     public Long getUserId() {
         return userId;
     }
 
-    public Long getReviewId() {
-        return reviewId;
+
+    public void setReviewId(Long reviewId) {
+        this.reviewId = reviewId;
     }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
 }

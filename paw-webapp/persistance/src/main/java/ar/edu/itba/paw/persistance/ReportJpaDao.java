@@ -8,9 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import java.lang.reflect.Type;
 import java.util.List;
-import java.util.Set;
 
 @Primary
 @Repository
@@ -52,12 +50,12 @@ public class ReportJpaDao implements ReportDao{
     public void addReport(Object reviewOrComment, ReportReason reason, String text) {
         if(reviewOrComment instanceof Review){
             Review review=(Review) reviewOrComment;
-            Report toAdd =new Report(review.getCreator(),review,text,reason);
+            ReviewReport toAdd =new ReviewReport(review.getCreator(),review,text,reason);
             em.persist(toAdd);
             em.merge(review);
         } else if(reviewOrComment instanceof Comment){
             Comment comment=(Comment) reviewOrComment;
-            Report toAdd =new Report(comment.getUser(),comment,text,reason);
+            CommentReport toAdd =new CommentReport(comment.getUser(),comment,text,reason);
             em.persist(toAdd);
             em.merge(comment);
         }
@@ -65,16 +63,15 @@ public class ReportJpaDao implements ReportDao{
     }
 
     @Override
-    public List<Report> getReportedReviews() {
-        TypedQuery<Report>query= em.createQuery("select r from Report r  where r.review <> :null",Report.class);
-        query.setParameter("null",null);
+    public List<ReviewReport> getReportedReviews() {
+        TypedQuery<ReviewReport> query=em.createQuery("select r from ReviewReport r",ReviewReport.class);
         return query.getResultList();
+
     }
 
     @Override
-    public List<Report> getReportedComments() {
-        TypedQuery<Report>query= em.createQuery("select r from Report r where r.comment <> :null",Report.class);
-        query.setParameter("null",null);
+    public List<CommentReport> getReportedComments() {
+        TypedQuery<CommentReport>query= em.createQuery("select r from CommentReport r", CommentReport.class);
         return query.getResultList();
     }
 
