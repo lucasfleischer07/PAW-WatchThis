@@ -9,10 +9,10 @@ import java.io.Serializable;
 public  class CommentKey implements Serializable {
 
     @Column(name = "userid")
-    private Long userId;
+    private long userId;
 
     @Column(name = "reviewid")
-    private Long reviewId;
+    private long reviewId;
 
     CommentKey(Long userId, Long reviewId){
         this.userId=userId;

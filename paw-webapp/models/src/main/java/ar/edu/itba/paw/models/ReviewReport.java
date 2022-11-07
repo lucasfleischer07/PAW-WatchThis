@@ -9,17 +9,18 @@ public class ReviewReport {
     }
     public ReviewReport(User user, Review review, String text, ReportReason reportReason){
             this.review=review;
-            this.id=new ReviewReportKey(user.getId(), review.getId());
         }
-    @EmbeddedId
-    private ReviewReportKey id;
-
+    @Id
+    @GeneratedValue
+    private long id;
     @ManyToOne
-    @MapsId("userId")
+    @MapsId
+    @JoinColumn(name = "userid")
     private User user;
 
     @ManyToOne
-    @MapsId("reviewId")
+    @MapsId
+    @JoinColumn(name="reviewid")
     private Review review;
 
 
@@ -43,9 +44,6 @@ public class ReviewReport {
         return reportReason;
     }
 
-    public ReviewReportKey getId() {
-        return id;
-    }
 
     public void setText(String text) {
         this.text = text;
@@ -59,9 +57,6 @@ public class ReviewReport {
         this.review = review;
     }
 
-    public void setId(ReviewReportKey id) {
-        this.id = id;
-    }
 
     public void setReportReason(ReportReason reportReason) {
         this.reportReason = reportReason;

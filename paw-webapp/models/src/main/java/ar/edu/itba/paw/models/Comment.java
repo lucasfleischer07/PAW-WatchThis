@@ -14,20 +14,20 @@ public class Comment {
         this.review=review;
         this.text=text;
         this.date=date;
-        this.id=new CommentKey(user.getId(), review.getId());
     }
-
-
-    @EmbeddedId
-    private CommentKey id;
+    @Id
+    @GeneratedValue
+    private long commentId;
 
     @ManyToOne
-    @MapsId("userId")
+    @MapsId
+    @JoinColumn(name="userid")
     private User user;
 
 
     @ManyToOne
-    @MapsId("reviewId")
+    @MapsId
+    @JoinColumn(name="reviewid")
     private Review review;
 
     @OneToMany(orphanRemoval = true,fetch = FetchType.LAZY,mappedBy = "comment")
@@ -56,14 +56,6 @@ public class Comment {
         return reports;
     }
 
-
-    public CommentKey getId() {
-        return id;
-    }
-
-    public void setId(CommentKey id) {
-        this.id = id;
-    }
 
     public void setReview(Review review) {
         this.review = review;

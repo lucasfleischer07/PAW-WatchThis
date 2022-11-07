@@ -7,10 +7,10 @@ import java.io.Serializable;
 @Embeddable
 public class ReviewReportKey implements Serializable {
     @Column(name = "userid")
-    private Long userId;
+    private long userId;
 
     @Column(name = "reviewid")
-    private Long reviewId;
+    private long reviewId;
 
 
 
