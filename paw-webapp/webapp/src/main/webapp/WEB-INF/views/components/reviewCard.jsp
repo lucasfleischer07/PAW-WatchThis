@@ -69,18 +69,23 @@
                                                             <ul class="W-no-bullets-list">
                                                                 <li>
                                                                     <form:radiobutton path="reportType" value="Spam"/> <spring:message code="Report.Spam"/>
+                                                                    <p style="color: darkgrey"><spring:message code="Report.Spam.Description"/></p>
                                                                 </li>
                                                                 <li>
                                                                     <form:radiobutton path="reportType" value="Insult"/> <spring:message code="Report.Insult"/>
+                                                                    <p style="color: darkgrey"><spring:message code="Report.Spam.Description"/></p>
                                                                 </li>
                                                                 <li>
                                                                     <form:radiobutton path="reportType" value="Inappropiate"/> <spring:message code="Report.Inappropriate"/>
+                                                                    <p style="color: darkgrey"><spring:message code="Report.Spam.Description"/></p>
                                                                 </li>
                                                                 <li>
                                                                     <form:radiobutton path="reportType" value="Unrelated"/> <spring:message code="Report.Unrelated"/>
+                                                                    <p style="color: darkgrey"><spring:message code="Report.Spam.Description"/></p>
                                                                 </li>
                                                                 <li>
                                                                     <form:radiobutton path="reportType" value="Others"/> <spring:message code="Report.Other"/>
+                                                                    <p style="color: darkgrey"><spring:message code="Report.Spam.Description"/></p>
                                                                 </li>
                                                             </ul>
                                                         </div>

@@ -4,7 +4,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 
 
-
 <div class="W-filter-div">
     <div class="W-genre-duration-div">
         <div class="list-group">
