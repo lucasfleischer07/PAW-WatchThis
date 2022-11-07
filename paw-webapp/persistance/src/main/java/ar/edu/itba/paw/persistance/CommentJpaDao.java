@@ -26,6 +26,7 @@ public class CommentJpaDao implements CommentDao{
         Comment toAdd=new Comment(user,review,text, LocalDateTime.now());
         em.persist(toAdd);
         em.merge(review);
+        em.merge(review.getContent());
         em.merge(user);
     }
 
@@ -36,6 +37,7 @@ public class CommentJpaDao implements CommentDao{
         em.remove(comment);
         em.merge(user);
         em.merge(review);
+        em.merge(review.getContent());
     }
 
     @Override

@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.models;
 
+import org.hibernate.annotations.Formula;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -37,6 +39,8 @@ public class Comment {
     private String text;
     private LocalDateTime date;
 
+    @Formula(value = "(SELECT count(*) from commentreport r where r.commentid=commentid)")
+    private Integer reportAmount;
     public User getUser() {
         return user;
     }
@@ -81,5 +85,9 @@ public class Comment {
 
     public long getCommentId() {
         return commentId;
+    }
+    @Transient
+    public Integer getReportAmount() {
+        return reportAmount;
     }
 }

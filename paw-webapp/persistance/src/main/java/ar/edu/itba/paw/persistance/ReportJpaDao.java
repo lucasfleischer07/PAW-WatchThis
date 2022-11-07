@@ -41,10 +41,13 @@ public class ReportJpaDao implements ReportDao{
             Review review=(Review) reviewOrComment;
             review.getReports().removeAll(review.getReports());
             em.merge(review);
+            em.merge(review.getContent());
         } else if(reviewOrComment instanceof Comment){
             Comment comment=(Comment) reviewOrComment;
             comment.getReports().removeAll(comment.getReports());
             em.merge(comment);
+            em.merge(comment.getReview());
+            em.merge(comment.getReview().getContent());
         }
         else throw new IllegalArgumentException();
     }

@@ -37,8 +37,11 @@ public class Review {
     @OneToMany(mappedBy = "review",orphanRemoval = true)
     private Set<Comment> comments;
 
-    @OneToMany(mappedBy = "review",orphanRemoval = true)
+    @OneToMany(mappedBy = "review",orphanRemoval = true,fetch = FetchType.LAZY)
     private Set<ReviewReport> reviewReports;
+
+    @Formula(value = "(SELECT count(*) from reviewreport r where r.reviewid=id)")
+    private Integer reportAmount;
 
     public Review(Long id, String type, String name, String description, Integer rating,User creator,Content content) {
         this.name = name;
@@ -121,6 +124,10 @@ public class Review {
 
     public void setContent(Content content) {
         this.content = content;
+    }
+    @Transient
+    public int getReportAmount() {
+        return reportAmount;
     }
 
     @Transient

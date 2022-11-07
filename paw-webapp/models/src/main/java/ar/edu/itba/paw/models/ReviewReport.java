@@ -9,7 +9,10 @@ public class ReviewReport {
 // Just for Hibernate, we love you!
     }
     public ReviewReport(User user, Review review, ReportReason reportReason){
-            this.review=review;
+
+        this.review=review;
+        this.user=user;
+        this.reportReason=reportReason;
         }
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "reviewreport_id_seq")
