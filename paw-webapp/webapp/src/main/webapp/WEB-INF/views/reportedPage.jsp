@@ -39,30 +39,35 @@
           </div>
         </div>
         <div class="bg-light p-4 d-flex text-center">
-            <ul class="list-inline mb-0">
-                <li class="list-inline-item">
-                    <h4 class="font-weight-bold mb-0 d-block"><c:out value="${reviewReportedAmount}"/></h4>
-                    <c:choose>
-                        <c:when test="${reviewReportedAmount == 1}">
-                            <medium class="text-muted"><i class="fas fa-image mr-1"></i><spring:message code="Profile.Review"/></medium>
-                        </c:when>
-                        <c:otherwise>
-                            <medium class="text-muted"><i class="fas fa-image mr-1"></i><spring:message code="Profile.Reviews"/></medium>
-                        </c:otherwise>
-                    </c:choose>
-                </li>
-                <li class="list-inline-item" >
-                    <h4 class="font-weight-bold mb-0 d-block"><c:out value="${commentsReportedAmount}"/></h4>
-                    <c:choose>
-                        <c:when test="${commentsReportedAmount == 1}">
-                            <medium class="text-muted"><i class="fas fa-image mr-1"></i><spring:message code="Comment.Title2"/></medium>
-                        </c:when>
-                        <c:otherwise>
-                            <medium class="text-muted"><i class="fas fa-image mr-1"></i><spring:message code="Comments.Title"/></medium>
-                        </c:otherwise>
-                    </c:choose>
-                </li>
-            </ul>
+            <div>
+                <ul class="list-inline mb-0">
+                    <li class="list-inline-item">
+                        <h4 class="font-weight-bold mb-0 d-block"><c:out value="${reviewReportedAmount}"/></h4>
+                        <c:choose>
+                            <c:when test="${reviewReportedAmount == 1}">
+                                <medium class="text-muted"><i class="fas fa-image mr-1"></i><spring:message code="Profile.Review"/></medium>
+                            </c:when>
+                            <c:otherwise>
+                                <medium class="text-muted"><i class="fas fa-image mr-1"></i><spring:message code="Profile.Reviews"/></medium>
+                            </c:otherwise>
+                        </c:choose>
+                    </li>
+                    <li class="list-inline-item" >
+                        <h4 class="font-weight-bold mb-0 d-block"><c:out value="${commentsReportedAmount}"/></h4>
+                        <c:choose>
+                            <c:when test="${commentsReportedAmount == 1}">
+                                <medium class="text-muted"><i class="fas fa-image mr-1"></i><spring:message code="Comment.Title2"/></medium>
+                            </c:when>
+                            <c:otherwise>
+                                <medium class="text-muted"><i class="fas fa-image mr-1"></i><spring:message code="Comments.Title"/></medium>
+                            </c:otherwise>
+                        </c:choose>
+                    </li>
+                </ul>
+            </div>
+            <div>
+
+            </div>
         </div>
 
         <c:choose>

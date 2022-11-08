@@ -2,22 +2,22 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<div class="card" style="width: 80%">
+<div class="card W-comment-general-card">
     <div class="card-body W-general-div-comment">
-        <div>
+        <div class="W-img-comment-div-margin-right">
             <c:choose>
-                <c:when test="${param.user.image == null}">
+                <c:when test="${comment.user.image == null}">
                     <img src="<c:url value="/resources/img/backgorundImage.png"/> " alt="User_img" class="W-comment-profile-picture">
                 </c:when>
                 <c:otherwise>
-                    <img src="<c:url value="/profile/${param.user.userName}/profileImage"/> " alt="User_img" class="W-edit-profile-picture">
+                    <img src="<c:url value="/profile/${comment.user.userName}/profileImage"/> " alt="User_img" class="W-comment-profile-picture">
                 </c:otherwise>
             </c:choose>
         </div>
         <div class="W-comment-username-report-description-div ">
             <div class="W-comment-username-and-report">
                 <div>
-                    <a href="<c:url value="/profile/${param.user.userName}"/>" class="W-creator-review"><c:url value="${param.user.userName}"/></a>
+                    <a href="<c:url value="/profile/${comment.user.userName}"/>" class="W-creator-review"><c:url value="${comment.user.userName}"/></a>
                 </div>
                 <div>
                     <c:choose>
@@ -30,7 +30,7 @@
                             </button>
                             <div class="modal fade" id="reportCommentModal" tabindex="-1" aria-labelledby="reportCommentModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
-                                    <c:url value="/report/comment/${param.commentId}" var="postPath"/>
+                                    <c:url value="/report/comment/${comment.commentId}" var="postPath"/>
                                     <form:form id="reportCommentForm" modelAttribute="reportCommentForm" action="${postPath}" method="post" enctype="multipart/form-data">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -122,7 +122,7 @@
                 </div>
             </div>
             <div class="W-comment-text">
-                <p id="floatingTextarea2"><c:out value="${param.commentDescription}"/></p>
+                <p id="floatingTextarea2"><c:out value="${comment.text}"/></p>
             </div>
         </div>
     </div>

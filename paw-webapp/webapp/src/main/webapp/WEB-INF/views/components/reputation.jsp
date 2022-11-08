@@ -115,13 +115,11 @@
 
 
 <div class="W-comment-section-general-div">
-    <c:forEach var="comment" items="${review.comments}">
+    <c:forEach var="comment" items="${requestScope.comments}">
+        <c:set var="comment" value="${comment}" scope="request"/>
         <jsp:include page="comments.jsp">
             <jsp:param name="loggedUserName" value="${param.loggedUserName}"/>
             <jsp:param name="reviewId" value="${param.reviewId}"/>
-            <jsp:param name="user" value="${comment.user}"/>
-            <jsp:param name="commentId" value="${comment.commentId}"/>
-            <jsp:param name="commentDescription" value="${comment.text}"/>
         </jsp:include>
     </c:forEach>
 </div>

@@ -1,13 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.models.Content;
-import ar.edu.itba.paw.models.Review;
-import ar.edu.itba.paw.models.Sorting;
-import ar.edu.itba.paw.models.User;
-import ar.edu.itba.paw.services.ContentService;
-import ar.edu.itba.paw.services.PaginationService;
-import ar.edu.itba.paw.services.ReviewService;
-import ar.edu.itba.paw.services.UserService;
+import ar.edu.itba.paw.models.*;
+import ar.edu.itba.paw.services.*;
 import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
 import ar.edu.itba.paw.webapp.form.CommentForm;
 import ar.edu.itba.paw.webapp.form.GenreFilterForm;
@@ -35,14 +29,16 @@ public class MovieAndSerieController {
     private final ContentService cs;
     private final PaginationService ps;
     private final ReviewService rs;
+    private CommentService ccs;
     private static final Logger LOGGER = LoggerFactory.getLogger(ContentController.class);
 
     @Autowired
-    public MovieAndSerieController(final UserService us, final ContentService cs, final ReviewService rs, PaginationService ps) {
+    public MovieAndSerieController(final UserService us, final ContentService cs, final ReviewService rs, PaginationService ps, CommentService ccs) {
         this.us = us;
         this.cs = cs;
         this.rs = rs;
         this.ps = ps;
+        this.ccs = ccs;
     }
 
     private void HeaderSetUp(ModelAndView mav,Principal userDetails) {

@@ -236,6 +236,7 @@
 
           <div class="card-body">
             <c:forEach var="review" items="${reviews}">
+              <c:set var="comments" value="${review.comments}" scope="request"/>
               <jsp:include page="components/reviewCard.jsp">
                 <jsp:param name="reviewTitle" value="${review.name}" />
                 <jsp:param name="reviewDescription" value="${review.description}" />
@@ -251,6 +252,7 @@
                 <jsp:param name="isDislikeReviews" value="${userDislikeReviews.contains(review.id)}"/>
               </jsp:include>
             </c:forEach>
+
             <c:if test="${pageSelected<amountPages}">
               <div class="W-readMore-button" >
                 <a id="readMore" class="W-readMore-a" data-toggle="collapse" href="<c:url value="/${type}/${contentId}/page/${pageSelected+1}"/>">
