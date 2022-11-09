@@ -22,7 +22,7 @@ public class ContentForm {
     private String releaseDate;
 
     @NotNull
-    private String genre;
+    private String[] genre;
 
     @Size(min = 4, max = 100)
     private String creator;
@@ -50,7 +50,7 @@ public class ContentForm {
         this.releaseDate = releaseDate;
     }
 
-    public void setGenre(String genre) {
+    public void setGenre(String[] genre) {
         this.genre = genre;
     }
 
@@ -82,7 +82,7 @@ public class ContentForm {
         return releaseDate;
     }
 
-    public String getGenre() {
+    public String[] getGenre() {
         return genre;
     }
 

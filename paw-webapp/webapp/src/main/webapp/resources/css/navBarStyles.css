@@ -3,9 +3,14 @@
     width: 150px;
 }
 
+.W-hamburger-button-title {
+    color: #b21e26;
+}
+
 .W-header-height {
     height: 65px;
     position: static;
+    padding-right: 1vw;
 }
 
 .W-home-button-hamburger-button {
@@ -123,7 +128,7 @@
     .W-nav-item {
         display: block;
         margin-left: 0%;
-        font-size: 2vw;
+        font-size: 3vw;
     }
 
     .W-navbar-search {
@@ -181,7 +186,7 @@
     .W-nav-item {
         display: block;
         margin-left: 0%;
-        font-size: 1.5vw;
+        font-size: 2vw;
     }
 }
 @media (max-width: 291px) {

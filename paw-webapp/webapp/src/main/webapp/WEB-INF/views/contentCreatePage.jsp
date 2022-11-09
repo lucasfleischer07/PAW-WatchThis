@@ -26,6 +26,7 @@
             <jsp:param name="userName" value="${userName}"/>
             <jsp:param name="userId" value="${userId}"/>
             <jsp:param name="admin" value="${admin}"/>
+            <jsp:param name="genre" value="${param.genre}"/>
         </jsp:include>
         <c:choose>
             <c:when test="${create == true}">
@@ -85,20 +86,49 @@
                             <div class="mb-3 W-input-label-review-info">
                                 <form:errors path="genre" element="p" cssStyle="color: #b21e26"/>
                                 <form:label path="genre" class="form-label"><spring:message code="CreateContent.ContentGenre"/> <span class="W-red-asterisco"><spring:message code="Asterisk"/></span></form:label>
-                                <form:select path="genre" class="form-select" aria-label="Default select example">
-                                    <form:option value="Action"><spring:message code="Genre.Action"/></form:option>
-                                    <form:option value="Science Fiction"><spring:message code="Genre.Science"/></form:option>
-                                    <form:option value="Comedy"><spring:message code="Genre.Comedy"/></form:option>
-                                    <form:option value="Adventure"><spring:message code="Genre.Adventure"/></form:option>
-                                    <form:option value="Drama"><spring:message code="Genre.Drama"/></form:option>
-                                    <form:option value="Horror"><spring:message code="Genre.Horror"/></form:option>
-                                    <form:option value="Animation"><spring:message code="Genre.Animation"/></form:option>
-                                    <form:option value="Thriller"><spring:message code="Genre.Thriller"/></form:option>
-                                    <form:option value="Mistery"><spring:message code="Genre.Mystery"/></form:option>
-                                    <form:option value="Crime"><spring:message code="Genre.Crime"/></form:option>
-                                    <form:option value="Fantasy"><spring:message code="Genre.Fantasy"/></form:option>
-                                    <form:option value="Romance"><spring:message code="Genre.Romance"/></form:option>
-                                </form:select>
+
+                                <button id="createGenre" onclick="dropDownStay()" type="button"class="W-genre-create-button btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" >
+                                    <spring:message code="GenreMessage"/>
+                                </button>
+
+                                <ul class="dropdown-menu" id="test">
+                                    <li class="mb-1 px-2">
+                                        <label><form:checkbox cssClass="px-2" path="genre" value="Action"/> <spring:message code="Genre.Action"/></label>
+                                    </li>
+                                    <li class="mb-1 px-2">
+                                        <label><form:checkbox cssClass="px-2" path="genre" value="Sci-Fi"/> <spring:message code="Genre.Science"/></label>
+                                    </li>
+                                    <li class="mb-1 px-2">
+                                        <label><form:checkbox cssClass="px-2" path="genre" value="Comedy"/> <spring:message code="Genre.Comedy"/></label>
+                                    </li>
+                                    <li class="mb-1 px-2">
+                                        <label><form:checkbox cssClass="px-2" path="genre" value="Adventure"/> <spring:message code="Genre.Adventure"/></label>
+                                    </li>
+                                    <li class="mb-1 px-2">
+                                        <label><form:checkbox cssClass="px-2" path="genre" value="Drama"/> <spring:message code="Genre.Drama"/></label>
+                                    </li>
+                                    <li class="mb-1 px-2">
+                                        <label><form:checkbox cssClass="px-2" path="genre" value="Horror"/> <spring:message code="Genre.Horror"/></label>
+                                    </li>
+                                    <li class="mb-1 px-2">
+                                        <label><form:checkbox cssClass="px-2" path="genre" value="Animation"/> <spring:message code="Genre.Animation"/></label>
+                                    </li>
+                                    <li class="mb-1 px-2">
+                                        <label><form:checkbox cssClass="px-2" path="genre" value="Thriller"/> <spring:message code="Genre.Thriller"/></label>
+                                    </li>
+                                    <li class="mb-1 px-2">
+                                        <label><form:checkbox cssClass="px-2" path="genre" value="Mystery"/> <spring:message code="Genre.Mystery"/></label>
+                                    </li>
+                                    <li class="mb-1 px-2">
+                                        <label><form:checkbox cssClass="px-2" path="genre" value="Crime"/> <spring:message code="Genre.Crime"/></label>
+                                    </li>
+                                    <li class="mb-1 px-2">
+                                        <label><form:checkbox cssClass="px-2" path="genre" value="Fantasy"/> <spring:message code="Genre.Fantasy"/></label>
+                                    </li>
+                                    <li class="mb-1 px-2">
+                                        <label><form:checkbox cssClass="px-2" path="genre" value="Romance"/> <spring:message code="Genre.Romance"/></label>
+                                    </li>
+                                </ul>
                             </div>
                             <div class="mb-3 W-input-label-review-info">
                                 <form:errors path="type" element="p" cssStyle="color: #b21e26"/>
@@ -117,8 +147,8 @@
                         </div>
                     </div>
                     <div class="W-submit-cancel-buttons">
-                        <a href="<c:url value="/"/>"><button type="button" class="btn btn-danger" id="cancelButton" onclick="(this).className += ' spinner-border'; (this).innerText = '|'"><spring:message code="Form.Cancel"/></button></a>
-                        <button id="submitButton" type="submit" class="btn btn-success" onclick="this.form.submit(); (this).className += ' spinner-border'; (this).innerText = '|'"><spring:message code="Form.Submit"/></button>
+                        <a href="<c:url value="/"/>"><button type="button" class="btn btn-danger" onclick="(this).className += ' spinner-border'; (this).innerText = '|'"><spring:message code="Form.Cancel"/></button></a>
+                        <button type="submit" class="btn btn-success" onclick="this.form.submit(); (this).className += ' spinner-border'; (this).innerText = '|'"><spring:message code="Form.Submit"/></button>
                     </div>
                 </form:form>
             </c:when>
@@ -208,9 +238,11 @@
             </c:when>
         </c:choose>
 
+        <script src="<c:url value="/resources/js/dropDownBehaviour.js"/>"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
         <script>const simplemde = new SimpleMDE({ element: document.getElementById("MyTextArea"),showIcons: ["strikethrough"],hideIcons: ["link", "image","table","preview","fullscreen","guide","side-by-side","quote"]});</script>
 
+        </script>
     </body>
 </html>
