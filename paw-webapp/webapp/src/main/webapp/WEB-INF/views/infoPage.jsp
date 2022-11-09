@@ -205,7 +205,7 @@
             <h3 class="W-title-review"><spring:message code="Content.Review"/></h3>
             <div class="W-add-review">
               <c:choose>
-                <c:when test="${userName != 'null' && reviews[0].creator.userName==userName}"/>
+                <c:when test="${userName != 'null' && reviews[0].user.userName==userName}"/>
                 <c:when test="${userName != 'null'}">
                   <a href="<c:url value="/reviewForm/${details.type}/${details.id}/${userId}"/>" onclick="(this).className += ' spinner-border text-dark'; (this).innerText = ''"><button type="button" class="btn btn-dark W-add-review-button W-reviewText"><spring:message code="Content.AddReview"/></button></a>
                 </c:when>
@@ -236,22 +236,23 @@
 
           <div class="card-body">
             <c:forEach var="review" items="${reviews}">
+              <c:set var="comments" value="${review.comments}" scope="request"/>
               <jsp:include page="components/reviewCard.jsp">
                 <jsp:param name="reviewTitle" value="${review.name}" />
                 <jsp:param name="reviewDescription" value="${review.description}" />
                 <jsp:param name="reviewRating" value="${review.rating}"/>
                 <jsp:param name="reviewId" value="${review.id}" />
                 <jsp:param name="reviewReputation" value="${review.reputation}" />
-                <jsp:param name="userName" value="${review.creator.userName}"/>
+                <jsp:param name="userName" value="${review.user.userName}"/>
                 <jsp:param name="contentId" value="${contentId}"/>
                 <jsp:param name="contentType" value="${review.type}"/>
                 <jsp:param name="loggedUserName" value="${userName}"/>
                 <jsp:param name="isAdmin" value="${admin}"/>
                 <jsp:param name="isLikeReviews" value="${userLikeReviews.contains(review.id)}"/>
                 <jsp:param name="isDislikeReviews" value="${userDislikeReviews.contains(review.id)}"/>
-
               </jsp:include>
             </c:forEach>
+
             <c:if test="${pageSelected<amountPages}">
               <div class="W-readMore-button" >
                 <a id="readMore" class="W-readMore-a" data-toggle="collapse" href="<c:url value="/${type}/${contentId}/page/${pageSelected+1}"/>">

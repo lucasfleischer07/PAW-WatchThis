@@ -17,21 +17,16 @@ import java.util.*;
 public class ReviewServiceImpl implements ReviewService{
 
     private final ReviewDao reviewDao;
-    private final ReportDao reportDao;
-    private final EmailService emailService;
 
-    @Autowired
-    private MessageSource messageSource;
-    private final Locale locale = LocaleContextHolder.getLocale();
 
     private List<Long> userLikeReviews = new ArrayList<>();
     private List<Long> userDislikeReviews = new ArrayList<>();
 
     @Autowired
-    public ReviewServiceImpl(final ReviewDao reviewDao,final EmailService emailService,final ReportDao reportDao) {
-        this.emailService=emailService;
+    public ReviewServiceImpl(final ReviewDao reviewDao) {
+
         this.reviewDao = reviewDao;
-        this.reportDao = reportDao;
+
     }
 
     @Override
@@ -49,26 +44,6 @@ public class ReviewServiceImpl implements ReviewService{
         reviewDao.deleteReview(reviewId);
     }
 
-    @Override
-    public void adminDeleteReview(Review deletedReview,String reasonsOfDelete) {
-        try{
-            reviewDao.deleteReview(deletedReview.getId());
-            Map<String, Object> mailVariables = new HashMap<>();
-            mailVariables.put("to",deletedReview.getCreator().getEmail());
-            mailVariables.put("userName", deletedReview.getCreator().getUserName());
-            mailVariables.put("deletedReview", deletedReview.getName());
-            if(reasonsOfDelete!=null){
-                mailVariables.put("reasonsOfDelete", reasonsOfDelete);
-            }else{
-                mailVariables.put("reasonsOfDelete", messageSource.getMessage("Mail.ReviewDeleteGeneralReason", new Object[]{}, locale));
-            }
-            emailService.sendMail("deleteReviewReported", messageSource.getMessage("Mail.ReviewDeleted", new Object[]{}, locale), mailVariables, locale);
-
-        }catch (MessagingException e){
-
-        }
-
-    }
 
     @Override
     public Optional<Review> findById(Long reviewId) {return reviewDao.findById(reviewId);}
@@ -85,7 +60,7 @@ public class ReviewServiceImpl implements ReviewService{
     public List<Review> sortReviews(User user, List<Review> reviewList){
         if(user!=null){
             for (Review review:reviewList) {
-                if(review.getCreator().getUserName().equals(user.getUserName())){
+                if(review.getUser().getUserName().equals(user.getUserName())){
                     reviewList.remove(review);
                     reviewList.add(0,review);
                     break;
@@ -132,62 +107,6 @@ public class ReviewServiceImpl implements ReviewService{
         return userDislikeReviews;
     }
 
-    @Override
-    public void reportReview(Review review,User reporterUser,ReportReason reasons,String description){
-        try{
-            reportDao.addReport(review,reasons,description);
-            Map<String, Object> mailVariables = new HashMap<>();
-            mailVariables.put("to",reporterUser.getEmail());    // Email del creador del comentario
-            mailVariables.put("userName", reporterUser.getUserName());  // userName del creador del comentario
-            mailVariables.put("reportedReview", review.getName());  // Esto seria la review, onda lo que decia la review
-            emailService.sendMail("reportReview", messageSource.getMessage("Mail.ReviewReported", new Object[]{}, locale), mailVariables, locale);
-        }catch (MessagingException e){
-            //algo
-        }
-
-    }
-    @Override
-    public void reportComment(Comment Comment,User reporterUser,ReportReason reasons,String description){
-        try{
-            reportDao.addReport(Comment,reasons,description);
-            Map<String, Object> mailVariables = new HashMap<>();
-            mailVariables.put("to",reporterUser.getEmail());    // Email del creador del comentario
-            mailVariables.put("userName", reporterUser.getUserName());  // userName del creador del comentario
-            mailVariables.put("reportedReview", Comment.getText());  // Esto seria la review, onda lo que decia la review
-            emailService.sendMail("reportComment", messageSource.getMessage("Mail.CommentReported", new Object[]{}, locale), mailVariables, locale);
-        }catch (MessagingException e){
-            //algo
-        }
-    }
-
-    @Override
-    public void addComment(Review review, User user, String text) {
-        reviewDao.addComment(review,user,text);
-    }
-
-    @Override
-    public void deleteComment(Comment comment) {
-        reviewDao.deleteComment(comment);
-    }
-
-    @Override
-    public void adminDeleteComment(Comment comment,String reason){
-        try {
-            reviewDao.deleteComment(comment);
-            Map<String, Object> mailVariables = new HashMap<>();
-            mailVariables.put("to", comment.getUser().getEmail());
-            mailVariables.put("userName", comment.getUser().getUserName());
-            mailVariables.put("deletedComment", comment.getText());
-            if(reason!=null){
-                mailVariables.put("reasonsOfDelete", reason);
-            }else{
-                mailVariables.put("reasonsOfDelete", messageSource.getMessage("Mail.CommentDeleteGeneralReason", new Object[]{}, locale));
-            }
-            emailService.sendMail("deleteCommentReported", messageSource.getMessage("Mail.CommentDeleted", new Object[]{}, locale), mailVariables, locale);
-        } catch (MessagingException e) {
-            //algo
-        }
 
 
-    }
 }

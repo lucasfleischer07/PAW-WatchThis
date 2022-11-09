@@ -113,7 +113,7 @@
                             <jsp:param name="reviewDescription" value="${review.description}" />
                             <jsp:param name="reviewRating" value="${review.rating}"/>
                             <jsp:param name="reviewId" value="${review.id}" />
-                            <jsp:param name="userName" value="${review.creator.userName}"/>
+                            <jsp:param name="userName" value="${review.user.userName}"/>
                             <jsp:param name="contentId" value="${review.id}"/>
                             <jsp:param name="reviewReputation" value="${review.reputation}" />
                             <jsp:param name="contentType" value="${review.type}"/>

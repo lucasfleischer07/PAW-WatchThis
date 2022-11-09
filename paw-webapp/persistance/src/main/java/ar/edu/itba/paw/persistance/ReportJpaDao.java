@@ -8,9 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import java.lang.reflect.Type;
 import java.util.List;
-import java.util.Set;
 
 @Primary
 @Repository
@@ -24,12 +22,15 @@ public class ReportJpaDao implements ReportDao{
             Review review=(Review) reviewOrComment;
             Content content=review.getContent();
             content.getContentReviews().remove(review);
+            em.remove(review);
             em.merge(content);
         } else if(reviewOrComment instanceof Comment){
             Comment comment=(Comment) reviewOrComment;
             Review review=comment.getReview();
             review.getComments().remove(comment);
+            em.remove(comment);
             em.merge(review);
+            em.merge(review.getContent());
         }
         else throw new IllegalArgumentException();
     }
@@ -40,41 +41,46 @@ public class ReportJpaDao implements ReportDao{
             Review review=(Review) reviewOrComment;
             review.getReports().removeAll(review.getReports());
             em.merge(review);
+            em.merge(review.getContent());
         } else if(reviewOrComment instanceof Comment){
             Comment comment=(Comment) reviewOrComment;
             comment.getReports().removeAll(comment.getReports());
             em.merge(comment);
+            em.merge(comment.getReview());
+            em.merge(comment.getReview().getContent());
         }
         else throw new IllegalArgumentException();
     }
 
     @Override
-    public void addReport(Object reviewOrComment, ReportReason reason, String text) {
+    public void addReport(Object reviewOrComment,User user, ReportReason reason) {
         if(reviewOrComment instanceof Review){
             Review review=(Review) reviewOrComment;
-            Report toAdd =new Report(review.getCreator(),review,text,reason);
+            ReviewReport toAdd =new ReviewReport(user,review,reason);
             em.persist(toAdd);
             em.merge(review);
+            em.merge(review.getContent());
         } else if(reviewOrComment instanceof Comment){
             Comment comment=(Comment) reviewOrComment;
-            Report toAdd =new Report(comment.getUser(),comment,text,reason);
+            CommentReport toAdd =new CommentReport(user,comment,reason);
             em.persist(toAdd);
             em.merge(comment);
+            em.merge(comment.getReview());
+            em.merge(comment.getReview().getContent());
         }
         else throw new IllegalArgumentException();
     }
 
     @Override
-    public List<Report> getReportedReviews() {
-        TypedQuery<Report>query= em.createQuery("select r from Report r  where r.review <> :null",Report.class);
-        query.setParameter("null",null);
+    public List<ReviewReport> getReportedReviews() {
+        TypedQuery<ReviewReport> query=em.createQuery("select r from ReviewReport r",ReviewReport.class);
         return query.getResultList();
+
     }
 
     @Override
-    public List<Report> getReportedComments() {
-        TypedQuery<Report>query= em.createQuery("select r from Report r where r.comment <> :null",Report.class);
-        query.setParameter("null",null);
+    public List<CommentReport> getReportedComments() {
+        TypedQuery<CommentReport>query= em.createQuery("select r from CommentReport r", CommentReport.class);
         return query.getResultList();
     }
 

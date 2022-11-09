@@ -1,10 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.models.Review;
-import ar.edu.itba.paw.models.User;
-import ar.edu.itba.paw.services.PaginationService;
-import ar.edu.itba.paw.services.ReviewService;
-import ar.edu.itba.paw.services.UserService;
+import ar.edu.itba.paw.models.*;
+import ar.edu.itba.paw.services.*;
 import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
 import ar.edu.itba.paw.webapp.form.ReportCommentForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,15 +23,20 @@ public class ReportsController {
     private final ReviewService rs;
     private final UserService us;
     private final PaginationService ps;
+    private final ReportService rrs;
+    private final CommentService ccs;
+
 
     @Autowired
-    public ReportsController(ReviewService rs, UserService us, PaginationService ps) {
+    public ReportsController(ReviewService rs, UserService us, PaginationService ps, ReportService rrs, CommentService ccs) {
         this.us = us;
         this.rs = rs;
         this.ps = ps;
+        this.rrs = rrs;
+        this.ccs = ccs;
     }
 
-    private void paginationSetup(ModelAndView mav, int page, List<Review> reportedList){
+    private void paginationSetup(ModelAndView mav, int page, List<Object> reportedList){
         if(reportedList.size() == 0) {
             mav.addObject("reportedListContent",reportedList);
             mav.addObject("pageSelected",1);
@@ -41,7 +44,7 @@ public class ReportsController {
             return;
         }
 
-        List<Review> reviewListPaginated = ps.reviewPagination(reportedList, page);
+        List<Object> reviewListPaginated = ps.reportPagination(reportedList, page);
         mav.addObject("reportedListContent", reviewListPaginated);
 
         int amountOfPages = ps.amountOfContentPages(reportedList.size());
@@ -55,7 +58,7 @@ public class ReportsController {
     public ModelAndView reportPage(Principal userDetails,
                                    @PathVariable("pageNum")final Optional<Integer> pageNum){
         ModelAndView mav = new ModelAndView("reportedPage");
-        User user=us.findByEmail(userDetails.getName()).get();
+        User user = us.findByEmail(userDetails.getName()).get();
         mav.addObject("userName", user.getUserName());
         mav.addObject("userId", user.getId());
         if(user.getRole().equals("admin")){
@@ -64,23 +67,16 @@ public class ReportsController {
             mav.addObject("admin",false);
         }
 
-//        TODO: Necesito lo siguiente:
-//         - Lista de cosas reportadas
-//         - Dentro de la lista, poder distinguir entre comments y reviews
-//         - Cantidad de reviews reportadas
-//         - Cantidad de comments reportadas
-//         - Cantidad de reports que tiene esa review/comment (si puede ser con la primer letra en minuscula, mejor)
-//         - Motivos del report, onda la/las categoria/s (si es en froma de un string ya listo, mejor)
-//         - Nombre y id del usuario que hizo el comment/review reportado
-//         - Nombre y id del contenido donde se hizo el reportado
-//         - El texto del comment/review que se reporto, onda, lo que decia esa comment/review
-
-        mav.addObject("commentsReportedList", user.getId());
-//        mav.addObject("reviewReportedAmount", user.getId());
-//        mav.addObject("commentsReportedAmount", user.getId());
-
-
-//        paginationSetup(mav,pageNum.orElse(1),reviewList);
+        List<CommentReport> commentReportedList = rrs.getReportedComments();
+        List<ReviewReport> reviewReportedList = rrs.getReportedReviews();
+        List<Object> commentsAndReviewsReportedList = new ArrayList<>();
+        commentsAndReviewsReportedList.addAll(commentReportedList);
+        commentsAndReviewsReportedList.addAll(reviewReportedList);
+        mav.addObject("commentsReportedAmount", commentReportedList.size());
+        mav.addObject("reviewReportedAmount", reviewReportedList.size());
+        mav.addObject("commentsAndReviewsReportedList", commentsAndReviewsReportedList);
+        mav.addObject("commentsAndReviewsReportedAmount", commentsAndReviewsReportedList.size());
+        paginationSetup(mav,pageNum.orElse(1),commentsAndReviewsReportedList);
         return mav;
     }
     // * ---------------------------------------------------------------------------------------------------------------
@@ -95,7 +91,7 @@ public class ReportsController {
                                       HttpServletRequest request){
         Review review=rs.findById(reviewId).orElseThrow(PageNotFoundException::new);
         User user=us.findByEmail(userDetails.getName()).get();
-//        rs.addReport(user, review, reportReviewForm.getReportType());
+        rrs.addReport(review, user, reportReviewForm.getReportType());
         String referer = request.getHeader("Referer");
         return new ModelAndView("redirect:"+ referer);
     }
@@ -103,15 +99,15 @@ public class ReportsController {
 
 
     // * ----------------------------------- Comment Report ------------------------------------------------------------
-    @RequestMapping(value="/report/comment/{reviewId:[0-9]+}",method = {RequestMethod.POST})
+    @RequestMapping(value="/report/comment/{commentId:[0-9]+}",method = {RequestMethod.POST})
     public ModelAndView reportComment(Principal userDetails,
-                                     @PathVariable("reviewId") final long reviewId,
+                                     @PathVariable("commentId") final long commentId,
                                       @ModelAttribute("reportReviewForm") final ReportCommentForm reportReviewForm,
                                       @ModelAttribute("reportCommentForm") final ReportCommentForm reportCommentForm,
                                      HttpServletRequest request){
-        Review review=rs.findById(reviewId).orElseThrow(PageNotFoundException::new);
+        Comment comment=ccs.getComment(commentId).orElseThrow(PageNotFoundException::new);
         User user=us.findByEmail(userDetails.getName()).get();
-//        rs.addReport(user, review, reportCommentForm.getReportType());
+        rrs.addReport(comment, user, reportCommentForm.getReportType());
         String referer = request.getHeader("Referer");
         return new ModelAndView("redirect:"+ referer);
     }

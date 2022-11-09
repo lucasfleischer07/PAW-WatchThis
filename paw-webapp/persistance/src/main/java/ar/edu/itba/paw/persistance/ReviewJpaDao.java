@@ -34,7 +34,7 @@ public class ReviewJpaDao implements ReviewDao{
     @Override
     public void deleteReview(Long reviewId) {
         Review toDelete=findById(reviewId).get();
-        User user=toDelete.getCreator();
+        User user=toDelete.getUser();
         Content content=toDelete.getContent();
         em.remove(toDelete);
         em.merge(user);
@@ -107,22 +107,7 @@ public class ReviewJpaDao implements ReviewDao{
         return Optional.ofNullable(em.find(Review.class, reviewId));
     }
 
-    @Override
-    public void addComment(Review review, User user, String text) {
-        Comment toAdd=new Comment(user,review,text, LocalDateTime.now());
-        em.persist(toAdd);
-        em.merge(review);
-        em.merge(user);
-    }
 
-    @Override
-    public void deleteComment(Comment comment) {
-        User user=comment.getUser();
-        Review review=comment.getReview();
-        em.remove(comment);
-        em.merge(user);
-        em.merge(review);
-    }
 
 
 }

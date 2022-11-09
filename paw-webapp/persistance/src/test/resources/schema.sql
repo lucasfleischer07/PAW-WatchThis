@@ -3,7 +3,6 @@ create table if not exists userdata(
                                        name       VARCHAR ( 50 ) unique NOT NULL,
                                         email      VARCHAR ( 50 ) unique NOT NULL,
                                         password   VARCHAR ( 50 ) NOT NULL,
-                                        reputation numeric default 0.00                   not null,
                                         image BIT ( 500 ) ,
                                         role VARCHAR ( 50 ) NOT NULL
                                         );

@@ -36,6 +36,15 @@ public class PaginationServiceImpl implements PaginationService{
     }
 
     @Override
+    public List<Object> reportPagination(List<Object> objectList, int page) {
+        if(objectList.size() >= page*REVIEW_AMOUNT) {
+            return objectList.subList(0, page * REVIEW_AMOUNT);
+        } else {
+            return objectList.subList(0, objectList.size());
+        }
+    }
+
+    @Override
     public int amountOfReviewPages(int reviewListSize) {
         return (int) Math.ceil((double)reviewListSize/(double)REVIEW_AMOUNT);
     }

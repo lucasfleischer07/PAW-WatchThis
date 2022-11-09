@@ -50,16 +50,16 @@
                                 <tbody>
                                 <tr>
                                   <td class="esd-block-text es-m-txt-l es-p30t es-p20r es-p20l" align="left">
-                                    <h2 style="color: #333333;" th:text="#{AdminConfirmation}"></h2>
+                                    <h2 style="color: #333333;" th:text="#{Delete.Comment}"></h2>
                                   </td>
                                 </tr>
                                 <tr>
                                   <td class="esd-block-text es-p10t es-p20r es-p20l" bgcolor="#fcfcfc" align="left">
                                     <p th:text="${userName}"></p>
                                     <p th:text="#{Delete.Comment.Message}"><br></p>
-                                    <p style="font-style: italic" th:text="#{deletedComment}"><br></p>
+                                    <p style="font-style: italic" th:text="${deletedComment}"><br></p>
                                     <p th:text="#{Delete.Reason.Message}"><br></p>
-                                    <p th:text="#{reasonsOfDelete}"><br></p>
+                                    <p th:text="${reasonsOfDelete}"><br></p>
                                     <p th:text="#{Regards.Message}"><br></p>
                                   </td>
                                 </tr>

@@ -115,28 +115,14 @@
 
 
 <div class="W-comment-section-general-div">
-    <jsp:include page="comments.jsp">
-        <jsp:param name="loggedUserName" value="${param.loggedUserName}"/>
-        <jsp:param name="reviewId" value="${param.reviewId}"/>
-    </jsp:include>
-
-
-<%--    <c:forEach var="content" items="${comments}">--%>
-<%--        <jsp:include page="comments.jsp">--%>
-<%--            <jsp:param name="contentName" value="${content.name}"/>--%>
-<%--            <jsp:param name="contentReleased" value="${content.released}"/>--%>
-<%--            <jsp:param name="contentCreator" value="${content.creator}"/>--%>
-<%--            <jsp:param name="contentGenre" value="${content.genre}"/>--%>
-<%--            <jsp:param name="contentImage" value="${content.image}"/>--%>
-<%--            <jsp:param name="contentId" value="${content.id}"/>--%>
-<%--            <jsp:param name="contentType" value="${content.type}"/>--%>
-<%--            <jsp:param name="contentRating" value="${content.rating}"/>--%>
-<%--            <jsp:param name="reviewsAmount" value="${content.reviewsAmount}"/>--%>
-<%--            <jsp:param name="userName" value="${userName}"/>--%>
-<%--            <jsp:param name="userWatchListContentId1" value="${userWatchListContentId.contains(content.id)}"/>--%>
-<%--        </jsp:include>--%>
-<%--    </c:forEach>--%>
+    <c:forEach var="comment" items="${requestScope.comments}">
+        <c:set var="comment" value="${comment}" scope="request"/>
+        <jsp:include page="comments.jsp">
+            <jsp:param name="loggedUserName" value="${param.loggedUserName}"/>
+            <jsp:param name="reviewId" value="${param.reviewId}"/>
+        </jsp:include>
+    </c:forEach>
 </div>
 
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
 <script src="<c:url value="/resources/js/commentVisibility.js"/>"></script>

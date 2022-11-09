@@ -233,6 +233,10 @@
     padding: 0;
 }
 
+.W-modal-comment-desc {
+    color: #6c757d;
+}
+
 .W-delete-edit-report-review-buttons {
     display: flex;
 }
@@ -261,8 +265,12 @@
 
 .W-comment-general-div {
     display: flex;
-    flex-direction: row;
     justify-content: center;
+}
+
+.W-comment-general-card {
+    width: 80%;
+    margin-bottom: 2vw;
 }
 
 .W-comment-form-div {
@@ -341,6 +349,12 @@
 .W-comment-section-general-div {
     display: flex;
     justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.W-img-comment-div-margin-right {
+    margin-right: 1.5vw;
 }
 
 .W-comment-text {

@@ -19,8 +19,8 @@
             <table cellpadding="0" cellspacing="0" class="es-footer" align="center">
               <tbody>
               <tr>
-                <td class="esd-stripe" style="background-color: #b21e26;" esd-custom-block-id="15625" bgcolor="#666666" align="center">
-                  <table class="es-footer-body" style="background-color: #b21e26;" width="600" cellspacing="0" cellpadding="0" bgcolor="#666666" align="center">
+                <td class="esd-stripe" style="background-color: #b21e26;" esd-custom-block-id="15625" bgcolor="#b21e26" align="center">
+                  <table class="es-footer-body" style="background-color: #b21e26;" width="600" cellspacing="0" cellpadding="0" bgcolor="#b21e26" align="center">
                     <tbody>
                     <tr>
                       <td class="esd-structure es-p20t es-p20b es-p20r es-p20l" align="center">
@@ -50,14 +50,14 @@
                                 <tbody>
                                 <tr>
                                   <td class="esd-block-text es-m-txt-l es-p30t es-p20r es-p20l" align="left">
-                                    <h2 style="color: #333333;" th:text="#{AdminConfirmation}"></h2>
+                                    <h2 style="color: #333333;" th:text="#{Report.Review}"></h2>
                                   </td>
                                 </tr>
                                 <tr>
                                   <td class="esd-block-text es-p10t es-p20r es-p20l" bgcolor="#fcfcfc" align="left">
                                     <p th:text="${userName}"></p>
                                     <p th:text="#{Report.Review.Message}"><br></p>
-                                    <p style="font-style: italic" th:text="#{reportedReview}"><br></p>
+                                    <p style="font-style: italic" th:text="${reportedReview}"><br></p>
                                     <p th:text="#{Regards.Message}"><br></p>
                                   </td>
                                 </tr>

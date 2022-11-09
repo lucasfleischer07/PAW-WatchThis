@@ -26,7 +26,7 @@ public class Review {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userid")
-    private User creator;
+    private User user;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "contentid")
     private Content content;
@@ -37,8 +37,11 @@ public class Review {
     @OneToMany(mappedBy = "review",orphanRemoval = true)
     private Set<Comment> comments;
 
-    @OneToMany(mappedBy = "review",orphanRemoval = true)
-    private Set<Report> reports;
+    @OneToMany(mappedBy = "review",orphanRemoval = true,fetch = FetchType.LAZY)
+    private Set<ReviewReport> reviewReports;
+
+    @Formula(value = "(SELECT coalesce(count(*),0) from reviewreport r where r.reviewid=reviewid)")
+    private int reportAmount;
 
     public Review(Long id, String type, String name, String description, Integer rating,User creator,Content content) {
         this.name = name;
@@ -47,7 +50,7 @@ public class Review {
         this.type = type;
         this.content=content;
         this.rating = rating;
-        this.creator=creator;
+        this.user=creator;
 
     }
     public Review(String type, String name, String description, Integer rating,User creator,Content content) {
@@ -108,19 +111,23 @@ public class Review {
         return comments;
     }
 
-    public Set<Report> getReports() {
-        return reports;
+    public Set<ReviewReport> getReports() {
+        return reviewReports;
     }
 
     public void setRating(Integer rating) {
         this.rating = rating;
     }
 
-    public User getCreator(){return this.creator;}
-    public void setCreator(User user){this.creator=user;}
+    public User getUser(){return this.user;}
+    public void setUser(User user){this.user=user;}
 
     public void setContent(Content content) {
         this.content = content;
+    }
+    @Transient
+    public int getReportAmount() {
+        return reportAmount;
     }
 
     @Transient

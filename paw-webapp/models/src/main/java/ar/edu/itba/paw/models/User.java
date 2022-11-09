@@ -28,8 +28,7 @@ public class User {
     @Column
     private byte[] image;
 
-    @OneToMany(fetch = FetchType.LAZY,orphanRemoval = true)
-    @JoinColumn(name = "userid")
+    @OneToMany(fetch = FetchType.LAZY,orphanRemoval = true,mappedBy = "user")
     private List<Review> userReviews;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -46,10 +45,16 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "contentid"))
     private List<Content> viewedlist;
 
-    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,orphanRemoval = true)
     private Set<Reputation> userVotes;
 
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,orphanRemoval = true)
+    private Set<Comment> userComments;
 
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,orphanRemoval = true)
+    private Set<CommentReport> userCommentReports;
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,orphanRemoval = true)
+    private Set<ReviewReport> userReviewReports;
     public User(Long id, String email, String userName, String password, Long reputation, byte[] image, String role) {
         this.id = id;
         this.email = email;
@@ -119,5 +124,10 @@ public class User {
     public void setRole(String role){this.role=role;}
 
     public byte[] getImage(){ return image;}
+
+    public Set<Comment> getUserComments() {
+        return userComments;
+    }
+
 
 }

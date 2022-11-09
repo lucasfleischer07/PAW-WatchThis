@@ -1,42 +1,50 @@
 package ar.edu.itba.paw.models;
 
+import org.hibernate.annotations.Formula;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Set;
 
 @Entity
+@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "userid", "reviewid" }) })
+
 public class Comment {
     /* package */ Comment() {
 // Just for Hibernate, we love you!
     }
-    public Comment(User user, Review review, String text, LocalDateTime date){
+    public Comment(User user, Review review,String text, LocalDateTime date){
         this.user=user;
         this.review=review;
-        this.id=new CommentKey(user.getId(),review.getId());
-        this.text=text;
         this.date=date;
+        this.text=text;
     }
-    @EmbeddedId
-    private CommentKey id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "comment_id_seq")
+    @SequenceGenerator(allocationSize = 1,sequenceName = "comment_id_seq",name = "comment_id_seq")
+    @Column(name = "commentid")
+    private long commentId;
 
-    @ManyToOne
-    @MapsId("userId")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "userid")
     private User user;
 
-    @ManyToOne
-    @MapsId("reviewId")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "reviewid")
     private Review review;
 
     @OneToMany(orphanRemoval = true,fetch = FetchType.LAZY,mappedBy = "comment")
-    private Set<Report> reports;
+    private Set<CommentReport> reports;
 
     private String text;
     private LocalDateTime date;
 
+    @Formula(value = "(SELECT coalesce(count(*),0) from commentreport r where r.commentid=commentid)")
+    private int reportAmount;
     public User getUser() {
         return user;
     }
+
 
     public Review getReview() {
         return review;
@@ -50,11 +58,36 @@ public class Comment {
         return text;
     }
 
-    public CommentKey getId() {
-        return id;
+    public Set<CommentReport> getReports() {
+        return reports;
     }
 
-    public Set<Report> getReports() {
-        return reports;
+
+    public void setReview(Review review) {
+        this.review = review;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public void setReports(Set<CommentReport> reports) {
+        this.reports = reports;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
+    }
+
+    public long getCommentId() {
+        return commentId;
+    }
+    @Transient
+    public Integer getReportAmount() {
+        return reportAmount;
     }
 }

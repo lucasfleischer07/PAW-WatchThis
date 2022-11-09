@@ -99,7 +99,7 @@ public class ReviewJdbcDaoTest {
     @Rollback
     public void testDelete(){
         Review review=dao.findById(2L).get();
-        User user=review.getCreator();
+        User user=review.getUser();
         dao.deleteReview(2L);
         assertFalse(dao.findById(2L).isPresent());
         Content content=contentDao.findById(1L).get();
@@ -116,7 +116,7 @@ public class ReviewJdbcDaoTest {
         assertEquals(4, (int) maybeReview.get().getRating());
         assertEquals("not that good", maybeReview.get().getName());
         assertEquals(1, dao.getAllReviews(contentDao.findById(1L).get()).size());
-        assertEquals("not that good", maybeReview.get().getCreator().getUserReviews().get(0).getName());
+        assertEquals("not that good", maybeReview.get().getUser().getUserReviews().get(0).getName());
     }
 
 }

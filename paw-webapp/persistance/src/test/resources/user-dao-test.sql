@@ -1,6 +1,6 @@
 
-insert into userdata(userid,name,email,password,reputation,image,role) values(1,'brandyhuevo','mateoperezrivera@gmail.com','secret',0,null ,'user');
-insert into userdata(userid,name,email,password,reputation,image,role) values(2,'brandyhuevo2','mateoperezrivera2@gmail.com','secret',0,null ,'user');
+insert into userdata(userid,name,email,password,image,role) values(1,'brandyhuevo','mateoperezrivera@gmail.com','secret',null ,'user');
+insert into userdata(userid,name,email,password,image,role) values(2,'brandyhuevo2','mateoperezrivera2@gmail.com','secret',null ,'user');
 insert into content(id,name,description,released,genre,creator,duration,durationnum,type,image) values (172,'Tonari no Totoro','description','1988','Animation Comedy Family','Hayao Miyazaki','1 hour 26 minutes',86,'movie',null);
 insert into content(id,name,description,released,genre,creator,duration,durationnum,type,image) values (501,'Toy Story 2','description','1999','Animation', 'John Lasseter','1:32',92,'movie',null);
 insert into content(id,name,description,released,genre,creator,duration,durationnum,type,image) values (10,'Il buono, il brutto, il cattivo','description','1966','Adventure Western','Sergio Leone','2 hours 41 minutes',161,'movie',null);
