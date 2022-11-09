@@ -63,21 +63,7 @@ public class MovieAndSerieController {
         }
     }
 
-    private void paginationSetup(ModelAndView mav,int page,List<Review> reviewList){
-        if(reviewList.size() == 0) {
-            mav.addObject("reviews",reviewList);
-            mav.addObject("pageSelected",1);
-            mav.addObject("amountPages",1);
-            return;
-        }
 
-        List<Review> reviewListPaginated = ps.reviewPagination(reviewList, page);
-        mav.addObject("reviews", reviewListPaginated);
-
-        int amountOfPages = ps.amountOfContentPages(reviewList.size());
-        mav.addObject("amountPages", amountOfPages);
-        mav.addObject("pageSelected",page);
-    }
 
     // * ----------------------------------- Movie and Series division -------------------------------------------------
     @RequestMapping(value= {"/{type:movies|series}","/{type:movies|series}/page/{pageNum}"})
@@ -124,82 +110,6 @@ public class MovieAndSerieController {
     // * ---------------------------------------------------------------------------------------------------------------
 
 
-    // * ----------------------------------- Movies and Series Info page -----------------------------------------------
-    @RequestMapping(value={"/{type:movie|serie}/{contentId:[0-9]+}","/{type:movie|serie}/{contentId:[0-9]+}/page/{pageNum:[0-9]+}"})
-    public ModelAndView reviews(Principal userDetails,
-                                @PathVariable("contentId")final long contentId,
-                                @PathVariable("type") final String type,
-                                @Valid @ModelAttribute("commentForm") final CommentForm commentForm,
-                                @ModelAttribute("reportReviewForm") final ReportCommentForm reportReviewForm,
-                                @ModelAttribute("reportCommentForm") final ReportCommentForm reportCommentForm,
-                                @PathVariable("pageNum")final Optional<Integer> pageNum,
-                                HttpServletRequest request) {
-        final ModelAndView mav = new ModelAndView("infoPage");
-        Content content=cs.findById(contentId).orElseThrow(PageNotFoundException::new);
-        mav.addObject("details", content);
-        List<Review> reviewList = rs.getAllReviews(content);
-        User user=null;
-        if(reviewList == null) {
-            LOGGER.warn("Cant find a the content specified",new PageNotFoundException());
-            throw new PageNotFoundException();
-        }
-
-        String auxType;
-        if (Objects.equals(type, "movie")) {
-            auxType = "movies";
-        } else if (Objects.equals(type, "serie")) {
-            auxType = "series";
-        } else {
-            auxType = "all";
-        }
-
-        mav.addObject("contentId",contentId);
-        mav.addObject("type",auxType);
-
-        if(userDetails != null) {
-            String userEmail = userDetails.getName();
-            user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
-            mav.addObject("userName",user.getUserName());
-            mav.addObject("userId",user.getId());
-            rs.userLikeAndDislikeReviewsId(user.getUserVotes());
-            mav.addObject("userLikeReviews", rs.getUserLikeReviews());
-            mav.addObject("userDislikeReviews", rs.getUserDislikeReviews());
-
-            Optional<Long> isInWatchList = us.searchContentInWatchList(user, contentId);
-            if(isInWatchList.get() != -1) {
-                mav.addObject("isInWatchList",isInWatchList);
-            } else {
-                mav.addObject("isInWatchList","null");
-            }
-
-            Optional<Long> isInViewedList = us.searchContentInViewedList(user, contentId);
-            if(isInViewedList.get() != -1) {
-                mav.addObject("isInViewedList",isInViewedList);
-            } else {
-                mav.addObject("isInViewedList","null");
-            }
-
-            if(user.getRole().equals("admin")) {
-                mav.addObject("admin",true);
-            } else {
-                mav.addObject("admin",false);
-            }
-        } else {
-            mav.addObject("userName","null");
-            mav.addObject("userId","null");
-            mav.addObject("isInWatchList","null");
-            mav.addObject("isInViewedList","null");
-            mav.addObject("admin",false);
-            mav.addObject("userLikeReviews", rs.getUserLikeReviews());
-            mav.addObject("userDislikeReviews", rs.getUserDislikeReviews());
-        }
-
-        reviewList = rs.sortReviews(user,reviewList);
-        paginationSetup(mav,pageNum.orElse(1),reviewList);
-        request.getSession().setAttribute("referer","/"+type+"/"+contentId);
-        return mav;
-    }
-    // * ---------------------------------------------------------------------------------------------------------------
 
 
     // *  ----------------------------------- Movies and Serie Filters -------------------------------------------------

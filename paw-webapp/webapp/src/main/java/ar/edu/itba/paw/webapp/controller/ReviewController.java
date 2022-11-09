@@ -5,6 +5,7 @@ import ar.edu.itba.paw.services.*;
 import ar.edu.itba.paw.webapp.exceptions.ForbiddenException;
 import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
 import ar.edu.itba.paw.webapp.form.CommentForm;
+import ar.edu.itba.paw.webapp.form.ReportCommentForm;
 import ar.edu.itba.paw.webapp.form.ReviewForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -29,18 +31,114 @@ public class ReviewController {
     private final ReviewService rs;
     private final ContentService cs;
     private final UserService us;
+    private final PaginationService ps;
     private final CommentService ccs;
     private final ReportService rrs;
     private static final Logger LOGGER = LoggerFactory.getLogger(ReviewController.class);
 
    @Autowired
-    public ReviewController(ReviewService rs,ContentService cs,UserService us, CommentService ccs, ReportService rrs) {
+    public ReviewController(ReviewService rs,ContentService cs,UserService us, CommentService ccs, ReportService rrs,PaginationService ps) {
         this.us = us;
         this.cs = cs;
         this.rs = rs;
         this.ccs = ccs;
         this.rrs = rrs;
+        this.ps = ps;
     }
+
+    private void paginationSetup(ModelAndView mav,int page,List<Review> reviewList){
+        if(reviewList.size() == 0) {
+            mav.addObject("reviews",reviewList);
+            mav.addObject("pageSelected",1);
+            mav.addObject("amountPages",1);
+            return;
+        }
+
+        List<Review> reviewListPaginated = ps.reviewPagination(reviewList, page);
+        mav.addObject("reviews", reviewListPaginated);
+
+        int amountOfPages = ps.amountOfContentPages(reviewList.size());
+        mav.addObject("amountPages", amountOfPages);
+        mav.addObject("pageSelected",page);
+    }
+
+
+    // * ----------------------------------- Movies and Series Info page -----------------------------------------------
+    @RequestMapping(value={"/{type:movie|serie}/{contentId:[0-9]+}","/{type:movie|serie}/{contentId:[0-9]+}/page/{pageNum:[0-9]+}"})
+    public ModelAndView reviews(Principal userDetails,
+                                @PathVariable("contentId")final long contentId,
+                                @PathVariable("type") final String type,
+                                @Valid @ModelAttribute("commentForm") final CommentForm commentForm,
+                                @ModelAttribute("reportReviewForm") final ReportCommentForm reportReviewForm,
+                                @ModelAttribute("reportCommentForm") final ReportCommentForm reportCommentForm,
+                                @PathVariable("pageNum")final Optional<Integer> pageNum,
+                                HttpServletRequest request) {
+        final ModelAndView mav = new ModelAndView("infoPage");
+        Content content=cs.findById(contentId).orElseThrow(PageNotFoundException::new);
+        mav.addObject("details", content);
+        List<Review> reviewList = rs.getAllReviews(content);
+        User user=null;
+        if(reviewList == null) {
+            LOGGER.warn("Cant find a the content specified",new PageNotFoundException());
+            throw new PageNotFoundException();
+        }
+
+        String auxType;
+        if (Objects.equals(type, "movie")) {
+            auxType = "movies";
+        } else if (Objects.equals(type, "serie")) {
+            auxType = "series";
+        } else {
+            auxType = "all";
+        }
+
+        mav.addObject("contentId",contentId);
+        mav.addObject("type",auxType);
+
+        if(userDetails != null) {
+            String userEmail = userDetails.getName();
+            user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
+            mav.addObject("userName",user.getUserName());
+            mav.addObject("userId",user.getId());
+            rs.userLikeAndDislikeReviewsId(user.getUserVotes());
+            mav.addObject("userLikeReviews", rs.getUserLikeReviews());
+            mav.addObject("userDislikeReviews", rs.getUserDislikeReviews());
+
+            Optional<Long> isInWatchList = us.searchContentInWatchList(user, contentId);
+            if(isInWatchList.get() != -1) {
+                mav.addObject("isInWatchList",isInWatchList);
+            } else {
+                mav.addObject("isInWatchList","null");
+            }
+
+            Optional<Long> isInViewedList = us.searchContentInViewedList(user, contentId);
+            if(isInViewedList.get() != -1) {
+                mav.addObject("isInViewedList",isInViewedList);
+            } else {
+                mav.addObject("isInViewedList","null");
+            }
+
+            if(user.getRole().equals("admin")) {
+                mav.addObject("admin",true);
+            } else {
+                mav.addObject("admin",false);
+            }
+        } else {
+            mav.addObject("userName","null");
+            mav.addObject("userId","null");
+            mav.addObject("isInWatchList","null");
+            mav.addObject("isInViewedList","null");
+            mav.addObject("admin",false);
+            mav.addObject("userLikeReviews", rs.getUserLikeReviews());
+            mav.addObject("userDislikeReviews", rs.getUserDislikeReviews());
+        }
+
+        reviewList = rs.sortReviews(user,reviewList);
+        paginationSetup(mav,pageNum.orElse(1),reviewList);
+        request.getSession().setAttribute("referer","/"+type+"/"+contentId);
+        return mav;
+    }
+    // * ---------------------------------------------------------------------------------------------------------------
 
 
     // * ----------------------------------- Movies and Series Review Creation------------------------------------------
@@ -263,19 +361,12 @@ public class ReviewController {
                                         final BindingResult errors,
                                         @PathVariable("reviewId")final long reviewId,
                                         HttpServletRequest request) {
-//        if(errors.hasErrors()) {
-//            return reviewFormCreate(userDetails,form,id,type);
-//        }
 
         Optional<User> user = us.findByEmail(userDetails.getName());
         Optional<Review> review = rs.getReview(reviewId);
 
-        if(!review.isPresent() || !user.isPresent()) {
+        if(!review.isPresent()) {
             throw new PageNotFoundException();
-        }
-
-        if(commentForm.getComment() == null || Objects.equals(commentForm.getComment(), "")) {
-//            return
         }
 
         ccs.addComment(review.get(), user.get(), commentForm.getComment());

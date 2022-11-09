@@ -77,7 +77,6 @@ public class ContentController {
     public ModelAndView helloWorld(Principal userDetails,
                                    @ModelAttribute("genreFilterForm") final GenreFilterForm genreFilterForm,
                                    @PathVariable("pageNum")final Optional<Integer> pageNum,
-                                   @RequestParam(name = "query", defaultValue = "") final String query,
                                    HttpServletRequest request) {
         final ModelAndView mav = new ModelAndView("homePage");
         List<Content> bestRatedList = cs.getBestRated();
@@ -170,7 +169,7 @@ public class ContentController {
         }
         mav.addObject("create",false);
         mav.addObject("contentId",contentId);
-        mav.addObject("type","all");
+        mav.addObject("type","profile");
         contentEditForm.setName(oldContent.get().getName());
         contentEditForm.setCreator(oldContent.get().getCreator());
         contentEditForm.setDescription(oldContent.get().getDescription());
@@ -192,7 +191,6 @@ public class ContentController {
         if(errors.hasErrors()) {
             return editContent(userDetails, contentEditForm,contentId);
         }
-        Content oldContent = cs.findById(contentId).orElseThrow(PageNotFoundException::new);
         cs.updateContent(contentId,contentEditForm.getName(), contentEditForm.getDescription(), contentEditForm.getReleaseDate(), contentEditForm.getGenre(), contentEditForm.getCreator(), contentEditForm.getDuration(), contentEditForm.getType(),contentEditForm.getContentPicture().getBytes());
         String referer = request.getSession().getAttribute("referer").toString();
         return new ModelAndView("redirect:" + (referer==null?"/":referer));
@@ -201,8 +199,7 @@ public class ContentController {
     // * ----------------------------------- Content Delete ------------------------------------------------------------
 
     @RequestMapping(value = "/content/{contentId:[0-9]+}/delete", method = {RequestMethod.POST})
-    public ModelAndView deleteContent(Principal userDetails,
-                                      @PathVariable("contentId")final long contentId){
+    public ModelAndView deleteContent(@PathVariable("contentId")final long contentId){
         Content oldContent = cs.findById(contentId).orElseThrow(PageNotFoundException::new);
         cs.deleteContent(contentId);
         return new ModelAndView("redirect:/");
@@ -215,7 +212,7 @@ public class ContentController {
     public ModelAndView createContent(Principal userDetails,@ModelAttribute("contentCreate") final ContentForm contentForm) {
         final ModelAndView mav = new ModelAndView("contentCreatePage");
         mav.addObject("create",true);
-        mav.addObject("type","all");
+        mav.addObject("type","profile");
         HeaderSetUp(mav,userDetails);
         return mav;
     }

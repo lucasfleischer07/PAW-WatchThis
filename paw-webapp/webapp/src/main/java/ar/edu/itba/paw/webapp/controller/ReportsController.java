@@ -84,7 +84,7 @@ public class ReportsController {
 
     // * ----------------------------------- Review Report ------------------------------------------------------------
     @RequestMapping(value="/report/review/{reviewId:[0-9]+}",method = {RequestMethod.POST})
-    public ModelAndView reviewComment(Principal userDetails,
+    public ModelAndView reportReview(Principal userDetails,
                                       @PathVariable("reviewId") final long reviewId,
                                       @ModelAttribute("reportReviewForm") final ReportCommentForm reportReviewForm,
                                       @ModelAttribute("reportCommentForm") final ReportCommentForm reportCommentForm,
