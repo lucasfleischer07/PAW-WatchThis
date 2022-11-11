@@ -87,11 +87,7 @@ public class MovieAndSerieController {
         } else {
             List<Content> contentListPaginated = ps.contentPagination(contentList, page);
             mav.addObject("allContent", contentListPaginated);
-            if(Objects.equals(type, "movies") || Objects.equals(type, "series")){
-                mav.addObject("contentType", type);
-            } else {
-                mav.addObject("contentType", "all");
-            }
+            mav.addObject("contentType", auxType);
             int amountOfPages = ps.amountOfContentPages(contentList.size());
             mav.addObject("amountPages", amountOfPages);
             mav.addObject("pageSelected",page);
