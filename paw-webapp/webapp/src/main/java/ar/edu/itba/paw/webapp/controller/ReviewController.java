@@ -379,20 +379,14 @@ public class ReviewController {
 
 
     // * ---------------------------------------------Comments delete---------------------------------------------------
-    @RequestMapping(value = "/comment/{reviewId:[0-9]+}/delete", method = {RequestMethod.POST})
+    @RequestMapping(value = "/comment/{commentId:[0-9]+}/delete", method = {RequestMethod.POST})
     public ModelAndView commentReviewDelete(Principal userDetails,
                                       @Valid @ModelAttribute("commentForm") final CommentForm commentForm,
-                                      @PathVariable("reviewId")final long reviewId,
+                                      @PathVariable("commentId")final long commentId,
                                       HttpServletRequest request) {
 
         Optional<User> user = us.findByEmail(userDetails.getName());
-        Optional<Review> review = rs.getReview(reviewId);
-
-        if(!review.isPresent() || !user.isPresent()) {
-            throw new PageNotFoundException();
-        }
-
-        Optional<Comment> deleteComment = ccs.getComment(reviewId);
+        Optional<Comment> deleteComment = ccs.getComment(commentId);
         if(!deleteComment.isPresent()) {
             throw new PageNotFoundException();
         }

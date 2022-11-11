@@ -320,6 +320,10 @@
     margin-bottom: 0;
 }
 
+.W-report-and-delete-comment-buttons {
+    display: flex;
+}
+
 .W-accordion-card-header{
     justify-content: space-between;
     display: flex;
