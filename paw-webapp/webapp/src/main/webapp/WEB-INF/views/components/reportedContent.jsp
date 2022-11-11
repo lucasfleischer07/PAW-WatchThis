@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
+<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <div class="card W-card-reported-width">
     <div class="card-body W-general-div-reports">
@@ -60,7 +61,12 @@
                 </div>
             </div>
             <div class="W-comment-text">
-                <p class="W-report-description-paragraph" id="floatingTextarea2"><c:out value="${param.reportDescription}"/></p>
+                <p id="commentTextArea" class="W-report-description-paragraph" ><c:out value="${param.reportDescription}"/></p>
+                <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+                <script>
+                    let previousText = document.getElementById('commentTextArea').innerHTML
+                    document.getElementById('commentTextArea').innerHTML = marked.parse(previousText);
+                </script>
             </div>
             <div class="W-type-of-report">
                 <c:choose>

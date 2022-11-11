@@ -82,7 +82,7 @@
                                     <form:option value="1"><spring:message code="Stars.quantity.1"/></form:option>
                                     <form:option value="2"><spring:message code="Stars.quantity.2"/></form:option>
                                     <form:option value="3"><spring:message code="Stars.quantity.3"/></form:option>
-                                    <form:option selected="true" value="4"><spring:message code="Stars.quantity.5"/></form:option>
+                                    <form:option selected="true" value="4"><spring:message code="Stars.quantity.4"/></form:option>
                                     <form:option value="5"><spring:message code="Stars.quantity.5"/></form:option>
                                 </c:when>
                                 <c:otherwise>

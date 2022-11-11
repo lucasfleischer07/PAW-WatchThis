@@ -71,7 +71,7 @@
                         <a class="nav-link active W-reported-reviews-comment-nav" aria-current="page" href="#"><spring:message code="Content.Review"/></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"><spring:message code="Comments.Title"/></a>
+                        <a class="nav-link W-reported-reviews-comment-nav" href="#"><spring:message code="Comments.Title"/></a>
                     </li>
                 </ul>
             </div>

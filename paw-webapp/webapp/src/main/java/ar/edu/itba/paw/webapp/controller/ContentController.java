@@ -209,7 +209,9 @@ public class ContentController {
 
     // * ----------------------------------- Content Creation ----------------------------------------------------------
     @RequestMapping(value = "/content/create",method = {RequestMethod.GET})
-    public ModelAndView createContent(Principal userDetails,@ModelAttribute("contentCreate") final ContentForm contentForm) {
+    public ModelAndView createContent(Principal userDetails,
+                                      @ModelAttribute("contentCreate") final ContentForm contentForm,
+                                      @ModelAttribute("genreFilterForm") final GenreFilterForm genreFilterForm) {
         final ModelAndView mav = new ModelAndView("contentCreatePage");
         mav.addObject("create",true);
         mav.addObject("type","profile");
@@ -220,9 +222,10 @@ public class ContentController {
     @RequestMapping(value = "/content/create",method = {RequestMethod.POST})
     public ModelAndView createContent(Principal userDetails,
                                       @Valid @ModelAttribute("contentCreate") final ContentForm contentForm,
+                                      @ModelAttribute("genreFilterForm") final GenreFilterForm genreFilterForm,
                                       final BindingResult errors) throws IOException {
         if(errors.hasErrors()) {
-            return createContent(userDetails,contentForm);
+            return createContent(userDetails,contentForm,genreFilterForm);
         }
 
         String auxGenre = "";
