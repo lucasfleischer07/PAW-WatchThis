@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <html>
   <head>
@@ -88,8 +89,41 @@
                 </ul>
             </div>
             <div class="W-review-comment-tabs">
-<%--                TODO: EL order tengoq ue pasarel el tipo, por el tema de las tabs--%>
-                <button>Holaaaaaa</button>
+                <div class="list-group">
+                    <div class="dropdown W-dropdown-button">
+                        <c:choose>
+                            <c:when test="${param.reason != null && param.reason != 'null' && param.reason != ''}">
+                                <button id="reportSortByGroup" type="button" class="W-filter-title btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <c:out value="${param.reason}"/>
+                                </button>
+                            </c:when>
+                            <c:otherwise>
+                                <button id="reportSortByGroup" type="button" class="W-filter-title btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <spring:message code="Report.Filter"/>
+                                </button>
+                            </c:otherwise>
+                        </c:choose>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="<c:url value="/report/reportedContent/${type}/filters">
+                                                                            </c:url>" onclick="showDuration(this)"><spring:message code="Duration.Clear"/></a></li>
+                            <li><a class="dropdown-item" href="<c:url value="/report/reportedContent/${type}/filters">
+                                                                            <c:param name="reason" value="Spam"/>
+                                                                            </c:url>" onclick="showDuration(this)"><spring:message code="Report.Spam"/></a></li>
+                            <li><a class="dropdown-item" href="<c:url value="/report/reportedContent/${type}/filters">
+                                                                            <c:param name="reason" value="Insult"/>
+                                                                            </c:url>" onclick="showDuration(this)"><spring:message code="Report.Insult"/></a></li>
+                            <li><a class="dropdown-item" href="<c:url value="/report/reportedContent/${type}/filters">
+                                                                            <c:param name="reason" value="Inappropriate"/>
+                                                                            </c:url>" onclick="showDuration(this)"><spring:message code="Report.Inappropriate"/></a></li>
+                            <li><a class="dropdown-item" href="<c:url value="/report/reportedContent/${type}/filters">
+                                                                            <c:param name="reason" value="Unrelated"/>
+                                                                            </c:url>" onclick="showDuration(this)"><spring:message code="Report.Unrelated"/></a></li>
+                            <li><a class="dropdown-item" href="<c:url value="/report/reportedContent/${type}/filters">
+                                                                            <c:param name="reason" value="Other"/>
+                                                                            </c:url>" onclick="showDuration(this)"><spring:message code="Report.Other"/></a></li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -250,6 +284,7 @@
         </ul>
       </div>
     </c:if>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
   </body>
 </html>

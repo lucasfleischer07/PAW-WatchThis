@@ -53,7 +53,7 @@ public class ReportsController {
 
 
     // * ----------------------------------- Report Page ---------------------------------------------------------------
-    @RequestMapping(value={"/report/reportedContent/{type:reviews|comments}", "/report/reportedContent/{type:reviews|comments}/page/{pageNum:[0-9]+}"},method = {RequestMethod.GET})
+    @RequestMapping(value={"/report/reportedContent/{type:reviews|comments}", "/report/reportedContent/{type:reviews|comments}/page/{pageNum:[0-9]+}", "/report/reportedContent/{type:reviews|comments}/filters"},method = {RequestMethod.GET})
     public ModelAndView reportPage(Principal userDetails,
                                    @PathVariable("pageNum")final Optional<Integer> pageNum,
                                    @PathVariable("type") final String type,
