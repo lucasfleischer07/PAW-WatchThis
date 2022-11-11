@@ -132,7 +132,7 @@ public class ReportServiceImpl implements ReportService{
                 }
                 break;
             default:
-                throw new IllegalArgumentException();
+                return;
         }
     }
 

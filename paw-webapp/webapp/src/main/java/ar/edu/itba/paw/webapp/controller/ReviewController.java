@@ -178,7 +178,6 @@ public class ReviewController {
                                         final BindingResult errors,
                                         @PathVariable("id")final long id,
                                         @PathVariable("type")final String type,
-                                        @PathVariable("userId")final long userId,
                                         HttpServletRequest request) {
         if(errors.hasErrors()) {
             return reviewFormCreate(userDetails,form,id,type);

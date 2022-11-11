@@ -179,8 +179,8 @@ public class UserController {
                                     @PathVariable("userName") final String userName,
                                     @ModelAttribute("reportReviewForm") final ReportCommentForm reportReviewForm,
                                     @Valid @ModelAttribute("commentForm") final CommentForm commentForm,
-                                    @ModelAttribute("reportCommentForm") final ReportCommentForm reportCommentForm,
-                                    final BindingResult errors) {
+                                    @ModelAttribute("reportCommentForm") final ReportCommentForm reportCommentForm
+                                    ) {
         Optional<User> user = us.findByUserName(userName);
         if(user.isPresent()) {
             us.promoteUser(user.get());

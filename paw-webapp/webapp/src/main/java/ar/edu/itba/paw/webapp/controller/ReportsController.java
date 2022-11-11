@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.services.*;
+import ar.edu.itba.paw.webapp.exceptions.BadRequestException;
 import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
 import ar.edu.itba.paw.webapp.form.ReportCommentForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,12 +63,6 @@ public class ReportsController {
         User user = us.findByEmail(userDetails.getName()).get();
         mav.addObject("userName", user.getUserName());
         mav.addObject("userId", user.getId());
-        if(user.getRole().equals("admin")){
-            mav.addObject("admin",true);
-        } else {
-            mav.addObject("admin",false);
-        }
-
         List<CommentReport> commentsReportedList = rrs.getReportedComments(reason.orElse(null));
         List<ReviewReport> reviewsReportedList = rrs.getReportedReviews(reason.orElse(null));
         if(Objects.equals(type, "reviews")) {
@@ -112,6 +107,8 @@ public class ReportsController {
                                      HttpServletRequest request){
         Comment comment=ccs.getComment(commentId).orElseThrow(PageNotFoundException::new);
         User user=us.findByEmail(userDetails.getName()).get();
+        if(comment.getUser().getId()==user.getId())
+            throw new BadRequestException();
         rrs.addReport(comment, user, reportCommentForm.getReportType());
         String referer = request.getHeader("Referer");
         return new ModelAndView("redirect:"+ referer);

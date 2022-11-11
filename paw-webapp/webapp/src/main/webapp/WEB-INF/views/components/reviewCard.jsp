@@ -172,7 +172,7 @@
                                 </li>
                                 <li>
                                     <label>
-                                        <form:radiobutton path="reportType" value="Inappropiate"/> <spring:message code="Report.Inappropriate"/>
+                                        <form:radiobutton path="reportType" value="Inappropriate"/> <spring:message code="Report.Inappropriate"/>
                                         <p class="W-modal-comment-desc"><spring:message code="Report.Inappropriate.Description"/></p>
                                     </label>
                                 </li>
@@ -184,7 +184,7 @@
                                 </li>
                                 <li>
                                     <label>
-                                        <form:radiobutton path="reportType" value="Others"/> <spring:message code="Report.Other"/>
+                                        <form:radiobutton path="reportType" value="Other"/> <spring:message code="Report.Other"/>
                                         <p class="W-modal-comment-desc"><spring:message code="Report.Other.Description"/></p>
                                     </label>
                                 </li>
