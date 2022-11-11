@@ -68,8 +68,8 @@ public class ReportsController {
             mav.addObject("admin",false);
         }
 
-        List<CommentReport> commentReportedList = rrs.getReportedComments(reason.orElse(null));
-        List<ReviewReport> reviewReportedList = rrs.getReportedReviews(reason.orElse(null));
+        List<CommentReport> commentsReportedList = rrs.getReportedComments(reason.orElse(null));
+        List<ReviewReport> reviewsReportedList = rrs.getReportedReviews(reason.orElse(null));
         if(Objects.equals(type, "reviews")) {
             mav.addObject("type", "reviews");
             paginationSetup(mav,pageNum.orElse(1), reviewsReportedList);
