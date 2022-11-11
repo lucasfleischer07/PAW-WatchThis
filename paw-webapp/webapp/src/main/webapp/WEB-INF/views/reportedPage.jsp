@@ -38,7 +38,7 @@
             </div>
           </div>
         </div>
-        <div class="bg-light p-4 d-flex text-center">
+        <div class="bg-light p-4 text-center W-report-header-div">
             <div>
                 <ul class="list-inline mb-0">
                     <li class="list-inline-item">
@@ -66,7 +66,14 @@
                 </ul>
             </div>
             <div>
-
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link active W-reported-reviews-comment-nav" aria-current="page" href="#"><spring:message code="Content.Review"/></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><spring:message code="Comments.Title"/></a>
+                    </li>
+                </ul>
             </div>
         </div>
 

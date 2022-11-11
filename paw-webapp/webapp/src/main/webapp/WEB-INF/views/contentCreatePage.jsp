@@ -87,11 +87,11 @@
                                 <form:errors path="genre" element="p" cssStyle="color: #b21e26"/>
                                 <form:label path="genre" class="form-label"><spring:message code="CreateContent.ContentGenre"/> <span class="W-red-asterisco"><spring:message code="Asterisk"/></span></form:label>
 
-                                <button id="createGenre" onclick="dropDownStay()" type="button"class="W-genre-create-button btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" >
+                                <button id="createGenre" onclick="dropDownStayGenreCreate()" type="button"class="W-genre-create-button btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" >
                                     <spring:message code="GenreMessage"/>
                                 </button>
 
-                                <ul class="dropdown-menu" id="test">
+                                <ul class="dropdown-menu" id="drop3">
                                     <li class="mb-1 px-2">
                                         <label><form:checkbox cssClass="px-2" path="genre" value="Action"/> <spring:message code="Genre.Action"/></label>
                                     </li>
@@ -243,6 +243,5 @@
         <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
         <script>const simplemde = new SimpleMDE({ element: document.getElementById("MyTextArea"),showIcons: ["strikethrough"],hideIcons: ["link", "image","table","preview","fullscreen","guide","side-by-side","quote"]});</script>
 
-        </script>
     </body>
 </html>

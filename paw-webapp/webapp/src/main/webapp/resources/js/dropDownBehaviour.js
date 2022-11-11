@@ -15,16 +15,31 @@
         document.getElementById("sortingGroupDrop").innerHTML = item.innerHTML;
     }
 
-    function dropDownStay() {
-        const ul = document.getElementById('drop1');
-        const ul2= document.getElementById('drop2');
-        ul.addEventListener('click', function (event) {
-            event.stopPropagation();
+    function dropDownStayGenreFilters() {
+        const genreFilters = document.getElementById('drop1');
+
+        genreFilters.addEventListener('click', function (event) {
+        event.stopPropagation();
         });
-        ul2.addEventListener('click', function (event) {
+    }
+
+    function dropDownStayGenreFiltersHamburger() {
+        const filterHamburger= document.getElementById('drop2');
+
+        filterHamburger.addEventListener('click', function (event) {
             event.stopPropagation();
         });
     }
+
+    function dropDownStayGenreCreate() {
+        const genreCreateContent = document.getElementById('drop3')
+
+        genreCreateContent.addEventListener('click', function (event) {
+            event.stopPropagation();
+        });
+    }
+
+
 
 
 

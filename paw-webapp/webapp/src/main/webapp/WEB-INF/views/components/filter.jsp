@@ -10,12 +10,12 @@
             <div class="dropdown W-dropdown-button">
                     <c:choose>
                         <c:when test="${param.genre != '' && param.genre != 'ANY'}">
-                            <button id="genreGroupDrop" type="button" onclick="dropDownStay()" class="W-filter-title W-genre-filter btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            <button id="genreGroupDrop" type="button" onclick="dropDownStayGenreFilters()" class="W-filter-title W-genre-filter btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                 <c:out value="${param.genre}"/>
                             </button>
                         </c:when>
                         <c:otherwise>
-                            <button id="genreGroupDrop" type="button" onclick="dropDownStay()" class="W-filter-title W-genre-filter btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" >
+                            <button id="genreGroupDrop" type="button" onclick="dropDownStayGenreFilters()" class="W-filter-title W-genre-filter btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" >
                                 <spring:message code="GenreMessage"/>
                             </button>
                         </c:otherwise>
