@@ -83,11 +83,9 @@
             <div class="card-body W-reviewText">
                 <p id="<c:out value="reviewDescription${param.id}"/>"><c:out value="${param.commentText}"/></p>
 
-                <script>
-                    console.log('reviewDescription'+'${param.id}')
-                    document.getElementById('reviewDescription'+'${param.id}').innerHTML = marked.parse(document.getElementById('reviewDescription'+'${param.id}').innerHTML);
-                </script>
-            </div>
+            <script>
+                document.getElementById('reviewDescription'+'${param.id}').innerHTML = marked.parse(document.getElementById('reviewDescription'+'${param.id}').innerHTML);
+            </script>
         </div>
     </div>
 
