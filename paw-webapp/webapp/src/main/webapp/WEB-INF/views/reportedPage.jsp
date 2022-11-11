@@ -67,8 +67,6 @@
             </div>
             <div>
                 <ul class="nav nav-tabs">
-                                <a class="nav-link W-reported-reviews-comment-nav" href="<c:url value="/report/reportedContent/comments"/>"><spring:message code="Comments.Title"/></a>
-                                <a class="nav-link active W-reported-reviews-comment-nav" href="<c:url value="/report/reportedContent/comments"/>"><spring:message code="Comments.Title"/></a>
                     <c:choose>
                         <c:when test="${type == 'reviews'}">
                             <li class="nav-item">
