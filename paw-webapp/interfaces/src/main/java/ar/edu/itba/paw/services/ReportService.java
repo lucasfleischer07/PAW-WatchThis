@@ -12,8 +12,8 @@ public interface ReportService {
     void delete(Object reviewOrComment, Set<CommentReport> reasonsOfDelete);
     void removeReports(Object reviewOrComment);
     void addReport(Object reviewOrComment, User user, String reason);
-    List<ReviewReport> getReportedReviews();
-    List<CommentReport> getReportedComments();
+    List<ReviewReport> getReportedReviews(ReportReason reason);
+    List<CommentReport> getReportedComments(ReportReason reason);
 
 
 }

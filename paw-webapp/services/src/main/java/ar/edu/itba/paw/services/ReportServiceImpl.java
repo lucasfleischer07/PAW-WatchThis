@@ -88,45 +88,45 @@ public class ReportServiceImpl implements ReportService{
         switch (reason) {
             case "Spam":
                 if (reviewOrComment instanceof Review)
-                    reportReview((Review) reviewOrComment, reporterUser, ReportReason.SPAM);
+                    reportReview((Review) reviewOrComment, reporterUser, ReportReason.Spam);
                 else if (reviewOrComment instanceof Comment) {
-                    reportComment((Comment) reviewOrComment, reporterUser, ReportReason.SPAM);
+                    reportComment((Comment) reviewOrComment, reporterUser, ReportReason.Spam);
                 } else {
                     throw new IllegalArgumentException();
                 }
                 break;
             case "Insult":
                 if (reviewOrComment instanceof Review)
-                    reportReview((Review) reviewOrComment, reporterUser, ReportReason.INSULT);
+                    reportReview((Review) reviewOrComment, reporterUser, ReportReason.Insult);
                 else if (reviewOrComment instanceof Comment) {
-                    reportComment((Comment) reviewOrComment, reporterUser, ReportReason.INSULT);
+                    reportComment((Comment) reviewOrComment, reporterUser, ReportReason.Insult);
                 } else {
                     throw new IllegalArgumentException();
                 }
                 break;
             case "Inappropriate":
                 if (reviewOrComment instanceof Review)
-                    reportReview((Review) reviewOrComment, reporterUser, ReportReason.INAPPROPRIATE);
+                    reportReview((Review) reviewOrComment, reporterUser, ReportReason.Inappropriate);
                 else if (reviewOrComment instanceof Comment) {
-                    reportComment((Comment) reviewOrComment, reporterUser, ReportReason.INAPPROPRIATE);
+                    reportComment((Comment) reviewOrComment, reporterUser, ReportReason.Inappropriate);
                 } else {
                     throw new IllegalArgumentException();
                 }
                 break;
             case "Unrelated":
                 if (reviewOrComment instanceof Review)
-                    reportReview((Review) reviewOrComment, reporterUser, ReportReason.UNRELATED);
+                    reportReview((Review) reviewOrComment, reporterUser, ReportReason.Unrelated);
                 else if (reviewOrComment instanceof Comment) {
-                    reportComment((Comment) reviewOrComment, reporterUser, ReportReason.UNRELATED);
+                    reportComment((Comment) reviewOrComment, reporterUser, ReportReason.Unrelated);
                 } else {
                     throw new IllegalArgumentException();
                 }
                 break;
             case "Other":
                 if (reviewOrComment instanceof Review)
-                    reportReview((Review) reviewOrComment, reporterUser, ReportReason.OTHER);
+                    reportReview((Review) reviewOrComment, reporterUser, ReportReason.Other);
                 else if (reviewOrComment instanceof Comment) {
-                    reportComment((Comment) reviewOrComment, reporterUser, ReportReason.OTHER);
+                    reportComment((Comment) reviewOrComment, reporterUser, ReportReason.Other);
                 } else {
                     throw new IllegalArgumentException();
                 }
@@ -167,12 +167,12 @@ public class ReportServiceImpl implements ReportService{
     }
 
     @Override
-    public List<ReviewReport> getReportedReviews() {
-        return reportDao.getReportedReviews();
+    public List<ReviewReport> getReportedReviews(ReportReason reason) {
+        return reason==null ? reportDao.getReportedReviews() : reportDao.getReportedReviewsByReason(reason);
     }
 
     @Override
-    public List<CommentReport> getReportedComments() {
-        return reportDao.getReportedComments();
+    public List<CommentReport> getReportedComments(ReportReason reason) {
+        return reason==null ? reportDao.getReportedComments() : reportDao.getReportedCommentsByReason(reason);
     }
 }

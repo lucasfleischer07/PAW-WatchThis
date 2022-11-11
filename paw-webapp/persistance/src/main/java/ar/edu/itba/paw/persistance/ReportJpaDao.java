@@ -79,10 +79,23 @@ public class ReportJpaDao implements ReportDao{
     }
 
     @Override
+    public List<ReviewReport> getReportedReviewsByReason(ReportReason reason){
+        TypedQuery<ReviewReport>query= em.createQuery("select r from ReviewReport r where r.reportReason = :reason", ReviewReport.class);
+        query.setParameter("reason",reason);
+        return query.getResultList();
+    }
+
+    @Override
     public List<CommentReport> getReportedComments() {
         TypedQuery<CommentReport>query= em.createQuery("select r from CommentReport r", CommentReport.class);
         return query.getResultList();
     }
 
+    @Override
+    public List<CommentReport> getReportedCommentsByReason(ReportReason reason){
+        TypedQuery<CommentReport>query= em.createQuery("select r from CommentReport r where r.reportReason = :reason", CommentReport.class);
+        query.setParameter("reason",reason);
+        return query.getResultList();
+    }
 
 }

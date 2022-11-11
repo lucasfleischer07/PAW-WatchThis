@@ -6,10 +6,7 @@ import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
 import ar.edu.itba.paw.webapp.form.ReportCommentForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -56,7 +53,8 @@ public class ReportsController {
     // * ----------------------------------- Report Page ---------------------------------------------------------------
     @RequestMapping(value={"/report/reportedContent", "/report/reportedContent/page/{pageNum:[0-9]+}"},method = {RequestMethod.GET})
     public ModelAndView reportPage(Principal userDetails,
-                                   @PathVariable("pageNum")final Optional<Integer> pageNum){
+                                   @PathVariable("pageNum")final Optional<Integer> pageNum,
+                                   @RequestParam(value = "reason",required = false)Optional<ReportReason> reason){
         ModelAndView mav = new ModelAndView("reportedPage");
         User user = us.findByEmail(userDetails.getName()).get();
         mav.addObject("userName", user.getUserName());
@@ -67,8 +65,8 @@ public class ReportsController {
             mav.addObject("admin",false);
         }
 
-        List<CommentReport> commentReportedList = rrs.getReportedComments();
-        List<ReviewReport> reviewReportedList = rrs.getReportedReviews();
+        List<CommentReport> commentReportedList = rrs.getReportedComments(reason.orElse(null));
+        List<ReviewReport> reviewReportedList = rrs.getReportedReviews(reason.orElse(null));
         List<Object> commentsAndReviewsReportedList = new ArrayList<>();
         commentsAndReviewsReportedList.addAll(commentReportedList);
         commentsAndReviewsReportedList.addAll(reviewReportedList);

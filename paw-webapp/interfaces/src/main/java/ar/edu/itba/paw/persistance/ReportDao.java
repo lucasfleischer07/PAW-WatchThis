@@ -13,5 +13,7 @@ public interface ReportDao {
     void removeReports(Object reviewOrComment);
     void addReport(Object reviewOrComment, User user, ReportReason reason);
     List<ReviewReport> getReportedReviews();
+    List<ReviewReport> getReportedReviewsByReason(ReportReason reason);
     List<CommentReport> getReportedComments();
+    List<CommentReport> getReportedCommentsByReason(ReportReason reason);
 }
