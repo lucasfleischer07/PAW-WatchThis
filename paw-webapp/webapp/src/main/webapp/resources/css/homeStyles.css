@@ -10,7 +10,7 @@
 .W-filter-div {
     display: flex;
     flex-direction: row;
-    /*height: 3vw;*/
+    height: 3vw;
     z-index: 1;
     align-items: center;
     justify-content: space-between;
@@ -99,6 +99,7 @@
 
 .W-border-color-user-btn {
     border-color: green;
+    margin-right: 2vw;
 }
 
 .W-films-margin{
@@ -357,6 +358,10 @@
         height: 4vw;
     }
 
+    .W-filter-div {
+        height: 5vw;
+    }
+
     .W-genre-filter {
         word-break: break-all;
         white-space: normal;
@@ -386,7 +391,19 @@
     }
 
     .W-dropdown-sorting {
-        max-height: 100px;
+        max-height: 90px;
+        overflow-y: auto;
+    }
+
+    .W-dropdown-button {
+        margin-top: 0;
+    }
+}
+
+@media (max-width: 780px) {
+
+    .W-dropdown-sorting {
+        max-height: 280px;
         overflow-y: auto;
     }
 }
@@ -399,7 +416,6 @@
     .W-filter-div {
         display: none;
     }
-
 
     .W-line-style {
         display: none;

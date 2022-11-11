@@ -318,7 +318,7 @@
                                                     </button>
                                                 </c:otherwise>
                                             </c:choose>
-                                            <ul class="dropdown-menu">
+                                            <ul class="dropdown-menu W-dropdown-sorting">
                                                 <jsp:useBean id="sortingTypes" scope="request" type="ar.edu.itba.paw.models.Sorting[]"/>
                                                 <c:forEach var="sortingType" items="${sortingTypes}">
                                                     <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">

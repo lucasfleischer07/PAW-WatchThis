@@ -36,6 +36,7 @@
 .W-reviews-card-margins {
     margin-left: 5vw;
     margin-right: 5vw;
+    border-color: white;
 }
 
 .W-general-div-infoPage-watchlistButton-and-review {
@@ -92,7 +93,6 @@
 
 .W-add-review {
     display: flex;
-    margin-right: 5%;
     margin-bottom: 0.5%;
     margin-top: 0.5%;
     justify-content: flex-end;
@@ -103,6 +103,7 @@
     display: flex;
     justify-content: space-between;
     align-content: center;
+    background-color: transparent;
 }
 .W-review-title-creator{
     width: 75%;
