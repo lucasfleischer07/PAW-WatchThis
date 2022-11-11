@@ -56,8 +56,8 @@ public class ReportsController {
     @RequestMapping(value={"/report/reportedContent/{type:reviews|comments}", "/report/reportedContent/{type:reviews|comments}/page/{pageNum:[0-9]+}"},method = {RequestMethod.GET})
     public ModelAndView reportPage(Principal userDetails,
                                    @PathVariable("pageNum")final Optional<Integer> pageNum,
-                                   @RequestParam(value = "reason",required = false)Optional<ReportReason> reason){
                                    @PathVariable("type") final String type,
+                                   @RequestParam(value = "reason",required = false)Optional<ReportReason> reason){
         ModelAndView mav = new ModelAndView("reportedPage");
         User user = us.findByEmail(userDetails.getName()).get();
         mav.addObject("userName", user.getUserName());
