@@ -3,6 +3,7 @@ package ar.edu.itba.paw.models;
 import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -35,13 +36,25 @@ public class Review {
     private Set<Reputation> userVotes;
 
     @OneToMany(mappedBy = "review",orphanRemoval = true)
+    @OrderBy(value = "commentid")
     private Set<Comment> comments;
 
     @OneToMany(mappedBy = "review",orphanRemoval = true,fetch = FetchType.LAZY)
     private Set<ReviewReport> reviewReports;
 
-    @Formula(value = "(SELECT coalesce(count(*),0) from reviewreport r where r.reviewid=reviewid)")
-    private int reportAmount;
+    @Transient
+    private int reportAmount=0;
+    @Transient
+    private Set<ReportReason> reportReasons;
+    @PostLoad
+    private void onLoad(){
+        this.reportReasons=new HashSet<>();
+        for (ReviewReport report:reviewReports
+             ) {
+            reportAmount++;
+            reportReasons.add(report.getReportReason());
+        }
+    }
 
     public Review(Long id, String type, String name, String description, Integer rating,User creator,Content content) {
         this.name = name;
@@ -125,7 +138,7 @@ public class Review {
     public void setContent(Content content) {
         this.content = content;
     }
-    @Transient
+
     public int getReportAmount() {
         return reportAmount;
     }
@@ -139,5 +152,13 @@ public class Review {
 
     public Set<Reputation> getUserVotes() {
         return userVotes;
+    }
+
+    public Set<ReportReason> getReportReasons() {
+        return reportReasons;
+    }
+
+    public Set<ReviewReport> getReviewReports() {
+        return reviewReports;
     }
 }

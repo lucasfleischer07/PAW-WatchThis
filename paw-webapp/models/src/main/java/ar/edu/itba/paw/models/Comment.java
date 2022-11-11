@@ -4,6 +4,7 @@ import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -34,13 +35,24 @@ public class Comment {
     private Review review;
 
     @OneToMany(orphanRemoval = true,fetch = FetchType.LAZY,mappedBy = "comment")
-    private Set<CommentReport> reports;
+    private Set<CommentReport> commentReports;
 
     private String text;
     private LocalDateTime date;
 
-    @Formula(value = "(SELECT coalesce(count(*),0) from commentreport r where r.commentid=commentid)")
-    private int reportAmount;
+    @Transient
+    private int reportAmount=0;
+    @Transient
+    private Set<ReportReason> reportReasons;
+    @PostLoad
+    private void onLoad(){
+        this.reportReasons=new HashSet<>();
+        for (CommentReport report:commentReports
+        ) {
+            reportAmount++;
+            reportReasons.add(report.getReportReason());
+        }
+    }
     public User getUser() {
         return user;
     }
@@ -59,7 +71,7 @@ public class Comment {
     }
 
     public Set<CommentReport> getReports() {
-        return reports;
+        return commentReports;
     }
 
 
@@ -74,20 +86,20 @@ public class Comment {
     public void setText(String text) {
         this.text = text;
     }
-
-    public void setReports(Set<CommentReport> reports) {
-        this.reports = reports;
-    }
-
-    public void setDate(LocalDateTime date) {
-        this.date = date;
-    }
-
+    
     public long getCommentId() {
         return commentId;
     }
     @Transient
     public Integer getReportAmount() {
         return reportAmount;
+    }
+
+    public Set<CommentReport> getCommentReports() {
+        return commentReports;
+    }
+
+    public Set<ReportReason> getReportReasons() {
+        return reportReasons;
     }
 }
