@@ -159,7 +159,7 @@ public class ReportServiceImpl implements ReportService{
             Map<String, Object> mailVariables = new HashMap<>();
             mailVariables.put("to",reportedUser.getEmail());    // Email del creador del comentario
             mailVariables.put("userName", reportedUser.getUserName());  // userName del creador del comentario
-            mailVariables.put("reportedReview", comment.getText());  // Esto seria la review, onda lo que decia la review
+            mailVariables.put("reportedComment", comment.getText());  // Esto seria la review, onda lo que decia la review
             emailService.sendMail("reportComment", messageSource.getMessage("Mail.CommentReported", new Object[]{}, locale), mailVariables, locale);
         }catch (MessagingException e){
             //algo
