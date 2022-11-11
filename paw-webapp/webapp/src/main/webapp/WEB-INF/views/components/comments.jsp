@@ -54,7 +54,7 @@
                                                         </li>
                                                         <li>
                                                             <label>
-                                                                <form:radiobutton path="reportType" value="Inappropiate"/> <spring:message code="Report.Inappropriate"/>
+                                                                <form:radiobutton path="reportType" value="Inappropriate"/> <spring:message code="Report.Inappropriate"/>
                                                                 <p class="W-modal-comment-desc"><spring:message code="Report.Spam.Description"/></p>
                                                             </label>
                                                         </li>

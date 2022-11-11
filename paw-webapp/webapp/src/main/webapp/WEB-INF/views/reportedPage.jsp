@@ -92,12 +92,12 @@
                     <c:choose>
                         <c:when test="${content.type == 'comment'}">
                             <jsp:include page="components/reportedContent.jsp">
-                                <jsp:param name="userName" value="${content.user.userName}"/>
+                                <jsp:param name="userName" value="${content.comment.user.userName}"/>
                                 <jsp:param name="contentId" value="${content.comment.review.content.id}"/>
                                 <jsp:param name="contentName" value="${content.comment.review.content.name}"/>
                                 <jsp:param name="contentType" value="${content.comment.review.content.type}"/>
                                 <jsp:param name="reportDescription" value="${content.comment.text}"/>
-                                <jsp:param name="typeId" value="${content.comment.id}"/>
+                                <jsp:param name="typeId" value="${content.comment.commentId}"/>
                                 <jsp:param name="reportType" value="${content.type}"/>
                             </jsp:include>
                         </c:when>

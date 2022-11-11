@@ -85,48 +85,54 @@ public class ReportServiceImpl implements ReportService{
 
     @Override
     public void addReport(Object reviewOrComment,User reporterUser, String reason) {
-        if(reason.equals("Spam")) {
-            if(reviewOrComment instanceof Review)
-                reportReview((Review) reviewOrComment,reporterUser, ReportReason.SPAM);
-            else if(reviewOrComment instanceof Comment){
-                reportComment((Comment) reviewOrComment, reporterUser, ReportReason.SPAM);
-            } else {
+        switch (reason) {
+            case "Spam":
+                if (reviewOrComment instanceof Review)
+                    reportReview((Review) reviewOrComment, reporterUser, ReportReason.SPAM);
+                else if (reviewOrComment instanceof Comment) {
+                    reportComment((Comment) reviewOrComment, reporterUser, ReportReason.SPAM);
+                } else {
+                    throw new IllegalArgumentException();
+                }
+                break;
+            case "Insult":
+                if (reviewOrComment instanceof Review)
+                    reportReview((Review) reviewOrComment, reporterUser, ReportReason.INSULT);
+                else if (reviewOrComment instanceof Comment) {
+                    reportComment((Comment) reviewOrComment, reporterUser, ReportReason.INSULT);
+                } else {
+                    throw new IllegalArgumentException();
+                }
+                break;
+            case "Inappropriate":
+                if (reviewOrComment instanceof Review)
+                    reportReview((Review) reviewOrComment, reporterUser, ReportReason.INAPPROPRIATE);
+                else if (reviewOrComment instanceof Comment) {
+                    reportComment((Comment) reviewOrComment, reporterUser, ReportReason.INAPPROPRIATE);
+                } else {
+                    throw new IllegalArgumentException();
+                }
+                break;
+            case "Unrelated":
+                if (reviewOrComment instanceof Review)
+                    reportReview((Review) reviewOrComment, reporterUser, ReportReason.UNRELATED);
+                else if (reviewOrComment instanceof Comment) {
+                    reportComment((Comment) reviewOrComment, reporterUser, ReportReason.UNRELATED);
+                } else {
+                    throw new IllegalArgumentException();
+                }
+                break;
+            case "Other":
+                if (reviewOrComment instanceof Review)
+                    reportReview((Review) reviewOrComment, reporterUser, ReportReason.OTHER);
+                else if (reviewOrComment instanceof Comment) {
+                    reportComment((Comment) reviewOrComment, reporterUser, ReportReason.OTHER);
+                } else {
+                    throw new IllegalArgumentException();
+                }
+                break;
+            default:
                 throw new IllegalArgumentException();
-            }
-        } else if(reason.equals("Insult")) {
-            if(reviewOrComment instanceof Review)
-                reportReview((Review) reviewOrComment,reporterUser, ReportReason.INSULT);
-            else if(reviewOrComment instanceof Comment){
-                reportComment((Comment) reviewOrComment, reporterUser, ReportReason.INSULT);
-            } else {
-                throw new IllegalArgumentException();
-            }
-        } else if(reason.equals("Inappropriate")) {
-            if(reviewOrComment instanceof Review)
-                reportReview((Review) reviewOrComment,reporterUser, ReportReason.INAPPROPRIATE);
-            else if(reviewOrComment instanceof Comment){
-                reportComment((Comment) reviewOrComment, reporterUser, ReportReason.INAPPROPRIATE);
-            } else {
-                throw new IllegalArgumentException();
-            }
-        } else if(reason.equals("Unrelated")) {
-            if(reviewOrComment instanceof Review)
-                reportReview((Review) reviewOrComment,reporterUser, ReportReason.UNRELATED);
-            else if(reviewOrComment instanceof Comment){
-                reportComment((Comment) reviewOrComment, reporterUser, ReportReason.UNRELATED);
-            } else {
-                throw new IllegalArgumentException();
-            }
-        } else if(reason.equals("Other")) {
-            if(reviewOrComment instanceof Review)
-                reportReview((Review) reviewOrComment,reporterUser, ReportReason.OTHER);
-            else if(reviewOrComment instanceof Comment){
-                reportComment((Comment) reviewOrComment, reporterUser, ReportReason.OTHER);
-            } else {
-                throw new IllegalArgumentException();
-            }
-        } else {
-            throw new IllegalArgumentException();
         }
     }
 
