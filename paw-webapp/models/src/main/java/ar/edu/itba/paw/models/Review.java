@@ -45,15 +45,15 @@ public class Review {
     @Transient
     private int reportAmount=0;
     @Transient
-    private Set<ReportReason> reportReasons;
+    private String reportReasons;
     @PostLoad
     private void onLoad(){
-        this.reportReasons=new HashSet<>();
-        for (ReviewReport report:reviewReports
-             ) {
+        this.reportReasons="";
+        for (ReviewReport report:reviewReports) {
             reportAmount++;
-            reportReasons.add(report.getReportReason());
+            reportReasons += report.getReportReason();
         }
+
     }
 
     public Review(Long id, String type, String name, String description, Integer rating,User creator,Content content) {
@@ -154,7 +154,7 @@ public class Review {
         return userVotes;
     }
 
-    public Set<ReportReason> getReportReasons() {
+    public String getReportReasons() {
         return reportReasons;
     }
 

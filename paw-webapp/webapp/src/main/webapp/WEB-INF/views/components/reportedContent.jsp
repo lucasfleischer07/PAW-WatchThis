@@ -16,10 +16,10 @@
                     <div class="W-report-margin-zero">
                         <c:choose>
                             <c:when test="${param.reportsAmount == 1}">
-                                <p class="W-report-margin-zero"><spring:message code="Report.Report" arguments="${param.reportsAmount}"/></p>
+                                <p class="W-report-margin-zero" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="${param.reportReasons}"><spring:message code="Report.Report" arguments="${param.reportsAmount}"/></p>
                             </c:when>
                             <c:otherwise>
-                                <p class="W-report-margin-zero"><spring:message code="Report.Reports" arguments="${param.reportsAmount}"/></p>
+                                <p class="W-report-margin-zero" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="${param.reportReasons}"><spring:message code="Report.Reports" arguments="${param.reportsAmount}"/></p>
                             </c:otherwise>
                         </c:choose>
                     </div>

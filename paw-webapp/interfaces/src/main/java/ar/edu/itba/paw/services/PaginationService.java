@@ -11,7 +11,7 @@ public interface PaginationService {
     int amountOfContentPages(int contentListSize);
 
     List<Review> reviewPagination(List<Review> reviewList, int page);
-    List<Object> reportPagination(List<Object> objectList, int page);
+    <T> List<T> reportPagination(List<T> objectList, int page);
     int amountOfReviewPages(int reviewListSize);
 
     boolean checkPagination(int listSize, int page);

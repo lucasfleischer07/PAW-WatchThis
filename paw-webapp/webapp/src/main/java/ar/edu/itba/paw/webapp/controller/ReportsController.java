@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Controller
@@ -33,16 +34,17 @@ public class ReportsController {
         this.ccs = ccs;
     }
 
-    private void paginationSetup(ModelAndView mav, int page, List<Object> reportedList){
+    private <T> void paginationSetup(ModelAndView mav, int page, List<T> reportedList){
         if(reportedList.size() == 0) {
-            mav.addObject("reportedListContent",reportedList);
+            mav.addObject("reportedList", reportedList);
+            mav.addObject("reportedListAmount", reportedList.size());
             mav.addObject("pageSelected",1);
             mav.addObject("amountPages",1);
             return;
         }
 
-        List<Object> reviewListPaginated = ps.reportPagination(reportedList, page);
-        mav.addObject("reportedListContent", reviewListPaginated);
+        List<T> reportedListPaginated = ps.reportPagination(reportedList, page);
+        mav.addObject("reportedList", reportedListPaginated);
 
         int amountOfPages = ps.amountOfContentPages(reportedList.size());
         mav.addObject("amountPages", amountOfPages);
@@ -51,10 +53,11 @@ public class ReportsController {
 
 
     // * ----------------------------------- Report Page ---------------------------------------------------------------
-    @RequestMapping(value={"/report/reportedContent", "/report/reportedContent/page/{pageNum:[0-9]+}"},method = {RequestMethod.GET})
+    @RequestMapping(value={"/report/reportedContent/{type:reviews|comments}", "/report/reportedContent/{type:reviews|comments}/page/{pageNum:[0-9]+}"},method = {RequestMethod.GET})
     public ModelAndView reportPage(Principal userDetails,
                                    @PathVariable("pageNum")final Optional<Integer> pageNum,
                                    @RequestParam(value = "reason",required = false)Optional<ReportReason> reason){
+                                   @PathVariable("type") final String type,
         ModelAndView mav = new ModelAndView("reportedPage");
         User user = us.findByEmail(userDetails.getName()).get();
         mav.addObject("userName", user.getUserName());
@@ -67,14 +70,18 @@ public class ReportsController {
 
         List<CommentReport> commentReportedList = rrs.getReportedComments(reason.orElse(null));
         List<ReviewReport> reviewReportedList = rrs.getReportedReviews(reason.orElse(null));
-        List<Object> commentsAndReviewsReportedList = new ArrayList<>();
-        commentsAndReviewsReportedList.addAll(commentReportedList);
-        commentsAndReviewsReportedList.addAll(reviewReportedList);
-        mav.addObject("commentsReportedAmount", commentReportedList.size());
-        mav.addObject("reviewReportedAmount", reviewReportedList.size());
-        mav.addObject("commentsAndReviewsReportedList", commentsAndReviewsReportedList);
-        mav.addObject("commentsAndReviewsReportedAmount", commentsAndReviewsReportedList.size());
-        paginationSetup(mav,pageNum.orElse(1),commentsAndReviewsReportedList);
+        if(Objects.equals(type, "reviews")) {
+            mav.addObject("type", "reviews");
+            paginationSetup(mav,pageNum.orElse(1), reviewsReportedList);
+        } else if(Objects.equals(type, "comments")) {
+            mav.addObject("type", "comments");
+            paginationSetup(mav,pageNum.orElse(1), commentsReportedList);
+        } else {
+            throw new PageNotFoundException();
+        }
+
+        mav.addObject("reviewsReportedAmount", reviewsReportedList.size());
+        mav.addObject("commentsReportedAmount", commentsReportedList.size());
         return mav;
     }
     // * ---------------------------------------------------------------------------------------------------------------
