@@ -90,11 +90,12 @@
               <div class="row row-cols-1 row-cols-md-2 g-2 W-report-content-alignment">
                 <c:forEach var="content" items="${commentsAndReviewsReportedList}">
                     <c:choose>
-                        <c:when test="${commentsAndReviewsReportedList.type == 'comment'}">
+                        <c:when test="${content.type == 'comment'}">
                             <jsp:include page="components/reportedContent.jsp">
                                 <jsp:param name="userName" value="${content.user.userName}"/>
-                                <jsp:param name="contentId" value="${content.comment.review.content}"/>
-                                <jsp:param name="contentName" value="${content.comment.review.content}"/>
+                                <jsp:param name="contentId" value="${content.comment.review.content.id}"/>
+                                <jsp:param name="contentName" value="${content.comment.review.content.name}"/>
+                                <jsp:param name="contentType" value="${content.comment.review.content.type}"/>
                                 <jsp:param name="reportDescription" value="${content.comment.text}"/>
                                 <jsp:param name="typeId" value="${content.comment.id}"/>
                                 <jsp:param name="reportType" value="${content.type}"/>
@@ -103,10 +104,11 @@
                         <c:otherwise>
                             <jsp:include page="components/reportedContent.jsp">
                                 <jsp:param name="userName" value="${content.user.userName}"/>
-                                <jsp:param name="contentId" value="${content.review.content}"/>
-                                <jsp:param name="contentName" value="${content.comment.review.content}"/>
+                                <jsp:param name="contentId" value="${content.review.content.id}"/>
+                                <jsp:param name="contentName" value="${content.review.content.name}"/>
+                                <jsp:param name="contentType" value="${content.review.content.type}"/>
                                 <jsp:param name="reportDescription" value="${content.review.description}"/>
-                                <jsp:param name="typeId" value="${content.comment.id}"/>
+                                <jsp:param name="typeId" value="${content.id}"/>
                                 <jsp:param name="reportType" value="${content.type}"/>
                             </jsp:include>
                         </c:otherwise>

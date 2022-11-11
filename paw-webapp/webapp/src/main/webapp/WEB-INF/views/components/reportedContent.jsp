@@ -9,7 +9,7 @@
                 <div>
                     <a href="<c:url value="/profile/${param.userName}"/>" class="W-creator-review W-margin-right-reports"><c:out value="${param.userName}"/></a>
 <%--                    TODO: Falta esta redireccion, falta el content type y content name--%>
-                    <a href="<c:url value="/"/>" class="W-creator-review"><c:out value="${param.contentName}"/></a>
+                    <a href="<c:url value="/${param.contentType}/${param.contentId}"/>" class="W-creator-review"><c:out value="${param.contentName}"/></a>
                 </div>
                 <div class="W-amount-reports-and-delete-button">
                     <div class="W-report-margin-zero">
@@ -63,7 +63,14 @@
                 <p class="W-report-description-paragraph" id="floatingTextarea2"><c:out value="${param.reportDescription}"/></p>
             </div>
             <div class="W-type-of-report">
-                <p class="W-report-margin-zero W-color-report-type"><c:out value="${param.typeId}"/></p>
+                <c:choose>
+                    <c:when test="${param.reportType == 'review'}">
+                        <p class="W-report-margin-zero W-color-report-type"><spring:message code="Profile.Review"/></p>
+                    </c:when>
+                    <c:otherwise>
+                        <p class="W-report-margin-zero W-color-report-type"><spring:message code="Comment.Title"/></p>
+                    </c:otherwise>
+                </c:choose>
             </div>
         </div>
     </div>

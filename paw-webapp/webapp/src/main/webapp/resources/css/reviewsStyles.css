@@ -367,8 +367,7 @@
 }
 
 .W-general-div-comment {
-    display: inline-block;
-    width: 80%
+    display: flex;
 }
 
 .W-comment-profile-picture {
