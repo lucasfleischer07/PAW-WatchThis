@@ -81,7 +81,7 @@ public class WatchAndViewedListsController {
         } else {
             mav.addObject("admin", false);
         }
-        request.getSession().setAttribute("referer","/profile/watchList");
+        request.getSession().setAttribute("referer","/profile/watchList"+(pageNum.isPresent()?"/page/"+pageNum.get():""));
         return mav;
     }
 
@@ -165,7 +165,7 @@ public class WatchAndViewedListsController {
         } else {
             mav.addObject("admin", false);
         }
-        request.getSession().setAttribute("referer","/profile/viewedList");
+        request.getSession().setAttribute("referer","/profile/viewedList"+(pageNum.isPresent()?"/page/"+pageNum.get():""));
         return mav;
     }
 

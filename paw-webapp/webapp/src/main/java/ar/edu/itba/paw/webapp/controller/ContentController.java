@@ -136,7 +136,7 @@ public class ContentController {
             mav.addObject("recommendedUserList", "null");
         }
 
-        request.getSession().setAttribute("referer","/");
+        request.getSession().setAttribute("referer",pageNum.isPresent()?"/page/"+pageNum.get():"/");
         return mav;
     }
     // * ---------------------------------------------------------------------------------------------------------------

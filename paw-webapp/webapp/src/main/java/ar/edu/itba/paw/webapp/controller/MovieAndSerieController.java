@@ -98,7 +98,7 @@ public class MovieAndSerieController {
         }
         mav.addObject("sortingTypes", Sorting.values());
         HeaderSetUp(mav,userDetails);
-        request.getSession().setAttribute("referer","/"+type);
+        request.getSession().setAttribute("referer","/"+type+(pageNum.isPresent()?"/page/"+pageNum.get():""));
 
         return mav;
     }
@@ -109,7 +109,7 @@ public class MovieAndSerieController {
 
 
     // *  ----------------------------------- Movies and Serie Filters -------------------------------------------------
-    @RequestMapping(value = {"/{type:movies|series|all|profile}/filters" , "/{type:movies|series|all|profile}/filters/page/{pageNum}"})
+    @RequestMapping(value = {"/{type:movies|series|all}/filters" , "/{type:movies|series|all}/filters/page/{pageNum}"})
     public ModelAndView moviesWithFilters(
             Principal userDetails,
             @ModelAttribute("genreFilterForm") final GenreFilterForm genreFilterForm,
@@ -162,7 +162,32 @@ public class MovieAndSerieController {
         mav.addObject("query", query);
         mav.addObject("sortingTypes", Sorting.values());
         HeaderSetUp(mav,userDetails);
-        request.getSession().setAttribute("referer","/"+type+"/filters");
+        StringBuilder referer=new StringBuilder();
+        referer.append("/"+type+"/filters"+(pageNum.isPresent()?"/page/"+pageNum.get():""));
+        if(genreList!=null||query!="ANY"||durationFrom!=null||durationTo!=null||sorting.isPresent()){
+            referer.append("?");
+            if(genreList!=null){
+                referer.append(referer.charAt(referer.length()-1)=='?'?"genre="+genreList.get(0):"&genre+"+genreList.get(0));
+                for(int i=1;i<genreList.size();i++){
+                    referer.append("%2c"+genreList.get(i));
+                }
+            }
+            if(!query.equals("ANY")){
+                referer.append(referer.charAt(referer.length()-1)=='?'?"query="+query:"&query="+query);
+            }
+            if(durationFrom!=null){
+                referer.append(referer.charAt(referer.length()-1)=='?' ? "durationFrom="+durationFrom:"&durationFrom="+durationFrom);
+            }
+            if(durationTo!=null){
+                referer.append(referer.charAt(referer.length()-1)=='?'?"durationTo="+durationTo:"&durationTo="+durationTo);
+            }
+            if(sorting.isPresent()){
+                referer.append(referer.charAt(referer.length()-1)=='?'?"sorting="+sorting.get():"&sorting="+sorting.get());
+            }
+        }
+        String string= referer.toString();
+        request.getSession().setAttribute("referer",referer.toString());
+        string=request.getSession().getAttribute("referer").toString();
         return mav;
     }
     // * ---------------------------------------------------------------------------------------------------------------

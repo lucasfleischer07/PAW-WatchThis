@@ -135,7 +135,7 @@ public class ReviewController {
 
         reviewList = rs.sortReviews(user,reviewList);
         paginationSetup(mav,pageNum.orElse(1),reviewList);
-        request.getSession().setAttribute("referer","/"+type+"/"+contentId);
+        request.getSession().setAttribute("referer","/"+type+"/"+contentId+(pageNum.isPresent()?"/page/"+pageNum.get():""));
         return mav;
     }
     // * ---------------------------------------------------------------------------------------------------------------

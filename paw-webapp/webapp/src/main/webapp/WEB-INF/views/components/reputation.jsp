@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-
+<div>
 <div class="W-movie-description-and-thumb-buttons">
     <div class="W-column-display-thumbs">
         <div class="W-thumbs-buttons-and-text">
@@ -125,6 +125,5 @@
         </jsp:include>
     </c:forEach>
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+</div>
 <script src="<c:url value="/resources/js/commentVisibility.js"/>"></script>

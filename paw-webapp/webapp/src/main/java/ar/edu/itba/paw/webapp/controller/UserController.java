@@ -100,7 +100,7 @@ public class UserController {
 
         paginationSetup(mav,pageNum.orElse(1),rs.getAllUserReviews(user));
 
-        request.getSession().setAttribute("referer","/profile");
+        request.getSession().setAttribute("referer","/profile"+(pageNum.isPresent()?"/page/"+pageNum.get():""));
         return mav;
     }
 
@@ -170,7 +170,7 @@ public class UserController {
             mav.addObject("userLikeReviews", rs.getUserLikeReviews());
             mav.addObject("userDislikeReviews", rs.getUserDislikeReviews());
         }
-        request.getSession().setAttribute("referer","/profile/"+userName);
+        request.getSession().setAttribute("referer","/profile/"+userName+(pageNum.isPresent()?"/page/"+pageNum.get():""));
         return mav;
     }
 
