@@ -163,11 +163,11 @@
                     <c:when test="${type == 'reviews'}">
                         <c:forEach var="content" items="${reportedList}">
                             <jsp:include page="components/reportedContent.jsp">
-                                <jsp:param name="userName" value="${content.user.userName}"/>
+                                <jsp:param name="userName" value="${content.review.user.userName}"/>
                                 <jsp:param name="contentId" value="${content.review.content.id}"/>
                                 <jsp:param name="contentName" value="${content.review.content.name}"/>
                                 <jsp:param name="contentType" value="${content.review.content.type}"/>
-                                <jsp:param name="reportDescription" value="${content.review.description}"/>
+                                <jsp:param name="reportDescription" value="${content.review.name}"/>
                                 <jsp:param name="reportReasons" value="${content.review.reportReasons}"/>
                                 <jsp:param name="reportsAmount" value="${content.review.reportAmount}"/>
                                 <jsp:param name="typeId" value="${content.id}"/>
