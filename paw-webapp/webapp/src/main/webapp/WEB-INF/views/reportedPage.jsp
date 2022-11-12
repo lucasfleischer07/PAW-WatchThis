@@ -171,7 +171,7 @@
                                 <jsp:param name="reportDescription2" value="${content.review.description}"/>
                                 <jsp:param name="reportReasons" value="${content.review.reportReasons}"/>
                                 <jsp:param name="reportsAmount" value="${content.review.reportAmount}"/>
-                                <jsp:param name="typeId" value="${content.id}"/>
+                                <jsp:param name="typeId" value="${content.review.id}"/>
                                 <jsp:param name="reportType" value="${content.type}"/>
                             </jsp:include>
                         </c:forEach>
