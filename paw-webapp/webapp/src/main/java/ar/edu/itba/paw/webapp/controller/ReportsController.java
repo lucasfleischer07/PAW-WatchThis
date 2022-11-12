@@ -117,7 +117,7 @@ public class ReportsController {
 
 
     // * ----------------------------------- Delete Report From Reported List-------------------------------------------
-    @RequestMapping(value = "/reportedContent/{type:review|comment]}/{contentId:[0-9]+}/report/delete", method = {RequestMethod.POST})
+    @RequestMapping(value = "/reportedContent/{type:review|comment}/{contentId:[0-9]+}/report/delete", method = {RequestMethod.POST})
     public ModelAndView deleteReportFromReportedList(@PathVariable("type")final String type,
                                                      @PathVariable("contentId")final long contentId,
                                                      HttpServletRequest request){
