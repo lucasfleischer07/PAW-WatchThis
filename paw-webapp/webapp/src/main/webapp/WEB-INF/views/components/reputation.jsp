@@ -82,6 +82,7 @@
         <div class="card W-card-width">
             <div class="card-body W-reviewText">
                 <p id="<c:out value="reviewDescription${param.id}"/>"><c:out value="${param.commentText}"/></p>
+            </div>
 
             <script>
                 document.getElementById('reviewDescription'+'${param.id}').innerHTML = marked.parse(document.getElementById('reviewDescription'+'${param.id}').innerHTML);
