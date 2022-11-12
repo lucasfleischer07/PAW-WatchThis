@@ -205,7 +205,14 @@
     <c:if test="${amountPages > 1}">
       <div>
         <ul class="pagination justify-content-center W-pagination">
-          <c:set var = "baseUrl" scope = "session" value = "/profile/viewedList"/>
+            <c:choose >
+                <c:when test="${reason == 'ANY'}">
+                    <c:set var = "baseUrl" scope = "session" value = "/report/reportedContent/${type}"/>
+                </c:when>
+                <c:otherwise>
+                    <c:set var = "baseUrl" scope = "session" value = "/report/reportedContent/${type}/filter/${reason}"/>
+                </c:otherwise>
+            </c:choose>
           <c:choose>
             <c:when test="${pageSelected > 1}">
               <li class="page-item">

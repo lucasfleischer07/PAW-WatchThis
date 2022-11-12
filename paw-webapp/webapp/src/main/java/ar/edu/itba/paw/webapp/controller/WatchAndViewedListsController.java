@@ -32,7 +32,7 @@ public class WatchAndViewedListsController {
     private final ContentService cs;
     private final PaginationService ps;
     private static final Logger LOGGER = LoggerFactory.getLogger(ContentController.class);
-
+    private static final int CONTENT_AMOUNT = 18;
     @Autowired
     public WatchAndViewedListsController(final UserService us, final ContentService cs, PaginationService ps) {
         this.us = us;
@@ -41,7 +41,7 @@ public class WatchAndViewedListsController {
     }
 
     private void listPaginationSetup(ModelAndView mav,String name,List<Content> contentList,int page) throws PageNotFoundException{
-        if(ps.checkPagination(contentList.size(), page)) {
+        if(ps.checkPagination(contentList.size(), page,CONTENT_AMOUNT)) {
             LOGGER.warn("Wrong login path:", new PageNotFoundException());
             throw new PageNotFoundException();
         }
@@ -49,7 +49,7 @@ public class WatchAndViewedListsController {
         List<Content> contentListFilterPaginated = ps.contentPagination(contentList, page);
         mav.addObject(name, contentListFilterPaginated);
 
-        int amountOfPages = ps.amountOfContentPages(contentList.size());
+        int amountOfPages = ps.amountOfContentPages(contentList.size(),CONTENT_AMOUNT);
         mav.addObject("amountPages", amountOfPages);
         mav.addObject("pageSelected",page);
 

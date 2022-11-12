@@ -7,6 +7,7 @@ import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
 import ar.edu.itba.paw.webapp.form.CommentForm;
 import ar.edu.itba.paw.webapp.form.ReportCommentForm;
 import ar.edu.itba.paw.webapp.form.ReviewForm;
+import com.sun.org.apache.regexp.internal.RE;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,7 @@ public class ReviewController {
     private final CommentService ccs;
     private final ReportService rrs;
     private static final Logger LOGGER = LoggerFactory.getLogger(ReviewController.class);
+    private static final int REVIEW_AMOUNT = 3;
 
    @Autowired
     public ReviewController(ReviewService rs,ContentService cs,UserService us, CommentService ccs, ReportService rrs,PaginationService ps) {
@@ -57,7 +59,7 @@ public class ReviewController {
         List<Review> reviewListPaginated = ps.reviewPagination(reviewList, page);
         mav.addObject("reviews", reviewListPaginated);
 
-        int amountOfPages = ps.amountOfContentPages(reviewList.size());
+        int amountOfPages = ps.amountOfContentPages(reviewList.size(),REVIEW_AMOUNT);
         mav.addObject("amountPages", amountOfPages);
         mav.addObject("pageSelected",page);
     }

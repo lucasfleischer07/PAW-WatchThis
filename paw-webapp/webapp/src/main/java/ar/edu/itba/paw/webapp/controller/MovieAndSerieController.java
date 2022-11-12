@@ -30,7 +30,8 @@ public class MovieAndSerieController {
     private final PaginationService ps;
     private final ReviewService rs;
     private CommentService ccs;
-    private static final Logger LOGGER = LoggerFactory.getLogger(ContentController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MovieAndSerieController.class);
+    private static final int CONTENT_AMOUNT = 18;
 
     @Autowired
     public MovieAndSerieController(final UserService us, final ContentService cs, final ReviewService rs, PaginationService ps, CommentService ccs) {
@@ -88,7 +89,7 @@ public class MovieAndSerieController {
             List<Content> contentListPaginated = ps.contentPagination(contentList, page);
             mav.addObject("allContent", contentListPaginated);
             mav.addObject("contentType", auxType);
-            int amountOfPages = ps.amountOfContentPages(contentList.size());
+            int amountOfPages = ps.amountOfContentPages(contentList.size(),CONTENT_AMOUNT);
             mav.addObject("amountPages", amountOfPages);
             mav.addObject("pageSelected",page);
             mav.addObject("genre","ANY");
@@ -149,7 +150,7 @@ public class MovieAndSerieController {
             List<Content> contentListFilterPaginated = ps.contentPagination(contentListFilter, page);
             mav.addObject("allContent", contentListFilterPaginated);
 
-            int amountOfPages = ps.amountOfContentPages(contentListFilter.size());
+            int amountOfPages = ps.amountOfContentPages(contentListFilter.size(),CONTENT_AMOUNT);
             mav.addObject("amountPages", amountOfPages);
             mav.addObject("pageSelected",page);
             mav.addObject("contentType", type);

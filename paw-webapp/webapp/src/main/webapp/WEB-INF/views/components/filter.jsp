@@ -8,7 +8,19 @@
     <div class="W-genre-duration-div">
         <div class="list-group">
             <div class="dropdown W-dropdown-button">
-                    <c:choose>
+                <c:choose>
+                    <c:when test="${param.type=='movie'}">
+                        <c:set var = "pageTpye" scope = "session" value = "movies"/>
+                    </c:when>
+                    <c:when test="${param.type=='serie'}">
+                        <c:set var = "pageTpye" scope = "session" value = "series"/>
+                    </c:when>
+                    <c:otherwise>
+                        <c:set var = "pageTpye" scope = "session" value = "all"/>
+                    </c:otherwise>
+                </c:choose>
+
+                <c:choose>
                         <c:when test="${param.genre != '' && param.genre != 'ANY'}">
                             <button id="genreGroupDrop" type="button" onclick="dropDownStayGenreFilters()" class="W-filter-title W-genre-filter btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                 <c:out value="${param.genre}"/>
@@ -21,7 +33,7 @@
                         </c:otherwise>
                     </c:choose>
                     <ul class="dropdown-menu" id="drop1">
-                        <c:url value="/${param.type}/filters" var="postPath">
+                        <c:url value="/${pageTpye}/filters" var="postPath">
                             <c:if test="${query != 'ANY' && query!=null}">
                                 <c:param name="query" value="${query}"/>
                             </c:if>
@@ -110,7 +122,7 @@
                     </c:otherwise>
                 </c:choose>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
+                    <li><a class="dropdown-item" href="<c:url value="/${pageTpye}/filters">
                                                                             <c:choose>
                                                                                 <c:when test="${param.genre!= 'ANY' && param.sorting!='ANY'}">
                                                                                     <c:param name="genre" value="${param.genre}"/>
@@ -127,7 +139,7 @@
                                                                                 <c:param name="query" value="${param.query}"/>
                                                                             </c:if>
                                                                             </c:url>" onclick="showDuration(this)"><spring:message code="Duration.Clear"/></a></li>
-                    <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
+                    <li><a class="dropdown-item" href="<c:url value="/${pageTpye}/filters">
                                                                             <c:choose>
                                                                                 <c:when test="${param.genre!= 'ANY' && param.sorting!='ANY'}">
                                                                                     <c:param name="genre" value="${param.genre}"/>
@@ -146,7 +158,7 @@
                                                                             <c:param name="durationFrom" value="0"/>
                                                                             <c:param name="durationTo" value="90"/>
                                                                             </c:url>" onclick="showDuration(this)"><spring:message code="Duration.0_90"/></a></li>
-                    <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
+                    <li><a class="dropdown-item" href="<c:url value="/${pageTpye}/filters">
                                                                             <c:choose>
                                                                                 <c:when test="${param.genre!= 'ANY' && param.sorting!='ANY'}">
                                                                                     <c:param name="genre" value="${param.genre}"/>
@@ -165,7 +177,7 @@
                                                                             <c:param name="durationFrom" value="90"/>
                                                                             <c:param name="durationTo" value="120"/>
                                                                             </c:url>" onclick="showDuration(this)"><spring:message code="Duration.90_120"/></a></li>
-                    <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
+                    <li><a class="dropdown-item" href="<c:url value="/${pageTpye}/filters">
                                                                             <c:choose>
                                                                                 <c:when test="${param.genre!= 'ANY' && param.sorting!='ANY'}">
                                                                                     <c:param name="genre" value="${param.genre}"/>
@@ -184,7 +196,7 @@
                                                                             <c:param name="durationFrom" value="120"/>
                                                                             <c:param name="durationTo" value="150"/>
                                                                             </c:url>" onclick="showDuration(this)"><spring:message code="Duration.120_150"/></a></li>
-                    <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
+                    <li><a class="dropdown-item" href="<c:url value="/${pageTpye}/filters">
                                                                             <c:choose>
                                                                                 <c:when test="${param.genre!= 'ANY' && param.sorting!='ANY'}">
                                                                                     <c:param name="genre" value="${param.genre}"/>
@@ -225,7 +237,7 @@
             <ul class="dropdown-menu">
                 <jsp:useBean id="sortingTypes" scope="request" type="ar.edu.itba.paw.models.Sorting[]"/>
                 <c:forEach var="sortingType" items="${sortingTypes}">
-                    <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
+                    <li><a class="dropdown-item" href="<c:url value="/${pageTpye}/filters">
                         <c:param name="sorting" value="${sortingType.toString()}"/>
                         <c:if test="${param.query != 'ANY' && param.query!=null}">
                             <c:param name="query" value="${param.query}"/>
