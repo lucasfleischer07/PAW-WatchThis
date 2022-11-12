@@ -209,8 +209,7 @@ public class ContentController {
     // * ----------------------------------- Content Creation ----------------------------------------------------------
     @RequestMapping(value = "/content/create",method = {RequestMethod.GET})
     public ModelAndView createContent(Principal userDetails,
-                                      @ModelAttribute("contentCreate") final ContentForm contentForm,
-                                      @ModelAttribute("genreFilterForm") final GenreFilterForm genreFilterForm) {
+                                      @ModelAttribute("contentCreate") final ContentForm contentForm) {
         final ModelAndView mav = new ModelAndView("contentCreatePage");
         mav.addObject("create",true);
         mav.addObject("type","profile");
@@ -221,10 +220,10 @@ public class ContentController {
     @RequestMapping(value = "/content/create",method = {RequestMethod.POST})
     public ModelAndView createContent(Principal userDetails,
                                       @Valid @ModelAttribute("contentCreate") final ContentForm contentForm,
-                                      @ModelAttribute("genreFilterForm") final GenreFilterForm genreFilterForm,
-                                      final BindingResult errors) throws IOException {
-        if(errors.hasErrors()) {
-            return createContent(userDetails,contentForm,genreFilterForm);
+                                      final BindingResult contentFormErrors) throws IOException {
+        return createContent(userDetails,contentForm);
+        /*if(contentFormErrors.hasErrors()) {
+            return createContent(userDetails,contentForm);
         }
 
         String auxGenre = "";
@@ -235,7 +234,9 @@ public class ContentController {
         cs.contentCreate(contentForm.getName(),contentForm.getDescription(),contentForm.getReleaseDate(),auxGenre,contentForm.getCreator(),contentForm.getDuration(),contentForm.getType(),contentForm.getContentPicture().getBytes());
         Optional<Content> newContent = cs.findByName(contentForm.getName());
         return new ModelAndView("redirect:/" + newContent.get().getType() + "/" + newContent.get().getId());
+        */
     }
+
     // * ---------------------------------------------------------------------------------------------------------------
 
 }

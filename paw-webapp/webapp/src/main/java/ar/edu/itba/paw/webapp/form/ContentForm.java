@@ -18,7 +18,6 @@ public class ContentForm {
     private String description;
 
     @Size(min = 4, max = 4)
-    @Pattern(regexp	= "19[0-9][0-9] | 20[0-9][0-9]")
     private String releaseDate;
 
     @NotNull
