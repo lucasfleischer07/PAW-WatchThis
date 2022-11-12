@@ -31,9 +31,9 @@
 
 
     <div class="row px-4">
-      <div class="W-profile-general-div-display">
-        <div class="bg-white shadow rounded overflow-hidden W-viewed-watch-list-general-div">
-          <div class="W-profile-background-color">
+      <div class="W-report-general-div-display">
+        <div class="bg-white shadow rounded overflow-hidden W-reported-list-general-div">
+          <div class="W-reported-background-color">
             <div>
               <h2 class="W-watch-viewed-list-title"><spring:message code="Report.ReportedContent"/></h2>
             </div>

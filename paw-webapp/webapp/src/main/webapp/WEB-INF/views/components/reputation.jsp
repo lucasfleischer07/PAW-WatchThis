@@ -120,6 +120,7 @@
             <jsp:include page="comments.jsp">
                 <jsp:param name="loggedUserName" value="${param.loggedUserName}"/>
                 <jsp:param name="reviewId" value="${param.reviewId}"/>
+                <jsp:param name="isAdmin" value="${param.isAdmin}"/>
             </jsp:include>
         </c:forEach>
     </div>

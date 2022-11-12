@@ -23,7 +23,7 @@
                 <div class="W-report-and-delete-comment-buttons">
                     <c:choose>
                         <c:when test="${param.loggedUserName != 'null'}">
-                            <c:if test="${comment.user.userName == param.loggedUserName}">
+                            <c:if test="${comment.user.userName == param.loggedUserName || param.isAdmin == 'true'}">
                                 <form class="W-delete-form" id="form${comment.commentId}" method="post" action="<c:url value="/comment/${comment.commentId}/delete"/>">
                                     <button class="btn btn-danger text-nowrap"  type="button" data-bs-toggle="modal" data-bs-target="#deleteCommentModal" >
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">

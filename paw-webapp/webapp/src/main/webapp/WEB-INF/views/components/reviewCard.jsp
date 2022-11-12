@@ -125,6 +125,7 @@
                     <jsp:param name="reviewReputation" value="${param.reviewReputation}"/>
                     <jsp:param name="isLikeReviews" value="${param.isLikeReviews}"/>
                     <jsp:param name="isDislikeReviews" value="${param.isDislikeReviews}"/>
+                    <jsp:param name="isAdmin" value="${param.isAdmin}"/>
                 </jsp:include>
 
             </div>

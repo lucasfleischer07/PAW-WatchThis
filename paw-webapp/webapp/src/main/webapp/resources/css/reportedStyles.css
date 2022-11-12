@@ -73,11 +73,31 @@
     font-weight: bold;
 }
 
+.W-reported-background-color {
+    padding: 1vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #b21e26;
+    height: 100%;
+}
+
 .W-type-of-report {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     margin-right: 1vw;
+}
+
+.W-reported-list-general-div {
+    display: inline-block;
+    width: 100%;
+    margin-top: 2vw;
+    height: 13%;
+}
+
+.W-report-general-div-display {
+    display: block;
 }
 
 .W-delete-button-report {
