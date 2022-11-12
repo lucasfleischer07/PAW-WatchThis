@@ -51,7 +51,7 @@ public class Review {
         this.reportReasons="";
         for (ReviewReport report:reviewReports) {
             reportAmount++;
-            reportReasons += report.getReportReason();
+            this.reportReasons = this.reportReasons + " " + report.getReportReason();
         }
 
     }

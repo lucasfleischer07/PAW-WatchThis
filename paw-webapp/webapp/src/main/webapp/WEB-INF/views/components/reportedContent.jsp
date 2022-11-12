@@ -9,17 +9,18 @@
             <div class="W-comment-username-and-report">
                 <div>
                     <a href="<c:url value="/profile/${param.userName}"/>" class="W-creator-review W-margin-right-reports"><c:out value="${param.userName}"/></a>
-<%--                    TODO: Falta esta redireccion, falta el content type y content name--%>
                     <a href="<c:url value="/${param.contentType}/${param.contentId}"/>" class="W-creator-review"><c:out value="${param.contentName}"/></a>
                 </div>
                 <div class="W-amount-reports-and-delete-button">
                     <div class="W-report-margin-zero">
                         <c:choose>
                             <c:when test="${param.reportsAmount == 1}">
-                                <p class="W-report-margin-zero" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="${param.reportReasons}"><spring:message code="Report.Report" arguments="${param.reportsAmount}"/></p>
+                                <p class="W-report-margin-zero" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="${param.reportReasons}"><spring:message code="Report.Report" arguments="${param.reportsAmount}"/></p>
+<%--                                <p class="W-report-margin-zero"><spring:message code="Report.Reports" arguments="${param.reportReasons}"/></p>--%>
                             </c:when>
                             <c:otherwise>
-                                <p class="W-report-margin-zero" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="${param.reportReasons}"><spring:message code="Report.Reports" arguments="${param.reportsAmount}"/></p>
+                                <p class="W-report-margin-zero" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="${param.reportReasons}"><spring:message code="Report.Reports" arguments="${param.reportsAmount}"/></p>
+<%--                                <p class="W-report-margin-zero"><spring:message code="Report.Reports" arguments="${param.reportReasons}"/></p>--%>
                             </c:otherwise>
                         </c:choose>
                     </div>
@@ -81,8 +82,3 @@
         </div>
     </div>
 </div>
-
-<script>
-    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-</script>

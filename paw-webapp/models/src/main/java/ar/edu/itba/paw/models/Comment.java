@@ -43,14 +43,13 @@ public class Comment {
     @Transient
     private int reportAmount=0;
     @Transient
-    private Set<ReportReason> reportReasons;
+    private String reportReasons;
     @PostLoad
     private void onLoad(){
-        this.reportReasons=new HashSet<>();
-        for (CommentReport report:commentReports
-        ) {
+        this.reportReasons="";
+        for (CommentReport report:commentReports) {
             reportAmount++;
-            reportReasons.add(report.getReportReason());
+            reportReasons = reportReasons + " " + report.getReportReason();
         }
     }
     public User getUser() {
@@ -99,7 +98,7 @@ public class Comment {
         return commentReports;
     }
 
-    public Set<ReportReason> getReportReasons() {
+    public String getReportReasons() {
         return reportReasons;
     }
 }
