@@ -197,7 +197,6 @@ public class ContentController {
     }
 
     // * ----------------------------------- Content Delete ------------------------------------------------------------
-
     @RequestMapping(value = "/content/{contentId:[0-9]+}/delete", method = {RequestMethod.POST})
     public ModelAndView deleteContent(@PathVariable("contentId")final long contentId){
         Content oldContent = cs.findById(contentId).orElseThrow(PageNotFoundException::new);

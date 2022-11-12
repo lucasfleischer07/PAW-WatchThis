@@ -101,10 +101,10 @@ public class ReportsController {
     // * ----------------------------------- Comment Report ------------------------------------------------------------
     @RequestMapping(value="/report/comment/{commentId:[0-9]+}",method = {RequestMethod.POST})
     public ModelAndView reportComment(Principal userDetails,
-                                     @PathVariable("commentId") final long commentId,
+                                      @PathVariable("commentId") final long commentId,
                                       @ModelAttribute("reportReviewForm") final ReportCommentForm reportReviewForm,
                                       @ModelAttribute("reportCommentForm") final ReportCommentForm reportCommentForm,
-                                     HttpServletRequest request){
+                                      HttpServletRequest request){
         Comment comment=ccs.getComment(commentId).orElseThrow(PageNotFoundException::new);
         User user=us.findByEmail(userDetails.getName()).get();
         if(comment.getUser().getId()==user.getId())
@@ -115,6 +115,17 @@ public class ReportsController {
     }
     // * ---------------------------------------------------------------------------------------------------------------
 
+
+    // * ----------------------------------- Delete Report From Reported List-------------------------------------------
+    @RequestMapping(value = "/reportedContent/{type:review|comment]}/{contentId:[0-9]+}/report/delete", method = {RequestMethod.POST})
+    public ModelAndView deleteReportFromReportedList(@PathVariable("type")final String type,
+                                                     @PathVariable("contentId")final long contentId,
+                                                     HttpServletRequest request){
+        rrs.removeReports(type, contentId);
+        String referer = request.getHeader("Referer");
+        return new ModelAndView("redirect:"+ referer);
+    }
+    // * ---------------------------------------------------------------------------------------------------------------
 
 
 }

@@ -1,7 +1,9 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.models.*;
+import ar.edu.itba.paw.persistance.CommentDao;
 import ar.edu.itba.paw.persistance.ReportDao;
+import ar.edu.itba.paw.persistance.ReviewDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -15,6 +17,8 @@ import java.util.*;
 @Service
 public class ReportServiceImpl implements ReportService{
     private final ReportDao reportDao;
+    private final ReviewDao reviewDao;
+    private final CommentDao commentDao;
     private final EmailService emailService;
     @Autowired
     private MessageSource messageSource;
@@ -22,9 +26,12 @@ public class ReportServiceImpl implements ReportService{
 
 
     @Autowired
-    public ReportServiceImpl(final ReportDao reportDao,final EmailService emailService){
-        this.reportDao=reportDao;
-        this.emailService=emailService;}
+    public ReportServiceImpl(final ReportDao reportDao, ReviewDao reviewDao, CommentDao commentDao, final EmailService emailService){
+        this.reportDao= reportDao;
+        this.reviewDao = reviewDao;
+        this.commentDao = commentDao;
+        this.emailService = emailService;
+    }
     @Override
     public void delete(Object reviewOrComment, Set<CommentReport> reasonsOfDelete) {
         String reasons = "";
@@ -79,8 +86,12 @@ public class ReportServiceImpl implements ReportService{
     }
 
     @Override
-    public void removeReports(Object reviewOrComment) {
-        reportDao.removeReports(reviewOrComment);
+    public void removeReports(String type, Long contentId) {
+        if(Objects.equals(type, "review")) {
+            reportDao.removeReports(reviewDao.findById(contentId).orElseThrow(IllegalArgumentException::new));
+        } else {
+            reportDao.removeReports(commentDao.getComment(contentId).orElseThrow(IllegalArgumentException::new));
+        }
     }
 
     @Override

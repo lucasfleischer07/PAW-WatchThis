@@ -54,6 +54,10 @@
     justify-content: space-between;
 }
 
+.W-form-remove-from-reported-bad-added {
+    margin-bottom: 0;
+}
+
 .W-margin-right-reports {
     margin-right: 3vw;
 }
