@@ -168,6 +168,7 @@
                                 <jsp:param name="contentName" value="${content.review.content.name}"/>
                                 <jsp:param name="contentType" value="${content.review.content.type}"/>
                                 <jsp:param name="reportDescription" value="${content.review.name}"/>
+                                <jsp:param name="reportDescription2" value="${content.review.description}"/>
                                 <jsp:param name="reportReasons" value="${content.review.reportReasons}"/>
                                 <jsp:param name="reportsAmount" value="${content.review.reportAmount}"/>
                                 <jsp:param name="typeId" value="${content.id}"/>
@@ -179,6 +180,8 @@
                         <c:forEach var="content" items="${reportedList}">
                             <jsp:include page="components/reportedContent.jsp">
                                 <jsp:param name="userName" value="${content.comment.user.userName}"/>
+                                <jsp:param name="reviewCreatorUserName" value="${content.comment.review.user.userName}"/>
+                                <jsp:param name="reviewNameOfReportedComment" value="${content.comment.review.name}"/>
                                 <jsp:param name="contentId" value="${content.comment.review.content.id}"/>
                                 <jsp:param name="contentName" value="${content.comment.review.content.name}"/>
                                 <jsp:param name="contentType" value="${content.comment.review.content.type}"/>

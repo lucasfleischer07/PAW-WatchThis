@@ -8,22 +8,22 @@
         <div class="W-username-report-description-div">
             <div class="W-comment-username-and-report">
                 <div>
-                    <a href="<c:url value="/profile/${param.userName}"/>" class="W-creator-review W-margin-right-reports"><c:out value="${param.userName}"/></a>
+                    <c:choose>
+                        <c:when test="${param.reportType == 'comment'}">
+                            <a href="<c:url value="/profile/${param.userName}"/>" class="W-creator-review W-margin-right-reports"><spring:message code="Comment.Owner" arguments="${param.userName}"/></a>
+                        </c:when>
+                        <c:otherwise>
+                            <a href="<c:url value="/profile/${param.userName}"/>" class="W-creator-review W-margin-right-reports"><spring:message code="Review.Owner" arguments="${param.userName}"/></a>
+                        </c:otherwise>
+                    </c:choose>
+                    <c:if test="${param.reportType == 'comment'}">
+                        <a href="<c:url value="/profile/${param.reviewCreatorUserName}"/>" class="W-creator-review W-margin-right-reports"><spring:message code="Review.Owner" arguments="${param.reviewCreatorUserName}"/></a>
+                    </c:if>
+                </div>
+                <div>
                     <a href="<c:url value="/${param.contentType}/${param.contentId}"/>" class="W-creator-review"><c:out value="${param.contentName}"/></a>
                 </div>
                 <div class="W-amount-reports-and-delete-button">
-                    <div class="W-report-margin-zero">
-                        <c:choose>
-                            <c:when test="${param.reportsAmount == 1}">
-                                <p class="W-report-margin-zero" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="${param.reportReasons}"><spring:message code="Report.Report" arguments="${param.reportsAmount}"/></p>
-<%--                                <p class="W-report-margin-zero"><spring:message code="Report.Reports" arguments="${param.reportReasons}"/></p>--%>
-                            </c:when>
-                            <c:otherwise>
-                                <p class="W-report-margin-zero" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="${param.reportReasons}"><spring:message code="Report.Reports" arguments="${param.reportsAmount}"/></p>
-<%--                                <p class="W-report-margin-zero"><spring:message code="Report.Reports" arguments="${param.reportReasons}"/></p>--%>
-                            </c:otherwise>
-                        </c:choose>
-                    </div>
                     <div class="W-delete-button-report">
                         <form class="W-delete-form-reported" id="<c:out value="form${param.reportType}"/>" method="post" action="<c:url value="/${param.reportType}/${param.typeId}/delete"/>">
                             <button class="btn btn-danger text-nowrap"  type="button" data-bs-toggle="modal" data-bs-target="#<c:out value="modal${param.typeId}"/>">
@@ -57,12 +57,20 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
             <div class="W-comment-text">
-                <p id="commentTextArea" class="W-report-description-paragraph" ><c:out value="${param.reportDescription}"/></p>
+                <c:choose>
+                    <c:when test="${param.reportType == 'comment'}">
+                        <p id="commentTextArea1" class="W-report-review-paragraph">"<c:out value="${param.reviewNameOfReportedComment}"/>"</p>
+                        <p id="commentTextArea" class="W-report-description-paragraph" ><c:out value="${param.reportDescription}"/></p>
+                    </c:when>
+                    <c:otherwise>
+                        <p id="commentTextArea" class="W-report-description-paragraph-review" ><c:out value="${param.reportDescription}"/></p>
+                        <p id="commentTextArea1" class="W-report-review-paragraph-review">"<c:out value="${param.reportDescription2}"/>"</p>
+                    </c:otherwise>
+                </c:choose>
                 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
                 <script>
                     let previousText = document.getElementById('commentTextArea').innerHTML
@@ -70,14 +78,26 @@
                 </script>
             </div>
             <div class="W-type-of-report">
-                <c:choose>
-                    <c:when test="${param.reportType == 'review'}">
-                        <p class="W-report-margin-zero W-color-report-type"><spring:message code="Profile.Review"/></p>
-                    </c:when>
-                    <c:otherwise>
-                        <p class="W-report-margin-zero W-color-report-type"><spring:message code="Comment.Title"/></p>
-                    </c:otherwise>
-                </c:choose>
+                <div>
+                    <c:choose>
+                        <c:when test="${param.reportsAmount == 1}">
+                            <p class="W-report-margin-zero" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="${param.reportReasons}"><spring:message code="Report.Report" arguments="${param.reportsAmount}"/></p>
+                        </c:when>
+                        <c:otherwise>
+                            <p class="W-report-margin-zero" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="${param.reportReasons}"><spring:message code="Report.Reports" arguments="${param.reportsAmount}"/></p>
+                        </c:otherwise>
+                    </c:choose>
+                </div>
+                <div>
+                    <c:choose>
+                        <c:when test="${param.reportType == 'review'}">
+                            <p class="W-report-margin-zero W-color-report-type"><spring:message code="Profile.Review"/></p>
+                        </c:when>
+                        <c:otherwise>
+                            <p class="W-report-margin-zero W-color-report-type"><spring:message code="Comment.Title"/></p>
+                        </c:otherwise>
+                    </c:choose>
+                </div>
             </div>
         </div>
     </div>
