@@ -73,11 +73,10 @@ public class CommentController {
             throw new PageNotFoundException();
         }
 
-
         if(user.get().getUserName().equals(deleteComment.get().getUser().getUserName())) {
             ccs.deleteComment(deleteComment.get());
         } else {
-            rrs.delete(deleteComment, deleteComment.get().getReports());
+            rrs.delete(deleteComment.get(), deleteComment.get().getReports());
         }
 
         String referer = request.getHeader("Referer");

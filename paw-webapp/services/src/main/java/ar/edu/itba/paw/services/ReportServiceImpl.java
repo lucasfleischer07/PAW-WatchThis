@@ -54,7 +54,7 @@ public class ReportServiceImpl implements ReportService{
             mailVariables.put("to", comment.getUser().getEmail());
             mailVariables.put("userName", comment.getUser().getUserName());
             mailVariables.put("deletedComment", comment.getText());
-            if(reason!=null){
+            if(!Objects.equals(reason, "")){
                 mailVariables.put("reasonsOfDelete", reason);
             }else{
                 mailVariables.put("reasonsOfDelete", messageSource.getMessage("Mail.CommentDeleteGeneralReason", new Object[]{}, locale));
@@ -72,7 +72,7 @@ public class ReportServiceImpl implements ReportService{
             mailVariables.put("to",deletedReview.getUser().getEmail());
             mailVariables.put("userName", deletedReview.getUser().getUserName());
             mailVariables.put("deletedReview", deletedReview.getName());
-            if(reasonsOfDelete!=null){
+            if(!Objects.equals(reasonsOfDelete, "")) {
                 mailVariables.put("reasonsOfDelete", reasonsOfDelete);
             }else{
                 mailVariables.put("reasonsOfDelete", messageSource.getMessage("Mail.ReviewDeleteGeneralReason", new Object[]{}, locale));
