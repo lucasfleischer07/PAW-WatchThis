@@ -59,13 +59,13 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     public DataSource dataSource(){
 //        * Conexion a Heroku
         LOGGER.info("Data base set up");
-        String dbUrl="jdbc:postgresql://localhost:5432/postgres";
-        String username = "postgres";
-        String password = "postgres";
+//        String dbUrl="jdbc:postgresql://localhost:5432/postgres";
+//        String username = "postgres";
+//        String password = "postgres";
 
-        //String dbUrl="jdbc:postgresql://ec2-44-209-158-64.compute-1.amazonaws.com:5432/dejahu751a4sa5";
-        //String username = "nnsbcsmyzbkewt";
-        //String password = "2d3518851436a2f7f6c4367b2c79aa6f66f456a436aeaf02f44cd07a80497f27";
+        String dbUrl="jdbc:postgresql://ec2-44-209-158-64.compute-1.amazonaws.com:5432/dejahu751a4sa5";
+        String username = "nnsbcsmyzbkewt";
+        String password = "2d3518851436a2f7f6c4367b2c79aa6f66f456a436aeaf02f44cd07a80497f27";
         final SimpleDriverDataSource basicDataSource = new SimpleDriverDataSource();
         basicDataSource.setDriverClass(org.postgresql.Driver.class);
         basicDataSource.setUrl(dbUrl);

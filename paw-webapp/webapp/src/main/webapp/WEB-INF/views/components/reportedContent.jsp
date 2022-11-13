@@ -58,7 +58,7 @@
                             </div>
                         </div>
 
-                        <form class="W-form-remove-from-reported-bad-added" id="<c:out value="report${param.typeId}${param.reportType}"/>" method="post" action="<c:url value="/reportedContent/${param.reportType}/${param.typeId}/report/delete"/>">
+                        <form class="W-form-remove-from-reported-bad-added" id="<c:out value="report${param.typeId}${param.reportType}"/>" method="post" action="<c:url value="/report/reportedContent/${param.reportType}/${param.typeId}/report/delete"/>">
                             <button type="button" class="btn btn-light W-background-color-report" data-bs-toggle="modal" data-bs-target="#<c:out value="unreportedCommentModal${param.typeId}${param.reportType}"/>">
                                 <svg data-bs-toggle="tooltip" data-bs-placement="bottom" xmlns="http://www.w3.org/2000/svg" data-bs-title="<spring:message code="Report.Unreport"/>" width="20" height="20" fill="green" class="bi bi-check-circle" viewBox="0 0 16 16">
                                     <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
