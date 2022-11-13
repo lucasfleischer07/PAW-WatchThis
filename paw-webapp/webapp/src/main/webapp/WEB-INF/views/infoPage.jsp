@@ -250,6 +250,7 @@
                 <jsp:param name="isAdmin" value="${admin}"/>
                 <jsp:param name="isLikeReviews" value="${userLikeReviews.contains(review.id)}"/>
                 <jsp:param name="isDislikeReviews" value="${userDislikeReviews.contains(review.id)}"/>
+                <jsp:param name="alreadyReport" value="${review.reporterUsernames.contains(userName)}"/>
               </jsp:include>
             </c:forEach>
 

@@ -49,7 +49,7 @@
                                     </div>
                                 </div>
                             </c:if>
-                            <c:if test="${comment.user.userName != param.loggedUserName}">
+                            <c:if test="${comment.user.userName != param.loggedUserName && !param.alreadyReport}">
                                 <button id="reportCommentButton" type="button" class="btn btn-light W-background-color-report" data-bs-toggle="modal" data-bs-target="#reportCommentModal">
                                     <svg data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="<spring:message code="Report.Add"/>" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#b21e26" class="bi bi-exclamation-circle" viewBox="0 0 16 16">
                                         <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>

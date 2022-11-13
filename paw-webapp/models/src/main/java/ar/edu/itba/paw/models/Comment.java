@@ -103,8 +103,9 @@ public class Comment {
     public String getReportReasons() {
         return reportReasons;
     }
+
     @Transient
-    public Set<String> getReporterUsers() {
+    public Set<String> getReporterUsernames() {
         return reporterUsernames;
     }
 }

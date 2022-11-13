@@ -100,6 +100,7 @@ public class ReviewController {
             String userEmail = userDetails.getName();
             user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
             mav.addObject("userName",user.getUserName());
+            mav.addObject("user",user);
             mav.addObject("userId",user.getId());
             rs.userLikeAndDislikeReviewsId(user.getUserVotes());
             mav.addObject("userLikeReviews", rs.getUserLikeReviews());
