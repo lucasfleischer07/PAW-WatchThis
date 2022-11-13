@@ -43,19 +43,19 @@ public class Review {
     private Set<ReviewReport> reviewReports;
 
     @Transient
-    private Set<User> reporterUsers;
+    private Set<String> reporterUsernames;
     @Transient
     private int reportAmount=0;
     @Transient
     private String reportReasons;
     @PostLoad
     private void onLoad(){
-        this.reporterUsers=new HashSet<>();
+        this.reporterUsernames=new HashSet<>();
         this.reportReasons="";
         for (ReviewReport report:reviewReports) {
             reportAmount++;
             this.reportReasons = this.reportReasons + " " + report.getReportReason();
-            this.reporterUsers.add(report.getUser());
+            this.reporterUsernames.add(report.getUser().getUserName());
         }
 
     }
@@ -167,7 +167,7 @@ public class Review {
     }
 
     @Transient
-    public Set<User> getReporterUsers() {
-        return reporterUsers;
+    public Set<String> getReporterUsers() {
+        return reporterUsernames;
     }
 }

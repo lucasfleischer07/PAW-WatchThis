@@ -39,19 +39,19 @@ public class Comment {
     private LocalDateTime date;
 
     @Transient
-    private Set<User> reporterUsers;
+    private Set<String> reporterUsernames;
     @Transient
     private int reportAmount=0;
     @Transient
     private String reportReasons;
     @PostLoad
     private void onLoad(){
-        this.reporterUsers=new HashSet<>();
+        this.reporterUsernames=new HashSet<>();
         this.reportReasons="";
         for (CommentReport report:commentReports) {
             reportAmount++;
             reportReasons = reportReasons + " " + report.getReportReason();
-            this.reporterUsers.add(report.getUser());
+            this.reporterUsernames.add(report.getUser().getUserName());
         }
     }
     public User getUser() {
@@ -104,7 +104,7 @@ public class Comment {
         return reportReasons;
     }
     @Transient
-    public Set<User> getReporterUsers() {
-        return reporterUsers;
+    public Set<String> getReporterUsers() {
+        return reporterUsernames;
     }
 }
