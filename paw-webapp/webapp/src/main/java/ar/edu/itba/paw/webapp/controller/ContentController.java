@@ -221,8 +221,7 @@ public class ContentController {
     public ModelAndView createContent(Principal userDetails,
                                       @Valid @ModelAttribute("contentCreate") final ContentForm contentForm,
                                       final BindingResult contentFormErrors) throws IOException {
-        return createContent(userDetails,contentForm);
-        /*if(contentFormErrors.hasErrors()) {
+        if(contentFormErrors.hasErrors()) {
             return createContent(userDetails,contentForm);
         }
 
@@ -234,7 +233,7 @@ public class ContentController {
         cs.contentCreate(contentForm.getName(),contentForm.getDescription(),contentForm.getReleaseDate(),auxGenre,contentForm.getCreator(),contentForm.getDuration(),contentForm.getType(),contentForm.getContentPicture().getBytes());
         Optional<Content> newContent = cs.findByName(contentForm.getName());
         return new ModelAndView("redirect:/" + newContent.get().getType() + "/" + newContent.get().getId());
-        */
+
     }
 
     // * ---------------------------------------------------------------------------------------------------------------

@@ -27,6 +27,6 @@ public class UsernameValidator implements ConstraintValidator<AvailableUserName,
         Optional<User> existingUser = us.findByUserName(username);
         if (existingUser.isPresent())
             return false;
-        return !username.equals("watchList") && !username.equals("viewedList");
+        return !username.equals("watchList") && !username.equals("viewedList") && !username.equals("editProfile");
     }
 }

@@ -21,7 +21,7 @@
         <title><spring:message code="CreateContent.Message"/></title>
     </head>
     <body>
-        <jsp:include page="components/header.jsp">
+        <jsp:include page="components/noFilterHeader.jsp">
             <jsp:param name="type" value="${type}"/>
             <jsp:param name="userName" value="${userName}"/>
             <jsp:param name="userId" value="${userId}"/>
