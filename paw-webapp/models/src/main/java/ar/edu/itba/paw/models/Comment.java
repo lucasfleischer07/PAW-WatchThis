@@ -8,8 +8,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "userid", "reviewid" }) })
-
 public class Comment {
     /* package */ Comment() {
 // Just for Hibernate, we love you!
@@ -41,15 +39,19 @@ public class Comment {
     private LocalDateTime date;
 
     @Transient
+    private Set<User> reporterUsers;
+    @Transient
     private int reportAmount=0;
     @Transient
     private String reportReasons;
     @PostLoad
     private void onLoad(){
+        this.reporterUsers=new HashSet<>();
         this.reportReasons="";
         for (CommentReport report:commentReports) {
             reportAmount++;
             reportReasons = reportReasons + " " + report.getReportReason();
+            this.reporterUsers.add(report.getUser());
         }
     }
     public User getUser() {
@@ -100,5 +102,9 @@ public class Comment {
 
     public String getReportReasons() {
         return reportReasons;
+    }
+    @Transient
+    public Set<User> getReporterUsers() {
+        return reporterUsers;
     }
 }

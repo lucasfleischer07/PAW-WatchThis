@@ -21,16 +21,14 @@ public class ReportJpaDao implements ReportDao{
         if(reviewOrComment instanceof Review){
             Review review=(Review) reviewOrComment;
             Content content=review.getContent();
-            content.getContentReviews().remove(review);
             em.remove(review);
             em.merge(content);
         } else if(reviewOrComment instanceof Comment){
             Comment comment=(Comment) reviewOrComment;
             Review review=comment.getReview();
-            review.getComments().remove(comment);
             em.remove(comment);
             em.merge(review);
-            em.merge(review.getContent());
+
         }
         else throw new IllegalArgumentException();
     }
@@ -39,15 +37,18 @@ public class ReportJpaDao implements ReportDao{
     public void removeReports(Object reviewOrComment) {
         if(reviewOrComment instanceof Review){
             Review review=(Review) reviewOrComment;
-            review.getReports().removeAll(review.getReports());
+            for (ReviewReport report:review.getReports()
+                 ) {
+                em.remove(report);
+            }
             em.merge(review);
-            em.merge(review.getContent());
         } else if(reviewOrComment instanceof Comment){
             Comment comment=(Comment) reviewOrComment;
-            comment.getReports().removeAll(comment.getReports());
+            for (CommentReport report:comment.getReports()
+                 ) {
+                em.remove(report);
+            }
             em.merge(comment);
-            em.merge(comment.getReview());
-            em.merge(comment.getReview().getContent());
         }
         else throw new IllegalArgumentException();
     }
@@ -59,14 +60,11 @@ public class ReportJpaDao implements ReportDao{
             ReviewReport toAdd =new ReviewReport(user,review,reason);
             em.persist(toAdd);
             em.merge(review);
-            em.merge(review.getContent());
         } else if(reviewOrComment instanceof Comment){
             Comment comment=(Comment) reviewOrComment;
             CommentReport toAdd =new CommentReport(user,comment,reason);
             em.persist(toAdd);
             em.merge(comment);
-            em.merge(comment.getReview());
-            em.merge(comment.getReview().getContent());
         }
         else throw new IllegalArgumentException();
     }
