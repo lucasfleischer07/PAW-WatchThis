@@ -120,7 +120,8 @@ public class ContentController {
                 mav.addObject("mostSavedContentByUsersListSize", mostSavedContentByUsersList.size());
                 mav.addObject("recommendedUserList", "null");
             }
-            if(user.getRole().equals("admin")){
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            if(auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))){
                 mav.addObject("admin",true);
             } else {
                 mav.addObject("admin",false);

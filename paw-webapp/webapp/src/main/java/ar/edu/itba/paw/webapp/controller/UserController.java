@@ -202,7 +202,8 @@ public class UserController {
         final String locale = LocaleContextHolder.getLocale().getDisplayLanguage();
         Optional<String> quote = cs.getContentQuote(locale);
         mav.addObject("quote", quote.get());
-        if(user.getRole().equals("admin")){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if(auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))){
             mav.addObject("admin",true);
         } else {
             mav.addObject("admin",false);

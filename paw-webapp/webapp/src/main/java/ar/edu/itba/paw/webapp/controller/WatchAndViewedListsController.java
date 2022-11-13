@@ -14,6 +14,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -76,7 +78,8 @@ public class WatchAndViewedListsController {
         mav.addObject("watchListSize", watchListContent.size());
         mav.addObject("userWatchListContentId", userWatchListContentId);
 
-        if (user.getRole().equals("admin")) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if(auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
             mav.addObject("admin", true);
         } else {
             mav.addObject("admin", false);
@@ -160,7 +163,8 @@ public class WatchAndViewedListsController {
         mav.addObject("viewedListContentSize", viewedListContent.size());
         mav.addObject("userWatchListContentId", userWatchListContentId);
 
-        if (user.getRole().equals("admin")) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if(auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))){
             mav.addObject("admin", true);
         } else {
             mav.addObject("admin", false);
