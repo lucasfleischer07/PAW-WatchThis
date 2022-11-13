@@ -74,15 +74,34 @@
                                 <a class="nav-link active W-reported-reviews-comment-nav" aria-current="page" href="#"><spring:message code="Content.Review"/></a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link W-reported-reviews-comment-nav" href="<c:url value="/report/reportedContent/comments"/>"><spring:message code="Comments.Title"/></a>
+                                <c:choose>
+                                    <c:when test="${reason == 'ANY'}">
+                                        <a class="nav-link W-reported-reviews-comment-nav" href="<c:url value="/report/reportedContent/comments"/>"><spring:message code="Comments.Title"/></a>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <a class="nav-link W-reported-reviews-comment-nav" href="<c:url value="/report/reportedContent/comments/filters">
+                                            <c:param name="reason" value="${reason}"/>
+                                            </c:url>"><spring:message code="Comments.Title"/> </a>
+                                    </c:otherwise>
+                                </c:choose>
+
                             </li>
                         </c:when>
                         <c:otherwise>
                             <li class="nav-item">
-                                <a class="nav-link W-reported-reviews-comment-nav" aria-current="page" href="<c:url value="/report/reportedContent/reviews"/>"><spring:message code="Content.Review"/></a>
+                                <c:choose>
+                                    <c:when test="${reason == 'ANY'}">
+                                        <a class="nav-link W-reported-reviews-comment-nav" href="<c:url value="/report/reportedContent/reviews"/>"><spring:message code="Content.Review"/></a>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <a class="nav-link W-reported-reviews-comment-nav" href="<c:url value="/report/reportedContent/reviews/filters">
+                                            <c:param name="reason" value="${reason}"/>
+                                            </c:url>"><spring:message code="Content.Review"/> </a>
+                                    </c:otherwise>
+                                </c:choose>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link active W-reported-reviews-comment-nav" href="<c:url value="/report/reportedContent/comments"/>"><spring:message code="Comments.Title"/></a>
+                                <a class="nav-link W-reported-reviews-comment-nav" aria-current="page" href="#"><spring:message code="Comments.Title"/></a>
                             </li>
                         </c:otherwise>
                     </c:choose>
