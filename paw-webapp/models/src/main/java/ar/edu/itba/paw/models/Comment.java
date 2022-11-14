@@ -5,6 +5,7 @@ import org.hibernate.annotations.Formula;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -32,27 +33,22 @@ public class Comment {
     @JoinColumn(name = "reviewid")
     private Review review;
 
-    @OneToMany(orphanRemoval = true,fetch = FetchType.LAZY,mappedBy = "comment")
+    @OneToMany(orphanRemoval = true,fetch = FetchType.EAGER,mappedBy = "comment")
     private Set<CommentReport> commentReports;
 
     private String text;
     private LocalDateTime date;
 
-    @Transient
-    private Set<String> reporterUsernames;
+    @Formula(value = "(select coalesce(string_agg(u.name,' '),'') from Userdata u join CommentReport r on u.userid=r.userid where r.commentid=commentid)")
+    private String reporterUsernames;
     @Transient
     private int reportAmount=0;
-    @Transient
+    @Formula(value = "(select coalesce(string_agg(r.reportreason,' '),'') from CommentReport r  where r.commentid=commentid)")
     private String reportReasons;
     @PostLoad
     private void onLoad(){
-        this.reporterUsernames=new HashSet<>();
-        this.reportReasons="";
-        for (CommentReport report:commentReports) {
-            reportAmount++;
-            reportReasons = reportReasons + " " + report.getReportReason();
-            this.reporterUsernames.add(report.getUser().getUserName());
-        }
+
+        reportAmount=commentReports.size();
     }
     public User getUser() {
         return user;
@@ -105,7 +101,7 @@ public class Comment {
     }
 
     @Transient
-    public Set<String> getReporterUsernames() {
+    public String getReporterUsernames() {
         return reporterUsernames;
     }
 }

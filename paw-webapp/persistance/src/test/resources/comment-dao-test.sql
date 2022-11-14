@@ -4,4 +4,4 @@ insert into content(id,name,description,released,genre,creator,duration,duration
 insert into review (reviewId,type,contentId,userId,name,description,rating) values (3,'serie',2,1,'bad tv show','dont recommend it!',2);
 insert into reviewreport(id,reportReason,reviewid,userid) values(2,'Other',3,1);
 insert into comment(commentid,date,text,reviewid,userid) values(2,null,'comment',3,1);
-insert into commentreport(id,reportReason,commentid,userid) values (2,'Inappropriate',1,1)
+insert into commentreport(id,reportReason,commentid,userid) values (2,'Inappropriate',2,1)

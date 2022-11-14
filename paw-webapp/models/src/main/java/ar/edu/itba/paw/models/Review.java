@@ -42,22 +42,15 @@ public class Review {
     @OneToMany(mappedBy = "review",orphanRemoval = true,fetch = FetchType.LAZY)
     private Set<ReviewReport> reviewReports;
 
-    @Transient
-    private Set<String> reporterUsernames;
+    @Formula(value = "(select coalesce(string_agg(u.name,' '),'') from Userdata u join ReviewReport r on u.userid=r.userid where r.reviewid=reviewid)")
+    private String  reporterUsernames;
     @Transient
     private int reportAmount=0;
-    @Transient
+    @Formula(value = "(select coalesce(string_agg(r.reportreason,' '),'') from ReviewReport r  where r.reviewid=reviewid)")
     private String reportReasons;
     @PostLoad
     private void onLoad(){
-        this.reporterUsernames=new HashSet<>();
-        this.reportReasons="";
-        for (ReviewReport report:reviewReports) {
-            reportAmount++;
-            this.reportReasons = this.reportReasons + " " + report.getReportReason();
-            this.reporterUsernames.add(report.getUser().getUserName());
-        }
-
+        reportAmount=getReports().size();
     }
 
     public Review(Long id, String type, String name, String description, Integer rating,User creator,Content content) {
@@ -167,7 +160,8 @@ public class Review {
     }
 
     @Transient
-    public Set<String> getReporterUsernames() {
+    public String getReporterUsernames() {
         return reporterUsernames;
     }
+
 }

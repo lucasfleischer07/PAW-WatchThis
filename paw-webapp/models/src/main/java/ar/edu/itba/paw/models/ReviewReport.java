@@ -18,7 +18,7 @@ public class ReviewReport {
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "reviewreport_id_seq")
     @SequenceGenerator(allocationSize = 1,sequenceName = "reviewreport_id_seq",name = "reviewreport_id_seq")
     private long id;
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false,fetch = FetchType.EAGER)
     @JoinColumn(name = "userid")
     private User user;
 

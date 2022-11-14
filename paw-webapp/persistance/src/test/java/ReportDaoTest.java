@@ -106,13 +106,13 @@ public class ReportDaoTest {
     }
     @Test
     public void getReportedReviewsByReason(){
-        assertEquals(1,dao.getReportedReviewsByReason(ReportReason.Inappropriate).size());
-        assertEquals(0,dao.getReportedReviewsByReason(ReportReason.Other).size());
+        assertEquals(1,dao.getReportedReviewsByReason(ReportReason.Other).size());
+        assertEquals(0,dao.getReportedReviewsByReason(ReportReason.Inappropriate).size());
     }
     @Test
     public void getReportedCommentsByReason(){
-        assertEquals(1,dao.getReportedReviewsByReason(ReportReason.Other).size());
-        assertEquals(0,dao.getReportedReviewsByReason(ReportReason.Inappropriate).size());
+        assertEquals(1,dao.getReportedCommentsByReason(ReportReason.Inappropriate).size());
+        assertEquals(0,dao.getReportedCommentsByReason(ReportReason.Other).size());
     }
 
     @Test
@@ -124,7 +124,7 @@ public class ReportDaoTest {
     @Test
     public void addCommentReport(){
         dao.addReport(commentDao.getComment(commentId).get(),userDao.findById(userId).get(),ReportReason.Inappropriate);
-        assertEquals(2,commentDao.getComment(reviewId).get().getReports().size());
+        assertEquals(2,commentDao.getComment(commentId).get().getReports().size());
     }
 
 }

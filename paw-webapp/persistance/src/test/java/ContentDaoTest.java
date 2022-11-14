@@ -76,7 +76,7 @@ public class ContentDaoTest {
 
     @Test
     public void testGetSearchedContentByGenre(){
-        List<Content> contentList=dao.getSearchedContentByGenre("movie","Animation",null,"toy");
+        List<Content> contentList=dao.getSearchedContentByGenre("movie"," '%'|| " + "'Animation'" + " ||'%'",null,"toy");
         assertEquals(1,contentList.size());
 
     }
@@ -88,25 +88,20 @@ public class ContentDaoTest {
     }
     @Test
     public void testGetSearchedContentByDurationAndGenre(){
-        List<Content> contentList=dao.getSearchedContentByDurationAndGenre("movie","Animation",90,100,null,null);
+        List<Content> contentList=dao.getSearchedContentByDurationAndGenre("movie"," '%'|| " + "'Animation'" + " ||'%'",90,100,null,"");
         assertEquals(1,contentList.size());
 
     }
-    @Test
-    public void testGetSearchedContentRandom(){
-        List<Content> contentList=dao.getSearchedContentRandom("t");
-        assertEquals(3,contentList.size());
 
-    }
     @Test
     public void testFindByDurationAndGenre(){
-        List<Content> contentList=dao.findByDurationAndGenre("serie","Animation",90,1000,null);
+        List<Content> contentList=dao.findByDurationAndGenre("movie"," '%'|| " + "'Animation'" + " ||'%'",90,1000,null);
         assertEquals(1,contentList.size());
     }
 
     @Test
     public void testFindByGenreTest(){
-        List<Content> contentList=dao.findByGenre("all"," '%'|| " + "Animation" + " ||'%'",null);
+        List<Content> contentList=dao.findByGenre("all"," '%'|| " + "'Animation'" + " ||'%'",null);
         assertEquals(2, contentList.size());
     }
 
@@ -158,7 +153,7 @@ public class ContentDaoTest {
         dao.contentCreate("new","description","2022","Animation","brandyhuevo",100,"100","movie",null);
         dao.getAllContent("ANY", null);
         assertTrue(dao.findByName("new").isPresent());
-        assertEquals(3, dao.findByGenre("all", "Animation", null).size());
+        assertEquals(3, dao.findByGenre("all", " '%'|| " + "'Animation'" + " ||'%'", null).size());
     }
 
     @Test
@@ -192,13 +187,6 @@ public class ContentDaoTest {
         List<Content> contentList=dao.getAllContent("ANY",null);
         assertEquals(5,dao.getAllContent("ANY",null).size());
     }
-
-    @Test
-    public void getContentQuote(){
-        assertNotNull(dao.getContentQuote("Spanish"));
-
-    }
-
 
 
 }
