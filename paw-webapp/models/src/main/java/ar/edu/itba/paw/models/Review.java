@@ -3,6 +3,7 @@ package ar.edu.itba.paw.models;
 import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -26,7 +27,7 @@ public class Review {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userid")
-    private User creator;
+    private User user;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "contentid")
     private Content content;
@@ -34,6 +35,30 @@ public class Review {
     @OneToMany(mappedBy = "review",orphanRemoval = true)
     private Set<Reputation> userVotes;
 
+    @OneToMany(mappedBy = "review",orphanRemoval = true)
+    @OrderBy(value = "commentid")
+    private Set<Comment> comments;
+
+    @OneToMany(mappedBy = "review",orphanRemoval = true,fetch = FetchType.LAZY)
+    private Set<ReviewReport> reviewReports;
+
+    @Transient
+    private Set<String> reporterUsernames;
+    @Transient
+    private int reportAmount=0;
+    @Transient
+    private String reportReasons;
+    @PostLoad
+    private void onLoad(){
+        this.reporterUsernames=new HashSet<>();
+        this.reportReasons="";
+        for (ReviewReport report:reviewReports) {
+            reportAmount++;
+            this.reportReasons = this.reportReasons + " " + report.getReportReason();
+            this.reporterUsernames.add(report.getUser().getUserName());
+        }
+
+    }
 
     public Review(Long id, String type, String name, String description, Integer rating,User creator,Content content) {
         this.name = name;
@@ -42,7 +67,7 @@ public class Review {
         this.type = type;
         this.content=content;
         this.rating = rating;
-        this.creator=creator;
+        this.user=creator;
 
     }
     public Review(String type, String name, String description, Integer rating,User creator,Content content) {
@@ -99,15 +124,27 @@ public class Review {
         return rating;
     }
 
+    public Set<Comment> getComments() {
+        return comments;
+    }
+
+    public Set<ReviewReport> getReports() {
+        return reviewReports;
+    }
+
     public void setRating(Integer rating) {
         this.rating = rating;
     }
 
-    public User getCreator(){return this.creator;}
-    public void setCreator(User user){this.creator=user;}
+    public User getUser(){return this.user;}
+    public void setUser(User user){this.user=user;}
 
     public void setContent(Content content) {
         this.content = content;
+    }
+
+    public int getReportAmount() {
+        return reportAmount;
     }
 
     @Transient
@@ -119,5 +156,18 @@ public class Review {
 
     public Set<Reputation> getUserVotes() {
         return userVotes;
+    }
+
+    public String getReportReasons() {
+        return reportReasons;
+    }
+
+    public Set<ReviewReport> getReviewReports() {
+        return reviewReports;
+    }
+
+    @Transient
+    public Set<String> getReporterUsernames() {
+        return reporterUsernames;
     }
 }

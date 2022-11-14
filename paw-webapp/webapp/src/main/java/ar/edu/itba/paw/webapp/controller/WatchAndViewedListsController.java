@@ -13,6 +13,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,7 +33,7 @@ public class WatchAndViewedListsController {
     private final ContentService cs;
     private final PaginationService ps;
     private static final Logger LOGGER = LoggerFactory.getLogger(ContentController.class);
-
+    private static final int CONTENT_AMOUNT = 18;
     @Autowired
     public WatchAndViewedListsController(final UserService us, final ContentService cs, PaginationService ps) {
         this.us = us;
@@ -40,7 +42,7 @@ public class WatchAndViewedListsController {
     }
 
     private void listPaginationSetup(ModelAndView mav,String name,List<Content> contentList,int page) throws PageNotFoundException{
-        if(ps.checkPagination(contentList.size(), page)) {
+        if(ps.checkPagination(contentList.size(), page,CONTENT_AMOUNT)) {
             LOGGER.warn("Wrong login path:", new PageNotFoundException());
             throw new PageNotFoundException();
         }
@@ -48,7 +50,7 @@ public class WatchAndViewedListsController {
         List<Content> contentListFilterPaginated = ps.contentPagination(contentList, page);
         mav.addObject(name, contentListFilterPaginated);
 
-        int amountOfPages = ps.amountOfPages(contentList.size());
+        int amountOfPages = ps.amountOfContentPages(contentList.size(),CONTENT_AMOUNT);
         mav.addObject("amountPages", amountOfPages);
         mav.addObject("pageSelected",page);
 
@@ -75,12 +77,13 @@ public class WatchAndViewedListsController {
         mav.addObject("watchListSize", watchListContent.size());
         mav.addObject("userWatchListContentId", userWatchListContentId);
 
-        if (user.getRole().equals("admin")) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if(auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
             mav.addObject("admin", true);
         } else {
             mav.addObject("admin", false);
         }
-        request.getSession().setAttribute("referer","/profile/watchList");
+        request.getSession().setAttribute("referer","/profile/watchList"+(pageNum.isPresent()?"/page/"+pageNum.get():""));
         return mav;
     }
 
@@ -159,12 +162,13 @@ public class WatchAndViewedListsController {
         mav.addObject("viewedListContentSize", viewedListContent.size());
         mav.addObject("userWatchListContentId", userWatchListContentId);
 
-        if (user.getRole().equals("admin")) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if(auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))){
             mav.addObject("admin", true);
         } else {
             mav.addObject("admin", false);
         }
-        request.getSession().setAttribute("referer","/profile/viewedList");
+        request.getSession().setAttribute("referer","/profile/viewedList"+(pageNum.isPresent()?"/page/"+pageNum.get():""));
         return mav;
     }
 

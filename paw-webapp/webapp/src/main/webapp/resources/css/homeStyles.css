@@ -52,7 +52,7 @@
 }
 
 .W-filter-title {
-    font-size: 1vw;
+    /*font-size: 1vw;*/
     font-weight: bold;
     width: fit-content;
     min-width: 6vw;
@@ -89,12 +89,17 @@
 .W-dropdown-button-genre-duration-sort {
     margin-top: 2vw;
     margin-right: 4vw;
+    font-size: 1.5vw;
     margin-bottom: 2vw;
-    height: 5vw;
+    height: 7vw;
+    white-space: normal;
+    word-break: break-all !important;
+    min-width: 11vw;
 }
 
 .W-border-color-user-btn {
     border-color: green;
+    margin-right: 2vw;
 }
 
 .W-films-margin{
@@ -339,7 +344,7 @@
 
 @media (max-width: 1600px) {
     .W-movie-title {
-        font-size: 1.8vw;
+        font-size: 1.5vw;
         color: black;
     }
 
@@ -348,6 +353,20 @@
     }
 }
 
+@media (max-width: 1096px) {
+    .W-filter-title{
+        height: 4vw;
+    }
+
+    .W-filter-div {
+        height: 5vw;
+    }
+
+    .W-genre-filter {
+        word-break: break-all;
+        white-space: normal;
+    }
+}
 
 @media (max-width: 992px) {
     .W-filter-div {
@@ -362,6 +381,31 @@
         height: 34vw;
     }
 
+    .W-filter-title {
+        height: 7vw;
+    }
+
+    .dropdown-menu {
+        max-height: 280px;
+        overflow-y: auto;
+    }
+
+    .W-dropdown-sorting {
+        max-height: 90px;
+        overflow-y: auto;
+    }
+
+    .W-dropdown-button {
+        margin-top: 0;
+    }
+}
+
+@media (max-width: 780px) {
+
+    .W-dropdown-sorting {
+        max-height: 280px;
+        overflow-y: auto;
+    }
 }
 
 @media (max-width: 591px) {
@@ -372,7 +416,6 @@
     .W-filter-div {
         display: none;
     }
-
 
     .W-line-style {
         display: none;

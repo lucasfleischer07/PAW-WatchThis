@@ -1,13 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.models.Content;
-import ar.edu.itba.paw.models.Review;
-import ar.edu.itba.paw.models.Sorting;
-import ar.edu.itba.paw.models.User;
-import ar.edu.itba.paw.services.ContentService;
-import ar.edu.itba.paw.services.PaginationService;
-import ar.edu.itba.paw.services.ReviewService;
-import ar.edu.itba.paw.services.UserService;
+import ar.edu.itba.paw.models.*;
+import ar.edu.itba.paw.services.*;
 import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
 import ar.edu.itba.paw.webapp.form.CommentForm;
 import ar.edu.itba.paw.webapp.form.GenreFilterForm;
@@ -35,14 +29,17 @@ public class MovieAndSerieController {
     private final ContentService cs;
     private final PaginationService ps;
     private final ReviewService rs;
-    private static final Logger LOGGER = LoggerFactory.getLogger(ContentController.class);
+    private CommentService ccs;
+    private static final Logger LOGGER = LoggerFactory.getLogger(MovieAndSerieController.class);
+    private static final int CONTENT_AMOUNT = 18;
 
     @Autowired
-    public MovieAndSerieController(final UserService us, final ContentService cs, final ReviewService rs, PaginationService ps) {
+    public MovieAndSerieController(final UserService us, final ContentService cs, final ReviewService rs, PaginationService ps, CommentService ccs) {
         this.us = us;
         this.cs = cs;
         this.rs = rs;
         this.ps = ps;
+        this.ccs = ccs;
     }
 
     private void HeaderSetUp(ModelAndView mav,Principal userDetails) {
@@ -67,21 +64,7 @@ public class MovieAndSerieController {
         }
     }
 
-    private void paginationSetup(ModelAndView mav,int page,List<Review> reviewList){
-        if(reviewList.size() == 0) {
-            mav.addObject("reviews",reviewList);
-            mav.addObject("pageSelected",1);
-            mav.addObject("amountPages",1);
-            return;
-        }
 
-        List<Review> reviewListPaginated = ps.reviewPagination(reviewList, page);
-        mav.addObject("reviews", reviewListPaginated);
-
-        int amountOfPages = ps.amountOfPages(reviewList.size());
-        mav.addObject("amountPages", amountOfPages);
-        mav.addObject("pageSelected",page);
-    }
 
     // * ----------------------------------- Movie and Series division -------------------------------------------------
     @RequestMapping(value= {"/{type:movies|series}","/{type:movies|series}/page/{pageNum}"})
@@ -105,12 +88,8 @@ public class MovieAndSerieController {
         } else {
             List<Content> contentListPaginated = ps.contentPagination(contentList, page);
             mav.addObject("allContent", contentListPaginated);
-            if(Objects.equals(type, "movies") || Objects.equals(type, "series")){
-                mav.addObject("contentType", type);
-            } else {
-                mav.addObject("contentType", "all");
-            }
-            int amountOfPages = ps.amountOfPages(contentList.size());
+            mav.addObject("contentType", auxType);
+            int amountOfPages = ps.amountOfContentPages(contentList.size(),CONTENT_AMOUNT);
             mav.addObject("amountPages", amountOfPages);
             mav.addObject("pageSelected",page);
             mav.addObject("genre","ANY");
@@ -120,7 +99,7 @@ public class MovieAndSerieController {
         }
         mav.addObject("sortingTypes", Sorting.values());
         HeaderSetUp(mav,userDetails);
-        request.getSession().setAttribute("referer","/"+type);
+        request.getSession().setAttribute("referer","/"+type+(pageNum.isPresent()?"/page/"+pageNum.get():""));
 
         return mav;
     }
@@ -128,86 +107,10 @@ public class MovieAndSerieController {
     // * ---------------------------------------------------------------------------------------------------------------
 
 
-    // * ----------------------------------- Movies and Series Info page -----------------------------------------------
-    @RequestMapping(value={"/{type:movie|serie}/{contentId:[0-9]+}","/{type:movie|serie}/{contentId:[0-9]+}/page/{pageNum:[0-9]+}"})
-    public ModelAndView reviews(Principal userDetails,
-                                @PathVariable("contentId")final long contentId,
-                                @PathVariable("type") final String type,
-                                @Valid @ModelAttribute("commentForm") final CommentForm commentForm,
-                                @ModelAttribute("reportReviewForm") final ReportCommentForm reportReviewForm,
-                                @ModelAttribute("reportCommentForm") final ReportCommentForm reportCommentForm,
-                                @PathVariable("pageNum")final Optional<Integer> pageNum,
-                                HttpServletRequest request) {
-        final ModelAndView mav = new ModelAndView("infoPage");
-        Content content=cs.findById(contentId).orElseThrow(PageNotFoundException::new);
-        mav.addObject("details", content);
-        List<Review> reviewList = rs.getAllReviews(content);
-        User user=null;
-        if(reviewList == null) {
-            LOGGER.warn("Cant find a the content specified",new PageNotFoundException());
-            throw new PageNotFoundException();
-        }
-
-        String auxType;
-        if (Objects.equals(type, "movie")) {
-            auxType = "movies";
-        } else if (Objects.equals(type, "serie")) {
-            auxType = "series";
-        } else {
-            auxType = "all";
-        }
-
-        mav.addObject("contentId",contentId);
-        mav.addObject("type",auxType);
-
-        if(userDetails != null) {
-            String userEmail = userDetails.getName();
-            user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
-            mav.addObject("userName",user.getUserName());
-            mav.addObject("userId",user.getId());
-            rs.userLikeAndDislikeReviewsId(user.getUserVotes());
-            mav.addObject("userLikeReviews", rs.getUserLikeReviews());
-            mav.addObject("userDislikeReviews", rs.getUserDislikeReviews());
-
-            Optional<Long> isInWatchList = us.searchContentInWatchList(user, contentId);
-            if(isInWatchList.get() != -1) {
-                mav.addObject("isInWatchList",isInWatchList);
-            } else {
-                mav.addObject("isInWatchList","null");
-            }
-
-            Optional<Long> isInViewedList = us.searchContentInViewedList(user, contentId);
-            if(isInViewedList.get() != -1) {
-                mav.addObject("isInViewedList",isInViewedList);
-            } else {
-                mav.addObject("isInViewedList","null");
-            }
-
-            if(user.getRole().equals("admin")) {
-                mav.addObject("admin",true);
-            } else {
-                mav.addObject("admin",false);
-            }
-        } else {
-            mav.addObject("userName","null");
-            mav.addObject("userId","null");
-            mav.addObject("isInWatchList","null");
-            mav.addObject("isInViewedList","null");
-            mav.addObject("admin",false);
-            mav.addObject("userLikeReviews", rs.getUserLikeReviews());
-            mav.addObject("userDislikeReviews", rs.getUserDislikeReviews());
-        }
-
-        reviewList = rs.sortReviews(user,reviewList);
-        paginationSetup(mav,pageNum.orElse(1),reviewList);
-        request.getSession().setAttribute("referer","/"+type+"/"+contentId);
-        return mav;
-    }
-    // * ---------------------------------------------------------------------------------------------------------------
 
 
     // *  ----------------------------------- Movies and Serie Filters -------------------------------------------------
-    @RequestMapping(value = {"/{type:movies|series|all|profile}/filters" , "/{type:movies|series|all|profile}/filters/page/{pageNum}"})
+    @RequestMapping(value = {"/{type:movies|series|all}/filters" , "/{type:movies|series|all}/filters/page/{pageNum}"})
     public ModelAndView moviesWithFilters(
             Principal userDetails,
             @ModelAttribute("genreFilterForm") final GenreFilterForm genreFilterForm,
@@ -247,7 +150,7 @@ public class MovieAndSerieController {
             List<Content> contentListFilterPaginated = ps.contentPagination(contentListFilter, page);
             mav.addObject("allContent", contentListFilterPaginated);
 
-            int amountOfPages = ps.amountOfPages(contentListFilter.size());
+            int amountOfPages = ps.amountOfContentPages(contentListFilter.size(),CONTENT_AMOUNT);
             mav.addObject("amountPages", amountOfPages);
             mav.addObject("pageSelected",page);
             mav.addObject("contentType", type);
@@ -260,7 +163,32 @@ public class MovieAndSerieController {
         mav.addObject("query", query);
         mav.addObject("sortingTypes", Sorting.values());
         HeaderSetUp(mav,userDetails);
-        request.getSession().setAttribute("referer","/"+type+"/filters");
+        StringBuilder referer=new StringBuilder();
+        referer.append("/"+type+"/filters"+(pageNum.isPresent()?"/page/"+pageNum.get():""));
+        if(genreList!=null||query!="ANY"||durationFrom!=null||durationTo!=null||sorting.isPresent()){
+            referer.append("?");
+            if(genreList!=null){
+                referer.append(referer.charAt(referer.length()-1)=='?'?"genre="+genreList.get(0):"&genre+"+genreList.get(0));
+                for(int i=1;i<genreList.size();i++){
+                    referer.append("%2c"+genreList.get(i));
+                }
+            }
+            if(!query.equals("ANY")){
+                referer.append(referer.charAt(referer.length()-1)=='?'?"query="+query:"&query="+query);
+            }
+            if(durationFrom!=null){
+                referer.append(referer.charAt(referer.length()-1)=='?' ? "durationFrom="+durationFrom:"&durationFrom="+durationFrom);
+            }
+            if(durationTo!=null){
+                referer.append(referer.charAt(referer.length()-1)=='?'?"durationTo="+durationTo:"&durationTo="+durationTo);
+            }
+            if(sorting.isPresent()){
+                referer.append(referer.charAt(referer.length()-1)=='?'?"sorting="+sorting.get():"&sorting="+sorting.get());
+            }
+        }
+        String string= referer.toString();
+        request.getSession().setAttribute("referer",referer.toString());
+        string=request.getSession().getAttribute("referer").toString();
         return mav;
     }
     // * ---------------------------------------------------------------------------------------------------------------

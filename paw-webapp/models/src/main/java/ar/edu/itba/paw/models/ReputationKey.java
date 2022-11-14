@@ -1,5 +1,4 @@
 package ar.edu.itba.paw.models;
-
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;

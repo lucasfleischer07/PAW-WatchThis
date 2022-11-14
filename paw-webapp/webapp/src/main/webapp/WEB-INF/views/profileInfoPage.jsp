@@ -29,7 +29,7 @@
       <jsp:param name="admin" value="${admin}"/>
     </jsp:include>
 
-    <div class="row py-5 px-4">
+    <div class="row py-5 px-4 W-set-margins">
       <div class="col-md-5 mx-auto W-profile-general-div-display">
           <div class="bg-white shadow rounded overflow-hidden W-profile-general-div">
               <div class="W-profile-background-color bg-dark">
@@ -113,7 +113,7 @@
                             <jsp:param name="reviewDescription" value="${review.description}" />
                             <jsp:param name="reviewRating" value="${review.rating}"/>
                             <jsp:param name="reviewId" value="${review.id}" />
-                            <jsp:param name="userName" value="${review.creator.userName}"/>
+                            <jsp:param name="userName" value="${review.user.userName}"/>
                             <jsp:param name="contentId" value="${review.id}"/>
                             <jsp:param name="reviewReputation" value="${review.reputation}" />
                             <jsp:param name="contentType" value="${review.type}"/>

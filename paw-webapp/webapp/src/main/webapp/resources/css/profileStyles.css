@@ -16,6 +16,11 @@
     background-repeat: no-repeat
 }
 
+.W-set-margins {
+    margin-right: 1vw;
+    margin-left: 1vw;
+}
+
 .W-input-label-edit-password {
     display: flex;
     align-items: flex-start;

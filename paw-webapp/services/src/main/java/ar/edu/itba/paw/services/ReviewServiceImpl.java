@@ -1,30 +1,32 @@
 package ar.edu.itba.paw.services;
 
-import ar.edu.itba.paw.models.Content;
-import ar.edu.itba.paw.models.Reputation;
-import ar.edu.itba.paw.models.Review;
-import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.models.*;
+import ar.edu.itba.paw.persistance.ReportDao;
 import ar.edu.itba.paw.persistance.ReviewDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import javax.mail.MessagingException;
+import java.util.*;
 
 @Transactional
 @Service
 public class ReviewServiceImpl implements ReviewService{
+
     private final ReviewDao reviewDao;
+
 
     private List<Long> userLikeReviews = new ArrayList<>();
     private List<Long> userDislikeReviews = new ArrayList<>();
 
     @Autowired
     public ReviewServiceImpl(final ReviewDao reviewDao) {
+
         this.reviewDao = reviewDao;
+
     }
 
     @Override
@@ -41,6 +43,7 @@ public class ReviewServiceImpl implements ReviewService{
     public void deleteReview(Long reviewId) {
         reviewDao.deleteReview(reviewId);
     }
+
 
     @Override
     public Optional<Review> findById(Long reviewId) {return reviewDao.findById(reviewId);}
@@ -106,4 +109,7 @@ public class ReviewServiceImpl implements ReviewService{
     public List<Long> getUserDislikeReviews() {
         return userDislikeReviews;
     }
+
+
+
 }

@@ -3,7 +3,6 @@ create table if not exists userdata(
                                        name       VARCHAR ( 50 ) unique NOT NULL,
                                         email      VARCHAR ( 50 ) unique NOT NULL,
                                         password   VARCHAR ( 50 ) NOT NULL,
-                                        reputation numeric default 0.00                   not null,
                                         image BIT ( 500 ) ,
                                         role VARCHAR ( 50 ) NOT NULL
                                         );
@@ -58,7 +57,57 @@ create table if not exists userviewedlist
     contentid integer not null
         references content on delete cascade
 );
-create table if not exists Reputation (reviewid bigint not null, userid bigint not null, downvote boolean not null, upvote boolean not null, primary key (reviewid, userid))
+create table if not exists Reputation (reviewid bigint not null, userid bigint not null, downvote boolean not null, upvote boolean not null, primary key (reviewid, userid));
+
+create table if not exists reviewreport
+(
+    id           bigint  not null
+    primary key,
+    reportreason varchar(255),
+    reviewid     integer not null
+    constraint fkt7dkxu3o53gve13117enrc8gl
+    references review,
+    userid       integer not null
+    constraint fkla8cfhl5mo5a1t1l4ccrtpx02
+    references userdata,
+    constraint uk8lgug7x3slgnl3jbj1fooy3f1
+    unique (userid, reviewid)
+    );
+
+create table if not exists comment
+(
+    commentid bigint  not null
+        primary key,
+    date      bit(500),
+    text      varchar(255),
+    reviewid  integer not null
+        constraint fk1w75ids3tepope04t0genajaq
+            references review,
+    userid    integer not null
+        constraint fkr9129fcvmyhvm8jt1c6ai4unl
+            references userdata
+);
+
+create table if not exists commentreport
+(
+    id           bigint  not null
+        primary key,
+    reportreason varchar(255),
+    commentid    bigint  not null
+        constraint fkbpirv4atuny7nw92pbi8f6avj
+            references comment,
+    userid       integer not null
+        constraint fk8wyu211nhbw69mntk4emvd2pp
+            references userdata,
+    constraint uktc6fo3p3uk57suw1qcvgvb7u0
+        unique (userid, commentid)
+);
+
+
+
+
+
+
 
 
 

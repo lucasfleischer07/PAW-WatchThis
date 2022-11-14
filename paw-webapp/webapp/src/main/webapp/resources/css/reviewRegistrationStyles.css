@@ -36,6 +36,16 @@
     margin-right: 3%;
 }
 
+.W-genre-create-button {
+    width: 100%;
+    border-color: #ced4da;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #595c5ede;
+}
+
 
 .W-forgot-password {
     margin-top:1vw;

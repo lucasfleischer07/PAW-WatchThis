@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.persistance;
 
+import ar.edu.itba.paw.models.Comment;
 import ar.edu.itba.paw.models.Content;
 import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.User;
@@ -18,5 +19,6 @@ public interface ReviewDao {
     void thumbUpReview(Review review,User user);
     void thumbDownReview(Review review,User user);
     Optional<Review> getReview(Long reviewId);
+
 
 }

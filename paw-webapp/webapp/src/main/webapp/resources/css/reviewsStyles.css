@@ -36,6 +36,7 @@
 .W-reviews-card-margins {
     margin-left: 5vw;
     margin-right: 5vw;
+    border-color: white;
 }
 
 .W-general-div-infoPage-watchlistButton-and-review {
@@ -92,7 +93,6 @@
 
 .W-add-review {
     display: flex;
-    margin-right: 5%;
     margin-bottom: 0.5%;
     margin-top: 0.5%;
     justify-content: flex-end;
@@ -103,6 +103,7 @@
     display: flex;
     justify-content: space-between;
     align-content: center;
+    background-color: transparent;
 }
 .W-review-title-creator{
     width: 75%;
@@ -170,7 +171,7 @@
 }
 
 .W-edit-button-review {
-    margin-right: 3vw;
+    /*margin-right: 3vw;*/
 }
 
 .W-delete-edit-buttons-width {
@@ -233,6 +234,10 @@
     padding: 0;
 }
 
+.W-modal-comment-desc {
+    color: #6c757d;
+}
+
 .W-delete-edit-report-review-buttons {
     display: flex;
 }
@@ -261,8 +266,12 @@
 
 .W-comment-general-div {
     display: flex;
-    flex-direction: row;
     justify-content: center;
+}
+
+.W-comment-general-card {
+    width: 80%;
+    margin-bottom: 2vw;
 }
 
 .W-comment-form-div {
@@ -311,6 +320,14 @@
     margin-bottom: 0;
 }
 
+.W-report-and-delete-comment-buttons {
+    display: flex;
+}
+
+.W-prueba {
+    margin-right: 1vw;
+}
+
 .W-accordion-card-header{
     justify-content: space-between;
     display: flex;
@@ -341,12 +358,42 @@
 .W-comment-section-general-div {
     display: flex;
     justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.W-img-comment-div-margin-right {
+    margin-right: 1.5vw;
+}
+
+.W-comment-text {
+    height: 100%;
+}
+
+.W-div-position-comment {
+    display: flex;
+    align-items: center;
+}
+
+.W-general-div-comment {
+    display: flex;
 }
 
 .W-comment-profile-picture {
-    width: 7vw;
-    height: 7vw;
-    border-radius: 50%;
+    width: 3vw;
+    height: 3vw;
+    border-radius: 50%!important;
+}
+
+.W-comment-image-text {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-right: 1vw;
+}
+
+.W-comment-image {
+    margin-right: 1vw;
 }
 
 @media (max-width: 1300px) {

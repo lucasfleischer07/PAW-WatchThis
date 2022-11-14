@@ -24,9 +24,9 @@ public class UsernameValidator implements ConstraintValidator<AvailableUserName,
 
     @Override
     public boolean isValid(String username, ConstraintValidatorContext constraintValidatorContext) {
-        Optional<User> existingEmail = us.findByUserName(username);
-        if (existingEmail.isPresent())
+        Optional<User> existingUser = us.findByUserName(username);
+        if (existingUser.isPresent())
             return false;
-        return true;
+        return !username.equals("watchList") && !username.equals("viewedList") && !username.equals("editProfile");
     }
 }

@@ -1,15 +1,13 @@
 package ar.edu.itba.paw.persistance;
 
-import ar.edu.itba.paw.models.Content;
-import ar.edu.itba.paw.models.Reputation;
-import ar.edu.itba.paw.models.Review;
-import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.models.*;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,7 +34,7 @@ public class ReviewJpaDao implements ReviewDao{
     @Override
     public void deleteReview(Long reviewId) {
         Review toDelete=findById(reviewId).get();
-        User user=toDelete.getCreator();
+        User user=toDelete.getUser();
         Content content=toDelete.getContent();
         em.remove(toDelete);
         em.merge(user);
@@ -108,5 +106,8 @@ public class ReviewJpaDao implements ReviewDao{
     public Optional<Review> getReview(Long reviewId) {
         return Optional.ofNullable(em.find(Review.class, reviewId));
     }
+
+
+
 
 }

@@ -77,7 +77,6 @@ public class ContentController {
     public ModelAndView helloWorld(Principal userDetails,
                                    @ModelAttribute("genreFilterForm") final GenreFilterForm genreFilterForm,
                                    @PathVariable("pageNum")final Optional<Integer> pageNum,
-                                   @RequestParam(name = "query", defaultValue = "") final String query,
                                    HttpServletRequest request) {
         final ModelAndView mav = new ModelAndView("homePage");
         List<Content> bestRatedList = cs.getBestRated();
@@ -121,7 +120,8 @@ public class ContentController {
                 mav.addObject("mostSavedContentByUsersListSize", mostSavedContentByUsersList.size());
                 mav.addObject("recommendedUserList", "null");
             }
-            if(user.getRole().equals("admin")){
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            if(auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))){
                 mav.addObject("admin",true);
             } else {
                 mav.addObject("admin",false);
@@ -137,7 +137,7 @@ public class ContentController {
             mav.addObject("recommendedUserList", "null");
         }
 
-        request.getSession().setAttribute("referer","/");
+        request.getSession().setAttribute("referer",pageNum.isPresent()?"/page/"+pageNum.get():"/");
         return mav;
     }
     // * ---------------------------------------------------------------------------------------------------------------
@@ -170,7 +170,7 @@ public class ContentController {
         }
         mav.addObject("create",false);
         mav.addObject("contentId",contentId);
-        mav.addObject("type","all");
+        mav.addObject("type","profile");
         contentEditForm.setName(oldContent.get().getName());
         contentEditForm.setCreator(oldContent.get().getCreator());
         contentEditForm.setDescription(oldContent.get().getDescription());
@@ -192,17 +192,14 @@ public class ContentController {
         if(errors.hasErrors()) {
             return editContent(userDetails, contentEditForm,contentId);
         }
-        Content oldContent = cs.findById(contentId).orElseThrow(PageNotFoundException::new);
         cs.updateContent(contentId,contentEditForm.getName(), contentEditForm.getDescription(), contentEditForm.getReleaseDate(), contentEditForm.getGenre(), contentEditForm.getCreator(), contentEditForm.getDuration(), contentEditForm.getType(),contentEditForm.getContentPicture().getBytes());
         String referer = request.getSession().getAttribute("referer").toString();
         return new ModelAndView("redirect:" + (referer==null?"/":referer));
     }
 
     // * ----------------------------------- Content Delete ------------------------------------------------------------
-
     @RequestMapping(value = "/content/{contentId:[0-9]+}/delete", method = {RequestMethod.POST})
-    public ModelAndView deleteContent(Principal userDetails,
-                                      @PathVariable("contentId")final long contentId){
+    public ModelAndView deleteContent(@PathVariable("contentId")final long contentId){
         Content oldContent = cs.findById(contentId).orElseThrow(PageNotFoundException::new);
         cs.deleteContent(contentId);
         return new ModelAndView("redirect:/");
@@ -212,10 +209,11 @@ public class ContentController {
 
     // * ----------------------------------- Content Creation ----------------------------------------------------------
     @RequestMapping(value = "/content/create",method = {RequestMethod.GET})
-    public ModelAndView createContent(Principal userDetails,@ModelAttribute("contentCreate") final ContentForm contentForm) {
+    public ModelAndView createContent(Principal userDetails,
+                                      @ModelAttribute("contentCreate") final ContentForm contentForm) {
         final ModelAndView mav = new ModelAndView("contentCreatePage");
         mav.addObject("create",true);
-        mav.addObject("type","all");
+        mav.addObject("type","profile");
         HeaderSetUp(mav,userDetails);
         return mav;
     }
@@ -223,14 +221,22 @@ public class ContentController {
     @RequestMapping(value = "/content/create",method = {RequestMethod.POST})
     public ModelAndView createContent(Principal userDetails,
                                       @Valid @ModelAttribute("contentCreate") final ContentForm contentForm,
-                                      final BindingResult errors) throws IOException {
-        if(errors.hasErrors()) {
+                                      final BindingResult contentFormErrors) throws IOException {
+        if(contentFormErrors.hasErrors()) {
             return createContent(userDetails,contentForm);
         }
-        cs.contentCreate(contentForm.getName(),contentForm.getDescription(),contentForm.getReleaseDate(),contentForm.getGenre(),contentForm.getCreator(),contentForm.getDuration(),contentForm.getType(),contentForm.getContentPicture().getBytes());
+
+        String auxGenre = "";
+        for(String genre : contentForm.getGenre()) {
+            auxGenre = auxGenre + " " + genre;
+        }
+
+        cs.contentCreate(contentForm.getName(),contentForm.getDescription(),contentForm.getReleaseDate(),auxGenre,contentForm.getCreator(),contentForm.getDuration(),contentForm.getType(),contentForm.getContentPicture().getBytes());
         Optional<Content> newContent = cs.findByName(contentForm.getName());
         return new ModelAndView("redirect:/" + newContent.get().getType() + "/" + newContent.get().getId());
+
     }
+
     // * ---------------------------------------------------------------------------------------------------------------
 
 }

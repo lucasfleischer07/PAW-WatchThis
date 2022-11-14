@@ -15,12 +15,9 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
-import java.io.Console;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,7 +27,7 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
 @Sql(scripts = "classpath:review-dao-test.sql")
-public class ReviewJdbcDaoTest {
+public class ReviewDaoTest {
 
     @Autowired
     private DataSource ds;
@@ -99,7 +96,7 @@ public class ReviewJdbcDaoTest {
     @Rollback
     public void testDelete(){
         Review review=dao.findById(2L).get();
-        User user=review.getCreator();
+        User user=review.getUser();
         dao.deleteReview(2L);
         assertFalse(dao.findById(2L).isPresent());
         Content content=contentDao.findById(1L).get();
@@ -116,7 +113,23 @@ public class ReviewJdbcDaoTest {
         assertEquals(4, (int) maybeReview.get().getRating());
         assertEquals("not that good", maybeReview.get().getName());
         assertEquals(1, dao.getAllReviews(contentDao.findById(1L).get()).size());
-        assertEquals("not that good", maybeReview.get().getCreator().getUserReviews().get(0).getName());
+        assertEquals("not that good", maybeReview.get().getUser().getUserReviews().get(0).getName());
+    }
+
+    @Test
+    @Rollback
+    public void testThumbUp(){
+        Review review=dao.findById(2L).get();
+        dao.thumbUpReview(review,testUser);
+        assertEquals(1,review.getReputation());
+    }
+
+    @Test
+    @Rollback
+    public void testThumbDown(){
+        Review review=dao.findById(2L).get();
+        dao.thumbDownReview(review,testUser);
+        assertEquals(-1,review.getReputation());
     }
 
 }

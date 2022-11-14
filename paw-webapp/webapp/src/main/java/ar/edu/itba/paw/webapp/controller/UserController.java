@@ -5,7 +5,9 @@ import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.services.*;
 import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
+import ar.edu.itba.paw.webapp.form.CommentForm;
 import ar.edu.itba.paw.webapp.form.EditProfile;
+import ar.edu.itba.paw.webapp.form.ReportCommentForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,6 +70,9 @@ public class UserController {
     @RequestMapping(value={"/profile","/profile/page/{pageNum:[0-9]+}"})
     public ModelAndView profile(Principal userDetails,
                                 @PathVariable("pageNum")final Optional<Integer> pageNum,
+                                @ModelAttribute("reportReviewForm") final ReportCommentForm reportReviewForm,
+                                @Valid @ModelAttribute("commentForm") final CommentForm commentForm,
+                                @ModelAttribute("reportCommentForm") final ReportCommentForm reportCommentForm,
                                 HttpServletRequest request) {
         final String locale = LocaleContextHolder.getLocale().getDisplayLanguage();
         final ModelAndView mav = new ModelAndView("profileInfoPage");
@@ -95,7 +100,7 @@ public class UserController {
 
         paginationSetup(mav,pageNum.orElse(1),rs.getAllUserReviews(user));
 
-        request.getSession().setAttribute("referer","/profile");
+        request.getSession().setAttribute("referer","/profile"+(pageNum.isPresent()?"/page/"+pageNum.get():""));
         return mav;
     }
 
@@ -114,6 +119,9 @@ public class UserController {
     public ModelAndView profileInfo(Principal userDetails,
                                     @PathVariable("userName") final String userName,
                                     @PathVariable("pageNum")final Optional<Integer> pageNum,
+                                    @ModelAttribute("reportReviewForm") final ReportCommentForm reportReviewForm,
+                                    @Valid @ModelAttribute("commentForm") final CommentForm commentForm,
+                                    @ModelAttribute("reportCommentForm") final ReportCommentForm reportCommentForm,
                                     HttpServletRequest request) {
         if(userName==null || userName.equals("")){
             LOGGER.warn("Wrong username photo request:",new PageNotFoundException());
@@ -162,14 +170,17 @@ public class UserController {
             mav.addObject("userLikeReviews", rs.getUserLikeReviews());
             mav.addObject("userDislikeReviews", rs.getUserDislikeReviews());
         }
-        request.getSession().setAttribute("referer","/profile/"+userName);
+        request.getSession().setAttribute("referer","/profile/"+userName+(pageNum.isPresent()?"/page/"+pageNum.get():""));
         return mav;
     }
 
     @RequestMapping(value = "/profile/{userName:[a-zA-Z0-9\\s]+}",method = {RequestMethod.POST})
     public ModelAndView profileInfo(@Valid @ModelAttribute("editProfile") final EditProfile editProfile,
                                     @PathVariable("userName") final String userName,
-                                    final BindingResult errors) {
+                                    @ModelAttribute("reportReviewForm") final ReportCommentForm reportReviewForm,
+                                    @Valid @ModelAttribute("commentForm") final CommentForm commentForm,
+                                    @ModelAttribute("reportCommentForm") final ReportCommentForm reportCommentForm
+                                    ) {
         Optional<User> user = us.findByUserName(userName);
         if(user.isPresent()) {
             us.promoteUser(user.get());
@@ -191,7 +202,8 @@ public class UserController {
         final String locale = LocaleContextHolder.getLocale().getDisplayLanguage();
         Optional<String> quote = cs.getContentQuote(locale);
         mav.addObject("quote", quote.get());
-        if(user.getRole().equals("admin")){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if(auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))){
             mav.addObject("admin",true);
         } else {
             mav.addObject("admin",false);

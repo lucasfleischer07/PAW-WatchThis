@@ -44,7 +44,7 @@ public class LoginController {
             mav.addObject("userName",user.getUserName());
             mav.addObject("userId",user.getId());
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            if(user.getRole().equals("admin")){
+            if(auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))){
                 mav.addObject("admin",true);
             }else{
                 mav.addObject("admin",false);
@@ -54,7 +54,7 @@ public class LoginController {
             mav.addObject("userId","null");
             mav.addObject("admin",false);
         }
-        mav.addObject("type","all");
+        mav.addObject("type","profile");
     }
 
     // * ----------------------------------- Login ---------------------------------------------------------------------

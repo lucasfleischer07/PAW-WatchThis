@@ -18,11 +18,11 @@ public class ContentForm {
     private String description;
 
     @Size(min = 4, max = 4)
-    @Pattern(regexp	= "[1-2][90][0-9][0-9]")
+    @Pattern(regexp = "([0-9][0-9][0-9][0-9])")
     private String releaseDate;
 
     @NotNull
-    private String genre;
+    private String[] genre;
 
     @Size(min = 4, max = 100)
     private String creator;
@@ -50,7 +50,7 @@ public class ContentForm {
         this.releaseDate = releaseDate;
     }
 
-    public void setGenre(String genre) {
+    public void setGenre(String[] genre) {
         this.genre = genre;
     }
 
@@ -82,7 +82,7 @@ public class ContentForm {
         return releaseDate;
     }
 
-    public String getGenre() {
+    public String[] getGenre() {
         return genre;
     }
 

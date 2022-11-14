@@ -29,7 +29,7 @@
             <jsp:param name="admin" value="${admin}"/>
         </jsp:include>
 
-        <div class="row py-5 px-4">
+        <div class="row py-5 px-4 W-set-margins">
             <div class="col-md-5 mx-auto W-edit-profile-width">
                 <div class="bg-white shadow rounded overflow-hidden">
                     <div class="W-profile-background-color bg-dark">
