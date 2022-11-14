@@ -9,34 +9,9 @@ import java.util.List;
 @Service
 public class PaginationServiceImpl implements PaginationService{
 
-    private static final int CONTENT_AMOUNT = 18;
-    private static final int REVIEW_AMOUNT = 3;
-
-    @Override
-    public List<Content> contentPagination(List<Content> contentList, int page) {
-        if(contentList == null)
-            return null;
-        if(contentList.size() < (page)*CONTENT_AMOUNT) {       //Si no llega a completar la pagina entera, que sirva los que pueda
-            return contentList.subList((page-1)*CONTENT_AMOUNT,contentList.size());
-        } else {
-            return contentList.subList((page - 1) * CONTENT_AMOUNT, (page - 1) * CONTENT_AMOUNT + CONTENT_AMOUNT);
-        }
-    }
-
     @Override
     public int amountOfContentPages(int contentListSize,final int pageSize) {
         return (int)Math.ceil((double) contentListSize/(double)pageSize);
-    }
-
-    @Override
-    public List<Review> reviewPagination(List<Review> reviewList, int page) {
-        if(reviewList == null)
-            return null;
-        if(reviewList.size() >= page*REVIEW_AMOUNT) {
-            return reviewList.subList(0, page * REVIEW_AMOUNT);
-        } else {
-            return reviewList.subList(0, reviewList.size());
-        }
     }
 
     @Override
@@ -55,20 +30,6 @@ public class PaginationServiceImpl implements PaginationService{
         } else {
             return list.subList(0, list.size());
         }
-    }
-
-    @Override
-    public <T> List<T> reportPagination(List<T> objectList, int page) {
-        if(objectList.size() >= page*REVIEW_AMOUNT) {
-            return objectList.subList(0, page * REVIEW_AMOUNT);
-        } else {
-            return objectList.subList(0, objectList.size());
-        }
-    }
-
-    @Override
-    public int amountOfReviewPages(int reviewListSize) {
-        return (int) Math.ceil((double)reviewListSize/(double)REVIEW_AMOUNT);
     }
 
     @Override

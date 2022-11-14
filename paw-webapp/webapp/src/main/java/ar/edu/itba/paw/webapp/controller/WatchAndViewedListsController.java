@@ -47,7 +47,7 @@ public class WatchAndViewedListsController {
             throw new PageNotFoundException();
         }
 
-        List<Content> contentListFilterPaginated = ps.contentPagination(contentList, page);
+        List<Content> contentListFilterPaginated = ps.pagePagination(contentList, page,CONTENT_AMOUNT);
         mav.addObject(name, contentListFilterPaginated);
 
         int amountOfPages = ps.amountOfContentPages(contentList.size(),CONTENT_AMOUNT);
