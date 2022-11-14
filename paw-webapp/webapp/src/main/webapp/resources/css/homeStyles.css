@@ -201,11 +201,10 @@
 }
 
 .W-inv-film-card-margin{
-    margin-top: 5%;
+    margin-top: 3%;
     margin-right: 5%;
     margin-left: 5%;
     max-height: 30vw;
-    max-width: 70vw;
 }
 
 .W-img-size{
@@ -368,7 +367,7 @@
     }
 }
 
-@media (max-width: 992px) {
+@media (max-width: 991px) {
     .W-filter-div {
         display: none;
     }

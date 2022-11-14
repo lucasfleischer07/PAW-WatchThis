@@ -84,10 +84,9 @@
 .W-nav-login-button {
     display: flex;
     justify-content: center;
-    /*width: 7vw;*/
 }
 
-@media (max-width: 992px) {
+@media (max-width: 991px) {
     .W-header-height {
         height: 15%;
         margin-top: 0;
@@ -122,7 +121,6 @@
         display: flex;
         margin-left: 0%;
         font-size: 100%;
-    
     }
     
     .W-nav-item {

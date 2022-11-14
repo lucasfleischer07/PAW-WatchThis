@@ -102,21 +102,21 @@
             <div class="W-comment-text">
                 <c:choose>
                     <c:when test="${param.reportType == 'comment'}">
-                        <p id="commentTextArea1" class="W-report-review-paragraph">"<c:out value="${param.reviewNameOfReportedComment}"/>"</p>
-                        <p id="commentTextArea" class="W-report-description-paragraph" ><c:out value="${param.reportDescription}"/></p>
+                        <p id="commentTextArea1${param.typeId}${param.reportType}${param.reportDescription}" class="W-report-review-paragraph">"<c:out value="${param.reviewNameOfReportedComment}"/>"</p>
+                        <p id="commentTextArea${param.typeId}${param.reportType}${param.reportDescription}" class="W-report-description-paragraph" ><c:out value="${param.reportDescription}"/></p>
                     </c:when>
                     <c:otherwise>
-                        <p id="commentTextArea" class="W-report-description-paragraph-review" ><c:out value="${param.reportDescription}"/></p>
-                        <p id="commentTextArea1" class="W-report-review-paragraph-review">"<c:out value="${param.reportDescription2}"/>"</p>
+                        <p id="commentTextArea${param.typeId}${param.reportType}${param.reportDescription}" class="W-report-description-paragraph-review" ><c:out value="${param.reportDescription}"/></p>
+                        <p id="commentTextArea1${param.typeId}${param.reportType}${param.reportDescription}" class="W-report-review-paragraph-review">"<c:out value="${param.reportDescription2}"/>"</p>
                     </c:otherwise>
                 </c:choose>
                 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
                 <script>
-                    let previousText = document.getElementById('commentTextArea').innerHTML
-                    document.getElementById('commentTextArea').innerHTML = marked.parse(previousText);
-                    let previousText1 = document.getElementById('commentTextArea1').innerHTML
-                    document.getElementById('commentTextArea1').innerHTML = marked.parse(previousText1);
+                    document.getElementById('commentTextArea'+'${param.typeId}'+'${param.reportType}'+'${param.reportDescription}').innerHTML = marked.parse(document.getElementById('commentTextArea'+'${param.typeId}'+'${param.reportType}'+'${param.reportDescription}').innerHTML);
+                    document.getElementById('commentTextArea1'+'${param.typeId}'+'${param.reportType}'+'${param.reportDescription}').innerHTML = marked.parse(document.getElementById('commentTextArea1'+'${param.typeId}'+'${param.reportType}'+'${param.reportDescription}').innerHTML);
+
                 </script>
+
             </div>
             <div class="W-type-of-report">
                 <div>

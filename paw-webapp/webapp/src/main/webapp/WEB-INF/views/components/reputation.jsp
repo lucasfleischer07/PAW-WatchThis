@@ -81,11 +81,12 @@
         </div>
         <div class="card W-card-width">
             <div class="card-body W-reviewText">
-                <p id="<c:out value="reviewDescription${param.id}"/>"><c:out value="${param.commentText}"/></p>
+                <p id="<c:out value="reviewDescription${param.reviewId}"/>"><c:out value="${param.commentText}"/></p>
             </div>
 
+            <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
             <script>
-                document.getElementById('reviewDescription'+'${param.id}').innerHTML = marked.parse(document.getElementById('reviewDescription'+'${param.id}').innerHTML);
+                document.getElementById('reviewDescription'+'${param.reviewId}').innerHTML = marked.parse(document.getElementById('reviewDescription'+'${param.reviewId}').innerHTML);
             </script>
         </div>
     </div>
