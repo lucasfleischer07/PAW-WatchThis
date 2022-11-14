@@ -200,20 +200,49 @@
                             <div class="mb-3 W-input-label-review-info">
                                 <form:errors path="genre" element="p" cssStyle="color: #b21e26"/>
                                 <form:label path="genre" class="form-label"><spring:message code="CreateContent.ContentGenre"/> <span class="W-red-asterisco"><spring:message code="Asterisk"/></span></form:label>
-                                <form:select path="genre" class="form-select" aria-label="Default select example">
-                                    <form:option value="Action"><spring:message code="Genre.Action"/></form:option>
-                                    <form:option value="Science Fiction"><spring:message code="Genre.Science"/></form:option>
-                                    <form:option value="Comedy"><spring:message code="Genre.Comedy"/></form:option>
-                                    <form:option value="Adventure"><spring:message code="Genre.Adventure"/></form:option>
-                                    <form:option value="Drama"><spring:message code="Genre.Drama"/></form:option>
-                                    <form:option value="Horror"><spring:message code="Genre.Horror"/></form:option>
-                                    <form:option value="Animation"><spring:message code="Genre.Animation"/></form:option>
-                                    <form:option value="Thriller"><spring:message code="Genre.Thriller"/></form:option>
-                                    <form:option value="Mistery"><spring:message code="Genre.Mystery"/></form:option>
-                                    <form:option value="Crime"><spring:message code="Genre.Crime"/></form:option>
-                                    <form:option value="Fantasy"><spring:message code="Genre.Fantasy"/></form:option>
-                                    <form:option value="Romance"><spring:message code="Genre.Romance"/></form:option>
-                                </form:select>
+
+                                <button id="createGenre" onclick="dropDownStayGenreCreate()" type="button"class="W-genre-create-button btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" >
+                                    <spring:message code="GenreMessage"/>
+                                </button>
+
+                                <ul class="dropdown-menu" id="drop3">
+                                    <li class="mb-1 px-2">
+                                        <label><form:checkbox cssClass="px-2" path="genre" value="Action"/> <spring:message code="Genre.Action"/></label>
+                                    </li>
+                                    <li class="mb-1 px-2">
+                                        <label><form:checkbox cssClass="px-2" path="genre" value="Sci-Fi"/> <spring:message code="Genre.Science"/></label>
+                                    </li>
+                                    <li class="mb-1 px-2">
+                                        <label><form:checkbox cssClass="px-2" path="genre" value="Comedy"/> <spring:message code="Genre.Comedy"/></label>
+                                    </li>
+                                    <li class="mb-1 px-2">
+                                        <label><form:checkbox cssClass="px-2" path="genre" value="Adventure"/> <spring:message code="Genre.Adventure"/></label>
+                                    </li>
+                                    <li class="mb-1 px-2">
+                                        <label><form:checkbox cssClass="px-2" path="genre" value="Drama"/> <spring:message code="Genre.Drama"/></label>
+                                    </li>
+                                    <li class="mb-1 px-2">
+                                        <label><form:checkbox cssClass="px-2" path="genre" value="Horror"/> <spring:message code="Genre.Horror"/></label>
+                                    </li>
+                                    <li class="mb-1 px-2">
+                                        <label><form:checkbox cssClass="px-2" path="genre" value="Animation"/> <spring:message code="Genre.Animation"/></label>
+                                    </li>
+                                    <li class="mb-1 px-2">
+                                        <label><form:checkbox cssClass="px-2" path="genre" value="Thriller"/> <spring:message code="Genre.Thriller"/></label>
+                                    </li>
+                                    <li class="mb-1 px-2">
+                                        <label><form:checkbox cssClass="px-2" path="genre" value="Mystery"/> <spring:message code="Genre.Mystery"/></label>
+                                    </li>
+                                    <li class="mb-1 px-2">
+                                        <label><form:checkbox cssClass="px-2" path="genre" value="Crime"/> <spring:message code="Genre.Crime"/></label>
+                                    </li>
+                                    <li class="mb-1 px-2">
+                                        <label><form:checkbox cssClass="px-2" path="genre" value="Fantasy"/> <spring:message code="Genre.Fantasy"/></label>
+                                    </li>
+                                    <li class="mb-1 px-2">
+                                        <label><form:checkbox cssClass="px-2" path="genre" value="Romance"/> <spring:message code="Genre.Romance"/></label>
+                                    </li>
+                                </ul>
                             </div>
                             <div class="mb-3 W-input-label-review-info">
                                 <form:errors path="type" element="p" cssStyle="color: #b21e26"/>

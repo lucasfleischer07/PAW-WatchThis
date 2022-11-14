@@ -145,7 +145,6 @@ public class ContentServiceImpl implements ContentService {
     @Override
     public void contentCreate(String name, String description, String releaseDate, String genre, String creator, Integer duration, String type, byte[] contentImage){
         String durationString = formatDuration(duration);
-
         ContentDao.contentCreate(name,description,releaseDate,genre,creator,duration,durationString,type,contentImage);
     }
 

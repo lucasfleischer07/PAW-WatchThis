@@ -6,6 +6,16 @@
     flex-direction: column;
 }
 
+.W-empty-comment-error {
+    display: none;
+    color: #b21e26;
+}
+
+.W-short-comment-error {
+    display: none;
+    color: #b21e26;
+}
+
 .W-read-button {
     height: 5%;
     width: 60%;

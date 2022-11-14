@@ -58,15 +58,18 @@ public class ReviewServiceImpl implements ReviewService{
 
     @Override
     public List<Review> sortReviews(User user, List<Review> reviewList){
+        List<Review> auxList = new ArrayList<>();
         if(user!=null){
             for (Review review:reviewList) {
                 if(review.getUser().getUserName().equals(user.getUserName())){
-                    reviewList.remove(review);
-                    reviewList.add(0,review);
-                    break;
+                    auxList.add(0,review);
+                }else{
+                    auxList.add(review);
                 }
             }
+            reviewList=auxList;
         }
+
         return reviewList;
     }
 

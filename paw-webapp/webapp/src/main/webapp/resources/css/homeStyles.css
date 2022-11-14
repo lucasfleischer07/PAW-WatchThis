@@ -241,7 +241,8 @@
 
 .W-movie-title {
     font-size: 1.3vw;
-   color: black;
+    color: black;
+    display: flex;
 }
 
 .W-movie-description {
