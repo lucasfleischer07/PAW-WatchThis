@@ -171,7 +171,7 @@
 }
 
 .W-edit-button-review {
-    margin-right: 3vw;
+    /*margin-right: 3vw;*/
 }
 
 .W-delete-edit-buttons-width {
@@ -322,6 +322,10 @@
 
 .W-report-and-delete-comment-buttons {
     display: flex;
+}
+
+.W-prueba {
+    margin-right: 1vw;
 }
 
 .W-accordion-card-header{

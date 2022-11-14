@@ -53,31 +53,40 @@
                 <div class="W-watchlist-button-div-infopage">
                   <c:choose>
                     <c:when test="${userName != 'null' && isInWatchList == 'null'}">
-                      <form id="<c:out value="form${details.id}"/>" method="post" action="<c:url value="/watchList/add/${details.id}"/>">
-                        <button data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="<spring:message code="WatchList.Add"/>" id="watchListButton" class="btn btn-white W-watchlist-button-infopage" type="submit"  onclick="this.form.submit(); (this).className -= ' W-watchlist-button-infopage'; (this).className += ' spinner-border'; (this).innerText = ''">
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-bookmark-plus W-watchList-icon" viewBox="0 0 16 16">
-                            <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"/>
-                            <path d="M8 4a.5.5 0 0 1 .5.5V6H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V7H6a.5.5 0 0 1 0-1h1.5V4.5A.5.5 0 0 1 8 4z"/>
-                          </svg>
-                        </button>
-                      </form>
+                      <spring:message code="WatchList.Add" var="watchListMsg"/>
+                      <span  title="${watchListMsg}">
+                        <form id="<c:out value="form${details.id}"/>" method="post" action="<c:url value="/watchList/add/${details.id}"/>">
+                          <button id="watchListButton" class="btn btn-white W-watchlist-button-infopage" type="submit"  onclick="this.form.submit(); (this).className -= ' W-watchlist-button-infopage'; (this).className += ' spinner-border'; (this).innerText = ''">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-bookmark-plus W-watchList-icon" viewBox="0 0 16 16">
+                              <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"/>
+                              <path d="M8 4a.5.5 0 0 1 .5.5V6H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V7H6a.5.5 0 0 1 0-1h1.5V4.5A.5.5 0 0 1 8 4z"/>
+                            </svg>
+                          </button>
+                        </form>
+                      </span>
                     </c:when>
                     <c:when test="${userName != 'null' && isInWatchList != 'null'}">
-                      <form id="<c:out value="form${details.id}"/>" method="post" action="<c:url value="/watchList/delete/${details.id}"/>">
-                        <button data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="<spring:message code="WatchList.Remove"/>" id="watchListButton" class="btn btn-white W-watchlist-button-infopage" type="submit" onclick="this.form.submit(); (this).className -= ' W-watchlist-button-infopage'; (this).className += ' spinner-border'; (this).innerText = ''">
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-bookmark-plus W-watchList-icon" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd" d="M2 15.5V2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.74.439L8 13.069l-5.26 2.87A.5.5 0 0 1 2 15.5zM6.854 5.146a.5.5 0 1 0-.708.708L7.293 7 6.146 8.146a.5.5 0 1 0 .708.708L8 7.707l1.146 1.147a.5.5 0 1 0 .708-.708L8.707 7l1.147-1.146a.5.5 0 0 0-.708-.708L8 6.293 6.854 5.146z"/>
-                          </svg>
-                        </button>
-                      </form>
+                      <spring:message code="WatchList.Remove" var="watchListMsgDelete"/>
+                      <span title="${watchListMsgDelete}">
+                        <form id="<c:out value="form${details.id}"/>" method="post" action="<c:url value="/watchList/delete/${details.id}"/>">
+                          <button id="watchListButton" class="btn btn-white W-watchlist-button-infopage" type="submit" onclick="this.form.submit(); (this).className -= ' W-watchlist-button-infopage'; (this).className += ' spinner-border'; (this).innerText = ''">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-bookmark-plus W-watchList-icon" viewBox="0 0 16 16">
+                              <path fill-rule="evenodd" d="M2 15.5V2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.74.439L8 13.069l-5.26 2.87A.5.5 0 0 1 2 15.5zM6.854 5.146a.5.5 0 1 0-.708.708L7.293 7 6.146 8.146a.5.5 0 1 0 .708.708L8 7.707l1.146 1.147a.5.5 0 1 0 .708-.708L8.707 7l1.147-1.146a.5.5 0 0 0-.708-.708L8 6.293 6.854 5.146z"/>
+                            </svg>
+                          </button>
+                        </form>
+                      </span>
                     </c:when>
                     <c:otherwise>
-                      <button id="watchListButton" class="btn btn-white W-watchlist-button-infopage" type="button" data-bs-toggle="modal" data-bs-target="#watchListModal">
-                        <svg data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="<spring:message code="WatchList.Add"/>" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-bookmark-plus W-watchList-icon" viewBox="0 0 16 16">
-                          <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"/>
-                          <path d="M8 4a.5.5 0 0 1 .5.5V6H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V7H6a.5.5 0 0 1 0-1h1.5V4.5A.5.5 0 0 1 8 4z"/>
-                        </svg>
-                      </button>
+                      <spring:message code="WatchList.Add" var="watchListMsg"/>
+                      <span title="${watchListMsg}">
+                          <button id="watchListButton" class="btn btn-white W-watchlist-button-infopage" type="button" data-bs-toggle="modal" data-bs-target="#watchListModal">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-bookmark-plus W-watchList-icon" viewBox="0 0 16 16">
+                              <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"/>
+                              <path d="M8 4a.5.5 0 0 1 .5.5V6H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V7H6a.5.5 0 0 1 0-1h1.5V4.5A.5.5 0 0 1 8 4z"/>
+                            </svg>
+                          </button>
+                      </span>
                       <div class="modal fade" id="watchListModal" tabindex="-1" aria-labelledby="watchListModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
                           <div class="modal-content">
@@ -103,32 +112,41 @@
                 <div class="W-viewedlist-button-div-infopage">
                   <c:choose>
                     <c:when test="${userName != 'null' && isInViewedList == 'null'}">
-                      <form id="<c:out value="form${details.id}"/>" method="post" class="W-form-zero-margin" action="<c:url value="/viewedList/add/${details.id}"/>">
+                      <spring:message code="ViewedList.Add" var="viewedListAdd"/>
+                      <span title="${viewedListAdd}">
+                        <form id="<c:out value="form${details.id}"/>" method="post" class="W-form-zero-margin" action="<c:url value="/viewedList/add/${details.id}"/>">
                         <button id="viewedListButton" class="btn btn-white W-watchlist-button-infopage" type="submit" onclick="this.form.submit(); (this).className -= ' W-watchlist-button-infopage'; (this).className += ' spinner-border'; (this).innerText = ''">
-                          <svg data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="<spring:message code="ViewedList.Add"/>" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-bookmark-plus W-watchList-icon" viewBox="0 0 16 16">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-bookmark-plus W-watchList-icon" viewBox="0 0 16 16">
                             <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
                             <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
                           </svg>
                         </button>
                       </form>
+                      </span>
                     </c:when>
                     <c:when test="${userName != 'null' && isInViewedList != 'null'}">
-                      <form id="<c:out value="form${details.id}"/>" method="post" class="W-form-zero-margin" action="<c:url value="/viewedList/delete/${details.id}"/>">
-                        <button id="viewedListButton" class="btn btn-white W-watchlist-button-infopage" type="submit" onclick="this.form.submit(); (this).className -= ' W-watchlist-button-infopage'; (this).className += ' spinner-border'; (this).innerText = ''">
-                          <svg data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="<spring:message code="ViewedList.Remove"/>" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-bookmark-plus W-watchList-icon" viewBox="0 0 16 16">
-                            <path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7.029 7.029 0 0 0 2.79-.588zM5.21 3.088A7.028 7.028 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474L5.21 3.089z"/>
-                            <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829l-2.83-2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12-.708.708z"/>
-                          </svg>
-                        </button>
-                      </form>
+                      <spring:message code="ViewedList.Remove" var="viewedListRemove"/>
+                      <span title="${viewedListRemove}">
+                        <form id="<c:out value="form${details.id}"/>" method="post" class="W-form-zero-margin" action="<c:url value="/viewedList/delete/${details.id}"/>">
+                          <button id="viewedListButton" class="btn btn-white W-watchlist-button-infopage" type="submit" onclick="this.form.submit(); (this).className -= ' W-watchlist-button-infopage'; (this).className += ' spinner-border'; (this).innerText = ''">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-bookmark-plus W-watchList-icon" viewBox="0 0 16 16">
+                              <path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7.029 7.029 0 0 0 2.79-.588zM5.21 3.088A7.028 7.028 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474L5.21 3.089z"/>
+                              <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829l-2.83-2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12-.708.708z"/>
+                            </svg>
+                          </button>
+                        </form>
+                      </span>
                     </c:when>
                     <c:otherwise>
-                      <button id="viewedListButton" class="btn btn-white W-watchlist-button-infopage" type="button" data-bs-toggle="modal" data-bs-target="#viewedListModal">
-                        <svg data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="<spring:message code="ViewedList.Add"/>" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-bookmark-plus W-watchList-icon" viewBox="0 0 16 16">
-                          <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
-                          <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
-                        </svg>
-                      </button>
+                      <spring:message code="ViewedList.Add" var="viewedListAdd"/>
+                      <span title="${viewedListAdd}">
+                        <button id="viewedListButton" class="btn btn-white W-watchlist-button-infopage" type="button" data-bs-toggle="modal" data-bs-target="#viewedListModal">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-bookmark-plus W-watchList-icon" viewBox="0 0 16 16">
+                            <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
+                            <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+                          </svg>
+                        </button>
+                      </span>
                       <div class="modal fade" id="viewedListModal" tabindex="-1" aria-labelledby="viewedListModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
                           <div class="modal-content">
