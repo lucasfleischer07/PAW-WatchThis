@@ -48,10 +48,12 @@
                     <a class="W-card-link-style" href="<c:url value='/${param.contentType}/${param.contentId}'/>">
                         <div class="W-margin-one">
                             <h6 class="card-title W-movie-title"><c:out value="${param.contentName}"/></h6>
-                            <p class="card-text W-movie-description W-card-details-margin"><span class="W-span-text-info-card-movie W-card-details-color"><spring:message code="Content.Released"/> </span><c:out value="${param.contentReleased}"/></p>
-                            <p class="card-text W-movie-description W-card-details-margin"><span class="W-span-text-info-card-movie W-card-details-color"><spring:message code="Content.Genre"/> </span><c:out value="${param.contentGenre}"/></p>
-                            <p class="card-text W-movie-description W-card-details-margin"><span class="W-span-text-info-card-movie W-card-details-color"><spring:message code="Content.Creator"/> </span> <c:out value="${param.contentCreator}"/></p>
-                            <c:forEach  begin="1" step="1" end="5" var="var">
+                            <div class="W-movie-description">
+                                <p class="card-text W-movie-description W-card-details-margin"><span class="W-span-text-info-card-movie W-card-details-color"><spring:message code="Content.Released"/> </span><c:out value="${param.contentReleased}"/></p>
+                                <p class="card-text W-movie-description W-card-details-margin"><span class="W-span-text-info-card-movie W-card-details-color"><spring:message code="Content.Genre"/> </span><c:out value="${param.contentGenre}"/></p>
+                                <p class="card-text W-movie-description W-card-details-margin"><span class="W-span-text-info-card-movie W-card-details-color"><spring:message code="Content.Creator"/> </span> <c:out value="${param.contentCreator}"/></p>
+                            </div>
+                             <c:forEach  begin="1" step="1" end="5" var="var">
                                 <c:choose>
                                     <c:when test="${param.contentRating >= var}">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-star-fill W-stars-width" viewBox="0 0 16 16">

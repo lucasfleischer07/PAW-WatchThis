@@ -52,7 +52,6 @@
 }
 
 .W-filter-title {
-    /*font-size: 1vw;*/
     font-weight: bold;
     width: fit-content;
     min-width: 6vw;
@@ -387,7 +386,6 @@
     .W-dropdown-button {
         margin-top: 0;
     }
-
 }
 
 @media (max-width: 800px) {
@@ -397,7 +395,6 @@
 }
 
 @media (max-width: 780px) {
-
     .W-dropdown-sorting {
         max-height: 280px;
         overflow-y: auto;
