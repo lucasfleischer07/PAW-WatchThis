@@ -32,10 +32,10 @@ public class Review {
     @JoinColumn(name = "contentid")
     private Content content;
 
-    @OneToMany(mappedBy = "review",orphanRemoval = true)
+    @OneToMany(mappedBy = "review",fetch = FetchType.EAGER,orphanRemoval = true)
     private Set<Reputation> userVotes;
 
-    @OneToMany(mappedBy = "review",orphanRemoval = true)
+    @OneToMany(mappedBy = "review",fetch = FetchType.LAZY,orphanRemoval = true)
     @OrderBy(value = "commentid")
     private Set<Comment> comments;
 

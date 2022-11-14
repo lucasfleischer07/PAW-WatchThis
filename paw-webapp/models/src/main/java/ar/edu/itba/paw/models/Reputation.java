@@ -17,12 +17,12 @@ public class Reputation {
     @EmbeddedId
     private ReputationKey id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("userId")
     @JoinColumn(name = "userid")
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("reviewId")
     @JoinColumn(name = "reviewid")
     private Review review;

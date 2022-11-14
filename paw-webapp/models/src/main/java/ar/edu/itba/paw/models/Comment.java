@@ -25,15 +25,15 @@ public class Comment {
     @Column(name = "commentid")
     private long commentId;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false,fetch = FetchType.LAZY)
     @JoinColumn(name = "userid")
     private User user;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false,fetch = FetchType.EAGER)
     @JoinColumn(name = "reviewid")
     private Review review;
 
-    @OneToMany(orphanRemoval = true,fetch = FetchType.EAGER,mappedBy = "comment")
+    @OneToMany(orphanRemoval = true,fetch = FetchType.LAZY,mappedBy = "comment")
     private Set<CommentReport> commentReports;
 
     private String text;
