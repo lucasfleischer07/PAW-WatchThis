@@ -86,7 +86,7 @@ public class MovieAndSerieController {
             LOGGER.warn("Failed at requesting content",new PageNotFoundException());
             throw new PageNotFoundException();
         } else {
-            List<Content> contentListPaginated = ps.contentPagination(contentList, page);
+            List<Content> contentListPaginated = ps.pagePagination(contentList, page,CONTENT_AMOUNT);
             mav.addObject("allContent", contentListPaginated);
             mav.addObject("contentType", auxType);
             int amountOfPages = ps.amountOfContentPages(contentList.size(),CONTENT_AMOUNT);
@@ -147,7 +147,7 @@ public class MovieAndSerieController {
             LOGGER.warn("Failed at requesting content",new PageNotFoundException());
             throw new PageNotFoundException();
         } else {
-            List<Content> contentListFilterPaginated = ps.contentPagination(contentListFilter, page);
+            List<Content> contentListFilterPaginated = ps.pagePagination(contentListFilter, page,CONTENT_AMOUNT);
             mav.addObject("allContent", contentListFilterPaginated);
 
             int amountOfPages = ps.amountOfContentPages(contentListFilter.size(),CONTENT_AMOUNT);
