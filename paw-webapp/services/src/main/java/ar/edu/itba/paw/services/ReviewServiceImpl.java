@@ -61,7 +61,7 @@ public class ReviewServiceImpl implements ReviewService{
         List<Review> auxList = new ArrayList<>();
         if(user!=null){
             for (Review review:reviewList) {
-                if(review.getCreator().getUserName().equals(user.getUserName())){
+                if(review.getUser().getUserName().equals(user.getUserName())){
                     auxList.add(0,review);
                 }else{
                     auxList.add(review);

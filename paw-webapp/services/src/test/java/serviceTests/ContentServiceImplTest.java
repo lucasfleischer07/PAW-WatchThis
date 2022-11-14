@@ -1,3 +1,5 @@
+package serviceTests;
+
 import ar.edu.itba.paw.models.Content;
 import ar.edu.itba.paw.models.Sorting;
 import ar.edu.itba.paw.persistance.ContentDao;
@@ -20,7 +22,6 @@ public class ContentServiceImplTest {
 
     private static final String TYPE = "movie";
     private static final String GENRE = "'%'|| 'Action' ||'%'";
-    private static final List<String> GENRES = new ArrayList<>();
     private static final Sorting SORT = Sorting.NewestReleased;
     private static final String DURATION_FROM = "120";
     private static final String DURATION_TO = "150";
@@ -49,6 +50,7 @@ public class ContentServiceImplTest {
 
     @Test
     public void getMasterContentByGenreTest(){
+        List<String> GENRES = new ArrayList<>();
         GENRES.add("Action");
         List<Content> responseContent=new ArrayList<>();
         responseContent.add(new Content(1L,"The Lord of The Rings",null,"Gandalf and Aragorn lead the World of Men against Sauron's army to draw his gaze from Frodo and Sam as they approach Mount Doom with the One Ring.","2003","Action","Peter Jackson","3 hours",130,"movie"));
@@ -88,6 +90,7 @@ public class ContentServiceImplTest {
 
     @Test
     public void getMasterContentSearchedContentByGenreTest(){
+        List<String> GENRES = new ArrayList<>();
         GENRES.add("Action");
         List<Content> responseContent=new ArrayList<>();
         responseContent.add(new Content(1L,"The Lord of The Rings",null,"Gandalf and Aragorn lead the World of Men against Sauron's army to draw his gaze from Frodo and Sam as they approach Mount Doom with the One Ring.","2003","Action","Peter Jackson","3 hours",180,"movie"));
@@ -115,6 +118,7 @@ public class ContentServiceImplTest {
 
     @Test
     public void getMasterContentSearchedContentByGenreAndDuratioNTest(){
+        List<String> GENRES = new ArrayList<>();
         GENRES.add("Action");
         List<Content> responseContent=new ArrayList<>();
         responseContent.add(new Content(1L,"The Lord of The Rings",null,"Gandalf and Aragorn lead the World of Men against Sauron's army to draw his gaze from Frodo and Sam as they approach Mount Doom with the One Ring.","2003","Action","Peter Jackson","3 hours",180,"movie"));
@@ -128,14 +132,14 @@ public class ContentServiceImplTest {
     }
 
     @Test
-    public void getGenreStringNull(){
+    public void getGenreStringNullTest(){
         String genreString = cs.getGenreString(null);
         Assert.assertNotNull(genreString);
         Assert.assertEquals("ANY",genreString);
     }
 
     @Test
-    public void getGenreStringMultiGenre(){
+    public void getGenreStringMultiGenreTest(){
         List<String> genreList = new ArrayList<>();
         genreList.add("Action");
         genreList.add("Sci-Fi");
