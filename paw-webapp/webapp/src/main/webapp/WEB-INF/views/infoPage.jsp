@@ -15,7 +15,7 @@
     <link href="<c:url value="/resources/css/reviewsStyles.css"/>" rel="stylesheet" type="text/css"/>
     <link href="<c:url value="/resources/css/navBarStyles.css"/>" rel="stylesheet" type="text/css"/>
     <link href="<c:url value="/resources/css/homeStyles.css"/>" rel="stylesheet" type="text/css"/>
-    <title>${details.name}</title>
+    <title><c:out value="${details.name}"/></title>
   </head>
 
   <body>
