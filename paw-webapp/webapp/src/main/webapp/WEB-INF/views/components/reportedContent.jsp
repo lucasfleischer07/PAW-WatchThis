@@ -102,12 +102,12 @@
             <div class="W-comment-text">
                 <c:choose>
                     <c:when test="${param.reportType == 'comment'}">
-                        <p id="commentTextArea1${param.typeId}${param.reportType}${param.reportDescription}" class="W-report-review-paragraph">"<c:out value="${param.reviewNameOfReportedComment}"/>"</p>
-                        <p id="commentTextArea${param.typeId}${param.reportType}${param.reportDescription}" class="W-report-description-paragraph" ><c:out value="${param.reportDescription}"/></p>
+                        <p id=<c:out value="commentTextArea1${param.typeId}${param.reportType}${param.reportDescription}"/> class="W-report-review-paragraph">"<c:out value="${param.reviewNameOfReportedComment}"/>"</p>
+                        <p id=<c:out value="commentTextArea${param.typeId}${param.reportType}${param.reportDescription}"/> class="W-report-description-paragraph" ><c:out value="${param.reportDescription}"/></p>
                     </c:when>
                     <c:otherwise>
-                        <p id="commentTextArea${param.typeId}${param.reportType}${param.reportDescription}" class="W-report-description-paragraph-review" ><c:out value="${param.reportDescription}"/></p>
-                        <p id="commentTextArea1${param.typeId}${param.reportType}${param.reportDescription}" class="W-report-review-paragraph-review">"<c:out value="${param.reportDescription2}"/>"</p>
+                        <p id=<c:out value="commentTextArea${param.typeId}${param.reportType}${param.reportDescription}"/> class="W-report-description-paragraph-review" ><c:out value="${param.reportDescription}"/></p>
+                        <p id=<c:out value="commentTextArea1${param.typeId}${param.reportType}${param.reportDescription}"/> class="W-report-review-paragraph-review">"<c:out value="${param.reportDescription2}"/>"</p>
                     </c:otherwise>
                 </c:choose>
                 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -125,7 +125,7 @@
                             <span title="${param.reportReasons}" class="W-report-margin-zero"><spring:message code="Report.Report" arguments="${param.reportsAmount}"/></span>
                         </c:when>
                         <c:otherwise>
-                            <span  title="${param.reportReasons}" class="W-report-margin-zero"><spring:message code="Report.Reports" arguments="${param.reportsAmount}"/></span>
+                            <span title="${param.reportReasons}" class="W-report-margin-zero"><spring:message code="Report.Reports" arguments="${param.reportsAmount}"/></span>
                         </c:otherwise>
                     </c:choose>
                 </div>

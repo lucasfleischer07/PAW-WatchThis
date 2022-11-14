@@ -5,19 +5,16 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top W-header-height">
     <div class="W-container-fluid">
-
         <a class="navbar-brand" href="<c:url value="/"/>">
             <div class="W-logo-div">
                 <img src="<c:url value="/resources/img/WatchThisLogo.png"/>" alt="WatchThisLogo" class="W-img-size2">
             </div>
         </a>
-
         <div>
             <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar">
                 <span class="navbar-toggler-icon"></span>
             </button>
         </div>
-
         <div class="offcanvas offcanvas-end text-bg-dark W-header-accomodation" tabindex="-1" id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
 
             <div class="offcanvas-header">
@@ -31,7 +28,7 @@
                     <ul class="navbar-nav justify-content-between flex-grow-1 pe-3 W-navitem-list">
                         <c:choose>
                             <c:when test="${param.type == 'movies' || param.type == 'movie'}">
-                                <li class="nav-item W-home-button-hamburger-button" style="display: none">
+                                <li class="nav-item W-home-button-hamburger-button W-display-none-header">
                                     <a class="nav-link" aria-current="page" href="<c:url value="/"/>"><spring:message code="HomeMessage"/></a>
                                 </li>
                                 <li class="nav-item W-nav-item">
@@ -42,7 +39,7 @@
                                 </li>
                             </c:when>
                             <c:when test="${param.type == 'series' || param.type == 'serie'}">
-                                <li class="nav-item W-home-button-hamburger-button" style="display: none">
+                                <li class="nav-item W-home-button-hamburger-button W-display-none-header">
                                     <a class="nav-link" aria-current="page" href="<c:url value="/"/>"><spring:message code="HomeMessage"/></a>
                                 </li>
                                 <li class="nav-item W-nav-item">
@@ -53,7 +50,7 @@
                                 </li>
                             </c:when>
                             <c:otherwise>
-                                <li class="nav-item W-home-button-hamburger-button" style="display: none">
+                                <li class="nav-item W-home-button-hamburger-button W-display-none-header">
                                     <a class="nav-link" aria-current="page" href="<c:url value="/"/>"><spring:message code="HomeMessage"/></a>
                                 </li>
                                 <li class="nav-item W-nav-item">
@@ -66,7 +63,6 @@
                         </c:choose>
                     </ul>
                 </div>
-
 
                 <div class="d-flex W-navbar-search">
                     <c:choose>

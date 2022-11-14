@@ -31,7 +31,7 @@
                     <ul class="navbar-nav justify-content-between flex-grow-1 pe-3 W-navitem-list">
                         <c:choose>
                             <c:when test="${param.type == 'movies' || param.type == 'movie'}">
-                                <li class="nav-item W-home-button-hamburger-button" style="display: none">
+                                <li class="nav-item W-home-button-hamburger-button W-display-none-header">
                                     <a class="nav-link" aria-current="page" href="<c:url value="/"/>"><spring:message code="HomeMessage"/></a>
                                 </li>
                                 <li class="nav-item W-nav-item">
@@ -42,7 +42,7 @@
                                 </li>
                             </c:when>
                             <c:when test="${param.type == 'series' || param.type == 'serie'}">
-                                <li class="nav-item W-home-button-hamburger-button" style="display: none">
+                                <li class="nav-item W-home-button-hamburger-button">
                                     <a class="nav-link" aria-current="page" href="<c:url value="/"/>"><spring:message code="HomeMessage"/></a>
                                 </li>
                                 <li class="nav-item W-nav-item">
@@ -53,7 +53,7 @@
                                 </li>
                             </c:when>
                             <c:otherwise>
-                                <li class="nav-item W-home-button-hamburger-button" style="display: none">
+                                <li class="nav-item W-home-button-hamburger-button">
                                     <a class="nav-link" aria-current="page" href="<c:url value="/"/>"><spring:message code="HomeMessage"/></a>
                                 </li>
                                 <li class="nav-item W-nav-item">

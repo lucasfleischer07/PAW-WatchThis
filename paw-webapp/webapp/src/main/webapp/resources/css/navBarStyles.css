@@ -13,6 +13,10 @@
     padding-right: 1vw;
 }
 
+.W-display-none-header {
+    display: none;
+}
+
 .W-home-button-hamburger-button {
     display: none;
 }
