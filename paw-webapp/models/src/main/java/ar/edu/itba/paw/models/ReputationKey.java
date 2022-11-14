@@ -6,10 +6,10 @@ import java.io.Serializable;
 @Embeddable
 public class ReputationKey implements Serializable {
     @Column(name = "userid")
-    Long userId;
+    private Long userId;
 
     @Column(name = "reviewid")
-    Long reviewId;
+    private Long reviewId;
 
     ReputationKey(Long userId, Long reviewId){
         this.userId=userId;

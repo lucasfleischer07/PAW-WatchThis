@@ -21,14 +21,10 @@ public class ReportJpaDao implements ReportDao{
     public void delete(Object reviewOrComment) {
         if(reviewOrComment instanceof Review){
             Review review=(Review) reviewOrComment;
-            Content content=review.getContent();
             em.remove(review);
-            em.merge(content);
         } else if(reviewOrComment instanceof Comment){
             Comment comment=(Comment) reviewOrComment;
-            Review review=comment.getReview();
             em.remove(comment);
-            em.merge(review);
 
         }
         else throw new IllegalArgumentException();
@@ -42,14 +38,14 @@ public class ReportJpaDao implements ReportDao{
                  ) {
                 em.remove(report);
             }
-            em.merge(review);
+
         } else if(reviewOrComment instanceof Comment){
             Comment comment=(Comment) reviewOrComment;
             for (CommentReport report:comment.getReports()
                  ) {
                 em.remove(report);
             }
-            em.merge(comment);
+
         }
         else throw new IllegalArgumentException();
     }
@@ -58,14 +54,10 @@ public class ReportJpaDao implements ReportDao{
     public void addReport(Object reviewOrComment,User user, ReportReason reason) {
         if(reviewOrComment instanceof Review){
             Review review=(Review) reviewOrComment;
-            ReviewReport toAdd =new ReviewReport(user,review,reason);
-            em.persist(toAdd);
-            em.merge(review);
+            em.persist(new ReviewReport(user,review,reason));
         } else if(reviewOrComment instanceof Comment){
             Comment comment=(Comment) reviewOrComment;
-            CommentReport toAdd =new CommentReport(user,comment,reason);
-            em.persist(toAdd);
-            em.merge(comment);
+            em.persist(new CommentReport(user,comment,reason));
         }
         else throw new IllegalArgumentException();
     }

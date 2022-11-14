@@ -34,6 +34,7 @@ public class Content {
     private Integer durationNum;
 
     @OneToMany(orphanRemoval = true,fetch = FetchType.LAZY,mappedBy = "content")
+    @OrderBy(value = "reputation desc")
     private List<Review> contentReviews;
 
     @ManyToMany(fetch = FetchType.LAZY)

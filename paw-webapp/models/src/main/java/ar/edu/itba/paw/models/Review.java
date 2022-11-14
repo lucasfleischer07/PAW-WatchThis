@@ -36,7 +36,7 @@ public class Review {
     private Set<Reputation> userVotes;
 
     @OneToMany(mappedBy = "review",fetch = FetchType.LAZY,orphanRemoval = true)
-    @OrderBy(value = "commentid")
+    @OrderBy(value = "commentid ASC ")
     private Set<Comment> comments;
 
     @OneToMany(mappedBy = "review",orphanRemoval = true,fetch = FetchType.LAZY)

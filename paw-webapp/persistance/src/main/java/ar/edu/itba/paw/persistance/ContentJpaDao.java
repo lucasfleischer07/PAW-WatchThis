@@ -194,7 +194,7 @@ public class ContentJpaDao implements ContentDao{
 
     @Override
     public List<Content> getBestRated() {
-        Query inQuery=em.createNativeQuery("SELECT content.id FROM content LEFT JOIN (SELECT * FROM review AS r2 WHERE r2.rating<>0) AS review ON content.id = review.contentid GROUP BY content.id,content.name,content.description,content.released,content.genre,content.creator,content.duration,content.type,content.durationNum HAVING sum(review.rating)/count(*) > 3 ORDER BY sum(review.rating)/count(*) DESC,count(*) DESC LIMIT 20 ");
+        Query inQuery=em.createNativeQuery("SELECT content.id FROM content LEFT JOIN (SELECT * FROM review AS r2 WHERE r2.rating<>0) AS review ON content.id = review.contentid GROUP BY content.id,content.name,content.description,content.released,content.genre,content.creator,content.duration,content.type,content.durationNum HAVING sum(review.rating)/count(*) >= 3 ORDER BY sum(review.rating)/count(*) DESC,count(*) DESC LIMIT 20 ");
         List<Integer> resulList=inQuery.getResultList();
         List<Long> longList=new ArrayList<>();
         for (Integer big:resulList) {
@@ -242,8 +242,7 @@ public class ContentJpaDao implements ContentDao{
 
     @Override
     public void contentCreate(String name, String description, String releaseDate, String genre, String creator, Integer duration, String durationString, String type, byte[] contentImage) {
-        Content toAdd=new Content(name,contentImage,description,releaseDate,genre,creator,durationString,duration,type);
-        em.persist(toAdd);
+        em.persist(new Content(name,contentImage,description,releaseDate,genre,creator,durationString,duration,type));
     }
 
     @Override
@@ -285,8 +284,6 @@ public class ContentJpaDao implements ContentDao{
 
     @Override
     public void deleteContent(Long id) {
-
-        Content toDelete =findById(id).get();
-        em.remove(toDelete);
+        em.remove(findById(id).get());
     }
 }

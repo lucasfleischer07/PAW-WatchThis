@@ -13,10 +13,9 @@ public class Comment {
     /* package */ Comment() {
 // Just for Hibernate, we love you!
     }
-    public Comment(User user, Review review,String text, LocalDateTime date){
+    public Comment(User user, Review review,String text){
         this.user=user;
         this.review=review;
-        this.date=date;
         this.text=text;
     }
     @Id
@@ -35,10 +34,8 @@ public class Comment {
 
     @OneToMany(orphanRemoval = true,fetch = FetchType.LAZY,mappedBy = "comment")
     private Set<CommentReport> commentReports;
-
+    @Column(length = 500)
     private String text;
-    private LocalDateTime date;
-
     @Formula(value = "(select coalesce(string_agg(u.name,' '),'') from Userdata u join CommentReport r on u.userid=r.userid where r.commentid=commentid)")
     private String reporterUsernames;
     @Transient
@@ -59,9 +56,6 @@ public class Comment {
         return review;
     }
 
-    public LocalDateTime getDate() {
-        return date;
-    }
 
     public String getText() {
         return text;

@@ -17,6 +17,8 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +31,8 @@ import static org.junit.Assert.*;
 @Sql(scripts = "classpath:review-dao-test.sql")
 public class ReviewDaoTest {
 
+    @PersistenceContext
+    private EntityManager em;
     @Autowired
     private DataSource ds;
 
@@ -98,6 +102,7 @@ public class ReviewDaoTest {
         Review review=dao.findById(2L).get();
         User user=review.getUser();
         dao.deleteReview(2L);
+        em.flush();
         assertFalse(dao.findById(2L).isPresent());
         Content content=contentDao.findById(1L).get();
         assertEquals(0,content.getContentReviews().size());
@@ -116,20 +121,5 @@ public class ReviewDaoTest {
         assertEquals("not that good", maybeReview.get().getUser().getUserReviews().get(0).getName());
     }
 
-    @Test
-    @Rollback
-    public void testThumbUp(){
-        Review review=dao.findById(2L).get();
-        dao.thumbUpReview(review,testUser);
-        assertEquals(1,review.getReputation());
-    }
-
-    @Test
-    @Rollback
-    public void testThumbDown(){
-        Review review=dao.findById(2L).get();
-        dao.thumbDownReview(review,testUser);
-        assertEquals(-1,review.getReputation());
-    }
 
 }
