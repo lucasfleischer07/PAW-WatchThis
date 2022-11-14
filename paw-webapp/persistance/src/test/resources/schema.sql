@@ -103,6 +103,14 @@ create table if not exists commentreport
         unique (userid, commentid)
 );
 
+CREATE FUNCTION string_agg(a varchar(100),b varchar(10))
+returns varchar(10)
+contains sql
+return null
+
+
+
+
 
 
 

@@ -37,8 +37,7 @@ public class ReviewJpaDao implements ReviewDao{
         User user=toDelete.getUser();
         Content content=toDelete.getContent();
         em.remove(toDelete);
-        em.merge(user);
-        em.merge(content);
+
     }
 
     @Override
@@ -66,8 +65,7 @@ public class ReviewJpaDao implements ReviewDao{
             if(reputation.getUser().getId()== user.getId()) {
                 if(reputation.isUpvote()){
                     em.remove(reputation);
-                    em.merge(user);
-                    em.merge(review);
+
                 } else{
                     reputation.setUpvote(true);
                     reputation.setDownvote(false);
@@ -76,9 +74,8 @@ public class ReviewJpaDao implements ReviewDao{
                 return;
             }
         }
-        em.persist(new Reputation(user,review,true));
-        em.merge(user);
-        em.merge(review);
+        Reputation toAdd=new Reputation(user,review,true);
+        em.persist(toAdd);
     }
 
     @Override
@@ -87,8 +84,7 @@ public class ReviewJpaDao implements ReviewDao{
             if(reputation.getUser().getId()== user.getId()) {
                 if(reputation.isDownvote()){
                     em.remove(reputation);
-                    em.merge(user);
-                    em.merge(review);
+
                 } else{
                     reputation.setDownvote(true);
                     reputation.setUpvote(false);
@@ -97,9 +93,8 @@ public class ReviewJpaDao implements ReviewDao{
                 return;
             }
         }
-        em.persist(new Reputation(user,review,false));
-        em.merge(user);
-        em.merge(review);
+        Reputation toAdd=new Reputation(user,review,false);
+        em.persist(toAdd);
     }
 
     @Override

@@ -8,7 +8,7 @@
         <div class="W-img-comment-div-margin-right">
             <c:choose>
                 <c:when test="${comment.user.image == null}">
-                    <img src="<c:url value="/resources/img/backgorundImage.png"/> " alt="User_img" class="W-comment-profile-picture">
+                    <img src="<c:url value="/resources/img/defaultUserImg.png"/> " alt="User_img" class="W-comment-profile-picture">
                 </c:when>
                 <c:otherwise>
                     <img src="<c:url value="/profile/${comment.user.userName}/profileImage"/> " alt="User_img" class="W-comment-profile-picture">

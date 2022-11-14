@@ -57,7 +57,7 @@ public class TestConfig {
 
         ds.setSuppressClose(true);
         ds.setDriverClassName(JDBCDriver.class.getName());
-        ds.setUrl("jdbc:hsqldb:mem:paw");
+        ds.setUrl("jdbc:hsqldb:mem:paw;MODE=PostgreSQL");
         ds.setUsername("ha");
         ds.setPassword("");
 

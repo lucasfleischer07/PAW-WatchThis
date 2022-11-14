@@ -6,6 +6,16 @@
     flex-direction: column;
 }
 
+.W-empty-comment-error {
+    display: none;
+    color: #b21e26;
+}
+
+.W-short-comment-error {
+    display: none;
+    color: #b21e26;
+}
+
 .W-read-button {
     height: 5%;
     width: 60%;
@@ -27,10 +37,6 @@
 .W-readMore-button {
     display: flex;
     justify-content: space-around;
-}
-
-.W-inv-film-card-margin{
-    margin: 1vw 3% 3%;
 }
 
 .W-reviews-card-margins {
@@ -166,12 +172,8 @@
 
 .W-delete-edit-buttons-content {
     display: flex;
-    margin-left: 12.5vw;
+    margin-left: 14vw;
     margin-top: 1vw;
-}
-
-.W-edit-button-review {
-    /*margin-right: 3vw;*/
 }
 
 .W-delete-edit-buttons-width {
@@ -183,10 +185,6 @@
     font-size: 1vw;
     color: #636464;
     position: relative;
-}
-
-.W-border-color-user-btn {
-    border-color: green;
 }
 
 .W-stars-width {
@@ -289,11 +287,10 @@
     margin-top: 1vw;
 }
 
-.W-hands-style{
-    height: 2vw;
-    width: 2vw;
-    padding-bottom: 10%;
-}
+/*.W-hands-style{*/
+/*    height: 2vw;*/
+/*    width: 2vw;*/
+/*}*/
 
 .W-thumbsButton-orientation {
     margin-bottom: 60%;
@@ -322,6 +319,7 @@
 
 .W-report-and-delete-comment-buttons {
     display: flex;
+    margin-bottom: 1vw;
 }
 
 .W-prueba {
@@ -341,7 +339,7 @@
 }
 
 .W-accordion-margin {
-    margin-bottom: 3%;
+    margin-bottom: 3% !important;
     margin-left: 3%;
     margin-right: 3%;
 }
@@ -352,7 +350,7 @@
     margin-bottom: 1%;
 }
 .W-bottom-buttons-size {
-    width: 2vw;
+    width: 1.8vw;
 }
 
 .W-comment-section-general-div {
@@ -423,6 +421,16 @@
     }
 }
 
+@media (max-width: 963px) {
+    .W-watchList-icon {
+        width: 3vw!important;
+    }
+
+    .W-creator-review{
+        font-size: 1.5vw;
+    }
+}
+
 @media (max-width: 800px) {
     .W-title-review {
         font-size: 3vw;
@@ -451,6 +459,23 @@
     .W-watchlist-button-infopage {
         width: 50px;
     }
+
+    .W-img-aligment {
+        display: flex;
+    }
+
+    .W-div-img-and-reviewInfo {
+        display: flex;
+        justify-items: center;
+    }
+
+    .W-watchList-icon {
+        width: 4vw!important;
+    }
+
+    .W-creator-review {
+        font-size: 2vw;
+    }
 }
 
 @media (max-width: 767px) {
@@ -478,6 +503,14 @@
 
     .W-div-img-and-reviewInfo{
         display: grid;
+    }
+
+    .W-img-size{
+        width: 80%;
+    }
+
+    .W-watchList-icon {
+        width: 3vw!important;
     }
 }
 

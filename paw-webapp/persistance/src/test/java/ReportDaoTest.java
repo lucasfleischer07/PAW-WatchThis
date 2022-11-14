@@ -16,6 +16,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 import static org.junit.Assert.*;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 
 @Transactional
@@ -26,10 +28,12 @@ public class ReportDaoTest {
     private final Long commentId=1L;
     private final Long reviewId=3L;
     private final Long contentId=2L;
-    private final Long reviewReportId=2L;
-    private final Long commentReportId=2L;
+    private final Long reviewReportId=3L;
+    private final Long commentReportId=3L;
     private final Long userId=2L;
 
+    @PersistenceContext
+    private EntityManager em;
     @Autowired
     private DataSource ds;
     @Autowired
@@ -106,25 +110,29 @@ public class ReportDaoTest {
     }
     @Test
     public void getReportedReviewsByReason(){
-        assertEquals(1,dao.getReportedReviewsByReason(ReportReason.Inappropriate).size());
-        assertEquals(0,dao.getReportedReviewsByReason(ReportReason.Other).size());
+        assertEquals(1,dao.getReportedReviewsByReason(ReportReason.Other).size());
+        assertEquals(0,dao.getReportedReviewsByReason(ReportReason.Inappropriate).size());
     }
     @Test
     public void getReportedCommentsByReason(){
-        assertEquals(1,dao.getReportedReviewsByReason(ReportReason.Other).size());
-        assertEquals(0,dao.getReportedReviewsByReason(ReportReason.Inappropriate).size());
+        assertEquals(1,dao.getReportedCommentsByReason(ReportReason.Inappropriate).size());
+        assertEquals(0,dao.getReportedCommentsByReason(ReportReason.Other).size());
     }
 
     @Test
     public void addReviewReport(){
         dao.addReport(reviewDao.findById(reviewId).get(),userDao.findById(userId).get(),ReportReason.Inappropriate);
-        assertEquals(2,reviewDao.findById(reviewId).get().getReports().size());
+        em.flush();
+        Review review=reviewDao.findById(reviewId).get();
+        assertEquals(2,review.getReports().size());
     }
 
     @Test
     public void addCommentReport(){
+        assertEquals(1,commentDao.getComment(commentId).get().getReports().size());
         dao.addReport(commentDao.getComment(commentId).get(),userDao.findById(userId).get(),ReportReason.Inappropriate);
-        assertEquals(2,commentDao.getComment(reviewId).get().getReports().size());
+        em.flush();
+        assertEquals(2,commentDao.getComment(commentId).get().getReports().size());
     }
 
 }

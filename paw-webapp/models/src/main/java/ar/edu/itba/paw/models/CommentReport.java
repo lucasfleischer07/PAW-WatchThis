@@ -21,7 +21,7 @@ public class CommentReport  {
         @SequenceGenerator(allocationSize = 1,sequenceName = "commentreport_id_seq",name = "commentreport_id_seq")
         private long id;
 
-        @ManyToOne(optional = false)
+        @ManyToOne(optional = false,fetch = FetchType.EAGER)
         @JoinColumn(name = "userid")
         private User user;
 

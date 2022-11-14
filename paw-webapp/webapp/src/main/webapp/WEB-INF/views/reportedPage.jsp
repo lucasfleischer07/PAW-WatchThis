@@ -112,7 +112,7 @@
                     <div class="dropdown W-dropdown-button">
                         <c:choose>
                             <c:when test="${param.reason != null && param.reason != 'null' && param.reason != ''}">
-                                <button id="reportSortByGroup" type="button" class="W-filter-title btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                <button id="reportSortByGroup" type="button" class="W-filter-title W-margin-top-report btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                     <c:out value="${param.reason}"/>
                                 </button>
                             </c:when>
@@ -222,7 +222,7 @@
 
 
     <c:if test="${amountPages > 1}">
-      <div>
+      <div class="W-general-pagination-reported">
         <ul class="pagination justify-content-center W-pagination">
             <c:choose >
                 <c:when test="${reason == 'ANY'}">

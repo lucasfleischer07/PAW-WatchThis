@@ -21,21 +21,14 @@ public class CommentJpaDao implements CommentDao{
 
     @Override
     public void addComment(Review review, User user, String text) {
-        Comment toAdd=new Comment(user,review,text, LocalDateTime.now());
-        em.persist(toAdd);
-        em.merge(review);
-        em.merge(review.getContent());
-        em.merge(user);
+        em.persist(new Comment(user,review,text));
+
     }
 
     @Override
     public void deleteComment(Comment comment) {
-        User user=comment.getUser();
-        Review review=comment.getReview();
         em.remove(comment);
-        em.merge(user);
-        em.merge(review);
-        em.merge(review.getContent());
+
     }
 
     @Override

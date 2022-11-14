@@ -4,9 +4,14 @@ import ar.edu.itba.paw.models.Comment;
 import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.services.*;
+import ar.edu.itba.paw.webapp.exceptions.ForbiddenException;
 import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
 import ar.edu.itba.paw.webapp.form.CommentForm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -26,6 +31,8 @@ public class CommentController {
     private final UserService us;
     private final CommentService ccs;
     private final ReportService rrs;
+    private static final Logger LOGGER = LoggerFactory.getLogger(CommentController.class);
+
 
     @Autowired
     public CommentController(ReviewService rs, UserService us, CommentService ccs, ReportService rrs) {
@@ -69,14 +76,19 @@ public class CommentController {
 
         Optional<User> user = us.findByEmail(userDetails.getName());
         Optional<Comment> deleteComment = ccs.getComment(commentId);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
         if(!deleteComment.isPresent()) {
             throw new PageNotFoundException();
         }
 
         if(user.get().getUserName().equals(deleteComment.get().getUser().getUserName())) {
             ccs.deleteComment(deleteComment.get());
-        } else {
+        } else if(auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
             rrs.delete(deleteComment.get(), deleteComment.get().getReports());
+        } else {
+            LOGGER.warn("Not allowed to delete",new ForbiddenException());
+            throw new ForbiddenException();
         }
 
         String referer = request.getHeader("Referer");

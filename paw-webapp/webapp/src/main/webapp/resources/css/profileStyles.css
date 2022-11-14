@@ -69,6 +69,7 @@
 
 .W-profile-general-div-display {
     display: table;
+    text-align: center;
 }
 
 .W-editProfileButton-and-reviewsCant {
@@ -134,7 +135,7 @@
 }
 
 .W-margin-left-label {
-    margin-left: 22vw;
+    margin-left: 18vw;
 }
 
 .W-margin-left-label-viewed-watch-list {
@@ -200,3 +201,16 @@
 .W-form-color-red {
     color: #b21e26;
 }
+
+@media (max-width: 900px) {
+    .W-editProfile-button {
+        font-size: 1.5vw;
+    }
+}
+
+@media (max-width: 850px) {
+    .W-quote-in-profile {
+        font-size: 1.5vw;
+    }
+}
+
