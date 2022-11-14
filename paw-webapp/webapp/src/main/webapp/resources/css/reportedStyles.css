@@ -49,6 +49,12 @@
     margin-right: 5vw;
 }
 
+.W-general-pagination-reported {
+    display: flex;
+    margin-top: 5vw;
+    justify-content: center;
+}
+
 .W-amount-reports-and-delete-button {
     display: flex;
     justify-content: space-between;

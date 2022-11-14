@@ -244,4 +244,5 @@
         <script>const simplemde = new SimpleMDE({ element: document.getElementById("MyTextArea"),showIcons: ["strikethrough"],hideIcons: ["link", "image","table","preview","fullscreen","guide","side-by-side","quote"]});</script>
 
     </body>
+
 </html>
