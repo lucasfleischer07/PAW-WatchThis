@@ -14,7 +14,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
     <link href="<c:url value="/resources/css/reviewsStyles.css"/>" rel="stylesheet" type="text/css"/>
     <link href="<c:url value="/resources/css/navBarStyles.css"/>" rel="stylesheet" type="text/css"/>
-    <title>${details.name}</title>
+    <link href="<c:url value="/resources/css/homeStyles.css"/>" rel="stylesheet" type="text/css"/>
+    <title><c:out value="${details.name}"/></title>
   </head>
 
   <body>
@@ -181,7 +182,7 @@
                     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
                     <script>
                       let previousText = document.getElementById('descriptionParagraphInfoPage').innerHTML
-                      document.getElementById('descriptionParagraphInfoPage').innerHTML = marked.parse(previousText);
+                      document.getElementById('descriptionParagraphInfoPage'+'${contentId}').innerHTML = marked.parse(previousText);
                     </script>
                     <p class="card-text W-subTitles-font-size"><span class="W-span-text-info-card-movie"><spring:message code="Content.Duration"/></span> <c:out value="${details.duration}"/></p>
                     <p class="card-text W-subTitles-font-size"><span class="W-span-text-info-card-movie"><spring:message code="Content.Genre"/></span> <c:out value="${details.genre}"/></p>

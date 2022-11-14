@@ -138,7 +138,8 @@
                                                                             <c:if test="${param.query != 'ANY' && param.query!=null}">
                                                                                 <c:param name="query" value="${param.query}"/>
                                                                             </c:if>
-                                                                            </c:url>" onclick="showDuration(this)"><spring:message code="Duration.Clear"/></a></li>
+                                                                            </c:url>" onclick="showDuration(this)"><spring:message code="Duration.Clear"/>
+                    </a></li>
                     <li><a class="dropdown-item" href="<c:url value="/${pageTpye}/filters">
                                                                             <c:choose>
                                                                                 <c:when test="${param.genre!= 'ANY' && param.sorting!='ANY'}">
@@ -157,7 +158,8 @@
                                                                             </c:if>
                                                                             <c:param name="durationFrom" value="0"/>
                                                                             <c:param name="durationTo" value="90"/>
-                                                                            </c:url>" onclick="showDuration(this)"><spring:message code="Duration.0_90"/></a></li>
+                                                                            </c:url>" onclick="showDuration(this)"><spring:message code="Duration.0_90"/>
+                    </a></li>
                     <li><a class="dropdown-item" href="<c:url value="/${pageTpye}/filters">
                                                                             <c:choose>
                                                                                 <c:when test="${param.genre!= 'ANY' && param.sorting!='ANY'}">
@@ -176,7 +178,8 @@
                                                                             </c:if>
                                                                             <c:param name="durationFrom" value="90"/>
                                                                             <c:param name="durationTo" value="120"/>
-                                                                            </c:url>" onclick="showDuration(this)"><spring:message code="Duration.90_120"/></a></li>
+                                                                            </c:url>" onclick="showDuration(this)"><spring:message code="Duration.90_120"/>
+                    </a></li>
                     <li><a class="dropdown-item" href="<c:url value="/${pageTpye}/filters">
                                                                             <c:choose>
                                                                                 <c:when test="${param.genre!= 'ANY' && param.sorting!='ANY'}">
@@ -195,7 +198,8 @@
                                                                             </c:if>
                                                                             <c:param name="durationFrom" value="120"/>
                                                                             <c:param name="durationTo" value="150"/>
-                                                                            </c:url>" onclick="showDuration(this)"><spring:message code="Duration.120_150"/></a></li>
+                                                                            </c:url>" onclick="showDuration(this)"><spring:message code="Duration.120_150"/>
+                    </a></li>
                     <li><a class="dropdown-item" href="<c:url value="/${pageTpye}/filters">
                                                                             <c:choose>
                                                                                 <c:when test="${param.genre!= 'ANY' && param.sorting!='ANY'}">
@@ -214,7 +218,8 @@
                                                                             </c:if>
                                                                             <c:param name="durationFrom" value="150"/>
                                                                             <c:param name="durationTo" value="1000"/>
-                                                                            </c:url>" onclick="showDuration(this)"><spring:message code="Duration.150_more"/></a></li>
+                                                                            </c:url>" onclick="showDuration(this)"><spring:message code="Duration.150_more"/>
+                    </a></li>
                 </ul>
             </div>
         </div>

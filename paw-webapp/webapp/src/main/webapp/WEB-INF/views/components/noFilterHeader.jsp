@@ -5,19 +5,16 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top W-header-height">
     <div class="W-container-fluid">
-
         <a class="navbar-brand" href="<c:url value="/"/>">
             <div class="W-logo-div">
                 <img src="<c:url value="/resources/img/WatchThisLogo.png"/>" alt="WatchThisLogo" class="W-img-size2">
             </div>
         </a>
-
         <div>
             <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar">
                 <span class="navbar-toggler-icon"></span>
             </button>
         </div>
-
         <div class="offcanvas offcanvas-end text-bg-dark W-header-accomodation" tabindex="-1" id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
 
             <div class="offcanvas-header">
@@ -31,7 +28,7 @@
                     <ul class="navbar-nav justify-content-between flex-grow-1 pe-3 W-navitem-list">
                         <c:choose>
                             <c:when test="${param.type == 'movies' || param.type == 'movie'}">
-                                <li class="nav-item W-home-button-hamburger-button" style="display: none">
+                                <li class="nav-item W-home-button-hamburger-button W-display-none-header">
                                     <a class="nav-link" aria-current="page" href="<c:url value="/"/>"><spring:message code="HomeMessage"/></a>
                                 </li>
                                 <li class="nav-item W-nav-item">
@@ -42,7 +39,7 @@
                                 </li>
                             </c:when>
                             <c:when test="${param.type == 'series' || param.type == 'serie'}">
-                                <li class="nav-item W-home-button-hamburger-button" style="display: none">
+                                <li class="nav-item W-home-button-hamburger-button W-display-none-header">
                                     <a class="nav-link" aria-current="page" href="<c:url value="/"/>"><spring:message code="HomeMessage"/></a>
                                 </li>
                                 <li class="nav-item W-nav-item">
@@ -53,7 +50,7 @@
                                 </li>
                             </c:when>
                             <c:otherwise>
-                                <li class="nav-item W-home-button-hamburger-button" style="display: none">
+                                <li class="nav-item W-home-button-hamburger-button W-display-none-header">
                                     <a class="nav-link" aria-current="page" href="<c:url value="/"/>"><spring:message code="HomeMessage"/></a>
                                 </li>
                                 <li class="nav-item W-nav-item">
@@ -67,11 +64,52 @@
                     </ul>
                 </div>
 
-
                 <div class="d-flex W-navbar-search">
                     <c:choose>
                         <c:when test="${param.type == 'profile'}">
                             <form class="form-inline my-2 my-lg-0 W-searchbar" method="GET" action="<c:url value="/all/filters"/>">
+                                <spring:message var="searchPlaceholder" />
+                                <input name="query" class="form-control me-2" type="search" placeholder="<spring:message code="SearchMessage"/>" aria-label="Search" >
+                                <c:if test="${param.genre != 'ANY' && param.genre!=null}">
+                                    <input type="hidden" id="thisField" name="genre" value="${param.genre}">
+                                </c:if>
+                                <c:if test="${param.durationFrom != 'ANY' && param.durationFrom!=null}">
+                                    <input type="hidden" id="thisField" name="durationFrom" value="${param.durationFrom}">
+                                    <input type="hidden" id="thisField" name="durationTo" value="${param.durationTo}">
+                                </c:if>
+                                <c:if test="${param.sorting != 'ANY' && param.sorting!=null}">
+                                    <input type="hidden" id="thisField" name="sorting" value="${param.sorting}">
+                                </c:if>
+                                <button class="btn btn-success W-search-button-color" type="submit">
+                                    <svg xmlns="http://www.w3.org/2000/svg"  fill="currentColor" class="bi bi-search W-search-icon" viewBox="0 0 16 16">
+                                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                                    </svg>
+                                </button>
+                            </form>
+                        </c:when>
+                        <c:when test="${param.type == 'movie'}">
+                            <form class="form-inline my-2 my-lg-0 W-searchbar" method="GET" action="<c:url value="/movies/filters"/>">
+                                <spring:message var="searchPlaceholder" />
+                                <input name="query" class="form-control me-2" type="search" placeholder="<spring:message code="SearchMessage"/>" aria-label="Search" >
+                                <c:if test="${param.genre != 'ANY' && param.genre!=null}">
+                                    <input type="hidden" id="thisField" name="genre" value="${param.genre}">
+                                </c:if>
+                                <c:if test="${param.durationFrom != 'ANY' && param.durationFrom!=null}">
+                                    <input type="hidden" id="thisField" name="durationFrom" value="${param.durationFrom}">
+                                    <input type="hidden" id="thisField" name="durationTo" value="${param.durationTo}">
+                                </c:if>
+                                <c:if test="${param.sorting != 'ANY' && param.sorting!=null}">
+                                    <input type="hidden" id="thisField" name="sorting" value="${param.sorting}">
+                                </c:if>
+                                <button class="btn btn-success W-search-button-color" type="submit">
+                                    <svg xmlns="http://www.w3.org/2000/svg"  fill="currentColor" class="bi bi-search W-search-icon" viewBox="0 0 16 16">
+                                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                                    </svg>
+                                </button>
+                            </form>
+                        </c:when>
+                        <c:when test="${param.type == 'serie'}">
+                            <form class="form-inline my-2 my-lg-0 W-searchbar" method="GET" action="<c:url value="/series/filters"/>">
                                 <spring:message var="searchPlaceholder" />
                                 <input name="query" class="form-control me-2" type="search" placeholder="<spring:message code="SearchMessage"/>" aria-label="Search" >
                                 <c:if test="${param.genre != 'ANY' && param.genre!=null}">
