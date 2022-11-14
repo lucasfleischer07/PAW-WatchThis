@@ -222,7 +222,7 @@
 
 
     <c:if test="${amountPages > 1}">
-      <div>
+      <div class="W-general-pagination-reported">
         <ul class="pagination justify-content-center W-pagination">
             <c:choose >
                 <c:when test="${reason == 'ANY'}">
