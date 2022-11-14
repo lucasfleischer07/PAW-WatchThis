@@ -292,7 +292,6 @@
 .W-hands-style{
     height: 2vw;
     width: 2vw;
-    padding-bottom: 10%;
 }
 
 .W-thumbsButton-orientation {
@@ -322,6 +321,7 @@
 
 .W-report-and-delete-comment-buttons {
     display: flex;
+    margin-bottom: 1vw;
 }
 
 .W-prueba {
