@@ -1,6 +1,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+
+
 <div>
     <div class="W-movie-description-and-thumb-buttons">
         <div class="W-column-display-thumbs">
@@ -135,12 +137,14 @@
 
         <div class="W-comment-general-div">
             <div class="W-comment-form-div">
+                <p id="emptyComment" class="W-empty-comment-error"><spring:message code="Comment.EmptyComment"/></p>
+                <p id="shortComment" class="W-short-comment-error"><spring:message code="Comment.LenghtComment"/></p>
                 <c:url value="/review/add/comment/${param.reviewId}" var="postPath"/>
                 <form:form modelAttribute="commentForm" action="${postPath}" method="post" id="commentInput${param.reviewId}" cssClass="W-comment-form">
                     <spring:message code="Comment.Placeholder" var="placeholder"/>
-                    <form:textarea type="text" class="form-control" placeholder="${placeholder}" path="comment"/>
+                    <form:textarea type="text" class="form-control" id="comment" placeholder="${placeholder}" path="comment"/>
                     <div class="W-submit-comment-button">
-                        <button type="submit" class="btn btn-success" onclick="this.form.submit(); (this).className += ' spinner-border'; (this).innerText = '|'"><spring:message code="Comment.Title"/></button>
+                        <button type="button" id="subButton" class="btn btn-success" onclick="validate(${param.reviewId})"><spring:message code="Comment.Title"/></button>
                     </div>
                 </form:form>
             </div>
@@ -160,5 +164,8 @@
         </c:forEach>
     </div>
 </div>
+
 <script src="<c:url value="/resources/js/commentVisibility.js"/>"></script>
+<script src="<c:url value="/resources/js/validateComment.js"/>"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
