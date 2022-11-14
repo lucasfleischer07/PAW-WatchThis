@@ -134,6 +134,7 @@
                     <jsp:param name="isLikeReviews" value="${param.isLikeReviews}"/>
                     <jsp:param name="isDislikeReviews" value="${param.isDislikeReviews}"/>
                     <jsp:param name="isAdmin" value="${param.isAdmin}"/>
+                    <jsp:param name="canComment" value="${param.canComment}"/>
                 </jsp:include>
 
             </div>

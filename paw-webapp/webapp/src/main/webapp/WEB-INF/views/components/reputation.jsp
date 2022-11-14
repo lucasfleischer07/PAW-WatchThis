@@ -90,60 +90,61 @@
         </div>
     </div>
 
-    <div class="W-reply-button-div">
-        <c:choose>
-            <c:when test="${param.loggedUserName != 'null'}">
-                <button class="W-reply-button btn btn-white" id="commentButton" onclick="showCommentForm('commentInput${param.reviewId}')">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-left-dots" viewBox="0 0 16 16">
-                        <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
-                        <path d="M5 6a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
-                    </svg>
-                    <span><spring:message code="Comment.Here"/></span>
-                </button>
-            </c:when>
-            <c:otherwise>
-                <button class="W-reply-button btn btn-white" type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#commentModal">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-left-dots" viewBox="0 0 16 16">
-                        <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
-                        <path d="M5 6a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
-                    </svg>
-                    <span><spring:message code="Comment.Here"/></span>
-                </button>
-                <div class="modal fade" id="commentModal" tabindex="-1" aria-labelledby="commentModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="commentModalLabel"><spring:message code="Comment.Title"/></h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <span><spring:message code="Comment.WarningAdd"/></span>
-                                <span><spring:message code="Review.WarningAddMessage"/></span>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><spring:message code="Close"/></button>
-                                <a href="<c:url value="/login/sign-in"/>"><button type="button" class="btn btn-success" onclick="this.form.submit(); (this).className += ' spinner-border'; (this).innerText = '|'"><spring:message code="Login.LoginMessage"/></button></a>
+    <c:if test="${param.canComment == 'true'}">
+        <div class="W-reply-button-div">
+            <c:choose>
+                <c:when test="${param.loggedUserName != 'null'}">
+                    <button class="W-reply-button btn btn-white" id="commentButton" onclick="showCommentForm('commentInput${param.reviewId}')">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-left-dots" viewBox="0 0 16 16">
+                            <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                            <path d="M5 6a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                        </svg>
+                        <span><spring:message code="Comment.Here"/></span>
+                    </button>
+                </c:when>
+                <c:otherwise>
+                    <button class="W-reply-button btn btn-white" type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#commentModal">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-left-dots" viewBox="0 0 16 16">
+                            <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                            <path d="M5 6a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                        </svg>
+                        <span><spring:message code="Comment.Here"/></span>
+                    </button>
+                    <div class="modal fade" id="commentModal" tabindex="-1" aria-labelledby="commentModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="commentModalLabel"><spring:message code="Comment.Title"/></h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <span><spring:message code="Comment.WarningAdd"/></span>
+                                    <span><spring:message code="Review.WarningAddMessage"/></span>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><spring:message code="Close"/></button>
+                                    <a href="<c:url value="/login/sign-in"/>"><button type="button" class="btn btn-success" onclick="this.form.submit(); (this).className += ' spinner-border'; (this).innerText = '|'"><spring:message code="Login.LoginMessage"/></button></a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </c:otherwise>
-        </c:choose>
-
-    </div>
-
-    <div class="W-comment-general-div">
-        <div class="W-comment-form-div">
-            <c:url value="/review/add/comment/${param.reviewId}" var="postPath"/>
-            <form:form modelAttribute="commentForm" action="${postPath}" method="post" id="commentInput${param.reviewId}" class="W-comment-form">
-                <spring:message code="Comment.Placeholder" var="placeholder"/>
-                <form:textarea type="text" class="form-control" placeholder="${placeholder}" path="comment"/>
-                <div class="W-submit-comment-button">
-                    <button type="submit" class="btn btn-success" onclick="this.form.submit(); (this).className += ' spinner-border'; (this).innerText = '|'"><spring:message code="Comment.Title"/></button>
-                </div>
-            </form:form>
+                </c:otherwise>
+            </c:choose>
         </div>
-    </div>
+
+        <div class="W-comment-general-div">
+            <div class="W-comment-form-div">
+                <c:url value="/review/add/comment/${param.reviewId}" var="postPath"/>
+                <form:form modelAttribute="commentForm" action="${postPath}" method="post" id="commentInput${param.reviewId}" class="W-comment-form">
+                    <spring:message code="Comment.Placeholder" var="placeholder"/>
+                    <form:textarea type="text" class="form-control" placeholder="${placeholder}" path="comment"/>
+                    <div class="W-submit-comment-button">
+                        <button type="submit" class="btn btn-success" onclick="this.form.submit(); (this).className += ' spinner-border'; (this).innerText = '|'"><spring:message code="Comment.Title"/></button>
+                    </div>
+                </form:form>
+            </div>
+        </div>
+    </c:if>
 
 
     <div class="W-comment-section-general-div">
