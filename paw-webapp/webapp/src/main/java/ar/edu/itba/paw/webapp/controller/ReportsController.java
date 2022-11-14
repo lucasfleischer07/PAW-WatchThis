@@ -26,7 +26,7 @@ public class ReportsController {
     private final PaginationService ps;
     private final ReportService rrs;
     private final CommentService ccs;
-    private static final int REPORTS_AMOUNT = 3;
+    private static final int REPORTS_AMOUNT = 5;
     private static final Logger LOGGER = LoggerFactory.getLogger(ReportsController.class);
     @Autowired
     public ReportsController(ReviewService rs, UserService us, PaginationService ps, ReportService rrs, CommentService ccs) {

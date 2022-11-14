@@ -55,7 +55,7 @@ public class ReviewController {
             return;
         }
 
-        List<Review> reviewListPaginated = ps.reviewPagination(reviewList, page);
+        List<Review> reviewListPaginated = ps.infiniteScrollPagination(reviewList, page,REVIEW_AMOUNT);
         mav.addObject("reviews", reviewListPaginated);
 
         int amountOfPages = ps.amountOfContentPages(reviewList.size(),REVIEW_AMOUNT);

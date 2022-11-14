@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.models.Content;
 import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.services.*;
@@ -13,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.MediaType;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -35,14 +33,14 @@ public class UserController {
     private final PaginationService ps;
     private final PasswordEncoder passwordEncoder;
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
-    protected AuthenticationManager authenticationManager;
+    private static final int REVIEW_AMOUNT = 3;
+
     @Autowired
-    public UserController(final UserService us, final ContentService cs, ReviewService rs, PaginationService ps,AuthenticationManager authenticationManager,PasswordEncoder passwordEncoder){
+    public UserController(final UserService us, final ContentService cs, ReviewService rs, PaginationService ps,PasswordEncoder passwordEncoder){
         this.us = us;
         this.cs = cs;
         this.rs = rs;
         this.ps = ps;
-        this.authenticationManager = authenticationManager;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -55,10 +53,10 @@ public class UserController {
             return;
         }
 
-        List<Review> reviewListPaginated = ps.reviewPagination(reviewList, page);
+        List<Review> reviewListPaginated = ps.infiniteScrollPagination(reviewList, page,REVIEW_AMOUNT);
         mav.addObject("reviews", reviewListPaginated);
 
-        int amountOfPages = ps.amountOfReviewPages(reviewList.size());
+        int amountOfPages = ps.amountOfContentPages(reviewList.size(),REVIEW_AMOUNT);
         mav.addObject("amountPages", amountOfPages);
         mav.addObject("pageSelected",page);
         mav.addObject("reviewsAmount",reviewList.size());
