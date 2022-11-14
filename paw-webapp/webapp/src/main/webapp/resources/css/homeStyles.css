@@ -125,7 +125,7 @@
 .W-films-card-body-carousel {
     display: flex;
     align-items: flex-start;
-    height: 33vw;
+    height: 36vw;
 }
 
 .W-img-watchList-button-div {
@@ -136,7 +136,6 @@
 
 .W-watchList-button-div {
     position: absolute;
-    /*z-index: 100;*/
 }
 
 .W-watchList-button {
@@ -201,14 +200,13 @@
 }
 
 .W-inv-film-card-margin{
-    margin-top: 3%;
+    margin-top: 1%;
     margin-right: 5%;
     margin-left: 5%;
-    max-height: 30vw;
 }
 
 .W-img-size{
-    max-height: 30vw;
+    max-height: 100%;
     max-width: 70vw;
 }
 
@@ -248,7 +246,7 @@
 }
 
 .W-movie-description {
-    font-size: 0.8vw;
+    font-size: 1vw;
 }
 
 .W-card-details-color {
@@ -335,20 +333,12 @@
         font-size: 1.5vw;
         color: black;
     }
-
-    .W-movie-description {
-        font-size: 0.7vw;
-    }
 }
 
 @media (max-width: 1600px) {
     .W-movie-title {
         font-size: 1.5vw;
         color: black;
-    }
-
-    .W-movie-description {
-        font-size: 0.6vw;
     }
 }
 
@@ -377,7 +367,7 @@
     }
 
     .W-films-card-body-carousel {
-        height: 34vw;
+        height: 38vw;
     }
 
     .W-filter-title {
@@ -397,6 +387,13 @@
     .W-dropdown-button {
         margin-top: 0;
     }
+
+}
+
+@media (max-width: 800px) {
+    .W-watchList-button-div {
+        display: none!important;
+    }
 }
 
 @media (max-width: 780px) {
@@ -404,6 +401,12 @@
     .W-dropdown-sorting {
         max-height: 280px;
         overflow-y: auto;
+    }
+}
+
+@media (max-width: 719px) {
+    .W-films-card-body-carousel {
+        height: 40vw;
     }
 }
 
@@ -429,9 +432,6 @@
 }
 
 @media (max-width: 291px) {
-    .W-movie-description {
-        display: none;
-    }
 
     .W-filter-div {
         display: none;
