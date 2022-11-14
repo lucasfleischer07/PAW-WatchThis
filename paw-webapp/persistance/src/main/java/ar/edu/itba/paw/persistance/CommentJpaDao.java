@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.persistance;
 
 import ar.edu.itba.paw.models.Comment;
-import ar.edu.itba.paw.models.Content;
 import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.User;
 import org.springframework.context.annotation.Primary;
@@ -10,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -42,9 +40,7 @@ public class CommentJpaDao implements CommentDao{
 
     @Override
     public Optional<Comment> getComment(Long id) {
+        return Optional.ofNullable(em.find(Comment.class,id));
 
-        TypedQuery<Comment> query=em.createQuery("select c from Comment c where c.commentId =:id",Comment.class);
-        query.setParameter("id",id);
-        return Optional.ofNullable(query.getSingleResult());
     }
 }

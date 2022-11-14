@@ -6,6 +6,7 @@ import ar.edu.itba.paw.models.ReportReason;
 import ar.edu.itba.paw.models.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ReportDao {
 
@@ -16,4 +17,7 @@ public interface ReportDao {
     List<ReviewReport> getReportedReviewsByReason(ReportReason reason);
     List<CommentReport> getReportedComments();
     List<CommentReport> getReportedCommentsByReason(ReportReason reason);
+    Optional<CommentReport> findCommentReport(Long id);
+    Optional<ReviewReport> findReviewReport(Long id);
+
 }

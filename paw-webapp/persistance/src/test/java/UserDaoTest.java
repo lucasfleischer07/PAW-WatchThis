@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,7 +25,7 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
 @Sql(scripts = "classpath:user-dao-test.sql")
-public class UserJdbcDaoTest {
+public class UserDaoTest {
     private final static User testUser=new User(1L,"mateoperezrivera@gmail.com","brandyhuevo","secret",0L,null,"user");
     private final static String PASSWORD = "password";
     private final static String NAME = "NAME";

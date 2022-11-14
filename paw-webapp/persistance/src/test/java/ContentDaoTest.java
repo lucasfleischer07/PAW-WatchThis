@@ -27,7 +27,7 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
 @Sql(scripts = "classpath:content-dao-test.sql")
-public class ContentJdbcDaoTest {
+public class ContentDaoTest {
 
     @Autowired
     private DataSource ds;
@@ -69,6 +69,42 @@ public class ContentJdbcDaoTest {
     }
 
     @Test
+    public void testFindByDuration(){
+        List<Content> contentList=dao.findByDuration("movie",0,100,null);
+        assertEquals(2,contentList.size());
+    }
+
+    @Test
+    public void testGetSearchedContentByGenre(){
+        List<Content> contentList=dao.getSearchedContentByGenre("movie","Animation",null,"toy");
+        assertEquals(1,contentList.size());
+
+    }
+    @Test
+    public void testGetSearchedContentByDuration(){
+        List<Content> contentList=dao.getSearchedContentByDuration("movie",80,100,null,"toy");
+        assertEquals(1,contentList.size());
+
+    }
+    @Test
+    public void testGetSearchedContentByDurationAndGenre(){
+        List<Content> contentList=dao.getSearchedContentByDurationAndGenre("movie","Animation",90,100,null,null);
+        assertEquals(1,contentList.size());
+
+    }
+    @Test
+    public void testGetSearchedContentRandom(){
+        List<Content> contentList=dao.getSearchedContentRandom("t");
+        assertEquals(3,contentList.size());
+
+    }
+    @Test
+    public void testFindByDurationAndGenre(){
+        List<Content> contentList=dao.findByDurationAndGenre("serie","Animation",90,1000,null);
+        assertEquals(1,contentList.size());
+    }
+
+    @Test
     public void testFindByGenreTest(){
         List<Content> contentList=dao.findByGenre("all"," '%'|| " + "Animation" + " ||'%'",null);
         assertEquals(2, contentList.size());
@@ -101,15 +137,7 @@ public class ContentJdbcDaoTest {
         assertEquals(1,contentList.size());
         assertEquals(2,contentList.get(0).getId());
     }
-/*
-    @Test
-    public void testGetLessDuration(){
-        List<Content> contentList=dao.getLessDuration("movie");
-        assertEquals(4, contentList.size());
-        assertEquals(172, contentList.get(0).getId());
-    }
 
- */
 
     @Test
     public void testGetLastAdded(){
@@ -163,6 +191,12 @@ public class ContentJdbcDaoTest {
         dao.deleteContent(2L);
         List<Content> contentList=dao.getAllContent("ANY",null);
         assertEquals(5,dao.getAllContent("ANY",null).size());
+    }
+
+    @Test
+    public void getContentQuote(){
+        assertNotNull(dao.getContentQuote("Spanish"));
+
     }
 
 

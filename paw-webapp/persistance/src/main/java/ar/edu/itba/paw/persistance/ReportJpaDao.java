@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
+import java.util.Optional;
 
 @Primary
 @Repository
@@ -95,5 +96,17 @@ public class ReportJpaDao implements ReportDao{
         query.setParameter("reason",reason);
         return query.getResultList();
     }
+
+    @Override
+    public Optional<CommentReport> findCommentReport(Long id) {
+        return Optional.ofNullable(em.find(CommentReport.class,id));
+    }
+
+    @Override
+    public Optional<ReviewReport> findReviewReport(Long id) {
+        return Optional.ofNullable(em.find(ReviewReport.class,id));
+
+    }
+
 
 }
