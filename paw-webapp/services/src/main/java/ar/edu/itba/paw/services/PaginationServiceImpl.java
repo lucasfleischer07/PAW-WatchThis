@@ -16,7 +16,9 @@ public class PaginationServiceImpl implements PaginationService{
 
     @Override
     public <T> List<T> pagePagination(List<T> list, int page,final int pageSize) {
-        if(list.size() < (page)*pageSize) {       //Si no llega a completar la pagina entera, que sirva los que pueda
+        if(list == null || page*pageSize > list.size() + (pageSize - list.size()%pageSize) )        //Si se pasa mas de una pagina de lo disponible retorna null
+            return null;
+        if(list.size() < page*pageSize) {       //Si no llega a completar la pagina entera, que sirva los que pueda
             return list.subList((page-1)*pageSize,list.size());
         } else {
             return list.subList((page - 1) * pageSize, (page) * pageSize);
