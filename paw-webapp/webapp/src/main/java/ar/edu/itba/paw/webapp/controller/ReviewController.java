@@ -100,6 +100,7 @@ public class ReviewController {
             String userEmail = userDetails.getName();
             user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
             mav.addObject("userName",user.getUserName());
+            mav.addObject("user",user);
             mav.addObject("userId",user.getId());
             rs.userLikeAndDislikeReviewsId(user.getUserVotes());
             mav.addObject("userLikeReviews", rs.getUserLikeReviews());
@@ -118,8 +119,8 @@ public class ReviewController {
             } else {
                 mav.addObject("isInViewedList","null");
             }
-
-            if(user.getRole().equals("admin")) {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            if(auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
                 mav.addObject("admin",true);
             } else {
                 mav.addObject("admin",false);
@@ -160,7 +161,8 @@ public class ReviewController {
             User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
             mav.addObject("userName",user.getUserName());
             mav.addObject("userId",user.getId());
-            if(user.getRole().equals("admin")) {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            if(auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
                 mav.addObject("admin",true);
             } else {
                 mav.addObject("admin",false);
@@ -256,7 +258,8 @@ public class ReviewController {
             mav.addObject("user",user);
             mav.addObject("userName",user.getUserName());
             mav.addObject("userId",user.getId());
-            if(user.getRole().equals("admin")){
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            if(auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))){
                 mav.addObject("admin",true);
             } else {
                 mav.addObject("admin",false);

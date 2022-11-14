@@ -153,6 +153,7 @@
                 <jsp:param name="loggedUserName" value="${param.loggedUserName}"/>
                 <jsp:param name="reviewId" value="${param.reviewId}"/>
                 <jsp:param name="isAdmin" value="${param.isAdmin}"/>
+                <jsp:param name="alreadyReport" value="${comment.reporterUsernames.contains(param.loggedUserName)}"/>
             </jsp:include>
         </c:forEach>
     </div>

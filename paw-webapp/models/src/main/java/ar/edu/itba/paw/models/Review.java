@@ -167,7 +167,7 @@ public class Review {
     }
 
     @Transient
-    public Set<String> getReporterUsers() {
+    public Set<String> getReporterUsernames() {
         return reporterUsernames;
     }
 }
