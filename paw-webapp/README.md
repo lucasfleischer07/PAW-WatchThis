@@ -1,7 +1,9 @@
-Usuario administrador: 
-email: pawAdmin@gmial.com
-contrasena: paw1234
+***Usuario administrador:*** 
+*username:* PawAdmin
+*email:* adminpaw@mail.com
+*contrasena:* 1234567890
 
-Usuario normal: 
-email: paw@gmial.com
-contrasena: paw1234
+***Usuario normal:***
+*username:* PawNormal
+*email:* paw@mail.com
+*contrasena:* 1234567890
