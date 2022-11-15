@@ -9,7 +9,7 @@ import javax.validation.constraints.*;
 
 public class ContentForm {
 
-    @Size(min = 1, max = 100)
+    @Size(min = 1, max = 55)
     @Pattern(regexp	= "([a-zA-Z0-9ñáéíóú!,.:;=+\n\\-_()?<>$%&#@{}\\[\\]|*\"'~/`^\\s]+)?")
     private String name;
 

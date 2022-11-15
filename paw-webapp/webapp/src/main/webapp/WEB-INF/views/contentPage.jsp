@@ -92,7 +92,17 @@
         <c:if test="${amountPages > 1}">
             <div>
                 <ul class="pagination justify-content-center W-pagination">
-                    <c:set var = "baseUrl" scope = "session" value = "/${contentType}/filters"/>
+                    <c:choose>
+                        <c:when test="${contentType == 'movie'}">
+                            <c:set var = "baseUrl" scope = "session" value = "/movies/filters"/>
+                        </c:when>
+                        <c:when test="${contentType == 'serie'}">
+                            <c:set var = "baseUrl" scope = "session" value = "/series/filters"/>
+                        </c:when>
+                        <c:otherwise>
+                            <c:set var = "baseUrl" scope = "session" value = "/all/filters"/>
+                        </c:otherwise>
+                    </c:choose>
                     <c:choose>
                         <c:when test="${pageSelected > 1}">
                             <li class="page-item">
