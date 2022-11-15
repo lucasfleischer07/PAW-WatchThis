@@ -48,7 +48,7 @@
                                         <h4 class="W-username-profilepage"><c:out value="${user.userName}"/></h4>
                                     </div>
                                     <div class="W-margin-left-label">
-                                        <p class="W-quote-in-profile">${quote}</p>
+                                        <p class="W-quote-in-profile"><c:out value="${quote}"/></p>
                                     </div>
                                 </div>
                             </div>

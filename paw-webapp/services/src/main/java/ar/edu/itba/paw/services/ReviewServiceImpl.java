@@ -17,16 +17,12 @@ import java.util.*;
 public class ReviewServiceImpl implements ReviewService{
 
     private final ReviewDao reviewDao;
-
-
     private List<Long> userLikeReviews = new ArrayList<>();
     private List<Long> userDislikeReviews = new ArrayList<>();
 
     @Autowired
     public ReviewServiceImpl(final ReviewDao reviewDao) {
-
         this.reviewDao = reviewDao;
-
     }
 
     @Override

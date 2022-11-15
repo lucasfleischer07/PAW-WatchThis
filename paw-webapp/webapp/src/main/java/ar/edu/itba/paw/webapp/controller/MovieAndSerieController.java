@@ -3,9 +3,7 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.services.*;
 import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
-import ar.edu.itba.paw.webapp.form.CommentForm;
 import ar.edu.itba.paw.webapp.form.GenreFilterForm;
-import ar.edu.itba.paw.webapp.form.ReportCommentForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import java.security.Principal;
 import java.util.*;
 
@@ -28,18 +25,14 @@ public class MovieAndSerieController {
     private final UserService us;
     private final ContentService cs;
     private final PaginationService ps;
-    private final ReviewService rs;
-    private CommentService ccs;
     private static final Logger LOGGER = LoggerFactory.getLogger(MovieAndSerieController.class);
     private static final int CONTENT_AMOUNT = 18;
 
     @Autowired
-    public MovieAndSerieController(final UserService us, final ContentService cs, final ReviewService rs, PaginationService ps, CommentService ccs) {
+    public MovieAndSerieController(final UserService us, final ContentService cs, PaginationService ps) {
         this.us = us;
         this.cs = cs;
-        this.rs = rs;
         this.ps = ps;
-        this.ccs = ccs;
     }
 
     private void HeaderSetUp(ModelAndView mav,Principal userDetails) {
@@ -105,8 +98,6 @@ public class MovieAndSerieController {
     }
 
     // * ---------------------------------------------------------------------------------------------------------------
-
-
 
 
     // *  ----------------------------------- Movies and Serie Filters -------------------------------------------------

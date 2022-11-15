@@ -32,17 +32,15 @@ public class ReviewController {
     private final ContentService cs;
     private final UserService us;
     private final PaginationService ps;
-    private final CommentService ccs;
     private final ReportService rrs;
     private static final Logger LOGGER = LoggerFactory.getLogger(ReviewController.class);
     private static final int REVIEW_AMOUNT = 3;
 
    @Autowired
-    public ReviewController(ReviewService rs,ContentService cs,UserService us, CommentService ccs, ReportService rrs,PaginationService ps) {
+    public ReviewController(ReviewService rs,ContentService cs,UserService us, ReportService rrs,PaginationService ps) {
         this.us = us;
         this.cs = cs;
         this.rs = rs;
-        this.ccs = ccs;
         this.rrs = rrs;
         this.ps = ps;
     }
