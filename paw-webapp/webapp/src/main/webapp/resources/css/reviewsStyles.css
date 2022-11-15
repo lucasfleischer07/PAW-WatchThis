@@ -291,6 +291,11 @@
     justify-content: center;
 }
 
+.W-comment-length {
+    font-size: 0.7vw;
+    color: #636464;
+}
+
 .W-comment-general-card {
     width: 80%;
     margin-bottom: 2vw;

@@ -141,6 +141,7 @@
                 <p id="shortComment" class="W-short-comment-error"><spring:message code="Comment.LenghtComment"/></p>
                 <c:url value="/review/add/comment/${param.reviewId}" var="postPath"/>
                 <form:form modelAttribute="commentForm" action="${postPath}" method="post" id="commentInput${param.reviewId}" cssClass="W-comment-form">
+                    <p class="W-comment-length"><spring:message code="CreateContent.CharacterLimits" arguments="10,500"/></p>
                     <spring:message code="Comment.Placeholder" var="placeholder"/>
                     <form:textarea type="text" class="form-control" id="comment" placeholder="${placeholder}" path="comment"/>
                     <div class="W-submit-comment-button">
