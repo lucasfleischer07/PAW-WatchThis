@@ -53,7 +53,7 @@
                             <div class="mb-3 W-input-label-review-info">
                                 <form:errors path="name" element="p" cssStyle="color: #b21e26"/>
                                 <form:label path="name" class="form-label"><spring:message code="CreateContent.ContentName"/> <span class="W-red-asterisco"><spring:message code="Asterisk"/></span></form:label>
-                                <p class="W-review-registration-text"><spring:message code="CreateContent.CharacterLimits" arguments="1,100"/></p>
+                                <p class="W-review-registration-text"><spring:message code="CreateContent.CharacterLimits" arguments="1,55"/></p>
                                 <spring:message code="Placeholder.FilmEx" var="placeholder"/>
                                 <form:input type="text" class="form-control" path="name" placeholder="${placeholder}"/>
                             </div>
