@@ -173,7 +173,6 @@
               <div class="W-div-img-and-reviewInfo">
                 <div class="col-md-4 W-img-aligment">
                   <img src="<c:url value="/contentImage/${details.id}"/>" class="W-img-size" alt="Image <c:out value="${details.name}"/>">
-
                 </div>
                 <div class="col-md-8">
                   <div class="card-body W-card-body-aligment">
