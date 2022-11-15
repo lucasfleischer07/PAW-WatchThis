@@ -36,6 +36,12 @@
     margin-right: 3%;
 }
 
+.W-input-width {
+    width: 20vw;
+    background-color: #e9ecef;
+    font-size: 1vw;
+}
+
 .W-genre-create-button {
     width: 100%;
     border-color: #ced4da;

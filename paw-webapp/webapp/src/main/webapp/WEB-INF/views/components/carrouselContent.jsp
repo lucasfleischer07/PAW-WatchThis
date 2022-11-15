@@ -44,11 +44,15 @@
       <div class="card-body W-films-card-body-div">
         <a class="W-card-link-style" href="<c:url value='/${param.contentType}/${param.contentId}'/>">
           <div class="W-margin-one">
-            <h4 class="card-title W-movie-title-carousel"><c:out value="${param.contentName}"/></h4>
+            <h4 class="card-title W-movie-title-carousel W-long-words-contemplation-title"><c:out value="${param.contentName}"/></h4>
             <div>
               <p class="card-text W-movie-description W-card-details-margin"><span class="W-span-text-info-card-movie W-card-details-color"><spring:message code="Content.Released"/> </span><c:out value="${param.contentReleased}"/></p>
-              <p class="card-text W-movie-description W-card-details-margin"><span class="W-span-text-info-card-movie W-card-details-color"><spring:message code="Content.Genre"/> </span><c:out value="${param.contentGenre}"/></p>
-              <p class="card-text W-movie-description W-card-details-margin"><span class="W-span-text-info-card-movie W-card-details-color"><spring:message code="Content.Creator"/> </span> <c:out value="${param.contentCreator}"/></p>
+             <div>
+               <p class="card-text W-movie-description W-card-details-margin W-long-words-contemplation-genre"><span class="W-span-text-info-card-movie W-card-details-color"><spring:message code="Content.Genre"/> </span><c:out value="${param.contentGenre}"/></p>
+             </div>
+              <div>
+                <p class="card-text W-movie-description W-card-details-margin W-long-words-contemplation-creator"><span class="W-span-text-info-card-movie W-card-details-color"><spring:message code="Content.Creator"/> </span> <c:out value="${param.contentCreator}"/></p>
+              </div>
             </div>
             <c:forEach  begin="1" step="1" end="5" var="var">
               <c:choose>

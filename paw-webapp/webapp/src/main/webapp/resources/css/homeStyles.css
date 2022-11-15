@@ -246,7 +246,7 @@
 }
 
 .W-movie-description {
-    font-size: 1vw;
+    font-size: 0.9vw;
 }
 
 .W-card-details-color {
@@ -275,6 +275,7 @@
 .W-card-link-style {
     text-decoration: none;
     color: black;
+    word-break: break-word;
 }
 
 .W-card-link-style:hover {
@@ -367,7 +368,7 @@
     }
 
     .W-films-card-body-carousel {
-        height: 38vw;
+        height: 39vw;
     }
 
     .W-filter-title {
@@ -404,7 +405,7 @@
 
 @media (max-width: 719px) {
     .W-films-card-body-carousel {
-        height: 40vw;
+        height: 41vw;
     }
 }
 
