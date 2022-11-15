@@ -178,11 +178,10 @@
                 <div class="col-md-8">
                   <div class="card-body W-card-body-aligment">
                     <h6 class="card-title W-card-title"><c:out value="${details.name}"/></h6>
-                    <p id="descriptionParagraphInfoPage" class="card-text W-subTitles-font-size"><c:out value="${details.description}"/></p>
+                    <p id="<c:out value="descriptionParagraphInfoPage${contentId}"/>" class="card-text W-subTitles-font-size"><c:out value="${details.description}"/></p>
                     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
                     <script>
-                      let previousText = document.getElementById('descriptionParagraphInfoPage').innerHTML
-                      document.getElementById('descriptionParagraphInfoPage'+'${contentId}').innerHTML = marked.parse(previousText);
+                      document.getElementById('descriptionParagraphInfoPage'+'${contentId}').innerHTML = marked.parse(document.getElementById('descriptionParagraphInfoPage'+'${contentId}').innerHTML);
                     </script>
                     <p class="card-text W-subTitles-font-size"><span class="W-span-text-info-card-movie"><spring:message code="Content.Duration"/></span> <c:out value="${details.duration}"/></p>
                     <p class="card-text W-subTitles-font-size"><span class="W-span-text-info-card-movie"><spring:message code="Content.Genre"/></span> <c:out value="${details.genre}"/></p>
