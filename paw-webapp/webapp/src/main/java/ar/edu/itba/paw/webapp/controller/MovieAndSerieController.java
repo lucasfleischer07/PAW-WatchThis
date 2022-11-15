@@ -126,7 +126,7 @@ public class MovieAndSerieController {
             auxType = "all";
         }
 
-        List<String> genreList = genreFilterForm.getFormGenre() != null ? Arrays.asList(genreFilterForm.getFormGenre()) : genre;
+        List<String> genreList = genreFilterForm.getFormGenre().length > 0 ? Arrays.asList(genreFilterForm.getFormGenre()) : genre;
         if(genreList!=null){
             genreFilterForm.setFormGenre(genreList.toArray(new String[0]));
         }

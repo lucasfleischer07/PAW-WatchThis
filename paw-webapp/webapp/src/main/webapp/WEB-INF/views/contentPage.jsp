@@ -93,10 +93,10 @@
             <div>
                 <ul class="pagination justify-content-center W-pagination">
                     <c:choose>
-                        <c:when test="${contentType == 'movie'}">
+                        <c:when test="${contentType == 'movie' || contentType == 'movies'}">
                             <c:set var = "baseUrl" scope = "session" value = "/movies/filters"/>
                         </c:when>
-                        <c:when test="${contentType == 'serie'}">
+                        <c:when test="${contentType == 'serie' || contentType == 'series'}">
                             <c:set var = "baseUrl" scope = "session" value = "/series/filters"/>
                         </c:when>
                         <c:otherwise>

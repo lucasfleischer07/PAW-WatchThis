@@ -9,10 +9,10 @@
         <div class="list-group">
             <div class="dropdown W-dropdown-button">
                 <c:choose>
-                    <c:when test="${param.type=='movie'}">
+                    <c:when test="${param.type=='movie' || param.type=='movies'}">
                         <c:set var = "pageTpye" scope = "session" value = "movies"/>
                     </c:when>
-                    <c:when test="${param.type=='serie'}">
+                    <c:when test="${param.type=='serie' || param.type=='series'}">
                         <c:set var = "pageTpye" scope = "session" value = "series"/>
                     </c:when>
                     <c:otherwise>
