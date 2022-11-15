@@ -183,7 +183,7 @@ public class ContentServiceImpl implements ContentService {
         StringBuilder genresBuilder = new StringBuilder();
         for (String subGenre : genres) {
             genresBuilder.append(subGenre);
-            genresBuilder.append(" ");
+            genresBuilder.append(",");
         }
         genresBuilder.deleteCharAt(genresBuilder.length()-1);
         return genresBuilder.toString();

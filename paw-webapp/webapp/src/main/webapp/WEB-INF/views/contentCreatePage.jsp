@@ -207,10 +207,10 @@
 
                                 <ul class="dropdown-menu" id="drop3" >
                                     <li class="mb-1 px-2" >
-                                        <label><form:checkbox onchange="update(this)" cssClass="px-2" path="genre" value="Action"/> <spring:message code="Genre.Action"/></label>
+                                        <label><form:checkbox onclick="update(this)" cssClass="px-2" path="genre" value="Action"/> <spring:message code="Genre.Action"/></label>
                                     </li>
                                     <li class="mb-1 px-2">
-                                        <label><form:checkbox onchange="update(this)" cssClass="px-2" path="genre" value="Sci-Fi"/> <spring:message code="Genre.Science"/></label>
+                                        <label><form:checkbox onclick="update(this)" cssClass="px-2" path="genre" value="Sci-Fi"/> <spring:message code="Genre.Science"/></label>
                                     </li>
                                     <li class="mb-1 px-2">
                                         <label><form:checkbox onclick="update(this)" cssClass="px-2" path="genre" value="Comedy"/> <spring:message code="Genre.Comedy"/></label>
