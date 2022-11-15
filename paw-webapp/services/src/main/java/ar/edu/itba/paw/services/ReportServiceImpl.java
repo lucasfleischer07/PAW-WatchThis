@@ -37,7 +37,25 @@ public class ReportServiceImpl implements ReportService{
         String reasons = "";
         if(reasonsOfDelete != null) {
             for(CommentReport string : reasonsOfDelete) {
-                reasons = reasons + ", " + string.toString();
+                switch (string.getReportReason().toString()) {
+                    case "Spam":
+                        reasons = reasons + messageSource.getMessage("Report.Spam", new Object[]{}, locale) + ", ";
+                        break;
+                    case "Insult":
+                        reasons = reasons + messageSource.getMessage("Report.Insult", new Object[]{}, locale) + ", ";
+                        break;
+                    case "Inappropriate":
+                        reasons = reasons + messageSource.getMessage("Report.Inappropriate", new Object[]{}, locale) + ", ";
+                        break;
+                    case "Unrelated":
+                        reasons = reasons + messageSource.getMessage("Report.Unrelated", new Object[]{}, locale) + ", ";
+                        break;
+                    case "Other":
+                        reasons = reasons + messageSource.getMessage("Report.Other", new Object[]{}, locale) + ", ";
+                        break;
+                    default:
+                        return;
+                }
             }
         }
         if(reviewOrComment instanceof Review)
@@ -156,6 +174,7 @@ public class ReportServiceImpl implements ReportService{
             mailVariables.put("to",reportedUser.getEmail());
             mailVariables.put("userName", reportedUser.getUserName());
             mailVariables.put("reportedReview", review.getName());
+            mailVariables.put("reasonsOfReport", reasons.toString());
             emailService.sendMail("reportReview", messageSource.getMessage("Mail.ReviewReported", new Object[]{}, locale), mailVariables, locale);
         }catch (MessagingException e){
             //algo
@@ -171,6 +190,7 @@ public class ReportServiceImpl implements ReportService{
             mailVariables.put("to",reportedUser.getEmail());    // Email del creador del comentario
             mailVariables.put("userName", reportedUser.getUserName());  // userName del creador del comentario
             mailVariables.put("reportedComment", comment.getText());  // Esto seria la review, onda lo que decia la review
+            mailVariables.put("reasonsOfReport", reasons.toString());
             emailService.sendMail("reportComment", messageSource.getMessage("Mail.CommentReported", new Object[]{}, locale), mailVariables, locale);
         }catch (MessagingException e){
             //algo

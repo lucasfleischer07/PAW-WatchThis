@@ -97,7 +97,7 @@
                                                             </li>
                                                             <li>
                                                                 <label>
-                                                                    <form:radiobutton path="reportType" value="Others"/> <spring:message code="Report.Other"/>
+                                                                    <form:radiobutton path="reportType" value="Other"/> <spring:message code="Report.Other"/>
                                                                     <p class="W-modal-comment-desc"><spring:message code="Report.Other.Description"/></p>
                                                                 </label>
                                                             </li>
