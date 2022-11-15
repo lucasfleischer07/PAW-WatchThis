@@ -101,7 +101,7 @@
                                 </c:choose>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link W-reported-reviews-comment-nav" aria-current="page" href="#"><spring:message code="Comments.Title"/></a>
+                                <a class="nav-link active W-reported-reviews-comment-nav" aria-current="page" href="#"><spring:message code="Comments.Title"/></a>
                             </li>
                         </c:otherwise>
                     </c:choose>
@@ -156,9 +156,6 @@
               <div>
                 <p><spring:message code="Report.Review.Empty"/></p>
               </div>
-              <div>
-                <a href="<c:url value="/"/>"><spring:message code="WatchList.Recomendation"/></a>
-              </div>
             </div>
           </c:when>
           <c:when test="${commentsReportedAmount == 0 && type == 'comments'}">
@@ -169,9 +166,6 @@
                 </svg>
                 <div>
                     <p><spring:message code="Report.Comment.Empty"/></p>
-                </div>
-                <div>
-                    <a href="<c:url value="/"/>"><spring:message code="WatchList.Recomendation"/></a>
                 </div>
             </div>
           </c:when>

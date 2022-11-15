@@ -175,7 +175,9 @@ public class ContentController {
         contentEditForm.setCreator(oldContent.get().getCreator());
         contentEditForm.setDescription(oldContent.get().getDescription());
         contentEditForm.setDuration(transformDate(oldContent.get().getDuration()));
-        contentEditForm.setGenre(oldContent.get().getGenre());
+//        contentEditForm.setGenre(oldContent.get().getGenre());
+        String[] newGenre = oldContent.get().getGenre().split(" ");
+        contentEditForm.setGenre(newGenre);
         contentEditForm.setReleaseDate(oldContent.get().getReleased());
         contentEditForm.setType(oldContent.get().getType());
         HeaderSetUp(mav,userDetails);
@@ -191,7 +193,13 @@ public class ContentController {
         if(errors.hasErrors()) {
             return editContent(userDetails, contentEditForm,contentId);
         }
-        cs.updateContent(contentId,contentEditForm.getName(), contentEditForm.getDescription(), contentEditForm.getReleaseDate(), contentEditForm.getGenre(), contentEditForm.getCreator(), contentEditForm.getDuration(), contentEditForm.getType(),contentEditForm.getContentPicture().getBytes());
+
+        String auxGenre = "";
+        for(String genre : contentEditForm.getGenre()) {
+            auxGenre = auxGenre + " " + genre;
+        }
+
+        cs.updateContent(contentId,contentEditForm.getName(), contentEditForm.getDescription(), contentEditForm.getReleaseDate(), auxGenre, contentEditForm.getCreator(), contentEditForm.getDuration(), contentEditForm.getType(),contentEditForm.getContentPicture().getBytes());
         String referer = request.getSession().getAttribute("referer").toString();
         return new ModelAndView("redirect:" + (referer==null?"/":referer));
     }

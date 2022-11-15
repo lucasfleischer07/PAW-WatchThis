@@ -21,7 +21,7 @@ public class ContentForm {
     @Pattern(regexp = "([0-9][0-9][0-9][0-9])")
     private String releaseDate;
 
-    @NotNull
+    @NotEmpty
     private String[] genre;
 
     @Size(min = 4, max = 100)
