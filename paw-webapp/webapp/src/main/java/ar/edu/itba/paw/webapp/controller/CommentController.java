@@ -47,7 +47,6 @@ public class CommentController {
     @RequestMapping(value = "/review/add/comment/{reviewId:[0-9]+}", method = {RequestMethod.POST})
     public ModelAndView commentReview(Principal userDetails,
                                       @Valid @ModelAttribute("commentForm") final CommentForm commentForm,
-                                      final BindingResult errors,
                                       @PathVariable("reviewId")final long reviewId,
                                       HttpServletRequest request) {
 

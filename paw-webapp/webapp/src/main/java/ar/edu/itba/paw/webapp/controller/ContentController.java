@@ -174,7 +174,6 @@ public class ContentController {
         contentEditForm.setName(oldContent.get().getName());
         contentEditForm.setCreator(oldContent.get().getCreator());
         contentEditForm.setDescription(oldContent.get().getDescription());
-        //Para obtener la duracion en minutos
         contentEditForm.setDuration(transformDate(oldContent.get().getDuration()));
         contentEditForm.setGenre(oldContent.get().getGenre());
         contentEditForm.setReleaseDate(oldContent.get().getReleased());
@@ -196,6 +195,9 @@ public class ContentController {
         String referer = request.getSession().getAttribute("referer").toString();
         return new ModelAndView("redirect:" + (referer==null?"/":referer));
     }
+
+    // * ---------------------------------------------------------------------------------------------------------------
+
 
     // * ----------------------------------- Content Delete ------------------------------------------------------------
     @RequestMapping(value = "/content/{contentId:[0-9]+}/delete", method = {RequestMethod.POST})
