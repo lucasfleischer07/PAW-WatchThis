@@ -57,15 +57,16 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Bean
     public DataSource dataSource(){
-//        * Conexion a Heroku
         LOGGER.info("Data base set up");
+//        * Conexion a localhost
 //        String dbUrl="jdbc:postgresql://localhost:5432/postgres";
 //        String username = "postgres";
 //        String password = "postgres";
 
+//        * Conexion a Heroku
         String dbUrl="jdbc:postgresql://ec2-44-209-158-64.compute-1.amazonaws.com:5432/dejahu751a4sa5";
         String username = "nnsbcsmyzbkewt";
-        String password = "2d3518851436a2f7f6c4367b2c79aa6f66f456a436aeaf02f44cd07a80497f27";
+       String password = "2d3518851436a2f7f6c4367b2c79aa6f66f456a436aeaf02f44cd07a80497f27";
         final SimpleDriverDataSource basicDataSource = new SimpleDriverDataSource();
         basicDataSource.setDriverClass(org.postgresql.Driver.class);
         basicDataSource.setUrl(dbUrl);
@@ -86,26 +87,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
 
     }
-/*
-    @Bean
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory(){
-        final LocalContainerEntityManagerFactoryBean factoryBean=new LocalContainerEntityManagerFactoryBean();
-        factoryBean.setPackagesToScan("ar.edu.itba.paw.models");
-        factoryBean.setDataSource(dataSource());
-        final JpaVendorAdapter vendorAdapter=new HibernateJpaVendorAdapter();
-        factoryBean.setJpaVendorAdapter(vendorAdapter);
-        final Properties properties=new Properties();
-        properties.setProperty("hibernate.hbm2ddl.auto","update");
-        properties.setProperty("hibernate.dialect","org.hibernate.dialect.PostgreSQL92Dialect");
 
-        factoryBean.setJpaProperties(properties);
-        return factoryBean;
-    }
-
-    @Bean
-    public PlatformTransactionManager transactionManager(final EntityManagerFactory emf)
-    {return new JpaTransactionManager(emf);}
-*/
 @Bean
 public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
     final LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
@@ -119,8 +101,8 @@ public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
     properties.setProperty("hibernate.dialect","org.hibernate.dialect.PostgreSQL92Dialect");
 
 // Si ponen esto en prod, hay tabla!!!
-    properties.setProperty("hibernate.show_sql", "true");
-    properties.setProperty("format_sql", "true");
+    //properties.setProperty("hibernate.show_sql", "true");
+    //properties.setProperty("format_sql", "true");
     factoryBean.setJpaProperties(properties);
     return factoryBean;
 }

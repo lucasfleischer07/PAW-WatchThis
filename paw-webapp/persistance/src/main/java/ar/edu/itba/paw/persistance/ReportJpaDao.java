@@ -54,37 +54,42 @@ public class ReportJpaDao implements ReportDao{
     public void addReport(Object reviewOrComment,User user, ReportReason reason) {
         if(reviewOrComment instanceof Review){
             Review review=(Review) reviewOrComment;
-            em.persist(new ReviewReport(user,review,reason));
+            ReviewReport reviewReport=new ReviewReport(user,review,reason);
+            em.persist(reviewReport);
+            review.getReports().add(reviewReport);
+
         } else if(reviewOrComment instanceof Comment){
             Comment comment=(Comment) reviewOrComment;
-            em.persist(new CommentReport(user,comment,reason));
+            CommentReport commentReport=new CommentReport(user,comment,reason);
+            em.persist(commentReport);
+            comment.getReports().add(commentReport);
         }
         else throw new IllegalArgumentException();
     }
 
     @Override
     public List<ReviewReport> getReportedReviews() {
-        TypedQuery<ReviewReport> query=em.createQuery("select r from ReviewReport r",ReviewReport.class);
+        TypedQuery<ReviewReport> query=em.createQuery("select r from  ReviewReport r where r.id in(select min(r2.id) from ReviewReport r2 group by r2.review) order by r.id asc",ReviewReport.class);
         return query.getResultList();
 
     }
 
     @Override
     public List<ReviewReport> getReportedReviewsByReason(ReportReason reason){
-        TypedQuery<ReviewReport>query= em.createQuery("select r from ReviewReport r where r.reportReason = :reason", ReviewReport.class);
+        TypedQuery<ReviewReport>query= em.createQuery("select r from ReviewReport r where r.reportReason = :reason and r.id in(select min(r2.id) from ReviewReport r2 group by r2.review) order by r.id asc", ReviewReport.class);
         query.setParameter("reason",reason);
         return query.getResultList();
     }
 
     @Override
     public List<CommentReport> getReportedComments() {
-        TypedQuery<CommentReport>query= em.createQuery("select r from CommentReport r", CommentReport.class);
+        TypedQuery<CommentReport>query= em.createQuery("select r from CommentReport r where r.id in(select min(r2.id) from CommentReport r2 group by r2.comment) order by r.id asc", CommentReport.class);
         return query.getResultList();
     }
 
     @Override
     public List<CommentReport> getReportedCommentsByReason(ReportReason reason){
-        TypedQuery<CommentReport>query= em.createQuery("select r from CommentReport r where r.reportReason = :reason", CommentReport.class);
+        TypedQuery<CommentReport>query= em.createQuery("select r from CommentReport r where r.reportReason = :reason and r.id in(select min(r2.id) from CommentReport r2 group by r2.comment) order by r.id asc", CommentReport.class);
         query.setParameter("reason",reason);
         return query.getResultList();
     }

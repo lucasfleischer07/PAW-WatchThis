@@ -148,7 +148,7 @@ public class ReportServiceImpl implements ReportService{
     }
 
 
-    public void reportReview(Review review, User reporterUser, ReportReason reasons){
+    private void reportReview(Review review, User reporterUser, ReportReason reasons){
         try{
             User reportedUser=review.getUser();
             reportDao.addReport(review,reporterUser,reasons);
@@ -163,7 +163,7 @@ public class ReportServiceImpl implements ReportService{
 
     }
 
-    public void reportComment(Comment comment,User reporterUser,ReportReason reasons){
+    private void reportComment(Comment comment,User reporterUser,ReportReason reasons){
         try{
             User reportedUser=comment.getUser();
             reportDao.addReport(comment,reporterUser,reasons);
