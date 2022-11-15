@@ -97,7 +97,6 @@ public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
     factoryBean.setJpaVendorAdapter(vendorAdapter);
     final Properties properties = new Properties();
     properties.setProperty("hibernate.hbm2ddl.auto", "update");
-    properties.setProperty("hibernate.show_sql", "true"); // TODO: remove this
     properties.setProperty("hibernate.dialect","org.hibernate.dialect.PostgreSQL92Dialect");
 
 // Si ponen esto en prod, hay tabla!!!
