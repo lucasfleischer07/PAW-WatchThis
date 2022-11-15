@@ -146,7 +146,7 @@ public class ContentServiceImplTest {
         genreList.add("Comedy");
         String genreString = cs.getGenreString(genreList);
         Assert.assertNotNull(genreString);
-        Assert.assertEquals("Action,Sci-Fi,Comedy",genreString);
+        Assert.assertEquals("Action Sci-Fi Comedy",genreString);
     }
 
 
