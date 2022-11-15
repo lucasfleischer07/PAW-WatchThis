@@ -76,7 +76,7 @@ public class ReportJpaDao implements ReportDao{
 
     @Override
     public List<ReviewReport> getReportedReviewsByReason(ReportReason reason){
-        TypedQuery<ReviewReport>query= em.createQuery("select r from ReviewReport r where r.reportReason = :reason and r.id in(select min(r2.id) from ReviewReport r2 group by r2.review) order by r.id asc", ReviewReport.class);
+        TypedQuery<ReviewReport>query= em.createQuery("select r from ReviewReport r where  r.id in(select min(r2.id) from ReviewReport r2 where r2.reportReason = :reason group by r2.review) order by r.id asc", ReviewReport.class);
         query.setParameter("reason",reason);
         return query.getResultList();
     }
@@ -89,7 +89,7 @@ public class ReportJpaDao implements ReportDao{
 
     @Override
     public List<CommentReport> getReportedCommentsByReason(ReportReason reason){
-        TypedQuery<CommentReport>query= em.createQuery("select r from CommentReport r where r.reportReason = :reason and r.id in(select min(r2.id) from CommentReport r2 group by r2.comment) order by r.id asc", CommentReport.class);
+        TypedQuery<CommentReport>query= em.createQuery("select r from CommentReport r  where r.id in(select min(r2.id) from CommentReport r2 where r2.reportReason = :reason group by r2.comment) order by r.id asc", CommentReport.class);
         query.setParameter("reason",reason);
         return query.getResultList();
     }
