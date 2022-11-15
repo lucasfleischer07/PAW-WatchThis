@@ -177,9 +177,7 @@ public class MovieAndSerieController {
                 referer.append(referer.charAt(referer.length()-1)=='?'?"sorting="+sorting.get():"&sorting="+sorting.get());
             }
         }
-        String string= referer.toString();
         request.getSession().setAttribute("referer",referer.toString());
-        string=request.getSession().getAttribute("referer").toString();
         return mav;
     }
     // * ---------------------------------------------------------------------------------------------------------------
