@@ -241,8 +241,10 @@ public class ContentJpaDao implements ContentDao{
     }
 
     @Override
-    public void contentCreate(String name, String description, String releaseDate, String genre, String creator, Integer duration, String durationString, String type, byte[] contentImage) {
-        em.persist(new Content(name,contentImage,description,releaseDate,genre,creator,durationString,duration,type));
+    public Content contentCreate(String name, String description, String releaseDate, String genre, String creator, Integer duration, String durationString, String type, byte[] contentImage) {
+        Content toAdd=new Content(name,contentImage,description,releaseDate,genre,creator,durationString,duration,type);
+        em.persist(toAdd);
+        return toAdd;
     }
 
     @Override

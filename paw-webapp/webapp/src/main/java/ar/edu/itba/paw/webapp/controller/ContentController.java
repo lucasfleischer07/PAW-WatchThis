@@ -233,9 +233,8 @@ public class ContentController {
             auxGenre = auxGenre + " " + genre;
         }
 
-        cs.contentCreate(contentForm.getName(),contentForm.getDescription(),contentForm.getReleaseDate(),auxGenre,contentForm.getCreator(),contentForm.getDuration(),contentForm.getType(),contentForm.getContentPicture().getBytes());
-        Optional<Content> newContent = cs.findByName(contentForm.getName());
-        return new ModelAndView("redirect:/" + newContent.get().getType() + "/" + newContent.get().getId());
+        Content newContent=cs.contentCreate(contentForm.getName(),contentForm.getDescription(),contentForm.getReleaseDate(),auxGenre,contentForm.getCreator(),contentForm.getDuration(),contentForm.getType(),contentForm.getContentPicture().getBytes());
+        return new ModelAndView("redirect:/" + newContent.getType() + "/" + newContent.getId());
 
     }
 
