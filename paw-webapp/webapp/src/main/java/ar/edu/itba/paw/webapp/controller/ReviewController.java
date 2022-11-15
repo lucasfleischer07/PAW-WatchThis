@@ -142,7 +142,7 @@ public class ReviewController {
 
 
     // * ----------------------------------- Movies and Series Review Creation------------------------------------------
-    @RequestMapping(value = "/reviewForm/{type:movie|serie}/{id:[0-9]+}/{userId:[0-9]+}", method = {RequestMethod.GET})
+    @RequestMapping(value = "/reviewForm/{type:movie|serie}/{id:[0-9]+}", method = {RequestMethod.GET})
     public ModelAndView reviewFormCreate(Principal userDetails,
                                          @ModelAttribute("registerForm") final ReviewForm reviewForm,
                                          @PathVariable("id")final long id,
@@ -173,7 +173,7 @@ public class ReviewController {
         return mav;
     }
 
-    @RequestMapping(value = "/reviewForm/{type:movie|serie}/{id:[0-9]+}/{userId:[0-9]+}", method = {RequestMethod.POST})
+    @RequestMapping(value = "/reviewForm/{type:movie|serie}/{id:[0-9]+}", method = {RequestMethod.POST})
     public ModelAndView reviewFormMovie(Principal userDetails,
                                         @Valid @ModelAttribute("registerForm") final ReviewForm form,
                                         final BindingResult errors,

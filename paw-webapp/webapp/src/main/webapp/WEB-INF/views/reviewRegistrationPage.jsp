@@ -31,7 +31,7 @@
             <jsp:param name="admin" value="${admin}"/>
         </jsp:include>
 
-        <c:url value="/reviewForm/${details.type}/${details.id}/${userId}" var="postPath"/>
+        <c:url value="/reviewForm/${details.type}/${details.id}" var="postPath"/>
         <form:form modelAttribute="registerForm" action="${postPath}" method="post">
             <div class="W-general-div-review-info">
                 <div class="W-review-registration-img-and-name">
