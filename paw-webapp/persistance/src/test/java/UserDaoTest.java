@@ -132,7 +132,7 @@ public class UserDaoTest {
         User user=dao.findByUserName("brandyhuevo").get();
         List<Content> contentList=dao.getWatchList(user);
         assertEquals(2,contentList.size());
-        assertEquals(10L,contentList.get(1).getId());
+        assertEquals(172L,contentList.get(1).getId());
 
     }
     @Test
@@ -149,7 +149,7 @@ public class UserDaoTest {
         User user=dao.findByUserName("brandyhuevo").get();
         List<Content> contentList=dao.getUserViewedList(user);
         assertEquals(2,contentList.size());
-        assertEquals(10L,contentList.get(1).getId());
+        assertEquals(501L,contentList.get(1).getId());
     }
     @Test
     public void testSearchContentInViewedList(){
