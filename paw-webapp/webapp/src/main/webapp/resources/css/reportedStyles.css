@@ -34,8 +34,6 @@
     font-style: italic;
     margin-top: 1vw;
     margin-left: 1vw;
-    text-overflow: ellipsis;
-    white-space: nowrap;
     overflow: hidden;
     width: 90%;
 }

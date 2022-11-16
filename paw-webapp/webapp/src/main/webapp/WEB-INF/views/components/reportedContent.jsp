@@ -102,19 +102,20 @@
             <div class="W-comment-text">
                 <c:choose>
                     <c:when test="${param.reportType == 'comment'}">
-                        <p id=<c:out value="commentTextArea1${param.typeId}${param.reportType}${param.reportDescription}"/> class="W-report-review-paragraph">"<c:out value="${param.reviewNameOfReportedComment}"/>"</p>
-                        <p id=<c:out value="commentTextArea${param.typeId}${param.reportType}${param.reportDescription}"/> class="W-report-description-paragraph" ><c:out value="${param.reportDescription}"/></p>
+                        <p id=<c:out value="commentTextArea1${param.typeId}${param.reportType}"/> class="W-report-review-paragraph">"<c:out value="${param.reviewNameOfReportedComment}"/>"</p>
+                        <p id=<c:out value="commentTextArea${param.typeId}${param.reportType}"/> class="W-report-description-paragraph" ><c:out value="${param.reportDescription}"/></p>
                     </c:when>
                     <c:otherwise>
-                        <p id=<c:out value="commentTextArea${param.typeId}${param.reportType}${param.reportDescription}"/> class="W-report-description-paragraph-review" ><c:out value="${param.reportDescription}"/></p>
-                        <p id=<c:out value="commentTextArea1${param.typeId}${param.reportType}${param.reportDescription}"/> class="W-report-review-paragraph-review">"<c:out value="${param.reportDescription2}"/>"</p>
+                        <p id=<c:out value="commentTextArea${param.typeId}${param.reportType}"/> class="W-report-description-paragraph-review" ><c:out value="${param.reportDescription}"/></p>
+                        <p id=<c:out value="commentTextArea1${param.typeId}${param.reportType}"/> class="W-report-review-paragraph-review">"<c:out value="${param.reportDescription2}"/>"</p>
                     </c:otherwise>
                 </c:choose>
                 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
                 <script>
-                    document.getElementById('commentTextArea'+'${param.typeId}'+'${param.reportType}'+'${param.reportDescription}').innerHTML = marked.parse(document.getElementById('commentTextArea'+'${param.typeId}'+'${param.reportType}'+'${param.reportDescription}').innerHTML);
-                    document.getElementById('commentTextArea1'+'${param.typeId}'+'${param.reportType}'+'${param.reportDescription}').innerHTML = marked.parse(document.getElementById('commentTextArea1'+'${param.typeId}'+'${param.reportType}'+'${param.reportDescription}').innerHTML);
-
+                    console.log('commentTextArea'+'<c:out value="${param.typeId}"/>'+'<c:out value="${param.reportType}"/>')
+                    console.log('commentTextArea1'+'<c:out value="${param.typeId}"/>'+'<c:out value="${param.reportType}"/>')
+                    document.getElementById('commentTextArea'+'${param.typeId}'+'${param.reportType}').innerHTML = marked.parse(document.getElementById('commentTextArea'+'<c:out value="${param.typeId}"/>'+'<c:out value="${param.reportType}"/>').innerHTML);
+                    document.getElementById('commentTextArea1'+'${param.typeId}'+'${param.reportType}').innerHTML = marked.parse(document.getElementById('commentTextArea1'+'<c:out value="${param.typeId}"/>'+'<c:out value="${param.reportType}"/>').innerHTML);
                 </script>
 
             </div>
