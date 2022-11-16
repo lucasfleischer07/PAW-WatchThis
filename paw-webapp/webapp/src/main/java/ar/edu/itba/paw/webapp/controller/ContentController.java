@@ -188,8 +188,8 @@ public class ContentController {
     @RequestMapping(value = "/content/editInfo/{contentId:[0-9]+}", method = {RequestMethod.POST})
     public ModelAndView editContent(Principal userDetails,
                                     @Valid @ModelAttribute("contentEditForm") final ContentEditForm contentEditForm,
-                                    @PathVariable("contentId")final long contentId,
                                     final BindingResult errors,
+                                    @PathVariable("contentId")final long contentId,
                                     HttpServletRequest request) throws  IOException {
         if(errors.hasErrors()) {
             return editContent(userDetails, contentEditForm,contentId);
