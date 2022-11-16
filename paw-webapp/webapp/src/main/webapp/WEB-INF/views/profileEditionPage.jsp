@@ -30,8 +30,8 @@
         </jsp:include>
 
         <div class="row py-5 px-4 W-set-margins">
-            <div class="col-md-5 mx-auto W-edit-profile-width">
-                <div class="bg-white shadow rounded overflow-hidden">
+            <div class="col-md-5 mx-auto W-edit-profile-display">
+                <div class="bg-white shadow rounded overflow-hidden W-profile-general-div">
                     <div class="W-profile-background-color bg-dark">
                         <div>
                             <div class="profile mr-3">
