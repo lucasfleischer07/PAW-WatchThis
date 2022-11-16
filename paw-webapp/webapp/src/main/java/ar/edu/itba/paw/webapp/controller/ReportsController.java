@@ -66,6 +66,16 @@ public class ReportsController {
         mav.addObject("reviewsReportedAmount", reviewsReportedList.size());
         mav.addObject("commentsReportedAmount", commentsReportedList.size());
 
+        if(pageNum.isPresent()) {
+            if (Objects.equals(type, "reviews") && (reviewsReportedList.size() <= REPORTS_AMOUNT * (pageNum.get() - 1)) || pageNum.get()<0) {
+                return new ModelAndView("redirect:/report/reportedContent/" + type +"/" + (reason.isPresent() ? "filters"+"/page/" + (((reviewsReportedList.size()-1) / 5)+1) +"?reason=" + reason.get() : "page/" + (((reviewsReportedList.size()-1) / 5)+1)));
+            }
+            else if (Objects.equals(type, "comments") && (commentsReportedList.size() <= REPORTS_AMOUNT * (pageNum.get() - 1))||pageNum.get()<0) {
+                return new ModelAndView("redirect:/report/reportedContent/" + type +"/" + (reason.isPresent() ? "filters"+"/page/" + (((commentsReportedList.size()-1) / 5)+1) +"?reason=" + reason.get() : "page/" + (((commentsReportedList.size()-1) / 5)+1)));
+
+            }
+        }
+
         if(Objects.equals(type, "reviews")) {
             mav.addObject("type", "reviews");
             paginationSetup(mav,pageNum.orElse(1), reviewsReportedList);
