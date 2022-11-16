@@ -29,6 +29,7 @@ public class User {
     private byte[] image;
 
     @OneToMany(fetch = FetchType.LAZY,orphanRemoval = true,mappedBy = "user")
+    @OrderBy(value = "reviewid DESC ")
     private List<Review> userReviews;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -36,6 +37,7 @@ public class User {
             name = "userwatchlist",
             joinColumns = @JoinColumn(name = "userid"),
             inverseJoinColumns = @JoinColumn(name = "contentid"))
+    @OrderBy(value = "id ASC ")
     private List<Content> watchlist;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -43,6 +45,7 @@ public class User {
             name = "userviewedlist",
             joinColumns = @JoinColumn(name = "userid"),
             inverseJoinColumns = @JoinColumn(name = "contentid"))
+    @OrderBy(value = "id ASC ")
     private List<Content> viewedlist;
 
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,orphanRemoval = true)
