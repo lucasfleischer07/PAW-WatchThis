@@ -231,7 +231,11 @@
             <c:when test="${pageSelected > 1}">
               <li class="page-item">
                 <a class="page-link W-pagination-color" href="<c:url value="${baseUrl}/page/${pageSelected-1}">
-                <c:param name="reason" value="${reason}"/></c:url>"><spring:message code="Pagination.Prev"/></a>
+                    <c:if test="${reason != 'ANY'}">
+                        <c:param name="reason" value="${reason}"/>
+                    </c:if>
+
+                </c:url>"><spring:message code="Pagination.Prev"/></a>
               </li>
             </c:when>
             <c:otherwise>
@@ -247,7 +251,9 @@
                   <c:when test="${page != pageSelected && ((page > pageSelected - 4 && page<pageSelected) || (page < pageSelected+5 && page > pageSelected))}">
                     <li class="page-item">
                       <a class="page-link W-pagination-color" href="<c:url value="${baseUrl}/page/${page}">
-                                                                                    <c:param name="reason" value="${reason}"/>
+                                                                        <c:if test="${reason != 'ANY'}">
+                                                                            <c:param name="reason" value="${reason}"/>
+                                                                        </c:if>
                                                                     </c:url>">
                         <c:out value="${page}"/>
                       </a>
@@ -256,7 +262,9 @@
                   <c:when test="${page == pageSelected - 4 || page == pageSelected + 5 }">
                     <li class="page-item">
                       <a class="page-link W-pagination-color" href="<c:url value="${baseUrl}/page/${page}">
-                                                                        <c:param name="reason" value="${reason}"/>
+                                                                        <c:if test="${reason != 'ANY'}">
+                                                                            <c:param name="reason" value="${reason}"/>
+                                                                        </c:if>
                                                                     </c:url>">
                         ...
                       </a>
@@ -265,7 +273,9 @@
                   <c:when test="${page == pageSelected}">
                     <li class="page-item active">
                       <a class="page-link W-pagination-color" href="<c:url value="${baseUrl}/page/${page}">
-                                                                        <c:param name="reason" value="${reason}"/>
+                                                                        <c:if test="${reason != 'ANY'}">
+                                                                            <c:param name="reason" value="${reason}"/>
+                                                                        </c:if>
                                                                     </c:url>">
                         <c:out value="${page}"/>
                       </a>
@@ -284,7 +294,9 @@
                   <c:when test="${page == pageSelected}">
                     <li class="page-item active">
                       <a class="page-link W-pagination-color" href="<c:url value="${baseUrl}/page/${page}">
-                                                                                    <c:param name="reason" value="${reason}"/>
+                                                                       <c:if test="${reason != 'ANY'}">
+                                                                            <c:param name="reason" value="${reason}"/>
+                                                                        </c:if>
                                                                     </c:url>">
                         <c:out value="${page}"/>
                       </a>
@@ -293,7 +305,9 @@
                   <c:otherwise>
                     <li class="page-item">
                       <a class="page-link W-pagination-color" href="<c:url value="${baseUrl}/page/${page}">
-                                                                        <c:param name="reason" value="${reason}"/>
+                                                                        <c:if test="${reason != 'ANY'}">
+                                                                            <c:param name="reason" value="${reason}"/>
+                                                                        </c:if>
                                                                      </c:url>">
                         <c:out value="${page}"/>
                       </a>
@@ -308,7 +322,9 @@
             <c:when test="${pageSelected < amountPages}">
               <li class="page-item">
                 <a class="page-link W-pagination-color" href="<c:url value="${baseUrl}/page/${pageSelected+1}">
-                                                                    <c:param name="reason" value="${reason}"/>
+                                                                    <c:if test="${reason != 'ANY'}">
+                                                                            <c:param name="reason" value="${reason}"/>
+                                                                    </c:if>
                                                                 </c:url>">
                     <spring:message code="Pagination.Next"/></a>
               </li>
