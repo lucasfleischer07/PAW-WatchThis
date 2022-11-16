@@ -146,6 +146,7 @@ public class MovieAndSerieController {
             mav.addObject("amountPages", amountOfPages);
             mav.addObject("pageSelected",page);
             mav.addObject("contentType", type);
+            mav.addObject("contentType2", type);
         }
 
         mav.addObject("genre", cs.getGenreString(genreList));
