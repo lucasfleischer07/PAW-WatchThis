@@ -22,6 +22,7 @@
     <body>
         <jsp:include page="components/header.jsp">
             <jsp:param name="type" value="${contentType}"/>
+            <jsp:param name="type2" value="${contentType2}"/>
             <jsp:param name="genre" value="${genre}"/>
             <jsp:param name="durationFrom" value="${durationFrom}"/>
             <jsp:param name="durationTo" value="${durationTo}"/>

@@ -93,6 +93,7 @@ public class ReviewController {
 
         mav.addObject("contentId",contentId);
         mav.addObject("type",auxType);
+        mav.addObject("type2",auxType);
 
         if(userDetails != null) {
             String userEmail = userDetails.getName();

@@ -95,6 +95,7 @@ public class ContentController {
         mav.addObject("durationTo","ANY");
         mav.addObject("sorting","ANY");
         mav.addObject("contentType", "all");
+        mav.addObject("contentType2", "all");
         mav.addObject("sortingTypes", Sorting.values());
         if(userDetails != null) {
             String userEmail = userDetails.getName();
