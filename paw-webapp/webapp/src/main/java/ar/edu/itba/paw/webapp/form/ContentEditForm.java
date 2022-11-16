@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.form;
 
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.*;
@@ -15,8 +16,8 @@ public class ContentEditForm {
 
     private String releaseDate;
 
-    @NotNull
-    private String genre;
+    @NotEmpty
+    private String[] genre;
 
     @Size(min = 4, max = 100)
     private String creator;
@@ -50,7 +51,7 @@ public class ContentEditForm {
         this.releaseDate = releaseDate;
     }
 
-    public void setGenre(String genre) {
+    public void setGenre(String[] genre) {
         this.genre = genre;
     }
 
@@ -79,7 +80,7 @@ public class ContentEditForm {
         return releaseDate;
     }
 
-    public String getGenre() {
+    public String[] getGenre() {
         return genre;
     }
 

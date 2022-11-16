@@ -40,7 +40,7 @@
         <c:choose>
             <c:when test="${create==true}">
                 <c:url value="/content/create" var="postPath"/>
-                <form:form modelAttribute="contentCreate" action="${postPath}" method="post" enctype="multipart/form-data">
+                <form:form modelAttribute="contentCreate" action="${postPath}" method="post" enctype="multipart/form-data" id="form">
                     <div class="W-general-div-review-info">
                         <div class="card W-review-card">
                             <c:if test="${errorMsg!=null && errorMsg != ''}">
@@ -87,46 +87,46 @@
                                 <form:errors path="genre" element="p" cssStyle="color: #b21e26"/>
                                 <form:label path="genre" class="form-label"><spring:message code="CreateContent.ContentGenre"/> <span class="W-red-asterisco"><spring:message code="Asterisk"/></span></form:label>
 
-                                <button id="createGenre" onclick="dropDownStayGenreCreate()" type="button"class="W-genre-create-button btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" >
-                                    <spring:message code="GenreMessage"/>
+                                <button id="createGenre" onclick="dropDownStayGenreCreate()" type="button"class="W-genre-create-button btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"  >
+                                    <spring:message code="Genre.Message2"/>
                                 </button>
 
                                 <ul class="dropdown-menu" id="drop3">
                                     <li class="mb-1 px-2">
-                                        <label><form:checkbox cssClass="px-2" path="genre" value="Action"/> <spring:message code="Genre.Action"/></label>
+                                        <label><form:checkbox onclick="update(this)" cssClass="px-2" path="genre" value="Action"/> <spring:message code="Genre.Action"/></label>
                                     </li>
                                     <li class="mb-1 px-2">
-                                        <label><form:checkbox cssClass="px-2" path="genre" value="Sci-Fi"/> <spring:message code="Genre.Science"/></label>
+                                        <label><form:checkbox onclick="update(this)"  cssClass="px-2" path="genre" value="Sci-Fi"/> <spring:message code="Genre.Science"/></label>
                                     </li>
                                     <li class="mb-1 px-2">
-                                        <label><form:checkbox cssClass="px-2" path="genre" value="Comedy"/> <spring:message code="Genre.Comedy"/></label>
+                                        <label><form:checkbox onclick="update(this)" cssClass="px-2" path="genre" value="Comedy"/> <spring:message code="Genre.Comedy"/></label>
                                     </li>
                                     <li class="mb-1 px-2">
-                                        <label><form:checkbox cssClass="px-2" path="genre" value="Adventure"/> <spring:message code="Genre.Adventure"/></label>
+                                        <label><form:checkbox onclick="update(this)" cssClass="px-2" path="genre" value="Adventure"/> <spring:message code="Genre.Adventure"/></label>
                                     </li>
                                     <li class="mb-1 px-2">
-                                        <label><form:checkbox cssClass="px-2" path="genre" value="Drama"/> <spring:message code="Genre.Drama"/></label>
+                                        <label><form:checkbox onclick="update(this)" cssClass="px-2" path="genre" value="Drama"/> <spring:message code="Genre.Drama"/></label>
                                     </li>
                                     <li class="mb-1 px-2">
-                                        <label><form:checkbox cssClass="px-2" path="genre" value="Horror"/> <spring:message code="Genre.Horror"/></label>
+                                        <label><form:checkbox onclick="update(this)" cssClass="px-2" path="genre" value="Horror"/> <spring:message code="Genre.Horror"/></label>
                                     </li>
                                     <li class="mb-1 px-2">
-                                        <label><form:checkbox cssClass="px-2" path="genre" value="Animation"/> <spring:message code="Genre.Animation"/></label>
+                                        <label><form:checkbox onclick="update(this)" cssClass="px-2" path="genre" value="Animation"/> <spring:message code="Genre.Animation"/></label>
                                     </li>
                                     <li class="mb-1 px-2">
-                                        <label><form:checkbox cssClass="px-2" path="genre" value="Thriller"/> <spring:message code="Genre.Thriller"/></label>
+                                        <label><form:checkbox onclick="update(this)" cssClass="px-2" path="genre" value="Thriller"/> <spring:message code="Genre.Thriller"/></label>
                                     </li>
                                     <li class="mb-1 px-2">
-                                        <label><form:checkbox cssClass="px-2" path="genre" value="Mystery"/> <spring:message code="Genre.Mystery"/></label>
+                                        <label><form:checkbox onclick="update(this)" cssClass="px-2" path="genre" value="Mystery"/> <spring:message code="Genre.Mystery"/></label>
                                     </li>
                                     <li class="mb-1 px-2">
-                                        <label><form:checkbox cssClass="px-2" path="genre" value="Crime"/> <spring:message code="Genre.Crime"/></label>
+                                        <label><form:checkbox onclick="update(this)" cssClass="px-2" path="genre" value="Crime"/> <spring:message code="Genre.Crime"/></label>
                                     </li>
                                     <li class="mb-1 px-2">
-                                        <label><form:checkbox cssClass="px-2" path="genre" value="Fantasy"/> <spring:message code="Genre.Fantasy"/></label>
+                                        <label><form:checkbox onclick="update(this)" cssClass="px-2" path="genre" value="Fantasy"/> <spring:message code="Genre.Fantasy"/></label>
                                     </li>
                                     <li class="mb-1 px-2">
-                                        <label><form:checkbox cssClass="px-2" path="genre" value="Romance"/> <spring:message code="Genre.Romance"/></label>
+                                        <label><form:checkbox onclick="update(this)" cssClass="px-2" path="genre" value="Romance"/> <spring:message code="Genre.Romance"/></label>
                                     </li>
                                 </ul>
                             </div>
@@ -201,46 +201,46 @@
                                 <form:errors path="genre" element="p" cssStyle="color: #b21e26"/>
                                 <form:label path="genre" class="form-label"><spring:message code="CreateContent.ContentGenre"/> <span class="W-red-asterisco"><spring:message code="Asterisk"/></span></form:label>
 
-                                <button id="createGenre" onclick="dropDownStayGenreCreate()" type="button"class="W-genre-create-button btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" >
-                                    <spring:message code="GenreMessage"/>
+                                <button id="createGenre" onclick="dropDownStayGenreCreate()" type="button" class="W-genre-create-button btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" >
+                                    <spring:message code="Genre.Message2"/>
                                 </button>
 
-                                <ul class="dropdown-menu" id="drop3">
-                                    <li class="mb-1 px-2">
-                                        <label><form:checkbox cssClass="px-2" path="genre" value="Action"/> <spring:message code="Genre.Action"/></label>
+                                <ul class="dropdown-menu" id="drop3" >
+                                    <li class="mb-1 px-2" >
+                                        <label><form:checkbox onclick="update(this)" cssClass="px-2" path="genre" value="Action"/> <spring:message code="Genre.Action"/></label>
                                     </li>
                                     <li class="mb-1 px-2">
-                                        <label><form:checkbox cssClass="px-2" path="genre" value="Sci-Fi"/> <spring:message code="Genre.Science"/></label>
+                                        <label><form:checkbox onclick="update(this)" cssClass="px-2" path="genre" value="Sci-Fi"/> <spring:message code="Genre.Science"/></label>
                                     </li>
                                     <li class="mb-1 px-2">
-                                        <label><form:checkbox cssClass="px-2" path="genre" value="Comedy"/> <spring:message code="Genre.Comedy"/></label>
+                                        <label><form:checkbox onclick="update(this)" cssClass="px-2" path="genre" value="Comedy"/> <spring:message code="Genre.Comedy"/></label>
                                     </li>
                                     <li class="mb-1 px-2">
-                                        <label><form:checkbox cssClass="px-2" path="genre" value="Adventure"/> <spring:message code="Genre.Adventure"/></label>
+                                        <label><form:checkbox onclick="update(this)" cssClass="px-2" path="genre" value="Adventure"/> <spring:message code="Genre.Adventure"/></label>
                                     </li>
                                     <li class="mb-1 px-2">
-                                        <label><form:checkbox cssClass="px-2" path="genre" value="Drama"/> <spring:message code="Genre.Drama"/></label>
+                                        <label><form:checkbox onclick="update(this)" cssClass="px-2" path="genre" value="Drama"/> <spring:message code="Genre.Drama"/></label>
                                     </li>
                                     <li class="mb-1 px-2">
-                                        <label><form:checkbox cssClass="px-2" path="genre" value="Horror"/> <spring:message code="Genre.Horror"/></label>
+                                        <label><form:checkbox onclick="update(this)" cssClass="px-2" path="genre" value="Horror"/> <spring:message code="Genre.Horror"/></label>
                                     </li>
                                     <li class="mb-1 px-2">
-                                        <label><form:checkbox cssClass="px-2" path="genre" value="Animation"/> <spring:message code="Genre.Animation"/></label>
+                                        <label><form:checkbox onclick="update(this)" cssClass="px-2" path="genre" value="Animation"/> <spring:message code="Genre.Animation"/></label>
                                     </li>
                                     <li class="mb-1 px-2">
-                                        <label><form:checkbox cssClass="px-2" path="genre" value="Thriller"/> <spring:message code="Genre.Thriller"/></label>
+                                        <label><form:checkbox onclick="update(this)" cssClass="px-2" path="genre" value="Thriller"/> <spring:message code="Genre.Thriller"/></label>
                                     </li>
                                     <li class="mb-1 px-2">
-                                        <label><form:checkbox cssClass="px-2" path="genre" value="Mystery"/> <spring:message code="Genre.Mystery"/></label>
+                                        <label><form:checkbox onclick="update(this)" cssClass="px-2" path="genre" value="Mystery"/> <spring:message code="Genre.Mystery"/></label>
                                     </li>
                                     <li class="mb-1 px-2">
-                                        <label><form:checkbox cssClass="px-2" path="genre" value="Crime"/> <spring:message code="Genre.Crime"/></label>
+                                        <label><form:checkbox onclick="update(this)" cssClass="px-2" path="genre" value="Crime"/> <spring:message code="Genre.Crime"/></label>
                                     </li>
                                     <li class="mb-1 px-2">
-                                        <label><form:checkbox cssClass="px-2" path="genre" value="Fantasy"/> <spring:message code="Genre.Fantasy"/></label>
+                                        <label><form:checkbox onclick="update(this)" cssClass="px-2" path="genre" value="Fantasy"/> <spring:message code="Genre.Fantasy"/></label>
                                     </li>
                                     <li class="mb-1 px-2">
-                                        <label><form:checkbox cssClass="px-2" path="genre" value="Romance"/> <spring:message code="Genre.Romance"/></label>
+                                        <label><form:checkbox onclick="update(this)" cssClass="px-2" path="genre" value="Romance"/> <spring:message code="Genre.Romance"/></label>
                                     </li>
                                 </ul>
                             </div>
