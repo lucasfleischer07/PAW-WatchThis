@@ -72,8 +72,8 @@
                     <c:choose>
                         <c:when test="${param.type == 'profile'}">
                             <form class="form-inline my-2 my-lg-0 W-searchbar" method="GET" action="<c:url value="/all/filters"/>">
-                                <spring:message var="searchPlaceholder" />
-                                <input name="query" class="form-control me-2" type="search" placeholder="<spring:message code="SearchMessage"/>" aria-label="Search" >
+                                <spring:message code="SearchMessage" var="searchPlaceholder"/>
+                                <input name="query" class="form-control me-2" type="search" placeholder="${searchPlaceholder}" aria-label="Search" >
                                 <c:if test="${param.genre != 'ANY' && param.genre!=null}">
                                     <input type="hidden" id="thisField" name="genre" value="${param.genre}">
                                 </c:if>
@@ -95,13 +95,13 @@
                             <c:choose>
                                 <c:when test="${param.type == 'movie'}">
                                     <form class="form-inline my-2 my-lg-0 W-searchbar" method="GET" action="<c:url value="/movies/filters"/>">
-                                        <spring:message var="searchPlaceholder" />
+                                        <spring:message code="SearchMessage" var="searchPlaceholder"/>
                                         <c:choose>
                                             <c:when test="${param.query != 'ANY'}">
-                                                <input name="query" class="form-control me-2" type="search" placeholder="<spring:message code="SearchMessage"/>" aria-label="Search" value="<c:out value="${param.query}"/>" >
+                                                <input name="query" class="form-control me-2" type="search" placeholder="${searchPlaceholder}" aria-label="Search" value="<c:out value="${param.query}"/>" >
                                             </c:when>
                                             <c:otherwise>
-                                                <input name="query" class="form-control me-2" type="search" placeholder="<spring:message code="SearchMessage"/>" aria-label="Search" >
+                                                <input name="query" class="form-control me-2" type="search" placeholder="${searchPlaceholder}" aria-label="Search" >
                                             </c:otherwise>
                                         </c:choose>
                                         <c:if test="${param.genre != 'ANY' && param.genre!=null}">
@@ -123,13 +123,13 @@
                                 </c:when>
                                 <c:when test="${param.type == 'serie'}">
                                     <form class="form-inline my-2 my-lg-0 W-searchbar" method="GET" action="<c:url value="/series/filters"/>">
-                                        <spring:message var="searchPlaceholder" />
+                                        <spring:message code="SearchMessage" var="searchPlaceholder"/>
                                         <c:choose>
                                             <c:when test="${param.query != 'ANY'}">
-                                                <input name="query" class="form-control me-2" type="search" placeholder="<spring:message code="SearchMessage"/>" aria-label="Search" value="<c:out value="${param.query}"/>">
+                                                <input name="query" class="form-control me-2" type="search" placeholder="${searchPlaceholder}" aria-label="Search" value="<c:out value="${param.query}"/>">
                                             </c:when>
                                             <c:otherwise>
-                                                <input name="query" class="form-control me-2" type="search" placeholder="<spring:message code="SearchMessage"/>" aria-label="Search" >
+                                                <input name="query" class="form-control me-2" type="search" placeholder="${searchPlaceholder}" aria-label="Search" >
                                             </c:otherwise>
                                         </c:choose>
                                         <c:if test="${param.genre != 'ANY' && param.genre!=null}">
@@ -151,13 +151,13 @@
                                 </c:when>
                                 <c:otherwise>
                                     <form class="form-inline my-2 my-lg-0 W-searchbar" method="GET" action="<c:url value="/${param.type2}/filters"/>">
-                                        <spring:message var="searchPlaceholder" />
+                                        <spring:message code="SearchMessage" var="searchPlaceholder"/>
                                         <c:choose>
                                             <c:when test="${param.query != 'ANY'}">
-                                                <input name="query" class="form-control me-2" type="search" placeholder="<spring:message code="SearchMessage"/>" aria-label="Search" value="<c:out value="${param.query}"/> " >
+                                                <input name="query" class="form-control me-2" type="search" placeholder="${searchPlaceholder}" aria-label="Search" value="<c:out value="${param.query}"/> " >
                                             </c:when>
                                             <c:otherwise>
-                                                <input name="query" class="form-control me-2" type="search" placeholder="<spring:message code="SearchMessage"/>" aria-label="Search" >
+                                                <input name="query" class="form-control me-2" type="search" placeholder="${searchPlaceholder}" aria-label="Search" >
                                             </c:otherwise>
                                         </c:choose>
                                         <c:if test="${param.genre != 'ANY' && param.genre!=null}">
