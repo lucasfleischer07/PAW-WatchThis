@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -87,7 +88,14 @@ public class ReportsController {
                                       @PathVariable("reviewId") final long reviewId,
                                       @ModelAttribute("reportReviewForm") final ReportCommentForm reportReviewForm,
                                       @ModelAttribute("reportCommentForm") final ReportCommentForm reportCommentForm,
+                                      final BindingResult errors,
                                       HttpServletRequest request){
+
+        if(errors.hasErrors() || reportReviewForm.getReportType() == null) {
+            String referer = request.getHeader("Referer");
+            return new ModelAndView("redirect:"+ referer);
+        }
+
         Review review=rs.findById(reviewId).orElseThrow(PageNotFoundException::new);
         User user=us.findByEmail(userDetails.getName()).get();
         rrs.addReport(review, user, reportReviewForm.getReportType());
@@ -103,7 +111,14 @@ public class ReportsController {
                                       @PathVariable("commentId") final long commentId,
                                       @ModelAttribute("reportReviewForm") final ReportCommentForm reportReviewForm,
                                       @ModelAttribute("reportCommentForm") final ReportCommentForm reportCommentForm,
+                                      final BindingResult errors,
                                       HttpServletRequest request){
+
+        if(errors.hasErrors() || reportCommentForm.getReportType() == null) {
+            String referer = request.getHeader("Referer");
+            return new ModelAndView("redirect:"+ referer);
+        }
+
         Comment comment=ccs.getComment(commentId).orElseThrow(PageNotFoundException::new);
         User user=us.findByEmail(userDetails.getName()).get();
         if(comment.getUser().getId()==user.getId())

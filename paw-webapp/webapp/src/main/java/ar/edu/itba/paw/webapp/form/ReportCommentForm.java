@@ -1,6 +1,9 @@
 package ar.edu.itba.paw.webapp.form;
 
+import javax.validation.constraints.NotNull;
+
 public class ReportCommentForm {
+    @NotNull
     private String reportType;
 
     public String getReportType() {
