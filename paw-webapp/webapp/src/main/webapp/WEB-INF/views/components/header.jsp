@@ -227,7 +227,7 @@
                                             </c:otherwise>
                                         </c:choose>
                                         <ul class="dropdown-menu" id="drop2">
-                                            <c:url value="/${param.type}/filters" var="postPath">
+                                            <c:url value="/${param.type2}/filters" var="postPath">
                                                 <c:if test="${param.query != 'ANY' && param.query!=null}">
                                                     <c:param name="query" value="${param.query}"/>
                                                 </c:if>
@@ -316,7 +316,7 @@
                                             </c:otherwise>
                                         </c:choose>
                                         <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
+                                            <li><a class="dropdown-item" href="<c:url value="/${param.type2}/filters">
                                                                                                 <c:if test="${param.query != 'ANY' && param.query!=null}">
                                                                                                     <c:param name="query" value="${param.query}"/>
                                                                                                 </c:if>
@@ -327,7 +327,7 @@
                                                                                                     <c:param name="sorting" value="${param.sorting}"/>
                                                                                                 </c:if>
                                                                                                 </c:url>" onclick="showDuration(this)">Clear filter</a></li>
-                                            <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
+                                            <li><a class="dropdown-item" href="<c:url value="/${param.type2}/filters">
                                                                                                 <c:if test="${param.query != 'ANY' && param.query!=null}">
                                                                                                     <c:param name="query" value="${param.query}"/>
                                                                                                 </c:if>
@@ -339,7 +339,7 @@
                                                                                                 </c:if>
                                                                                                 <c:param name="durationFrom" value="0"/>-<c:param name="durationTo" value="90"/>
                                                                                                 </c:url>" onclick="showDuration(this)">0-90 minutes</a></li>
-                                            <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
+                                            <li><a class="dropdown-item" href="<c:url value="/${param.type2}/filters">
                                                                                                 <c:if test="${param.query != 'ANY' && param.query!=null}">
                                                                                                     <c:param name="query" value="${param.query}"/>
                                                                                                 </c:if>
@@ -351,7 +351,7 @@
                                                                                                 </c:if>
                                                                                                 <c:param name="durationFrom" value="90"/>-<c:param name="durationTo" value="120"/>
                                                                                                 </c:url>" onclick="showDuration(this)">90-120 minutes</a></li>
-                                            <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
+                                            <li><a class="dropdown-item" href="<c:url value="/${param.type2}/filters">
                                                                                                 <c:if test="${param.query != 'ANY' && param.query!=null}">
                                                                                                     <c:param name="query" value="${param.query}"/>
                                                                                                 </c:if>
@@ -363,7 +363,7 @@
                                                                                                 </c:if>
                                                                                                 <c:param name="durationFrom" value="120"/>-<c:param name="durationTo" value="150"/>
                                                                                                 </c:url>" onclick="showDuration(this)">120-150 minutes</a></li>
-                                            <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
+                                            <li><a class="dropdown-item" href="<c:url value="/${param.type2}/filters">
                                                                                                 <c:if test="${param.query != 'ANY' && param.query!=null}">
                                                                                                     <c:param name="query" value="${param.query}"/>
                                                                                                 </c:if>
@@ -380,22 +380,22 @@
                                 </div>
                                 <div class="list-group">
                                     <div class="dropdown W-dropdown-button">
-                                            <c:choose>
-                                                <c:when test="${param.sorting != '' && param.sorting != 'ANY'}">
-                                                    <button id="sortingGroupDrop" type="button" class="W-dropdown-button-genre-duration-sort  W-filter-title btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <spring:message code="Sort.${param.sorting}"/>
-                                                    </button>
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <button id="sortingGroupDrop" type="button" class="W-dropdown-button-genre-duration-sort  W-filter-title btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <spring:message code="SortMessage"/>
-                                                    </button>
-                                                </c:otherwise>
-                                            </c:choose>
-                                            <ul class="dropdown-menu W-dropdown-sorting">
-                                                <jsp:useBean id="sortingTypes" scope="request" type="ar.edu.itba.paw.models.Sorting[]"/>
-                                                <c:forEach var="sortingType" items="${sortingTypes}">
-                                                    <li><a class="dropdown-item" href="<c:url value="/${param.type}/filters">
+                                        <c:choose>
+                                            <c:when test="${param.sorting != '' && param.sorting != 'ANY'}">
+                                                <button id="sortingGroupDrop" type="button" class="W-dropdown-button-genre-duration-sort  W-filter-title btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <spring:message code="Sort.${param.sorting}"/>
+                                                </button>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <button id="sortingGroupDrop" type="button" class="W-dropdown-button-genre-duration-sort  W-filter-title btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <spring:message code="SortMessage"/>
+                                                </button>
+                                            </c:otherwise>
+                                        </c:choose>
+                                        <ul class="dropdown-menu W-dropdown-sorting">
+                                            <jsp:useBean id="sortingTypes" scope="request" type="ar.edu.itba.paw.models.Sorting[]"/>
+                                            <c:forEach var="sortingType" items="${sortingTypes}">
+                                                <li><a class="dropdown-item" href="<c:url value="/${param.type2}/filters">
                                                         <c:param name="sorting" value="${sortingType.toString()}"/>
                                                         <c:if test="${param.query != 'ANY' && param.query!=null}">
                                                             <c:param name="query" value="${param.query}"/>
@@ -415,8 +415,8 @@
                                                             </c:when>
                                                         </c:choose>
                                                         </c:url>" onclick="showSorting(this)"><spring:message code="Sort.${sortingType.toString()}"/></a></li>
-                                                </c:forEach>
-                                            </ul>
+                                            </c:forEach>
+                                        </ul>
                                     </div>
                                 </div>
                             </div>

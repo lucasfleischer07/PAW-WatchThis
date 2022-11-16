@@ -82,6 +82,7 @@ public class MovieAndSerieController {
             List<Content> contentListPaginated = ps.pagePagination(contentList, page,CONTENT_AMOUNT);
             mav.addObject("allContent", contentListPaginated);
             mav.addObject("contentType", auxType);
+            mav.addObject("contentType2", type);
             int amountOfPages = ps.amountOfContentPages(contentList.size(),CONTENT_AMOUNT);
             mav.addObject("amountPages", amountOfPages);
             mav.addObject("pageSelected",page);
@@ -125,10 +126,8 @@ public class MovieAndSerieController {
         } else {
             auxType = "all";
         }
-        List<String> genreList=null;
-        if(genreFilterForm.getFormGenre() != null){
-            genreList = genreFilterForm.getFormGenre().length > 0 ? Arrays.asList(genreFilterForm.getFormGenre()) : genre;
-        }
+        List<String> genreList = (genreFilterForm.getFormGenre()!=null && genreFilterForm.getFormGenre().length > 0 ) ? Arrays.asList(genreFilterForm.getFormGenre()) : genre;
+        
         if(genreList!=null){
             genreFilterForm.setFormGenre(genreList.toArray(new String[0]));
         }

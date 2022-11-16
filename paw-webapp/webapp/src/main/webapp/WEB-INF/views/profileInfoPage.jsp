@@ -24,7 +24,8 @@
   <body class="body">
     <jsp:include page="components/header.jsp">
       <jsp:param name="type" value="profile"/>
-      <jsp:param name="userName" value="${userName}"/>
+        <jsp:param name="type2" value="profile"/>
+        <jsp:param name="userName" value="${userName}"/>
       <jsp:param name="userId" value="${userId}"/>
       <jsp:param name="admin" value="${admin}"/>
     </jsp:include>
