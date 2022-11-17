@@ -61,7 +61,7 @@
                             </div>
                         </div>
 
-                        <spring:message code="Report.Unreport" var="unreported"/>
+                        <spring:message code="Report.Dismiss" var="unreported"/>
                         <span title="${unreported}">
                             <form class="W-form-remove-from-reported-bad-added" id="<c:out value="report${param.typeId}${param.reportType}"/>" method="post" action="<c:url value="/report/reportedContent/${param.reportType}/${param.typeId}/report/delete"/>">
                                 <button type="button" class="btn btn-light W-background-color-report" data-bs-toggle="modal" data-bs-target="#<c:out value="unreportedCommentModal${param.typeId}${param.reportType}"/>">
@@ -76,7 +76,7 @@
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="<c:out value="unreportedCommentModalLabel${param.typeId}${param.reportType}"/>"><spring:message code="Delete.Confirmation"/></h5>
+                                        <h5 class="modal-title" id="<c:out value="unreportedCommentModalLabel${param.typeId}${param.reportType}"/>"><spring:message code="Dismiss.Confirmation"/></h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
