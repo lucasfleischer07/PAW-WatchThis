@@ -167,34 +167,11 @@ public class ReportServiceImpl implements ReportService{
 
 
     private void reportReview(Review review, User reporterUser, ReportReason reasons){
-        try{
-            User reportedUser=review.getUser();
-            reportDao.addReport(review,reporterUser,reasons);
-            Map<String, Object> mailVariables = new HashMap<>();
-            mailVariables.put("to",reportedUser.getEmail());
-            mailVariables.put("userName", reportedUser.getUserName());
-            mailVariables.put("reportedReview", review.getName());
-            mailVariables.put("reasonsOfReport", reasons.toString());
-            emailService.sendMail("reportReview", messageSource.getMessage("Mail.ReviewReported", new Object[]{}, locale), mailVariables, locale);
-        }catch (MessagingException e){
-            //algo
-        }
-
+        reportDao.addReport(review,reporterUser,reasons);
     }
 
     private void reportComment(Comment comment,User reporterUser,ReportReason reasons){
-        try{
-            User reportedUser=comment.getUser();
-            reportDao.addReport(comment,reporterUser,reasons);
-            Map<String, Object> mailVariables = new HashMap<>();
-            mailVariables.put("to",reportedUser.getEmail());    // Email del creador del comentario
-            mailVariables.put("userName", reportedUser.getUserName());  // userName del creador del comentario
-            mailVariables.put("reportedComment", comment.getText());  // Esto seria la review, onda lo que decia la review
-            mailVariables.put("reasonsOfReport", reasons.toString());
-            emailService.sendMail("reportComment", messageSource.getMessage("Mail.CommentReported", new Object[]{}, locale), mailVariables, locale);
-        }catch (MessagingException e){
-            //algo
-        }
+        reportDao.addReport(comment,reporterUser,reasons);
     }
 
     @Override
