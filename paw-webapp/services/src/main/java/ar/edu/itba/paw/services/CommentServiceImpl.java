@@ -53,4 +53,9 @@ public class CommentServiceImpl implements CommentService{
     public Optional<Comment> getComment(Long id) {
         return commentDao.getComment(id);
     }
+
+    @Override
+    public List<Comment> getReviewComments(Long reviewId,int page){
+        return null;
+    }
 }

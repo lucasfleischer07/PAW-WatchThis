@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.config;
 
 
+import ar.edu.itba.paw.webapp.auth.JwtTokenFilter;
 import ar.edu.itba.paw.webapp.auth.RedirectionSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -14,11 +15,18 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.web.filter.CorsFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -56,6 +64,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(final HttpSecurity http) throws Exception	{
         http.sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and().headers().cacheControl().disable()
                    // .invalidSessionUrl("/login/sign-in")
                 .and().authorizeRequests()
                     .antMatchers("/login/sign-in","/login/sign-up","/login/forgot-password").anonymous()
@@ -98,21 +108,10 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(HttpMethod.POST,"/content/*/delete").hasRole("ADMIN")
                     .antMatchers(HttpMethod.POST,"/report/reportedContent/*/*/report/delete").hasRole("ADMIN")
                 .antMatchers("/**").permitAll()
-                .and().formLogin()
-                    .usernameParameter("email")
-                    .passwordParameter("password")
-                    .loginPage("/login/sign-in")
-                    .successHandler(successHandler())
-                   // .defaultSuccessUrl("/",false)
-                    .failureUrl("/login/sign-in?error=true")
-                .and().rememberMe()
-                    .rememberMeParameter("rememberMe")
-                    .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(30))
-                    .key(loadRememberMeKey())
-                .and().logout()
-                    .logoutUrl("/login/sign-out")
-                    .logoutSuccessUrl("/")
-                .and().csrf().disable();
+                .and().cors()
+                .and().csrf().disable()
+                .addFilterBefore(new JwtTokenFilter(), UsernamePasswordAuthenticationFilter.class)
+        ;
     }
 
 
@@ -130,5 +129,17 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     public void	configure(final WebSecurity web)throws	Exception{
         web.ignoring()
                 .antMatchers("/css/**",	"/js/**",	"/img/**",	"/favicon.ico",	"/403");
+    }
+    @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source =
+                new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        config.addAllowedOrigin("*");
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("*");
+        source.registerCorsConfiguration("/**", config);
+        return new CorsFilter(source);
     }
 }

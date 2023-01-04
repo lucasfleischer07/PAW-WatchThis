@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Primary
@@ -35,5 +36,10 @@ public class CommentJpaDao implements CommentDao{
     public Optional<Comment> getComment(Long id) {
         return Optional.ofNullable(em.find(Comment.class,id));
 
+    }
+
+    @Override
+    public List<Comment> getReviewComment(Long reviewId, int page){
+        return null;
     }
 }
