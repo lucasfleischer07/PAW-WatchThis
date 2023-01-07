@@ -4,7 +4,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-public class CommentDto {
+public class NewCommentDto {
 //    TODO: METER LOS MENSAJES DE ERROR EN CASO DE QUE ESTE VACIO
     @NotNull(message = "...")
     @Size(min = 5, max = 250, message = "...")

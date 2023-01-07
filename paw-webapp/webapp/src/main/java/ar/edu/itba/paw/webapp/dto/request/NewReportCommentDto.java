@@ -2,7 +2,7 @@ package ar.edu.itba.paw.webapp.dto.request;
 
 import javax.validation.constraints.NotNull;
 
-public class ReportCommentDto {
+public class NewReportCommentDto {
 //    TODO: METER LOS MENSAJES DE ERROR EN CASO DE QUE ESTE VACIO
     @NotNull(message = "...")
     private String reportType;

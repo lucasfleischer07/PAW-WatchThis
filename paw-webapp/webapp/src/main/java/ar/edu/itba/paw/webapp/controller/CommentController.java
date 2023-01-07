@@ -65,9 +65,11 @@ public class CommentController {
         return null;
     }
 
-    @POST
-    @Path("/{reviewId}")
-    public Response commentReviewAdd(@PathParam("reviewId")final long reviewId) {
+
+
+//    @POST
+//    @Path("/{reviewId}")
+//    public Response commentReviewAdd(@PathParam("reviewId")final long reviewId) {
 
 //        Optional<Review> review = rs.getReview(reviewId);
 //        Optional<User> user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());

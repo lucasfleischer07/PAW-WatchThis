@@ -106,7 +106,6 @@ public class ContentJpaDao implements ContentDao{
     @Override
     public Optional<Content> findById(long id) {
         return Optional.ofNullable(em.find(Content.class,id));
-
     }
 
     @Override

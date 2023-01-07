@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-public class ContentEditDto {
+public class NewContentEditionDto {
 //    TODO: METER LOS MENSAJES DE ERROR EN CASO DE QUE ESTE VACIO
     @Size(min = 1, max = 100, message = "...")
     @Pattern(regexp	= "([a-zA-Z0-9ñáéíóú!,.:;=+\n\\-_()?<>$%&#@{}\\[\\]|*\"'~/`^\\s]+)?", message = "...")

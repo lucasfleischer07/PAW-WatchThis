@@ -6,7 +6,7 @@ import ar.edu.itba.paw.webapp.validations.AvailableUserName;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-public class LoginDto {
+public class NewUser {
 //    TODO: METER LOS MENSAJES DE ERROR EN CASO DE QUE ESTE VACIO
 
     @AvailableEmail
