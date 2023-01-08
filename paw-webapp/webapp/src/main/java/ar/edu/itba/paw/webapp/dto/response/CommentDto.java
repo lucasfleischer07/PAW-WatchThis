@@ -1,13 +1,9 @@
 package ar.edu.itba.paw.webapp.dto.response;
 
 import ar.edu.itba.paw.models.Comment;
-import ar.edu.itba.paw.models.CommentReport;
-import ar.edu.itba.paw.models.Review;
-import ar.edu.itba.paw.models.User;
-
-import javax.persistence.*;
 import javax.ws.rs.core.UriInfo;
-import java.util.Set;
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 public class CommentDto {
 
@@ -16,6 +12,14 @@ public class CommentDto {
     private String text;
 
     private String commentReportersUrl;
+
+    public static Collection<CommentDto> mapCommentToCommentDto(UriInfo uriInfo, Collection<Comment> comments) {
+        return comments.stream().map(c -> new CommentDto(uriInfo, c)).collect(Collectors.toList());
+    }
+
+    public CommentDto() {
+        // For Jersey
+    }
 
     public CommentDto(UriInfo uriInfo, Comment comment) {
         this.commentReportersUrl = uriInfo.getBaseUriBuilder().path("reports").path("comment").path(String.valueOf(comment.getCommentId())).build().toString();

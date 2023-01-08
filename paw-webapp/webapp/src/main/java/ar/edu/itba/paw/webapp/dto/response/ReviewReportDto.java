@@ -2,7 +2,12 @@ package ar.edu.itba.paw.webapp.dto.response;
 
 import ar.edu.itba.paw.models.CommentReport;
 import ar.edu.itba.paw.models.ReportReason;
+import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.ReviewReport;
+
+import javax.ws.rs.core.UriInfo;
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 public class ReviewReportDto {
 
@@ -15,9 +20,18 @@ public class ReviewReportDto {
     private String eliminateReview;
     private String dismissReport;
 
+
+    public static Collection<ReviewReportDto> mapReviewReportToReviewReportDto(UriInfo uriInfo, Collection<ReviewReport> reviewReports) {
+        return reviewReports.stream().map(rr -> new ReviewReportDto(uriInfo, rr)).collect(Collectors.toList());
+    }
+
+    public ReviewReportDto() {
+        // For Jersey
+    }
+
     public ReviewReportDto(UriInfo url, ReviewReport reviewReport){
         //Este path deberia ir con un metodo delete
-        this.eliminateReview = url.getBaseUriBuilder().path("review").path(String.valueOf(reviewReport.getComment().getCommentId())).build().toString();
+        this.eliminateReview = url.getBaseUriBuilder().path("review").path(String.valueOf(reviewReport.getReview().getId())).build().toString();
         //Este path tambien deberia ser con un metodo delete
         this.dismissReport = url.getBaseUriBuilder().path("report").path(String.valueOf(reviewReport.getId())).build().toString();
         this.id = reviewReport.getId();

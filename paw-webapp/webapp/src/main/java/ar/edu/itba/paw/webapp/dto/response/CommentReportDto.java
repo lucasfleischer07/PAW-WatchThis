@@ -2,17 +2,28 @@ package ar.edu.itba.paw.webapp.dto.response;
 
 import ar.edu.itba.paw.models.*;
 
+import javax.ws.rs.core.UriInfo;
+import java.util.Collection;
+import java.util.stream.Collectors;
+
 public class CommentReportDto {
 
     private long id;
     private UserDto user;
     private CommentDto comment;
-    private final String type="comment";
+    private final String type = "comment";
     private ReportReason reportReason;
 
     private String eliminateComment;
     private String dismissReport;
 
+    public static Collection<CommentReportDto> mapCommentReportToCommentReportDto(UriInfo uriInfo, Collection<CommentReport> commentsReported) {
+        return commentsReported.stream().map(cr -> new CommentReportDto(uriInfo, cr)).collect(Collectors.toList());
+    }
+
+    public CommentReportDto() {
+        // For Jersey
+    }
 
     public CommentReportDto(UriInfo url, CommentReport commentReport){
         //Este path deberia ir con un metodo delete

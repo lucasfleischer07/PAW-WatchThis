@@ -1,7 +1,12 @@
 package ar.edu.itba.paw.webapp.dto.response;
 
 import javax.ws.rs.core.UriInfo;
+
+import ar.edu.itba.paw.models.ReviewReport;
 import ar.edu.itba.paw.models.User;
+
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 public class UserDto {
     private String username;
@@ -10,17 +15,23 @@ public class UserDto {
     private Long reputation;
     private byte[] image;
     private String role;
-
-
-    private String userwatchListURL;
+    private String userWatchListURL;
     private String userViewedListURL;
     private String userReviews;
 
+    public static Collection<UserDto> mapUserToUserDto(UriInfo uriInfo, Collection<User> user) {
+        return user.stream().map(u -> new UserDto(uriInfo, u)).collect(Collectors.toList());
+    }
+
+    public UserDto() {
+        // For Jersey
+    }
+
 
     public UserDto(UriInfo url, User user) {
-        this.userwatchListURL = url.getBaseUriBuilder().path("watchlist").path(String.valueOf(user.getId())).build().toString();
-        this.userViewedListURL = url.getBaseUriBuilder().path("viewedlist").path(String.valueOf(user.getId())).build().toString();
-        this.userReviews = url.getBaseUriBuilder().path("user").path(String.valueOf(content.getId())).path("reviews").build().toString();
+        this.userWatchListURL = url.getBaseUriBuilder().path("watchList").path(String.valueOf(user.getId())).build().toString();
+        this.userViewedListURL = url.getBaseUriBuilder().path("viewedList").path(String.valueOf(user.getId())).build().toString();
+        this.userReviews = url.getBaseUriBuilder().path("user").path(String.valueOf(user.getId())).path("reviews").build().toString();
         this.email = user.getEmail();
         this.username = user.getUserName();
         this.id = user.getId();
@@ -77,12 +88,12 @@ public class UserDto {
         this.role = role;
     }
 
-    public String getUserwatchListURL() {
-        return userwatchListURL;
+    public String getUserWatchListURL() {
+        return userWatchListURL;
     }
 
-    public void setUserwatchListURL(String userwatchListURL) {
-        this.userwatchListURL = userwatchListURL;
+    public void setUserWatchListURL(String userWatchListURL) {
+        this.userWatchListURL = userWatchListURL;
     }
 
     public String getUserViewedListURL() {

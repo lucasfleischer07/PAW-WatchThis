@@ -1,8 +1,12 @@
 package ar.edu.itba.paw.webapp.dto.response;
 
+import ar.edu.itba.paw.models.Content;
 import ar.edu.itba.paw.models.Review;
+import ar.edu.itba.paw.models.User;
 
 import javax.ws.rs.core.UriInfo;
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 public class ReviewDto {
     private long id;
@@ -15,6 +19,15 @@ public class ReviewDto {
     
     private String commentUrl;
     private String reviewReportersUrl;
+
+
+    public static Collection<ReviewDto> mapReviewToReviewDto(UriInfo uriInfo, Collection<Review> reviews) {
+        return reviews.stream().map(r -> new ReviewDto(uriInfo, r)).collect(Collectors.toList());
+    }
+
+    public ReviewDto() {
+        // For Jersey
+    }
 
     public ReviewDto(UriInfo uriInfo, Review review) {
         this.commentUrl = uriInfo.getBaseUriBuilder().path("review").path(String.valueOf(review.getId())).build().toString();

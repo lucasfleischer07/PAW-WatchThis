@@ -1,8 +1,11 @@
 package ar.edu.itba.paw.webapp.dto.response;
 
+import ar.edu.itba.paw.models.CommentReport;
 import ar.edu.itba.paw.models.Content;
 import ar.edu.itba.paw.models.User;
 import javax.ws.rs.core.UriInfo;
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 
 // /movies  ---> getAllMovies   ----> List<Content>   --->  List<Contentdto>
@@ -25,8 +28,15 @@ public class ContentDto {
     private String reviewsUrl;
     private String contentReviewers;
 
+    public static Collection<ContentDto> mapContentToContentDto(UriInfo uriInfo, Collection<Content> content, User user) {
+        return content.stream().map(c -> new ContentDto(uriInfo, c, user)).collect(Collectors.toList());
+    }
 
+    public ContentDto() {
+        // For Jersey
+    }
 
+//    TODO: Ver si le pasamos o no el user
     public ContentDto(UriInfo url, Content content, User user) {
         this.myUrl = url.getBaseUriBuilder().path("content").path(String.valueOf(content.getId())).build().toString();
         this.reviewsUrl = url.getBaseUriBuilder().path("reviews").path(String.valueOf(content.getId())).build().toString();
