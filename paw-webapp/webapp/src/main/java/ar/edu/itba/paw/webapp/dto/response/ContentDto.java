@@ -25,16 +25,11 @@ public class ContentDto {
     private String reviewsUrl;
     private String contentReviewers;
 
-    // Related url to the user
-    private String watchListUrl;
-    private String viewedListUrl;
 
 
     public ContentDto(UriInfo url, Content content, User user) {
         this.myUrl = url.getBaseUriBuilder().path("content").path(String.valueOf(content.getId())).build().toString();
         this.reviewsUrl = url.getBaseUriBuilder().path("reviews").path(String.valueOf(content.getId())).build().toString();
-        this.watchListUrl = url.getBaseUriBuilder().path("watchlist").path(String.valueOf(user.getId())).build().toString();
-        this.viewedListUrl = url.getBaseUriBuilder().path("viewedlist").path(String.valueOf(user.getId())).build().toString();
         this.contentReviewers = url.getBaseUriBuilder().path("content").path(String.valueOf(content.getId())).path("reviewers").build().toString();
 
         this.id = content.getId();
@@ -154,19 +149,4 @@ public class ContentDto {
         this.reviewsUrl = reviewsUrl;
     }
 
-    public String getWatchListUrl() {
-        return watchListUrl;
-    }
-
-    public void setWatchListUrl(String watchListUrl) {
-        this.watchListUrl = watchListUrl;
-    }
-
-    public String getViewedListUrl() {
-        return viewedListUrl;
-    }
-
-    public void setViewedListUrl(String viewedListUrl) {
-        this.viewedListUrl = viewedListUrl;
-    }
 }
