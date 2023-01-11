@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.dto.response;
 
+import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
 import ar.edu.itba.paw.models.ReviewReport;
@@ -21,6 +22,10 @@ public class UserDto {
 
     public static Collection<UserDto> mapUserToUserDto(UriInfo uriInfo, Collection<User> user) {
         return user.stream().map(u -> new UserDto(uriInfo, u)).collect(Collectors.toList());
+    }
+
+    public static UriBuilder getUserUriBuilder(User user, UriInfo uriInfo) {
+        return uriInfo.getBaseUriBuilder().clone().path("users").path(String.valueOf(user.getId()));
     }
 
     public UserDto() {
