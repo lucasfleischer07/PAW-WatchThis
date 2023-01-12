@@ -3,6 +3,8 @@ package ar.edu.itba.paw.webapp.dto.response;
 import ar.edu.itba.paw.models.CommentReport;
 import ar.edu.itba.paw.models.Content;
 import ar.edu.itba.paw.models.User;
+
+import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -18,6 +20,7 @@ public class ContentDto {
     private String genre;
     private String creator;
     private String duration;
+    private int durationNum;
     private String type;
     private byte[] contentPicture;
     private Integer reviewsAmount;
@@ -30,6 +33,10 @@ public class ContentDto {
 
     public static Collection<ContentDto> mapContentToContentDto(UriInfo uriInfo, Collection<Content> content, User user) {
         return content.stream().map(c -> new ContentDto(uriInfo, c, user)).collect(Collectors.toList());
+    }
+
+    public static UriBuilder getContentUriBuilder(Content content, UriInfo uriInfo) {
+        return uriInfo.getBaseUriBuilder().clone().path("content").path(String.valueOf(content.getId()));
     }
 
     public ContentDto() {
@@ -53,6 +60,7 @@ public class ContentDto {
         this.contentPicture = content.getImage();
         this.reviewsAmount = content.getReviewsAmount();
         this.rating = content.getRating();
+        this.durationNum = content.getDurationNum();
     }
 
     public Long getId() {
@@ -159,4 +167,19 @@ public class ContentDto {
         this.reviewsUrl = reviewsUrl;
     }
 
+    public int getDurationNum() {
+        return durationNum;
+    }
+
+    public void setDurationNum(int durationNum) {
+        this.durationNum = durationNum;
+    }
+
+    public String getContentReviewers() {
+        return contentReviewers;
+    }
+
+    public void setContentReviewers(String contentReviewers) {
+        this.contentReviewers = contentReviewers;
+    }
 }

@@ -145,6 +145,8 @@ public class UserController {
     //Endpoint para editar la imagen de perfil del usuario
     @PUT
     @Path("/{id}/profileImage")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(value = {MediaType.APPLICATION_JSON,})
     public Response updateUserProfileImage(@Size(max = 1024 * 1024 * 2) @FormDataParam("image") byte[] imageBytes,
                                            @PathParam("id") final long id) {
 
