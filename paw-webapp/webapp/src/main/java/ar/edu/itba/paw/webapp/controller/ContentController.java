@@ -361,10 +361,10 @@ public class ContentController {
     public Response createContent(@PathParam("contentId") final long contentId,
                                   @FormDataParam("images") FormDataBodyPart img,
                                   @Valid ContentDto contentDto) {
-        Content newContent = cs.contentCreate(contentDto.getName(),contentDto.getDescription(),contentDto.getReleaseDate(),auxGenre,contentDto.getCreator(),contentDto.getDurationNum(),contentDto.getType(),contentDto.getContentPicture());
+        Content newContent = cs.contentCreate(contentDto.getName(),contentDto.getDescription(),contentDto.getReleaseDate(), contentDto.getGenre(), contentDto.getCreator(),contentDto.getDurationNum(),contentDto.getType(),contentDto.getContentPicture());
         return Response.created(ContentDto.getContentUriBuilder(newContent, uriInfo).build()).build();
     }
-    
+
 //    @RequestMapping(value = "/content/create",method = {RequestMethod.GET})
 //    public ModelAndView createContent(Principal userDetails,
 //                                      @ModelAttribute("contentCreate") final ContentForm contentForm) {
