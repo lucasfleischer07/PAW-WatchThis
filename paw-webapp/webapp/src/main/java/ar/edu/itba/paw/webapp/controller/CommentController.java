@@ -46,7 +46,8 @@ public class CommentController {
     @Path("/{reviewId}")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getReviewComments(@PathParam("reviewId") final long reviewId,
-                                      @QueryParam("page")@DefaultValue("1")final int page) {
+                                      @QueryParam("pageNumber") @DefaultValue("1") int pageNum,
+                                      @QueryParam("pageSize") @DefaultValue("10") int pageSize) {
 
         List<Comment> commentList = ccs.getReviewComments(reviewId,1);
         LOGGER.info("GET /{}: Comments geted from review with id {}", uriInfo.getPath(), reviewId);

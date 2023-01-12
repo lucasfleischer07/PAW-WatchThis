@@ -71,7 +71,8 @@ public class WatchAndViewedListsController {
     @Path("/watchList/{userId}")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getUserWatchList(@PathParam("userId") final long userId,
-                                     @QueryParam("page")@DefaultValue("1")final int page) {
+                                     @QueryParam("pageNumber") @DefaultValue("1") int page,
+                                     @QueryParam("pageSize") @DefaultValue("10") int pageSize) {
         final User user = us.findById(userId).orElseThrow(PageNotFoundException::new);
         final User user2 = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(PageNotFoundException::new);
 
@@ -207,7 +208,8 @@ public class WatchAndViewedListsController {
     @Path("/viewedList/{userId}")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getUserViewedList(@PathParam("userId") final long userId,
-                                     @QueryParam("page")@DefaultValue("1")final int page) {
+                                      @QueryParam("pageNumber") @DefaultValue("1") int page,
+                                      @QueryParam("pageSize") @DefaultValue("10") int pageSize) {
         final User user = us.findById(userId).orElseThrow(PageNotFoundException::new);
         final User user2 = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(PageNotFoundException::new);
 

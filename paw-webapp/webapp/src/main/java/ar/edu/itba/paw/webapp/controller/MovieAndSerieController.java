@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.swing.text.html.Option;
 import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -75,7 +76,8 @@ public class MovieAndSerieController {
     @Path("/{contentType}")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getContentByType(@PathParam("contentType") final String contentType,
-                                     @QueryParam("page")@DefaultValue("1") final Optional<Integer> pageNum) {
+                                     @QueryParam("pageNumber")Optional<Integer> pageNum,
+                                     @QueryParam("pageSize") @DefaultValue("10") int pageSize) {
 
         int page= pageNum.orElse(1);
         List<Content> contentList = cs.getAllContent(contentType, null);
@@ -142,7 +144,8 @@ public class MovieAndSerieController {
     @Path("/{contentType}/filters")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response filterContentByType(@PathParam("contentType") final String contentType,
-                                        @QueryParam("pageNum")final Optional<Integer> pageNum,
+                                        @QueryParam("pageNumber") Optional<Integer> pageNum,
+                                        @QueryParam("pageSize") @DefaultValue("10") int pageSize,
                                         @QueryParam("durationFrom") @DefaultValue("ANY") final String durationFrom,
                                         @QueryParam("durationTo") @DefaultValue("ANY") final String durationTo,
                                         @QueryParam("sorting") final Optional<Sorting> sorting,

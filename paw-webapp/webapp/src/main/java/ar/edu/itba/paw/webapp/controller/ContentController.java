@@ -82,7 +82,9 @@ public class ContentController {
     @GET
     @Path("{contentType}")
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response getContentByType(@PathParam("contentType") final String contentType) {
+    public Response getContentByType(@PathParam("contentType") final String contentType,
+                                     @QueryParam("pageNumber") @DefaultValue("1") int pageNumber,
+                                     @QueryParam("pageSize") @DefaultValue("10") int pageSize) {
 //        TODO: VER QUE PASARLE ACA COMO USER
         Optional<User> user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
         if(!user.isPresent()) {

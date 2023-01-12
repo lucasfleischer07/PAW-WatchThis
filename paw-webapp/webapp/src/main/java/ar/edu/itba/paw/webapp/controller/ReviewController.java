@@ -75,7 +75,9 @@ public class ReviewController {
     @GET
     @Path("/{contentId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response reviews(@PathParam("contentId") final long contentId) {
+    public Response reviews(@PathParam("contentId") final long contentId,
+                            @QueryParam("pageNumber") @DefaultValue("1") int pageNumber,
+                            @QueryParam("pageSize") @DefaultValue("10") int pageSize) {
         Content content=cs.findById(contentId).orElseThrow(PageNotFoundException::new);
         List<Review> reviewList = rs.getAllReviews(content);
         if(reviewList == null) {
