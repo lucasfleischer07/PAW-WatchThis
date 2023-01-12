@@ -4,6 +4,7 @@ import ar.edu.itba.paw.models.Content;
 import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.User;
 
+import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -23,6 +24,10 @@ public class ReviewDto {
 
     public static Collection<ReviewDto> mapReviewToReviewDto(UriInfo uriInfo, Collection<Review> reviews) {
         return reviews.stream().map(r -> new ReviewDto(uriInfo, r)).collect(Collectors.toList());
+    }
+
+    public static UriBuilder getReviewUriBuilder(Content content, UriInfo uriInfo) {
+        return uriInfo.getBaseUriBuilder().clone().path("review").path(String.valueOf(content.getId()));
     }
 
     public ReviewDto() {

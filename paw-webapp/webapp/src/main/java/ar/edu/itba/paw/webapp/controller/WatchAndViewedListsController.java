@@ -207,7 +207,7 @@ public class WatchAndViewedListsController {
     @Path("/viewedList/{userId}")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getUserViewedList(@PathParam("userId") final long userId,
-                                      @QueryParam("page")@DefaultValue("1")final int page) {
+                                     @QueryParam("page")@DefaultValue("1")final int page) {
         final User user = us.findById(userId).orElseThrow(PageNotFoundException::new);
         final User user2 = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(PageNotFoundException::new);
 

@@ -273,7 +273,7 @@ public class ContentController {
         final Content content = cs.findById(contentId).orElseThrow(PageNotFoundException::new);
 
 //        TODO: VER ESTO SI ERA ADMIN O QUE
-        if(!Objects.equals(user.getRole(), "ADMIN")) {
+        if(!Objects.equals(user.getRole(), "ROLE_ADMIN")) {
             throw new PageNotFoundException();
         }
 
@@ -356,10 +356,9 @@ public class ContentController {
     // Endpoint para crear un contenido
 //    TODO: VER BIEN
     @POST
-    @Path("/{contentId}/deleteContent")
+    @Path("/create")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createContent(@PathParam("contentId") final long contentId,
-                                  @FormDataParam("images") FormDataBodyPart img,
+    public Response createContent(@FormDataParam("images") FormDataBodyPart img,
                                   @Valid ContentDto contentDto) {
         Content newContent = cs.contentCreate(contentDto.getName(),contentDto.getDescription(),contentDto.getReleaseDate(), contentDto.getGenre(), contentDto.getCreator(),contentDto.getDurationNum(),contentDto.getType(),contentDto.getContentPicture());
         return Response.created(ContentDto.getContentUriBuilder(newContent, uriInfo).build()).build();

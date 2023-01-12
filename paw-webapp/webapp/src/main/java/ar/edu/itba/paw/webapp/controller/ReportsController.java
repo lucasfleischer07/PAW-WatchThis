@@ -68,7 +68,7 @@ public class ReportsController {
                                      @QueryParam("page")@DefaultValue("1")final int page,
                                      @RequestParam(value = "reason",required = false)Optional<ReportReason> reason) {
         final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(ForbiddenException::new);
-        if(!Objects.equals(user.getRole(), "ADMIN")) {
+        if(!Objects.equals(user.getRole(), "ROLE_ADMIN")) {
             LOGGER.warn("GET /{}: Login user {} not an admin", uriInfo.getPath(), user.getId());
             throw new ForbiddenException();
         }
@@ -134,7 +134,7 @@ public class ReportsController {
     @PUT
     @Path("/report/review/{reviewId}")
     public Response addReviewReport(@PathParam("reviewId") long reviewId,
-                                    @Valid CommentReportDto commentReportDto) {
+                                  @Valid CommentReportDto commentReportDto) {
         final Review review = rs.findById(reviewId).orElseThrow(PageNotFoundException::new);
         final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(ForbiddenException::new);
         rrs.addReport(review, user, commentReportDto.getReportReason().toString());
