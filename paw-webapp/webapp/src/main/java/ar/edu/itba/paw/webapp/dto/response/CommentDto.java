@@ -19,9 +19,9 @@ public class CommentDto {
         return comments.stream().map(c -> new CommentDto(uriInfo, c)).collect(Collectors.toList());
     }
 
-    public static UriBuilder getCommentUriBuilder(Comment comment, UriInfo uriInfo) {
-        return uriInfo.getBaseUriBuilder().path("commentAdd").path(String.valueOf(comment.getCommentId()));
-    }
+//    public static UriBuilder getCommentUriBuilder(Comment comment, UriInfo uriInfo) {
+//        return uriInfo.getBaseUriBuilder().path("commentAdd").path(String.valueOf(comment.getCommentId()));
+//    }
 
     public static UriBuilder getCommentReportedUriBuilder(Comment comment, UriInfo uriInfo) {
         return uriInfo.getBaseUriBuilder().path("reports").path("comment").path(String.valueOf(comment.getCommentId()));

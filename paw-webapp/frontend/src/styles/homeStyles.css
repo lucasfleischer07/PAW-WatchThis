@@ -1,0 +1,451 @@
+
+.W-star-filter-location{
+    display: inline;
+}
+
+.W-list{
+    list-style: none;
+}
+
+.W-filter-div {
+    display: flex;
+    flex-direction: row;
+    height: 3vw;
+    z-index: 1;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #a9a9a9d1;
+}
+
+.W-films-div{
+    padding-right: 7%;
+    padding-left: 7%;
+    margin-top: 2vw;
+    justify-content: space-around;
+}
+
+.W-content-alignment {
+    display: flex;
+    justify-content: center;
+}
+
+.W-search-context-title {
+    padding-right: 5%;
+    padding-left: 5%;
+    margin-top: 2%;
+}
+
+.W-row-display {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.W-search-notFound-image {
+    margin-right: 5vw;
+}
+
+.W-search-notFound-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.W-filter-title {
+    font-weight: bold;
+    width: fit-content;
+    min-width: 6vw;
+    height: 2vw;
+    border-color: black;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.W-dropdown-button-sorting {
+    margin-right: 1vw;
+}
+
+.W-dropdown-button {
+    margin-top: 1vw;
+    margin-right: 4vw;
+    margin-bottom: 1vw;
+}
+
+.W-genre-duration-div {
+    display: flex;
+    margin-left: 1vw;
+}
+
+.W-apply-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1vw;
+}
+
+.W-dropdown-button-genre-duration-sort {
+    margin-top: 2vw;
+    margin-right: 4vw;
+    font-size: 1.5vw;
+    margin-bottom: 2vw;
+    height: 7vw;
+    white-space: normal;
+    word-break: break-all !important;
+    min-width: 11vw;
+}
+
+.W-border-color-user-btn {
+    border-color: green;
+    margin-right: 2vw;
+}
+
+.W-films-margin{
+    margin: 7%;
+    width: 100% ;
+}
+
+.W-line-style{
+    width: 99vw;
+    color: inherit;
+    border: 0;
+    border-top: 1px solid;
+    opacity: .85;
+    margin: 0vw;
+}
+
+.W-films-card-body {
+    display: flex;
+    align-items: flex-start;
+    height: 100%;
+}
+
+.W-films-card-body-carousel {
+    display: flex;
+    align-items: flex-start;
+    height: 33vw;
+}
+
+.W-img-watchList-button-div {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+.W-watchList-button-div {
+    position: absolute;
+}
+
+.W-watchList-button {
+    height: 4vw;
+    background-color: #a9a9a9d1;
+}
+
+.W-a-display-none{
+    display: none;
+}
+
+.W-watchList-button:hover {
+    height: 4vw;
+    background-color: #665e5ef2;
+}
+
+.W-films-card-body-div {
+    display: contents;
+}
+
+.W-more-style {
+    display: block;
+}
+
+.W-card-design{
+    text-decoration: none;
+}
+
+.W-card-text{
+    text-decoration: none;
+    color: black;
+    transition: 0.1s;
+}
+
+.W-card-text:hover {
+    transform: translateY(-5px);
+    transition: 0.1s ;
+    box-shadow: -1rem 0 3rem grey;
+  }
+
+.W-card-text:hover ~ .W-card-text {
+    position: relative;
+    transition: 0.1s;
+}
+
+.W-watchList-icon {
+    width: 2vw;
+}
+
+.W-movie-card-size {
+    width: 15vw;
+    margin: 1vm;
+    height: auto;
+    display: flex;
+    word-break: break-word;
+}
+
+.card-img-top {
+    width: 100%;
+    height: 17vw;
+    object-fit: cover;
+}
+
+.W-inv-film-card-margin{
+    margin-top: 1%;
+    margin-right: 5%;
+    margin-left: 5%;
+}
+
+.W-img-size{
+    max-height: 100%;
+    max-width: 70vw;
+}
+
+.W-nested-comments-list{
+    border-left: 1px solid #333;
+    list-style: none;
+}
+.W-nested-comment{
+    margin-left: 1em;
+    
+    list-style: none;
+}
+
+.W-thumb-up {
+    text-decoration: none;
+    color: green;
+}
+
+.W-thumb-down {
+    text-decoration: none;
+    color: #b21e26;
+} 
+
+.W-thumb-orientation {
+    margin-left: 5%;
+    margin-top: 5%;
+    margin-right: 1%;
+}
+
+.W-comment-section{
+    list-style: none;
+}
+
+.W-movie-title {
+    font-size: 1.3vw;
+    color: black;
+    display: flex;
+}
+
+.W-movie-description {
+    font-size: 0.9vw;
+}
+
+.W-card-details-color {
+    color: darkred;
+}
+
+.W-star-location{
+    margin-bottom: 5%;
+}
+
+.W-filter-items-text-style{
+    margin-top: 0.5%;
+    padding-top: 0.5%;
+    margin-bottom: 2%;
+    font-size: 1.1vw;
+}
+
+.W-link-selected-color-red {
+    color: #b21e26;
+}
+
+.W-pagination-color {
+    color: #212529 !important;
+}
+
+.W-card-link-style {
+    text-decoration: none;
+    color: black;
+    word-break: break-word;
+}
+
+.W-card-link-style:hover {
+    color: #0d6efd;
+}
+
+.W-margin-one {
+    margin: 1vw;
+}
+
+.pagination {
+    --bs-pagination-active-bg: #6c757d;
+    --bs-pagination-active-border-color: #212529;
+    --bs-pagination-color: #212529;
+}
+
+.accordion {
+    margin-left: 5%;
+    margin-bottom: 5%;
+    size: 20vm;
+}
+
+.W-filter-padding {
+    padding: 2%;
+}
+
+.W-star-style{
+    height: 1vw;
+    width: 1vw;
+}
+
+.W-not-found{
+    height: 10vw;
+    width: 10vw;
+}
+
+.W-not-found-card {
+    justify-content: center;
+    align-content: center;
+    width: 70%;
+    margin-top: 4vw;
+    margin-bottom: 4vw;
+    margin-left: 15vw;
+}
+.W-not-found-message{
+    word-break: break-word;
+    font-size: 2vw;
+}
+
+.W-search-notFound-text2 {
+    margin-top: 2vw;
+}
+
+@media (max-width: 1800px) {
+    .W-movie-title {
+        font-size: 1.5vw;
+        color: black;
+    }
+}
+
+@media (max-width: 1600px) {
+    .W-movie-title {
+        font-size: 1.5vw;
+        color: black;
+    }
+}
+
+@media (max-width: 1096px) {
+    .W-filter-title{
+        height: 4vw;
+    }
+
+    .W-filter-div {
+        height: 5vw;
+    }
+
+    .W-genre-filter {
+        word-break: break-all;
+        white-space: normal;
+    }
+}
+
+@media (max-width: 991px) {
+    .W-filter-div {
+        display: none;
+    }
+
+    .W-line-style {
+        display: none;
+    }
+
+    .W-films-card-body-carousel {
+        height: 39vw;
+    }
+
+    .W-filter-title {
+        height: 7vw;
+    }
+
+    .dropdown-menu {
+        max-height: 280px;
+        overflow-y: auto;
+    }
+
+    .W-dropdown-sorting {
+        max-height: 90px;
+        overflow-y: auto;
+    }
+
+    .W-dropdown-button {
+        margin-top: 0;
+    }
+}
+
+@media (max-width: 800px) {
+    .W-watchList-button-div {
+        display: none!important;
+    }
+}
+
+@media (max-width: 780px) {
+    .W-dropdown-sorting {
+        max-height: 280px;
+        overflow-y: auto;
+    }
+}
+
+@media (max-width: 719px) {
+    .W-films-card-body-carousel {
+        height: 41vw;
+    }
+}
+
+@media (max-width: 591px) {
+    .W-movie-description {
+        display: none;
+    }
+
+    .W-filter-div {
+        display: none;
+    }
+
+    .W-line-style {
+        display: none;
+    }
+}
+
+@media (max-width: 450px) {
+    .W-movie-title {
+        font-size: 2.5vw;
+        color: black;
+    }
+}
+
+@media (max-width: 291px) {
+
+    .W-filter-div {
+        display: none;
+    }
+
+    .W-movie-title {
+        font-size: 3vw;
+        color: black;
+    }
+
+    .W-line-style {
+        display: none;
+    }
+
+    .W-pagination {
+        display: flex;
+    }
+}

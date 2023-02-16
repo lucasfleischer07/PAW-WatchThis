@@ -36,12 +36,13 @@ public class UserDto {
     public UserDto(UriInfo url, User user) {
         this.userWatchListURL = url.getBaseUriBuilder().path("watchList").path(String.valueOf(user.getId())).build().toString();
         this.userViewedListURL = url.getBaseUriBuilder().path("viewedList").path(String.valueOf(user.getId())).build().toString();
-        this.userReviews = url.getBaseUriBuilder().path("user").path(String.valueOf(user.getId())).path("reviews").build().toString();
+        this.userReviews = url.getBaseUriBuilder().path("users").path(String.valueOf(user.getId())).path("reviews").build().toString();
         this.email = user.getEmail();
         this.username = user.getUserName();
         this.id = user.getId();
         this.reputation = user.getReputation();
-        this.image = user.getImage();
+//        TODO: Cambiar lo de la imagen
+//        this.image = user.getImage();
         this.role = user.getRole();
     }
 

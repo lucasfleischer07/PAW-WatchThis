@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ContentService {
+    List<List<Content>> getLandingPageContent(User user);
     List<Content> getMasterContent(String type, List<String> genres, String durationFrom, String durationTo, Sorting sort, String queryUser);
     List<Content> getAllContent(String type, Sorting sort);
     Optional<Content> findByName(String name);

@@ -1,0 +1,254 @@
+.W-logo-div {
+    margin-top: 1%;
+    width: 150px;
+}
+
+.W-hamburger-button-title {
+    color: #b21e26;
+}
+
+.W-header-height {
+    height: 65px;
+    position: static;
+    padding-right: 1vw;
+}
+
+.W-display-none-header {
+    display: none;
+}
+
+.W-home-button-hamburger-button {
+    display: none;
+}
+
+.W-img-size2 {
+    width: 100%;
+    height: 50px;
+}
+
+.W-navbar-hamburger-margin {
+    margin-bottom: 20%;
+}
+
+.W-nav-item {
+    display: flex;
+    font-size: 30px;
+    align-items: center;
+}
+
+.W-header-accomodation {
+    display: flex;
+    flex-direction: column-reverse;
+    width: 75%;
+}
+
+.W-navbar-buttons-acomodation {
+    height: 100%;
+    display: flex;
+    overflow-y: visible;
+    align-content: stretch;
+    align-items: center;
+    justify-content: space-around;
+    flex-direction: row;
+}
+
+.W-container-fluid {
+    display: contents;
+    flex-wrap: inherit;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.W-navbar-hamburger-postion {
+    display: flex;
+    margin-right: 90px;
+    width: 20vw;
+}
+
+.W-navbar-search {
+    display: flex;
+    margin-right: 40px;
+    margin-left: 80px;
+}
+
+.W-filters-hamburger-buttons {
+    display: none;
+}
+
+.W-filter-hamburger-button {
+    border-color: #b21e26;
+}
+
+.W-confirm-filters-button {
+    margin-top: 15%;
+    display: flex;
+    justify-content: center;
+}
+
+.W-nav-login-button {
+    display: flex;
+    justify-content: center;
+}
+
+@media (max-width: 991px) {
+    .W-header-height {
+        min-height: 66px;
+        margin-top: 0;
+        position: static;
+    }
+    
+    .W-home-button-hamburger-button {
+        display: flex;
+    }
+
+    .W-header-accomodation {
+        display: flex;
+        flex-direction: column;
+        margin-left: 90%;
+        width: 40% !important;
+    }
+
+    .W-navbar-buttons-acomodation {
+        height: 100%;
+        justify-content: space-between;
+        display: block;
+        overflow-y: auto;
+        max-height: 850px;
+    }
+
+    .W-navbar-hamburger-postion {
+        display: flex;
+    }
+
+    .W-filter-font-size{
+        font-size: 180%;
+    }
+
+    .W-navitem-list {
+        display: flex;
+        margin-left: 0%;
+        font-size: 100%;
+    }
+    
+    .W-nav-item {
+        display: block;
+        margin-left: 0%;
+        font-size: 3vw;
+    }
+
+    .W-navbar-search {
+        display: flex;
+        margin: 20px 0 20px 0;
+    }
+
+    .W-nav-login-button {
+        display: flex;
+        justify-content: center;
+    }
+
+    .W-filters-hamburger-buttons {
+        display: flex;
+        margin-top: 0;
+    }
+}
+
+@media (max-width: 591px) {
+    .W-home-button-hamburger-button {
+        display: flex;
+    }
+
+    .W-navbar-buttons-acomodation {
+        height: 100%;
+        justify-content: space-between;
+        display: block;
+    }
+
+    .W-header-accomodation {
+        display: flex;
+        flex-direction: column;
+        width: 45% !important;
+    }
+
+    .W-home-button-hamburger-button {
+        display: flex;
+    }
+
+    .W-navitem-list {
+        display: flex;
+        margin-left: 0%;
+        font-size: 100%;
+    }
+
+    .W-filter-font-size{
+        font-size: 100%;
+    }
+    
+    .W-nav-item {
+        display: block;
+        margin-left: 0%;
+        font-size: 2vw;
+    }
+}
+@media (max-width: 291px) {
+    .W-home-button-hamburger-button {
+        display: flex;
+    }
+
+    .W-navbar-buttons-acomodation {
+        height: 100%;
+        justify-content: space-between;
+        display: block;
+    }
+
+    .W-header-accomodation {
+        display: flex;
+        flex-direction: column;
+        width: 50% !important;
+    }
+
+    .W-navbar-hamburger-postion {
+        display: flex;
+    }
+
+    .W-filter-font-size{
+        font-size: 60%;
+    }
+
+    .W-navitem-list {
+        display: flex;
+        margin-left: 0%;
+        font-size: 100%;
+    }
+    
+    .W-nav-item {
+        display: block;
+        margin-left: 0%;
+        font-size: 1vw;
+    }
+}
+
+.W-searchbar {
+    display: flex;
+    margin-bottom: 0vw;
+}
+
+.W-search-icon {
+    height: 100%;
+    width: 20px;
+}
+
+.W-search-button-color {
+    color: white;
+    background-color: transparent;
+    border-color: white;
+}
+
+.W-search-button-color:hover {
+    color: white;
+    background-color: rgb(104, 19, 19);
+    border-color: #b21e26;
+}
+
+.W-navbar-padding {
+    padding-right: 3%;
+}

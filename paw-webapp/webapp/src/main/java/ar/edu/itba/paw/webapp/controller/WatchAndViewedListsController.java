@@ -82,7 +82,7 @@ public class WatchAndViewedListsController {
         }
         List<Content> watchList = us.getWatchList(user);
         LOGGER.info("GET /{}: Watchlist from user {}", uriInfo.getPath(),userId);
-        return Response.ok(ContentDto.mapContentToContentDto(uriInfo, watchList, user)).build();
+        return Response.ok(ContentDto.mapContentToContentDto(uriInfo, watchList)).build();
     }
 
 //    @RequestMapping(value = {"/profile/watchList","/profile/watchList/page/{pageNum:[0-9]+}"}, method = {RequestMethod.GET})
@@ -219,7 +219,7 @@ public class WatchAndViewedListsController {
         }
         List<Content> viewedList = us.getUserViewedList(user);
         LOGGER.info("GET /{}: Viewedlist from user {}", uriInfo.getPath(),userId);
-        return Response.ok(ContentDto.mapContentToContentDto(uriInfo, viewedList, user)).build();
+        return Response.ok(ContentDto.mapContentToContentDto(uriInfo, viewedList)).build();
     }
 
 //    @RequestMapping(value = {"/profile/viewedList","/profile/viewedList/page/{pageNum:[0-9]+}"}, method = {RequestMethod.GET})

@@ -58,29 +58,30 @@ public class CommentController {
 
     // * ---------------------------------------------Comment POST------------------------------------------------------
     // Endpoint para crear un comentario
-    @POST
-    @Produces(value = {MediaType.APPLICATION_JSON})
-    @Path("/{reviewId}/add")
-    public Response commentReviewAdd(@PathParam("reviewId")final long reviewId, @Valid NewCommentDto commentDto) {
-
-        Optional<Review> review = rs.getReview(reviewId);
-        Optional<User> user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
-
-        if(!review.isPresent() || !user.isPresent()) {
-            throw new PageNotFoundException();
-        }
-
-        if(commentDto == null) {
-//            TODO: Ver que error tirar aca
-            throw new PageNotFoundException();
-        }
+//    @POST
+//    @Produces(value = {MediaType.APPLICATION_JSON})
+//    @Path("/{reviewId}/add")
+//    public Response commentReviewAdd(@PathParam("reviewId")final long reviewId, @Valid NewCommentDto commentDto) {
+//
+//        Optional<Review> review = rs.getReview(reviewId);
+//        Optional<User> user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+//
+//        if(!review.isPresent() || !user.isPresent()) {
+//            throw new PageNotFoundException();
+//        }
+//
+//        if(commentDto == null) {
+////            TODO: Ver que error tirar aca
+//            throw new PageNotFoundException();
+//        }
 
 //        TODO: hacer que este metodo devuelva el comment
-        Comment newComment = ccs.addComment(review.get(), user.get(), commentDto.getComment());
+//        Comment newComment = ccs.addComment(review.get(), user.get(), commentDto.getComment());
 
-        LOGGER.info("POST /{}: Comment created with id {}", uriInfo.getPath(), newComment.getCommentId());
-        return Response.created(CommentDto.getCommentUriBuilder(newComment, uriInfo).build()).build();
-    }
+//        LOGGER.info("POST /{}: Comment created with id {}", uriInfo.getPath(), newComment.getCommentId());
+//        return Response.created(CommentDto.getCommentUriBuilder(newComment, uriInfo).build()).build();
+//        return null;
+//    }
     // * ---------------------------------------------------------------------------------------------------------------
 
 

@@ -76,10 +76,10 @@ public class MovieAndSerieController {
     @Path("/{contentType}")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getContentByType(@PathParam("contentType") final String contentType,
-                                     @QueryParam("pageNumber")Optional<Integer> pageNum,
+                                     @QueryParam("pageNumber") @DefaultValue("1") Integer pageNum,
                                      @QueryParam("pageSize") @DefaultValue("10") int pageSize) {
 
-        int page= pageNum.orElse(1);
+        int page= pageNum;
         List<Content> contentList = cs.getAllContent(contentType, null);
         List<Content> contentListPaginated;
         if(contentList == null) {
@@ -94,7 +94,7 @@ public class MovieAndSerieController {
             user = Optional.empty();
         }
         LOGGER.info("GET /{}: Success getting the content", uriInfo.getPath(), new PageNotFoundException());
-        return Response.ok(ContentDto.mapContentToContentDto(uriInfo, contentListPaginated, user.get())).build();
+        return Response.ok(ContentDto.mapContentToContentDto(uriInfo, contentListPaginated)).build();
     }
 
 //    @RequestMapping(value= {"/{type:movies|series}","/{type:movies|series}/page/{pageNum}"})
@@ -144,23 +144,22 @@ public class MovieAndSerieController {
     @Path("/{contentType}/filters")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response filterContentByType(@PathParam("contentType") final String contentType,
-                                        @QueryParam("pageNumber") Optional<Integer> pageNum,
+                                        @QueryParam("pageNumber") @DefaultValue("1") Integer pageNum,
                                         @QueryParam("pageSize") @DefaultValue("10") int pageSize,
                                         @QueryParam("durationFrom") @DefaultValue("ANY") final String durationFrom,
                                         @QueryParam("durationTo") @DefaultValue("ANY") final String durationTo,
-                                        @QueryParam("sorting") final Optional<Sorting> sorting,
+                                        @QueryParam("sorting") final Sorting sorting,
                                         @QueryParam("query") @DefaultValue("ANY") final String query,
-                                        @QueryParam("genre") final List<String> genre,
-                                        @Valid GenreFilterDto genreFilterDto) {
+                                        @QueryParam("genre") final List<String> genre) {
 
-        int page= pageNum.orElse(1);
-        List<String> genreList = (genreFilterDto.getFormGenre()!=null && genreFilterDto.getFormGenre().length > 0 ) ? Arrays.asList(genreFilterDto.getFormGenre()) : genre;
+        int page= pageNum;
+//        List<String> genreList = (genreFilterDto.getFormGenre()!=null && genreFilterDto.getFormGenre().length > 0 ) ? Arrays.asList(genreFilterDto.getFormGenre()) : genre;
+//
+//        if(genreList != null){
+//            genreFilterDto.setFormGenre(genreList.toArray(new String[0]));
+//        }
 
-        if(genreList != null){
-            genreFilterDto.setFormGenre(genreList.toArray(new String[0]));
-        }
-
-        List<Content> contentListFilter = cs.getMasterContent(contentType, genreList,durationFrom,durationTo,sorting.orElse(null),query);
+        List<Content> contentListFilter = cs.getMasterContent(contentType, genre,durationFrom,durationTo,sorting,query);
         List<Content> contentListFilterPaginated;
         int amountOfPages;
         if(contentListFilter == null) {
@@ -203,7 +202,7 @@ public class MovieAndSerieController {
             user = Optional.empty();
         }
         LOGGER.info("GET /{}: Success filtering the content", uriInfo.getPath(), new PageNotFoundException());
-        return Response.ok(ContentDto.mapContentToContentDto(uriInfo, contentListFilterPaginated, user.get())).build();
+        return Response.ok(ContentDto.mapContentToContentDto(uriInfo, contentListFilterPaginated)).build();
     }
 
 

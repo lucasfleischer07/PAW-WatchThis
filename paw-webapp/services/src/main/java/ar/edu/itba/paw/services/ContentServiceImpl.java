@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -16,6 +17,8 @@ import java.util.Optional;
 public class ContentServiceImpl implements ContentService {
 
     private final ContentDao ContentDao;
+    @Autowired
+    private UserService us;
 
     @Autowired
     public ContentServiceImpl(final ContentDao ContentDao) {
@@ -41,6 +44,34 @@ public class ContentServiceImpl implements ContentService {
             genreFilterDao = "ANY";
         }
         return genreFilterDao;
+    }
+
+    @Override
+    public List<List<Content>> getLandingPageContent(User user) {
+        List<List<Content>> mainList = new ArrayList<>();
+        List<Content> bestRatedList = getBestRated();
+        List<Content> lastAddedList = getLastAdded();
+        mainList.add(bestRatedList);
+        mainList.add(lastAddedList);
+        if(user == null) {
+            List<Content> mostSavedContentByUsersList = getMostUserSaved();
+            mainList.add(mostSavedContentByUsersList);
+        } else {
+            List<Long> userWatchListContentId = us.getUserWatchListContent(user);
+            if(userWatchListContentId.size() != 0) {
+                List<Content> recommendedUserList = getUserRecommended(user);
+                if (recommendedUserList.size() == 0) {
+                    List<Content> mostSavedContentByUsersList = getMostUserSaved();
+                    mainList.add(mostSavedContentByUsersList);
+                } else {
+                    mainList.add(recommendedUserList);
+                }
+            } else {
+                List<Content> mostSavedContentByUsersList = getMostUserSaved();
+                mainList.add(mostSavedContentByUsersList);
+            }
+        }
+        return mainList;
     }
 
     @Override

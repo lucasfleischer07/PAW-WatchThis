@@ -5,7 +5,10 @@ import ar.edu.itba.paw.models.Sorting;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.services.ContentService;
 import ar.edu.itba.paw.services.UserService;
+import ar.edu.itba.paw.webapp.dto.request.NewContentDto;
+import ar.edu.itba.paw.webapp.dto.response.AnonymousLandingPageDto;
 import ar.edu.itba.paw.webapp.dto.response.ContentDto;
+import ar.edu.itba.paw.webapp.dto.response.UserLandingPageDto;
 import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
 import ar.edu.itba.paw.webapp.form.ContentForm;
 import ar.edu.itba.paw.webapp.form.ContentEditForm;
@@ -80,60 +83,64 @@ public class ContentController {
     // * ----------------------------------- Home Page -----------------------------------------------------------------
     // Endpoint para getear el contenido de la home page
     @GET
-    @Path("{contentType}")
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response getContentByType(@PathParam("contentType") final String contentType,
-                                     @QueryParam("pageNumber") @DefaultValue("1") int pageNumber,
+    public Response getContentByType(@QueryParam("pageNumber") @DefaultValue("1") int pageNumber,
                                      @QueryParam("pageSize") @DefaultValue("10") int pageSize) {
-//        TODO: VER QUE PASARLE ACA COMO USER
+        LOGGER.info("GET /{}: Called", uriInfo.getPath());
         Optional<User> user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+        List<List<Content>> landingPageContentList;
         if(!user.isPresent()) {
-            user = Optional.empty();
+            landingPageContentList = cs.getLandingPageContent(null);
+            LOGGER.info("GET /{}: Returning Landing Page Content for user NULL", uriInfo.getPath());
+            return Response.ok(new GenericEntity<AnonymousLandingPageDto>(new AnonymousLandingPageDto(uriInfo, landingPageContentList)){}).build();
+        } else {
+            landingPageContentList = cs.getLandingPageContent(user.get());
+            LOGGER.info("GET /{}: Returning Landing Page Content for userId {}", uriInfo.getPath(), user.get().getId());
+            return Response.ok(new GenericEntity<UserLandingPageDto>(new UserLandingPageDto(uriInfo, landingPageContentList)){}).build();
+
         }
 
-        if(Objects.equals(contentType, "bestRated")) {
-            List<Content> bestRatedList = cs.getBestRated();
-            if(bestRatedList.size() == 0) {
-                LOGGER.warn("GET /{}: Error bringing {} data from the db", uriInfo.getPath(), contentType, new PageNotFoundException());
-                throw new PageNotFoundException();
-            }
-            LOGGER.info("GET /{}: Bringing {} data from the db succeeded", uriInfo.getPath(), contentType);
-            return Response.ok(ContentDto.mapContentToContentDto(uriInfo, bestRatedList, user.get())).build();
-
-        } else if(Objects.equals(contentType, "lastAdded")) {
-            List<Content> lastAddedList = cs.getLastAdded();
-            if(lastAddedList.size() == 0) {
-                LOGGER.warn("GET /{}: Error bringing {} data from the db", uriInfo.getPath(), contentType, new PageNotFoundException());
-                throw new PageNotFoundException();
-            }
-            LOGGER.info("GET /{}: Bringing {} data from the db succeeded", uriInfo.getPath(), contentType);
-            return Response.ok(ContentDto.mapContentToContentDto(uriInfo, lastAddedList, user.get())).build();
-        } else if(Objects.equals(contentType, "recommendedUser")) {
-            if(!user.isPresent()) {
-                List<Content> mostSavedContentByUsersList = cs.getMostUserSaved();
-                LOGGER.info("GET /{}: Bringing {} data from the db succeeded", uriInfo.getPath(), contentType);
-                return Response.ok(ContentDto.mapContentToContentDto(uriInfo, mostSavedContentByUsersList, user.get())).build();
-            } else {
-                List<Long> userWatchListContentId = us.getUserWatchListContent(user.get());
-                if(userWatchListContentId.size() != 0) {
-                    List<Content> recommendedUserList = cs.getUserRecommended(user.get());
-                    if (recommendedUserList.size() == 0) {
-                        List<Content> mostSavedContentByUsersList = cs.getMostUserSaved();
-                        LOGGER.info("GET /{}: Bringing {} data from the db succeeded", uriInfo.getPath(), contentType);
-                        return Response.ok(ContentDto.mapContentToContentDto(uriInfo, mostSavedContentByUsersList, user.get())).build();
-                    } else {
-                        LOGGER.info("GET /{}: Bringing {} data from the db succeeded", uriInfo.getPath(), contentType);
-                        return Response.ok(ContentDto.mapContentToContentDto(uriInfo, recommendedUserList, user.get())).build();
-                    }
-                } else {
-                    List<Content> mostSavedContentByUsersList = cs.getMostUserSaved();
-                    LOGGER.info("GET /{}: Bringing {} data from the db succeeded", uriInfo.getPath(), contentType);
-                    return Response.ok(ContentDto.mapContentToContentDto(uriInfo, mostSavedContentByUsersList, user.get())).build();
-                }
-            }
-        }
-        LOGGER.warn("GET /{}: Error bringing {} data from the db", uriInfo.getPath(), contentType, new PageNotFoundException());
-        return null;
+//        if(Objects.equals(contentType, "bestRated")) {
+//            List<Content> bestRatedList = cs.getBestRated();
+//            if(bestRatedList.size() == 0) {
+//                LOGGER.warn("GET /{}: Error bringing {} data from the db", uriInfo.getPath(), contentType, new PageNotFoundException());
+//                throw new PageNotFoundException();
+//            }
+//            LOGGER.info("GET /{}: Bringing {} data from the db succeeded", uriInfo.getPath(), contentType);
+//            return Response.ok(ContentDto.mapContentToContentDto(uriInfo, bestRatedList, user.get())).build();
+//
+//        } else if(Objects.equals(contentType, "lastAdded")) {
+//            List<Content> lastAddedList = cs.getLastAdded();
+//            if(lastAddedList.size() == 0) {
+//                LOGGER.warn("GET /{}: Error bringing {} data from the db", uriInfo.getPath(), contentType, new PageNotFoundException());
+//                throw new PageNotFoundException();
+//            }
+//            LOGGER.info("GET /{}: Bringing {} data from the db succeeded", uriInfo.getPath(), contentType);
+//            return Response.ok(ContentDto.mapContentToContentDto(uriInfo, lastAddedList, user.get())).build();
+//        } else if(Objects.equals(contentType, "recommendedUser")) {
+//            if(!user.isPresent()) {
+//                List<Content> mostSavedContentByUsersList = cs.getMostUserSaved();
+//                LOGGER.info("GET /{}: Bringing {} data from the db succeeded", uriInfo.getPath(), contentType);
+//                return Response.ok(ContentDto.mapContentToContentDto(uriInfo, mostSavedContentByUsersList, user.get())).build();
+//            } else {
+//                List<Long> userWatchListContentId = us.getUserWatchListContent(user.get());
+//                if(userWatchListContentId.size() != 0) {
+//                    List<Content> recommendedUserList = cs.getUserRecommended(user.get());
+//                    if (recommendedUserList.size() == 0) {
+//                        List<Content> mostSavedContentByUsersList = cs.getMostUserSaved();
+//                        LOGGER.info("GET /{}: Bringing {} data from the db succeeded", uriInfo.getPath(), contentType);
+//                        return Response.ok(ContentDto.mapContentToContentDto(uriInfo, mostSavedContentByUsersList, user.get())).build();
+//                    } else {
+//                        LOGGER.info("GET /{}: Bringing {} data from the db succeeded", uriInfo.getPath(), contentType);
+//                        return Response.ok(ContentDto.mapContentToContentDto(uriInfo, recommendedUserList, user.get())).build();
+//                    }
+//                } else {
+//                    List<Content> mostSavedContentByUsersList = cs.getMostUserSaved();
+//                    LOGGER.info("GET /{}: Bringing {} data from the db succeeded", uriInfo.getPath(), contentType);
+//                    return Response.ok(ContentDto.mapContentToContentDto(uriInfo, mostSavedContentByUsersList, user.get())).build();
+//                }
+//            }
+//        }
     }
 
 
@@ -212,9 +219,10 @@ public class ContentController {
     // Endpoint para getear la imagen del contenido
     @GET
     @Produces(value = {MediaType.APPLICATION_JSON})
-    @Path("/{contentId}/contentImage")
+    @Path("/content/{contentId}/contentImage")
     public Response getContentImage(@PathParam("contentId") final long contentId,
                                     @Context Request request) {
+        LOGGER.info("GET /{}: Called", uriInfo.getPath());
         Content content = cs.findById(contentId).orElseThrow(PageNotFoundException::new);
         EntityTag eTag = new EntityTag(String.valueOf(content.getId()));
         final CacheControl cacheControl = new CacheControl();
@@ -232,17 +240,16 @@ public class ContentController {
 
     //Endpoint para editar la imagen del contenido
     @PUT
-    @Path("/{contentId}/contentImage")
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/content/{contentId}/contentImage")
     @Produces(value = {MediaType.APPLICATION_JSON,})
     public Response updateContentImage(@Size(max = 1024 * 1024 * 2) @FormDataParam("image") byte[] imageBytes,
-                                           @PathParam("contentId") final long contentId) {
-
+                                       @PathParam("contentId") final long contentId) {
+        LOGGER.info("PUT /{}: Called", uriInfo.getPath());
         Content content = cs.findById(contentId).orElseThrow(PageNotFoundException::new);
 
         cs.updateContent(content.getId(), content.getName(), content.getDescription(), content.getReleased(), content.getGenre(), content.getCreator(), content.getDurationNum(), content.getType(), imageBytes);
         LOGGER.info("PUT /{}: Content {} Image Updated", uriInfo.getPath(), contentId);
-        return Response.noContent().contentLocation(uriInfo.getAbsolutePathBuilder().path(String.valueOf(content.getId())).path("contentImage").build()).build();
+        return Response.noContent().contentLocation(ContentDto.getContentUriBuilder(uriInfo).path("content").path(String.valueOf(content.getId())).path("contentImage").build()).build();
     }
 
 
@@ -266,11 +273,10 @@ public class ContentController {
     @Path("/content/editInfo/{contentId}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(value = {MediaType.APPLICATION_JSON,})
-    public Response updateContentInfo(@Size(max = 1024 * 1024 * 2) @FormDataParam("image") byte[] imageBytes,
-                                      @PathParam("contentId") final long contentId,
-                                      @Valid ContentDto contentDto,
-                                      @FormDataParam("images") FormDataBodyPart image) {
-
+    public Response updateContentInfo(@PathParam("contentId") final long contentId,
+                                      @Valid NewContentDto contentDto,
+                                      @Context final HttpServletRequest request) {
+        LOGGER.info("PUT /{}: Called", uriInfo.getPath());
         final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(PageNotFoundException::new);
         final Content content = cs.findById(contentId).orElseThrow(PageNotFoundException::new);
 
@@ -279,12 +285,15 @@ public class ContentController {
             throw new PageNotFoundException();
         }
 
-//        TODO: NOSE BIEN COMO SERIA ESTO, HAY QUE VERLO MEJOR
+        String auxGenre = "";
+        for(String genre : contentDto.getGenre()) {
+            auxGenre = auxGenre + " " + genre;
+        }
 
-        cs.updateContent(contentDto.getId(), contentDto.getName(), contentDto.getDescription(), contentDto.getReleaseDate(), contentDto.getGenre(), contentDto.getCreator(), contentDto.getDurationNum(), contentDto.getType(), contentDto.getContentPicture());
+//        TODO: NOSE BIEN COMO SERIA ESTO, HAY QUE VERLO MEJOR (POR EL MOMENTO, ESTA PUESTO LA IMAGEN ORIGINAL, NOSE BIEN COMO HACER PARA CAMBIAR SOLO LA IMAGEN, HAY QUE HACER UN BOTON APARTE Y ESO)
+        cs.updateContent(contentId, contentDto.getName(), contentDto.getDescription(), contentDto.getReleaseDate(), auxGenre, contentDto.getCreator(), contentDto.getDuration(), contentDto.getType(), content.getImage());
         LOGGER.info("PUT /{}: Content {} Info Updated", uriInfo.getPath(), contentId);
         return Response.ok().build();
-//        return Response.noContent().contentLocation(uriInfo.getAbsolutePathBuilder().path(String.valueOf(content.getId())).path("profileImage").build()).build();
     }
 
 //    @RequestMapping(value = "/content/editInfo/{contentId:[0-9]+}", method = {RequestMethod.GET})
@@ -337,8 +346,9 @@ public class ContentController {
 
     // * ----------------------------------- Content Delete ------------------------------------------------------------
     @DELETE
-    @Path("/{contentId}/deleteContent")
+    @Path("/content/{contentId}/deleteContent")
     public Response deleteContent(@PathParam("contentId") final long contentId) {
+        LOGGER.info("DELETE /{}: Called", uriInfo.getPath());
         Content oldContent = cs.findById(contentId).orElseThrow(PageNotFoundException::new);
         cs.deleteContent(contentId);
         LOGGER.info("DELETE /{}: Content {} deleted", uriInfo.getPath(), contentId);
@@ -358,12 +368,20 @@ public class ContentController {
     // Endpoint para crear un contenido
 //    TODO: VER BIEN
     @POST
-    @Path("/create")
+    @Path("/content/create")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createContent(@FormDataParam("images") FormDataBodyPart img,
-                                  @Valid ContentDto contentDto) {
-        Content newContent = cs.contentCreate(contentDto.getName(),contentDto.getDescription(),contentDto.getReleaseDate(), contentDto.getGenre(), contentDto.getCreator(),contentDto.getDurationNum(),contentDto.getType(),contentDto.getContentPicture());
-        return Response.created(ContentDto.getContentUriBuilder(newContent, uriInfo).build()).build();
+    public Response createContent(@Valid NewContentDto contentDto) {
+        LOGGER.info("POST /{}: Called", uriInfo.getPath());
+//        User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(PageNotFoundException::new);
+
+        String auxGenre = "";
+        for(String genre : contentDto.getGenre()) {
+            auxGenre = auxGenre + " " + genre;
+        }
+
+        Content newContent = cs.contentCreate(contentDto.getName(),contentDto.getDescription(),contentDto.getReleaseDate(), auxGenre, contentDto.getCreator(),contentDto.getDuration(),contentDto.getType(),null);
+//        TODO: REvisar bien estas URls
+        return Response.created(ContentDto.getContentUriBuilder(uriInfo).path("content").path(String.valueOf(newContent.getId())).build()).build();
     }
 
 //    @RequestMapping(value = "/content/create",method = {RequestMethod.GET})

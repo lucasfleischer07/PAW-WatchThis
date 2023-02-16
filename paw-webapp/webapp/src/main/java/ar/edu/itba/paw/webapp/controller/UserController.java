@@ -3,8 +3,12 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.services.*;
+import ar.edu.itba.paw.webapp.dto.request.EditProfileDto;
+import ar.edu.itba.paw.webapp.dto.request.NewUser;
+import ar.edu.itba.paw.webapp.dto.response.ReviewDto;
 import ar.edu.itba.paw.webapp.dto.response.UserDto;
 import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
+import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,34 +42,39 @@ public class UserController {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
     private static final int REVIEW_AMOUNT = 3;
 
-//    @Autowired
-//    public UserController(final UserService us, final ContentService cs, ReviewService rs, PaginationService ps,PasswordEncoder passwordEncoder){
-//        this.us = us;
-//        this.cs = cs;
-//        this.rs = rs;
-//        this.ps = ps;
-//        this.passwordEncoder = passwordEncoder;
-//    }
 
 //    TODO: ESTO NI LO VI, HAY QUE VERLO
-    private void paginationSetup(ModelAndView mav,int page,List<Review> reviewList){
-        if(reviewList.size()==0){
-            mav.addObject("reviews",reviewList);
-            mav.addObject("reviewsAmount",reviewList.size());
-            mav.addObject("pageSelected",1);
-            mav.addObject("amountPages",1);
-            return;
-        }
+//    private void paginationSetup(ModelAndView mav,int page,List<Review> reviewList){
+//        if(reviewList.size()==0){
+//            mav.addObject("reviews",reviewList);
+//            mav.addObject("reviewsAmount",reviewList.size());
+//            mav.addObject("pageSelected",1);
+//            mav.addObject("amountPages",1);
+//            return;
+//        }
+//
+//        List<Review> reviewListPaginated = ps.infiniteScrollPagination(reviewList, page,REVIEW_AMOUNT);
+//        mav.addObject("reviews", reviewListPaginated);
+//
+//        int amountOfPages = ps.amountOfContentPages(reviewList.size(),REVIEW_AMOUNT);
+//        mav.addObject("amountPages", amountOfPages);
+//        mav.addObject("pageSelected",page);
+//        mav.addObject("reviewsAmount",reviewList.size());
+//
+//    }
 
-        List<Review> reviewListPaginated = ps.infiniteScrollPagination(reviewList, page,REVIEW_AMOUNT);
-        mav.addObject("reviews", reviewListPaginated);
-
-        int amountOfPages = ps.amountOfContentPages(reviewList.size(),REVIEW_AMOUNT);
-        mav.addObject("amountPages", amountOfPages);
-        mav.addObject("pageSelected",page);
-        mav.addObject("reviewsAmount",reviewList.size());
-
+    // * ----------------------------------------------- User POST -----------------------------------------------------
+    // Endpoint para crear un usuario
+    @POST
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response userCreate(@Valid final NewUser newUser) {
+        LOGGER.info("POST /{}: Called", uriInfo.getPath());
+        final User user = us.register(newUser.getEmail(), newUser.getUsername(), newUser.getPassword()).orElseThrow(PageNotFoundException::new);
+        LOGGER.info("POST /{}: New user created with id {}", uriInfo.getPath(), user.getId());
+        return Response.created(UserDto.getUserUriBuilder(user, uriInfo).build()).build();
     }
+
+    // * ---------------------------------------------------------------------------------------------------------------
 
 
     // * ----------------------------------------------- User GET ------------------------------------------------------
@@ -73,10 +82,25 @@ public class UserController {
     @GET
     @Produces(value = {MediaType.APPLICATION_JSON})
     @Path("/{id}")
-    public Response getUserInfo(@PathParam("id") final long id, @QueryParam("page")@DefaultValue("1")final int page) {
+    public Response getUserInfo(@PathParam("id") final long id) {
+        LOGGER.info("GET /{}: Called",  uriInfo.getPath());
         final User user = us.findById(id).orElseThrow(PageNotFoundException::new);
-        LOGGER.info("GET /users/{}", id);
+        LOGGER.info("GET /{}: User returned with success", uriInfo.getPath());
         return Response.ok(new UserDto(uriInfo, user)).build();
+    }
+
+    // Endpoint para getear las reviews del usuario
+    @GET
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    @Path("/{id}/reviews")
+    public Response getUserReviews(@PathParam("id") final long id,
+                                   @QueryParam("page")@DefaultValue("1")final int page) {
+        LOGGER.info("GET /{}: Called",  uriInfo.getPath());
+        final User user = us.findById(id).orElseThrow(PageNotFoundException::new);
+        List<Review> reviewList = rs.getAllUserReviews(user);
+        Collection<ReviewDto> reviewDtoList = ReviewDto.mapReviewToReviewDto(uriInfo, reviewList);
+        LOGGER.info("GET /{}: User {} reviews returned with success",  uriInfo.getPath(), id);
+        return Response.ok(new GenericEntity<Collection<ReviewDto>>(reviewDtoList){}).build();
     }
 
 //    @RequestMapping(value={"/profile","/profile/page/{pageNum:[0-9]+}"})
@@ -124,8 +148,13 @@ public class UserController {
     @GET
     @Produces(value = {"image/*", MediaType.APPLICATION_JSON})
     @Path("/{id}/profileImage")
-    public Response getUserProfileImage(@PathParam("id") final long id, @Context Request request) {
+    public Response getUserProfileImage(@PathParam("id") final long id,
+                                        @Context Request request) {
+        LOGGER.info("GET /{}: Called", uriInfo.getPath());
         final User user = us.findById(id).orElseThrow(PageNotFoundException::new);
+        if(user.getImage() == null) {
+            return Response.noContent().build();
+        }
 
         EntityTag eTag = new EntityTag(String.valueOf(user.getId()));
         final CacheControl cacheControl = new CacheControl();
@@ -142,14 +171,14 @@ public class UserController {
         return response.cacheControl(cacheControl).build();
     }
 
-    //Endpoint para editar la imagen de perfil del usuario
+//    Endpoint para editar la imagen de perfil del usuario
     @PUT
     @Path("/{id}/profileImage")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(value = {MediaType.APPLICATION_JSON,})
-    public Response updateUserProfileImage(@Size(max = 1024 * 1024 * 2) @FormDataParam("image") byte[] imageBytes,
+    public Response updateUserProfileImage(@Size(max = 1024 * 1024) @FormDataParam("image") byte[] imageBytes,
                                            @PathParam("id") final long id) {
-
+        LOGGER.info("PUT /{}: Called", uriInfo.getPath());
         final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(PageNotFoundException::new);
         if(user.getId() != id) {
             throw new PageNotFoundException();
@@ -157,7 +186,7 @@ public class UserController {
 
         us.setProfilePicture(imageBytes, user);
         LOGGER.info("PUT /{}: User {} Profile Image Updated", uriInfo.getPath(), id);
-        return Response.noContent().contentLocation(uriInfo.getAbsolutePathBuilder().path(String.valueOf(user.getId())).path("profileImage").build()).build();
+        return Response.noContent().contentLocation(UserDto.getUserUriBuilder(user, uriInfo).path("profileImage").build()).build();
     }
 
 //    @RequestMapping(path = "/profile/{userName:[a-zA-Z0-9\\s]+}/profileImage", method = RequestMethod.GET, produces = {MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
@@ -255,18 +284,17 @@ public class UserController {
     @Path("/{id}/editProfile")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(value = {MediaType.APPLICATION_JSON,})
-    public Response updateUserProfileInfo(@Valid UserDto userDto,
+    public Response updateUserProfileInfo(@Valid EditProfileDto editProfileDto,
                                           @PathParam("id") final long id) {
+        LOGGER.info("PUT /{}: Called", uriInfo.getPath());
+
         final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(PageNotFoundException::new);
         if(user.getId() != id) {
             throw new PageNotFoundException();
         }
+        us.setPassword(editProfileDto.getPassword(), user, "forgotten");
 
-//        TODO: Verificar el tema de que setea la contrasena y la foto o una de las 2 o ninguna
-//        if() {
-//
-//        }
-//        us.setPassword(userDto.user);
+//      TODO: Hay que hace un boton para cambiar solamente la imagen y otro boton para cambiar la info, ya no puede ser le mismo boton para ambos
         LOGGER.info("PUT /{}: User {} profile Updated", uriInfo.getPath(), id);
         return Response.ok().build();
     }

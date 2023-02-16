@@ -22,7 +22,7 @@ public class ContentDto {
     private String duration;
     private int durationNum;
     private String type;
-    private byte[] contentPicture;
+    private String contentPictureUrl;
     private Integer reviewsAmount;
     private Integer rating;
 
@@ -31,12 +31,12 @@ public class ContentDto {
     private String reviewsUrl;
     private String contentReviewers;
 
-    public static Collection<ContentDto> mapContentToContentDto(UriInfo uriInfo, Collection<Content> content, User user) {
-        return content.stream().map(c -> new ContentDto(uriInfo, c, user)).collect(Collectors.toList());
+    public static Collection<ContentDto> mapContentToContentDto(UriInfo uriInfo, Collection<Content> content) {
+        return content.stream().map(c -> new ContentDto(uriInfo, c)).collect(Collectors.toList());
     }
 
-    public static UriBuilder getContentUriBuilder(Content content, UriInfo uriInfo) {
-        return uriInfo.getBaseUriBuilder().clone().path("content").path(String.valueOf(content.getId()));
+    public static UriBuilder getContentUriBuilder(UriInfo uriInfo) {
+        return uriInfo.getBaseUriBuilder().clone().path("/");
     }
 
     public ContentDto() {
@@ -44,7 +44,7 @@ public class ContentDto {
     }
 
 //    TODO: Ver si le pasamos o no el user
-    public ContentDto(UriInfo url, Content content, User user) {
+    public ContentDto(UriInfo url, Content content) {
         this.myUrl = url.getBaseUriBuilder().path("content").path(String.valueOf(content.getId())).build().toString();
         this.reviewsUrl = url.getBaseUriBuilder().path("reviews").path(String.valueOf(content.getId())).build().toString();
         this.contentReviewers = url.getBaseUriBuilder().path("content").path(String.valueOf(content.getId())).path("reviewers").build().toString();
@@ -57,10 +57,11 @@ public class ContentDto {
         this.releaseDate = content.getReleased();
         this.duration = content.getDuration();
         this.type = content.getType();
-        this.contentPicture = content.getImage();
         this.reviewsAmount = content.getReviewsAmount();
         this.rating = content.getRating();
         this.durationNum = content.getDurationNum();
+//        TODO: CHECKEAR ESTO DE LA IMAGEN
+        this.contentPictureUrl = url.getBaseUriBuilder().path("content").path(String.valueOf(content.getId())).path("contentImage").build().toString();
     }
 
     public Long getId() {
@@ -127,12 +128,12 @@ public class ContentDto {
         this.type = type;
     }
 
-    public byte[] getContentPicture() {
-        return contentPicture;
+    public String getContentPictureUrl() {
+        return contentPictureUrl;
     }
 
-    public void setContentPicture(byte[] contentPicture) {
-        this.contentPicture = contentPicture;
+    public void setContentPictureUrl(String contentPictureUrl) {
+        this.contentPictureUrl = contentPictureUrl;
     }
 
     public Integer getReviewsAmount() {
