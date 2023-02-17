@@ -217,13 +217,19 @@ public class ContentController {
 
     // * ----------------------------------- Get img from database -----------------------------------------------------
     // Endpoint para getear la imagen del contenido
+//    TODO: ESTE NO ANDA POR ALGUN MOTIVO
     @GET
     @Produces(value = {MediaType.APPLICATION_JSON})
     @Path("/content/{contentId}/contentImage")
     public Response getContentImage(@PathParam("contentId") final long contentId,
                                     @Context Request request) {
+
         LOGGER.info("GET /{}: Called", uriInfo.getPath());
         Content content = cs.findById(contentId).orElseThrow(PageNotFoundException::new);
+        if(content.getImage() == null) {
+            return Response.noContent().build();
+        }
+
         EntityTag eTag = new EntityTag(String.valueOf(content.getId()));
         final CacheControl cacheControl = new CacheControl();
         cacheControl.setNoCache(true);
@@ -281,7 +287,7 @@ public class ContentController {
         final Content content = cs.findById(contentId).orElseThrow(PageNotFoundException::new);
 
 //        TODO: VER ESTO SI ERA ADMIN O QUE
-        if(!Objects.equals(user.getRole(), "ROLE_ADMIN")) {
+        if(!Objects.equals(user.getRole(), "amin")) {
             throw new PageNotFoundException();
         }
 
@@ -380,7 +386,7 @@ public class ContentController {
         }
 
         Content newContent = cs.contentCreate(contentDto.getName(),contentDto.getDescription(),contentDto.getReleaseDate(), auxGenre, contentDto.getCreator(),contentDto.getDuration(),contentDto.getType(),null);
-//        TODO: REvisar bien estas URls
+//        TODO: Revisar bien estas URls
         return Response.created(ContentDto.getContentUriBuilder(uriInfo).path("content").path(String.valueOf(newContent.getId())).build()).build();
     }
 

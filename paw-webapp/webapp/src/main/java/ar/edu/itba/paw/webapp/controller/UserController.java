@@ -29,14 +29,14 @@ import java.util.*;
 public class UserController {
     @Autowired
     private UserService us;
-    @Autowired
-    private ContentService cs;
+//    @Autowired
+//    private ContentService cs;
     @Autowired
     private ReviewService rs;
-    @Autowired
-    private PaginationService ps;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+//    @Autowired
+//    private PaginationService ps;
+//    @Autowired
+//    private PasswordEncoder passwordEncoder;
     @Context
     private UriInfo uriInfo;
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);

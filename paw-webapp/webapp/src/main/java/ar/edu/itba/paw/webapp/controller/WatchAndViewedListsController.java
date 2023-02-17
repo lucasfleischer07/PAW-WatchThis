@@ -6,6 +6,7 @@ import ar.edu.itba.paw.services.ContentService;
 import ar.edu.itba.paw.services.PaginationService;
 import ar.edu.itba.paw.services.UserService;
 import ar.edu.itba.paw.webapp.dto.response.ContentDto;
+import ar.edu.itba.paw.webapp.dto.response.ReviewDto;
 import ar.edu.itba.paw.webapp.dto.response.UserDto;
 import ar.edu.itba.paw.webapp.exceptions.ForbiddenException;
 import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
@@ -26,11 +27,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.*;
 import java.security.Principal;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,6 +48,7 @@ public class WatchAndViewedListsController {
     private static final int CONTENT_AMOUNT = 18;
 
 // TODO: VER ESTO
+
 //    private void listPaginationSetup(ModelAndView mav,String name,List<Content> contentList,int page) throws PageNotFoundException{
 //        if(ps.checkPagination(contentList.size(), page,CONTENT_AMOUNT)) {
 //            LOGGER.warn("Wrong login path:", new PageNotFoundException());
@@ -66,13 +66,14 @@ public class WatchAndViewedListsController {
 
     // * ------------------------------------------------User Watch List------------------------------------------------
     // Endpoint para getear la watchlist del ususario
-//    TODO: FALTA LO DE PAGINAR
     @GET
     @Path("/watchList/{userId}")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getUserWatchList(@PathParam("userId") final long userId,
                                      @QueryParam("pageNumber") @DefaultValue("1") int page,
                                      @QueryParam("pageSize") @DefaultValue("10") int pageSize) {
+        LOGGER.info("GET /{}: Called", uriInfo.getPath());
+
         final User user = us.findById(userId).orElseThrow(PageNotFoundException::new);
         final User user2 = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(PageNotFoundException::new);
 
@@ -81,8 +82,12 @@ public class WatchAndViewedListsController {
             throw new ForbiddenException();
         }
         List<Content> watchList = us.getWatchList(user);
+        Collection<ContentDto> watchListDto = ContentDto.mapContentToContentDto(uriInfo,watchList);
         LOGGER.info("GET /{}: Watchlist from user {}", uriInfo.getPath(),userId);
-        return Response.ok(ContentDto.mapContentToContentDto(uriInfo, watchList)).build();
+
+//        TODO: El Return aca deberia ya estar paginado (Por el momento no lo esta, habria que cambairlo)
+        return Response.ok(new GenericEntity<Collection<ContentDto>>(watchListDto){}).build();
+
     }
 
 //    @RequestMapping(value = {"/profile/watchList","/profile/watchList/page/{pageNum:[0-9]+}"}, method = {RequestMethod.GET})
@@ -120,6 +125,7 @@ public class WatchAndViewedListsController {
     @PUT
     @Path("/watchList/add/{contentId}")
     public Response addUserWatchList(@PathParam("contentId") final long contentId) {
+        LOGGER.info("POST /{}: Called", uriInfo.getPath());
         final Content content = cs.findById(contentId).orElseThrow(PageNotFoundException::new);
         final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(ForbiddenException::new);
 
@@ -159,6 +165,8 @@ public class WatchAndViewedListsController {
     @DELETE
     @Path("/watchList/delete/{contentId}")
     public Response deleteUserWatchList(@PathParam("contentId") final long contentId) {
+        LOGGER.info("DELETE /{}: Called", uriInfo.getPath());
+
         final Content content = cs.findById(contentId).orElseThrow(PageNotFoundException::new);
         final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(ForbiddenException::new);
 
@@ -203,13 +211,14 @@ public class WatchAndViewedListsController {
 
     // * ------------------------------------------------User Viewed List-----------------------------------------------
     // Endpoint para getear la viewedlist del ususario
-//    TODO: FALTA LO DE PAGINAR
     @GET
     @Path("/viewedList/{userId}")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getUserViewedList(@PathParam("userId") final long userId,
                                       @QueryParam("pageNumber") @DefaultValue("1") int page,
                                       @QueryParam("pageSize") @DefaultValue("10") int pageSize) {
+        LOGGER.info("GET /{}: Called", uriInfo.getPath());
+
         final User user = us.findById(userId).orElseThrow(PageNotFoundException::new);
         final User user2 = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(PageNotFoundException::new);
 
@@ -219,6 +228,8 @@ public class WatchAndViewedListsController {
         }
         List<Content> viewedList = us.getUserViewedList(user);
         LOGGER.info("GET /{}: Viewedlist from user {}", uriInfo.getPath(),userId);
+
+//        TODO: El Return aca deberia ya estar paginado (Por el momento no lo esta, habria que cambairlo)
         return Response.ok(ContentDto.mapContentToContentDto(uriInfo, viewedList)).build();
     }
 
@@ -257,14 +268,16 @@ public class WatchAndViewedListsController {
     @PUT
     @Path("/viewedList/add/{contentId}")
     public Response addUserViewedList(@PathParam("contentId") final long contentId) {
+        LOGGER.info("PUT /{}: Called", uriInfo.getPath());
+
         final Content content = cs.findById(contentId).orElseThrow(PageNotFoundException::new);
         final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(ForbiddenException::new);
 
         try {
             us.addToViewedList(user, content);
-            LOGGER.info("POST /{}: Content {} added successfully", uriInfo.getPath(), contentId);
+            LOGGER.info("PUT /{}: Content {} added successfully", uriInfo.getPath(), contentId);
         } catch (DuplicateKeyException ignore){
-            LOGGER.warn("POST /{}: DuplicateKeyException, content {} already in viewedlist", uriInfo.getPath(), contentId);
+            LOGGER.warn("PUT /{}: DuplicateKeyException, content {} already in viewedlist", uriInfo.getPath(), contentId);
         }
         return Response.noContent().build();
     }
@@ -290,6 +303,8 @@ public class WatchAndViewedListsController {
     @DELETE
     @Path("/viewedList/delete/{contentId}")
     public Response deleteUserViewedList(@PathParam("contentId") final long contentId) {
+        LOGGER.info("DELETE /{}: Called", uriInfo.getPath());
+
         final Content content = cs.findById(contentId).orElseThrow(PageNotFoundException::new);
         final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(ForbiddenException::new);
 

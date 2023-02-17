@@ -4,6 +4,7 @@ import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.services.*;
 import ar.edu.itba.paw.webapp.dto.request.NewReviewDto;
 import ar.edu.itba.paw.webapp.dto.response.ReviewDto;
+import ar.edu.itba.paw.webapp.dto.response.UserLandingPageDto;
 import ar.edu.itba.paw.webapp.exceptions.ForbiddenException;
 import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
 import ar.edu.itba.paw.webapp.form.CommentForm;
@@ -25,11 +26,9 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.*;
 import java.security.Principal;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -78,21 +77,28 @@ public class ReviewController {
     public Response reviews(@PathParam("contentId") final long contentId,
                             @QueryParam("pageNumber") @DefaultValue("1") int pageNumber,
                             @QueryParam("pageSize") @DefaultValue("10") int pageSize) {
-        Content content=cs.findById(contentId).orElseThrow(PageNotFoundException::new);
+        LOGGER.info("GET /{}: Called",uriInfo.getPath());
+        Content content = cs.findById(contentId).orElseThrow(PageNotFoundException::new);
         List<Review> reviewList = rs.getAllReviews(content);
         if(reviewList == null) {
             LOGGER.warn("GET /{}: Cant find a the content specified",uriInfo.getPath(), new PageNotFoundException());
             throw new PageNotFoundException();
         }
+        Collection<ReviewDto> reviewDtoList = ReviewDto.mapReviewToReviewDto(uriInfo, reviewList);
+
         LOGGER.info("GET /{}: Review list for content {}",uriInfo.getPath(), contentId);
-        return Response.ok(ReviewDto.mapReviewToReviewDto(uriInfo, reviewList)).build();
+
+//        TODO: El Return aca deberia ya estar paginado (Por el momento no lo esta, habria que cambairlo)
+         return Response.ok(new GenericEntity<Collection<ReviewDto>>(reviewDtoList){}).build();
+
 
     }
     // * ---------------------------------------------------------------------------------------------------------------
 
 
     // * ----------------------------------- Movies and Series Lists Gets ----------------------------------------------
-//TODO: VER QUE ONDA ESTO
+
+// TODO: VER QUE ONDA ESTO
 
 //    @GET
 //    @Path("/{contentId}/isInWatchlist")
@@ -187,12 +193,15 @@ public class ReviewController {
     // * ---------------------------------------------------------------------------------------------------------------
 
 
-    // * ----------------------------------- Movies and Series Review Creation------------------------------------------
+    // * ----------------------------------- Review Creation -----------------------------------------------------------
+//    Endpoint para crear una resenia
     @POST
+    @Produces(value = {MediaType.APPLICATION_JSON})
     @Path("/create/{type}/{contentId}")
     public Response reviews(@PathParam("type") final String type,
                             @PathParam("contentId") final long contentId,
                             @Valid NewReviewDto reviewDto) {
+        LOGGER.info("POST /{}: Called", uriInfo.getPath());
         final Content content = cs.findById(contentId).orElseThrow(PageNotFoundException::new);
         final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(ForbiddenException::new);
         try {
@@ -271,149 +280,178 @@ public class ReviewController {
 
 
     // * ---------------------------------------------Review delete-----------------------------------------------------
-    @RequestMapping(value="/review/{reviewId:[0-9]+}/delete",method = {RequestMethod.POST})
-    public ModelAndView deleteReview(Principal userDetails,
-                                     @PathVariable("reviewId") final long reviewId,
-                                     HttpServletRequest request){
-        Review review=rs.findById(reviewId).orElseThrow(PageNotFoundException::new);
-        User user=us.findByEmail(userDetails.getName()).get();
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if(review.getUser().getUserName().equals(user.getUserName())){
+//    Endpoint para eliminar una resenia
+    @DELETE
+    @Path("/delete/{reviewId}")
+    @Produces(value = {MediaType.APPLICATION_JSON,})
+    public Response deleteReview(@PathParam("reviewId") final Long reviewId) {
+        LOGGER.info("DELETE /{}: Called", uriInfo.getPath());
+        final Review review = rs.findById(reviewId).orElseThrow(PageNotFoundException::new);
+        User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(PageNotFoundException::new);
+        if(review.getUser().getUserName().equals(user.getUserName())) {
             rs.deleteReview(reviewId);
-            String referer = request.getHeader("Referer");
-            return new ModelAndView("redirect:"+ referer);
-        } else if(auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+            LOGGER.info("DELETE /{}: Review Deleted by user owner", uriInfo.getPath());
+            return Response.noContent().build();
+        }
+//        TODO: VER ESTE QUE SERIA SI UN ADIN LO ELIMINA
+        else if(Objects.equals(user.getRole(), "admin")) {
             rrs.delete(review, null);
-            String referer = request.getHeader("Referer");
-            return new ModelAndView("redirect:"+ referer);
+            LOGGER.info("DELETE /{}: Review Deleted by admin", uriInfo.getPath());
+            return Response.noContent().build();
+
         } else {
-            LOGGER.warn("Not allowed to delete",new ForbiddenException());
+            LOGGER.warn("DELETE /{}: Not allowed to delete", uriInfo.getPath());
             throw new ForbiddenException();
         }
+
     }
+
     // * ---------------------------------------------------------------------------------------------------------------
 
 
     // * ---------------------------------------------Review edition----------------------------------------------------
-    @RequestMapping(value = "/reviewForm/edit/{type:movie|serie}/{contentId:[0-9]+}/{reviewId:[0-9]+}", method = {RequestMethod.GET})
-    public ModelAndView reviewFormEdition(Principal userDetails,
-                                          @ModelAttribute("registerForm") final ReviewForm reviewForm,
-                                          @PathVariable("contentId")final long contentId,
-                                          @PathVariable("reviewId")final long reviewId,
-                                          @PathVariable("type")final String type,
-                                          HttpServletRequest request) {
-        final ModelAndView mav = new ModelAndView("reviewEditionPage");
-        mav.addObject("details", cs.findById(contentId).orElseThrow(PageNotFoundException::new));
-        if(Objects.equals(type, "movie")) {
-            mav.addObject("type", "movies");
-        } else if(Objects.equals(type, "serie")) {
-            mav.addObject("type", "series");
-        }
-        Optional<Review> oldReview = rs.findById(reviewId);
-        if(!oldReview.isPresent()){
-            LOGGER.warn("Cant find a the review specified", new PageNotFoundException());
-            throw new PageNotFoundException();
-        }
-        if(userDetails != null) {
-            String userEmail = userDetails.getName();
-            User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
-            mav.addObject("user",user);
-            mav.addObject("userName",user.getUserName());
-            mav.addObject("userId",user.getId());
-            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            if(auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))){
-                mav.addObject("admin",true);
-            } else {
-                mav.addObject("admin",false);
-            }
+//    Endpoint para editar una review
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/editReview/{reviewId}")
+    @Produces(value = {MediaType.APPLICATION_JSON,})
+    public Response reviewEdition(@PathParam("reviewId") final Long reviewId,
+                                  @Valid final NewReviewDto reviewDto) {
 
-            if(!oldReview.get().getUser().getUserName().equals(us.findByEmail(userDetails.getName()).get().getUserName())){
-                LOGGER.warn("The editor is not owner of the review",new ForbiddenException());
-                throw new ForbiddenException();
-            }
+        LOGGER.info("PUT /{}: Called", uriInfo.getPath());
 
-        } else {
-            mav.addObject("userName","null");
-            mav.addObject("userId","null");
-            mav.addObject("admin",false);
-        }
-
-        reviewForm.setDescription(oldReview.get().getDescription());
-        reviewForm.setRating(oldReview.get().getRating());
-        reviewForm.setName(oldReview.get().getName());
-        String referer = request.getHeader("Referer");
-        mav.addObject("backLink",referer);
-        mav.addObject("reviewInfo", rs.findById(reviewId).orElseThrow(PageNotFoundException::new));
-        return mav;
-    }
-
-    @RequestMapping(value = "/reviewForm/edit/{type:movie|serie}/{contentId:[0-9]+}/{reviewId:[0-9]+}", method = {RequestMethod.POST})
-    public ModelAndView reviewFormEditionPost(Principal userDetails,
-                                              @Valid @ModelAttribute("registerForm") final ReviewForm form,
-                                              final BindingResult errors, @PathVariable("type")final String type,
-                                              @PathVariable("contentId")final long contentId,
-                                              @PathVariable("reviewId")final long reviewId,
-                                              HttpServletRequest request) {
-        if(errors.hasErrors()) {
-            return reviewFormEdition(userDetails,form,contentId,reviewId,type,request);
-        }
-        if(form.getRating() < 0 || form.getRating() > 5) {
-            return reviewFormEdition(userDetails,form,contentId,reviewId,type,request);
-        }
-
-        Optional<Review> oldReview = rs.findById(reviewId);
-        if(!oldReview.isPresent()){
-            LOGGER.warn("Cant find a the review specified",new PageNotFoundException());
-            throw new PageNotFoundException();
-        }
-
-        Optional<User> user = us.findByEmail(userDetails.getName());
-        if(!oldReview.get().getUser().getUserName().equals(user.get().getUserName())){
-            LOGGER.warn("The editor is not owner of the review",new PageNotFoundException());
+        final Review oldReview = rs.findById(reviewId).orElseThrow(PageNotFoundException::new);
+        User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(ForbiddenException::new);
+        if(!oldReview.getUser().getUserName().equals(user.getUserName())){
+            LOGGER.warn("PUT /{}: The editor is not owner of the review", uriInfo.getPath());
             throw new ForbiddenException();
         }
-        rs.updateReview(form.getName(), form.getDescription(), form.getRating(), reviewId);
-        ModelMap model =new ModelMap();
-        String referer = request.getSession().getAttribute("referer").toString();
-        return new ModelAndView("redirect:" + (referer==null?"/":referer),model);
-
+        rs.updateReview(reviewDto.getName(), reviewDto.getDescription(), reviewDto.getRating(), reviewId);
+        return Response.noContent().build();
     }
+
+//    @RequestMapping(value = "/reviewForm/edit/{type:movie|serie}/{contentId:[0-9]+}/{reviewId:[0-9]+}", method = {RequestMethod.GET})
+//    public ModelAndView reviewFormEdition(Principal userDetails,
+//                                          @ModelAttribute("registerForm") final ReviewForm reviewForm,
+//                                          @PathVariable("contentId")final long contentId,
+//                                          @PathVariable("reviewId")final long reviewId,
+//                                          @PathVariable("type")final String type,
+//                                          HttpServletRequest request) {
+//        final ModelAndView mav = new ModelAndView("reviewEditionPage");
+//        mav.addObject("details", cs.findById(contentId).orElseThrow(PageNotFoundException::new));
+//        if(Objects.equals(type, "movie")) {
+//            mav.addObject("type", "movies");
+//        } else if(Objects.equals(type, "serie")) {
+//            mav.addObject("type", "series");
+//        }
+//        Optional<Review> oldReview = rs.findById(reviewId);
+//        if(!oldReview.isPresent()){
+//            LOGGER.warn("Cant find a the review specified", new PageNotFoundException());
+//            throw new PageNotFoundException();
+//        }
+//        if(userDetails != null) {
+//            String userEmail = userDetails.getName();
+//            User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
+//            mav.addObject("user",user);
+//            mav.addObject("userName",user.getUserName());
+//            mav.addObject("userId",user.getId());
+//            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//            if(auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))){
+//                mav.addObject("admin",true);
+//            } else {
+//                mav.addObject("admin",false);
+//            }
+//
+//            if(!oldReview.get().getUser().getUserName().equals(us.findByEmail(userDetails.getName()).get().getUserName())){
+//                LOGGER.warn("The editor is not owner of the review",new ForbiddenException());
+//                throw new ForbiddenException();
+//            }
+//
+//        } else {
+//            mav.addObject("userName","null");
+//            mav.addObject("userId","null");
+//            mav.addObject("admin",false);
+//        }
+//
+//        reviewForm.setDescription(oldReview.get().getDescription());
+//        reviewForm.setRating(oldReview.get().getRating());
+//        reviewForm.setName(oldReview.get().getName());
+//        String referer = request.getHeader("Referer");
+//        mav.addObject("backLink",referer);
+//        mav.addObject("reviewInfo", rs.findById(reviewId).orElseThrow(PageNotFoundException::new));
+//        return mav;
+//    }
+//
+//    @RequestMapping(value = "/reviewForm/edit/{type:movie|serie}/{contentId:[0-9]+}/{reviewId:[0-9]+}", method = {RequestMethod.POST})
+//    public ModelAndView reviewFormEditionPost(Principal userDetails,
+//                                              @Valid @ModelAttribute("registerForm") final ReviewForm form,
+//                                              final BindingResult errors, @PathVariable("type")final String type,
+//                                              @PathVariable("contentId")final long contentId,
+//                                              @PathVariable("reviewId")final long reviewId,
+//                                              HttpServletRequest request) {
+//        if(errors.hasErrors()) {
+//            return reviewFormEdition(userDetails,form,contentId,reviewId,type,request);
+//        }
+//        if(form.getRating() < 0 || form.getRating() > 5) {
+//            return reviewFormEdition(userDetails,form,contentId,reviewId,type,request);
+//        }
+//
+//        Optional<Review> oldReview = rs.findById(reviewId);
+//        if(!oldReview.isPresent()){
+//            LOGGER.warn("Cant find a the review specified",new PageNotFoundException());
+//            throw new PageNotFoundException();
+//        }
+//
+//        Optional<User> user = us.findByEmail(userDetails.getName());
+//        if(!oldReview.get().getUser().getUserName().equals(user.get().getUserName())){
+//            LOGGER.warn("The editor is not owner of the review",new PageNotFoundException());
+//            throw new ForbiddenException();
+//        }
+//        rs.updateReview(form.getName(), form.getDescription(), form.getRating(), reviewId);
+//        ModelMap model =new ModelMap();
+//        String referer = request.getSession().getAttribute("referer").toString();
+//        return new ModelAndView("redirect:" + (referer==null?"/":referer),model);
+//
+//    }
 
     // * ---------------------------------------------------------------------------------------------------------------
 
 
     // * ---------------------------------------------Review reputation-------------------------------------------------
-    @RequestMapping(value = "/reviewReputation/thumbUp/{reviewId:[0-9]+}", method = {RequestMethod.GET})
-    public ModelAndView reviewReputationThumbUpPost(Principal userDetails,
-                                                    @PathVariable("reviewId")final long reviewId,
-                                                    HttpServletRequest request) {
-       if(us.findByEmail(userDetails.getName()).isPresent()) {
+//    Endpoint para likear una review
+    @PUT
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    @Path("/reviewReputation/thumbUp/{reviewId}")
+    public Response reviewThumbUp(@PathParam("reviewId") final long reviewId) {
+        LOGGER.info("POST /{}: Called", uriInfo.getPath());
+        if(us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).isPresent()) {
             Review review = rs.getReview(reviewId).orElseThrow(PageNotFoundException ::new);
-            User loggedUser=us.findByEmail(userDetails.getName()).get();
+            User loggedUser = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).get();
             rs.thumbUpReview(review,loggedUser);
         } else {
-            LOGGER.warn("Not allowed to thumb up the review",new ForbiddenException());
+            LOGGER.warn("POST /{}: Not allowed to thumb up the review", uriInfo.getPath());
             throw new ForbiddenException();
         }
-
-        String referer = request.getHeader("Referer");
-        return new ModelAndView("redirect:"+ referer);
+        return Response.noContent().build();
     }
 
-    @RequestMapping(value = "/reviewReputation/thumbDown/{reviewId:[0-9]+}", method = {RequestMethod.GET})
-    public ModelAndView reviewReputationThumbDownPost(Principal userDetails,
-                                                      @PathVariable("reviewId")final long reviewId,
-                                                      HttpServletRequest request) {
-        if(us.findByEmail(userDetails.getName()).isPresent()){
+
+//    Endpoint para likear una review
+    @PUT
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    @Path("/reviewReputation/thumbDown/{reviewId}")
+    public Response reviewThumbDown(@PathParam("reviewId") final long reviewId) {
+        LOGGER.info("POST /{}: Called", uriInfo.getPath());
+        if(us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).isPresent()) {
             Review review = rs.getReview(reviewId).orElseThrow(PageNotFoundException ::new);
-            User loggedUser=us.findByEmail(userDetails.getName()).get();
+            User loggedUser = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).get();
             rs.thumbDownReview(review,loggedUser);
-            String referer = request.getHeader("Referer");
-            return new ModelAndView("redirect:"+ referer);
         } else {
-            LOGGER.warn("Not allowed to thumb down the review",new ForbiddenException());
+            LOGGER.warn("POST /{}: Not allowed to thumb down the review", uriInfo.getPath());
             throw new ForbiddenException();
         }
+
+        return Response.noContent().build();
     }
 
     // * ---------------------------------------------------------------------------------------------------------------
