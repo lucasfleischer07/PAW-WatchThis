@@ -31,9 +31,11 @@ public class ReviewReportDto {
 
     public ReviewReportDto(UriInfo url, ReviewReport reviewReport){
         //Este path deberia ir con un metodo delete
-        this.eliminateReview = url.getBaseUriBuilder().path("review").path(String.valueOf(reviewReport.getReview().getId())).build().toString();
+//        Lucas: Lo acabo de hacer, verificar
+        this.eliminateReview = url.getBaseUriBuilder().path("reviews").path("delete").path(String.valueOf(reviewReport.getReview().getId())).build().toString();
         //Este path tambien deberia ser con un metodo delete
-        this.dismissReport = url.getBaseUriBuilder().path("report").path(String.valueOf(reviewReport.getId())).build().toString();
+//        Lucas: Lo acabo de hacer, verificar
+        this.dismissReport = url.getBaseUriBuilder().path("reports").path("deleteReport").path("review").path(String.valueOf(reviewReport.getReview().getContent().getId())).build().toString();
         this.id = reviewReport.getId();
         this.user = new UserDto(url,reviewReport.getUser());
         this.review = new ReviewDto(url,reviewReport.getReview());

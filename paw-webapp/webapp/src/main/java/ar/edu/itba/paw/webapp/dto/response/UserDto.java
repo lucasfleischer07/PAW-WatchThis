@@ -14,7 +14,7 @@ public class UserDto {
     private String email;
     private Long id;
     private Long reputation;
-    private byte[] image;
+    private String image;
     private String role;
     private String userWatchListURL;
     private String userViewedListURL;
@@ -34,15 +34,14 @@ public class UserDto {
 
 
     public UserDto(UriInfo url, User user) {
-        this.userWatchListURL = url.getBaseUriBuilder().path("watchList").path(String.valueOf(user.getId())).build().toString();
-        this.userViewedListURL = url.getBaseUriBuilder().path("viewedList").path(String.valueOf(user.getId())).build().toString();
+        this.userWatchListURL = url.getBaseUriBuilder().path("lists").path("watchList").path(String.valueOf(user.getId())).build().toString();
+        this.userViewedListURL = url.getBaseUriBuilder().path("lists").path("viewedList").path(String.valueOf(user.getId())).build().toString();
         this.userReviews = url.getBaseUriBuilder().path("users").path(String.valueOf(user.getId())).path("reviews").build().toString();
         this.email = user.getEmail();
         this.username = user.getUserName();
         this.id = user.getId();
         this.reputation = user.getReputation();
-//        TODO: Cambiar lo de la imagen
-//        this.image = user.getImage();
+        this.image = url.getBaseUriBuilder().path("users").path(String.valueOf(user.getId())).path("profileImage").build().toString();
         this.role = user.getRole();
     }
 
@@ -62,6 +61,14 @@ public class UserDto {
         this.email = email;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
     public Long getId() {
         return id;
     }
@@ -76,14 +83,6 @@ public class UserDto {
 
     public void setReputation(Long reputation) {
         this.reputation = reputation;
-    }
-
-    public byte[] getImage() {
-        return image;
-    }
-
-    public void setImage(byte[] image) {
-        this.image = image;
     }
 
     public String getRole() {

@@ -27,7 +27,7 @@ public class ReviewDto {
     }
 
     public static UriBuilder getReviewUriBuilder(Content content, UriInfo uriInfo) {
-        return uriInfo.getBaseUriBuilder().clone().path("review").path(String.valueOf(content.getId()));
+        return uriInfo.getBaseUriBuilder().clone().path("reviews").path(String.valueOf(content.getId()));
     }
 
     public ReviewDto() {
@@ -35,8 +35,9 @@ public class ReviewDto {
     }
 
     public ReviewDto(UriInfo uriInfo, Review review) {
-        this.commentUrl = uriInfo.getBaseUriBuilder().path("review").path(String.valueOf(review.getId())).build().toString();
-        this.reviewReportersUrl = uriInfo.getBaseUriBuilder().path("reports").path("review").path(String.valueOf(review.getId())).build().toString();
+        this.commentUrl = uriInfo.getBaseUriBuilder().path("comments").path(String.valueOf(review.getId())).build().toString();
+//        TODO: Si esto se refiere a traer a los usuarios que la reportaron, habria uqe hacer un metodo tanto en el controller como en ls bdd
+        this.reviewReportersUrl = uriInfo.getBaseUriBuilder().path("reports").path("reviews").path(String.valueOf(review.getId())).build().toString();
         this.id = review.getId();
         this.name = review.getName();
         this.description = review.getDescription();

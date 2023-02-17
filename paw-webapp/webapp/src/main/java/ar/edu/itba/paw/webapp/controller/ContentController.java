@@ -4,7 +4,9 @@ import ar.edu.itba.paw.models.Content;
 import ar.edu.itba.paw.models.Sorting;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.services.ContentService;
+import ar.edu.itba.paw.services.PaginationService;
 import ar.edu.itba.paw.services.UserService;
+import ar.edu.itba.paw.webapp.dto.request.GenreFilterDto;
 import ar.edu.itba.paw.webapp.dto.request.NewContentDto;
 import ar.edu.itba.paw.webapp.dto.response.AnonymousLandingPageDto;
 import ar.edu.itba.paw.webapp.dto.response.ContentDto;
@@ -35,15 +37,18 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.*;
 
-@Path("/")
+@Path("content")
 @Component
 public class ContentController {
     @Autowired
     private ContentService cs;
     @Autowired
     private UserService us;
+    @Autowired
+    private PaginationService ps;
     @Context
     UriInfo uriInfo;
+    private static final int CONTENT_AMOUNT = 18;
     private static final Logger LOGGER = LoggerFactory.getLogger(ContentController.class);
 
 //    TODO: VER QUE HACER CON ESTO
@@ -97,7 +102,6 @@ public class ContentController {
             landingPageContentList = cs.getLandingPageContent(user.get());
             LOGGER.info("GET /{}: Returning Landing Page Content for userId {}", uriInfo.getPath(), user.get().getId());
             return Response.ok(new GenericEntity<UserLandingPageDto>(new UserLandingPageDto(uriInfo, landingPageContentList)){}).build();
-
         }
 
 //        if(Objects.equals(contentType, "bestRated")) {
@@ -214,13 +218,27 @@ public class ContentController {
 //    }
     // * ---------------------------------------------------------------------------------------------------------------
 
+    // * ----------------------------------- Get a particual content----------------------------------------------------
+    // Endpoint para getear un contenido a partir de su id
+    @GET
+    @Path("/specificContent/{contentId}")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response getSpecificContent(@PathParam("contentId") final long contentId) {
+        LOGGER.info("GET /{}: Called", uriInfo.getPath());
+        Content content = cs.findById(contentId).orElseThrow(PageNotFoundException::new);
+        ContentDto contentDto = new ContentDto(uriInfo, content);
+        LOGGER.info("GET /{}: Return content {} with success", uriInfo.getPath(), content.getId());
+        return Response.ok(contentDto).build();
+    }
+
+    // * ---------------------------------------------------------------------------------------------------------------
+
 
     // * ----------------------------------- Get img from database -----------------------------------------------------
     // Endpoint para getear la imagen del contenido
-//    TODO: ESTE NO ANDA POR ALGUN MOTIVO
     @GET
     @Produces(value = {MediaType.APPLICATION_JSON})
-    @Path("/content/{contentId}/contentImage")
+    @Path("/{contentId}/contentImage")
     public Response getContentImage(@PathParam("contentId") final long contentId,
                                     @Context Request request) {
 
@@ -246,7 +264,7 @@ public class ContentController {
 
     //Endpoint para editar la imagen del contenido
     @PUT
-    @Path("/content/{contentId}/contentImage")
+    @Path("/{contentId}/contentImage")
     @Produces(value = {MediaType.APPLICATION_JSON,})
     public Response updateContentImage(@Size(max = 1024 * 1024 * 2) @FormDataParam("image") byte[] imageBytes,
                                        @PathParam("contentId") final long contentId) {
@@ -276,7 +294,7 @@ public class ContentController {
     // * ----------------------------------------Content Editing--------------------------------------------------------
     //Endpoint para editar el contenido
     @PUT
-    @Path("/content/editInfo/{contentId}")
+    @Path("/editInfo/{contentId}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(value = {MediaType.APPLICATION_JSON,})
     public Response updateContentInfo(@PathParam("contentId") final long contentId,
@@ -352,7 +370,7 @@ public class ContentController {
 
     // * ----------------------------------- Content Delete ------------------------------------------------------------
     @DELETE
-    @Path("/content/{contentId}/deleteContent")
+    @Path("/{contentId}/deleteContent")
     public Response deleteContent(@PathParam("contentId") final long contentId) {
         LOGGER.info("DELETE /{}: Called", uriInfo.getPath());
         Content oldContent = cs.findById(contentId).orElseThrow(PageNotFoundException::new);
@@ -374,7 +392,7 @@ public class ContentController {
     // Endpoint para crear un contenido
 //    TODO: VER BIEN
     @POST
-    @Path("/content/create")
+    @Path("/create")
     @Produces(MediaType.APPLICATION_JSON)
     public Response createContent(@Valid NewContentDto contentDto) {
         LOGGER.info("POST /{}: Called", uriInfo.getPath());
@@ -417,6 +435,124 @@ public class ContentController {
 //        return new ModelAndView("redirect:/" + newContent.getType() + "/" + newContent.getId());
 //
 //    }
+
+    // * ---------------------------------------------------------------------------------------------------------------
+
+    // * ----------------------------------- Movie and Series division -------------------------------------------------
+    // Endpoint para getear las peliculas o series
+    @GET
+    @Path("/{contentType}")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response getContentByType(@PathParam("contentType") final String contentType,
+                                     @QueryParam("pageNumber") @DefaultValue("1") Integer pageNum,
+                                     @QueryParam("pageSize") @DefaultValue("10") int pageSize) {
+        LOGGER.info("GET /{}: Called", uriInfo.getPath());
+
+        int page= pageNum;
+        List<Content> contentList = cs.getAllContent(contentType, null);
+        List<Content> contentListPaginated;
+        Collection<ContentDto> contentListPaginatedDto;
+        if(contentList == null) {
+            LOGGER.warn("GET /{}: Failed at requesting content", uriInfo.getPath(), new PageNotFoundException());
+            throw new PageNotFoundException();
+        } else {
+            contentListPaginated = ps.pagePagination(contentList, page,CONTENT_AMOUNT);
+            contentListPaginatedDto = ContentDto.mapContentToContentDto(uriInfo, contentListPaginated);
+        }
+
+        LOGGER.info("GET /{}: Success getting the content", uriInfo.getPath(), new PageNotFoundException());
+
+//        TODO: El Return aca deberia ya estar paginado (Por el momento no lo esta, habria que cambairlo)
+        return Response.ok(new GenericEntity<Collection<ContentDto>>(contentListPaginatedDto){}).build();
+
+    }
+
+    // * ---------------------------------------------------------------------------------------------------------------
+
+
+    // *  ----------------------------------- Movies and Serie Filters -------------------------------------------------
+    // Endpoint para filtrar el las peliculas/series
+    @GET
+    @Path("/{contentType}/filters")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response filterContentByType(@PathParam("contentType") final String contentType,
+                                        @QueryParam("pageNumber") @DefaultValue("1") Integer pageNum,
+                                        @QueryParam("pageSize") @DefaultValue("10") int pageSize,
+                                        @QueryParam("durationFrom") @DefaultValue("ANY") final String durationFrom,
+                                        @QueryParam("durationTo") @DefaultValue("ANY") final String durationTo,
+                                        @QueryParam("sorting") final Sorting sorting,
+                                        @QueryParam("query") @DefaultValue("ANY") final String query,
+                                        @QueryParam("genre") final List<String> genre,
+                                        @Valid GenreFilterDto genreFilterDto) {
+
+        LOGGER.info("GET /{}: Called", uriInfo.getPath());
+
+        int page= pageNum;
+        String auxType;
+        if(!Objects.equals(contentType, "movie") && !Objects.equals(contentType, "serie")) {
+            auxType = "all";
+        } else {
+            auxType = contentType;
+        }
+
+//        TODO: VER ESTO DEL GENRE, NO SE PASABA COMO QUERYPARAM Y AHORA NI IDEA COMO SERIA. EL ORIGINAL ESTA EN EL ARCHIVO
+//        TODO: MovieAndSerieController linea 76 (esta comentado)
+        List<String> genreList = (genreFilterDto.getFormGenre()!=null && genreFilterDto.getFormGenre().length > 0 ) ? Arrays.asList(genreFilterDto.getFormGenre()) : genre;
+        if(genreList != null){
+            genreFilterDto.setFormGenre(genreList.toArray(new String[0]));
+        }
+
+        List<Content> contentListFilter = cs.getMasterContent(auxType, genre, durationFrom, durationTo, sorting, query);
+        List<Content> contentListFilterPaginated;
+        int amountOfPages;
+        if(contentListFilter == null) {
+            LOGGER.warn("GET /{}: Failed at requesting content", uriInfo.getPath(), new PageNotFoundException());
+            throw new PageNotFoundException();
+        } else {
+            contentListFilterPaginated = ps.pagePagination(contentListFilter, page,CONTENT_AMOUNT);
+            amountOfPages = ps.amountOfContentPages(contentListFilter.size(),CONTENT_AMOUNT);
+        }
+
+//        TODO: VER QUE ONDA ESTO DE LA URL, CREO QUE NO ES NECESARIO PERO NDEA
+//        StringBuilder referer=new StringBuilder();
+//        referer.append("/"+type+"/filters"+(pageNum.isPresent()?"/page/"+pageNum.get():""));
+//        if(genreList!=null||query!="ANY"||durationFrom!=null||durationTo!=null||sorting.isPresent()){
+//            referer.append("?");
+//            if(genreList!=null){
+//                referer.append(referer.charAt(referer.length()-1)=='?'?"genre="+genreList.get(0):"&genre+"+genreList.get(0));
+//                for(int i=1;i<genreList.size();i++){
+//                    referer.append("%2c"+genreList.get(i));
+//                }
+//            }
+//            if(!query.equals("ANY")){
+//                referer.append(referer.charAt(referer.length()-1)=='?'?"query="+query:"&query="+query);
+//            }
+//            if(durationFrom!=null){
+//                referer.append(referer.charAt(referer.length()-1)=='?' ? "durationFrom="+durationFrom:"&durationFrom="+durationFrom);
+//            }
+//            if(durationTo!=null){
+//                referer.append(referer.charAt(referer.length()-1)=='?'?"durationTo="+durationTo:"&durationTo="+durationTo);
+//            }
+//            if(sorting.isPresent()){
+//                referer.append(referer.charAt(referer.length()-1)=='?'?"sorting="+sorting.get():"&sorting="+sorting.get());
+//            }
+//        }
+
+
+//        TODO: VER QUE PASARLE ACA COMO USER
+//        Optional<User> user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+//        if(!user.isPresent()) {
+//            user = Optional.empty();
+//        }
+
+        Collection<ContentDto> contentListFilterPaginatedDto = ContentDto.mapContentToContentDto(uriInfo, contentListFilterPaginated);
+
+        LOGGER.info("GET /{}: Success filtering the content", uriInfo.getPath(), new PageNotFoundException());
+
+//        TODO: El Return aca deberia ya estar paginado (Por el momento no lo esta, habria que cambairlo)
+        return Response.ok(new GenericEntity<Collection<ContentDto>>(contentListFilterPaginatedDto){}).build();
+
+    }
 
     // * ---------------------------------------------------------------------------------------------------------------
 

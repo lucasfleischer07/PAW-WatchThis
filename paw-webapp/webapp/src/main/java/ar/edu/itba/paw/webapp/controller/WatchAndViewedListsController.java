@@ -90,36 +90,6 @@ public class WatchAndViewedListsController {
 
     }
 
-//    @RequestMapping(value = {"/profile/watchList","/profile/watchList/page/{pageNum:[0-9]+}"}, method = {RequestMethod.GET})
-//    public ModelAndView watchList(Principal userDetails,
-//                                  @PathVariable("pageNum")final Optional<Integer> pageNum,
-//                                  HttpServletRequest request) {
-//        String userEmail = userDetails.getName();
-//        final String locale = LocaleContextHolder.getLocale().getDisplayLanguage();
-//        User user = us.findByEmail(userEmail).orElseThrow(ServerErrorException::new);
-//        List<Content> watchListContent = us.getWatchList(user);
-//        List<Long> userWatchListContentId = us.getUserWatchListContent(user);
-//        final ModelAndView mav = new ModelAndView("watchListPage");
-//        Optional<String> quote = cs.getContentQuote(locale);
-//        mav.addObject("quote", quote.get());
-//        mav.addObject("user", user);
-//        mav.addObject("type","all");
-//        mav.addObject("userName", user.getUserName());
-//        mav.addObject("userId", user.getId());
-//        listPaginationSetup(mav,"watchListContent",watchListContent,pageNum.orElse(1));
-//        mav.addObject("watchListSize", watchListContent.size());
-//        mav.addObject("userWatchListContentId", userWatchListContentId);
-//
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        if(auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
-//            mav.addObject("admin", true);
-//        } else {
-//            mav.addObject("admin", false);
-//        }
-//        request.getSession().setAttribute("referer","/profile/watchList"+(pageNum.isPresent()?"/page/"+pageNum.get():""));
-//        return mav;
-//    }
-
 
     // Endpoint para agregar a la watchlist del ususario
     @PUT
@@ -138,29 +108,6 @@ public class WatchAndViewedListsController {
         return Response.noContent().build();
     }
 
-//    @RequestMapping(value = "/watchList/add/{contentId:[0-9]+}", method = {RequestMethod.POST})
-//    public ModelAndView watchListAddPost(Principal userDetails,
-//                                         @PathVariable("contentId") final Optional<Long> contentId,
-//                                         HttpServletRequest request) {
-//        if(!contentId.isPresent()) {
-//            LOGGER.warn("Wrong contentID:",new PageNotFoundException());
-//            throw new PageNotFoundException();
-//        }
-//
-//        if(userDetails != null) {
-//            String userEmail = userDetails.getName();
-//            User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
-//            try {
-//                Content content = cs.findById(contentId.get()).orElseThrow(PageNotFoundException::new);
-//                us.addToWatchList(user, content);
-//            } catch (DuplicateKeyException ignore){}
-//        } else {
-//            throw new ForbiddenException();
-//        }
-//
-//        String referer = request.getSession().getAttribute("referer").toString();
-//        return new ModelAndView("redirect:" + (referer==null ? "/" : referer));
-//    }
 
     @DELETE
     @Path("/watchList/delete/{contentId}")
@@ -179,33 +126,6 @@ public class WatchAndViewedListsController {
         return Response.noContent().build();
     }
 
-//    @RequestMapping(value = "/watchList/delete/{contentId:[0-9]+}", method = {RequestMethod.POST})
-//    public ModelAndView watchListDeletePost(Principal userDetails,
-//                                            @PathVariable("contentId") final Optional<Long> contentId,
-//                                            HttpServletRequest request) {
-//        if(!contentId.isPresent()) {
-//            LOGGER.warn("No content Specified:",new PageNotFoundException());
-//            throw new PageNotFoundException();
-//        }
-//
-//        if(userDetails != null) {
-//            String userEmail = userDetails.getName();
-//            User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
-//            Content content = cs.findById(contentId.get()).orElseThrow(PageNotFoundException::new);
-//            us.deleteFromWatchList(user, content);
-//        } else {
-//            throw new ForbiddenException();
-//        }
-//
-//        String referer = request.getSession().getAttribute("referer").toString();
-//        return new ModelAndView("redirect:" + (referer==null ? "/" : referer));
-//
-//    }
-
-//    @RequestMapping(value = "/go/to/login", method = {RequestMethod.POST})
-//    public ModelAndView goToLogin()  {
-//        return new ModelAndView("redirect:/login/sign-in");
-//    }
     // * ---------------------------------------------------------------------------------------------------------------
 
 
@@ -233,36 +153,6 @@ public class WatchAndViewedListsController {
         return Response.ok(ContentDto.mapContentToContentDto(uriInfo, viewedList)).build();
     }
 
-//    @RequestMapping(value = {"/profile/viewedList","/profile/viewedList/page/{pageNum:[0-9]+}"}, method = {RequestMethod.GET})
-//    public ModelAndView viewedList(Principal userDetails,
-//                                   @PathVariable("pageNum")final Optional<Integer> pageNum,
-//                                   HttpServletRequest request) {
-//        String userEmail = userDetails.getName();
-//        final String locale = LocaleContextHolder.getLocale().getDisplayLanguage();
-//        User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
-//        List<Content> viewedListContent = us.getUserViewedList(user);
-//        List<Long> userWatchListContentId = us.getUserWatchListContent(user);
-//        final ModelAndView mav = new ModelAndView("viewedListPage");
-//        Optional<String> quote = cs.getContentQuote(locale);
-//        mav.addObject("quote", quote.get());
-//        mav.addObject("user", user);
-//        mav.addObject("userName", user.getUserName());
-//        mav.addObject("userId", user.getId());
-//        mav.addObject("type","all");
-//        listPaginationSetup(mav,"viewedListContent",viewedListContent,pageNum.orElse(1));
-//        mav.addObject("viewedListContentSize", viewedListContent.size());
-//        mav.addObject("userWatchListContentId", userWatchListContentId);
-//
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        if(auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))){
-//            mav.addObject("admin", true);
-//        } else {
-//            mav.addObject("admin", false);
-//        }
-//        request.getSession().setAttribute("referer","/profile/viewedList"+(pageNum.isPresent()?"/page/"+pageNum.get():""));
-//        return mav;
-//    }
-
 
     // Endpoint para agregar a la viewedlist del ususario
     @PUT
@@ -282,23 +172,6 @@ public class WatchAndViewedListsController {
         return Response.noContent().build();
     }
 
-//    @RequestMapping(value = "/viewedList/add/{contentId:[0-9]+}", method = {RequestMethod.POST})
-//    public ModelAndView viewedListAddPost(Principal userDetails,
-//                                          @PathVariable("contentId") final Optional<Long> contentId,
-//                                          HttpServletRequest request) {
-//        if(!contentId.isPresent()) {
-//            throw new PageNotFoundException();
-//        }
-//        String userEmail = userDetails.getName();
-//        User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
-//        try{
-//            Content content = cs.findById(contentId.get()).orElseThrow(PageNotFoundException::new);
-//            us.addToViewedList(user, content);
-//        } catch (DuplicateKeyException ignore) {}
-//        String referer = request.getSession().getAttribute("referer").toString();
-//        return new ModelAndView("redirect:" + (referer==null?"/":referer));
-//    }
-
 
     @DELETE
     @Path("/viewedList/delete/{contentId}")
@@ -317,20 +190,5 @@ public class WatchAndViewedListsController {
         return Response.noContent().build();
     }
 
-
-//    @RequestMapping(value = "/viewedList/delete/{contentId:[0-9]+}", method = {RequestMethod.POST})
-//    public ModelAndView viewedListDeletePost(Principal userDetails,
-//                                             @PathVariable("contentId") final Optional<Long> contentId,
-//                                             HttpServletRequest request) {
-//        if(!contentId.isPresent()) {
-//            throw new PageNotFoundException();
-//        }
-//        String userEmail = userDetails.getName();
-//        User user = us.findByEmail(userEmail).orElseThrow(PageNotFoundException::new);
-//        Content content = cs.findById(contentId.get()).orElseThrow(PageNotFoundException::new);
-//        us.deleteFromViewedList(user, content);
-//        String referer = request.getSession().getAttribute("referer").toString();
-//        return new ModelAndView("redirect:" + (referer==null?"/":referer));
-//    }
     // * ---------------------------------------------------------------------------------------------------------------
 }

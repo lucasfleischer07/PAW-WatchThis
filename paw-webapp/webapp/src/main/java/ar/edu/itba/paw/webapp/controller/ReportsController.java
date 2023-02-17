@@ -3,6 +3,8 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.services.*;
 import ar.edu.itba.paw.webapp.dto.response.CommentReportDto;
+import ar.edu.itba.paw.webapp.dto.response.ContentDto;
+import ar.edu.itba.paw.webapp.dto.response.ReviewReportDto;
 import ar.edu.itba.paw.webapp.exceptions.BadRequestException;
 import ar.edu.itba.paw.webapp.exceptions.ForbiddenException;
 import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
@@ -20,11 +22,9 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.*;
 import java.security.Principal;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -62,11 +62,13 @@ public class ReportsController {
 
     // * ----------------------------------- Report Page ---------------------------------------------------------------
     @GET
-    @Path("/reportedContent/{type}")
+    @Path("/{type}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUserWatchList(@PathParam("type") final String type,
                                      @QueryParam("page")@DefaultValue("1")final int page,
-                                     @RequestParam(value = "reason",required = false)Optional<ReportReason> reason) {
+                                     @RequestParam(value = "reason",required = false)ReportReason reason) {
+        LOGGER.info("GET /{}: Called", uriInfo.getPath());
+
         final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(ForbiddenException::new);
         if(!Objects.equals(user.getRole(), "admin")) {
             LOGGER.warn("GET /{}: Login user {} not an admin", uriInfo.getPath(), user.getId());
@@ -74,67 +76,33 @@ public class ReportsController {
         }
 
         if(Objects.equals(type, "reviews")) {
-            List<ReviewReport> reviewsReportedList = rrs.getReportedReviews(reason.orElse(null));
+            List<ReviewReport> reviewsReportedList = rrs.getReportedReviews(reason);
+            Collection<ReviewReportDto> reviewsReportedListDto = ReviewReportDto.mapReviewReportToReviewReportDto(uriInfo, reviewsReportedList);
             LOGGER.info("GET /{}: Reported reviews list success for admin user {}", uriInfo.getPath(), user.getId());
-//            TODO: meter el return aca
-            return null;
+//            TODO: VER EL TEMA DE LA PAGINACION
+            return Response.ok(new GenericEntity<Collection<ReviewReportDto>>(reviewsReportedListDto){}).build();
         } else if(Objects.equals(type, "comments")) {
-            List<CommentReport> commentsReportedList = rrs.getReportedComments(reason.orElse(null));
+            List<CommentReport> commentsReportedList = rrs.getReportedComments(reason);
+            Collection<CommentReportDto> commentReportedListDto = CommentReportDto.mapCommentReportToCommentReportDto(uriInfo, commentsReportedList);
             LOGGER.info("GET /{}: Reported comments list success for admin user {}", uriInfo.getPath(), user.getId());
-//            TODO: meter el return aca
-            return null;
+//            TODO: VER EL TEMA DE LA PAGINACION
+            return Response.ok(new GenericEntity<Collection<CommentReportDto>>(commentReportedListDto){}).build();
+
         } else {
             throw new PageNotFoundException();
         }
     }
 
-//    @RequestMapping(value={"/report/reportedContent/{type:reviews|comments}", "/report/reportedContent/{type:reviews|comments}/page/{pageNum:[0-9]+}", "/report/reportedContent/{type:reviews|comments}/filters", "/report/reportedContent/{type:reviews|comments}/filters/page/{pageNum:[0-9]+}"},method = {RequestMethod.GET})
-//    public ModelAndView reportPage(Principal userDetails,
-//                                   @PathVariable("pageNum")final Optional<Integer> pageNum,
-//                                   @PathVariable("type") final String type,
-//                                   @RequestParam(value = "reason",required = false)Optional<ReportReason> reason){
-//        ModelAndView mav = new ModelAndView("reportedPage");
-//        User user = us.findByEmail(userDetails.getName()).get();
-//        mav.addObject("userName", user.getUserName());
-//        mav.addObject("userId", user.getId());
-//        List<CommentReport> commentsReportedList = rrs.getReportedComments(reason.orElse(null));
-//        List<ReviewReport> reviewsReportedList = rrs.getReportedReviews(reason.orElse(null));
-//        ReportReason reasonGiven = reason.orElse(null);
-//        mav.addObject("reason",reasonGiven != null ? reasonGiven.toString() : "ANY");
-//        mav.addObject("reviewsReportedAmount", reviewsReportedList.size());
-//        mav.addObject("commentsReportedAmount", commentsReportedList.size());
-//
-//        if(pageNum.isPresent()) {
-//            if (Objects.equals(type, "reviews") && (reviewsReportedList.size() <= REPORTS_AMOUNT * (pageNum.get() - 1)) || pageNum.get()<0) {
-//                return new ModelAndView("redirect:/report/reportedContent/" + type +"/" + (reason.isPresent() ? "filters"+"/page/" + (((reviewsReportedList.size()-1) / 5)+1) +"?reason=" + reason.get() : "page/" + (((reviewsReportedList.size()-1) / 5)+1)));
-//            }
-//            else if (Objects.equals(type, "comments") && (commentsReportedList.size() <= REPORTS_AMOUNT * (pageNum.get() - 1))||pageNum.get()<0) {
-//                return new ModelAndView("redirect:/report/reportedContent/" + type +"/" + (reason.isPresent() ? "filters"+"/page/" + (((commentsReportedList.size()-1) / 5)+1) +"?reason=" + reason.get() : "page/" + (((commentsReportedList.size()-1) / 5)+1)));
-//
-//            }
-//        }
-//
-//        if(Objects.equals(type, "reviews")) {
-//            mav.addObject("type", "reviews");
-//            paginationSetup(mav,pageNum.orElse(1), reviewsReportedList);
-//        } else if(Objects.equals(type, "comments")) {
-//            mav.addObject("type", "comments");
-//            paginationSetup(mav,pageNum.orElse(1), commentsReportedList);
-//        } else {
-//            throw new PageNotFoundException();
-//        }
-//
-//
-//        return mav;
-//    }
     // * ---------------------------------------------------------------------------------------------------------------
 
 
     // * ----------------------------------- Review Report ------------------------------------------------------------
-    @PUT
-    @Path("/report/review/{reviewId}")
+    @POST
+    @Path("/review/{reviewId}")
     public Response addReviewReport(@PathParam("reviewId") long reviewId,
-                                  @Valid CommentReportDto commentReportDto) {
+                                    @Valid CommentReportDto commentReportDto) {
+        LOGGER.info("PUT /{}: Called", uriInfo.getPath());
+
         final Review review = rs.findById(reviewId).orElseThrow(PageNotFoundException::new);
         final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(ForbiddenException::new);
         rrs.addReport(review, user, commentReportDto.getReportReason().toString());
@@ -166,16 +134,18 @@ public class ReportsController {
 
 
     // * ----------------------------------- Comment Report ------------------------------------------------------------
-    @PUT
-    @Path("/report/comment/{commentId}")
+    @POST
+    @Path("/comment/{commentId}")
     public Response addCommentReport(@PathParam("commentId") long commentId,
                                      @Valid CommentReportDto commentReportDto) {
+        LOGGER.info("PUT /{}: Called", uriInfo.getPath());
+
         final Comment comment = ccs.getComment(commentId).orElseThrow(PageNotFoundException::new);
         final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(ForbiddenException::new);
         rrs.addReport(comment, user, commentReportDto.getReportReason().toString());
 
         LOGGER.info("PUT /{}: Comment {} reported", uriInfo.getPath(), comment.getCommentId());
-        return Response.noContent().build();
+        return Response.ok().build();
     }
 
 //    @RequestMapping(value="/report/comment/{commentId:[0-9]+}",method = {RequestMethod.POST})
@@ -204,22 +174,15 @@ public class ReportsController {
 
     // * ----------------------------------- Delete Report From Reported List-------------------------------------------
     @DELETE
-    @Path("/report/deleteReport/{type}/{reportId}")
-    public Response deleteReport(@PathParam("reportId") long reportId,
+    @Path("/deleteReport/{type}/{contentId}")
+    public Response deleteReport(@PathParam("contentId") long contentId,
                                  @PathParam("type") String type) {
-        rrs.removeReports(type, reportId);
-        LOGGER.info("DELETE /{}: {} {} report deleted", uriInfo.getPath(), type, reportId);
+        LOGGER.info("DELETE /{}: Called", uriInfo.getPath());
+
+        rrs.removeReports(type, contentId);
+        LOGGER.info("DELETE /{}: {} on contentId {} report deleted", uriInfo.getPath(), type, contentId);
         return Response.noContent().build();
     }
 
-
-//    @RequestMapping(value = "/report/reportedContent/{type:review|comment}/{contentId:[0-9]+}/report/delete", method = {RequestMethod.POST})
-//    public ModelAndView deleteReportFromReportedList(@PathVariable("type")final String type,
-//                                                     @PathVariable("contentId")final long contentId,
-//                                                     HttpServletRequest request){
-//        rrs.removeReports(type, contentId);
-//        String referer = request.getHeader("Referer");
-//        return new ModelAndView("redirect:"+ referer);
-//    }
     // * ---------------------------------------------------------------------------------------------------------------
 }

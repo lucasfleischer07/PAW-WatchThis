@@ -36,7 +36,7 @@ public class ContentDto {
     }
 
     public static UriBuilder getContentUriBuilder(UriInfo uriInfo) {
-        return uriInfo.getBaseUriBuilder().clone().path("/");
+        return uriInfo.getBaseUriBuilder().clone().path("content");
     }
 
     public ContentDto() {
@@ -45,8 +45,10 @@ public class ContentDto {
 
 //    TODO: Ver si le pasamos o no el user
     public ContentDto(UriInfo url, Content content) {
-        this.myUrl = url.getBaseUriBuilder().path("content").path(String.valueOf(content.getId())).build().toString();
+//        TODO: CHECKEAR SI LA / es necesaria en el primero
+        this.myUrl = url.getBaseUriBuilder().path("content").path("specificContent").path(String.valueOf(content.getId())).build().toString();
         this.reviewsUrl = url.getBaseUriBuilder().path("reviews").path(String.valueOf(content.getId())).build().toString();
+//        TODO: Hayq ue hacer un metodo que me traiga quienes ya hicieron una review en este contendio
         this.contentReviewers = url.getBaseUriBuilder().path("content").path(String.valueOf(content.getId())).path("reviewers").build().toString();
 
         this.id = content.getId();
@@ -60,7 +62,6 @@ public class ContentDto {
         this.reviewsAmount = content.getReviewsAmount();
         this.rating = content.getRating();
         this.durationNum = content.getDurationNum();
-//        TODO: CHECKEAR ESTO DE LA IMAGEN
         this.contentPictureUrl = url.getBaseUriBuilder().path("content").path(String.valueOf(content.getId())).path("contentImage").build().toString();
     }
 

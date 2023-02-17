@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.dto.response;
 
 import ar.edu.itba.paw.models.*;
 
+import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -21,15 +22,21 @@ public class CommentReportDto {
         return commentsReported.stream().map(cr -> new CommentReportDto(uriInfo, cr)).collect(Collectors.toList());
     }
 
+    public static UriBuilder getCommentReportedUriBuilder(Comment comment, UriInfo uriInfo) {
+        return uriInfo.getBaseUriBuilder().path("reports").path("comment").path(String.valueOf(comment.getCommentId()));
+    }
+
     public CommentReportDto() {
         // For Jersey
     }
 
     public CommentReportDto(UriInfo url, CommentReport commentReport){
         //Este path deberia ir con un metodo delete
-        this.eliminateComment = url.getBaseUriBuilder().path("comment").path(String.valueOf(commentReport.getComment().getCommentId())).build().toString();
+//        Lucas:La acabo de hacer, solo habria que verificar
+        this.eliminateComment = url.getBaseUriBuilder().path("comments").path("delete").path(String.valueOf(commentReport.getComment().getCommentId())).build().toString();
         //Este path tambien deberia ser con un metodo delete
-        this.dismissReport = url.getBaseUriBuilder().path("report").path(String.valueOf(commentReport.getId())).build().toString();
+//        Lucas:La acabo de hacer, solo habria que verificar
+        this.dismissReport = url.getBaseUriBuilder().path("reports").path("deleteReport").path("comment").path(String.valueOf(commentReport.getComment().getReview().getContent().getId())).build().toString();
         this.id = commentReport.getId();
         this.user = new UserDto(url,commentReport.getUser());
         this.comment = new CommentDto(url,commentReport.getComment());

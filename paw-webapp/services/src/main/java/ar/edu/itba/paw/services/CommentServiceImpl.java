@@ -55,7 +55,8 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
-    public List<Comment> getReviewComments(Long reviewId,int page){
+    public List<Comment> getReviewComments(Long reviewId){
+//        TODO: HACER ESTE METODO QUE ME DEVUELVA LOS COMMENTS DE UNA CIERTA REVIEW (QUE LE PASO EL REVIEWID)
         return null;
     }
 }
