@@ -6,9 +6,6 @@ import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.services.*;
 import ar.edu.itba.paw.webapp.dto.request.NewCommentDto;
 import ar.edu.itba.paw.webapp.dto.response.CommentDto;
-import ar.edu.itba.paw.webapp.dto.response.CommentReportDto;
-import ar.edu.itba.paw.webapp.exceptions.ForbiddenException;
-import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,7 +66,8 @@ public class CommentController {
         Optional<User> user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
 
         if(!review.isPresent() || !user.isPresent()) {
-            throw new PageNotFoundException();
+//            TODO: CUANDO SE ARREGLE EL MAPPER DEL PAGENOTFOUND, DESCOMENTAR
+//            throw new PageNotFoundException();
         }
 
 //        TODO: hacer que este metodo (addComment) devuelva el comment
@@ -94,7 +92,8 @@ public class CommentController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         if(!deleteComment.isPresent()) {
-            throw new PageNotFoundException();
+//            TODO: CUANDO SE ARREGLE EL MAPPER DEL PAGENOTFOUND, DESCOMENTAR
+//            throw new PageNotFoundException();
         }
 
         if(user.get().getUserName().equals(deleteComment.get().getUser().getUserName())) {

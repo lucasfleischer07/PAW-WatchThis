@@ -7,21 +7,18 @@ import ar.edu.itba.paw.webapp.dto.request.EditProfileDto;
 import ar.edu.itba.paw.webapp.dto.request.NewUser;
 import ar.edu.itba.paw.webapp.dto.response.ReviewDto;
 import ar.edu.itba.paw.webapp.dto.response.UserDto;
-import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
-import org.glassfish.jersey.media.multipart.FormDataBodyPart;
+import ar.edu.itba.paw.webapp.exceptionsMapper.PageNotFoundExceptionMapper;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.ModelAndView;
+
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
-import java.io.IOException;
 import java.util.*;
 
 @Path("users")
@@ -69,7 +66,8 @@ public class UserController {
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response userCreate(@Valid final NewUser newUser) {
         LOGGER.info("POST /{}: Called", uriInfo.getPath());
-        final User user = us.register(newUser.getEmail(), newUser.getUsername(), newUser.getPassword()).orElseThrow(PageNotFoundException::new);
+//            TODO: CUANDO SE ARREGLE EL MAPPER DEL PAGENOTFOUND, arreglar este
+        final User user = us.register(newUser.getEmail(), newUser.getUsername(), newUser.getPassword()).orElseThrow(PageNotFoundExceptionMapper::new);
         LOGGER.info("POST /{}: New user created with id {}", uriInfo.getPath(), user.getId());
         return Response.created(UserDto.getUserUriBuilder(user, uriInfo).build()).build();
     }
@@ -84,7 +82,8 @@ public class UserController {
     @Path("/{id}")
     public Response getUserInfo(@PathParam("id") final long id) {
         LOGGER.info("GET /{}: Called",  uriInfo.getPath());
-        final User user = us.findById(id).orElseThrow(PageNotFoundException::new);
+//            TODO: CUANDO SE ARREGLE EL MAPPER DEL PAGENOTFOUND, arreglar este
+        final User user = us.findById(id).orElseThrow(PageNotFoundExceptionMapper::new);
         LOGGER.info("GET /{}: User returned with success", uriInfo.getPath());
         return Response.ok(new UserDto(uriInfo, user)).build();
     }
@@ -96,7 +95,8 @@ public class UserController {
     public Response getUserReviews(@PathParam("id") final long id,
                                    @QueryParam("page")@DefaultValue("1")final int page) {
         LOGGER.info("GET /{}: Called",  uriInfo.getPath());
-        final User user = us.findById(id).orElseThrow(PageNotFoundException::new);
+//            TODO: CUANDO SE ARREGLE EL MAPPER DEL PAGENOTFOUND, arreglar este
+        final User user = us.findById(id).orElseThrow(PageNotFoundExceptionMapper::new);
         List<Review> reviewList = rs.getAllUserReviews(user);
         Collection<ReviewDto> reviewDtoList = ReviewDto.mapReviewToReviewDto(uriInfo, reviewList);
         LOGGER.info("GET /{}: User {} reviews returned with success",  uriInfo.getPath(), id);
@@ -151,7 +151,8 @@ public class UserController {
     public Response getUserProfileImage(@PathParam("id") final long id,
                                         @Context Request request) {
         LOGGER.info("GET /{}: Called", uriInfo.getPath());
-        final User user = us.findById(id).orElseThrow(PageNotFoundException::new);
+//            TODO: CUANDO SE ARREGLE EL MAPPER DEL PAGENOTFOUND, arreglar este
+        final User user = us.findById(id).orElseThrow(PageNotFoundExceptionMapper::new);
         if(user.getImage() == null) {
             return Response.noContent().build();
         }
@@ -179,9 +180,10 @@ public class UserController {
     public Response updateUserProfileImage(@Size(max = 1024 * 1024) @FormDataParam("image") byte[] imageBytes,
                                            @PathParam("id") final long id) {
         LOGGER.info("PUT /{}: Called", uriInfo.getPath());
-        final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(PageNotFoundException::new);
+//            TODO: CUANDO SE ARREGLE EL MAPPER DEL PAGENOTFOUND, arreglar este
+        final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(PageNotFoundExceptionMapper::new);
         if(user.getId() != id) {
-            throw new PageNotFoundException();
+            throw new PageNotFoundExceptionMapper();
         }
 
         us.setProfilePicture(imageBytes, user);
@@ -288,9 +290,11 @@ public class UserController {
                                           @PathParam("id") final long id) {
         LOGGER.info("PUT /{}: Called", uriInfo.getPath());
 
-        final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(PageNotFoundException::new);
+//            TODO: CUANDO SE ARREGLE EL MAPPER DEL PAGENOTFOUND, arreglar este
+        final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(PageNotFoundExceptionMapper::new);
         if(user.getId() != id) {
-            throw new PageNotFoundException();
+//            TODO: CUANDO SE ARREGLE EL MAPPER DEL PAGENOTFOUND, arreglar este
+            throw new PageNotFoundExceptionMapper();
         }
         us.setPassword(editProfileDto.getPassword(), user, "forgotten");
 

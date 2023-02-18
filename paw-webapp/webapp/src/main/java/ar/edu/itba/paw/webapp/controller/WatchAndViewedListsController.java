@@ -6,32 +6,19 @@ import ar.edu.itba.paw.services.ContentService;
 import ar.edu.itba.paw.services.PaginationService;
 import ar.edu.itba.paw.services.UserService;
 import ar.edu.itba.paw.webapp.dto.response.ContentDto;
-import ar.edu.itba.paw.webapp.dto.response.ReviewDto;
-import ar.edu.itba.paw.webapp.dto.response.UserDto;
-import ar.edu.itba.paw.webapp.exceptions.ForbiddenException;
-import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
-import ar.edu.itba.paw.webapp.exceptions.ServerErrorException;
+import ar.edu.itba.paw.webapp.exceptionsMapper.ForbiddenExceptionMapper;
+import ar.edu.itba.paw.webapp.exceptionsMapper.PageNotFoundExceptionMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.dao.DuplicateKeyException;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
-import java.security.Principal;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 
 @Path("lists")
 @Component
@@ -74,8 +61,10 @@ public class WatchAndViewedListsController {
                                      @QueryParam("pageSize") @DefaultValue("10") int pageSize) {
         LOGGER.info("GET /{}: Called", uriInfo.getPath());
 
-        final User user = us.findById(userId).orElseThrow(PageNotFoundException::new);
-        final User user2 = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(PageNotFoundException::new);
+//            TODO: CUANDO SE ARREGLE EL MAPPER DEL PAGENOTFOUND, arreglar este
+        final User user = us.findById(userId).orElseThrow(PageNotFoundExceptionMapper::new);
+//            TODO: CUANDO SE ARREGLE EL MAPPER DEL PAGENOTFOUND, arreglar este
+        final User user2 = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(PageNotFoundExceptionMapper::new);
 
         if(user.getId() != user2.getId()) {
             LOGGER.warn("GET /{}: Login user {} is different from watchlist owner {}", uriInfo.getPath(), user2.getId(), userId);
@@ -96,7 +85,8 @@ public class WatchAndViewedListsController {
     @Path("/watchList/add/{contentId}")
     public Response addUserWatchList(@PathParam("contentId") final long contentId) {
         LOGGER.info("POST /{}: Called", uriInfo.getPath());
-        final Content content = cs.findById(contentId).orElseThrow(PageNotFoundException::new);
+//            TODO: CUANDO SE ARREGLE EL MAPPER DEL PAGENOTFOUND, arreglar este
+        final Content content = cs.findById(contentId).orElseThrow(PageNotFoundExceptionMapper::new);
         final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(ForbiddenException::new);
 
         try {
@@ -114,7 +104,8 @@ public class WatchAndViewedListsController {
     public Response deleteUserWatchList(@PathParam("contentId") final long contentId) {
         LOGGER.info("DELETE /{}: Called", uriInfo.getPath());
 
-        final Content content = cs.findById(contentId).orElseThrow(PageNotFoundException::new);
+//            TODO: CUANDO SE ARREGLE EL MAPPER DEL PAGENOTFOUND, arreglar este
+        final Content content = cs.findById(contentId).orElseThrow(PageNotFoundExceptionMapper::new);
         final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(ForbiddenException::new);
 
         try {
@@ -139,8 +130,9 @@ public class WatchAndViewedListsController {
                                       @QueryParam("pageSize") @DefaultValue("10") int pageSize) {
         LOGGER.info("GET /{}: Called", uriInfo.getPath());
 
-        final User user = us.findById(userId).orElseThrow(PageNotFoundException::new);
-        final User user2 = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(PageNotFoundException::new);
+//            TODO: CUANDO SE ARREGLE EL MAPPER DEL PAGENOTFOUND, arreglar este
+        final User user = us.findById(userId).orElseThrow(PageNotFoundExceptionMapper::new);
+        final User user2 = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(PageNotFoundExceptionMapper::new);
 
         if(user.getId() != user2.getId()) {
             LOGGER.warn("GET /{}: Logged user {} is different from viewedlist owner {}", uriInfo.getPath(), user2.getId(), userId);
@@ -160,7 +152,8 @@ public class WatchAndViewedListsController {
     public Response addUserViewedList(@PathParam("contentId") final long contentId) {
         LOGGER.info("PUT /{}: Called", uriInfo.getPath());
 
-        final Content content = cs.findById(contentId).orElseThrow(PageNotFoundException::new);
+//            TODO: CUANDO SE ARREGLE EL MAPPER DEL PAGENOTFOUND, arreglar este
+        final Content content = cs.findById(contentId).orElseThrow(PageNotFoundExceptionMapper::new);
         final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(ForbiddenException::new);
 
         try {
@@ -178,7 +171,8 @@ public class WatchAndViewedListsController {
     public Response deleteUserViewedList(@PathParam("contentId") final long contentId) {
         LOGGER.info("DELETE /{}: Called", uriInfo.getPath());
 
-        final Content content = cs.findById(contentId).orElseThrow(PageNotFoundException::new);
+//            TODO: CUANDO SE ARREGLE EL MAPPER DEL PAGENOTFOUND, arreglar este
+        final Content content = cs.findById(contentId).orElseThrow(PageNotFoundExceptionMapper::new);
         final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(ForbiddenException::new);
 
         try {

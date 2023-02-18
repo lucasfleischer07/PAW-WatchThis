@@ -3,31 +3,22 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.services.*;
 import ar.edu.itba.paw.webapp.dto.response.CommentReportDto;
-import ar.edu.itba.paw.webapp.dto.response.ContentDto;
 import ar.edu.itba.paw.webapp.dto.response.ReviewReportDto;
-import ar.edu.itba.paw.webapp.exceptions.BadRequestException;
-import ar.edu.itba.paw.webapp.exceptions.ForbiddenException;
-import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
-import ar.edu.itba.paw.webapp.form.ReportCommentForm;
+import ar.edu.itba.paw.webapp.exceptionsMapper.ForbiddenExceptionMapper;
+import ar.edu.itba.paw.webapp.exceptionsMapper.PageNotFoundExceptionMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
-import java.security.Principal;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Path("reports")
 @Component
@@ -89,7 +80,7 @@ public class ReportsController {
             return Response.ok(new GenericEntity<Collection<CommentReportDto>>(commentReportedListDto){}).build();
 
         } else {
-            throw new PageNotFoundException();
+            throw new PageNotFoundExceptionMapper();
         }
     }
 
@@ -102,8 +93,8 @@ public class ReportsController {
     public Response addReviewReport(@PathParam("reviewId") long reviewId,
                                     @Valid CommentReportDto commentReportDto) {
         LOGGER.info("PUT /{}: Called", uriInfo.getPath());
-
-        final Review review = rs.findById(reviewId).orElseThrow(PageNotFoundException::new);
+//            TODO: CUANDO SE ARREGLE EL MAPPER DEL PAGENOTFOUND, arreglar este
+        final Review review = rs.findById(reviewId).orElseThrow(PageNotFoundExceptionMapper::new);
         final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(ForbiddenException::new);
         rrs.addReport(review, user, commentReportDto.getReportReason().toString());
 
@@ -140,7 +131,8 @@ public class ReportsController {
                                      @Valid CommentReportDto commentReportDto) {
         LOGGER.info("PUT /{}: Called", uriInfo.getPath());
 
-        final Comment comment = ccs.getComment(commentId).orElseThrow(PageNotFoundException::new);
+//            TODO: CUANDO SE ARREGLE EL MAPPER DEL PAGENOTFOUND, arreglar este
+        final Comment comment = ccs.getComment(commentId).orElseThrow(PageNotFoundExceptionMapper::new);
         final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(ForbiddenException::new);
         rrs.addReport(comment, user, commentReportDto.getReportReason().toString());
 

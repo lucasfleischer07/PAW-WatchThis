@@ -1,36 +1,14 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.services.*;
-import ar.edu.itba.paw.webapp.dto.request.GenreFilterDto;
-import ar.edu.itba.paw.webapp.dto.request.NewCommentDto;
-import ar.edu.itba.paw.webapp.dto.response.CommentDto;
-import ar.edu.itba.paw.webapp.dto.response.ContentDto;
-import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
-import ar.edu.itba.paw.webapp.form.GenreFilterForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.swing.text.html.Option;
-import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.security.Principal;
-import java.util.*;
 
 @Path("contentType")
 @Component
