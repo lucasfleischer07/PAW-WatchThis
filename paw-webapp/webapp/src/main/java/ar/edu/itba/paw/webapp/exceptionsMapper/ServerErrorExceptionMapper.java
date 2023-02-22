@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.ServerErrorException;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.ExceptionMapper;
@@ -20,6 +21,6 @@ public class ServerErrorExceptionMapper implements ExceptionMapper<ServerErrorEx
     @Override
     public Response toResponse(ServerErrorException e) {
         LOGGER.error("ServerErrorExceptionMapper: ServerErrorException caught");
-        return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ErrorDto(e.getMessage())).build();
+        return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ErrorDto(e.getMessage())).type(MediaType.APPLICATION_JSON).build();
     }
 }

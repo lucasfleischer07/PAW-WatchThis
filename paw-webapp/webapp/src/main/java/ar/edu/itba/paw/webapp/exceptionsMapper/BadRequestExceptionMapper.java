@@ -7,6 +7,7 @@ import org.springframework.security.core.AuthenticationException;
 
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.ExceptionMapper;
@@ -22,6 +23,6 @@ public class BadRequestExceptionMapper implements ExceptionMapper<BadRequestExce
     @Override
     public Response toResponse(BadRequestException e) {
         LOGGER.error("BadRequestExceptionMapper: BadRequestException caught");
-        return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorDto(e.getMessage())).build();
+        return Response.status(Response.Status.BAD_REQUEST).entity(new ErrorDto(e.getMessage())).type(MediaType.APPLICATION_JSON).build();
     }
 }

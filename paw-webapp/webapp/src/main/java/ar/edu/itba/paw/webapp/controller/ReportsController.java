@@ -61,6 +61,7 @@ public class ReportsController {
         LOGGER.info("GET /{}: Called", uriInfo.getPath());
 
         final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(ForbiddenException::new);
+
         if(!Objects.equals(user.getRole(), "admin")) {
             LOGGER.warn("GET /{}: Login user {} not an admin", uriInfo.getPath(), user.getId());
             throw new ForbiddenException();
