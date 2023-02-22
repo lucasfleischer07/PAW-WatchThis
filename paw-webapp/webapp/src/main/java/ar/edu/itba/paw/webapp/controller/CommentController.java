@@ -49,9 +49,8 @@ public class CommentController {
                                       @QueryParam("pageNumber") @DefaultValue("1") int pageNum,
                                       @QueryParam("pageSize") @DefaultValue("10") int pageSize) {
         LOGGER.info("GET /{}: Called", uriInfo.getPath());
-
-        Set<Comment> commentList = ccs.getReviewComments(reviewId);
-        Collection<CommentDto> commentListDto = CommentDto.mapCommentToCommentDto(uriInfo, commentList);
+        Review review = rs.findById(reviewId).orElseThrow(ReviewNotFoundException::new);
+        Collection<CommentDto> commentListDto = CommentDto.mapCommentToCommentDto(uriInfo, review.getComments());
         LOGGER.info("GET /{}: Comments got from review with id {}", uriInfo.getPath(), reviewId);
         return Response.ok(new GenericEntity<Collection<CommentDto>>(commentListDto){}).build();
     }

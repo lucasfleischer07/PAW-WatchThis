@@ -58,6 +58,7 @@ public class Content {
     private Integer rating;
 
 
+
     public Content(Long id, String name, byte[] image, String description, String released, String genre, String creator, String duration,int durationNum,String type) {
         this.id = id;
         this.name = name;
@@ -79,6 +80,7 @@ public class Content {
     /* package */ Content() {
 // Just for Hibernate, we love you!
     }
+
 
     @Transient
     public Integer getReviewsAmount() {
@@ -173,4 +175,5 @@ public class Content {
     public List<User> getViewedlist() {
         return viewedlist;
     }
+
 }

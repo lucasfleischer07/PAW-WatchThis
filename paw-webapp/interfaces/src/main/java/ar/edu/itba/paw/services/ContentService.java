@@ -32,4 +32,5 @@ public interface ContentService {
     void updateContent(Long id,String name, String description, String releaseDate, String genre, String creator, Integer duration, String type,byte[] contentImage);
     void deleteContent(Long id);
     String getGenreString(List<String> genres);
+    List<User> getContentReviewers(Long id);
 }

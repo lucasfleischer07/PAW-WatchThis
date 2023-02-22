@@ -19,7 +19,7 @@ public class ReviewDto {
     private UserDto user;
     
     private String commentUrl;
-    private String reviewReportersUrl;
+    private String reviewReporters;
 
 
     public static Collection<ReviewDto> mapReviewToReviewDto(UriInfo uriInfo, Collection<Review> reviews) {
@@ -36,8 +36,8 @@ public class ReviewDto {
 
     public ReviewDto(UriInfo uriInfo, Review review) {
         this.commentUrl = uriInfo.getBaseUriBuilder().path("comments").path(String.valueOf(review.getId())).build().toString();
-//        TODO: Si esto se refiere a traer a los usuarios que la reportaron, habria uqe hacer un metodo tanto en el controller como en ls bdd
-        this.reviewReportersUrl = uriInfo.getBaseUriBuilder().path("reports").path("reviews").path(String.valueOf(review.getId())).build().toString();
+//        TODO: VER SI LO DEJAMOS COMO UN STRING A TODO O LO PASAMOS A UNA LISTA
+        this.reviewReporters = review.getReporterUsernames();
         this.id = review.getId();
         this.name = review.getName();
         this.description = review.getDescription();
@@ -112,12 +112,12 @@ public class ReviewDto {
         this.commentUrl = commentUrl;
     }
 
-    public String getReviewReportersUrl() {
-        return reviewReportersUrl;
+    public String getReviewReporters() {
+        return reviewReporters;
     }
 
-    public void setReviewReportersUrl(String reviewReportersUrl) {
-        this.reviewReportersUrl = reviewReportersUrl;
+    public void setReviewReporters(String reviewReporters) {
+        this.reviewReporters = reviewReporters;
     }
 
 

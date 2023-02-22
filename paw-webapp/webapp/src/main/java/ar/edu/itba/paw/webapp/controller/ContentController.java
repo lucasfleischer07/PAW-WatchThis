@@ -12,6 +12,7 @@ import ar.edu.itba.paw.webapp.dto.request.GenreFilterDto;
 import ar.edu.itba.paw.webapp.dto.request.NewContentDto;
 import ar.edu.itba.paw.webapp.dto.response.AnonymousLandingPageDto;
 import ar.edu.itba.paw.webapp.dto.response.ContentDto;
+import ar.edu.itba.paw.webapp.dto.response.UserDto;
 import ar.edu.itba.paw.webapp.dto.response.UserLandingPageDto;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
@@ -545,5 +546,32 @@ public class ContentController {
     }
 
     // * ---------------------------------------------------------------------------------------------------------------
+
+
+    // * ----------------------------------- Content Reviewers ---------------------------------------------------------
+    // Endpoint para getear las peliculas o series
+//    TODO: VER PORQUE NO LA LLAMA BIEN
+    @GET
+    @Path("/{contentId}/reviewers}")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response getContentReviewers(@PathParam("contentId") final long contentId) {
+        LOGGER.info("GET /{}: Called", uriInfo.getPath());
+        Content content = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
+        List<User> contentReviewersList = cs.getContentReviewers(content.getId());
+        Collection<UserDto> contentReviewersListPaginatedDto = null;
+        if(contentReviewersList.isEmpty()) {
+            LOGGER.info("GET /{}: No reviewers", uriInfo.getPath());
+            return Response.noContent().build();
+        } else {
+            contentReviewersListPaginatedDto = UserDto.mapUserToUserDto(uriInfo, contentReviewersList);
+        }
+
+        LOGGER.info("GET /{}: Success getting the content reviewers list", uriInfo.getPath());
+        return Response.ok(new GenericEntity<Collection<UserDto>>(contentReviewersListPaginatedDto){}).build();
+
+    }
+
+    // * ---------------------------------------------------------------------------------------------------------------
+
 
 }

@@ -287,4 +287,17 @@ public class ContentJpaDao implements ContentDao{
     public void deleteContent(Long id) {
         em.remove(findById(id).get());
     }
+
+    public List<User> getContentReviewers(Long id) {
+        Query inQuery=em.createNativeQuery("SELECT userid from review where contentid = :id");
+        inQuery.setParameter("id",id);
+        List<Integer> resulList = inQuery.getResultList();
+        List<Long> longList=new ArrayList<>();
+        for (Integer big:resulList) {
+            longList.add(big.longValue());
+        }
+        TypedQuery<User> query= em.createQuery(" FROM User WHERE id IN ( :resultList ) ",User.class);
+        query.setParameter("resultList",longList);
+        return query.getResultList();
+    }
 }

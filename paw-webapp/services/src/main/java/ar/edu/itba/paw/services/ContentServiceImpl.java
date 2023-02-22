@@ -220,4 +220,9 @@ public class ContentServiceImpl implements ContentService {
         return genresBuilder.toString();
     }
 
+    @Override
+    public List<User> getContentReviewers(Long id) {
+        return ContentDao.getContentReviewers(id);
+    }
+
 }
