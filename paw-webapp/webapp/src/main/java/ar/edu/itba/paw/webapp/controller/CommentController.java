@@ -19,6 +19,7 @@ import javax.ws.rs.core.*;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Path("comments")
 @Component
@@ -46,7 +47,7 @@ public class CommentController {
                                       @QueryParam("pageSize") @DefaultValue("10") int pageSize) {
         LOGGER.info("GET /{}: Called", uriInfo.getPath());
 
-        List<Comment> commentList = ccs.getReviewComments(reviewId);
+        Set<Comment> commentList = ccs.getReviewComments(reviewId);
         Collection<CommentDto> commentListDto = CommentDto.mapCommentToCommentDto(uriInfo, commentList);
         LOGGER.info("GET /{}: Comments got from review with id {}", uriInfo.getPath(), reviewId);
         return Response.ok(new GenericEntity<Collection<CommentDto>>(commentListDto){}).build();

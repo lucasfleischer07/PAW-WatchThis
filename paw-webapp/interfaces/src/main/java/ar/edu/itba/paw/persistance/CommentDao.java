@@ -6,10 +6,11 @@ import ar.edu.itba.paw.models.User;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface CommentDao {
     void addComment(Review review, User user, String text);
     void deleteComment(Comment comment);
     Optional<Comment> getComment(Long id);
-    List<Comment> getReviewComment(Long reviewId, int page);
+    Set<Comment> getReviewComment(Long reviewId);
 }

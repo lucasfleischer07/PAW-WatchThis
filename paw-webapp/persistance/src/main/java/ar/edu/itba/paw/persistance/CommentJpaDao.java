@@ -12,6 +12,7 @@ import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Primary
 @Repository
@@ -39,7 +40,8 @@ public class CommentJpaDao implements CommentDao{
     }
 
     @Override
-    public List<Comment> getReviewComment(Long reviewId, int page){
-        return null;
+    public Set<Comment> getReviewComment(Long reviewId){
+        Optional<Review> maybeReview= Optional.ofNullable(em.find(Review.class,reviewId));
+        return maybeReview.isPresent()?maybeReview.get().getComments():null;
     }
 }
