@@ -28,9 +28,10 @@ public class CommentServiceImpl implements CommentService{
         this.emailService = emailService;
     }
     @Override
-    public void addComment(Review review, User user, String text) {
+    public Comment addComment(Review review, User user, String text) {
+        Comment comment = null;
         try {
-            commentDao.addComment(review,user,text);
+            comment=commentDao.addComment(review,user,text);
             if(!review.getUser().getUserName().equals(user.getUserName())) {
                 Map<String, Object> mailVariables = new HashMap<>();
                 mailVariables.put("to", review.getUser().getEmail());
@@ -42,6 +43,7 @@ public class CommentServiceImpl implements CommentService{
         } catch (MessagingException e) {
             //algo
         }
+        return comment;
     }
 
     @Override

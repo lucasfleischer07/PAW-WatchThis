@@ -9,7 +9,7 @@ import java.util.Optional;
 import java.util.Set;
 
 public interface CommentService {
-    void addComment(Review review, User user, String text);
+    Comment addComment(Review review, User user, String text);
     void deleteComment(Comment comment);
     Optional<Comment> getComment(Long id);
     Set<Comment> getReviewComments(Long reviewId);

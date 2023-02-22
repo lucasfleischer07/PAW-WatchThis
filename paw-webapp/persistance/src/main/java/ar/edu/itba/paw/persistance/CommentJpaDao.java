@@ -22,8 +22,11 @@ public class CommentJpaDao implements CommentDao{
     private EntityManager em;
 
     @Override
-    public void addComment(Review review, User user, String text) {
-        em.persist(new Comment(user,review,text));
+    public Comment addComment(Review review, User user, String text)
+    {   Comment comment = new Comment(user,review,text);
+        em.persist(comment);
+        em.flush();
+        return comment;
 
     }
 

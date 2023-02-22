@@ -1,11 +1,12 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.exceptions.CommentNotFoundException;
+import ar.edu.itba.paw.exceptions.ContentNotFoundException;
+import ar.edu.itba.paw.exceptions.ReviewNotFoundException;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.services.*;
 import ar.edu.itba.paw.webapp.dto.response.CommentReportDto;
 import ar.edu.itba.paw.webapp.dto.response.ReviewReportDto;
-import ar.edu.itba.paw.webapp.exceptionsMapper.ForbiddenExceptionMapper;
-import ar.edu.itba.paw.webapp.exceptionsMapper.PageNotFoundExceptionMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,7 +82,7 @@ public class ReportsController {
             return Response.ok(new GenericEntity<Collection<CommentReportDto>>(commentReportedListDto){}).build();
 
         } else {
-            throw new PageNotFoundExceptionMapper();
+            throw new ContentNotFoundException();
         }
     }
 
@@ -94,8 +95,7 @@ public class ReportsController {
     public Response addReviewReport(@PathParam("reviewId") long reviewId,
                                     @Valid CommentReportDto commentReportDto) {
         LOGGER.info("PUT /{}: Called", uriInfo.getPath());
-//            TODO: CUANDO SE ARREGLE EL MAPPER DEL PAGENOTFOUND, arreglar este
-        final Review review = rs.findById(reviewId).orElseThrow(PageNotFoundExceptionMapper::new);
+        final Review review = rs.findById(reviewId).orElseThrow(ReviewNotFoundException::new);
         final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(ForbiddenException::new);
         rrs.addReport(review, user, commentReportDto.getReportReason().toString());
 
@@ -132,8 +132,7 @@ public class ReportsController {
                                      @Valid CommentReportDto commentReportDto) {
         LOGGER.info("PUT /{}: Called", uriInfo.getPath());
 
-//            TODO: CUANDO SE ARREGLE EL MAPPER DEL PAGENOTFOUND, arreglar este
-        final Comment comment = ccs.getComment(commentId).orElseThrow(PageNotFoundExceptionMapper::new);
+        final Comment comment = ccs.getComment(commentId).orElseThrow(CommentNotFoundException::new);
         final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(ForbiddenException::new);
         rrs.addReport(comment, user, commentReportDto.getReportReason().toString());
 

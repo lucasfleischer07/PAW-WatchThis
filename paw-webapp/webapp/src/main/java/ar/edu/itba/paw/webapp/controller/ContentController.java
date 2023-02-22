@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.exceptions.ContentNotFoundException;
+import ar.edu.itba.paw.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.models.Content;
 import ar.edu.itba.paw.models.Sorting;
 import ar.edu.itba.paw.models.User;
@@ -11,7 +13,6 @@ import ar.edu.itba.paw.webapp.dto.request.NewContentDto;
 import ar.edu.itba.paw.webapp.dto.response.AnonymousLandingPageDto;
 import ar.edu.itba.paw.webapp.dto.response.ContentDto;
 import ar.edu.itba.paw.webapp.dto.response.UserLandingPageDto;
-import ar.edu.itba.paw.webapp.exceptionsMapper.PageNotFoundExceptionMapper;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -214,8 +215,7 @@ public class ContentController {
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getSpecificContent(@PathParam("contentId") final long contentId) {
         LOGGER.info("GET /{}: Called", uriInfo.getPath());
-//            TODO: CUANDO SE ARREGLE EL MAPPER DEL PAGENOTFOUND, arreglar este
-        Content content = cs.findById(contentId).orElseThrow(PageNotFoundExceptionMapper::new);
+        Content content = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
         ContentDto contentDto = new ContentDto(uriInfo, content);
         LOGGER.info("GET /{}: Return content {} with success", uriInfo.getPath(), content.getId());
         return Response.ok(contentDto).build();
@@ -233,8 +233,7 @@ public class ContentController {
                                     @Context Request request) {
 
         LOGGER.info("GET /{}: Called", uriInfo.getPath());
-//            TODO: CUANDO SE ARREGLE EL MAPPER DEL PAGENOTFOUND, arreglar este
-        Content content = cs.findById(contentId).orElseThrow(PageNotFoundExceptionMapper::new);
+        Content content = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
         if(content.getImage() == null) {
             return Response.noContent().build();
         }
@@ -260,8 +259,7 @@ public class ContentController {
     public Response updateContentImage(@Size(max = 1024 * 1024 * 2) @FormDataParam("image") byte[] imageBytes,
                                        @PathParam("contentId") final long contentId) {
         LOGGER.info("PUT /{}: Called", uriInfo.getPath());
-//            TODO: CUANDO SE ARREGLE EL MAPPER DEL PAGENOTFOUND, arreglar este
-        Content content = cs.findById(contentId).orElseThrow(PageNotFoundExceptionMapper::new);
+        Content content = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
 
         cs.updateContent(content.getId(), content.getName(), content.getDescription(), content.getReleased(), content.getGenre(), content.getCreator(), content.getDurationNum(), content.getType(), imageBytes);
         LOGGER.info("PUT /{}: Content {} Image Updated", uriInfo.getPath(), contentId);
@@ -293,15 +291,12 @@ public class ContentController {
                                       @Valid NewContentDto contentDto,
                                       @Context final HttpServletRequest request) {
         LOGGER.info("PUT /{}: Called", uriInfo.getPath());
-//            TODO: CUANDO SE ARREGLE EL MAPPER DEL PAGENOTFOUND, arreglar este
-        final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(PageNotFoundExceptionMapper::new);
-//            TODO: CUANDO SE ARREGLE EL MAPPER DEL PAGENOTFOUND, arreglar este
-        final Content content = cs.findById(contentId).orElseThrow(PageNotFoundExceptionMapper::new);
+        final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
+        final Content content = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
 
 //        TODO: VER ESTO SI ERA ADMIN O QUE
-        if(!Objects.equals(user.getRole(), "amin")) {
-//            TODO: CUANDO SE ARREGLE EL MAPPER DEL PAGENOTFOUND, DESCOMENTAR
-//            throw new PageNotFoundException();
+        if(!Objects.equals(user.getRole(), "admin")) {
+            throw new ForbiddenException();
         }
 
         String auxGenre = "";
@@ -368,8 +363,7 @@ public class ContentController {
     @Path("/{contentId}/deleteContent")
     public Response deleteContent(@PathParam("contentId") final long contentId) {
         LOGGER.info("DELETE /{}: Called", uriInfo.getPath());
-//            TODO: CUANDO SE ARREGLE EL MAPPER DEL PAGENOTFOUND, arreglar este
-        Content oldContent = cs.findById(contentId).orElseThrow(PageNotFoundExceptionMapper::new);
+        Content oldContent = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
         cs.deleteContent(contentId);
         LOGGER.info("DELETE /{}: Content {} deleted", uriInfo.getPath(), contentId);
         return Response.noContent().build();
@@ -392,7 +386,7 @@ public class ContentController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response createContent(@Valid NewContentDto contentDto) {
         LOGGER.info("POST /{}: Called", uriInfo.getPath());
-//        User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(PageNotFoundException::new);
+        User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
 
         String auxGenre = "";
         for(String genre : contentDto.getGenre()) {
@@ -450,8 +444,7 @@ public class ContentController {
         Collection<ContentDto> contentListPaginatedDto = null;
         if(contentList == null) {
             LOGGER.warn("GET /{}: Failed at requesting content", uriInfo.getPath());
-//            TODO: CUANDO SE ARREGLE EL MAPPER DEL PAGENOTFOUND, arreglar este
-//            throw new PageNotFoundExceptionMapper();
+            throw new ContentNotFoundException();
         } else {
             contentListPaginated = ps.pagePagination(contentList, page,CONTENT_AMOUNT);
             contentListPaginatedDto = ContentDto.mapContentToContentDto(uriInfo, contentListPaginated);
@@ -504,8 +497,7 @@ public class ContentController {
         int amountOfPages;
         if(contentListFilter == null) {
             LOGGER.warn("GET /{}: Failed at requesting content", uriInfo.getPath());
-//            TODO: CUANDO SE ARREGLE EL MAPPER DEL PAGENOTFOUND, DESCOMENTAR
-//            throw new PageNotFoundExceptionMapper();
+            throw new ContentNotFoundException();
         } else {
             contentListFilterPaginated = ps.pagePagination(contentListFilter, page,CONTENT_AMOUNT);
             amountOfPages = ps.amountOfContentPages(contentListFilter.size(),CONTENT_AMOUNT);

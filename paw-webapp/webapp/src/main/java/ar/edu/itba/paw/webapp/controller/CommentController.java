@@ -1,5 +1,8 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.exceptions.CommentNotFoundException;
+import ar.edu.itba.paw.exceptions.ReviewNotFoundException;
+import ar.edu.itba.paw.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.models.Comment;
 import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.User;
@@ -66,17 +69,16 @@ public class CommentController {
         Optional<Review> review = rs.getReview(reviewId);
         Optional<User> user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
 
-        if(!review.isPresent() || !user.isPresent()) {
-//            TODO: CUANDO SE ARREGLE EL MAPPER DEL PAGENOTFOUND, DESCOMENTAR
-//            throw new PageNotFoundException();
+        if(!review.isPresent()) {
+            throw new ReviewNotFoundException();
+        } else if(!user.isPresent()) {
+            throw new UserNotFoundException();
         }
 
-//        TODO: hacer que este metodo (addComment) devuelva el comment
-//        Comment newComment = ccs.addComment(review.get(), user.get(), commentDto.getComment());
+        Comment newComment = ccs.addComment(review.get(), user.get(), commentDto.getComment());
 
-//        LOGGER.info("POST /{}: Comment created with id {}", uriInfo.getPath(), newComment.getCommentId());
-//        return Response.created(CommentDto.get(newComment, uriInfo).build()).build();
-        return null;
+        LOGGER.info("POST /{}: Comment created with id {}", uriInfo.getPath(), newComment.getCommentId());
+        return Response.created(CommentDto.getCommentUriBuilder(newComment, uriInfo).build()).build();
     }
     // * ---------------------------------------------------------------------------------------------------------------
 
@@ -93,8 +95,7 @@ public class CommentController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         if(!deleteComment.isPresent()) {
-//            TODO: CUANDO SE ARREGLE EL MAPPER DEL PAGENOTFOUND, DESCOMENTAR
-//            throw new PageNotFoundException();
+            throw new CommentNotFoundException();
         }
 
         if(user.get().getUserName().equals(deleteComment.get().getUser().getUserName())) {

@@ -1,11 +1,11 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.exceptions.ContentNotFoundException;
+import ar.edu.itba.paw.exceptions.ReviewNotFoundException;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.services.*;
 import ar.edu.itba.paw.webapp.dto.request.NewReviewDto;
 import ar.edu.itba.paw.webapp.dto.response.ReviewDto;
-import ar.edu.itba.paw.webapp.exceptionsMapper.ForbiddenExceptionMapper;
-import ar.edu.itba.paw.webapp.exceptionsMapper.PageNotFoundExceptionMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,13 +65,11 @@ public class ReviewController {
                             @QueryParam("pageNumber") @DefaultValue("1") int pageNumber,
                             @QueryParam("pageSize") @DefaultValue("10") int pageSize) {
         LOGGER.info("GET /{}: Called",uriInfo.getPath());
-//            TODO: CUANDO SE ARREGLE EL MAPPER DEL PAGENOTFOUND, arreglar este
-        Content content = cs.findById(contentId).orElseThrow(PageNotFoundExceptionMapper::new);
+        Content content = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
         List<Review> reviewList = rs.getAllReviews(content);
         if(reviewList == null) {
             LOGGER.warn("GET /{}: Cant find a the content specified",uriInfo.getPath());
-//            TODO: CUANDO SE ARREGLE EL MAPPER DEL PAGENOTFOUND, arreglar este
-            throw new PageNotFoundExceptionMapper();
+            throw new ContentNotFoundException();
         }
         Collection<ReviewDto> reviewDtoList = ReviewDto.mapReviewToReviewDto(uriInfo, reviewList);
 
@@ -191,15 +189,14 @@ public class ReviewController {
                             @PathParam("contentId") final long contentId,
                             @Valid NewReviewDto reviewDto) {
         LOGGER.info("POST /{}: Called", uriInfo.getPath());
-        final Content content = cs.findById(contentId).orElseThrow(PageNotFoundExceptionMapper::new);
+        final Content content = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
         final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(ForbiddenException::new);
         try {
             rs.addReview(reviewDto.getName(), reviewDto.getDescription(), reviewDto.getRating(), reviewDto.getType(), user, content);
             LOGGER.info("POST /{}: Review added", uriInfo.getPath());
 
         } catch (DuplicateKeyException e) {
-//            TODO: CUANDO SE ARREGLE EL MAPPER DEL PAGENOTFOUND, arreglar este
-            LOGGER.warn("POST /{}: Duplicate review", uriInfo.getPath(), new PageNotFoundExceptionMapper());
+            LOGGER.warn("POST /{}: Duplicate review", uriInfo.getPath(), new ContentNotFoundException());
         }
 
         return Response.created(ReviewDto.getReviewUriBuilder(content, uriInfo).build()).build();
@@ -276,9 +273,8 @@ public class ReviewController {
     @Produces(value = {MediaType.APPLICATION_JSON,})
     public Response deleteReview(@PathParam("reviewId") final Long reviewId) {
         LOGGER.info("DELETE /{}: Called", uriInfo.getPath());
-//            TODO: CUANDO SE ARREGLE EL MAPPER DEL PAGENOTFOUND, arreglar este
-        final Review review = rs.findById(reviewId).orElseThrow(PageNotFoundExceptionMapper::new);
-        User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(PageNotFoundExceptionMapper::new);
+        final Review review = rs.findById(reviewId).orElseThrow(ReviewNotFoundException::new);
+        User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(ForbiddenException::new);
         if(review.getUser().getUserName().equals(user.getUserName())) {
             rs.deleteReview(reviewId);
             LOGGER.info("DELETE /{}: Review Deleted by user owner", uriInfo.getPath());
@@ -311,8 +307,7 @@ public class ReviewController {
 
         LOGGER.info("PUT /{}: Called", uriInfo.getPath());
 
-//            TODO: CUANDO SE ARREGLE EL MAPPER DEL PAGENOTFOUND, arreglar este
-        final Review oldReview = rs.findById(reviewId).orElseThrow(PageNotFoundExceptionMapper::new);
+        final Review oldReview = rs.findById(reviewId).orElseThrow(ReviewNotFoundException::new);
         User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(ForbiddenException::new);
         if(!oldReview.getUser().getUserName().equals(user.getUserName())){
             LOGGER.warn("PUT /{}: The editor is not owner of the review", uriInfo.getPath());
@@ -417,8 +412,7 @@ public class ReviewController {
     public Response reviewThumbUp(@PathParam("reviewId") final long reviewId) {
         LOGGER.info("POST /{}: Called", uriInfo.getPath());
         if(us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).isPresent()) {
-//            TODO: CUANDO SE ARREGLE EL MAPPER DEL PAGENOTFOUND, arreglar este
-            Review review = rs.getReview(reviewId).orElseThrow(PageNotFoundExceptionMapper::new);
+            Review review = rs.getReview(reviewId).orElseThrow(ReviewNotFoundException::new);
             User loggedUser = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).get();
             rs.thumbUpReview(review,loggedUser);
         } else {
@@ -436,8 +430,7 @@ public class ReviewController {
     public Response reviewThumbDown(@PathParam("reviewId") final long reviewId) {
         LOGGER.info("POST /{}: Called", uriInfo.getPath());
         if(us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).isPresent()) {
-//            TODO: CUANDO SE ARREGLE EL MAPPER DEL PAGENOTFOUND, arreglar este
-            Review review = rs.getReview(reviewId).orElseThrow(PageNotFoundExceptionMapper::new);
+            Review review = rs.getReview(reviewId).orElseThrow(ReviewNotFoundException::new);
             User loggedUser = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).get();
             rs.thumbDownReview(review,loggedUser);
         } else {
