@@ -549,10 +549,9 @@ public class ContentController {
 
 
     // * ----------------------------------- Content Reviewers ---------------------------------------------------------
-    // Endpoint para getear las peliculas o series
-//    TODO: VER PORQUE NO LA LLAMA BIEN
+    // Endpoint para getear los reviewers de peliculas o series
     @GET
-    @Path("/{contentId}/reviewers}")
+    @Path("/{contentId}/reviewers")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getContentReviewers(@PathParam("contentId") final long contentId) {
         LOGGER.info("GET /{}: Called", uriInfo.getPath());
