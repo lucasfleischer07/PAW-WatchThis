@@ -276,7 +276,7 @@ public class UserController {
 
 
     // * ------------------------------------------------Profile Edition------------------------------------------------
-    // Endpoint para editar la nformacion del usuario
+    // Endpoint para editar la informacion del usuario
     @PUT
     @Path("/{id}/editProfile")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -289,7 +289,7 @@ public class UserController {
         if(user.getId() != id) {
             throw new ForbiddenException();
         }
-        us.setPassword(editProfileDto.getPassword(), user, "forgotten");
+        us.setPassword(editProfileDto.getPassword(), user, "restore");
 
 //      TODO: Hay que hace un boton para cambiar solamente la imagen y otro boton para cambiar la info, ya no puede ser le mismo boton para ambos
         LOGGER.info("PUT /{}: User {} profile Updated", uriInfo.getPath(), id);
