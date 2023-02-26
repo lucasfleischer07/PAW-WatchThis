@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.exceptions.ContentNotFoundException;
 import ar.edu.itba.paw.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.models.Content;
+import ar.edu.itba.paw.models.PageWapper;
 import ar.edu.itba.paw.models.Sorting;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.services.ContentService;
@@ -440,15 +441,13 @@ public class ContentController {
         LOGGER.info("GET /{}: Called", uriInfo.getPath());
 
         int page= pageNum;
-        List<Content> contentList = cs.getAllContent(contentType, null);
-        List<Content> contentListPaginated;
+        PageWapper<Content> contentList = cs.getAllContent(contentType, null, page, CONTENT_AMOUNT);
         Collection<ContentDto> contentListPaginatedDto = null;
-        if(contentList == null) {
+        if(contentList.getPageContent() == null) {
             LOGGER.warn("GET /{}: Failed at requesting content", uriInfo.getPath());
             throw new ContentNotFoundException();
         } else {
-            contentListPaginated = ps.pagePagination(contentList, page,CONTENT_AMOUNT);
-            contentListPaginatedDto = ContentDto.mapContentToContentDto(uriInfo, contentListPaginated);
+            contentListPaginatedDto = ContentDto.mapContentToContentDto(uriInfo, contentList.getPageContent() );
         }
 
         LOGGER.info("GET /{}: Success getting the content", uriInfo.getPath());
@@ -493,16 +492,16 @@ public class ContentController {
             genreFilterDto.setFormGenre(genreList.toArray(new String[0]));
         }
 
-        List<Content> contentListFilter = cs.getMasterContent(auxType, genre, durationFrom, durationTo, sorting, query);
-        List<Content> contentListFilterPaginated = null;
-        int amountOfPages;
-        if(contentListFilter == null) {
+        PageWapper<Content> contentListFilter = cs.getMasterContent(auxType, genre, durationFrom, durationTo, sorting, query,page,CONTENT_AMOUNT);
+        List<Content> contentListFilterPaginated = contentListFilter.getPageContent();
+        long amountOfPages;
+        if(contentListFilterPaginated == null) {
             LOGGER.warn("GET /{}: Failed at requesting content", uriInfo.getPath());
             throw new ContentNotFoundException();
-        } else {
-            contentListFilterPaginated = ps.pagePagination(contentListFilter, page,CONTENT_AMOUNT);
-            amountOfPages = ps.amountOfContentPages(contentListFilter.size(),CONTENT_AMOUNT);
         }
+        
+        amountOfPages = contentListFilter.getPageAmount();
+
 
 //        TODO: VER QUE ONDA ESTO DE LA URL, CREO QUE NO ES NECESARIO PERO NDEA
 //        StringBuilder referer=new StringBuilder();

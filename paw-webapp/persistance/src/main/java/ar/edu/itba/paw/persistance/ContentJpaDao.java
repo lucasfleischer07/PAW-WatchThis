@@ -1,9 +1,6 @@
 package ar.edu.itba.paw.persistance;
 
-import ar.edu.itba.paw.models.Content;
-import ar.edu.itba.paw.models.Review;
-import ar.edu.itba.paw.models.Sorting;
-import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.models.*;
 import org.postgresql.core.NativeQuery;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
@@ -24,17 +21,25 @@ public class ContentJpaDao implements ContentDao{
     private EntityManager em;
 
     @Override
-    public List<Content> getAllContent(String type, Sorting sort) {
-        TypedQuery<Content> query=em.createQuery("FROM Content",Content.class);
+    public PageWapper<Content> getAllContent(String type, Sorting sort, int page, int pageSize) {
+        TypedQuery<Content> query=em.createQuery("FROM Content OFFSET (:offset) LIMIT (:limit)",Content.class);
+
         String sortString = sort == null ? "" : sort.getQueryString();
+        TypedQuery<Content> countQuery;
         if (Objects.equals(type, "movie") || Objects.equals(type, "serie")) {
-            query= em.createQuery("FROM Content WHERE type = :type" + sortString,Content.class);
+            query= em.createQuery("FROM Content WHERE type = :type OFFSET (:offset) LIMIT (:limit)" + sortString,Content.class);
+            countQuery = em.createQuery("FROM Content WHERE type = :type",Content.class);
+            countQuery.setParameter("type",type);
             query.setParameter("type",type);
         } else {
+            countQuery = em.createQuery("FROM Content OFFSET (:offset) LIMIT (:limit)",Content.class);
             query= em.createQuery("FROM Content" + sortString,Content.class);
         }
+        query.setParameter("offset", (page - 1) * pageSize);
+        query.setParameter("limit", pageSize);
+        long totalContent = PageWapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
 
-        return query.getResultList();
+        return new PageWapper<Content>(page,totalContent,pageSize,query.getResultList()) ;
     }
 
     @Override
@@ -57,50 +62,84 @@ public class ContentJpaDao implements ContentDao{
     }
 
     @Override
-    public List<Content> findByGenre(String type, String genre, Sorting sort) {
+    public PageWapper<Content> findByGenre(String type, String genre, Sorting sort,int page, int pageSize) {
         String sortString = sort == null ? "" : sort.getQueryString();
         List<Long> longList = genreBaseQuery(genre);
         TypedQuery<Content> query;
+        TypedQuery<Content> countQuery;
         if (Objects.equals(type, "movie") || Objects.equals(type, "serie")) {
-            query= em.createQuery("FROM Content WHERE id IN ( :resultList ) AND type = :type" + sortString,Content.class);
+            query= em.createQuery("FROM Content WHERE id IN ( :resultList ) AND type = :type OFFSET (:offset) LIMIT (:limit)" + sortString,Content.class);
+            countQuery = em.createQuery("FROM Content WHERE id IN ( :resultList ) AND type = :type",Content.class);
+            countQuery.setParameter("type",type);
             query.setParameter("type",type);
         } else {
-            query= em.createQuery("FROM Content WHERE id IN ( :resultList )" + sortString,Content.class);
+            query= em.createQuery("FROM Content WHERE id IN ( :resultList ) OFFSET (:offset) LIMIT (:limit)" + sortString,Content.class);
+            countQuery = em.createQuery("FROM Content WHERE id IN ( :resultList )",Content.class);
         }
+        countQuery.setParameter("resultList",longList);
         query.setParameter("resultList",longList);
-        return query.getResultList();
+        query.setParameter("offset", (page - 1) * pageSize);
+        query.setParameter("limit", pageSize);
+
+
+        long totalContent = PageWapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
+
+        return new PageWapper<Content>(page,totalContent,pageSize,query.getResultList()) ;
     }
 
     @Override
-    public List<Content> findByDuration(String type, int durationFrom, int durationTo, Sorting sort) {
+    public PageWapper<Content> findByDuration(String type, int durationFrom, int durationTo, Sorting sort,int page, int pageSize) {
         String sortString = sort == null ? "" : sort.getQueryString();
         TypedQuery<Content> query= em.createQuery("From Content",Content.class);
+        TypedQuery<Content> countQuery;
         if(!Objects.equals(type, "all")) {
-            query = em.createQuery("FROM Content WHERE durationnum > :durationFrom  AND durationnum <= :durationTo AND type = :type" + sortString,Content.class);
+            query = em.createQuery("FROM Content WHERE durationnum > :durationFrom  AND durationnum <= :durationTo AND type = :type OFFSET (:offset) LIMIT (:limit)" + sortString,Content.class);
+            countQuery = em.createQuery("FROM Content WHERE durationnum > :durationFrom  AND durationnum <= :durationTo AND type = :type",Content.class);
+            countQuery.setParameter("type",type);
             query.setParameter("type",type);
         } else {
-            query = em.createQuery("FROM Content WHERE durationnum > :durationFrom  AND durationnum <= :durationTo" + sortString,Content.class);
+            countQuery = em.createQuery("FROM Content WHERE durationnum > :durationFrom  AND durationnum <= :durationTo",Content.class);
+            query = em.createQuery("FROM Content WHERE durationnum > :durationFrom  AND durationnum <= :durationTo OFFSET (:offset) LIMIT (:limit)" + sortString,Content.class);
         }
+        countQuery.setParameter("durationFrom",durationFrom);
+        countQuery.setParameter("durationTo",durationTo);
         query.setParameter("durationFrom",durationFrom);
         query.setParameter("durationTo",durationTo);
-        return query.getResultList();
+        query.setParameter("offset", (page - 1) * pageSize);
+        query.setParameter("limit", pageSize);
+
+        long totalContent = PageWapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
+
+        return new PageWapper<Content>(page,totalContent,pageSize,query.getResultList());
     }
 
     @Override
-    public List<Content> findByDurationAndGenre(String type, String genre, int durationFrom, int durationTo, Sorting sort) {
+    public PageWapper<Content> findByDurationAndGenre(String type, String genre, int durationFrom, int durationTo, Sorting sort,int page, int pageSize) {
         String sortString = sort == null ? "" : sort.getQueryString();
         List<Long> longList = genreBaseQuery(genre);
         TypedQuery<Content> query;
+        TypedQuery<Content> countQuery;
         if (Objects.equals(type, "movie") || Objects.equals(type, "serie")) {
-            query= em.createQuery("FROM Content WHERE id IN ( :resultList ) AND type = :type and durationnum > :durationFrom  AND durationnum <= :durationTo" + sortString,Content.class);
+            query= em.createQuery("FROM Content WHERE id IN ( :resultList ) AND type = :type and durationnum > :durationFrom  AND durationnum <= :durationTo OFFSET (:offset) LIMIT (:limit)" + sortString,Content.class);
+            countQuery = em.createQuery("FROM Content WHERE id IN ( :resultList ) AND type = :type and durationnum > :durationFrom  AND durationnum <= :durationTo" + sortString,Content.class);
             query.setParameter("type",type);
+            countQuery.setParameter("type",type);
         } else {
-            query= em.createQuery("FROM Content WHERE id IN ( :resultList ) AND durationnum > :durationFrom  AND durationnum <= :durationTo" + sortString,Content.class);
+            query= em.createQuery("FROM Content WHERE id IN ( :resultList ) AND durationnum > :durationFrom  AND durationnum <= :durationTo OFFSET (:offset) LIMIT (:limit)" + sortString,Content.class);
+            countQuery = em.createQuery("FROM Content WHERE id IN ( :resultList ) AND durationnum > :durationFrom  AND durationnum <= :durationTo" + sortString,Content.class);
         }
+        countQuery.setParameter("durationFrom",durationFrom);
+        countQuery.setParameter("durationTo",durationTo);
+        countQuery.setParameter("resultList",longList);
+
+        long totalContent = PageWapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
+
         query.setParameter("durationFrom",durationFrom);
         query.setParameter("durationTo",durationTo);
         query.setParameter("resultList",longList);
-        return query.getResultList();
+        query.setParameter("offset", (page - 1) * pageSize);
+        query.setParameter("limit", pageSize);
+        return new PageWapper<Content>(page,totalContent,pageSize,query.getResultList());
     }
 
     @Override
@@ -109,86 +148,144 @@ public class ContentJpaDao implements ContentDao{
     }
 
     @Override
-    public List<Content> getSearchedContent(String type,String queryUser) {
+    public PageWapper<Content> getSearchedContent(String type,String queryUser,int page, int pageSize) {
         TypedQuery<Content> query;
+        TypedQuery<Content> countQuery;
         if(Objects.equals(type, "movie") || Objects.equals(type, "serie")){
-            query= em.createQuery("From Content WHERE type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)",Content.class);
+            query= em.createQuery("From Content WHERE type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) OFFSET (:offset) LIMIT (:limit)",Content.class);
+            countQuery = em.createQuery("FROM Content WHERE type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)",Content.class);
+            countQuery.setParameter("type",type);
             query.setParameter("type",type);
         } else{
-            query= em.createQuery("From Content WHERE (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)",Content.class);
-
+            query= em.createQuery("From Content WHERE (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) OFFSET (:offset) LIMIT (:limit)",Content.class);
+            countQuery = em.createQuery("FROM Content WHERE (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)",Content.class);
         }
+        countQuery.setParameter("query","%" + queryUser.toLowerCase() + "%");
+
+        long totalContent = PageWapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
+
         query.setParameter("query","%" + queryUser.toLowerCase() + "%");
-        return query.getResultList();
+        query.setParameter("offset", (page - 1) * pageSize);
+        query.setParameter("limit", pageSize);
+        return new PageWapper<Content>(page,totalContent,pageSize,query.getResultList());
     }
 
     //First makes the genre query in a NativeQuery
     @Override
-    public List<Content> getSearchedContentByGenre(String type, String genre, Sorting sort,String queryUser) {
+    public PageWapper<Content> getSearchedContentByGenre(String type, String genre, Sorting sort,String queryUser,int page, int pageSize) {
         List<Long> longList = genreBaseQuery(genre);
         TypedQuery<Content> query;
+        TypedQuery<Content> countQuery;
         String sortString = sort == null ? "" : sort.getQueryString();
         if (Objects.equals(type, "movie") || Objects.equals(type, "serie")) {
-            query= em.createQuery(" FROM Content WHERE id IN ( :resultList ) AND type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)" + sortString,Content.class);
+            query= em.createQuery(" FROM Content WHERE id IN ( :resultList ) AND type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) OFFSET (:offset) LIMIT (:limit)" + sortString,Content.class);
+            countQuery = em.createQuery("FROM Content WHERE id IN ( :resultList ) AND type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)",Content.class);
+            countQuery.setParameter("type",type);
             query.setParameter("type",type);
         } else {
-            query= em.createQuery(" FROM Content WHERE id IN ( :resultList ) AND (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)" + sortString,Content.class);
+            query= em.createQuery(" FROM Content WHERE id IN ( :resultList ) AND (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) OFFSET (:offset) LIMIT (:limit)" + sortString,Content.class);
+            countQuery = em.createQuery("FROM Content WHERE id IN ( :resultList ) AND and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)",Content.class);
         }
+        countQuery.setParameter("query","%" + queryUser.toLowerCase() + "%");
+        countQuery.setParameter("resultList",longList);
+
+        long totalContent = PageWapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
+
         query.setParameter("query","%" + queryUser.toLowerCase() + "%");
         query.setParameter("resultList",longList);
-        return query.getResultList();
+        query.setParameter("offset", (page - 1) * pageSize);
+        query.setParameter("limit", pageSize);
+        return new PageWapper<Content>(page,totalContent,pageSize,query.getResultList());
     }
 
     @Override
-    public List<Content> getSearchedContentByDuration(String type, int durationFrom, int durationTo, Sorting sort,String queryUser) {
+    public PageWapper<Content> getSearchedContentByDuration(String type, int durationFrom, int durationTo, Sorting sort,String queryUser,int page, int pageSize) {
         TypedQuery<Content> query= em.createQuery("From Content",Content.class);
         String sortString = sort == null ? "" : sort.getQueryString();
+        TypedQuery<Content> countQuery;
         if(!Objects.equals(type, "all")) {
-            query = em.createQuery("FROM Content WHERE durationnum > :durationFrom  AND durationnum <= :durationTo AND type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)" + sortString,Content.class);
+            query = em.createQuery("FROM Content WHERE durationnum > :durationFrom  AND durationnum <= :durationTo AND type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) OFFSET (:offset) LIMIT (:limit)" + sortString,Content.class);
+            countQuery = em.createQuery("FROM Content WHERE durationnum > :durationFrom  AND durationnum <= :durationTo AND type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)",Content.class);
+            countQuery.setParameter("type",type);
             query.setParameter("type",type);
         } else {
-            query = em.createQuery("FROM Content WHERE durationnum > :durationFrom  AND durationnum <= :durationTo and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)" + sortString,Content.class);
+            query = em.createQuery("FROM Content WHERE durationnum > :durationFrom  AND durationnum <= :durationTo and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) OFFSET (:offset) LIMIT (:limit)" + sortString,Content.class);
+            countQuery = em.createQuery("FROM Content WHERE durationnum > :durationFrom  AND durationnum <= :durationTo AND (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)",Content.class);
         }
+        countQuery.setParameter("query","%" + queryUser.toLowerCase() + "%");
+        countQuery.setParameter("durationFrom",durationFrom);
+        countQuery.setParameter("durationTo",durationTo);
+
+        long totalContent = PageWapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
+
         query.setParameter("query","%" + queryUser.toLowerCase() + "%");
         query.setParameter("durationFrom",durationFrom);
         query.setParameter("durationTo",durationTo);
-        return query.getResultList();
+        query.setParameter("offset", (page - 1) * pageSize);
+        query.setParameter("limit", pageSize);
+        return new PageWapper<Content>(page,totalContent,pageSize,query.getResultList());
     }
 
 
     @Override
-    public List<Content> getSearchedContentByDurationAndGenre(String type, String genre, int durationFrom, int durationTo, Sorting sort,String queryUser) {
+    public PageWapper<Content> getSearchedContentByDurationAndGenre(String type, String genre, int durationFrom, int durationTo, Sorting sort,String queryUser,int page, int pageSize) {
         String sortString = sort == null ? "" : sort.getQueryString();
         List<Long> longList = genreBaseQuery(genre);
         TypedQuery<Content> query;
+        TypedQuery<Content> countQuery;
         if (Objects.equals(type, "movie") || Objects.equals(type, "serie")) {
-            query= em.createQuery(" FROM Content WHERE id IN ( :resultList ) AND type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) AND durationnum > :durationFrom  AND durationnum <= :durationTo" + sortString,Content.class);
+            query= em.createQuery(" FROM Content WHERE id IN ( :resultList ) AND type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) AND durationnum > :durationFrom  AND durationnum <= :durationTo OFFSET (:offset) LIMIT (:limit)" + sortString,Content.class);
+            countQuery = em.createQuery("FROM Content WHERE id IN ( :resultList ) AND type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) AND durationnum > :durationFrom  AND durationnum <= :durationTo",Content.class);
+            countQuery.setParameter("type",type);
             query.setParameter("type",type);
         } else {
-            query= em.createQuery(" FROM Content WHERE id IN ( :resultList ) AND (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) AND durationnum > :durationFrom  AND durationnum <= :durationTo" + sortString,Content.class);
-
+            query= em.createQuery(" FROM Content WHERE id IN ( :resultList ) AND (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) AND durationnum > :durationFrom  AND durationnum <= :durationTo OFFSET (:offset) LIMIT (:limit)" + sortString,Content.class);
+            countQuery = em.createQuery("FROM Content WHERE id IN ( :resultList ) AND (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) AND durationnum > :durationFrom  AND durationnum <= :durationTo",Content.class);
         }
+        countQuery.setParameter("durationFrom",durationFrom);
+        countQuery.setParameter("durationTo",durationTo);
+        countQuery.setParameter("query","%" + queryUser.toLowerCase() + "%");
+        countQuery.setParameter("resultList",longList);
+
+        long totalContent = PageWapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
+
         query.setParameter("durationFrom",durationFrom);
         query.setParameter("durationTo",durationTo);
         query.setParameter("query","%" + queryUser.toLowerCase() + "%");
         query.setParameter("resultList",longList);
-        return query.getResultList();
+        query.setParameter("offset", (page - 1) * pageSize);
+        query.setParameter("limit", pageSize);
+
+
+        return new PageWapper<Content>(page,totalContent,pageSize,query.getResultList());
     }
 
 
 
     @Override
-    public List<Content> getSearchedContentRandom(String queryUser) {
+    public PageWapper<Content> getSearchedContentRandom(String queryUser,int page, int pageSize) {
         TypedQuery<Content> query= em.createQuery("From Content WHERE (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) ORDER BY RANDOM()",Content.class);
+        TypedQuery<Content> countQuery = em.createQuery("FROM Content WHERE (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)",Content.class);
+        countQuery.setParameter("query","%" + queryUser.toLowerCase() + "%");
+
+        long totalContent = PageWapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
+
         query.setParameter("query","%" + queryUser.toLowerCase() + "%");
-        return query.getResultList();
+        return new PageWapper<Content>(page,totalContent,pageSize,query.getResultList());
     }
 
     @Override
-    public List<Content> findByType(String type) {
-        TypedQuery<Content> query= em.createQuery("FROM Content WHERE type = :type",Content.class);
+    public PageWapper<Content> findByType(String type,int page, int pageSize) {
+        TypedQuery<Content> query= em.createQuery("FROM Content WHERE type = :type OFFSET (:offset) LIMIT (:limit)",Content.class);
+        TypedQuery<Content> countQuery = em.createQuery("FROM Content WHERE type = :type",Content.class);
+        countQuery.setParameter("type",type);
+
+        long totalContent = PageWapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
+
         query.setParameter("type",type);
-        return query.getResultList();
+        query.setParameter("offset", (page - 1) * pageSize);
+        query.setParameter("limit", pageSize);
+        return new PageWapper<Content>(page,totalContent,pageSize,query.getResultList());
     }
 
     @Override
