@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.models.Content;
-import ar.edu.itba.paw.models.PageWapper;
+import ar.edu.itba.paw.models.PageWrapper;
 import ar.edu.itba.paw.models.Sorting;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.persistance.ContentDao;
@@ -76,7 +76,7 @@ public class ContentServiceImpl implements ContentService {
     }
 
     @Override
-    public PageWapper<Content> getMasterContent(String type, List<String> genres, String durationFrom, String durationTo, Sorting sort, String queryUser, int page, int pageSize){
+    public PageWrapper<Content> getMasterContent(String type, List<String> genres, String durationFrom, String durationTo, Sorting sort, String queryUser, int page, int pageSize){
         String genre = getGenreQuery(genres);
         if (!Objects.equals(genre, "ANY") && Objects.equals(durationFrom, "ANY") && Objects.equals(queryUser, "ANY")) {
             return findByGenre(type, genre, sort,page,pageSize);
@@ -98,7 +98,7 @@ public class ContentServiceImpl implements ContentService {
     }
 
     @Override
-    public PageWapper<Content> getAllContent(String type, Sorting sort,int page, int pageSize) {
+    public PageWrapper<Content> getAllContent(String type, Sorting sort, int page, int pageSize) {
         return ContentDao.getAllContent(type, sort,page,pageSize);
     }
 
@@ -108,17 +108,17 @@ public class ContentServiceImpl implements ContentService {
     }
 
     @Override
-    public PageWapper<Content> findByGenre(String type, String genre, Sorting sort,int page, int pageSize) {
+    public PageWrapper<Content> findByGenre(String type, String genre, Sorting sort, int page, int pageSize) {
         return ContentDao.findByGenre(type, genre, sort,page,pageSize);
     }
 
     @Override
-    public PageWapper<Content> findByDuration(String type, int durationFrom, int durationTo, Sorting sort,int page, int pageSize) {
+    public PageWrapper<Content> findByDuration(String type, int durationFrom, int durationTo, Sorting sort, int page, int pageSize) {
         return ContentDao.findByDuration(type, durationFrom, durationTo, sort,page,pageSize);
     }
 
     @Override
-    public PageWapper<Content> findByDurationAndGenre(String type, String genre,int durationFrom, int durationTo, Sorting sort,int page, int pageSize){
+    public PageWrapper<Content> findByDurationAndGenre(String type, String genre, int durationFrom, int durationTo, Sorting sort, int page, int pageSize){
         return ContentDao.findByDurationAndGenre(type, genre,durationFrom,durationTo, sort,page,pageSize);
     }
 
@@ -128,28 +128,28 @@ public class ContentServiceImpl implements ContentService {
     }
 
     @Override
-    public PageWapper<Content> getSearchedContent(String type,String query,int page, int pageSize) {
+    public PageWrapper<Content> getSearchedContent(String type, String query, int page, int pageSize) {
         return ContentDao.getSearchedContent(type,query,page,pageSize);
     }
 
     @Override
-    public PageWapper<Content> getSearchedContentByGenre(String type, String genre, Sorting sort,String queryUser,int page, int pageSize){
+    public PageWrapper<Content> getSearchedContentByGenre(String type, String genre, Sorting sort, String queryUser, int page, int pageSize){
         return ContentDao.getSearchedContentByGenre(type,genre,sort,queryUser,page,pageSize);
     }
 
     @Override
-    public PageWapper<Content> getSearchedContentByDuration(String type, int durationFrom, int durationTo, Sorting sort,String queryUser,int page, int pageSize){
+    public PageWrapper<Content> getSearchedContentByDuration(String type, int durationFrom, int durationTo, Sorting sort, String queryUser, int page, int pageSize){
         return ContentDao.getSearchedContentByDuration(type,durationFrom,durationTo,sort,queryUser,page,pageSize);
     }
 
     @Override
-    public PageWapper<Content> getSearchedContentByDurationAndGenre(String type, String genre, int durationFrom, int durationTo, Sorting sort,String queryUser,int page, int pageSize){
+    public PageWrapper<Content> getSearchedContentByDurationAndGenre(String type, String genre, int durationFrom, int durationTo, Sorting sort, String queryUser, int page, int pageSize){
         return ContentDao.getSearchedContentByDurationAndGenre(type,genre,durationFrom,durationTo,sort,queryUser,page,pageSize);
     }
 
 
     @Override
-    public PageWapper<Content> getSearchedContentRandom(String query,int page, int pageSize) {
+    public PageWrapper<Content> getSearchedContentRandom(String query, int page, int pageSize) {
         return ContentDao.getSearchedContentRandom(query,page,pageSize);
     }
 

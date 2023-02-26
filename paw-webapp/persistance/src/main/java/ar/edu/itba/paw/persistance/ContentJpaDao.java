@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.persistance;
 
 import ar.edu.itba.paw.models.*;
-import org.postgresql.core.NativeQuery;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,7 +9,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import java.math.BigInteger;
 import java.util.*;
 
 @Primary
@@ -21,7 +19,7 @@ public class ContentJpaDao implements ContentDao{
     private EntityManager em;
 
     @Override
-    public PageWapper<Content> getAllContent(String type, Sorting sort, int page, int pageSize) {
+    public PageWrapper<Content> getAllContent(String type, Sorting sort, int page, int pageSize) {
         TypedQuery<Content> query=em.createQuery("FROM Content OFFSET (:offset) LIMIT (:limit)",Content.class);
 
         String sortString = sort == null ? "" : sort.getQueryString();
@@ -37,9 +35,9 @@ public class ContentJpaDao implements ContentDao{
         }
         query.setParameter("offset", (page - 1) * pageSize);
         query.setParameter("limit", pageSize);
-        long totalContent = PageWapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
+        long totalContent = PageWrapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
 
-        return new PageWapper<Content>(page,totalContent,pageSize,query.getResultList()) ;
+        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList()) ;
     }
 
     @Override
@@ -62,7 +60,7 @@ public class ContentJpaDao implements ContentDao{
     }
 
     @Override
-    public PageWapper<Content> findByGenre(String type, String genre, Sorting sort,int page, int pageSize) {
+    public PageWrapper<Content> findByGenre(String type, String genre, Sorting sort, int page, int pageSize) {
         String sortString = sort == null ? "" : sort.getQueryString();
         List<Long> longList = genreBaseQuery(genre);
         TypedQuery<Content> query;
@@ -82,13 +80,13 @@ public class ContentJpaDao implements ContentDao{
         query.setParameter("limit", pageSize);
 
 
-        long totalContent = PageWapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
+        long totalContent = PageWrapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
 
-        return new PageWapper<Content>(page,totalContent,pageSize,query.getResultList()) ;
+        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList()) ;
     }
 
     @Override
-    public PageWapper<Content> findByDuration(String type, int durationFrom, int durationTo, Sorting sort,int page, int pageSize) {
+    public PageWrapper<Content> findByDuration(String type, int durationFrom, int durationTo, Sorting sort, int page, int pageSize) {
         String sortString = sort == null ? "" : sort.getQueryString();
         TypedQuery<Content> query= em.createQuery("From Content",Content.class);
         TypedQuery<Content> countQuery;
@@ -108,13 +106,13 @@ public class ContentJpaDao implements ContentDao{
         query.setParameter("offset", (page - 1) * pageSize);
         query.setParameter("limit", pageSize);
 
-        long totalContent = PageWapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
+        long totalContent = PageWrapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
 
-        return new PageWapper<Content>(page,totalContent,pageSize,query.getResultList());
+        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList());
     }
 
     @Override
-    public PageWapper<Content> findByDurationAndGenre(String type, String genre, int durationFrom, int durationTo, Sorting sort,int page, int pageSize) {
+    public PageWrapper<Content> findByDurationAndGenre(String type, String genre, int durationFrom, int durationTo, Sorting sort, int page, int pageSize) {
         String sortString = sort == null ? "" : sort.getQueryString();
         List<Long> longList = genreBaseQuery(genre);
         TypedQuery<Content> query;
@@ -132,14 +130,14 @@ public class ContentJpaDao implements ContentDao{
         countQuery.setParameter("durationTo",durationTo);
         countQuery.setParameter("resultList",longList);
 
-        long totalContent = PageWapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
+        long totalContent = PageWrapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
 
         query.setParameter("durationFrom",durationFrom);
         query.setParameter("durationTo",durationTo);
         query.setParameter("resultList",longList);
         query.setParameter("offset", (page - 1) * pageSize);
         query.setParameter("limit", pageSize);
-        return new PageWapper<Content>(page,totalContent,pageSize,query.getResultList());
+        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList());
     }
 
     @Override
@@ -148,7 +146,7 @@ public class ContentJpaDao implements ContentDao{
     }
 
     @Override
-    public PageWapper<Content> getSearchedContent(String type,String queryUser,int page, int pageSize) {
+    public PageWrapper<Content> getSearchedContent(String type, String queryUser, int page, int pageSize) {
         TypedQuery<Content> query;
         TypedQuery<Content> countQuery;
         if(Objects.equals(type, "movie") || Objects.equals(type, "serie")){
@@ -162,17 +160,17 @@ public class ContentJpaDao implements ContentDao{
         }
         countQuery.setParameter("query","%" + queryUser.toLowerCase() + "%");
 
-        long totalContent = PageWapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
+        long totalContent = PageWrapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
 
         query.setParameter("query","%" + queryUser.toLowerCase() + "%");
         query.setParameter("offset", (page - 1) * pageSize);
         query.setParameter("limit", pageSize);
-        return new PageWapper<Content>(page,totalContent,pageSize,query.getResultList());
+        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList());
     }
 
     //First makes the genre query in a NativeQuery
     @Override
-    public PageWapper<Content> getSearchedContentByGenre(String type, String genre, Sorting sort,String queryUser,int page, int pageSize) {
+    public PageWrapper<Content> getSearchedContentByGenre(String type, String genre, Sorting sort, String queryUser, int page, int pageSize) {
         List<Long> longList = genreBaseQuery(genre);
         TypedQuery<Content> query;
         TypedQuery<Content> countQuery;
@@ -189,17 +187,17 @@ public class ContentJpaDao implements ContentDao{
         countQuery.setParameter("query","%" + queryUser.toLowerCase() + "%");
         countQuery.setParameter("resultList",longList);
 
-        long totalContent = PageWapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
+        long totalContent = PageWrapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
 
         query.setParameter("query","%" + queryUser.toLowerCase() + "%");
         query.setParameter("resultList",longList);
         query.setParameter("offset", (page - 1) * pageSize);
         query.setParameter("limit", pageSize);
-        return new PageWapper<Content>(page,totalContent,pageSize,query.getResultList());
+        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList());
     }
 
     @Override
-    public PageWapper<Content> getSearchedContentByDuration(String type, int durationFrom, int durationTo, Sorting sort,String queryUser,int page, int pageSize) {
+    public PageWrapper<Content> getSearchedContentByDuration(String type, int durationFrom, int durationTo, Sorting sort, String queryUser, int page, int pageSize) {
         TypedQuery<Content> query= em.createQuery("From Content",Content.class);
         String sortString = sort == null ? "" : sort.getQueryString();
         TypedQuery<Content> countQuery;
@@ -216,19 +214,19 @@ public class ContentJpaDao implements ContentDao{
         countQuery.setParameter("durationFrom",durationFrom);
         countQuery.setParameter("durationTo",durationTo);
 
-        long totalContent = PageWapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
+        long totalContent = PageWrapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
 
         query.setParameter("query","%" + queryUser.toLowerCase() + "%");
         query.setParameter("durationFrom",durationFrom);
         query.setParameter("durationTo",durationTo);
         query.setParameter("offset", (page - 1) * pageSize);
         query.setParameter("limit", pageSize);
-        return new PageWapper<Content>(page,totalContent,pageSize,query.getResultList());
+        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList());
     }
 
 
     @Override
-    public PageWapper<Content> getSearchedContentByDurationAndGenre(String type, String genre, int durationFrom, int durationTo, Sorting sort,String queryUser,int page, int pageSize) {
+    public PageWrapper<Content> getSearchedContentByDurationAndGenre(String type, String genre, int durationFrom, int durationTo, Sorting sort, String queryUser, int page, int pageSize) {
         String sortString = sort == null ? "" : sort.getQueryString();
         List<Long> longList = genreBaseQuery(genre);
         TypedQuery<Content> query;
@@ -247,7 +245,7 @@ public class ContentJpaDao implements ContentDao{
         countQuery.setParameter("query","%" + queryUser.toLowerCase() + "%");
         countQuery.setParameter("resultList",longList);
 
-        long totalContent = PageWapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
+        long totalContent = PageWrapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
 
         query.setParameter("durationFrom",durationFrom);
         query.setParameter("durationTo",durationTo);
@@ -257,35 +255,35 @@ public class ContentJpaDao implements ContentDao{
         query.setParameter("limit", pageSize);
 
 
-        return new PageWapper<Content>(page,totalContent,pageSize,query.getResultList());
+        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList());
     }
 
 
 
     @Override
-    public PageWapper<Content> getSearchedContentRandom(String queryUser,int page, int pageSize) {
+    public PageWrapper<Content> getSearchedContentRandom(String queryUser, int page, int pageSize) {
         TypedQuery<Content> query= em.createQuery("From Content WHERE (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) ORDER BY RANDOM()",Content.class);
         TypedQuery<Content> countQuery = em.createQuery("FROM Content WHERE (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)",Content.class);
         countQuery.setParameter("query","%" + queryUser.toLowerCase() + "%");
 
-        long totalContent = PageWapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
+        long totalContent = PageWrapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
 
         query.setParameter("query","%" + queryUser.toLowerCase() + "%");
-        return new PageWapper<Content>(page,totalContent,pageSize,query.getResultList());
+        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList());
     }
 
     @Override
-    public PageWapper<Content> findByType(String type,int page, int pageSize) {
+    public PageWrapper<Content> findByType(String type, int page, int pageSize) {
         TypedQuery<Content> query= em.createQuery("FROM Content WHERE type = :type OFFSET (:offset) LIMIT (:limit)",Content.class);
         TypedQuery<Content> countQuery = em.createQuery("FROM Content WHERE type = :type",Content.class);
         countQuery.setParameter("type",type);
 
-        long totalContent = PageWapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
+        long totalContent = PageWrapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
 
         query.setParameter("type",type);
         query.setParameter("offset", (page - 1) * pageSize);
         query.setParameter("limit", pageSize);
-        return new PageWapper<Content>(page,totalContent,pageSize,query.getResultList());
+        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList());
     }
 
     @Override

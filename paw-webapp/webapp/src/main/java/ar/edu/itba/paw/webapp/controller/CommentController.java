@@ -4,11 +4,14 @@ import ar.edu.itba.paw.exceptions.CommentNotFoundException;
 import ar.edu.itba.paw.exceptions.ReviewNotFoundException;
 import ar.edu.itba.paw.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.models.Comment;
+import ar.edu.itba.paw.models.PageWrapper;
 import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.services.*;
 import ar.edu.itba.paw.webapp.dto.request.NewCommentDto;
 import ar.edu.itba.paw.webapp.dto.response.CommentDto;
+import ar.edu.itba.paw.webapp.dto.response.ContentDto;
+import ar.edu.itba.paw.webapp.utilities.ResponseBuildingUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +41,7 @@ public class CommentController {
     @Context
     UriInfo uriInfo;
     private static final Logger LOGGER = LoggerFactory.getLogger(CommentController.class);
-
+    private static final int CONTENT_AMOUNT = 3;
     
     // * ---------------------------------------------Comment GET ------------------------------------------------------
     //Endpoint para pedir los comentarios de una review
@@ -50,9 +53,12 @@ public class CommentController {
                                       @QueryParam("pageSize") @DefaultValue("10") int pageSize) {
         LOGGER.info("GET /{}: Called", uriInfo.getPath());
         Review review = rs.findById(reviewId).orElseThrow(ReviewNotFoundException::new);
-        Collection<CommentDto> commentListDto = CommentDto.mapCommentToCommentDto(uriInfo, review.getComments());
+        PageWrapper<Comment> commentsPaginated = ccs.getReviewComments(review,pageNum,CONTENT_AMOUNT);
+        Collection<CommentDto> commentListDto = CommentDto.mapCommentToCommentDto(uriInfo, commentsPaginated.getPageContent());
         LOGGER.info("GET /{}: Comments got from review with id {}", uriInfo.getPath(), reviewId);
-        return Response.ok(new GenericEntity<Collection<CommentDto>>(commentListDto){}).build();
+        Response.ResponseBuilder response = Response.ok(new GenericEntity<Collection<CommentDto>>(commentListDto){});
+        ResponseBuildingUtils.setPaginationLinks(response,commentsPaginated , uriInfo);
+        return response.build();
     }
     // * ---------------------------------------------------------------------------------------------------------------
 

@@ -1,15 +1,11 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.models.*;
-import ar.edu.itba.paw.persistance.ReportDao;
 import ar.edu.itba.paw.persistance.ReviewDao;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.mail.MessagingException;
 import java.util.*;
 
 @Transactional
@@ -31,7 +27,7 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     @Override
-    public PageWapper<Review> getAllReviews(Content content,int page,int pageSize) {
+    public PageWrapper<Review> getAllReviews(Content content, int page, int pageSize) {
         return reviewDao.getAllReviews(content,page,pageSize);
     }
 
@@ -45,7 +41,7 @@ public class ReviewServiceImpl implements ReviewService{
     public Optional<Review> findById(Long reviewId) {return reviewDao.findById(reviewId);}
 
     @Override
-    public PageWapper<Review> getAllUserReviews(User user,int page,int pageSize){return reviewDao.getAllUserReviews(user,page,pageSize);}
+    public PageWrapper<Review> getAllUserReviews(User user, int page, int pageSize){return reviewDao.getAllUserReviews(user,page,pageSize);}
     
     @Override
     public void updateReview(String name, String description, Integer rating, Long id) {

@@ -7,7 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,16 +26,16 @@ public class ReviewJpaDao implements ReviewDao{
     }
 
     @Override
-    public PageWapper<Review> getAllReviews(Content content,int page,int pageSize){
+    public PageWrapper<Review> getAllReviews(Content content, int page, int pageSize){
         List<Review> reviews = content.getContentReviews();
-        long totalPages = PageWapper.calculatePageAmount(reviews.size(),pageSize);
+        long totalPages = PageWrapper.calculatePageAmount(reviews.size(),pageSize);
         if(page > totalPages || page <= 0){
-            return new PageWapper<Review>(page,totalPages,pageSize,null);
+            return new PageWrapper<Review>(page,totalPages,pageSize,null);
         }
         if(page < totalPages){
-            return new PageWapper<Review>(page,totalPages,pageSize,reviews.subList((page-1)*pageSize,page * pageSize));
+            return new PageWrapper<Review>(page,totalPages,pageSize,reviews.subList((page-1)*pageSize,page * pageSize));
         }
-        return new PageWapper<Review>(page,totalPages,pageSize,reviews.subList((page-1)*pageSize,(page-1)*pageSize + (reviews.size() % pageSize)));
+        return new PageWrapper<Review>(page,totalPages,pageSize,reviews.subList((page-1)*pageSize,(page-1)*pageSize + (reviews.size() % pageSize)));
     }
 
     @Override
@@ -63,17 +62,17 @@ public class ReviewJpaDao implements ReviewDao{
     }
 
     @Override
-    public PageWapper<Review> getAllUserReviews(User user,int page,int pageSize) {
+    public PageWrapper<Review> getAllUserReviews(User user, int page, int pageSize) {
 
         List<Review> reviews = user.getUserReviews();
-        long totalPages = PageWapper.calculatePageAmount(reviews.size(),pageSize);
+        long totalPages = PageWrapper.calculatePageAmount(reviews.size(),pageSize);
         if(page > totalPages || page <= 0){
-            return new PageWapper<Review>(page,totalPages,pageSize,null);
+            return new PageWrapper<Review>(page,totalPages,pageSize,null);
         }
         if(page < totalPages){
-            return new PageWapper<Review>(page,totalPages,pageSize,reviews.subList((page-1)*pageSize,page * pageSize));
+            return new PageWrapper<Review>(page,totalPages,pageSize,reviews.subList((page-1)*pageSize,page * pageSize));
         }
-        return new PageWapper<Review>(page,totalPages,pageSize,reviews.subList((page-1)*pageSize,(page-1)*pageSize + (reviews.size() % pageSize)));
+        return new PageWrapper<Review>(page,totalPages,pageSize,reviews.subList((page-1)*pageSize,(page-1)*pageSize + (reviews.size() % pageSize)));
     }
 
     @Override

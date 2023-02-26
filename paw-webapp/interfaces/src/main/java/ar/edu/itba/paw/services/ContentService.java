@@ -1,29 +1,27 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.models.Content;
-import ar.edu.itba.paw.models.PageWapper;
+import ar.edu.itba.paw.models.PageWrapper;
 import ar.edu.itba.paw.models.Sorting;
 import ar.edu.itba.paw.models.User;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.mail.Multipart;
 import java.util.List;
 import java.util.Optional;
 
 public interface ContentService {
     List<List<Content>> getLandingPageContent(User user);
-    PageWapper<Content> getMasterContent(String type, List<String> genres, String durationFrom, String durationTo, Sorting sort, String queryUser, int page, int pageSize);
-    PageWapper<Content> getAllContent(String type, Sorting sort,int page, int pageSize);
+    PageWrapper<Content> getMasterContent(String type, List<String> genres, String durationFrom, String durationTo, Sorting sort, String queryUser, int page, int pageSize);
+    PageWrapper<Content> getAllContent(String type, Sorting sort, int page, int pageSize);
     Optional<Content> findByName(String name);
-    PageWapper<Content> findByGenre(String type, String genre, Sorting sort,int page, int pageSize);
-    PageWapper<Content> findByDuration(String type, int durationFrom, int durationTo, Sorting sort,int page, int pageSize);
-    PageWapper<Content> findByDurationAndGenre(String type, String genre, int durationFrom, int durationTo, Sorting sort,int page, int pageSize);
+    PageWrapper<Content> findByGenre(String type, String genre, Sorting sort, int page, int pageSize);
+    PageWrapper<Content> findByDuration(String type, int durationFrom, int durationTo, Sorting sort, int page, int pageSize);
+    PageWrapper<Content> findByDurationAndGenre(String type, String genre, int durationFrom, int durationTo, Sorting sort, int page, int pageSize);
     Optional<Content> findById(long id);
-    PageWapper<Content> getSearchedContent(String type,String query,int page, int pageSize);
-    PageWapper<Content> getSearchedContentByGenre(String type, String genre, Sorting sort,String queryUser,int page, int pageSize);
-    PageWapper<Content> getSearchedContentByDuration(String type, int durationFrom, int durationTo, Sorting sort,String queryUser,int page, int pageSize);
-    PageWapper<Content> getSearchedContentByDurationAndGenre(String type, String genre, int durationFrom, int durationTo, Sorting sort,String queryUser,int page, int pageSize);
-    PageWapper<Content> getSearchedContentRandom(String query,int page, int pageSize);
+    PageWrapper<Content> getSearchedContent(String type, String query, int page, int pageSize);
+    PageWrapper<Content> getSearchedContentByGenre(String type, String genre, Sorting sort, String queryUser, int page, int pageSize);
+    PageWrapper<Content> getSearchedContentByDuration(String type, int durationFrom, int durationTo, Sorting sort, String queryUser, int page, int pageSize);
+    PageWrapper<Content> getSearchedContentByDurationAndGenre(String type, String genre, int durationFrom, int durationTo, Sorting sort, String queryUser, int page, int pageSize);
+    PageWrapper<Content> getSearchedContentRandom(String query, int page, int pageSize);
     List<Content> getBestRated();
     List<Content> getUserRecommended(User user);
     List<Content> getMostUserSaved();

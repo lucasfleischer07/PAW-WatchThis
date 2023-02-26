@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.models.Comment;
+import ar.edu.itba.paw.models.PageWrapper;
 import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.persistance.CommentDao;
@@ -59,5 +60,18 @@ public class CommentServiceImpl implements CommentService{
     @Override
     public Set<Comment> getReviewComments(Long reviewId){
         return commentDao.getReviewComment(reviewId);
+    }
+
+    @Override
+    public PageWrapper<Comment> getReviewComments(Review review, int page, int pageSize){
+        List<Comment> comment = new ArrayList<>(review.getComments());
+        long totalPages = PageWrapper.calculatePageAmount(comment.size(),pageSize);
+        if(page > totalPages || page <= 0){
+            return new PageWrapper<Comment>(page,totalPages,pageSize,null);
+        }
+        if(page < totalPages){
+            return new PageWrapper<Comment>(page,totalPages,pageSize,comment.subList((page-1)*pageSize,page * pageSize));
+        }
+        return new PageWrapper<Comment>(page,totalPages,pageSize,comment.subList((page-1)*pageSize,(page-1)*pageSize + (comment.size() % pageSize)));
     }
 }

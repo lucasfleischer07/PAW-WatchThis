@@ -2,13 +2,13 @@ package ar.edu.itba.paw.models;
 
 import java.util.List;
 
-public class PageWapper<T> {
+public class PageWrapper<T> {
     private final int page;
     private final long pageAmount;
     private final int pageSize;
     private final List<T> pageContent;
 
-    public PageWapper(int page, long pageAmount,int pageSize, List<T> pageContent){
+    public PageWrapper(int page, long pageAmount, int pageSize, List<T> pageContent){
         this.page=page;
         this.pageAmount=pageAmount;
         this.pageContent=pageContent;
@@ -19,6 +19,14 @@ public class PageWapper<T> {
         final double result = elems / (double) pageSize;
         final int pageQty = (int) Math.ceil(result);
         return pageQty == 0 ? 1 : pageQty;
+    }
+
+    public boolean hasNextPage(){
+        return page < pageAmount;
+    }
+
+    public boolean hasPrevPage(){
+        return page > 1;
     }
 
     public int getPageSize() {

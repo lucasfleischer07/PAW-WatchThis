@@ -5,7 +5,9 @@ import ar.edu.itba.paw.exceptions.ReviewNotFoundException;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.services.*;
 import ar.edu.itba.paw.webapp.dto.request.NewReviewDto;
+import ar.edu.itba.paw.webapp.dto.response.ContentDto;
 import ar.edu.itba.paw.webapp.dto.response.ReviewDto;
+import ar.edu.itba.paw.webapp.utilities.ResponseBuildingUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +19,6 @@ import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 
 @Path("reviews")
@@ -70,7 +71,7 @@ public class ReviewController {
                             @QueryParam("pageSize") @DefaultValue("10") int pageSize) {
         LOGGER.info("GET /{}: Called",uriInfo.getPath());
         Content content = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
-        PageWapper<Review> reviewList = rs.getAllReviews(content,pageNumber,REVIEW_AMOUNT);
+        PageWrapper<Review> reviewList = rs.getAllReviews(content,pageNumber,REVIEW_AMOUNT);
         if(reviewList == null) {
             LOGGER.warn("GET /{}: Cant find a the content specified",uriInfo.getPath());
             throw new ContentNotFoundException();
@@ -80,7 +81,9 @@ public class ReviewController {
         LOGGER.info("GET /{}: Review list for content {}",uriInfo.getPath(), contentId);
 
 //        TODO: El Return aca deberia ya estar paginado (Por el momento no lo esta, habria que cambairlo)
-         return Response.ok(new GenericEntity<Collection<ReviewDto>>(reviewDtoList){}).build();
+        final Response.ResponseBuilder response = Response.ok(new GenericEntity<Collection<ReviewDto>>(reviewDtoList){});
+        ResponseBuildingUtils.setPaginationLinks(response,reviewList , uriInfo);
+        return response.build();
 
 
     }

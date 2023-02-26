@@ -3,7 +3,7 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.exceptions.ContentNotFoundException;
 import ar.edu.itba.paw.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.models.Content;
-import ar.edu.itba.paw.models.PageWapper;
+import ar.edu.itba.paw.models.PageWrapper;
 import ar.edu.itba.paw.models.Sorting;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.services.ContentService;
@@ -15,6 +15,7 @@ import ar.edu.itba.paw.webapp.dto.response.AnonymousLandingPageDto;
 import ar.edu.itba.paw.webapp.dto.response.ContentDto;
 import ar.edu.itba.paw.webapp.dto.response.UserDto;
 import ar.edu.itba.paw.webapp.dto.response.UserLandingPageDto;
+import ar.edu.itba.paw.webapp.utilities.ResponseBuildingUtils;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -441,7 +442,7 @@ public class ContentController {
         LOGGER.info("GET /{}: Called", uriInfo.getPath());
 
         int page= pageNum;
-        PageWapper<Content> contentList = cs.getAllContent(contentType, null, page, CONTENT_AMOUNT);
+        PageWrapper<Content> contentList = cs.getAllContent(contentType, null, page, CONTENT_AMOUNT);
         Collection<ContentDto> contentListPaginatedDto = null;
         if(contentList.getPageContent() == null) {
             LOGGER.warn("GET /{}: Failed at requesting content", uriInfo.getPath());
@@ -453,7 +454,9 @@ public class ContentController {
         LOGGER.info("GET /{}: Success getting the content", uriInfo.getPath());
 
 //        TODO: El Return aca deberia ya estar paginado (Por el momento no lo esta, habria que cambairlo)
-        return Response.ok(new GenericEntity<Collection<ContentDto>>(contentListPaginatedDto){}).build();
+        Response.ResponseBuilder response = Response.ok(new GenericEntity<Collection<ContentDto>>(contentListPaginatedDto){});
+        ResponseBuildingUtils.setPaginationLinks(response,contentList , uriInfo);
+        return response.build();
 
     }
 
@@ -492,7 +495,7 @@ public class ContentController {
             genreFilterDto.setFormGenre(genreList.toArray(new String[0]));
         }
 
-        PageWapper<Content> contentListFilter = cs.getMasterContent(auxType, genre, durationFrom, durationTo, sorting, query,page,CONTENT_AMOUNT);
+        PageWrapper<Content> contentListFilter = cs.getMasterContent(auxType, genre, durationFrom, durationTo, sorting, query,page,CONTENT_AMOUNT);
         List<Content> contentListFilterPaginated = contentListFilter.getPageContent();
         long amountOfPages;
         if(contentListFilterPaginated == null) {
@@ -540,7 +543,9 @@ public class ContentController {
         LOGGER.info("GET /{}: Success filtering the content", uriInfo.getPath());
 
 //        TODO: El Return aca deberia ya estar paginado (Por el momento no lo esta, habria que cambairlo)
-        return Response.ok(new GenericEntity<Collection<ContentDto>>(contentListFilterPaginatedDto){}).build();
+        final Response.ResponseBuilder response = Response.ok(new GenericEntity<Collection<ContentDto>>(contentListFilterPaginatedDto){});
+        ResponseBuildingUtils.setPaginationLinks(response,contentListFilter , uriInfo);
+        return response.build();
 
     }
 

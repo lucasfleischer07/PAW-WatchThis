@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.models.Comment;
+import ar.edu.itba.paw.models.PageWrapper;
 import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.User;
 
@@ -13,4 +14,5 @@ public interface CommentService {
     void deleteComment(Comment comment);
     Optional<Comment> getComment(Long id);
     Set<Comment> getReviewComments(Long reviewId);
+    PageWrapper<Comment> getReviewComments(Review review, int page, int pageSize);
 }
