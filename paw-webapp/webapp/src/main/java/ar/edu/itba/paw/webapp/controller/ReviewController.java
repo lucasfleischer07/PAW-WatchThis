@@ -58,6 +58,10 @@ public class ReviewController {
 
 
     // * ----------------------------------- Movies and Series Review Gets ---------------------------------------------
+    /*
+    TODO: HAY QUE VER COMO MANDAMOS LA CANTIDAD DE PAGINAS Y ESO
+     */
+
     @GET
     @Path("/{contentId}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -66,12 +70,12 @@ public class ReviewController {
                             @QueryParam("pageSize") @DefaultValue("10") int pageSize) {
         LOGGER.info("GET /{}: Called",uriInfo.getPath());
         Content content = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
-        List<Review> reviewList = rs.getAllReviews(content);
+        PageWapper<Review> reviewList = rs.getAllReviews(content,pageNumber,REVIEW_AMOUNT);
         if(reviewList == null) {
             LOGGER.warn("GET /{}: Cant find a the content specified",uriInfo.getPath());
             throw new ContentNotFoundException();
         }
-        Collection<ReviewDto> reviewDtoList = ReviewDto.mapReviewToReviewDto(uriInfo, reviewList);
+        Collection<ReviewDto> reviewDtoList = ReviewDto.mapReviewToReviewDto(uriInfo, reviewList.getPageContent());
 
         LOGGER.info("GET /{}: Review list for content {}",uriInfo.getPath(), contentId);
 

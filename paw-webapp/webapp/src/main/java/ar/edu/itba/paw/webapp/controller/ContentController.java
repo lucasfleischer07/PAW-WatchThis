@@ -499,7 +499,7 @@ public class ContentController {
             LOGGER.warn("GET /{}: Failed at requesting content", uriInfo.getPath());
             throw new ContentNotFoundException();
         }
-        
+
         amountOfPages = contentListFilter.getPageAmount();
 
 

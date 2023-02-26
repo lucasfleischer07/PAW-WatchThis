@@ -27,8 +27,16 @@ public class ReviewJpaDao implements ReviewDao{
     }
 
     @Override
-    public List<Review> getAllReviews(Content content) {
-        return content.getContentReviews();
+    public PageWapper<Review> getAllReviews(Content content,int page,int pageSize){
+        List<Review> reviews = content.getContentReviews();
+        long totalPages = PageWapper.calculatePageAmount(reviews.size(),pageSize);
+        if(page > totalPages || page <= 0){
+            return new PageWapper<Review>(page,totalPages,pageSize,null);
+        }
+        if(page < totalPages){
+            return new PageWapper<Review>(page,totalPages,pageSize,reviews.subList((page-1)*pageSize,page * pageSize));
+        }
+        return new PageWapper<Review>(page,totalPages,pageSize,reviews.subList((page-1)*pageSize,(page-1)*pageSize + (reviews.size() % pageSize)));
     }
 
     @Override
@@ -55,8 +63,17 @@ public class ReviewJpaDao implements ReviewDao{
     }
 
     @Override
-    public List<Review> getAllUserReviews(User user) {
-        return user.getUserReviews();
+    public PageWapper<Review> getAllUserReviews(User user,int page,int pageSize) {
+
+        List<Review> reviews = user.getUserReviews();
+        long totalPages = PageWapper.calculatePageAmount(reviews.size(),pageSize);
+        if(page > totalPages || page <= 0){
+            return new PageWapper<Review>(page,totalPages,pageSize,null);
+        }
+        if(page < totalPages){
+            return new PageWapper<Review>(page,totalPages,pageSize,reviews.subList((page-1)*pageSize,page * pageSize));
+        }
+        return new PageWapper<Review>(page,totalPages,pageSize,reviews.subList((page-1)*pageSize,(page-1)*pageSize + (reviews.size() % pageSize)));
     }
 
     @Override

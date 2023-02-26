@@ -9,11 +9,11 @@ import java.util.Set;
 public interface ReviewService {
 
     void addReview(String name,String description,int rating,String type,User creator,Content content);          //No se si retornar bool
-    List<Review> getAllReviews(Content content);
+    PageWapper<Review> getAllReviews(Content content,int page,int pageSize);
     void deleteReview(Long reviewId);
     Optional<Review> findById(Long reviewId);
     void updateReview(String name, String description, Integer rating, Long id);
-    List<Review> getAllUserReviews(User user);
+    PageWapper<Review> getAllUserReviews(User user,int page,int pageSize);
     List<Review> sortReviews(User user,List<Review> reviewList);
     void thumbUpReview(Review review,User user);
     void thumbDownReview(Review review,User user);

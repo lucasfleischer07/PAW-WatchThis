@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.exceptions.UserNotFoundException;
+import ar.edu.itba.paw.models.PageWapper;
 import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.services.*;
@@ -94,8 +95,8 @@ public class UserController {
                                    @QueryParam("page")@DefaultValue("1")final int page) {
         LOGGER.info("GET /{}: Called",  uriInfo.getPath());
         final User user = us.findById(id).orElseThrow(UserNotFoundException::new);
-        List<Review> reviewList = rs.getAllUserReviews(user);
-        Collection<ReviewDto> reviewDtoList = ReviewDto.mapReviewToReviewDto(uriInfo, reviewList);
+        PageWapper<Review> reviewList = rs.getAllUserReviews(user,page,REVIEW_AMOUNT);
+        Collection<ReviewDto> reviewDtoList = ReviewDto.mapReviewToReviewDto(uriInfo, reviewList.getPageContent());
         LOGGER.info("GET /{}: User {} reviews returned with success",  uriInfo.getPath(), id);
         return Response.ok(new GenericEntity<Collection<ReviewDto>>(reviewDtoList){}).build();
     }

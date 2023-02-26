@@ -31,8 +31,8 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     @Override
-    public List<Review> getAllReviews(Content content) {
-        return reviewDao.getAllReviews(content);
+    public PageWapper<Review> getAllReviews(Content content,int page,int pageSize) {
+        return reviewDao.getAllReviews(content,page,pageSize);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class ReviewServiceImpl implements ReviewService{
     public Optional<Review> findById(Long reviewId) {return reviewDao.findById(reviewId);}
 
     @Override
-    public List<Review> getAllUserReviews(User user){return reviewDao.getAllUserReviews(user);}
+    public PageWapper<Review> getAllUserReviews(User user,int page,int pageSize){return reviewDao.getAllUserReviews(user,page,pageSize);}
     
     @Override
     public void updateReview(String name, String description, Integer rating, Long id) {
