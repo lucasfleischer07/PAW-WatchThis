@@ -490,10 +490,7 @@ public class ContentController {
 
 //        TODO: VER ESTO DEL GENRE, NO SE PASABA COMO QUERYPARAM Y AHORA NI IDEA COMO SERIA. EL ORIGINAL ESTA EN EL ARCHIVO
 //        TODO: MovieAndSerieController linea 76 (esta comentado)
-        List<String> genreList = (genreFilterDto.getFormGenre()!=null && genreFilterDto.getFormGenre().length > 0 ) ? Arrays.asList(genreFilterDto.getFormGenre()) : genre;
-        if(genreList != null){
-            genreFilterDto.setFormGenre(genreList.toArray(new String[0]));
-        }
+        List<String> genreList = genre;
 
         PageWrapper<Content> contentListFilter = cs.getMasterContent(auxType, genre, durationFrom, durationTo, sorting, query,page,CONTENT_AMOUNT);
         List<Content> contentListFilterPaginated = contentListFilter.getPageContent();
