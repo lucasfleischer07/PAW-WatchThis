@@ -82,8 +82,7 @@ public class ContentController {
     // Endpoint para getear el contenido de la home page
     @GET
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response getContentByType(@QueryParam("pageNumber") @DefaultValue("1") int pageNumber,
-                                     @QueryParam("pageSize") @DefaultValue("10") int pageSize) {
+    public Response getContentByType() {
         LOGGER.info("GET /{}: Called", uriInfo.getPath());
         Optional<User> user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
         List<List<Content>> landingPageContentList;
