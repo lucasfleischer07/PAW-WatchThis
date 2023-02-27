@@ -20,7 +20,7 @@ public interface ContentDao {
     PageWrapper<Content> getSearchedContentByGenre(String type, String genre, Sorting sort, String queryUser, int page, int pageSize);
     PageWrapper<Content> getSearchedContentByDuration(String type, int durationFrom, int durationTo, Sorting sort, String queryUser, int page, int pageSize);
     PageWrapper<Content> getSearchedContentByDurationAndGenre(String type, String genre, int durationFrom, int durationTo, Sorting sort, String queryUser, int page, int pageSize);
-    PageWrapper<Content> findByType(String type);
+    PageWrapper<Content> findByType(String type, int page, int pageSize);
     List<Content> getBestRated();
     List<Content> getUserRecommended(User user);
     List<Content> getMostUserSaved();

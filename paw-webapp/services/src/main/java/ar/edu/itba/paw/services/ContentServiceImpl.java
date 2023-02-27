@@ -104,7 +104,7 @@ public class ContentServiceImpl implements ContentService {
 
     @Override
     public Optional<Content> findByName(String name) {
-        return ContentDao.findByName(name,page,pageSize);
+        return ContentDao.findByName(name);
     }
 
     @Override
