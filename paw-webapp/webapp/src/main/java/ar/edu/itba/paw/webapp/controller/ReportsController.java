@@ -56,7 +56,7 @@ public class ReportsController {
     @GET
     @Path("/{type}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getUserWatchList(@PathParam("type") final String type,
+    public Response getReportsByType(@PathParam("type") final String type,
                                      @QueryParam("page")@DefaultValue("1")final int page,
                                      @RequestParam(value = "reason",required = false)ReportReason reason) {
         LOGGER.info("GET /{}: Called", uriInfo.getPath());
