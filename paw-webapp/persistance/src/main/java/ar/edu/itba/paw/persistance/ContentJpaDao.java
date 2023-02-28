@@ -20,21 +20,22 @@ public class ContentJpaDao implements ContentDao{
 
     @Override
     public PageWrapper<Content> getAllContent(String type, Sorting sort, int page, int pageSize) {
-        TypedQuery<Content> query=em.createQuery("FROM Content OFFSET (:offset) LIMIT (:limit)",Content.class);
+        TypedQuery<Content> query = em.createQuery("SELECT c FROM Content c", Content.class);
 
         String sortString = sort == null ? "" : sort.getQueryString();
         TypedQuery<Content> countQuery;
         if (Objects.equals(type, "movie") || Objects.equals(type, "serie")) {
-            query= em.createQuery("FROM Content WHERE type = :type OFFSET (:offset) LIMIT (:limit)" + sortString,Content.class);
+            query= em.createQuery("SELECT c FROM Content c WHERE type = :type" + sortString,Content.class);
             countQuery = em.createQuery("FROM Content WHERE type = :type",Content.class);
             countQuery.setParameter("type",type);
             query.setParameter("type",type);
         } else {
-            countQuery = em.createQuery("FROM Content OFFSET (:offset) LIMIT (:limit)",Content.class);
+            countQuery = em.createQuery("SELECT c FROM Content c", Content.class);
             query= em.createQuery("FROM Content" + sortString,Content.class);
         }
-        query.setParameter("offset", (page - 1) * pageSize);
-        query.setParameter("limit", pageSize);
+
+        query.setFirstResult((page - 1) * pageSize);
+        query.setMaxResults(pageSize);
         long totalContent = PageWrapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
 
         return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList()) ;
@@ -66,18 +67,18 @@ public class ContentJpaDao implements ContentDao{
         TypedQuery<Content> query;
         TypedQuery<Content> countQuery;
         if (Objects.equals(type, "movie") || Objects.equals(type, "serie")) {
-            query= em.createQuery("FROM Content WHERE id IN ( :resultList ) AND type = :type OFFSET (:offset) LIMIT (:limit)" + sortString,Content.class);
+            query=em.createQuery("SELECT c FROM Content c WHERE c.id IN (:resultList) AND c.type = :type " + sortString, Content.class);
             countQuery = em.createQuery("FROM Content WHERE id IN ( :resultList ) AND type = :type",Content.class);
             countQuery.setParameter("type",type);
             query.setParameter("type",type);
         } else {
-            query= em.createQuery("FROM Content WHERE id IN ( :resultList ) OFFSET (:offset) LIMIT (:limit)" + sortString,Content.class);
+            query = em.createQuery("SELECT c FROM Content c WHERE c.id IN (:resultList) " + sortString, Content.class);
             countQuery = em.createQuery("FROM Content WHERE id IN ( :resultList )",Content.class);
         }
         countQuery.setParameter("resultList",longList);
         query.setParameter("resultList",longList);
-        query.setParameter("offset", (page - 1) * pageSize);
-        query.setParameter("limit", pageSize);
+        query.setFirstResult((page - 1) * pageSize);
+        query.setMaxResults(pageSize);
 
 
         long totalContent = PageWrapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
@@ -91,20 +92,20 @@ public class ContentJpaDao implements ContentDao{
         TypedQuery<Content> query= em.createQuery("From Content",Content.class);
         TypedQuery<Content> countQuery;
         if(!Objects.equals(type, "all")) {
-            query = em.createQuery("FROM Content WHERE durationnum > :durationFrom  AND durationnum <= :durationTo AND type = :type OFFSET (:offset) LIMIT (:limit)" + sortString,Content.class);
+            query = em.createQuery("SELECT c FROM Content c WHERE c.durationnum > :durationFrom AND c.durationnum <= :durationTo AND c.type = :type " + sortString, Content.class);
             countQuery = em.createQuery("FROM Content WHERE durationnum > :durationFrom  AND durationnum <= :durationTo AND type = :type",Content.class);
             countQuery.setParameter("type",type);
             query.setParameter("type",type);
         } else {
             countQuery = em.createQuery("FROM Content WHERE durationnum > :durationFrom  AND durationnum <= :durationTo",Content.class);
-            query = em.createQuery("FROM Content WHERE durationnum > :durationFrom  AND durationnum <= :durationTo OFFSET (:offset) LIMIT (:limit)" + sortString,Content.class);
+            query = em.createQuery("SELECT c FROM Content c WHERE c.durationnum > :durationFrom AND c.durationnum <= :durationTo " + sortString, Content.class);
         }
         countQuery.setParameter("durationFrom",durationFrom);
         countQuery.setParameter("durationTo",durationTo);
         query.setParameter("durationFrom",durationFrom);
         query.setParameter("durationTo",durationTo);
-        query.setParameter("offset", (page - 1) * pageSize);
-        query.setParameter("limit", pageSize);
+        query.setFirstResult((page - 1) * pageSize);
+        query.setMaxResults(pageSize);
 
         long totalContent = PageWrapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
 
@@ -118,12 +119,12 @@ public class ContentJpaDao implements ContentDao{
         TypedQuery<Content> query;
         TypedQuery<Content> countQuery;
         if (Objects.equals(type, "movie") || Objects.equals(type, "serie")) {
-            query= em.createQuery("FROM Content WHERE id IN ( :resultList ) AND type = :type and durationnum > :durationFrom  AND durationnum <= :durationTo OFFSET (:offset) LIMIT (:limit)" + sortString,Content.class);
+            query= em.createQuery("FROM Content WHERE id IN ( :resultList ) AND type = :type and durationnum > :durationFrom  AND durationnum <= :durationTo" + sortString,Content.class);
             countQuery = em.createQuery("FROM Content WHERE id IN ( :resultList ) AND type = :type and durationnum > :durationFrom  AND durationnum <= :durationTo" + sortString,Content.class);
             query.setParameter("type",type);
             countQuery.setParameter("type",type);
         } else {
-            query= em.createQuery("FROM Content WHERE id IN ( :resultList ) AND durationnum > :durationFrom  AND durationnum <= :durationTo OFFSET (:offset) LIMIT (:limit)" + sortString,Content.class);
+            query= em.createQuery("FROM Content WHERE id IN ( :resultList ) AND durationnum > :durationFrom  AND durationnum <= :durationTo" + sortString,Content.class);
             countQuery = em.createQuery("FROM Content WHERE id IN ( :resultList ) AND durationnum > :durationFrom  AND durationnum <= :durationTo" + sortString,Content.class);
         }
         countQuery.setParameter("durationFrom",durationFrom);
@@ -135,8 +136,8 @@ public class ContentJpaDao implements ContentDao{
         query.setParameter("durationFrom",durationFrom);
         query.setParameter("durationTo",durationTo);
         query.setParameter("resultList",longList);
-        query.setParameter("offset", (page - 1) * pageSize);
-        query.setParameter("limit", pageSize);
+        query.setFirstResult((page - 1) * pageSize);
+        query.setMaxResults(pageSize);
         return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList());
     }
 
@@ -150,12 +151,12 @@ public class ContentJpaDao implements ContentDao{
         TypedQuery<Content> query;
         TypedQuery<Content> countQuery;
         if(Objects.equals(type, "movie") || Objects.equals(type, "serie")){
-            query= em.createQuery("From Content WHERE type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) OFFSET (:offset) LIMIT (:limit)",Content.class);
+            query= em.createQuery("From Content WHERE type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)",Content.class);
             countQuery = em.createQuery("FROM Content WHERE type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)",Content.class);
             countQuery.setParameter("type",type);
             query.setParameter("type",type);
         } else{
-            query= em.createQuery("From Content WHERE (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) OFFSET (:offset) LIMIT (:limit)",Content.class);
+            query= em.createQuery("From Content WHERE (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)",Content.class);
             countQuery = em.createQuery("FROM Content WHERE (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)",Content.class);
         }
         countQuery.setParameter("query","%" + queryUser.toLowerCase() + "%");
@@ -163,8 +164,8 @@ public class ContentJpaDao implements ContentDao{
         long totalContent = PageWrapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
 
         query.setParameter("query","%" + queryUser.toLowerCase() + "%");
-        query.setParameter("offset", (page - 1) * pageSize);
-        query.setParameter("limit", pageSize);
+        query.setFirstResult((page - 1) * pageSize);
+        query.setMaxResults(pageSize);
         return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList());
     }
 
@@ -176,12 +177,12 @@ public class ContentJpaDao implements ContentDao{
         TypedQuery<Content> countQuery;
         String sortString = sort == null ? "" : sort.getQueryString();
         if (Objects.equals(type, "movie") || Objects.equals(type, "serie")) {
-            query= em.createQuery(" FROM Content WHERE id IN ( :resultList ) AND type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) OFFSET (:offset) LIMIT (:limit)" + sortString,Content.class);
+            query= em.createQuery(" FROM Content WHERE id IN ( :resultList ) AND type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)" + sortString,Content.class);
             countQuery = em.createQuery("FROM Content WHERE id IN ( :resultList ) AND type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)",Content.class);
             countQuery.setParameter("type",type);
             query.setParameter("type",type);
         } else {
-            query= em.createQuery(" FROM Content WHERE id IN ( :resultList ) AND (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) OFFSET (:offset) LIMIT (:limit)" + sortString,Content.class);
+            query= em.createQuery(" FROM Content WHERE id IN ( :resultList ) AND (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)" + sortString,Content.class);
             countQuery = em.createQuery("FROM Content WHERE id IN ( :resultList ) AND and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)",Content.class);
         }
         countQuery.setParameter("query","%" + queryUser.toLowerCase() + "%");
@@ -191,8 +192,8 @@ public class ContentJpaDao implements ContentDao{
 
         query.setParameter("query","%" + queryUser.toLowerCase() + "%");
         query.setParameter("resultList",longList);
-        query.setParameter("offset", (page - 1) * pageSize);
-        query.setParameter("limit", pageSize);
+        query.setFirstResult((page - 1) * pageSize);
+        query.setMaxResults(pageSize);
         return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList());
     }
 
@@ -202,12 +203,12 @@ public class ContentJpaDao implements ContentDao{
         String sortString = sort == null ? "" : sort.getQueryString();
         TypedQuery<Content> countQuery;
         if(!Objects.equals(type, "all")) {
-            query = em.createQuery("FROM Content WHERE durationnum > :durationFrom  AND durationnum <= :durationTo AND type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) OFFSET (:offset) LIMIT (:limit)" + sortString,Content.class);
+            query = em.createQuery("FROM Content WHERE durationnum > :durationFrom  AND durationnum <= :durationTo AND type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)" + sortString,Content.class);
             countQuery = em.createQuery("FROM Content WHERE durationnum > :durationFrom  AND durationnum <= :durationTo AND type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)",Content.class);
             countQuery.setParameter("type",type);
             query.setParameter("type",type);
         } else {
-            query = em.createQuery("FROM Content WHERE durationnum > :durationFrom  AND durationnum <= :durationTo and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) OFFSET (:offset) LIMIT (:limit)" + sortString,Content.class);
+            query = em.createQuery("FROM Content WHERE durationnum > :durationFrom  AND durationnum <= :durationTo and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)" + sortString,Content.class);
             countQuery = em.createQuery("FROM Content WHERE durationnum > :durationFrom  AND durationnum <= :durationTo AND (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)",Content.class);
         }
         countQuery.setParameter("query","%" + queryUser.toLowerCase() + "%");
@@ -219,8 +220,8 @@ public class ContentJpaDao implements ContentDao{
         query.setParameter("query","%" + queryUser.toLowerCase() + "%");
         query.setParameter("durationFrom",durationFrom);
         query.setParameter("durationTo",durationTo);
-        query.setParameter("offset", (page - 1) * pageSize);
-        query.setParameter("limit", pageSize);
+        query.setFirstResult((page - 1) * pageSize);
+        query.setMaxResults(pageSize);
         return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList());
     }
 
@@ -232,12 +233,12 @@ public class ContentJpaDao implements ContentDao{
         TypedQuery<Content> query;
         TypedQuery<Content> countQuery;
         if (Objects.equals(type, "movie") || Objects.equals(type, "serie")) {
-            query= em.createQuery(" FROM Content WHERE id IN ( :resultList ) AND type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) AND durationnum > :durationFrom  AND durationnum <= :durationTo OFFSET (:offset) LIMIT (:limit)" + sortString,Content.class);
+            query= em.createQuery(" FROM Content WHERE id IN ( :resultList ) AND type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) AND durationnum > :durationFrom  AND durationnum <= :durationTo" + sortString,Content.class);
             countQuery = em.createQuery("FROM Content WHERE id IN ( :resultList ) AND type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) AND durationnum > :durationFrom  AND durationnum <= :durationTo",Content.class);
             countQuery.setParameter("type",type);
             query.setParameter("type",type);
         } else {
-            query= em.createQuery(" FROM Content WHERE id IN ( :resultList ) AND (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) AND durationnum > :durationFrom  AND durationnum <= :durationTo OFFSET (:offset) LIMIT (:limit)" + sortString,Content.class);
+            query= em.createQuery(" FROM Content WHERE id IN ( :resultList ) AND (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) AND durationnum > :durationFrom  AND durationnum <= :durationTo" + sortString,Content.class);
             countQuery = em.createQuery("FROM Content WHERE id IN ( :resultList ) AND (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) AND durationnum > :durationFrom  AND durationnum <= :durationTo",Content.class);
         }
         countQuery.setParameter("durationFrom",durationFrom);
@@ -251,8 +252,8 @@ public class ContentJpaDao implements ContentDao{
         query.setParameter("durationTo",durationTo);
         query.setParameter("query","%" + queryUser.toLowerCase() + "%");
         query.setParameter("resultList",longList);
-        query.setParameter("offset", (page - 1) * pageSize);
-        query.setParameter("limit", pageSize);
+        query.setFirstResult((page - 1) * pageSize);
+        query.setMaxResults(pageSize);
 
 
         return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList());
@@ -274,15 +275,15 @@ public class ContentJpaDao implements ContentDao{
 
     @Override
     public PageWrapper<Content> findByType(String type, int page, int pageSize) {
-        TypedQuery<Content> query= em.createQuery("FROM Content WHERE type = :type OFFSET (:offset) LIMIT (:limit)",Content.class);
+        TypedQuery<Content> query= em.createQuery("FROM Content WHERE type = :type",Content.class);
         TypedQuery<Content> countQuery = em.createQuery("FROM Content WHERE type = :type",Content.class);
         countQuery.setParameter("type",type);
 
         long totalContent = PageWrapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
 
         query.setParameter("type",type);
-        query.setParameter("offset", (page - 1) * pageSize);
-        query.setParameter("limit", pageSize);
+        query.setFirstResult((page - 1) * pageSize);
+        query.setMaxResults(pageSize);
         return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList());
     }
 
