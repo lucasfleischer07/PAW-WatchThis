@@ -417,15 +417,17 @@ public class ReviewController {
     @Produces(value = {MediaType.APPLICATION_JSON})
     @Path("/reviewReputation/thumbUp/{reviewId}")
     public Response reviewThumbUp(@PathParam("reviewId") final long reviewId) {
-        LOGGER.info("POST /{}: Called", uriInfo.getPath());
+        LOGGER.info("PUT /{}: Called", uriInfo.getPath());
         if(us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).isPresent()) {
             Review review = rs.getReview(reviewId).orElseThrow(ReviewNotFoundException::new);
             User loggedUser = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).get();
             rs.thumbUpReview(review,loggedUser);
         } else {
-            LOGGER.warn("POST /{}: Not allowed to thumb up the review", uriInfo.getPath());
+            LOGGER.warn("PUT /{}: Not allowed to thumb up the review", uriInfo.getPath());
             throw new ForbiddenException();
         }
+        LOGGER.info("PUT /{}: Thumb up successful", uriInfo.getPath());
+
         return Response.noContent().build();
     }
 
@@ -435,15 +437,16 @@ public class ReviewController {
     @Produces(value = {MediaType.APPLICATION_JSON})
     @Path("/reviewReputation/thumbDown/{reviewId}")
     public Response reviewThumbDown(@PathParam("reviewId") final long reviewId) {
-        LOGGER.info("POST /{}: Called", uriInfo.getPath());
+        LOGGER.info("PUT /{}: Called", uriInfo.getPath());
         if(us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).isPresent()) {
             Review review = rs.getReview(reviewId).orElseThrow(ReviewNotFoundException::new);
             User loggedUser = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).get();
             rs.thumbDownReview(review,loggedUser);
         } else {
-            LOGGER.warn("POST /{}: Not allowed to thumb down the review", uriInfo.getPath());
+            LOGGER.warn("PUT /{}: Not allowed to thumb down the review", uriInfo.getPath());
             throw new ForbiddenException();
         }
+        LOGGER.info("PUT /{}: Thumb down successful", uriInfo.getPath());
 
         return Response.noContent().build();
     }
