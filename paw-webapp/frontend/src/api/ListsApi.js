@@ -42,17 +42,12 @@ export class ReportsApi {
 
     async deleteUserWatchList(contentId) {
         try {
-            const res = await fetch(`${this.basePath}/watchList/delete/${contentId}`, {
+            await fetch(`${this.basePath}/watchList/delete/${contentId}`, {
                 method: 'DELETE',
                 headers: {},
                 body: {}
             })
-
-            if(res.status !== 204) {
-                return {error: false, data: await res.json()}
-            } else {
-                return {error: false, data: []}
-            }
+            return {error: false, data: []}
         } catch (e) {
             return {error: true}
         }

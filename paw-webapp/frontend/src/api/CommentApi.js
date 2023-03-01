@@ -46,15 +46,10 @@ export class CommentApi {
 
     async commentReviewDelete(commentId) {
         try {
-            const res = await fetch(`${this.basePath}/delete/${commentId}`, {
+            await fetch(`${this.basePath}/delete/${commentId}`, {
                 method: 'DELETE'
             })
-            // TODO: Verificar este que onda, si deveulve algo o no
-            if(res.status !== 204) {
-                return {error: false, data: await res.json()}
-            } else {
-                return {error: false, data: []}
-            }
+            return {error: false, data: []}
         } catch (e) {
             return {error: true}
         }

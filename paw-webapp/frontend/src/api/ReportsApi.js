@@ -68,15 +68,10 @@ export class ReportsApi {
 
     async deleteReport(contentId, type) {
         try {
-            const res = await fetch(`${this.basePath}/deleteReport/${type}/${contentId}`, {
+            await fetch(`${this.basePath}/deleteReport/${type}/${contentId}`, {
                 method: 'DELETE'
             })
-
-            if(res.status !== 204) {
-                return {error: false, data: await res.json()}
-            } else {
-                return {error: false, data: []}
-            }
+            return {error: false, data: []}
         } catch (e) {
             return {error: true}
         }

@@ -89,15 +89,10 @@ export class ContentApi {
 
     async deleteContent(contentId) {
         try {
-            const res = await fetch(`${this.basePath}/${contentId}/deleteContent`, {
+            await fetch(`${this.basePath}/${contentId}/deleteContent`, {
                 method: 'DELETE'
             })
-            // TODO: Ver bien este
-            if(res.status !== 204) {
-                return {error: false, data: await res.json()}
-            } else {
-                return {error: false, data: []}
-            }
+            return {error: false, data: []}
         } catch (e) {
             return {error: true}
         }

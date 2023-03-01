@@ -36,15 +36,10 @@ export class ReviewApi {
 
     async deleteReview(reviewId) {
         try {
-            const res = await fetch(`${this.basePath}/delete/${reviewId}`, {
+            await fetch(`${this.basePath}/delete/${reviewId}`, {
                 method: 'DELETE'
             })
-            // TODO: Ver bien este que devolver si vacio o no, y creo que vacio pero ndea
-            if(res.status !== 204) {
-                return {error: false, data: await res.json()}
-            } else {
-                return {error: false, data: []}
-            }
+            return {error: false, data: []}
         } catch (e) {
             return {error: true}
         }
