@@ -150,4 +150,16 @@ public class UserController {
 
     // * ---------------------------------------------------------------------------------------------------------------
 
+    // * ------------------------------------------------Forgot Password (desde el login)-------------------------------
+    @Path("/login/{email}/forgotPassword")
+    @POST
+    @Consumes(value = {MediaType.APPLICATION_JSON})
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response loginForgotPassword(@PathParam("email") final String email) {
+        User user = us.findByEmail(email).orElseThrow(UserNotFoundException::new);
+        us.setPassword(null, user, "forgotten");
+        return Response.noContent().build();
+    }
+    // * ---------------------------------------------------------------------------------------------------------------
+
 }

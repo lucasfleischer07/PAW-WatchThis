@@ -115,5 +115,24 @@ export class UserApi {
         }
     }
 
+    async loginForgotPassword(userEmail) {
+        try {
+            const res = await fetch(`${this.basePath}/login/${userEmail}/forgotPassword`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': APPLICATION_JSON_TYPE,
+                },
+                body: {}
+            })
+            if(res.status !== 204) {
+                return {error: false, data: await res.json()}
+            } else {
+                return {error: false, data: []}
+            }
+        } catch (e) {
+            return {error: true}
+        }
+    }
+
 
 }
