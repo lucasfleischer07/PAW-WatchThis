@@ -134,10 +134,12 @@ public class WatchAndViewedListsController {
             throw new ForbiddenException();
         }
         List<Content> viewedList = us.getUserViewedList(user);
+        Collection<ContentDto> viewedListDto = ContentDto.mapContentToContentDto(uriInfo,viewedList);
+
         LOGGER.info("GET /{}: Viewedlist from user {}", uriInfo.getPath(),userId);
 
 //        TODO: El Return aca deberia ya estar paginado (Por el momento no lo esta, habria que cambairlo)
-        return Response.ok(ContentDto.mapContentToContentDto(uriInfo, viewedList)).build();
+        return Response.ok(new GenericEntity<Collection<ContentDto>>(viewedListDto){}).build();
     }
 
 
