@@ -27,10 +27,10 @@ export class ContentApi {
 
 
 
-    async updateContent(contentDetails) {
+    async updateContent(contentId, contentDetails) {
         try {
             // TODO: Verificar si esta bien el contentDetails.id o como seria esa parte
-            const res = await fetch(`${this.basePath}/editInfo/${contentDetails.id}`, {
+            const res = await fetch(`${this.basePath}/editInfo/${contentId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': APPLICATION_JSON_TYPE,
@@ -122,9 +122,6 @@ export class ContentApi {
         } catch (e) {
             return {error: true}
         }
-
-
-
     }
 
 
