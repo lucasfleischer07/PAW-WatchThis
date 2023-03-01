@@ -10,7 +10,6 @@ import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.services.*;
 import ar.edu.itba.paw.webapp.dto.request.NewCommentDto;
 import ar.edu.itba.paw.webapp.dto.response.CommentDto;
-import ar.edu.itba.paw.webapp.dto.response.ContentDto;
 import ar.edu.itba.paw.webapp.utilities.ResponseBuildingUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,9 +22,7 @@ import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Path("comments")
 @Component

@@ -5,7 +5,6 @@ import ar.edu.itba.paw.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.models.Content;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.services.ContentService;
-import ar.edu.itba.paw.services.PaginationService;
 import ar.edu.itba.paw.services.UserService;
 import ar.edu.itba.paw.webapp.dto.response.ContentDto;
 import org.slf4j.Logger;
@@ -27,29 +26,9 @@ public class WatchAndViewedListsController {
     private UserService us;
     @Autowired
     private ContentService cs;
-    @Autowired
-    private PaginationService ps;
     @Context
     private UriInfo uriInfo;
     private static final Logger LOGGER = LoggerFactory.getLogger(ContentController.class);
-    private static final int CONTENT_AMOUNT = 18;
-
-// TODO: VER ESTO
-
-//    private void listPaginationSetup(ModelAndView mav,String name,List<Content> contentList,int page) throws PageNotFoundException{
-//        if(ps.checkPagination(contentList.size(), page,CONTENT_AMOUNT)) {
-//            LOGGER.warn("Wrong login path:", new PageNotFoundException());
-//            throw new PageNotFoundException();
-//        }
-//
-//        List<Content> contentListFilterPaginated = ps.pagePagination(contentList, page,CONTENT_AMOUNT);
-//        mav.addObject(name, contentListFilterPaginated);
-//
-//        int amountOfPages = ps.amountOfContentPages(contentList.size(),CONTENT_AMOUNT);
-//        mav.addObject("amountPages", amountOfPages);
-//        mav.addObject("pageSelected",page);
-//
-//    }
 
     // * ------------------------------------------------User Watch List------------------------------------------------
     // Endpoint para getear la watchlist del ususario
