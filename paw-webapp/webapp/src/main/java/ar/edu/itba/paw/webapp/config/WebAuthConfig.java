@@ -1,13 +1,19 @@
 package ar.edu.itba.paw.webapp.config;
 
 
-//import ar.edu.itba.paw.webapp.auth.JwtAuthenticationFilter;
-import ar.edu.itba.paw.webapp.auth.RedirectionSuccessHandler;
+import ar.edu.itba.paw.webapp.auth.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.access.AccessDecisionManager;
+import org.springframework.security.access.AccessDecisionVoter;
+import org.springframework.security.access.vote.AuthenticatedVoter;
+import org.springframework.security.access.vote.RoleVoter;
+import org.springframework.security.access.vote.UnanimousBased;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -19,6 +25,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
+import org.springframework.security.web.access.expression.WebExpressionVoter;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.util.FileCopyUtils;
@@ -33,6 +42,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import static org.springframework.web.cors.CorsConfiguration.ALL;
 
@@ -43,7 +53,12 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserDetailsService userDetailsService;
-
+    @Autowired
+    private JwtTokenFilter jwtTokenFilter;
+    @Autowired
+    private BasicAuthFilter basicAuthFilter;
+    @Autowired
+    private AccessControl accessControl;
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
@@ -65,6 +80,55 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
 
+    private static final String ACCESS_CONTROL_CHECK_USER = "@accessControl.checkUser(request, #id)";
+    private static final String ACCESS_CONTROL_CHECK_REVIEW_OWNER_OR_ADMIN = "@accessControl.checkReviewOwnerOrAdmin(request, #id)";
+    private static final String ACCESS_CONTROL_CHECK_COMMENT_OWNER_OR_ADMIN = "@accessControl.checkCommentOwnerOrAdmin(request, #id)";
+    private static final String ACCESS_CONTROL_CHECK_COMMENT_NOT_OWNER = "@accessControl.checkCommentNotOwner(request, #id)";
+    private static final String ACCESS_CONTROL_CHECK_REVIEW_NOT_OWNER = "@accessControl.checkReviewNotOwner(request, #id)";
+
+
+
+
+
+
+    @Bean
+    public AccessDecisionManager accessDecisionManager() {
+        List<AccessDecisionVoter<?>> decisionVoters = Arrays.asList(
+                webExpressionVoter(),
+                new RoleVoter(),
+                new AuthenticatedVoter()
+        );
+        return new UnanimousBased(decisionVoters);
+    }
+
+    @Bean
+    public WebExpressionVoter webExpressionVoter() {
+        WebExpressionVoter webExpressionVoter = new WebExpressionVoter();
+        webExpressionVoter.setExpressionHandler(webSecurityExpressionHandler());
+        return webExpressionVoter;
+    }
+
+    @Bean
+    public DefaultWebSecurityExpressionHandler webSecurityExpressionHandler() {
+        DefaultWebSecurityExpressionHandler expressionHandler = new DefaultWebSecurityExpressionHandler();
+        return expressionHandler;
+    }
+
+
+    @Bean
+    public JwtTokenUtil jwtTokenUtil(@Value("classpath:jwt.key") Resource jwtKeyResource) throws IOException {
+        return new JwtTokenUtil(jwtKeyResource);
+    }
+    @Override @Bean
+    public AuthenticationManager authenticationManager() throws Exception {
+        return super.authenticationManager();
+    }
+
+    @Bean
+    public AuthenticationEntryPoint authenticationEntryPoint () {
+        return new UnauthorizedRequestHandler();
+    }
+
 //    TODO: VER BIEN ESTO
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
@@ -84,54 +148,48 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         filter.setEncoding("UTF-8");
         filter.setForceEncoding(true);
         http.cors()
-                .and().csrf().disable()
-                .sessionManagement()
+                .and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().httpBasic()
                 .and().headers().cacheControl().disable()
-                   // .invalidSessionUrl("/login/sign-in")
+                .and().exceptionHandling()
+                // Set unauthorized requests exception handler
+                .authenticationEntryPoint(new UnauthorizedRequestHandler())
+                // Set forbidden requests exception handler
+                .accessDeniedHandler(new ForbiddenRequestHandler())
                 .and().authorizeRequests()
-//                    .antMatchers("/login/sign-in","/login/sign-up","/login/forgot-password").anonymous()
-//                    //.antMatchers("/admin/**").hasRole("ADMIN")
-//                    .antMatchers("/contentForm").hasRole("ADMIN")
-//                    .antMatchers("/content/create").hasRole("ADMIN")
-//                    .antMatchers("/content/editInfo/*").hasRole("ADMIN")
-//                    .antMatchers("/report/reportedContent/**").hasRole("ADMIN")
-//                    .antMatchers("/reviewForm/movie/*").authenticated()
-//                    .antMatchers("/reviewForm/serie/*").authenticated()
-//                    .antMatchers("/login/sign-out").authenticated()
-//                    .antMatchers("/profile").authenticated()
-//                    .antMatchers("/profile/page/*").authenticated()
-//                    .antMatchers("/profile/editProfile").authenticated()
-//                    .antMatchers("/profile/viewedList").authenticated()
-//                    .antMatchers("/profile/viewedList/page/*").authenticated()
-//                    .antMatchers("/profile/watchList").authenticated()
-//                    .antMatchers("/profile/watchList/page/*").authenticated()
-//                    .antMatchers("/reviewForm/edit/movie/*/*").authenticated()
-//                    .antMatchers("/reviewForm/edit/serie/*/*").authenticated()
-//                    .antMatchers("/reviewReputation/thumbUp/*").authenticated()
-//                    .antMatchers("/reviewReputation/thumbDown/*").authenticated()
-//                    .antMatchers(HttpMethod.POST,"/reviewForm/movie/*").authenticated()
-//                    .antMatchers(HttpMethod.POST,"/reviewForm/serie/*").authenticated()
-//                    .antMatchers(HttpMethod.POST,"/profile/editProfile").authenticated()
-//                    .antMatchers(HttpMethod.POST,"/reviewForm/edit/movie/*/*").authenticated()
-//                    .antMatchers(HttpMethod.POST,"/reviewForm/edit/serie/*/*").authenticated()
-//                    .antMatchers(HttpMethod.POST,"/review/*/delete").authenticated()
-//                    .antMatchers(HttpMethod.POST,"/review/add/comment/*").authenticated()
-//                    .antMatchers(HttpMethod.POST,"/report/review/*").authenticated()
-//                    .antMatchers(HttpMethod.POST,"/watchList/add/*").authenticated()
-//                    .antMatchers(HttpMethod.POST,"/watchList/delete/*").authenticated()
-//                    .antMatchers(HttpMethod.POST,"/viewedList/add/*").authenticated()
-//                    .antMatchers(HttpMethod.POST,"/viewedList/delete/*").authenticated()
-//                    .antMatchers(HttpMethod.POST,"/report/comment/*").authenticated()
-//                    .antMatchers(HttpMethod.POST,"/comment/*/delete").authenticated()
-//                    .antMatchers(HttpMethod.POST,"/content/create").hasRole("ADMIN")
-//                    .antMatchers(HttpMethod.POST,"/profile/*").hasRole("ADMIN")
-//                    .antMatchers(HttpMethod.POST,"/content/editInfo/*").hasRole("ADMIN")
-//                    .antMatchers(HttpMethod.POST,"/content/*/delete").hasRole("ADMIN")
-//                    .antMatchers(HttpMethod.POST,"/report/reportedContent/*/*/report/delete").hasRole("ADMIN")
-                .antMatchers("/**").permitAll()
-//                .addFilterBefore(new JwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                //content
+                .antMatchers(HttpMethod.PUT,"/api/content/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE,"/api/content/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST,"/api/content/**").hasRole("ADMIN")
+                //reviews
+                .antMatchers(HttpMethod.POST,"/api/reviews/**").authenticated()
+                .antMatchers(HttpMethod.DELETE,"/api/reviews/delete/{id}").access(ACCESS_CONTROL_CHECK_REVIEW_OWNER_OR_ADMIN)
+                .antMatchers(HttpMethod.PUT,"/api/reviews/editReview/{id}").access(ACCESS_CONTROL_CHECK_REVIEW_OWNER_OR_ADMIN)
+                .antMatchers(HttpMethod.PUT,"/api/reviews/reviewReputation/**").authenticated()
+                //comments
+                .antMatchers(HttpMethod.POST,"/api/comments/**").authenticated()
+                .antMatchers(HttpMethod.DELETE,"/api/comments/delete/{id]").access(ACCESS_CONTROL_CHECK_COMMENT_OWNER_OR_ADMIN)
+                //users
+                .antMatchers(HttpMethod.PUT,"/api/users/{id}/**").access(ACCESS_CONTROL_CHECK_USER)
+                //reports
+                .antMatchers(HttpMethod.DELETE,"/api/reports/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET,"/api/reports/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST,"/api/reports/review/{id}").access(ACCESS_CONTROL_CHECK_REVIEW_NOT_OWNER)
+                .antMatchers(HttpMethod.POST,"/api/reports/comment/{id}").access(ACCESS_CONTROL_CHECK_COMMENT_NOT_OWNER)
+                //lists
+                .antMatchers(HttpMethod.DELETE,"api/lists/watchList/delete/{id}").authenticated()
+                .antMatchers(HttpMethod.DELETE,"api/lists/viewedList/delete/{id}").authenticated()
+                .antMatchers(HttpMethod.PUT,"api/lists/watchList/add/{id}").authenticated()
+                .antMatchers(HttpMethod.PUT,"api/lists/viewedList/add/{id}").authenticated()
+                .antMatchers(HttpMethod.GET,"api/lists/viewedList/{id}").access(ACCESS_CONTROL_CHECK_USER)
+                .antMatchers(HttpMethod.GET,"api/lists/watchList/{id}").access(ACCESS_CONTROL_CHECK_USER)
+                .antMatchers("/api/**").permitAll()
+                // Add JWT Token Filter
+                .and().csrf().disable()
+                .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
+                // Add Basic Auth Filter
+                .addFilterBefore(basicAuthFilter, UsernamePasswordAuthenticationFilter.class);
         ;
     }
 
