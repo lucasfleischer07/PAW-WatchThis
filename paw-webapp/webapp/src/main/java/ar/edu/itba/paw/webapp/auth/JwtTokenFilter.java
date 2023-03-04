@@ -36,7 +36,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
         //Get JwtToken and UserDetails
         final String token = header.split(" ")[1].trim();
-        UserDetails userDetails = jwtTokenUtil.parseToken(token);
+        PawUserDetails userDetails = jwtTokenUtil.parseToken(token);
 
         // Validate userDetails
         if (userDetails == null || !userDetails.isEnabled() || !userDetails.isAccountNonLocked() || SecurityContextHolder.getContext().getAuthentication() != null) {

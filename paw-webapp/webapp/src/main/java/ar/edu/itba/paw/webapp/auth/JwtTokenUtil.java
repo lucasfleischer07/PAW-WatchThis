@@ -40,7 +40,7 @@ public class JwtTokenUtil {
     /**
      * jws: Json Web Signature (https://datatracker.ietf.org/doc/html/rfc7515)
      */
-    public UserDetails parseToken(String jws) {
+    public PawUserDetails parseToken(String jws) {
         try {
             final Claims claims = Jwts.parserBuilder().setSigningKey(jwtKey).build().parseClaimsJws(jws).getBody();
 
@@ -59,7 +59,7 @@ public class JwtTokenUtil {
     public String createToken(User user) {
         Claims claims = Jwts.claims();
 
-        claims.setSubject(user.getUserName());
+        claims.setSubject(user.getEmail());
         claims.put("authorization", user.getRole());
         return "Bearer " + Jwts.builder()
                 .setClaims(claims)

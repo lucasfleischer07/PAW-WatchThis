@@ -28,7 +28,7 @@ public class PawUserDetailsService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public PawUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         final Optional<User> user = us.findByEmail(username);
         if(!user.isPresent()){
             throw new UsernameNotFoundException("Not user with email " + username);

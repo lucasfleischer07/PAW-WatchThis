@@ -51,7 +51,7 @@ public class BasicAuthFilter extends OncePerRequestFilter {
                     new UsernamePasswordAuthenticationToken(credentials[USR_IDX], credentials[PWD_IDX])
             );
 
-            userService.findByUserName(credentials[USR_IDX]).ifPresent(user -> response.setHeader(HttpHeaders.AUTHORIZATION, jwtTokenUtil.createToken(user)));
+            userService.findByEmail(credentials[USR_IDX]).ifPresent(user -> response.setHeader(HttpHeaders.AUTHORIZATION, jwtTokenUtil.createToken(user)));
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (AuthenticationException failed) {
             SecurityContextHolder.clearContext();
