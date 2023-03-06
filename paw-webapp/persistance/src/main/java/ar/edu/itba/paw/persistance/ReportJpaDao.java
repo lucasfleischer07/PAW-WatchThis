@@ -68,30 +68,55 @@ public class ReportJpaDao implements ReportDao{
     }
 
     @Override
-    public List<ReviewReport> getReportedReviews() {
+    public PageWrapper<ReviewReport> getReportedReviews(int page,int pageSize) {
         TypedQuery<ReviewReport> query=em.createQuery("select r from  ReviewReport r where r.id in(select min(r2.id) from ReviewReport r2 group by r2.review) order by r.id asc",ReviewReport.class);
-        return query.getResultList();
+        TypedQuery<ReviewReport> countQuery=em.createQuery("select r from  ReviewReport r where r.id in(select min(r2.id) from ReviewReport r2 group by r2.review) order by r.id asc",ReviewReport.class);
+        query.setFirstResult((page - 1) * pageSize);
+        query.setMaxResults(pageSize);
+
+        long totalContent = PageWrapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
+
+        return new PageWrapper<ReviewReport>(page,totalContent,pageSize,query.getResultList());
 
     }
 
     @Override
-    public List<ReviewReport> getReportedReviewsByReason(ReportReason reason){
+    public PageWrapper<ReviewReport> getReportedReviewsByReason(ReportReason reason,int page,int pageSize){
         TypedQuery<ReviewReport>query= em.createQuery("select r from ReviewReport r where  r.id in(select min(r2.id) from ReviewReport r2 where r2.reportReason = :reason group by r2.review) order by r.id asc", ReviewReport.class);
+        TypedQuery<ReviewReport>countQuery= em.createQuery("select r from ReviewReport r where  r.id in(select min(r2.id) from ReviewReport r2 where r2.reportReason = :reason group by r2.review) order by r.id asc", ReviewReport.class);
         query.setParameter("reason",reason);
-        return query.getResultList();
+        query.setFirstResult((page - 1) * pageSize);
+        query.setMaxResults(pageSize);
+
+        long totalContent = PageWrapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
+
+        return new PageWrapper<ReviewReport>(page,totalContent,pageSize,query.getResultList());
     }
 
     @Override
-    public List<CommentReport> getReportedComments() {
+    public PageWrapper<CommentReport> getReportedComments(int page,int pageSize) {
         TypedQuery<CommentReport>query= em.createQuery("select r from CommentReport r where r.id in(select min(r2.id) from CommentReport r2 group by r2.comment) order by r.id asc", CommentReport.class);
-        return query.getResultList();
+        TypedQuery<CommentReport>countQuery= em.createQuery("select r from CommentReport r where r.id in(select min(r2.id) from CommentReport r2 group by r2.comment) order by r.id asc", CommentReport.class);
+        query.setFirstResult((page - 1) * pageSize);
+        query.setMaxResults(pageSize);
+
+        long totalContent = PageWrapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
+
+        return new PageWrapper<CommentReport>(page,totalContent,pageSize,query.getResultList());
     }
 
     @Override
-    public List<CommentReport> getReportedCommentsByReason(ReportReason reason){
+    public PageWrapper<CommentReport> getReportedCommentsByReason(ReportReason reason,int page,int pageSize){
         TypedQuery<CommentReport>query= em.createQuery("select r from CommentReport r  where r.id in(select min(r2.id) from CommentReport r2 where r2.reportReason = :reason group by r2.comment) order by r.id asc", CommentReport.class);
+        TypedQuery<CommentReport>countQuery= em.createQuery("select r from CommentReport r  where r.id in(select min(r2.id) from CommentReport r2 where r2.reportReason = :reason group by r2.comment) order by r.id asc", CommentReport.class);
+
         query.setParameter("reason",reason);
-        return query.getResultList();
+        query.setFirstResult((page - 1) * pageSize);
+        query.setMaxResults(pageSize);
+
+        long totalContent = PageWrapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
+
+        return new PageWrapper<CommentReport>(page,totalContent,pageSize,query.getResultList());
     }
 
     @Override

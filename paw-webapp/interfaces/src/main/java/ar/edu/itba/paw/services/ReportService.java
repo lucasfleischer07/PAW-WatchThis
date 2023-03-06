@@ -1,9 +1,6 @@
 package ar.edu.itba.paw.services;
 
-import ar.edu.itba.paw.models.CommentReport;
-import ar.edu.itba.paw.models.ReviewReport;
-import ar.edu.itba.paw.models.ReportReason;
-import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.models.*;
 
 import java.util.List;
 import java.util.Set;
@@ -12,8 +9,8 @@ public interface ReportService {
     void delete(Object reviewOrComment, Set<CommentReport> reasonsOfDelete);
     void removeReports(String type, Long contentId);
     void addReport(Object reviewOrComment, User user, String reason);
-    List<ReviewReport> getReportedReviews(ReportReason reason);
-    List<CommentReport> getReportedComments(ReportReason reason);
+    PageWrapper<ReviewReport> getReportedReviews(ReportReason reason,int page,int pageSize);
+    PageWrapper<CommentReport> getReportedComments(ReportReason reason,int page,int pageSize);
 
 
 

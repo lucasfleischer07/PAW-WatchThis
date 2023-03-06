@@ -7,7 +7,9 @@ import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.services.*;
 import ar.edu.itba.paw.webapp.dto.request.NewReportCommentDto;
 import ar.edu.itba.paw.webapp.dto.response.CommentReportDto;
+import ar.edu.itba.paw.webapp.dto.response.ContentDto;
 import ar.edu.itba.paw.webapp.dto.response.ReviewReportDto;
+import ar.edu.itba.paw.webapp.utilities.ResponseBuildingUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +37,9 @@ public class ReportsController {
     private CommentService ccs;
     @Context
     private UriInfo uriInfo;
+
+    private static final int REPORTS_AMOUNT = 10;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(ReportsController.class);
 
 
@@ -55,18 +60,19 @@ public class ReportsController {
         }
 
         if(Objects.equals(type, "reviews")) {
-            List<ReviewReport> reviewsReportedList = rrs.getReportedReviews(reason);
-            Collection<ReviewReportDto> reviewsReportedListDto = ReviewReportDto.mapReviewReportToReviewReportDto(uriInfo, reviewsReportedList);
+            PageWrapper<ReviewReport> reviewsReported = rrs.getReportedReviews(reason,page,REPORTS_AMOUNT);
+            Collection<ReviewReportDto> reviewsReportedListDto = ReviewReportDto.mapReviewReportToReviewReportDto(uriInfo, reviewsReported.getPageContent());
             LOGGER.info("GET /{}: Reported reviews list success for admin user {}", uriInfo.getPath(), user.getId());
-//            TODO: VER EL TEMA DE LA PAGINACION
-            return Response.ok(new GenericEntity<Collection<ReviewReportDto>>(reviewsReportedListDto){}).build();
+            Response.ResponseBuilder response = Response.ok(new GenericEntity<Collection<ReviewReportDto>>(reviewsReportedListDto){});
+            ResponseBuildingUtils.setPaginationLinks(response,reviewsReported , uriInfo);
+            return response.build();
         } else if(Objects.equals(type, "comments")) {
-            List<CommentReport> commentsReportedList = rrs.getReportedComments(reason);
-            Collection<CommentReportDto> commentReportedListDto = CommentReportDto.mapCommentReportToCommentReportDto(uriInfo, commentsReportedList);
+            PageWrapper<CommentReport> commentsReported = rrs.getReportedComments(reason,page,REPORTS_AMOUNT);
+            Collection<CommentReportDto> commentReportedListDto = CommentReportDto.mapCommentReportToCommentReportDto(uriInfo, commentsReported.getPageContent());
             LOGGER.info("GET /{}: Reported comments list success for admin user {}", uriInfo.getPath(), user.getId());
-//            TODO: VER EL TEMA DE LA PAGINACION
-            return Response.ok(new GenericEntity<Collection<CommentReportDto>>(commentReportedListDto){}).build();
-
+            Response.ResponseBuilder response = Response.ok(new GenericEntity<Collection<CommentReportDto>>(commentReportedListDto){});
+            ResponseBuildingUtils.setPaginationLinks(response,commentsReported , uriInfo);
+            return response.build();
         } else {
             throw new ContentNotFoundException();
         }
