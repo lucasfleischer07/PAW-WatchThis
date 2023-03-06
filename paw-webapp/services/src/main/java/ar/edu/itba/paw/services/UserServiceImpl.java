@@ -4,6 +4,7 @@ import java.security.Principal;
 import java.util.*;
 
 import ar.edu.itba.paw.models.Content;
+import ar.edu.itba.paw.models.PageWrapper;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.persistance.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -114,8 +115,8 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public List<Content> getWatchList(User user) {
-        return userDao.getWatchList(user);
+    public PageWrapper<Content> getWatchList(User user, int page, int pageSize) {
+        return userDao.getWatchList(user,page,pageSize);
     }
 
     @Override
@@ -135,8 +136,8 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public List<Content> getUserViewedList(User user) {
-        return userDao.getUserViewedList(user);
+    public PageWrapper<Content> getUserViewedList(User user,int page,int pageSize) {
+        return userDao.getUserViewedList(user,page,pageSize);
     }
 
     @Override
@@ -159,7 +160,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public List<Long>getUserWatchListContent(User user) {
         List<Long> contentIdList = new ArrayList<>();
-        for(Content content: getWatchList(user)) {
+        for(Content content: user.getWatchlist()) {
             contentIdList.add(content.getId());
         }
         return contentIdList;
@@ -168,7 +169,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public List<Long>getUserViewedListContent(User user) {
         List<Long> contentIdList = new ArrayList<>();
-        for(Content content: getUserViewedList(user)) {
+        for(Content content: user.getViewedList()) {
             contentIdList.add(content.getId());
         }
         return contentIdList;

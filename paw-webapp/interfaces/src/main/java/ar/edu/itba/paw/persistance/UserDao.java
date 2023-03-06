@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistance;
 
 import ar.edu.itba.paw.models.Content;
+import ar.edu.itba.paw.models.PageWrapper;
 import ar.edu.itba.paw.models.User;
 
 import java.util.List;
@@ -17,11 +18,11 @@ public interface UserDao {
     void setProfilePicture(byte[] profilePicture, User user);
     void addToWatchList(User user, Content toAdd);
     void deleteFromWatchList(User user, Content toDelete);
-    List<Content> getWatchList(User user);
+    PageWrapper<Content> getWatchList(User user, int page, int pageSize);
     Optional<Long> searchContentInWatchList(User user, Long contentId);
     void addToViewedList(User user, Content toAdd);
     void deleteFromViewedList(User user, Content toDelete);
-    List<Content> getUserViewedList(User user);
+    PageWrapper<Content> getUserViewedList(User user,int page,int pageSize);
     Optional<Long> searchContentInViewedList(User user, Long contentId);
     void promoteUser(User userId);
 }

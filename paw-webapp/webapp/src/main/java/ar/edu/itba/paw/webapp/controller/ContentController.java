@@ -7,7 +7,6 @@ import ar.edu.itba.paw.models.PageWrapper;
 import ar.edu.itba.paw.models.Sorting;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.services.ContentService;
-import ar.edu.itba.paw.services.PaginationService;
 import ar.edu.itba.paw.services.UserService;
 import ar.edu.itba.paw.webapp.dto.request.GenreFilterDto;
 import ar.edu.itba.paw.webapp.dto.request.NewContentDto;
@@ -213,7 +212,6 @@ public class ContentController {
 
         LOGGER.info("GET /{}: Success getting the content", uriInfo.getPath());
 
-//        TODO: El Return aca deberia ya estar paginado (Por el momento no lo esta, habria que cambairlo)
         Response.ResponseBuilder response = Response.ok(new GenericEntity<Collection<ContentDto>>(contentListPaginatedDto){});
         ResponseBuildingUtils.setPaginationLinks(response,contentList , uriInfo);
         return response.build();

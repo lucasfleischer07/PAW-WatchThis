@@ -3,10 +3,12 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.exceptions.ContentNotFoundException;
 import ar.edu.itba.paw.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.models.Content;
+import ar.edu.itba.paw.models.PageWrapper;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.services.ContentService;
 import ar.edu.itba.paw.services.UserService;
 import ar.edu.itba.paw.webapp.dto.response.ContentDto;
+import ar.edu.itba.paw.webapp.utilities.ResponseBuildingUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,7 @@ public class WatchAndViewedListsController {
     private ContentService cs;
     @Context
     private UriInfo uriInfo;
+    private static final int CONTENT_AMOUNT = 18;
     private static final Logger LOGGER = LoggerFactory.getLogger(ContentController.class);
 
     // * ------------------------------------------------User Watch List------------------------------------------------
@@ -47,12 +50,13 @@ public class WatchAndViewedListsController {
             LOGGER.warn("GET /{}: Login user {} is different from watchlist owner {}", uriInfo.getPath(), user2.getId(), userId);
             throw new ForbiddenException();
         }
-        List<Content> watchList = us.getWatchList(user);
-        Collection<ContentDto> watchListDto = ContentDto.mapContentToContentDto(uriInfo,watchList);
+        PageWrapper<Content> watchList = us.getWatchList(user,page,CONTENT_AMOUNT);
+        Collection<ContentDto> watchListDto = ContentDto.mapContentToContentDto(uriInfo,watchList.getPageContent());
         LOGGER.info("GET /{}: Watchlist from user {}", uriInfo.getPath(),userId);
 
-//        TODO: El Return aca deberia ya estar paginado (Por el momento no lo esta, habria que cambairlo)
-        return Response.ok(new GenericEntity<Collection<ContentDto>>(watchListDto){}).build();
+        Response.ResponseBuilder response = Response.ok(new GenericEntity<Collection<ContentDto>>(watchListDto){});
+        ResponseBuildingUtils.setPaginationLinks(response,watchList , uriInfo);
+        return response.build();
 
     }
 
@@ -112,13 +116,14 @@ public class WatchAndViewedListsController {
             LOGGER.warn("GET /{}: Logged user {} is different from viewedlist owner {}", uriInfo.getPath(), user2.getId(), userId);
             throw new ForbiddenException();
         }
-        List<Content> viewedList = us.getUserViewedList(user);
-        Collection<ContentDto> viewedListDto = ContentDto.mapContentToContentDto(uriInfo,viewedList);
+        PageWrapper<Content> viewedList = us.getUserViewedList(user,page,pageSize);
+        Collection<ContentDto> viewedListDto = ContentDto.mapContentToContentDto(uriInfo,viewedList.getPageContent());
 
         LOGGER.info("GET /{}: Viewedlist from user {}", uriInfo.getPath(),userId);
 
-//        TODO: El Return aca deberia ya estar paginado (Por el momento no lo esta, habria que cambairlo)
-        return Response.ok(new GenericEntity<Collection<ContentDto>>(viewedListDto){}).build();
+        Response.ResponseBuilder response = Response.ok(new GenericEntity<Collection<ContentDto>>(viewedListDto){});
+        ResponseBuildingUtils.setPaginationLinks(response,viewedList , uriInfo);
+        return response.build();
     }
 
 

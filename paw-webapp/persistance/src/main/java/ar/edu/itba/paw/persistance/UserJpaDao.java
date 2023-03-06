@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistance;
 
 import ar.edu.itba.paw.models.Content;
+import ar.edu.itba.paw.models.PageWrapper;
 import ar.edu.itba.paw.models.User;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
@@ -86,8 +87,17 @@ public class UserJpaDao implements UserDao{
     }
 
     @Override
-    public List<Content> getWatchList(User user) {
-        return user.getWatchlist();
+    public PageWrapper<Content> getWatchList(User user, int page, int pageSize) {
+        List<Content> contentList = user.getWatchlist();
+        int pageAmount= PageWrapper.calculatePageAmount(contentList.size(),pageSize);
+        PageWrapper<Content> pageWrapper;
+        if( page < pageAmount){
+            pageWrapper = new PageWrapper<>(page,pageAmount,pageSize,contentList.subList((page-1)*pageSize,page * pageSize));
+        }else{
+            pageWrapper = new PageWrapper<>(page,pageAmount,pageSize,contentList.subList((page-1)*pageSize,(page-1) * pageSize + contentList.size()% pageSize ));
+        }
+
+        return pageWrapper;
     }
 
     @Override
@@ -126,8 +136,17 @@ public class UserJpaDao implements UserDao{
     }
 
     @Override
-    public List<Content> getUserViewedList(User user) {
-        return user.getViewedList();
+    public PageWrapper<Content> getUserViewedList(User user,int page,int pageSize) {
+        List<Content> contentList = user.getViewedList();
+        int pageAmount= PageWrapper.calculatePageAmount(contentList.size(),pageSize);
+        PageWrapper<Content> pageWrapper;
+        if( page < pageAmount){
+            pageWrapper = new PageWrapper<>(page,pageAmount,pageSize,contentList.subList((page-1)*pageSize,page * pageSize));
+        }else{
+            pageWrapper = new PageWrapper<>(page,pageAmount,pageSize,contentList.subList((page-1)*pageSize,(page-1) * pageSize + contentList.size()% pageSize ));
+        }
+
+        return pageWrapper;
     }
 
     @Override
