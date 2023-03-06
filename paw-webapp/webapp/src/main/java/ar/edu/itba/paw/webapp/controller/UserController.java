@@ -61,6 +61,20 @@ public class UserController {
         return Response.ok(new UserDto(uriInfo, user)).build();
     }
 
+    @GET
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    @Path("/loggedUser")
+    public Response getLoggedUserInfo() {
+        LOGGER.info("GET /{}: Called",  uriInfo.getPath());
+        final Optional<User> user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+        if(!user.isPresent()) {
+            LOGGER.warn("GET /{}: User not logged", uriInfo.getPath());
+            return Response.noContent().build();
+        }
+        LOGGER.info("GET /{}: User returned with success", uriInfo.getPath());
+        return Response.ok(new UserDto(uriInfo, user.get())).build();
+    }
+
     // Endpoint para getear las reviews del usuario
     @GET
     @Produces(value = {MediaType.APPLICATION_JSON})

@@ -134,5 +134,25 @@ export class UserApi {
         }
     }
 
+    async login(email, password) {
+        try {
+            const loggedUserInfo = email + ":" + password;
+            const hash = btoa(loggedUserInfo);
+            const res = await fetch(`${this.basePath}/loggedUser`, {
+                method: 'GET',
+                headers: {
+                    Authorization: "Basic " + hash
+                }
+            })
+            if(res.status !== 204) {
+                return {error: false, data: await res.json(), header: res.headers.get("Authorization")?.toString().split(" ")[1]}
+            } else {
+                return {error: false, data: []}
+            }
+        } catch (e) {
+            return {error: true}
+        }
+    }
+
 
 }
