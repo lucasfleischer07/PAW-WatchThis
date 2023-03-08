@@ -62,12 +62,7 @@ export default function Login() {
     useEffect(() => {
         document.title = t('Login.LoginMessage')
     })
-
-    useEffect(() => {
-        contentService.getContentByType('movie', 1, 5).then((data) => {
-            console.log(data.data)
-        })
-    }, [])
+    
 
     return (
         // TODO: Meter el header
