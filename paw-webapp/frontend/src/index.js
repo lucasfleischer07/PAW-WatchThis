@@ -8,14 +8,16 @@ import 'bootstrap/dist/js/bootstrap.js';
 import i18n from "./i18n";
 import {I18nextProvider} from "react-i18next";
 
-// const root = ReactDOM.createRoot(document.getElementById('root'));
-// root.render(
-//   <React.StrictMode>
-//       <I18nextProvider i18n={i18n}>
-//           <App />
-//       </I18nextProvider>
-//   </React.StrictMode>
-// );
+import "./styles/carrouselStyles.css"
+import "./styles/homeStyles.css"
+import "./styles/loginStyles.css"
+import "./styles/navBarStyles.css"
+import "./styles/profileStyles.css"
+import "./styles/reportedStyles.css"
+import "./styles/reviewsStyles.css"
+import "./styles/reviewRegistrationStyles.css"
+import "./styles/snackbarStyles.css"
+
 
 ReactDOM.render(
     <React.StrictMode>
