@@ -1,5 +1,6 @@
 import {APPLICATION_JSON_TYPE, paths} from "../paths";
 import {fetchWithQueryParamsApi} from "./FetchWithQueryParams";
+import {authCheck} from "../scripts/authCheck";
 
 export class UserApi {
     constructor() {
@@ -10,10 +11,7 @@ export class UserApi {
         try {
             const res = await fetch(`${this.basePath}`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': APPLICATION_JSON_TYPE,
-                },
-                // TODO: userDetails ya tiene que ser un objeto en formato JSON para mandarle con al info
+                headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}),
                 body: JSON.stringify(userDetails)
             })
             if(res.status !== 204) {
@@ -28,7 +26,10 @@ export class UserApi {
 
     async getUserInfo(userId) {
         try {
-            const res = await fetch(`${this.basePath}/${userId}`)
+            const res = await fetch(`${this.basePath}/${userId}`, {
+                method: 'GET',
+                headers: authCheck({})
+            })
             if(res.status !== 204) {
                 return {error: false, data: await res.json()}
             } else {
@@ -43,7 +44,7 @@ export class UserApi {
         try {
             const apiUrl = `${this.basePath}/${userId}/reviews`
             const params = {pageNumber: pageNumber}
-            const options = {}
+            const options = {headers: authCheck({})}
             const res = await fetchWithQueryParamsApi(apiUrl, params, options)
             if(res.status !== 204) {
                 return {error: false, data: await res.json()}
@@ -58,7 +59,10 @@ export class UserApi {
     // TODO: Chequear bien este
     async getUserProfileImage(userId) {
         try {
-            const res = await fetch(`${this.basePath}/${userId}/profileImage`)
+            const res = await fetch(`${this.basePath}/${userId}/profileImage`, {
+                method: 'GET',
+                headers: authCheck({})
+            })
             if(res.status !== 204) {
                 return {error: false, data: await res.json()}
             } else {
@@ -75,11 +79,9 @@ export class UserApi {
         try {
             const formData = new FormData();
             formData.append("image", image, image.name)
-            // TODO: Verificar si esta bien el contentDetails.id o como seria esa parte
             const res = await fetch(`${this.basePath}/${userId}/profileImage`, {
                 method: 'PUT',
-                headers: {},
-                // TODO: contentDetails ya tiene que ser un objeto en formato JSON para mandarle con al info
+                headers: authCheck({}),
                 body: formData
             })
             if(res.status !== 204) {
@@ -95,13 +97,9 @@ export class UserApi {
 
     async updateUserProfileInfo(userId, userDetails) {
         try {
-            // TODO: Verificar si esta bien el userDetails.id o como seria esa parte
             const res = await fetch(`${this.basePath}/editInfo/${userId}`, {
                 method: 'PUT',
-                headers: {
-                    'Content-Type': APPLICATION_JSON_TYPE,
-                },
-                // TODO: contentDetails ya tiene que ser un objeto en formato JSON para mandarle con al info
+                headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}),
                 body: JSON.stringify(userDetails)
             })
 
@@ -119,9 +117,7 @@ export class UserApi {
         try {
             const res = await fetch(`${this.basePath}/login/${userEmail}/forgotPassword`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': APPLICATION_JSON_TYPE,
-                },
+                headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE}),
                 body: {}
             })
             if(res.status !== 204) {
@@ -144,8 +140,10 @@ export class UserApi {
                     Authorization: "Basic " + hash
                 }
             })
-            if(res.status !== 204) {
+            if(res.status !== 204 && res.status !== 401) {
                 return {error: false, data: await res.json(), header: res.headers.get("Authorization")?.toString().split(" ")[1]}
+            } else if(res.status === 401) {
+                return {error: true, data: []}
             } else {
                 return {error: false, data: []}
             }
@@ -153,6 +151,5 @@ export class UserApi {
             return {error: true}
         }
     }
-
-
+    
 }

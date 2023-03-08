@@ -1,5 +1,6 @@
 import {APPLICATION_JSON_TYPE, paths} from "../paths";
 import {fetchWithQueryParamsApi} from "./FetchWithQueryParams";
+import {authCheck} from "../scripts/authCheck";
 
 export class CommentApi {
     constructor() {
@@ -10,7 +11,7 @@ export class CommentApi {
         try {
             const apiUrl = `${this.basePath}/${reviewId}`
             const params = {pageNumber: pageNumber, pageSize: pageSize}
-            const options = {}
+            const options = {headers: authCheck({})}
             const res = await fetchWithQueryParamsApi(apiUrl, params, options)
             if(res.status !== 204) {
                 return {error: false, data: await res.json()}
@@ -27,10 +28,7 @@ export class CommentApi {
         try {
             const res = await fetch(`${this.basePath}/${reviewId}/add`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': APPLICATION_JSON_TYPE,
-                },
-                // TODO: contentDetails ya tiene que ser un objeto en formato JSON para mandarle con al info
+                headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}),
                 body: JSON.stringify(commentDetails)
             })
             if(res.status !== 204) {
@@ -47,7 +45,8 @@ export class CommentApi {
     async commentReviewDelete(commentId) {
         try {
             await fetch(`${this.basePath}/delete/${commentId}`, {
-                method: 'DELETE'
+                method: 'DELETE',
+                headers: authCheck({})
             })
             return {error: false, data: []}
         } catch (e) {

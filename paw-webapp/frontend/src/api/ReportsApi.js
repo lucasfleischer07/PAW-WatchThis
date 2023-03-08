@@ -1,5 +1,6 @@
 import {APPLICATION_JSON_TYPE, paths} from "../paths";
 import {fetchWithQueryParamsApi} from "./FetchWithQueryParams";
+import {authCheck} from "../scripts/authCheck";
 
 export class ReportsApi {
     constructor() {
@@ -10,7 +11,7 @@ export class ReportsApi {
         try {
             const apiUrl = `${this.basePath}/${type}`
             const params = {pageNumber: pageNumber, pageSize: pageSize}
-            const options = {}
+            const options = {headers: authCheck({})}
             const res = await fetchWithQueryParamsApi(apiUrl, params, options)
             if(res.status !== 204) {
                 return {error: false, data: await res.json()}
@@ -27,10 +28,7 @@ export class ReportsApi {
         try {
             const res = await fetch(`${this.basePath}/review/${reviewId}`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': APPLICATION_JSON_TYPE,
-                },
-                // TODO: reviewReportReasons ya tiene que ser un objeto en formato JSON para mandarle con al info
+                headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}),
                 body: JSON.stringify(reviewReportReasons)
             })
 
@@ -49,10 +47,7 @@ export class ReportsApi {
         try {
             const res = await fetch(`${this.basePath}/comment/${reviewId}`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': APPLICATION_JSON_TYPE,
-                },
-                // TODO: commentReportReasons ya tiene que ser un objeto en formato JSON para mandarle con al info
+                headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}),
                 body: JSON.stringify(commentReportReasons)
             })
 
@@ -69,7 +64,8 @@ export class ReportsApi {
     async deleteReport(contentId, type) {
         try {
             await fetch(`${this.basePath}/deleteReport/${type}/${contentId}`, {
-                method: 'DELETE'
+                method: 'DELETE',
+                headers: authCheck({})
             })
             return {error: false, data: []}
         } catch (e) {

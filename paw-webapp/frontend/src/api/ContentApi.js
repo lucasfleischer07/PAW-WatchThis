@@ -1,5 +1,6 @@
 import {APPLICATION_JSON_TYPE, paths} from "../paths";
 import {fetchWithQueryParamsApi} from "./FetchWithQueryParams";
+import {authCheck, normalFetch} from "../scripts/authCheck";
 
 export class ContentApi {
     constructor() {
@@ -13,7 +14,10 @@ export class ContentApi {
 
     async getSpecificContent(contentId) {
         try {
-            const res = await fetch(`${this.basePath}/specificContent/${contentId}`)
+            const res = await fetch(`${this.basePath}/specificContent/${contentId}`, {
+                method: 'GET',
+                headers: authCheck({})
+            })
             if(res.status !== 204) {
                 return {error: false, data: await res.json()}
             } else {
@@ -25,17 +29,11 @@ export class ContentApi {
 
     }
 
-
-
     async updateContent(contentId, contentDetails) {
         try {
-            // TODO: Verificar si esta bien el contentDetails.id o como seria esa parte
             const res = await fetch(`${this.basePath}/editInfo/${contentId}`, {
                 method: 'PUT',
-                headers: {
-                    'Content-Type': APPLICATION_JSON_TYPE,
-                },
-                // TODO: contentDetails ya tiene que ser un objeto en formato JSON para mandarle con al info
+                headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}),
                 body: JSON.stringify(contentDetails)
             })
 
@@ -72,8 +70,7 @@ export class ContentApi {
             // TODO: Verificar si esta bien el contentDetails.id o como seria esa parte
             const res = await fetch(`${this.basePath}/${contentId}/contentImage`, {
                 method: 'PUT',
-                headers: {},
-                // TODO: contentDetails ya tiene que ser un objeto en formato JSON para mandarle con al info
+                headers: authCheck({}),
                 body: formData
             })
             if(res.status !== 204) {
@@ -90,7 +87,8 @@ export class ContentApi {
     async deleteContent(contentId) {
         try {
             await fetch(`${this.basePath}/${contentId}/deleteContent`, {
-                method: 'DELETE'
+                method: 'DELETE',
+                headers: authCheck({})
             })
             return {error: false, data: []}
         } catch (e) {
@@ -103,9 +101,7 @@ export class ContentApi {
             // TODO: Verificar si esta bien el contentDetails.id o como seria esa parte
             const res = await fetch(`${this.basePath}/create`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': APPLICATION_JSON_TYPE,
-                },
+                headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}),
                 // TODO: contentDetails ya tiene que ser un objeto en formato JSON para mandarle con al info
                 body: JSON.stringify(contentDetails)
             })
@@ -119,12 +115,11 @@ export class ContentApi {
         }
     }
 
-
     async getContentByType(contentType, pageNumber, pageSize) {
         try {
             const apiUrl = `${this.basePath}/${contentType}`
             const params = {pageNumber: pageNumber, pageSize: pageSize}
-            const options = {}
+            const options = {headers: authCheck({})}
             const res = await fetchWithQueryParamsApi(apiUrl, params, options)
             if(res.status !== 204) {
                 return {error: false, data: await res.json()}
@@ -142,7 +137,7 @@ export class ContentApi {
         try {
             const apiUrl = `${this.basePath}/${contentType}/filters`
             const params = {pageNumber: pageNumber, pageSize: pageSize, ...filters}
-            const options = {}
+            const options = {headers: authCheck({})}
             const res = await fetchWithQueryParamsApi(apiUrl, params, options)
             if(res.status !== 204) {
                 return {error: false, data: await res.json()}
@@ -156,7 +151,10 @@ export class ContentApi {
 
     async getContentReviewers(contentId) {
         try {
-            const res = await fetch(`${this.basePath}/${contentId}/reviewers`)
+            const res = await fetch(`${this.basePath}/${contentId}/reviewers`, {
+                method: 'GET',
+                headers: authCheck({})
+            })
             if(res.status !== 204) {
                 return {error: false, data: await res.json()}
             } else {

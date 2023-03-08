@@ -1,5 +1,6 @@
 import {APPLICATION_JSON_TYPE, paths} from "../paths";
 import {fetchWithQueryParamsApi} from "./FetchWithQueryParams";
+import {authCheck} from "../scripts/authCheck";
 
 export class ReviewApi {
     constructor() {
@@ -9,7 +10,7 @@ export class ReviewApi {
     async reviews(contentId, pageNumber, pageSize) {
         const apiUrl = `${this.basePath}/${contentId}`
         const params = {pageNumber: pageNumber, pageSize: pageSize}
-        const options = {}
+        const options = {headers: authCheck({})}
         return await fetchWithQueryParamsApi(apiUrl, params, options)
     }
 
@@ -17,10 +18,7 @@ export class ReviewApi {
         try {
             const res = await fetch(`${this.basePath}/create/${type}/${reviewId}`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': APPLICATION_JSON_TYPE,
-                },
-                // TODO: reviewDetails ya tiene que ser un objeto en formato JSON para mandarle con al info
+                headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}),
                 body: JSON.stringify(reviewDetails)
             })
 
@@ -37,7 +35,8 @@ export class ReviewApi {
     async deleteReview(reviewId) {
         try {
             await fetch(`${this.basePath}/delete/${reviewId}`, {
-                method: 'DELETE'
+                method: 'DELETE',
+                headers: authCheck({})
             })
             return {error: false, data: []}
         } catch (e) {
@@ -47,13 +46,9 @@ export class ReviewApi {
 
     async reviewEdition(reviewId, reviewDetails) {
         try {
-            // TODO: Verificar si esta bien el reviewId o seria el reviewDetails.id o como seria esa parte
             const res = await fetch(`${this.basePath}/editReview/${reviewId}`, {
                 method: 'PUT',
-                headers: {
-                    'Content-Type': APPLICATION_JSON_TYPE,
-                },
-                // TODO: reviewDetails ya tiene que ser un objeto en formato JSON para mandarle con al info
+                headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}),
                 body: JSON.stringify(reviewDetails)
             })
 
@@ -72,7 +67,7 @@ export class ReviewApi {
             // TODO: Verificar si esta bien el contentId o seri el contentDetails.id o como seria esa parte
             const res = await fetch(`${this.basePath}/reviewReputation/thumbUp/${reviewId}`, {
                 method: 'PUT',
-                headers: {},
+                headers: authCheck({}),
                 body: {}
             })
 
@@ -92,7 +87,7 @@ export class ReviewApi {
             // TODO: Verificar si esta bien el contentId o seri el contentDetails.id o como seria esa parte
             const res = await fetch(`${this.basePath}/reviewReputation/thumbDown/${reviewId}`, {
                 method: 'PUT',
-                headers: {},
+                headers: authCheck({}),
                 body: {}
             })
 
