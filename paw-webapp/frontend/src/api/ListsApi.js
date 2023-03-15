@@ -7,18 +7,16 @@ export class ListsApi {
         this.basePath = `${paths.BASE_URL_API}${paths.LISTS}`
     }
 
-    // TODO: Cambiar lo de pageSize. No le quiero yo pasar el maximo, quiero que me lo devuelva.
-
-    async getUserWatchList(userId, pageNumber, pageSize) {
+    async getUserWatchList(userId, pageNumber) {
         try {
             const apiUrl = `${this.basePath}/watchList/${userId}`
-            const params = {pageNumber: pageNumber, pageSize: pageSize}
+            const params = {pageNumber: pageNumber, pageSize: 10}
             const options = {headers: authCheck({})}
             const res = await fetchWithQueryParamsApi(apiUrl, params, options)
             if(res.status !== 204) {
-                return {error: false, data: await res.json()}
+                return {error: false, data: await res.json(), totalPages: res.totalPages}
             } else {
-                return {error: false, data: []}
+                return {error: false, data: [], totalPages: res.totalPages}
             }
         } catch (e) {
             return {error: true}
@@ -56,16 +54,16 @@ export class ListsApi {
         }
     }
 
-    async getUserViewedList(userId, pageNumber, pageSize) {
+    async getUserViewedList(userId, pageNumber) {
         try {
             const apiUrl = `${this.basePath}/viewedList/${userId}`
-            const params = {pageNumber: pageNumber, pageSize: pageSize}
+            const params = {pageNumber: pageNumber, pageSize: 10}
             const options = {headers: authCheck({})}
             const res = await fetchWithQueryParamsApi(apiUrl, params, options)
             if(res.status !== 204) {
-                return {error: false, data: await res.json()}
+                return {error: false, data: await res.json(), totalPages: res.totalPages}
             } else {
-                return {error: false, data: []}
+                return {error: false, data: [], totalPages: res.totalPages}
             }
         } catch (e) {
             return {error: true}

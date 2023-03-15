@@ -27,6 +27,9 @@ import javax.validation.Valid;
 import javax.validation.constraints.Size;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.net.URLConnection;
 import java.util.*;
 
 @Path("content")
@@ -96,14 +99,19 @@ public class ContentController {
         final CacheControl cacheControl = new CacheControl();
         cacheControl.setNoCache(true);
         Response.ResponseBuilder response = request.evaluatePreconditions(eTag);
-
+        String contentType;
+        try {
+            contentType = URLConnection.guessContentTypeFromStream(new ByteArrayInputStream(content.getImage()));
+        } catch (Exception e) {
+            contentType = "image/png";
+        }
         if (response == null) {
             final byte[] contentImage = content.getImage();
             response = Response.ok(contentImage).tag(eTag);
         }
 
         LOGGER.info("GET /{}: Content {} Image", uriInfo.getPath(), contentId);
-        return response.cacheControl(cacheControl).build();
+        return response.cacheControl(cacheControl).type(contentType).build();
     }
 
     //Endpoint para editar la imagen del contenido

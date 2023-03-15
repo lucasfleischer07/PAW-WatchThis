@@ -4,7 +4,6 @@ export function authCheck(headerOptions) {
         return headerOptions;
     } else {
         headerOptions.Authorization = `Bearer ${userAuthToken}`;
-        console.log(headerOptions)
         return headerOptions;
     }
 }

@@ -1,16 +1,16 @@
 import {useContext, useEffect, useState} from 'react';
 import {useTranslation} from "react-i18next";
-import {useLocation, useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {AuthContext} from "../../context/AuthContext";
-import {listsService} from "../../services";
+import {contentService, listsService} from "../../services";
 
 export default function CarrouselContent(props) {
     const {t} = useTranslation()
     let navigate = useNavigate()
     let {isLogged} = useContext(AuthContext)
-    const user = localStorage.getItem("user") ? localStorage.getItem("user") : undefined
 
     const [isInWatchList, setIsInWatchList] = useState(false);
+    const [contentImage, setContentImage] = useState('');
 
     const handleAddToWatchlist = (event) => {
         event.preventDefault();
@@ -44,16 +44,19 @@ export default function CarrouselContent(props) {
 
 
     useEffect(() => {
-        listsService.getUserWatchList(user.id)
-            .then(watchList => {
-                for (let i = 0; i < watchList.length; i++) {
-                    if (watchList.data[i].id === props.id) {
-                        setIsInWatchList(true)
-                        break;
+        if(isLogged()) {
+            listsService.getUserWatchList(props.user.id, 1)
+                .then(watchList => {
+                    for (let i = 0; i < watchList.length; i++) {
+                        if (watchList.data[i].id === props.id) {
+                            setIsInWatchList(true)
+                            break;
+                        }
                     }
-                }
-            })
-    }, [isInWatchList])
+                })
+        }
+
+    }, [isInWatchList, props.id])
 
     return (
         <div className="card-group W-card-text-carousel W-films-margin-carrousel">
@@ -81,8 +84,7 @@ export default function CarrouselContent(props) {
                             ) : (
                                 <form id={`login${props.id}`} onSubmit={handleLogin}>
                                     <button className="btn btn-secondary W-watchList-button" type="submit">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                                             className="bi bi-bookmark-plus W-watchList-icon" viewBox="0 0 16 16">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="bi bi-bookmark-plus W-watchList-icon" viewBox="0 0 16 16">
                                             <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"/>
                                             <path d="M8 4a.5.5 0 0 1 .5.5V6H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V7H6a.5.5 0 0 1 0-1h1.5V4.5A.5.5 0 0 1 8 4z"/>
                                         </svg>
@@ -90,16 +92,16 @@ export default function CarrouselContent(props) {
                                 </form>
                             )}
                         </div>
-                        {/*TODO: ESTO DEBERIA SER UN TAG LINK no a*/}
-                        <a className="card-img-top W-card-link-style" href={`/${param.contentType}/${param.contentId}`}>
-                            <img className="card-img-top" src={props.contentPictureUrl} alt={`Image ${props.name}`} />
-                        </a>
+                        <Link className="card-img-top W-card-link-style" to={`/content/${props.type}/${props.id}`}>
+                            {/* eslint-disable-next-line jsx-a11y/img-redundant-alt */}
+                            <img className="card-img-top" src={props.image} alt={`Image ${props.name}`} />
+                        </Link>
                     </div>
 
                     <div className="card-body W-films-card-body-div">
-                        <a className="W-card-link-style" href={`/${param.contentType}/${param.contentId}`}>
+                        <Link className="W-card-link-style" to={`/content/${props.type}/${props.id}`}>
                             <div className="W-margin-one">
-                                <h4 className="card-title W-movie-title-carousel W-long-words-contemplation-title">{props.contentName}</h4>
+                                <h4 className="card-title W-movie-title-carousel W-long-words-contemplation-title">{props.name}</h4>
                                 <div>
                                     <p className="card-text W-movie-description W-card-details-margin"><span className="W-span-text-info-card-movie W-card-details-color">{t('Content.Released')} </span>{props.releaseDate}</p>
                                     <div>
@@ -109,7 +111,6 @@ export default function CarrouselContent(props) {
                                         <p className="card-text W-movie-description W-card-details-margin W-long-words-contemplation-creator"><span className="W-span-text-info-card-movie W-card-details-color">{t('Content.Creator')} </span> {props.creator}</p>
                                     </div>
                                 </div>
-                                {/*TODO: ESTO ES RARI*/}
                                 {[...Array(5)].map((_, index) => {
                                     if (props.rating >= index + 1) {
                                         return <svg key={index} xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="bi bi-star-fill W-stars-width" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>;
@@ -119,7 +120,7 @@ export default function CarrouselContent(props) {
                                 })}
                                 <p className="card-text W-movie-description W-card-details-margin">{t('Content.ReviewAmount', {reviewsAmount: props.reviewsAmount})}</p>
                             </div>
-                        </a>
+                        </Link>
                     </div>
                 </div>
             </div>

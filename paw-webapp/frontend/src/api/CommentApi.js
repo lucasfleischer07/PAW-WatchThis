@@ -7,16 +7,16 @@ export class CommentApi {
         this.basePath = `${paths.BASE_URL_API}${paths.COMMENT}`
     }
 
-    async getReviewComments(reviewId, pageNumber, pageSize) {
+    async getReviewComments(reviewId, pageNumber) {
         try {
             const apiUrl = `${this.basePath}/${reviewId}`
-            const params = {pageNumber: pageNumber, pageSize: pageSize}
+            const params = {pageNumber: pageNumber, pageSize: 10}
             const options = {headers: authCheck({})}
             const res = await fetchWithQueryParamsApi(apiUrl, params, options)
             if(res.status !== 204) {
-                return {error: false, data: await res.json()}
+                return {error: false, data: await res.json(), totalPages: res.totalPages}
             } else {
-                return {error: false, data: []}
+                return {error: false, data: [], totalPages: res.totalPages}
             }
         } catch (error) {
             return {error: true}

@@ -7,11 +7,21 @@ export class ReviewApi {
         this.basePath = `${paths.BASE_URL_API}${paths.REVIEWS}`
     }
 
-    async reviews(contentId, pageNumber, pageSize) {
-        const apiUrl = `${this.basePath}/${contentId}`
-        const params = {pageNumber: pageNumber, pageSize: pageSize}
-        const options = {headers: authCheck({})}
-        return await fetchWithQueryParamsApi(apiUrl, params, options)
+    async reviews(contentId, pageNumber) {
+        try {
+            const apiUrl = `${this.basePath}/${contentId}`
+            const params = {pageNumber: pageNumber, pageSize: 10}
+            const options = {headers: authCheck({})}
+            const res =  await fetchWithQueryParamsApi(apiUrl, params, options)
+            if(res.status !== 204) {
+                return {error: false, data: await res.json(), totalPages: res.totalPages}
+            } else {
+                return {error: false, data: [], totalPages: res.totalPages}
+            }
+        } catch (e) {
+            return {error: true}
+        }
+
     }
 
     async reviewsCreation(reviewId, type, reviewDetails) {

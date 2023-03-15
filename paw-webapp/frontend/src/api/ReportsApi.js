@@ -7,16 +7,16 @@ export class ReportsApi {
         this.basePath = `${paths.BASE_URL_API}${paths.REPORTS}`
     }
 
-    async getReportsByType(type, pageNumber, pageSize) {
+    async getReportsByType(type, pageNumber) {
         try {
             const apiUrl = `${this.basePath}/${type}`
-            const params = {pageNumber: pageNumber, pageSize: pageSize}
+            const params = {pageNumber: pageNumber, pageSize: 10}
             const options = {headers: authCheck({})}
             const res = await fetchWithQueryParamsApi(apiUrl, params, options)
             if(res.status !== 204) {
-                return {error: false, data: await res.json()}
+                return {error: false, data: await res.json(), totalPages: res.totalPages}
             } else {
-                return {error: false, data: []}
+                return {error: false, data: [], totalPages: res.totalPages}
             }
         } catch (e) {
             return {error: true}

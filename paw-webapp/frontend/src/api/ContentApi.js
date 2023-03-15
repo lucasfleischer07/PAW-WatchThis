@@ -8,8 +8,11 @@ export class ContentApi {
     }
 
     async getLandingPage() {
-        const res = await fetch(this.basePath)
-        return await res.json()
+        const res = await fetch(this.basePath, {
+            method: 'GET',
+            headers: authCheck({})
+        })
+        return {error: false, data: await res.json()}
     }
 
     async getSpecificContent(contentId) {
@@ -58,7 +61,6 @@ export class ContentApi {
             }
         } catch (e) {
             return {error: true}
-
         }
 
     }
@@ -115,14 +117,14 @@ export class ContentApi {
         }
     }
 
-    async getContentByType(contentType, pageNumber, pageSize) {
+    async getContentByType(contentType, pageNumber) {
         try {
             const apiUrl = `${this.basePath}/${contentType}`
-            const params = {pageNumber: pageNumber, pageSize: pageSize}
+            const params = {pageNumber: pageNumber, pageSize: 10}
             const options = {headers: authCheck({})}
             const res = await fetchWithQueryParamsApi(apiUrl, params, options)
             if(res.status !== 204) {
-                return {error: false, data: await res.json()}
+                return {error: false, data: await res.json(), totalPages: res.totalPages}
             } else {
                 return {error: false, data: []}
             }
@@ -133,16 +135,16 @@ export class ContentApi {
 
     // TODO: Ver bien ste que seria con paginacion y filtros
     // TODO: Filters seria un objeto que adentro tiene el genre, duration y sortBy
-    async filterContentByType(contentType, pageNumber, pageSize, filters) {
+    async filterContentByType(contentType, pageNumber, filters) {
         try {
             const apiUrl = `${this.basePath}/${contentType}/filters`
-            const params = {pageNumber: pageNumber, pageSize: pageSize, ...filters}
+            const params = {pageNumber: pageNumber, pageSize: 10, ...filters}
             const options = {headers: authCheck({})}
             const res = await fetchWithQueryParamsApi(apiUrl, params, options)
             if(res.status !== 204) {
-                return {error: false, data: await res.json()}
+                return {error: false, data: await res.json(), totalPages: res.totalPages}
             } else {
-                return {error: false, data: []}
+                return {error: false, data: [], totalPages: res.totalPages}
             }
         } catch (e) {
             return {error: true}
