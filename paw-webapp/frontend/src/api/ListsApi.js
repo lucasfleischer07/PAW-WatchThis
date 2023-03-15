@@ -7,6 +7,8 @@ export class ListsApi {
         this.basePath = `${paths.BASE_URL_API}${paths.LISTS}`
     }
 
+    // TODO: Cambiar lo de pageSize. No le quiero yo pasar el maximo, quiero que me lo devuelva.
+
     async getUserWatchList(userId, pageNumber, pageSize) {
         try {
             const apiUrl = `${this.basePath}/watchList/${userId}`

@@ -28,18 +28,10 @@ export function AuthProvider ({children}) {
         return localStorage.getItem("user") !== null
     }
 
-    // TODO: ver que onda esto
-    const makeAdmin = () => {
-        if(loggedUser !== null) {
-
-        }
-    }
-
     const value = {
         signIn,
         signOut,
         isLogged,
-        makeAdmin
     };
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

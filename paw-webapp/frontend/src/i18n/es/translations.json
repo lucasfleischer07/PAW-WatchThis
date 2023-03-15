@@ -163,7 +163,7 @@
   "Content.Genre": "Género:",
   "Content.Released": "Estrenado:",
   "Content.Creator": "Director:",
-  "Content.ReviewAmount": "({0} reseñas)",
+  "Content.ReviewAmount": "({{reviewsAmount}} reseñas)",
   "Content.Review": "Reseñas",
   "Content.AddReview": "Agregar reseña",
   "Content.NoReviewMessage.Movie": "No hay reseñas para esta película todavía.¡Sea el primero en crear una!",

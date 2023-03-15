@@ -164,7 +164,7 @@
   "Content.Genre": "Genre:",
   "Content.Released": "Released:",
   "Content.Creator": "Director:",
-  "Content.ReviewAmount": "({0} reviews)",
+  "Content.ReviewAmount": "({{reviewsAmount}} reviews)",
   "Content.Review": "Reviews",
   "Content.AddReview": "Add review",
   "Content.NoReviewMessage.Movie": "There are no reviews for this movie yet. Be the first to add one!",
