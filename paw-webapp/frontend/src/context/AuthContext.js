@@ -1,14 +1,11 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import {use} from "i18next";
+import { createContext, useState } from "react";
 
 export const AuthContext = createContext(null);
 
 
 export function AuthProvider ({children}) {
-    const [loggedUser, setLoggedUser] = useState(undefined);
 
     const signIn = (user, authToken, rememberMe) => {
-        setLoggedUser(user)
         localStorage.setItem("user", JSON.stringify(user))
         localStorage.setItem("userAuthToken", authToken)
         localStorage.setItem("isAdmin", user.role === 'admin' ? "true" : "false")
@@ -17,7 +14,6 @@ export function AuthProvider ({children}) {
     }
 
     const signOut = (email, password) => {
-        setLoggedUser(null)
         localStorage.removeItem("user");
         localStorage.removeItem("userAuthToken");
         localStorage.removeItem("isAdmin");

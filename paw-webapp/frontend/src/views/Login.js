@@ -1,8 +1,8 @@
 import {useContext, useEffect, useState} from 'react';
-import {Link, useLocation, useNavigate} from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import {useTranslation} from "react-i18next";
 import {AuthContext} from "../context/AuthContext";
-import {contentService, userService} from "../services";
+import {userService} from "../services";
 
 export default function Login() {
     const {t} = useTranslation()
@@ -20,7 +20,7 @@ export default function Login() {
     const [error, setError] = useState(false)
 
     const validEmail = () => {
-        const emailRegex = /^((([+\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3}))+)?$/
+        const emailRegex = /^((([+.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3}))+)?$/
         return userForm.email && emailRegex.test(userForm.email)
     }
     const validForm = () => {
@@ -47,6 +47,7 @@ export default function Login() {
         userService.login(userForm.email, userForm.password)
             .then((user) => {
                 if(!user.error) {
+                    console.log(user.data)
                     signIn(user.data, user.header, userForm.rememberMe)
                     navigate(origin, {replace: true})
                 } else {
