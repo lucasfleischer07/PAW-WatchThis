@@ -42,7 +42,7 @@ export class CommentApi {
 
     }
 
-    async commentReviewDelete(commentId) {
+    async commentDelete(commentId) {
         try {
             await fetch(`${this.basePath}/delete/${commentId}`, {
                 method: 'DELETE',
