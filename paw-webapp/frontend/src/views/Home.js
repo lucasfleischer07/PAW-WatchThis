@@ -83,7 +83,7 @@ export default function Home() {
                                 .map((externalIndex) => (
                                         <div className={`carousel-item ${externalIndex === 0 ? "active" : ""}`} key={externalIndex}>
                                             <div className="cards-wrapper">
-                                                {[...Array(Math.min(4, recommendedUserList.length - externalIndex * 5)).keys()]
+                                                {[...Array(Math.min(5, recommendedUserList.length - externalIndex * 5)).keys()]
                                                     .map((internalIndex) => (
                                                         <CarrouselContent
                                                             name={recommendedUserList[internalIndex + externalIndex * 5].name}
