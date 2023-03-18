@@ -14,7 +14,7 @@ export class CommentApi {
             const options = {headers: authCheck({})}
             const res = await fetchWithQueryParamsApi(apiUrl, params, options)
             if(res.status !== 204) {
-                return {error: false, data: await res.json(), totalPages: res.totalPages}
+                return {error: false, data: await res.data, totalPages: res.totalPages}
             } else {
                 return {error: false, data: [], totalPages: res.totalPages}
             }

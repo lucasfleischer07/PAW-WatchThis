@@ -109,7 +109,7 @@
   "Comment.EmptyComment": "The comment is empty",
   "Comment.LenghtComment": "The comment must have between 10 and 500 characters",
 
-  "Search.Title": "The result of: {0}",
+  "Search.Title": "The result of: {{query}}",
 
   "Review.Owner": "Review owner: {0}",
   "Review.Mine": "My review",
@@ -169,7 +169,7 @@
   "Content.AddReview": "Add review",
   "Content.NoReviewMessage.Movie": "There are no reviews for this movie yet. Be the first to add one!",
   "Content.NoReviewMessage.Serie": "There are no reviews for this tv Show yet. Be the first to add one!",
-  "Content.NoContent": "We looked {0} everywhere, but we couldn't find anything at all.",
+  "Content.NoContent": "We looked {{query}} everywhere, but we couldn't find anything at all.",
   "Content.NoContent.Filters": "Oh, no! Seems like we don't have that. Try searching another genre or duration!",
   "Content.Carousel.BestRatedContent": "Best rated content",
   "Content.Carousel.RecommendedForYou": "Recommended for you",

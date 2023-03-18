@@ -13,13 +13,13 @@ export default function Home() {
     const [mostSavedContentByUsersList, setMostSavedContentByUsersList] = useState([])
     const [recommendedUserList, setRecommendedUserList] = useState(new Array(0))
 
-    const [userWatchList, setUserWatchList] = useState(new Array(0))
+    const [userWatchListIds, setUserWatchListIds] = useState(new Array(0))
 
-    useEffect(() => {
-        if(user === undefined) {
-            setUser(JSON.parse(localStorage.getItem("user")))
-        }
-    }, [user])
+    // useEffect(() => {
+    //     if(user === undefined) {
+    //         setUser(JSON.parse(localStorage.getItem("user")))
+    //     }
+    // }, [])
 
     useEffect(() => {
         contentService.getLandingPage()
@@ -44,10 +44,10 @@ export default function Home() {
 
     useEffect(() => {
         if(isLogged()) {
-            listsService.getUserWatchList(user.id, 1)
+            listsService.getUserWatchListContentIds(user.id)
                 .then(data => {
                     if(!data.error) {
-                        setUserWatchList(data.data)
+                        setUserWatchListIds(data.data)
                     } else {
                         //     TODO: Meter un toast de error
                     }
@@ -56,7 +56,7 @@ export default function Home() {
                     //     TODO: Meter un toast o algo asi
                 })
         }
-    }, [])
+    }, [user.id])
 
     useEffect(() => {
         document.title = t('WatchThisMessage')
@@ -65,8 +65,10 @@ export default function Home() {
 
 
     return(
+        // TODO: FALTA HEADER
+
         <div className="W-carousels-div">
-            {isLogged() && userWatchList != null && recommendedUserList != null ? (
+            {isLogged() && userWatchListIds.length !== 0 && recommendedUserList.length !== 0 ? (
                 <>
                     <h3 className="W-carousel-title">{t('Content.Carousel.RecommendedForYou')}</h3>
                     <div id="carouselRecommended" className="carousel slide" data-ride="carousel">

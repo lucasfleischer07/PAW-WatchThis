@@ -2,7 +2,7 @@ import {useContext, useEffect, useState} from 'react';
 import {useTranslation} from "react-i18next";
 import {Link, useNavigate} from "react-router-dom";
 import {AuthContext} from "../../context/AuthContext";
-import {contentService, listsService} from "../../services";
+import {listsService} from "../../services";
 
 export default function CarrouselContent(props) {
     const {t} = useTranslation()
@@ -10,7 +10,6 @@ export default function CarrouselContent(props) {
     let {isLogged} = useContext(AuthContext)
 
     const [isInWatchList, setIsInWatchList] = useState(false);
-    const [contentImage, setContentImage] = useState('');
 
     const handleAddToWatchlist = (event) => {
         event.preventDefault();
@@ -42,7 +41,6 @@ export default function CarrouselContent(props) {
         navigate('/login', {replace: true})
     }
 
-
     useEffect(() => {
         if(isLogged()) {
             listsService.getUserWatchList(props.user.id, 1)
@@ -53,6 +51,9 @@ export default function CarrouselContent(props) {
                             break;
                         }
                     }
+                })
+                .catch(e => {
+                //     TODO: Meter algo
                 })
         }
 

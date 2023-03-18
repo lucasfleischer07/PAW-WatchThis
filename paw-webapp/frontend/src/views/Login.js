@@ -1,5 +1,5 @@
 import {useContext, useEffect, useState} from 'react';
-import {useLocation, useNavigate} from 'react-router-dom';
+import {Link, useLocation, useNavigate} from 'react-router-dom';
 import {useTranslation} from "react-i18next";
 import {AuthContext} from "../context/AuthContext";
 import {userService} from "../services";
@@ -148,9 +148,9 @@ export default function Login() {
                             {/*<Link to='/singUp'>*/}
                             {/*    <button type="button" className="btn btn-secondary W-sign-up-button-link">{t('Login.SignUpMessage')}</button>*/}
                             {/*</Link>*/}
-                            <a href="/login/sign-up">
+                            <Link to="/login/sign-up">
                                 <button type="button" className="btn btn-secondary W-sign-up-button-link">{t('Login.SignUpMessage')}</button>
-                            </a>
+                            </Link>
                         </div>
                     </div>
                 </form>

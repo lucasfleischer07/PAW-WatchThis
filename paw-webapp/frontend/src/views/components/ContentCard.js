@@ -1,22 +1,25 @@
-import {useContext, useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {useTranslation} from "react-i18next";
-import {useLocation, useNavigate} from "react-router-dom";
-import {AuthContext} from "../../context/AuthContext";
+import {useNavigate} from "react-router-dom";
 import {listsService} from "../../services";
 
 export default function ContentCard(props) {
     const {t} = useTranslation()
     let navigate = useNavigate()
-    const [user,setUser] = useState(undefined);
-    const contentType = props.contentType;
-    const contentId = props.contentId;
+
+    const user = props.user;
+    const [isInWatchList, setIsInWatchList] = useState(false)
+
     const contentName = props.contentName;
     const contentReleased = props.contentReleased;
-    const contentGenre = props.contentGenre;
     const contentCreator = props.contentCreator;
+    const contentGenre = props.contentGenre;
+    const contentImage=props.contentImage;
+    const contentId = props.contentId;
+    const contentType = props.contentType;
     const contentRating = props.contentRating;
-    const contentPictureUrl=props.contentPictureUrl;
-    const [isInWatchList, setIsInWatchList] = useState(false);
+    const reviewsAmount = props.reviewsAmount
+
     const handleAddToWatchlist = (event) => {
         event.preventDefault();
         listsService.addUserWatchList(contentId)
@@ -46,22 +49,25 @@ export default function ContentCard(props) {
         event.preventDefault();
         navigate('/login', {replace: true})
     }
-    useEffect(() => {setUser(localStorage.getItem("user")?localStorage.getItem("user"):undefined)}
-        ,[])
 
     useEffect(() => {
-        user!==undefined?
-        listsService.getUserWatchList(user.id)
-            .then(watchList => {
-                for (let i = 0; i < watchList.length; i++) {
-                    if (watchList.data[i].id === contentId) {
-                        setIsInWatchList(true)
-                        break;
-                    }
-                }
-            })
-            : setIsInWatchList(false)
-    }, [isInWatchList,user,contentId])
+        setIsInWatchList(props.isInWatchList)
+    }, [])
+
+    // TODO: Creo que esto no iria, ya que viene del padre, revisar
+    // useEffect(() => {
+    //     user!==undefined?
+    //     listsService.getUserWatchListContentIds(user.id)
+    //         .then(watchList => {
+    //             for (let i = 0; i < watchList.length; i++) {
+    //                 if (watchList.data[i].id === contentId) {
+    //                     setIsInWatchList(true)
+    //                     break;
+    //                 }
+    //             }
+    //         })
+    //         : setIsInWatchList(false)
+    // }, [isInWatchList, user, contentId])
 
 
     const ratingStars = [];
@@ -86,48 +92,29 @@ export default function ContentCard(props) {
     const watchListButton =
         user !== "null" ? (
             isInWatchList ? (
-                <form
-                    id={`form${contentId}`}
-                    onSubmit={handleRemoveFromWatchlist}
-                >
+                <form id={`form${contentId}`} onSubmit={handleRemoveFromWatchlist}>
                     <button className="btn btn-secondary W-watchList-button" type="submit">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                             className="bi bi-bookmark-plus W-watchList-icon" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd"
-                                  d="M2 15.5V2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.74.439L8 13.069l-5.26 2.87A.5.5 0 0 1 2 15.5zM6.854 5.146a.5.5 0 1 0-.708.708L7.293 7 6.146 8.146a.5.5 0 1 0 .708.708L8 7.707l1.146 1.147a.5.5 0 1 0 .708-.708L8.707 7l1.147-1.146a.5.5 0 0 0-.708-.708L8 6.293 6.854 5.146z"/>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="bi bi-bookmark-plus W-watchList-icon" viewBox="0 0 16 16">
+                            <path fillRule="evenodd" d="M2 15.5V2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.74.439L8 13.069l-5.26 2.87A.5.5 0 0 1 2 15.5zM6.854 5.146a.5.5 0 1 0-.708.708L7.293 7 6.146 8.146a.5.5 0 1 0 .708.708L8 7.707l1.146 1.147a.5.5 0 1 0 .708-.708L8.707 7l1.147-1.146a.5.5 0 0 0-.708-.708L8 6.293 6.854 5.146z"/>
                         </svg>
                     </button>
                 </form>
             ) : (
-                <form
-                    id={`form${contentId}`}
-                    onSubmit={handleAddToWatchlist}
-
-                >
+                <form id={`form${contentId}`} onSubmit={handleAddToWatchlist}>
                     <button className="btn btn-secondary W-watchList-button" type="submit">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                             className="bi bi-bookmark-plus W-watchList-icon" viewBox="0 0 16 16">
-                            <path
-                                d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"/>
-                            <path
-                                d="M8 4a.5.5 0 0 1 .5.5V6H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V7H6a.5.5 0 0 1 0-1h1.5V4.5A.5.5 0 0 1 8 4z"/>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="bi bi-bookmark-plus W-watchList-icon" viewBox="0 0 16 16">
+                            <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"/>
+                            <path d="M8 4a.5.5 0 0 1 .5.5V6H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V7H6a.5.5 0 0 1 0-1h1.5V4.5A.5.5 0 0 1 8 4z"/>
                         </svg>
                     </button>
                 </form>
             )
         ) : (
-            <form
-                id={`login${contentId}`}
-                onSubmit={handleLogin}
-
-            >
+            <form id={`login${contentId}`} onSubmit={handleLogin}>
                 <button className="btn btn-secondary W-watchList-button" type="submit">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                         className="bi bi-bookmark-plus W-watchList-icon" viewBox="0 0 16 16">
-                        <path
-                            d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"/>
-                        <path
-                            d="M8 4a.5.5 0 0 1 .5.5V6H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V7H6a.5.5 0 0 1 0-1h1.5V4.5A.5.5 0 0 1 8 4z"/>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="bi bi-bookmark-plus W-watchList-icon" viewBox="0 0 16 16">
+                        <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"/>
+                        <path d="M8 4a.5.5 0 0 1 .5.5V6H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V7H6a.5.5 0 0 1 0-1h1.5V4.5A.5.5 0 0 1 8 4z"/>
                     </svg>
                 </button>
             </form>
@@ -142,10 +129,8 @@ export default function ContentCard(props) {
                             <div className="d-grid gap-2 W-watchList-button-div">
                                 {watchListButton}
                             </div>
-                            <a className="card-img-top W-card-link-style"
-                               href={`/${contentType}/${contentId}`}>
-                                <img className="card-img-top" src={contentPictureUrl}
-                                     alt={`${contentName}`} />
+                            <a className="card-img-top W-card-link-style" href={`/${contentType}/${contentId}`}>
+                                <img className="card-img-top" src={contentImage} alt={`${contentName}`} />
                             </a>
                         </div>
                         <div className="card-body W-films-card-body-div">
@@ -174,7 +159,7 @@ export default function ContentCard(props) {
                                     </div>
                                     <div>{ratingStars}</div>
                                     <p className="card-text W-movie-description W-card-details-margin">
-                                        {t('Content.ReviewAmount', {reviewsAmount: props.reviewsAmount})}
+                                        {t('Content.ReviewAmount', {reviewsAmount: reviewsAmount})}
                                     </p>
                                 </div>
                             </a>

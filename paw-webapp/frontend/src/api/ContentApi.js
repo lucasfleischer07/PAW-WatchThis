@@ -1,6 +1,6 @@
 import {APPLICATION_JSON_TYPE, paths} from "../paths";
 import {fetchWithQueryParamsApi} from "./FetchWithQueryParams";
-import {authCheck, normalFetch} from "../scripts/authCheck";
+import {authCheck} from "../scripts/authCheck";
 
 export class ContentApi {
     constructor() {
@@ -124,11 +124,12 @@ export class ContentApi {
             const options = {headers: authCheck({})}
             const res = await fetchWithQueryParamsApi(apiUrl, params, options)
             if(res.status !== 204) {
-                return {error: false, data: await res.json(), totalPages: res.totalPages}
+                return {error: false, totalPages: res.totalPages, data: res.data}
             } else {
                 return {error: false, data: []}
             }
         } catch (e) {
+            console.log(e)
             return {error: true}
         }
     }
@@ -142,7 +143,7 @@ export class ContentApi {
             const options = {headers: authCheck({})}
             const res = await fetchWithQueryParamsApi(apiUrl, params, options)
             if(res.status !== 204) {
-                return {error: false, data: await res.json(), totalPages: res.totalPages}
+                return {error: false, data: await res.data, totalPages: res.totalPages}
             } else {
                 return {error: false, data: [], totalPages: res.totalPages}
             }
