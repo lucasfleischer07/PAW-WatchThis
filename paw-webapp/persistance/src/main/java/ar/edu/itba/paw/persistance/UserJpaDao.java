@@ -92,9 +92,9 @@ public class UserJpaDao implements UserDao{
         int pageAmount= PageWrapper.calculatePageAmount(contentList.size(),pageSize);
         PageWrapper<Content> pageWrapper;
         if( page < pageAmount){
-            pageWrapper = new PageWrapper<>(page,pageAmount,pageSize,contentList.subList((page-1)*pageSize,page * pageSize));
+            pageWrapper = new PageWrapper<>(page,pageAmount,pageSize,contentList.subList((page-1)*pageSize,page * pageSize),contentList.size());
         }else{
-            pageWrapper = new PageWrapper<>(page,pageAmount,pageSize,contentList.subList((page-1)*pageSize,(page-1) * pageSize + contentList.size()% pageSize ));
+            pageWrapper = new PageWrapper<>(page,pageAmount,pageSize,contentList.subList((page-1)*pageSize,(page-1) * pageSize + contentList.size()% pageSize ),contentList.size());
         }
 
         return pageWrapper;
@@ -141,9 +141,9 @@ public class UserJpaDao implements UserDao{
         int pageAmount= PageWrapper.calculatePageAmount(contentList.size(),pageSize);
         PageWrapper<Content> pageWrapper;
         if( page < pageAmount){
-            pageWrapper = new PageWrapper<>(page,pageAmount,pageSize,contentList.subList((page-1)*pageSize,page * pageSize));
+            pageWrapper = new PageWrapper<>(page,pageAmount,pageSize,contentList.subList((page-1)*pageSize,page * pageSize),contentList.size());
         }else{
-            pageWrapper = new PageWrapper<>(page,pageAmount,pageSize,contentList.subList((page-1)*pageSize,(page-1) * pageSize + contentList.size()% pageSize ));
+            pageWrapper = new PageWrapper<>(page,pageAmount,pageSize,contentList.subList((page-1)*pageSize,(page-1) * pageSize + contentList.size()% pageSize ),contentList.size());
         }
 
         return pageWrapper;

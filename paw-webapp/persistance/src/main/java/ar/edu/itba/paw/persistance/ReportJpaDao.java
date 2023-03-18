@@ -76,7 +76,7 @@ public class ReportJpaDao implements ReportDao{
 
         long totalContent = PageWrapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
 
-        return new PageWrapper<ReviewReport>(page,totalContent,pageSize,query.getResultList());
+        return new PageWrapper<ReviewReport>(page,totalContent,pageSize,query.getResultList(),countQuery.getResultList().size());
 
     }
 
@@ -90,7 +90,7 @@ public class ReportJpaDao implements ReportDao{
 
         long totalContent = PageWrapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
 
-        return new PageWrapper<ReviewReport>(page,totalContent,pageSize,query.getResultList());
+        return new PageWrapper<ReviewReport>(page,totalContent,pageSize,query.getResultList(),countQuery.getResultList().size());
     }
 
     @Override
@@ -102,7 +102,7 @@ public class ReportJpaDao implements ReportDao{
 
         long totalContent = PageWrapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
 
-        return new PageWrapper<CommentReport>(page,totalContent,pageSize,query.getResultList());
+        return new PageWrapper<CommentReport>(page,totalContent,pageSize,query.getResultList(),countQuery.getResultList().size());
     }
 
     @Override
@@ -116,7 +116,7 @@ public class ReportJpaDao implements ReportDao{
 
         long totalContent = PageWrapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
 
-        return new PageWrapper<CommentReport>(page,totalContent,pageSize,query.getResultList());
+        return new PageWrapper<CommentReport>(page,totalContent,pageSize,query.getResultList(),countQuery.getResultList().size());
     }
 
     @Override

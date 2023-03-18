@@ -38,7 +38,7 @@ public class ContentJpaDao implements ContentDao{
         query.setMaxResults(pageSize);
         long totalContent = PageWrapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
 
-        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList()) ;
+        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList(),countQuery.getResultList().size()) ;
     }
 
     @Override
@@ -83,7 +83,7 @@ public class ContentJpaDao implements ContentDao{
 
         long totalContent = PageWrapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
 
-        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList()) ;
+        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList(),countQuery.getResultList().size()) ;
     }
 
     @Override
@@ -109,7 +109,7 @@ public class ContentJpaDao implements ContentDao{
 
         long totalContent = PageWrapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
 
-        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList());
+        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList(),countQuery.getResultList().size());
     }
 
     @Override
@@ -138,7 +138,7 @@ public class ContentJpaDao implements ContentDao{
         query.setParameter("resultList",longList);
         query.setFirstResult((page - 1) * pageSize);
         query.setMaxResults(pageSize);
-        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList());
+        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList(),countQuery.getResultList().size());
     }
 
     @Override
@@ -166,7 +166,7 @@ public class ContentJpaDao implements ContentDao{
         query.setParameter("query","%" + queryUser.toLowerCase() + "%");
         query.setFirstResult((page - 1) * pageSize);
         query.setMaxResults(pageSize);
-        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList());
+        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList(),countQuery.getResultList().size());
     }
 
     //First makes the genre query in a NativeQuery
@@ -194,7 +194,7 @@ public class ContentJpaDao implements ContentDao{
         query.setParameter("resultList",longList);
         query.setFirstResult((page - 1) * pageSize);
         query.setMaxResults(pageSize);
-        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList());
+        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList(),countQuery.getResultList().size());
     }
 
     @Override
@@ -222,7 +222,7 @@ public class ContentJpaDao implements ContentDao{
         query.setParameter("durationTo",durationTo);
         query.setFirstResult((page - 1) * pageSize);
         query.setMaxResults(pageSize);
-        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList());
+        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList(),countQuery.getResultList().size());
     }
 
 
@@ -256,7 +256,7 @@ public class ContentJpaDao implements ContentDao{
         query.setMaxResults(pageSize);
 
 
-        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList());
+        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList(),countQuery.getResultList().size());
     }
 
 
@@ -270,7 +270,7 @@ public class ContentJpaDao implements ContentDao{
         long totalContent = PageWrapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
 
         query.setParameter("query","%" + queryUser.toLowerCase() + "%");
-        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList());
+        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList(),countQuery.getResultList().size());
     }
 
     @Override
@@ -284,7 +284,7 @@ public class ContentJpaDao implements ContentDao{
         query.setParameter("type",type);
         query.setFirstResult((page - 1) * pageSize);
         query.setMaxResults(pageSize);
-        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList());
+        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList(),countQuery.getResultList().size());
     }
 
     @Override

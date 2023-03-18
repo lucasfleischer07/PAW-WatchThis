@@ -30,12 +30,12 @@ public class ReviewJpaDao implements ReviewDao{
         List<Review> reviews = content.getContentReviews();
         long totalPages = PageWrapper.calculatePageAmount(reviews.size(),pageSize);
         if(page > totalPages || page <= 0){
-            return new PageWrapper<Review>(page,totalPages,pageSize,null);
+            return new PageWrapper<Review>(page,totalPages,pageSize,null,reviews.size());
         }
         if(page < totalPages){
-            return new PageWrapper<Review>(page,totalPages,pageSize,reviews.subList((page-1)*pageSize,page * pageSize));
+            return new PageWrapper<Review>(page,totalPages,pageSize,reviews.subList((page-1)*pageSize,page * pageSize),reviews.size());
         }
-        return new PageWrapper<Review>(page,totalPages,pageSize,reviews.subList((page-1)*pageSize,(page-1)*pageSize + (reviews.size() % pageSize)));
+        return new PageWrapper<Review>(page,totalPages,pageSize,reviews.subList((page-1)*pageSize,(page-1)*pageSize + (reviews.size() % pageSize)),reviews.size());
     }
 
     @Override
@@ -67,12 +67,12 @@ public class ReviewJpaDao implements ReviewDao{
         List<Review> reviews = user.getUserReviews();
         long totalPages = PageWrapper.calculatePageAmount(reviews.size(),pageSize);
         if(page > totalPages || page <= 0){
-            return new PageWrapper<Review>(page,totalPages,pageSize,null);
+            return new PageWrapper<Review>(page,totalPages,pageSize,null,reviews.size());
         }
         if(page < totalPages){
-            return new PageWrapper<Review>(page,totalPages,pageSize,reviews.subList((page-1)*pageSize,page * pageSize));
+            return new PageWrapper<Review>(page,totalPages,pageSize,reviews.subList((page-1)*pageSize,page * pageSize),reviews.size());
         }
-        return new PageWrapper<Review>(page,totalPages,pageSize,reviews.subList((page-1)*pageSize,(page-1)*pageSize + (reviews.size() % pageSize)));
+        return new PageWrapper<Review>(page,totalPages,pageSize,reviews.subList((page-1)*pageSize,(page-1)*pageSize + (reviews.size() % pageSize)),reviews.size());
     }
 
     @Override

@@ -7,12 +7,14 @@ public class PageWrapper<T> {
     private final long pageAmount;
     private final int pageSize;
     private final List<T> pageContent;
+    private final int elemsAmount;
 
-    public PageWrapper(int page, long pageAmount, int pageSize, List<T> pageContent){
+    public PageWrapper(int page, long pageAmount, int pageSize, List<T> pageContent,int elemsAmount){
         this.page=page;
         this.pageAmount=pageAmount;
         this.pageContent=pageContent;
         this.pageSize=pageSize;
+        this.elemsAmount = elemsAmount;
     }
 
     public static int calculatePageAmount(long elems, int pageSize) {
@@ -23,6 +25,10 @@ public class PageWrapper<T> {
 
     public boolean hasNextPage(){
         return page < pageAmount;
+    }
+
+    public int getElemsAmount() {
+        return elemsAmount;
     }
 
     public boolean hasPrevPage(){
