@@ -15,12 +15,6 @@ export default function Home() {
 
     const [userWatchListIds, setUserWatchListIds] = useState(new Array(0))
 
-    // useEffect(() => {
-    //     if(user === undefined) {
-    //         setUser(JSON.parse(localStorage.getItem("user")))
-    //     }
-    // }, [])
-
     useEffect(() => {
         contentService.getLandingPage()
             .then(list => {
@@ -40,6 +34,18 @@ export default function Home() {
                 console.log(e)
                 //     TODO: Meter un toast o algo asi
             })
+
+        listsService.getUserWatchListContentIds(user.id)
+            .then(watchList => {
+                if(!watchList.error) {
+                    setUserWatchListIds(watchList.data)
+                } else {
+                //     Meter toast
+                }
+            })
+            .catch(e => {
+            //     TODO: Meter toast
+            })
     }, [])
 
     useEffect(() => {
@@ -56,7 +62,7 @@ export default function Home() {
                     //     TODO: Meter un toast o algo asi
                 })
         }
-    }, [user.id])
+    }, [userWatchListIds, user.id])
 
     useEffect(() => {
         document.title = t('WatchThisMessage')
@@ -91,7 +97,9 @@ export default function Home() {
                                                             reviewsAmount={recommendedUserList[internalIndex + externalIndex * 5].reviewsAmount}
                                                             image={recommendedUserList[internalIndex + externalIndex * 5].contentPictureUrl}
                                                             user={user}
-                                                            key={internalIndex}/>
+                                                            isInWatchList={userWatchListIds.length > 0 ? userWatchListIds.some(item => item.id === recommendedUserList[internalIndex + externalIndex * 5].id) : false}
+                                                            key={internalIndex}
+                                                        />
                                                     )
                                                 )}
                                             </div>
@@ -132,6 +140,7 @@ export default function Home() {
                                                     reviewsAmount={content.reviewsAmount}
                                                     image={content.contentPictureUrl}
                                                     user={user}
+                                                    isInWatchList={userWatchListIds.length > 0 ? userWatchListIds.some(item => item.id === content.id) : false}
                                                     key={index}/>
                                         ))}
                                     </div>
@@ -170,6 +179,7 @@ export default function Home() {
                                                 rating={content.rating}
                                                 reviewsAmount={content.reviewsAmount}
                                                 image={content.contentPictureUrl}
+                                                isInWatchList={userWatchListIds.length > 0 ? userWatchListIds.some(item => item.id === content.id) : false}
                                                 user={user}
                                             />
                                         ))}
@@ -207,6 +217,7 @@ export default function Home() {
                                             rating={content.rating}
                                             reviewsAmount={content.reviewsAmount}
                                             image={content.contentPictureUrl}
+                                            isInWatchList={userWatchListIds.length > 0 ? userWatchListIds.some(item => item.id === content.id) : false}
                                             user={user}
                                         />
                                     ))}

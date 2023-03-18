@@ -8,7 +8,7 @@ export default function ContentCard(props) {
     let navigate = useNavigate()
 
     const user = props.user;
-    const [isInWatchList, setIsInWatchList] = useState(false)
+    const [isInWatchList, setIsInWatchList] = useState(props.isInWatchList)
 
     const contentName = props.contentName;
     const contentReleased = props.contentReleased;
@@ -38,7 +38,7 @@ export default function ContentCard(props) {
         listsService.deleteUserWatchList(contentId)
             .then(data => {
                 if(!data.error) {
-                    setIsInWatchList(true);
+                    setIsInWatchList(false);
                 }
             })
             .catch(() => {
@@ -49,25 +49,6 @@ export default function ContentCard(props) {
         event.preventDefault();
         navigate('/login', {replace: true})
     }
-
-    useEffect(() => {
-        setIsInWatchList(props.isInWatchList)
-    }, [])
-
-    // TODO: Creo que esto no iria, ya que viene del padre, revisar
-    // useEffect(() => {
-    //     user!==undefined?
-    //     listsService.getUserWatchListContentIds(user.id)
-    //         .then(watchList => {
-    //             for (let i = 0; i < watchList.length; i++) {
-    //                 if (watchList.data[i].id === contentId) {
-    //                     setIsInWatchList(true)
-    //                     break;
-    //                 }
-    //             }
-    //         })
-    //         : setIsInWatchList(false)
-    // }, [isInWatchList, user, contentId])
 
 
     const ratingStars = [];
@@ -90,7 +71,7 @@ export default function ContentCard(props) {
     }
 
     const watchListButton =
-        user !== "null" ? (
+        user !== null ? (
             isInWatchList ? (
                 <form id={`form${contentId}`} onSubmit={handleRemoveFromWatchlist}>
                     <button className="btn btn-secondary W-watchList-button" type="submit">
@@ -119,6 +100,7 @@ export default function ContentCard(props) {
                 </button>
             </form>
         );
+
 
     return (
         <div className="W-movie-card-size">

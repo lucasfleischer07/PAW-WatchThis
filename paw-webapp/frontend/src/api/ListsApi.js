@@ -28,7 +28,6 @@ export class ListsApi {
             const res = await fetch(`${this.basePath}/watchListContentIds/${userId}`, {
                 method: 'GET',
                 headers: authCheck({}),
-                body: {}
             })
 
             if(res.status !== 204) {
@@ -93,7 +92,6 @@ export class ListsApi {
             const res = await fetch(`${this.basePath}/viewedListContentIds/${userId}`, {
                 method: 'GET',
                 headers: authCheck({}),
-                body: {}
             })
 
             if(res.status !== 204) {

@@ -9,7 +9,7 @@ export default function CarrouselContent(props) {
     let navigate = useNavigate()
     let {isLogged} = useContext(AuthContext)
 
-    const [isInWatchList, setIsInWatchList] = useState(false);
+    const [isInWatchList, setIsInWatchList] = useState(props.isInWatchList);
 
     const handleAddToWatchlist = (event) => {
         event.preventDefault();
@@ -29,7 +29,7 @@ export default function CarrouselContent(props) {
         listsService.deleteUserWatchList(props.id)
             .then(data => {
                 if(!data.error) {
-                    setIsInWatchList(true);
+                    setIsInWatchList(false);
                 }
             })
             .catch(() => {
@@ -41,23 +41,24 @@ export default function CarrouselContent(props) {
         navigate('/login', {replace: true})
     }
 
+    const watchListHandle = () => {
+        listsService.getUserWatchListContentIds(props.user.id)
+            .then(watchList => {
+                if(!watchList.error) {
+                    setIsInWatchList(watchList.data.some(item => item.id === props.id))
+                }
+            })
+            .catch(e => {
+                //     TODO: Meter algo
+            })
+    }
+
     useEffect(() => {
         if(isLogged()) {
-            listsService.getUserWatchList(props.user.id, 1)
-                .then(watchList => {
-                    for (let i = 0; i < watchList.length; i++) {
-                        if (watchList.data[i].id === props.id) {
-                            setIsInWatchList(true)
-                            break;
-                        }
-                    }
-                })
-                .catch(e => {
-                //     TODO: Meter algo
-                })
+            watchListHandle()
         }
+    }, [isInWatchList])
 
-    }, [isInWatchList, props.id])
 
     return (
         <div className="card-group W-card-text-carousel W-films-margin-carrousel">

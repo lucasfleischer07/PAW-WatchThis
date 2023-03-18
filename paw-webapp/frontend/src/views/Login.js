@@ -47,7 +47,6 @@ export default function Login() {
         userService.login(userForm.email, userForm.password)
             .then((user) => {
                 if(!user.error) {
-                    console.log(user.data)
                     signIn(user.data, user.header, userForm.rememberMe)
                     navigate(origin, {replace: true})
                 } else {
