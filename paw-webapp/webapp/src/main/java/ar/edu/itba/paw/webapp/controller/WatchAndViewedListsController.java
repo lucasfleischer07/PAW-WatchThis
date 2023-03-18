@@ -8,6 +8,7 @@ import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.services.ContentService;
 import ar.edu.itba.paw.services.UserService;
 import ar.edu.itba.paw.webapp.dto.response.ContentDto;
+import ar.edu.itba.paw.webapp.dto.response.LongDto;
 import ar.edu.itba.paw.webapp.utilities.ResponseBuildingUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,6 +59,27 @@ public class WatchAndViewedListsController {
         ResponseBuildingUtils.setPaginationLinks(response,watchList , uriInfo);
         return response.build();
 
+    }
+
+    // Endpoint para getear la watchlist del ususario con los ids del contenido
+    @GET
+    @Path("/watchListContentIds/{userId}")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response getUserWatchListContentIds(@PathParam("userId") final long userId) {
+        LOGGER.info("GET /{}: Called", uriInfo.getPath());
+
+        final User user = us.findById(userId).orElseThrow(UserNotFoundException::new);
+        final User user2 = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
+
+        if(user.getId() != user2.getId()) {
+            LOGGER.warn("GET /{}: Login user {} is different from watchlist owner {}", uriInfo.getPath(), user2.getId(), userId);
+            throw new ForbiddenException();
+        }
+        List<Long> watchListIds = us.getUserWatchListContent(user);
+        Collection<LongDto> watchListIdsDto = LongDto.mapLongToLongDto(watchListIds);
+        LOGGER.info("GET /{}: Watchlist from user {}", uriInfo.getPath(),userId);
+
+        return Response.ok(new GenericEntity<Collection<LongDto>>(watchListIdsDto){}).build();
     }
 
 
@@ -124,6 +146,27 @@ public class WatchAndViewedListsController {
         Response.ResponseBuilder response = Response.ok(new GenericEntity<Collection<ContentDto>>(viewedListDto){});
         ResponseBuildingUtils.setPaginationLinks(response,viewedList , uriInfo);
         return response.build();
+    }
+
+    // Endpoint para getear la watchlist del ususario con los ids del contenido
+    @GET
+    @Path("/viewedListContentIds/{userId}")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response getUserViewedListContentIds(@PathParam("userId") final long userId) {
+        LOGGER.info("GET /{}: Called", uriInfo.getPath());
+
+        final User user = us.findById(userId).orElseThrow(UserNotFoundException::new);
+        final User user2 = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
+
+        if(user.getId() != user2.getId()) {
+            LOGGER.warn("GET /{}: Login user {} is different from viewedlist owner {}", uriInfo.getPath(), user2.getId(), userId);
+            throw new ForbiddenException();
+        }
+        List<Long> viewedListIds = us.getUserViewedListContent(user);
+        Collection<LongDto> viewedListIdsDto = LongDto.mapLongToLongDto(viewedListIds);
+        LOGGER.info("GET /{}: Viewedlist from user {}", uriInfo.getPath(),userId);
+
+        return Response.ok(new GenericEntity<Collection<LongDto>>(viewedListIdsDto){}).build();
     }
 
 

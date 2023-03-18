@@ -14,9 +14,27 @@ export class ListsApi {
             const options = {headers: authCheck({})}
             const res = await fetchWithQueryParamsApi(apiUrl, params, options)
             if(res.status !== 204) {
-                return {error: false, data: await res.json(), totalPages: res.totalPages}
+                return {error: false, data: await res.data, totalPages: res.totalPages}
             } else {
                 return {error: false, data: [], totalPages: res.totalPages}
+            }
+        } catch (e) {
+            return {error: true}
+        }
+    }
+
+    async getUserWatchListContentIds(userId) {
+        try {
+            const res = await fetch(`${this.basePath}/watchListContentIds/${userId}`, {
+                method: 'GET',
+                headers: authCheck({}),
+                body: {}
+            })
+
+            if(res.status !== 204) {
+                return {error: false, data: await res.json()}
+            } else {
+                return {error: false, data: []}
             }
         } catch (e) {
             return {error: true}
@@ -61,9 +79,27 @@ export class ListsApi {
             const options = {headers: authCheck({})}
             const res = await fetchWithQueryParamsApi(apiUrl, params, options)
             if(res.status !== 204) {
-                return {error: false, data: await res.json(), totalPages: res.totalPages}
+                return {error: false, data: await res.data, totalPages: res.totalPages}
             } else {
                 return {error: false, data: [], totalPages: res.totalPages}
+            }
+        } catch (e) {
+            return {error: true}
+        }
+    }
+
+    async getUserViewedListContentIds(userId) {
+        try {
+            const res = await fetch(`${this.basePath}/viewedListContentIds/${userId}`, {
+                method: 'GET',
+                headers: authCheck({}),
+                body: {}
+            })
+
+            if(res.status !== 204) {
+                return {error: false, data: await res.json()}
+            } else {
+                return {error: false, data: []}
             }
         } catch (e) {
             return {error: true}
