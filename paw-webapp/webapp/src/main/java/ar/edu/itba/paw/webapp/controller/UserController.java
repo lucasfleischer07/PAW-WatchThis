@@ -123,8 +123,7 @@ public class UserController {
 //    Endpoint para editar la imagen de perfil del usuario
     @PUT
     @Path("/{id}/profileImage")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(value = {MediaType.APPLICATION_JSON,})
+    @Produces({"image/*", MediaType.APPLICATION_JSON,})
     public Response updateUserProfileImage(@FormDataParam("image") byte[] imageBytes,
                                            @PathParam("id") final long id) {
         LOGGER.info("PUT /{}: Called", uriInfo.getPath());

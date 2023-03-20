@@ -2,6 +2,8 @@ import {useTranslation} from "react-i18next";
 import {useContext, useEffect, useState} from "react";
 import {AuthContext} from "../context/AuthContext";
 import {userService} from "../services";
+import {useForm} from "react-hook-form";
+
 
 export default function ProfileEditionPage() {
     const {t} = useTranslation()
@@ -9,6 +11,7 @@ export default function ProfileEditionPage() {
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
     const [error, setError] = useState(undefined)
     const [image, setImage] = useState(undefined)
+    const {reset} = useForm()
 
 
     const [userForm, setUserForm] = useState({
@@ -36,6 +39,7 @@ export default function ProfileEditionPage() {
                 .then(data => {
                     if(!data.error) {
                         setError(false)
+                        reset()
                     } else {
                         setError(true)
                     }
@@ -49,12 +53,14 @@ export default function ProfileEditionPage() {
     }
 
     const onSubmitImage = (e) => {
+// TODO: FALTA AHCER QUE SE RESETEE LA IMAGEN CUANOD SE PONE EL UPLOAD
         e.preventDefault();
         if(isLogged() && image !== undefined) {
             userService.updateUserProfileImage(user.id, image)
                 .then(data => {
                     if (!data.error) {
                         setError(false)
+                        reset()
                     //     TODO: Llevarlo a la profilePage
                     } else {
                         setError(true)

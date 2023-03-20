@@ -78,7 +78,7 @@ export class UserApi {
     async updateUserProfileImage(userId, image) {
         try {
             const formData = new FormData();
-            formData.append("image", image, image.name)
+            formData.set("image", image)
             const res = await fetch(`${this.basePath}/${userId}/profileImage`, {
                 method: 'PUT',
                 headers: authCheck({}),
