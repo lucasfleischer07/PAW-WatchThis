@@ -171,7 +171,9 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST,"/api/comments/**").authenticated()
                 .antMatchers(HttpMethod.DELETE,"/api/comments/delete/{id]").access(ACCESS_CONTROL_CHECK_COMMENT_OWNER_OR_ADMIN)
                 //users
-                .antMatchers(HttpMethod.PUT,"/api/users/{id}/**").access(ACCESS_CONTROL_CHECK_USER)
+                .antMatchers(HttpMethod.PUT,"/api/users/{id}/profileImage").access(ACCESS_CONTROL_CHECK_USER)
+                .antMatchers(HttpMethod.PUT,"/api/users/{id}/editProfile").access(ACCESS_CONTROL_CHECK_USER)
+
                 //reports
                 .antMatchers(HttpMethod.DELETE,"/api/reports/**").hasRole("ADMIN")
                 .antMatchers(HttpMethod.GET,"/api/reports/**").hasRole("ADMIN")

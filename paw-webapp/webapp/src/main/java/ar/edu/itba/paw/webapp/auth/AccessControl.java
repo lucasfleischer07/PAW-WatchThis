@@ -40,7 +40,7 @@ public class AccessControl {
         if(user==null){
             return true;
         }
-        return userDetails.getUsername().equals(user.getUserName());
+        return userDetails.getUsername().equals(user.getEmail());
     }
     @Transactional(readOnly = true)
     public boolean checkReviewOwnerOrAdmin(HttpServletRequest request, Long reviewId) {
@@ -55,7 +55,7 @@ public class AccessControl {
         if (review == null) {
             return true; // Jersey will throw 404 Response
         }
-        return userDetails.getUsername().equals(review.getUser().getUserName());
+        return userDetails.getUsername().equals(review.getUser().getEmail());
     }
     @Transactional(readOnly = true)
     public boolean checkReviewNotOwner(HttpServletRequest request, Long reviewId) {
@@ -67,7 +67,7 @@ public class AccessControl {
         if (review == null) {
             return true; // Jersey will throw 404 Response
         }
-        return !userDetails.getUsername().equals(review.getUser().getUserName());
+        return !userDetails.getUsername().equals(review.getUser().getEmail());
     }
     @Transactional(readOnly = true)
     public boolean checkCommentOwnerOrAdmin(HttpServletRequest request, Long commentId) {
@@ -82,7 +82,7 @@ public class AccessControl {
         if (comment == null) {
             return true; // Jersey will throw 404 Response
         }
-        return userDetails.getUsername().equals(comment.getUser().getUserName());
+        return userDetails.getUsername().equals(comment.getUser().getEmail());
     }
 
     @Transactional(readOnly = true)
@@ -95,7 +95,7 @@ public class AccessControl {
         if (comment == null) {
             return true; // Jersey will throw 404 Response
         }
-        return !userDetails.getUsername().equals(comment.getUser().getUserName());
+        return !userDetails.getUsername().equals(comment.getUser().getEmail());
     }
 
     private UserDetails getUserDetailsFromSecurityContext() {
