@@ -50,7 +50,7 @@
   "WatchList.Recomendation": "Browse popular content",
   "WatchList.Title": "Watch list",
   "WatchList.WarningAdd": "To add content to a watch list, you must be logged in.",
-  "WatchList.Titles": "{0} Titles",
+  "WatchList.Titles": "{{titlesAmount}} Titles",
   "WatchList.Add": "Add to watch list",
   "WatchList.Remove": "Remove from watch list",
 

@@ -49,7 +49,7 @@
   "WatchList.Recomendation": "Buscar contenido popular",
   "WatchList.Title": "Lista de reproducción",
   "WatchList.WarningAdd": "Para añadir contenido a tu lista, tienes que iniciar sesión.",
-  "WatchList.Titles": "{0} Títulos",
+  "WatchList.Titles": "{{titlesAmount}} Títulos",
   "WatchList.Add": "Agregar a lista de seguimiento",
   "WatchList.Remove": "Remover de lista de seguimiento",
 
