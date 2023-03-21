@@ -1,10 +1,8 @@
 function validate(reviewId){
     let f=document.getElementById("commentInput"+reviewId);
     if(validateComment(f)){
-        let button = document.getElementById("subButton");
-        button.className += ' spinner-border';
-        button.innerHTML =  '|';
-        f.submit();
+        handleAddComment(f["comment"].value)
+        f["comment"].value=null
     }
 }
 

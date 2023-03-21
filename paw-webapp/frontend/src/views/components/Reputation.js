@@ -1,19 +1,20 @@
 import React, {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
-import {commentService} from "../../services";
+import {commentService, reviewService} from "../../services";
 import Markdown from 'marked-react';
 import {validate} from "../../scripts/validateComment"
 import changeVisibility from "../../scripts/commentVisibility";
+import {Link} from "react-router-dom";
 
 export default function Reputation(props) {
     const {t} = useTranslation()
     const reviewId=props.reviewId;
-    const reviewReputation=props.reviewReputation;
-    const isLikeReviews=props.isLikeReviews;
-    const isDislikeReviews=props.isDislikeReviews;
     const user=props.user;
     const reviewDescription=props.reviewDescription;
     const isAdmin=props.isAdmin
+    const [isLikeReviews,setIsLikeReviews]=useState(props.isLikeReviews);
+    const [isDislikeReviews,setIsDislikeReviews]=useState(props.isDislikeReviews);
+    const [reviewReputation,setReviewReputation]=useState(props.reputation)
     const [comments,setComments]=useState([]);
     const [added,setAdded]=useState(false)
     const canComment=true;
@@ -51,6 +52,49 @@ export default function Reputation(props) {
                 console.log("error deleting comments")
             })
     }
+    function handleLike(){
+        reviewService.reviewThumbUp(reviewId)
+            .then(data => {
+                if(!data.error){
+                    if(isDislikeReviews) {
+                        setReviewReputation(reviewReputation + 2)
+                        setIsDislikeReviews(false)
+                        setIsLikeReviews(true)
+                    } else if(isLikeReviews){
+                        setReviewReputation(reviewReputation-1)
+                        setIsLikeReviews(false)
+                    } else{
+                        setReviewReputation(reviewReputation+1)
+                        setIsLikeReviews(true)
+                    }
+
+                }
+            }).catch(e => {
+            console.log("error liking review")
+        })
+    }
+
+    function handleDislike(){
+        reviewService.reviewThumbDown(reviewId)
+            .then(data => {
+                if(!data.error){
+                    if(isDislikeReviews) {
+                        setReviewReputation(reviewReputation + 1)
+                        setIsDislikeReviews(false)
+                    } else if(isLikeReviews){
+                        setReviewReputation(reviewReputation-2)
+                        setIsLikeReviews(false)
+                        setIsDislikeReviews(true)
+                    } else{
+                        setReviewReputation(reviewReputation-1)
+                        setIsDislikeReviews(true)
+                    }
+
+                }
+            }).catch(e => {
+            console.log("error disliking review")
+        })
+    }
 
     return (
         <div>
@@ -62,7 +106,8 @@ export default function Reputation(props) {
                                 {isLikeReviews ? (
                                     <a
                                         className="W-thumb-up W-bottom-buttons-size"
-                                        href={`/reviewReputation/thumbUp/${reviewId}`}
+                                        onClick={handleLike}
+
                                     >
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="green"
                                              className="bi bi-hand-thumbs-up-fill W-bottom-buttons-size"
@@ -74,7 +119,7 @@ export default function Reputation(props) {
                                 ) : (
                                     <a
                                         className="W-thumb-up W-bottom-buttons-size"
-                                        href={`/reviewReputation/thumbUp/${reviewId}`}
+                                        onClick={handleLike}
                                     >
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                                              className="bi bi-hand-thumbs-up W-hands-style W-bottom-buttons-size"
@@ -90,7 +135,7 @@ export default function Reputation(props) {
                                 {isDislikeReviews ? (
                                     <a
                                         className="W-thumb-down W-bottom-buttons-size"
-                                        href={`/reviewReputation/thumbDown/${reviewId}`}
+                                        onClick={handleDislike}
                                     >
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="red"
                                              className="bi bi-hand-thumbs-down-fill W-bottom-buttons-size"
@@ -102,8 +147,7 @@ export default function Reputation(props) {
                                 ) : (
                                     <a
                                         className="W-thumb-down W-bottom-buttons-size"
-                                        href={`/reviewReputation/thumbDown/${reviewId}`}
-                                    >
+                                        onClick={handleDislike}>
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                                              className="bi bi-hand-thumbs-down W-hands-style W-bottom-buttons-size"
                                              viewBox="0 0 16 16">
@@ -155,7 +199,7 @@ export default function Reputation(props) {
                                         <div className="modal-content">
                                             <div className="modal-header">
                                                 <h5 className="modal-title" id="thumbsModalLabel">
-                                                    Reputation Title
+                                                    {t('Reputation.Title')}
                                                 </h5>
                                                 <button
                                                     type="button"
@@ -165,8 +209,8 @@ export default function Reputation(props) {
                                                 ></button>
                                             </div>
                                             <div className="modal-body">
-                                                <span>Reputation Warning Add</span>
-                                                <span>Review Warning Add Message</span>
+                                                <span>{t('Reputation.WarningAdd')}</span>
+                                                <span>{t('Review.WarningAddMessage')}</span>
                                             </div>
                                             <div className="modal-footer">
                                                 <button
@@ -174,21 +218,16 @@ export default function Reputation(props) {
                                                     className="btn btn-secondary"
                                                     data-bs-dismiss="modal"
                                                 >
-                                                    Close
+                                                    {t('Close')}
                                                 </button>
-                                                <a href="/login/sign-in">
+                                                <Link to="/login/sign-in">
                                                     <button
                                                         type="button"
                                                         className="btn btn-success"
-                                                        onClick={(event) => {
-                                                            event.target.form.submit();
-                                                            event.target.classList += " spinner-border";
-                                                            event.target.innerText = "|";
-                                                        }}
                                                     >
-                                                        Login Login Message
+                                                        {t('Login.LoginMessage')}
                                                     </button>
-                                                </a>
+                                                </Link>
                                             </div>
                                         </div>
                                     </div>
@@ -204,7 +243,7 @@ export default function Reputation(props) {
                 </div>
             </div>
 
-            {canComment === 'true' && (
+            {canComment === true && (
                 <>
                     <div className="W-reply-button-div">
                         {user !== undefined ? (
@@ -216,7 +255,7 @@ export default function Reputation(props) {
                                     <path
                                         d="M5 6a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
                                 </svg>
-                                <span>{t('Comment.Here')}</span>
+                                <span> {t('Comment.Here')} </span>
                             </button>
                         ) : (
                             <>
@@ -243,7 +282,7 @@ export default function Reputation(props) {
                                             </div>
                                             <div className="modal-footer">
                                                 <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">{t('Close')}</button>
-                                                <a href="./login/sign-in"><button type="button" className="btn btn-success" onClick={() => {this.form.submit(); this.className += ' spinner-border'; this.innerText = '|'}}>{t('Login.LoginMessage')}</button></a>
+                                                <Link to="./login/sign-in"><button type="button" className="btn btn-success">{t('Login.LoginMessage')}</button></Link>
                                             </div>
                                         </div>
                                     </div>
