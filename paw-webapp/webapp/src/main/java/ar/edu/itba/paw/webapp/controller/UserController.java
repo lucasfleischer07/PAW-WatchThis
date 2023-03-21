@@ -175,4 +175,21 @@ public class UserController {
     }
     // * ---------------------------------------------------------------------------------------------------------------
 
+    // * ------------------------------------------------Promote User-------------------------------
+    @Path("/promoteUser/{userId}")
+    @PUT
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response promoteUSer(@PathParam("userId") final long userId) {
+        LOGGER.info("PUT /{}: Called", uriInfo.getPath());
+        User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
+        if(!Objects.equals(user.getRole(), "admin")) {
+            throw new ForbiddenException();
+        }
+        User user2 = us.findById(userId).orElseThrow(UserNotFoundException::new);
+        us.promoteUser(user2);
+        LOGGER.info("PUT /{}: Returning user promoted", uriInfo.getPath());
+        return Response.noContent().build();
+    }
+    // * ---------------------------------------------------------------------------------------------------------------
+
 }

@@ -47,9 +47,9 @@ export class UserApi {
             const options = {headers: authCheck({})}
             const res = await fetchWithQueryParamsApi(apiUrl, params, options)
             if(res.status !== 204) {
-                return {error: false, data: await res.data}
+                return {error: false, data: res.data, totalPages: res.totalPages}
             } else {
-                return {error: false, data: []}
+                return {error: false, data: [], totalPages: res.totalPages}
             }
         } catch (e) {
             return {error: true}
@@ -147,6 +147,21 @@ export class UserApi {
             } else {
                 return {error: false, data: []}
             }
+        } catch (e) {
+            return {error: true}
+        }
+    }
+
+    async promoteUserToAdmin(userId) {
+        try {
+            const res = await fetch(`${this.basePath}/promoteUser/${userId}`, {
+                method: 'PUT',
+                headers: authCheck({}),
+                body: {}
+            })
+
+            return {error: false, data: []}
+
         } catch (e) {
             return {error: true}
         }

@@ -5,7 +5,10 @@ export async function fetchWithQueryParamsApi(url, queryParams = {}, options = {
         const urlObj = new URL(url);
         Object.keys(queryParams).forEach(key => urlObj.searchParams.append(key, queryParams[key]));
         const res = await fetch(urlObj, options)
-        const totalPages = parse(res.headers.get('Link')).last.page;
+        let totalPages = 1
+        if(res.headers.get('Link')) {
+            totalPages = parse(res.headers.get('Link')).last.page;
+        }
         return res.json().then(data => ({ error:false, data, totalPages}));
     } catch (e) {
         return {error: true}

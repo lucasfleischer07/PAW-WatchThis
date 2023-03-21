@@ -17,7 +17,7 @@ public class ReviewDto {
     private Integer reputation;
     private String type;
     private UserDto user;
-    
+    private ContentDto content;
     private String commentUrl;
     private String reviewReporters;
 
@@ -45,6 +45,7 @@ public class ReviewDto {
         this.reputation = review.getReputation();
         this.type = review.getType();
         this.user = new UserDto(uriInfo, review.getUser());
+        this.content = new ContentDto(uriInfo, review.getContent());
 
     }
 
@@ -120,5 +121,11 @@ public class ReviewDto {
         this.reviewReporters = reviewReporters;
     }
 
+    public ContentDto getContent() {
+        return content;
+    }
 
+    public void setContent(ContentDto content) {
+        this.content = content;
+    }
 }
