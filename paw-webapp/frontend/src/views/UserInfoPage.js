@@ -33,6 +33,7 @@ export default function UserInfoPage() {
         userService.getUserReviews(parseInt(userProfileId), currentPage)
             .then(reviews => {
                 if(!reviews.error) {
+
                     setReviews(reviews.data)
                     setReviewOwnerUser(reviews.data[0].user)
                     setTotalPages(reviews.totalPages)
@@ -41,25 +42,25 @@ export default function UserInfoPage() {
                         reputation += reviews.data[i].reputation
                     }
                     setReputation(Math.floor(reputation / reviews.data.length))
+
+                    if(user.id === parseInt(userProfileId)) {
+                        setIsSameUser(true)
+                    } else {
+                        setIsSameUser(false)
+                    }
+                    if(user.role === 'admin' && reviews.data[0].user.role !== 'admin') {
+                        setCanPromote(true)
+                    } else {
+                        setCanPromote(false)
+                    }
                 } else {
             //     TODO: meter toast
                 }
+
             })
             .catch(e => {
             //     TODO: meter toast
             })
-
-        if(user.id === parseInt(userProfileId)) {
-            setIsSameUser(true)
-        } else {
-            setIsSameUser(false)
-        }
-
-        if(user.role === 'admin' && reviewOwnerUser.role !== 'admin') {
-            setCanPromote(true)
-        } else {
-            setCanPromote(false)
-        }
 
     }, [])
 
