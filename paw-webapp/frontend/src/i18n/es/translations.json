@@ -1,4 +1,6 @@
 {
+  "Action.Forbidden.Login": "Para continuar, por favor inicie sesión",
+
   "Size": "La cantidad de caracteres de {0} debe estar entre {2} y {1}",
   "Pattern.registerForm.name": "Nombre inválido, tenga cuidado con los caracteres especiales",
   "Pattern.registerForm.description": "Descripción invalida, tenga cuidado con los caracteres especiales",
@@ -52,6 +54,9 @@
   "WatchList.Titles": "{{titlesAmount}} Títulos",
   "WatchList.Add": "Agregar a lista de seguimiento",
   "WatchList.Remove": "Remover de lista de seguimiento",
+  "WatchList.Added": "Contenido agregado a lista de seguimiento",
+  "WatchList.Removed": "Contenido eliminado de la lista de seguimiento",
+
 
   "LoginMessage": "Inicia sesión",
   "LogOutMessage": "Cerrar sesión",
@@ -68,6 +73,8 @@
   "Login.LoginMessage": "Inicia sesión",
   "Login.NoAccountMessage": "¿No tiene cuenta?",
   "Login.SignUpMessage": "¡Registrate!",
+  "Login.Success": "¡Inicio de sesión exitoso!",
+  "Login.Error": "Inicio de sesión fallido! Intente nuevamente",
 
   "Signup.PageInfo": "Registrate en Watch This",
   "Signup.Username": "nombre",
@@ -85,6 +92,9 @@
   "Profile.EditProfile": "Editar perfil",
   "Profile.RecentReviews": "Reseñas recientes",
   "Profile.PromoteUser": "Hacer admin",
+  "Profile.PromoteUser.Success": "Este usuario ya se promovió a admin",
+  "Profile.PromoteUser.Error": "Error al promover este usuario a admin",
+
   "Profile.NoReviews.Owner": "No hiciste ninguna reseña, hacé una de tu película o serie favorita!",
   "Profile.NoReviews.NotOwner": "{0} no realizó ninguna reseña aún",
   "EditProfile.EditPicture": "Editar foto de perfil:",
@@ -96,6 +106,11 @@
   "EditProfile.ConfirmPassword": "Confirme la contraseña:",
   "EditProfile.NotSamePassword": "Las contraseñas no coinciden",
   "EditProfile.Change": "Cambiar",
+  "EditProfile.Upload.Image": "Foto de perfil actualizada correctamente",
+  "EditProfile.Upload.Image.Error": "Error al actualizar la foto de perfil",
+  "EditProfile.Upload.Password.Success": "Contraseña actualizada correctamente",
+  "EditProfile.Upload.Password.Error": "Error al actualizar la contraseña",
+
 
   "Comment.Owner": "Creador del comentario: {0}",
   "Comment.Title": "Comentar",
@@ -231,6 +246,8 @@
   "ViewedList.Empty2": "¡Agregue películas y series a su lista de seguimiento para tener un recordatorio de lo que ya vió!",
   "ViewedList.Add": "Agregar a la lista de vistos",
   "ViewedList.Remove": "Remover de la lista de vistos",
+  "ViewedList.Added": "Contenido agregado a la lista de vistos",
+  "ViewedList.Removed": "Contenido eliminado de la lista de vistos",
 
   "Reputation.Title": "Me gusta y no me gusta",
   "Reputation.WarningAdd": "Para marcar que una reseña te gusto o no te gusto, tienes que iniciar sesión.",

@@ -36,12 +36,9 @@ export default function ContentPage(props) {
                 if(!data.error) {
                     setAllContent(data.data)
                     setTotalPages(data.totalPages)
-                } else {
-                //     TODO: Meter un toast o algo
                 }
             })
             .catch(e => {
-            //     TODO: Meter un toast o algo
             })
     }, [actualPage])
 
@@ -53,8 +50,6 @@ export default function ContentPage(props) {
                 .then(watchList => {
                     if(!watchList.error) {
                         setUserWatchListIds(watchList.data)
-                    } else {
-                    //     TODO: METER ALGO
                     }
                 })
             : setUserWatchListIds(null)

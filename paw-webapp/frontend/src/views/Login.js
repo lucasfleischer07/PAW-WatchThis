@@ -3,6 +3,7 @@ import {Link, useLocation, useNavigate} from 'react-router-dom';
 import {useTranslation} from "react-i18next";
 import {AuthContext} from "../context/AuthContext";
 import {userService} from "../services";
+import {toast} from "react-toastify";
 
 export default function Login() {
     const {t} = useTranslation()
@@ -49,12 +50,15 @@ export default function Login() {
                 if(!user.error) {
                     signIn(user.data, user.header, userForm.rememberMe)
                     navigate(origin, {replace: true})
-                } else {
-                    setError(true)
+                    toast.success(t('Login.Success'))
                 }
+                // else {
+                //     setError(true)
+                // }
             })
             .catch(() => {
                 setError(true)
+                toast.error(t('Login.Error'))
             })
     };
 

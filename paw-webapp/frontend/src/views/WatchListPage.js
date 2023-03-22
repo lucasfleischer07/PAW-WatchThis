@@ -21,9 +21,8 @@ export default function WatchListPage(props) {
                     if(!watchList.error) {
                         setWatchList(watchList.data)
                         setTotalPages(watchList.totalPages)
-                    } else {
-                        //     TODO: Meter toasts
                     }
+
                 })
                 .catch(e => {
                     //     TODO: Meter toasts

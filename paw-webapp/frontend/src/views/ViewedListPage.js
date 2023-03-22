@@ -21,12 +21,10 @@ export default function ViewedListPage(props) {
                     if(!watchList.error) {
                         setViewedList(watchList.data)
                         setTotalPages(watchList.totalPages)
-                    } else {
-                        //     TODO: Meter toasts
                     }
                 })
                 .catch(e => {
-                    //     TODO: Meter toasts
+                    //     TODO: Meter toasts o tirar a apagina de error
                 })
         } else {
             //     TODO: Tirar a la pagina de error de que no tiene permisos

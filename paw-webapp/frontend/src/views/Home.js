@@ -26,12 +26,10 @@ export default function Home() {
                     } else {
                         setMostSavedContentByUsersList(list.data.mostSavedContentByUsersList)
                     }
-                } else {
-                //     TODO: Meter un toast de error
                 }
+
             })
             .catch((e) => {
-                console.log(e)
                 //     TODO: Meter un toast o algo asi
             })
 
@@ -39,9 +37,8 @@ export default function Home() {
             .then(watchList => {
                 if(!watchList.error) {
                     setUserWatchListIds(watchList.data)
-                } else {
-                //     Meter toast
                 }
+
             })
             .catch(e => {
             //     TODO: Meter toast
@@ -54,8 +51,6 @@ export default function Home() {
                 .then(data => {
                     if(!data.error) {
                         setUserWatchListIds(data.data)
-                    } else {
-                        //     TODO: Meter un toast de error
                     }
                 })
                 .catch(() => {
@@ -63,6 +58,7 @@ export default function Home() {
                 })
         }
     }, [userWatchListIds, user.id])
+
 
     useEffect(() => {
         document.title = t('WatchThisMessage')

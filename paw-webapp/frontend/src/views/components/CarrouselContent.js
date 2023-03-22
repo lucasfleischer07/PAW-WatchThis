@@ -3,6 +3,7 @@ import {useTranslation} from "react-i18next";
 import {Link, useNavigate} from "react-router-dom";
 import {AuthContext} from "../../context/AuthContext";
 import {listsService} from "../../services";
+import {toast} from "react-toastify";
 
 export default function CarrouselContent(props) {
     const {t} = useTranslation()
@@ -17,10 +18,12 @@ export default function CarrouselContent(props) {
             .then(data => {
                 if(!data.error) {
                     setIsInWatchList(true);
+                    toast.success(t('WatchList.Added'))
                 }
             })
             .catch(() => {
             //     TODO: Meter un toast o algo asi
+            //     TODO Llegar a pagina de error
             })
     }
 
@@ -30,9 +33,12 @@ export default function CarrouselContent(props) {
             .then(data => {
                 if(!data.error) {
                     setIsInWatchList(false);
+                    toast.success(t('WatchList.Removed'))
                 }
             })
             .catch(() => {
+                //     TODO: Meter un toast o algo asi
+                //     TODO Llegar a pagina de error
              })
     }
 

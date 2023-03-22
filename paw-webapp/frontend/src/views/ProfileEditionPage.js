@@ -3,11 +3,17 @@ import {useContext, useEffect, useState} from "react";
 import {AuthContext} from "../context/AuthContext";
 import {userService} from "../services";
 import {useForm} from "react-hook-form";
+import {toast} from "react-toastify";
+import {useLocation, useNavigate} from "react-router-dom";
 
 
 export default function ProfileEditionPage() {
     const {t} = useTranslation()
+    let navigate = useNavigate()
+    let location = useLocation()
     let {isLogged} = useContext(AuthContext)
+    let origin = location.state?.from?.pathname || "/";
+
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
     const [error, setError] = useState(undefined)
     const [image, setImage] = useState(undefined)
@@ -40,20 +46,22 @@ export default function ProfileEditionPage() {
                     if(!data.error) {
                         setError(false)
                         reset()
-                    } else {
-                        setError(true)
+                        toast.info(t('EditProfile.Upload.Password.Success'))
                     }
                 })
                 .catch(e => {
-                //     TODO: METER TOAST
+                    toast.error(t('EditProfile.Upload.Password.Error'))
                 })
         } else {
-        //     TODO: ERROR
+            if(!isLogged()) {
+                toast.warn(t('Action.Forbidden.Login'))
+                navigate(origin, {replace: true})
+            }
         }
     }
 
+    // TODO: FALTA AHCER QUE SE RESETEE LA IMAGEN CUANOD SE PONE EL UPLOAD
     const onSubmitImage = (e) => {
-// TODO: FALTA AHCER QUE SE RESETEE LA IMAGEN CUANOD SE PONE EL UPLOAD
         e.preventDefault();
         if(isLogged() && image !== undefined) {
             userService.updateUserProfileImage(user.id, image)
@@ -61,14 +69,19 @@ export default function ProfileEditionPage() {
                     if (!data.error) {
                         setError(false)
                         reset()
-                    //     TODO: Llevarlo a la profilePage
+                        toast.success(t('EditProfile.Upload.Image'));
                     } else {
                         setError(true)
                     }
                 })
                 .catch(e => {
-                    //     TODO: METER TOAST
+                    toast.error(t('EditProfile.Upload.Image.Error'));
                 })
+        } else {
+            if(!isLogged()) {
+                toast.warn(t('Action.Forbidden.Login'));
+                navigate(origin, {replace: true})
+            }
         }
 
     }

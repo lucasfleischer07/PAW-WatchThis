@@ -2,6 +2,7 @@ import {useEffect, useState} from 'react';
 import {useTranslation} from "react-i18next";
 import {useNavigate} from "react-router-dom";
 import {listsService} from "../../services";
+import {toast} from "react-toastify";
 
 export default function ContentCard(props) {
     const {t} = useTranslation()
@@ -26,10 +27,11 @@ export default function ContentCard(props) {
             .then(data => {
                 if(!data.error) {
                     setIsInWatchList(true);
+                    toast.success(t('WatchList.Added'))
                 }
             })
             .catch(() => {
-                //     TODO: Meter un toast o algo asi
+                //     TODO Llegar a pagina de error
             })
     }
 
@@ -39,9 +41,11 @@ export default function ContentCard(props) {
             .then(data => {
                 if(!data.error) {
                     setIsInWatchList(false);
+                    toast.success(t('WatchList.Removed'))
                 }
             })
             .catch(() => {
+                //     TODO Llegar a pagina de error
             })
     }
 

@@ -1,4 +1,6 @@
 {
+  "Action.Forbidden.Login": "Please login to continue",
+
   "Size":"The amount of characters of the {0} should be between {2} and {1}",
   "Pattern.contentEditForm.name":"Invalid name, be careful with special characters",
   "Pattern.contentEditForm.description":"Invalid description, be careful with special characters",
@@ -53,6 +55,8 @@
   "WatchList.Titles": "{{titlesAmount}} Titles",
   "WatchList.Add": "Add to watch list",
   "WatchList.Remove": "Remove from watch list",
+  "WatchList.Added": "Content added to Watch List",
+  "WatchList.Removed": "Content removed from watch list",
 
 
   "LoginMessage": "Login",
@@ -70,6 +74,9 @@
   "Login.LoginMessage": "Log in",
   "Login.NoAccountMessage": "Do not have an account?",
   "Login.SignUpMessage": "Sign up!",
+  "Login.Success": "Login succeeded!",
+  "Login.Error": "Login failed! Please try again",
+
 
   "Signup.PageInfo": "Sign up into Watch This",
   "Signup.Username": "Username",
@@ -87,6 +94,8 @@
   "Profile.EditProfile": "Edit profile",
   "Profile.RecentReviews": "Recent Reviews",
   "Profile.PromoteUser": "Make admin",
+  "Profile.PromoteUser.Success": "This user has been promote to admin",
+  "Profile.PromoteUser.Error": "Error while promoting this user to admin",
   "Profile.NoReviews.Owner": "You don't have any review, make one in your favourite movie or tv show!",
   "Profile.NoReviews.NotOwner": "{0} didn't make a review yet",
   "EditProfile.EditPicture": "Edit profile picture:",
@@ -98,6 +107,11 @@
   "EditProfile.ConfirmPassword": "Confirm password:",
   "EditProfile.NotSamePassword": "Passwords do not match",
   "EditProfile.Change": "Change",
+  "EditProfile.Upload.Image": "Profile image updated",
+  "EditProfile.Upload.Image.Error": "Error while updating profile image",
+  "EditProfile.Upload.Password": "Profile password uploaded",
+  "EditProfile.Upload.Password.Error": "Error while updating password",
+
 
   "Comment.Owner": "Comment owner: {0}",
   "Comment.Title": "Comment",
@@ -233,6 +247,8 @@
   "ViewedList.Empty2": "Add movies and tv shows to your viewed list to keep track of what you have already watched!",
   "ViewedList.Add": "Add to viewed list",
   "ViewedList.Remove": "Remove from viewed list",
+  "ViewedList.Added": "Content added to viewed list",
+  "ViewedList.Removed": "Content removed from viewed list",
 
   "Reputation.Title": "Like and dislike",
   "Reputation.WarningAdd": "To like or dislike a review, you must be logged in.",

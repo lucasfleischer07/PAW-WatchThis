@@ -10,6 +10,8 @@ import ViewedListPage from "./views/ViewedListPage";
 import ProfileEditionPage from "./views/ProfileEditionPage";
 import UserInfoPage from "./views/UserInfoPage";
 
+import {ToastContainer} from "react-toastify";
+
 function App() {
   return (
       <AuthProvider>
@@ -25,6 +27,20 @@ function App() {
                       <Route path='viewedList' element={<ViewedListPage/>}/>
                   </Route>
               </Routes>
+
+              <ToastContainer
+                  position="top-right"
+                  autoClose={5000}
+                  hideProgressBar={false}
+                  newestOnTop={false}
+                  closeOnClick
+                  rtl={false}
+                  pauseOnFocusLoss
+                  draggable
+                  pauseOnHover
+                  theme="colored"
+              />
+
           </BrowserRouter>
       </AuthProvider>
   );

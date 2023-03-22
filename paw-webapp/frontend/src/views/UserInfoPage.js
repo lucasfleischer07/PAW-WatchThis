@@ -3,6 +3,7 @@ import {useContext, useEffect, useState} from "react";
 import {AuthContext} from "../context/AuthContext";
 import {Link, useParams} from "react-router-dom";
 import {userService} from "../services";
+import {toast} from "react-toastify";
 
 export default function UserInfoPage() {
     const {t} = useTranslation()
@@ -24,8 +25,13 @@ export default function UserInfoPage() {
             .then(data => {
                 if(!data.error) {
                     setCanPromote(false)
-                //     TODO: METER UN TOAST DICENDO QUE YA LO HIZO ADMIN
+                    toast.success(t('Profile.PromoteUser.Success'))
+                } else {
+                    toast.error(t('Profile.PromoteUser.Error'))
                 }
+            })
+            .catch(e => {
+            //     TODO: LLEVAR A PAGINA DE ERROR O ALGO ASI
             })
     }
 
@@ -33,7 +39,6 @@ export default function UserInfoPage() {
         userService.getUserReviews(parseInt(userProfileId), currentPage)
             .then(reviews => {
                 if(!reviews.error) {
-
                     setReviews(reviews.data)
                     setReviewOwnerUser(reviews.data[0].user)
                     setTotalPages(reviews.totalPages)
@@ -48,25 +53,21 @@ export default function UserInfoPage() {
                     } else {
                         setIsSameUser(false)
                     }
+
                     if(user.role === 'admin' && reviews.data[0].user.role !== 'admin') {
                         setCanPromote(true)
                     } else {
                         setCanPromote(false)
                     }
-                } else {
-            //     TODO: meter toast
                 }
 
             })
             .catch(e => {
-            //     TODO: meter toast
+            //     TODO: Si no existe el usuario, hay que llevar a la pagina de error
             })
 
     }, [])
 
-    // useEffect(() => {
-    //
-    // }, [canPromote])
 
     return(
         // TODO: METER HEADER
