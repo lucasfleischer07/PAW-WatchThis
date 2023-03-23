@@ -96,7 +96,7 @@
   "Profile.PromoteUser.Error": "Error al promover este usuario a admin",
 
   "Profile.NoReviews.Owner": "No hiciste ninguna reseña, hacé una de tu película o serie favorita!",
-  "Profile.NoReviews.NotOwner": "{0} no realizó ninguna reseña aún",
+  "Profile.NoReviews.NotOwner": "{{user}} no realizó ninguna reseña aún",
   "EditProfile.EditPicture": "Editar foto de perfil:",
   "EditProfile.Upload": "Subir",
   "EditProfile.IncorrectOldPassword": "No coincide con la contraseña actual",

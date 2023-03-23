@@ -97,7 +97,7 @@
   "Profile.PromoteUser.Success": "This user has been promote to admin",
   "Profile.PromoteUser.Error": "Error while promoting this user to admin",
   "Profile.NoReviews.Owner": "You don't have any review, make one in your favourite movie or tv show!",
-  "Profile.NoReviews.NotOwner": "{0} didn't make a review yet",
+  "Profile.NoReviews.NotOwner": "{{user}} didn't make a review yet",
   "EditProfile.EditPicture": "Edit profile picture:",
   "EditProfile.Upload": "Upload",
   "EditProfile.IncorrectOldPassword": "Password do not match the current one",

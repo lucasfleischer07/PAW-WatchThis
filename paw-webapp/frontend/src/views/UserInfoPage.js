@@ -1,6 +1,6 @@
 import {useTranslation} from "react-i18next";
-import {useContext, useEffect, useState} from "react";
-import {AuthContext} from "../context/AuthContext";
+import {useEffect, useState} from "react";
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import {Link, useParams} from "react-router-dom";
 import {userService} from "../services";
 import {toast} from "react-toastify";
@@ -40,13 +40,26 @@ export default function UserInfoPage() {
             .then(reviews => {
                 if(!reviews.error) {
                     setReviews(reviews.data)
-                    setReviewOwnerUser(reviews.data[0].user)
-                    setTotalPages(reviews.totalPages)
-                    let reputation = 0
-                    for(let i = 0; i < reviews.data.length; i++) {
-                        reputation += reviews.data[i].reputation
+                    if(reviews.data.length === 0) {
+                         userService.getUserInfo(parseInt(userProfileId))
+                             .then((data) => {
+                                 if(!data.error) {
+                                    setReviewOwnerUser(data.data)
+                                 }
+                             })
+                            .catch(e => {
+                            //     TODO: Pagina de error
+                            })
+                        setReputation(0)
+                    } else {
+                        setReviewOwnerUser(reviews.data[0].user)
+                        let reputation = 0
+                        for(let i = 0; i < reviews.data.length; i++) {
+                            reputation += reviews.data[i].reputation
+                        }
+                        setReputation(reputation)
                     }
-                    setReputation(Math.floor(reputation / reviews.data.length))
+                    setTotalPages(reviews.totalPages)
 
                     if(user.id === parseInt(userProfileId)) {
                         setIsSameUser(true)
@@ -69,6 +82,20 @@ export default function UserInfoPage() {
     }, [])
 
 
+    const tooltip =
+        <OverlayTrigger
+            placement="bottom"
+            overlay = {
+                <Tooltip>
+                    {t('Reputation.Tooltip')}
+                </Tooltip>
+            }>
+            <li className="list-inline-item">
+                <h4 className="font-weight-bold mb-0 d-block">{reputation}</h4>
+                <span className="text-muted"><i className="fas fa-image mr-1"></i>{t('Profile.Reputation')}</span>
+            </li>
+        </OverlayTrigger>
+
     return(
         // TODO: METER HEADER
 
@@ -81,9 +108,9 @@ export default function UserInfoPage() {
                                 <div className="W-img-and-quote-div">
                                     <div>
                                         {reviewOwnerUser.image == null ? (
-                                            <img src={'./images/defaultUserImg.png'} alt="User_img" className="W-edit-profile-picture" />
+                                            <img src={"/images/defaultUserImg.png"} alt="User_img" className="W-edit-profile-picture" />
                                         ) : (
-                                            <img src={reviews[0].user.image} alt="User_img" className="W-edit-profile-picture" />
+                                            <img src={reviewOwnerUser.image} alt="User_img" className="W-edit-profile-picture" />
                                         )}
                                         <h4 className="W-username-profilepage">{reviewOwnerUser.username}</h4>
                                     </div>
@@ -119,10 +146,11 @@ export default function UserInfoPage() {
                                     <span className="text-muted"><i className="fas fa-image mr-1"></i>{t('Profile.Reviews')}</span>
                                 )}
                             </li>
-                            <li className="list-inline-item" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title={t('Reputation.Tooltip')}>
-                                <h4 className="font-weight-bold mb-0 d-block">{reputation}</h4>
-                                <span className="text-muted"><i className="fas fa-image mr-1"></i>{t('Profile.Reputation')}</span>
-                            </li>
+                            {tooltip}
+                            {/*<li className="list-inline-item" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title={t('Reputation.Tooltip')}>*/}
+                            {/*    <h4 className="font-weight-bold mb-0 d-block">{reputation}</h4>*/}
+                            {/*    <span className="text-muted"><i className="fas fa-image mr-1"></i>{t('Profile.Reputation')}</span>*/}
+                            {/*</li>*/}
                         </ul>
                     </div>
 
@@ -134,11 +162,11 @@ export default function UserInfoPage() {
                             <div className="card-body">
                                 {reviews.length === 0 ? (
                                     <div className="W-no-reviews-icon">
-                                        <img className="W-no-reviews-image" src={"./images/noReviews.png"} alt="No_Review_Img"/>
-                                        {canPromote ? (
+                                        <img className="W-no-reviews-image" src={"/images/noReviews.png"} alt="No_Review_Img"/>
+                                        {isSameUser ? (
                                             <h4 className="W-no-reviews-text">{t('Profile.NoReviews.Owner')}</h4>
                                         ) : (
-                                            <h4 className="W-no-reviews-text">{t('Profile.NoReviews.NotOwner')}</h4>
+                                            <h4 className="W-no-reviews-text">{t('Profile.NoReviews.NotOwner', {user: reviewOwnerUser.username})}</h4>
                                         )}
                                     </div>
                                 ) : (
