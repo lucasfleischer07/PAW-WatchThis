@@ -113,11 +113,11 @@ export default function ProfileEditionPage() {
                                 <div className="W-img-and-quote-div">
                                     <div className="W-div-img-quote">
                                         {user.image == null ? (
-                                            <img src={'./images/defaultUserImg.png'} alt="User_img" className="W-edit-profile-picture"/>
+                                            <img src={"/images/defaultUserImg.png"} alt="User_img" className="W-edit-profile-picture"/>
                                         ) : (
                                             <img src={user.image} alt="User_img" className="W-edit-profile-picture"/>
                                         )}
-                                        <h4 className="W-username-profilepage">{user.name}</h4>
+                                        <h4 className="W-username-profilepage">{user.username}</h4>
                                     </div>
                                 </div>
                             </div>

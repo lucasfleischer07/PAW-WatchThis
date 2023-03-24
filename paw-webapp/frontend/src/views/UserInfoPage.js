@@ -125,9 +125,9 @@ export default function UserInfoPage() {
                     <div className="bg-light p-4 d-flex text-center W-editProfileButton-and-reviewsCant">
                         <div className="W-edition-and-admin-buttons">
                             {isSameUser && (
-                                <a href="/profile/editProfile" className="btn btn-outline-dark btn-block W-editProfile-button">
+                                <Link to="/user/profile/editProfile" className="btn btn-outline-dark btn-block W-editProfile-button">
                                     {t('Profile.EditProfile')}
-                                </a>
+                                </Link>
                             )}
                             {!isSameUser && canPromote && (
                                 <form onSubmit={handlePromoteUser} className="W-delete-form" id={`user${reviewOwnerUser.username}`} method="post">

@@ -52,9 +52,9 @@ export default function Login() {
                     navigate(origin, {replace: true})
                     toast.success(t('Login.Success'))
                 }
-                // else {
-                //     setError(true)
-                // }
+                else {
+                    setError(true)
+                }
             })
             .catch(() => {
                 setError(true)
@@ -118,7 +118,7 @@ export default function Login() {
                                     {/*    <div className="W-forgot-password">{t('Login.ForgotPassword')}</div>*/}
                                     {/*</Link>*/}
                                     {/*TODO: Esto no es un tag a, tiene que ser un Link creo*/}
-                                    <a className="W-forgot-password" href="/login/forgot-password">{t('Login.ForgotPassword')}</a>
+                                    <Link className="W-forgot-password" to="/login/forgotPassword">{t('Login.ForgotPassword')}</Link>
                                 </div>
                             </div>
                         </div>

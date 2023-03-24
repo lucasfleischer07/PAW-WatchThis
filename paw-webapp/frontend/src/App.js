@@ -11,6 +11,8 @@ import ProfileEditionPage from "./views/ProfileEditionPage";
 import UserInfoPage from "./views/UserInfoPage";
 
 import {ToastContainer} from "react-toastify";
+import LoginPage from "./views/LoginPage";
+import ForgotPassword from "./views/ForgotPassword";
 
 function App() {
   return (
@@ -19,7 +21,10 @@ function App() {
               <Routes>
                   <Route path='/' element={<Home/>}/>
                   <Route path='/content/:contentType' element={<ContentPage/>}/>
-                  <Route path='/login' element={<Login/>}/>
+                  <Route path='/login' element={<LoginPage/>}>
+                      <Route index element={<Login/>}/>
+                      <Route path='forgotPassword' element={<ForgotPassword/>}/>
+                  </Route>
                   <Route path='/user' element={<UserPage/>}>
                       <Route path='profile/:userProfileId' element={<UserInfoPage/>}/>
                       <Route path='profile/editProfile' element={<ProfileEditionPage/>}/>
