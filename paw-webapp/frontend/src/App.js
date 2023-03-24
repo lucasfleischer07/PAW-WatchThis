@@ -13,6 +13,8 @@ import UserInfoPage from "./views/UserInfoPage";
 import {ToastContainer} from "react-toastify";
 import LoginPage from "./views/LoginPage";
 import ForgotPassword from "./views/ForgotPassword";
+import ReviewRegistrationPage from "./views/ReviewRegistrationPage";
+import ReviewEditionPage from "./views/ReviewEditionPage";
 
 function App() {
   return (
@@ -21,6 +23,8 @@ function App() {
               <Routes>
                   <Route path='/' element={<Home/>}/>
                   <Route path='/content/:contentType' element={<ContentPage/>}/>
+                  <Route path='/content/:contentType/:contentId/reviewRegistration' element={<ReviewRegistrationPage/>}/>
+                  <Route path='/content/:contentType/:contentId/:reviewId/reviewEdition' element={<ReviewEditionPage/>}/>
                   <Route path='/login' element={<LoginPage/>}>
                       <Route index element={<Login/>}/>
                       <Route path='forgotPassword' element={<ForgotPassword/>}/>

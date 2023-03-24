@@ -49,19 +49,15 @@
                             <li class="mb-1 px-2">
                                 <label><form:checkbox cssClass="px-2" path="formGenre" value="Action"/> <spring:message code="Genre.Action"/></label>
                             </li>
-
                             <li class="mb-1 px-2">
                                 <label><form:checkbox cssClass="px-2" path="formGenre" value="Sci-Fi"/> <spring:message code="Genre.Science"/></label>
                             </li>
-
                             <li class="mb-1 px-2">
                                 <label><form:checkbox cssClass="px-2" path="formGenre" value="Comedy"/> <spring:message code="Genre.Comedy"/></label>
                             </li>
-
                             <li class="mb-1 px-2">
                                 <label><form:checkbox cssClass="px-2" path="formGenre" value="Adventure"/> <spring:message code="Genre.Adventure"/></label>
                             </li>
-
                             <li class="mb-1 px-2">
                                 <label><form:checkbox cssClass="px-2" path="formGenre" value="Drama"/> <spring:message code="Genre.Drama"/></label>
                             </li>
@@ -69,7 +65,6 @@
                             <li class="mb-1 px-2">
                                 <label><form:checkbox cssClass="px-2" path="formGenre" value="Horror"/> <spring:message code="Genre.Horror"/></label>
                             </li>
-
                             <li class="mb-1 px-2">
                                 <label><form:checkbox cssClass="px-2" path="formGenre" value="Animation"/> <spring:message code="Genre.Animation"/></label>
                             </li>

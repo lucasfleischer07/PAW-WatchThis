@@ -24,6 +24,23 @@ export class ReviewApi {
 
     }
 
+    async getSpecificReview(reviewId) {
+        try {
+            const res = await fetch(`${this.basePath}/specificReview/${reviewId}`, {
+                method: 'GET',
+                headers: authCheck({})
+            })
+            if(res.status !== 204) {
+                return {error: false, data: await res.json()}
+            } else {
+                return {error: false, data: []}
+            }
+        } catch (e) {
+            return {error: true}
+        }
+
+    }
+
     async reviewsCreation(reviewId, type, reviewDetails) {
         try {
             const res = await fetch(`${this.basePath}/create/${type}/${reviewId}`, {
@@ -35,7 +52,7 @@ export class ReviewApi {
             if(res.status !== 204) {
                 return {error: false, data: await res.json()}
             } else {
-                return {error: false, data: []}
+                return {error: true, data: []}
             }
         } catch (e) {
             return {error: true}

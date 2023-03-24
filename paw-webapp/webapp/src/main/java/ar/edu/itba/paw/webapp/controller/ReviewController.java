@@ -18,6 +18,7 @@ import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 @Path("reviews")
@@ -59,12 +60,24 @@ public class ReviewController {
 
         LOGGER.info("GET /{}: Review list for content {}",uriInfo.getPath(), contentId);
 
-//        TODO: El Return aca deberia ya estar paginado (Por el momento no lo esta, habria que cambairlo)
         final Response.ResponseBuilder response = Response.ok(new GenericEntity<Collection<ReviewDto>>(reviewDtoList){});
         ResponseBuildingUtils.setPaginationLinks(response,reviewList , uriInfo);
         return response.build();
 
 
+    }
+
+
+
+    @GET
+    @Path("/specificReview/{reviewId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response reviews(@PathParam("reviewId") final long reviewId) {
+        LOGGER.info("GET /{}: Called",uriInfo.getPath());
+        Review review = rs.findById(reviewId).orElseThrow(ReviewNotFoundException::new);
+        ReviewDto reviewDto = new ReviewDto(uriInfo, review);
+        LOGGER.info("GET /{}: Review {}",uriInfo.getPath(), reviewId);
+        return Response.ok(reviewDto).build();
     }
     // * ---------------------------------------------------------------------------------------------------------------
 
@@ -80,6 +93,12 @@ public class ReviewController {
         LOGGER.info("POST /{}: Called", uriInfo.getPath());
         final Content content = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
         final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(ForbiddenException::new);
+        final List<User> userList = cs.getContentReviewers(contentId);
+        for (User user2 : userList) {
+            if (user2.getId() == user.getId()) {
+                return Response.noContent().build();
+            }
+        }
         try {
             rs.addReview(reviewDto.getName(), reviewDto.getDescription(), reviewDto.getRating(), reviewDto.getType(), user, content);
             LOGGER.info("POST /{}: Review added", uriInfo.getPath());
