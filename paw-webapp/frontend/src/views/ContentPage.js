@@ -30,6 +30,7 @@ export default function ContentPage(props) {
         }
     }, [user])
 
+
     useEffect(() => {
         contentService.getContentByType(contentType, actualPage)
             .then(data => {
@@ -42,6 +43,7 @@ export default function ContentPage(props) {
             })
     }, [actualPage])
 
+
     // TODO: Ver tema de useEffect de cuando tengo que ponerle nada y cunado tengo que ponerle dependencia.
     //  Si a este no le pongo nada, va bien pero si lo pongo deps, no me carga al entrar a la pagina
     useEffect(() => {
@@ -53,7 +55,8 @@ export default function ContentPage(props) {
                     }
                 })
             : setUserWatchListIds(null)
-    }, [userWatchListIds, user])
+    }, [user])
+
 
     return (
         <div>
