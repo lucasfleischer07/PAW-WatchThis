@@ -18,7 +18,9 @@ export default function ReviewRegistrationPage() {
     const { contentType, contentId } = useParams();
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
     const [content, setContent] = useState({})
-    const [error, setError] = useState(false)
+    const [nameError, setNameError] = useState(false)
+    const [descriptionError, setDescriptionError] = useState(false)
+    const [ratingError, setRatingError] = useState(false)
 
     const [reviewForm, setReviewForm] = useState({
         name: "",
@@ -29,40 +31,37 @@ export default function ReviewRegistrationPage() {
 
 
     const validName = () => {
-        const regex = /([a-zA-Z0-9ñáéíóú!,.:;=+\-_()?<>$%&#@{}\[\]|*"'~/`^\s]+)?/
-        if(reviewForm.name.length < 6 || reviewForm.name.length > 200) {
-            setError(true)
+        const regex = /([a-zA-Z0-9ñáéíóú!,.:;=+\-_()?<>$%&#@{}[\]|*"'~/`^\s]+)?/
+        if(reviewForm.name.length < 6 || reviewForm.name.length > 200 || !regex.test(reviewForm.name)) {
+            setNameError(true)
             return false
         }
-
-        return regex.test(reviewForm.name)
+        setNameError(false)
+        return true
     }
 
     const validDescription = () => {
-        const regex = /([a-zA-Z0-9ñáéíóú!,.:;=+\- _()?<>$%&#@{}\[\]|*"'~/`^\s]+)?/
-        if(reviewForm.description.length < 20 || reviewForm.description.length > 2000) {
-            setError(true)
+        const regex = /([a-zA-Z0-9ñáéíóú!,.:;=+\- _()?<>$%&#@{}[\]|*"'~/`^\s]+)?/
+        if(reviewForm.description.length < 20 || reviewForm.description.length > 2000 || !regex.test(reviewForm.description)) {
+            setDescriptionError(true)
             return false
         }
-
-        return regex.test(reviewForm.name)
+        setDescriptionError(false)
+        return true
     }
 
     const validRating = () => {
         if(reviewForm.rating <= 0 || reviewForm.rating > 5) {
-            setError(true)
+            setRatingError(true)
             return false
         }
-
+        setRatingError(false)
         return true
     }
 
     const validForm = () => {
-        if(!validName() || !validDescription() || !validRating()) {
-            setError(true)
-            return false
-        }
-        return true
+        return (validName() && validDescription() && validRating());
+
     }
 
     const handleChange = (e) => {
@@ -94,7 +93,7 @@ export default function ReviewRegistrationPage() {
 
 
     useEffect(() => {
-        if(isLogged()) {
+        if(isLogged() && user.role === 'admin') {
             contentService.getSpecificContent(parseInt(contentId))
                 .then(data => {
                     if(!data.error) {
@@ -121,12 +120,10 @@ export default function ReviewRegistrationPage() {
                     <h4 className="W-review-registration-name">{content.name}</h4>
                 </div>
                 <div className="card W-review-card">
-                    {/*{errorMsg && errorMsg !== '' && (*/}
-                    {/*    <div className="alert alert-danger d-flex align-items-center" role="alert">*/}
-                    {/*        <div className="W-register-errorMsg">{errorMsg}</div>*/}
-                    {/*    </div>*/}
-                    {/*)}*/}
                     <div className="mb-3 W-input-label-review-info">
+                        {nameError &&
+                            <p style={{color: '#b21e26'}}>{t('Pattern.contentCreate.name')}</p>
+                        }
                         {/*<p style={{ color: '#b21e26' }}>{nameErrors}</p>*/}
                         <label className="form-label">
                             {t('CreateReview.ReviewName')}<span className="W-red-asterisco">{t('Asterisk')}</span>
@@ -144,7 +141,9 @@ export default function ReviewRegistrationPage() {
                         />
                     </div>
                     <div className="mb-3 W-input-label-review-info">
-                        {/*<p style={{ color: '#b21e26' }}>{descriptionErrors}</p>*/}
+                        {descriptionError &&
+                            <p style={{color: '#b21e26'}}>{t('Pattern.contentCreate.description')}</p>
+                        }
                         <label className="form-label">
                             {t('CreateReview.ReviewDescription')}<span className="W-red-asterisco">{t('Asterisk')}</span>
                         </label>
@@ -152,22 +151,28 @@ export default function ReviewRegistrationPage() {
                             {t('CreateReview.CharacterLimits', {min: 20, max: 2000})}
                         </p>
 
-                        <SimpleMDE
-                            id="MyTextArea"
-                            className="form-control"
-                            name="description"
-                            options={{
-                                showIcons: ["strikethrough"],
-                                hideIcons: ["link", "image","table","preview","fullscreen","guide","side-by-side","quote"]
-                            }}
-                            value={reviewForm.description}
-                            onChange={handleChange}
-                            rows="3"
-                        />
+                        <textarea className="form-control" name="description" id="description" cols="30" rows="10" onChange={handleChange} value={reviewForm.description}/>
+
+
+                        {/*TODO: VER PORQUE ESTO NO ANDA*/}
+                        {/*<SimpleMDE*/}
+                        {/*    id="MyTextArea"*/}
+                        {/*    className="form-control"*/}
+                        {/*    name="description"*/}
+                        {/*    options={{*/}
+                        {/*        showIcons: ["strikethrough"],*/}
+                        {/*        hideIcons: ["link", "image","table","preview","fullscreen","guide","side-by-side","quote"]*/}
+                        {/*    }}*/}
+                        {/*    value={reviewForm.description}*/}
+                        {/*    onChange={handleChange}*/}
+                        {/*    rows="3"*/}
+                        {/*/>*/}
 
                     </div>
                     <div className="mb-3 W-input-label-review-info">
-                        {/*<p style={{ color: '#b21e26' }}>{ratingErrors}</p>*/}
+                        {ratingError &&
+                            <p style={{color: '#b21e26'}}>Error</p>
+                        }
                         <label className="form-label">
                             {t('CreateReview.ReviewRating')}<span className="W-red-asterisco">{t('Asterisk')}</span>
                         </label>

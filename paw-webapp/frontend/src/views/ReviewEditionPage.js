@@ -1,9 +1,10 @@
 import {useTranslation} from "react-i18next";
 import {Link, useLocation, useNavigate, useParams} from "react-router-dom";
-import {useContext, useEffect, useState} from "react";
+import {useContext, useEffect, useRef, useState} from "react";
 import {AuthContext} from "../context/AuthContext";
 import {contentService, reviewService} from "../services";
 import SimpleMDE from "react-simplemde-editor";
+
 
 
 export default function ReviewEditionPage() {
@@ -11,11 +12,16 @@ export default function ReviewEditionPage() {
     let navigate = useNavigate()
     let location = useLocation()
     let {isLogged} = useContext(AuthContext)
+    const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
 
     let origin = location.state?.from?.pathname || "/";
     const { contentType, contentId, reviewId } = useParams();
     const [content, setContent] = useState({})
     const [error, setError] = useState(false)
+
+    const [nameError, setNameError] = useState(false)
+    const [descriptionError, setDescriptionError] = useState(false)
+    const [ratingError, setRatingError] = useState(false)
 
     const [reviewForm, setReviewForm] = useState({
         name: "",
@@ -24,40 +30,39 @@ export default function ReviewEditionPage() {
         type: contentType
     });
 
+
     const validName = () => {
-        const regex = /([a-zA-Z0-9ñáéíóú!,.:;=+\-_()?<>$%&#@{}\[\]|*"'~/`^\s]+)?/
-        if(reviewForm.name.length < 6 || reviewForm.name.length > 200) {
-            setError(true)
+        const regex = /([a-zA-Z0-9ñáéíóú!,.:;=+\-_()?<>$%&#@{}[\]|*"'~/`^\s]+)?/
+        if(reviewForm.name.length < 6 || reviewForm.name.length > 200 || !regex.test(reviewForm.name)) {
+            setNameError(true)
             return false
         }
-
-        return regex.test(reviewForm.name)
+        setNameError(false)
+        return true
     }
 
     const validDescription = () => {
-        const regex = /([a-zA-Z0-9ñáéíóú!,.:;=+\- _()?<>$%&#@{}\[\]|*"'~/`^\s]+)?/
-        if(reviewForm.description.length < 20 || reviewForm.description.length > 2000) {
-            setError(true)
+        const regex = /([a-zA-Z0-9ñáéíóú!,.:;=+\- _()?<>$%&#@{}[\]|*"'~/`^\s]+)?/
+        if(reviewForm.description.length < 20 || reviewForm.description.length > 2000 || !regex.test(reviewForm.description)) {
+            setDescriptionError(true)
             return false
         }
-
-        return regex.test(reviewForm.name)
+        setDescriptionError(false)
+        return true
     }
 
     const validRating = () => {
         if(reviewForm.rating <= 0 || reviewForm.rating > 5) {
-            setError(true)
+            setRatingError(true)
             return false
         }
+        setRatingError(false)
         return true
     }
 
     const validForm = () => {
-        if(!validName() || !validDescription() || !validRating()) {
-            setError(true)
-            return false
-        }
-        return true
+        return (validName() && validDescription() && validRating());
+
     }
 
     const handleChange = (e) => {
@@ -91,13 +96,16 @@ export default function ReviewEditionPage() {
         if(isLogged()) {
             reviewService.getSpecificReview(reviewId)
                 .then(data => {
-                    if(!data.error) {
+                    if(!data.error && (user.id === data.data.user.id)) {
                         setReviewForm({
                             name: data.data.name,
                             description: data.data.description,
                             rating: data.data.rating,
                             type: data.data.type
                         })
+                    } else {
+                        navigate("/error", {replace: true})
+                    //     TODO: Meter error de forbiden access y llevar a pagina de errror
                     }
                 })
                 .catch(e => {
@@ -133,9 +141,9 @@ export default function ReviewEditionPage() {
                 </div>
                 <div className="card W-review-card">
                     <div className="mb-3 W-input-label-review-info">
-                        {/*{props.errors.name && (*/}
-                        {/*    <p style={{ color: '#b21e26' }}>{props.errors.name}</p>*/}
-                        {/*)}*/}
+                        {nameError &&
+                            <p style={{color: '#b21e26'}}>{t('Pattern.contentCreate.name')}</p>
+                        }
                         <label htmlFor="name" className="form-label">
                             {t('CreateReview.ReviewName')}
                             <span className="W-red-asterisco">{t('Asterisk')}</span>
@@ -154,9 +162,9 @@ export default function ReviewEditionPage() {
                         />
                     </div>
                     <div className="mb-3 W-input-label-review-info">
-                        {/*{props.errors.description && (*/}
-                        {/*    <p style={{ color: '#b21e26' }}>{props.errors.description}</p>*/}
-                        {/*)}*/}
+                        {descriptionError &&
+                            <p style={{color: '#b21e26'}}>{t('Pattern.contentCreate.description')}</p>
+                        }
                         <label htmlFor="description" className="form-label">
                             {t('CreateReview.ReviewDescription')}
                             <span className="W-red-asterisco">{t('Asterisk')}</span>
@@ -165,23 +173,27 @@ export default function ReviewEditionPage() {
                             {t('CreateReview.CharacterLimits', {min: 20, max: 2000})}
                         </p>
 
-                        <SimpleMDE
-                            id="description"
-                            className="form-control"
-                            name="description"
-                            options={{
-                                showIcons: ["strikethrough"],
-                                hideIcons: ["link", "image","table","preview","fullscreen","guide","side-by-side","quote"]
-                            }}
-                            value={reviewForm.description}
-                            onChange={handleChange}
-                            rows="3"
-                        />
+                        <textarea className="form-control" name="description" id="description" cols="30" rows="10" onChange={handleChange} value={reviewForm.description}/>
+
+                        {/*TODO: Ver porque no lee el texto de adentro al submitear*/}
+                        {/*<SimpleMDE*/}
+                        {/*    id="description"*/}
+                        {/*    className="form-control"*/}
+                        {/*    name="description"*/}
+                        {/*    options={{*/}
+                        {/*        showIcons: ["strikethrough"],*/}
+                        {/*        hideIcons: ["link", "image","table","preview","fullscreen","guide","side-by-side","quote"]*/}
+                        {/*    }}*/}
+                        {/*    value={reviewForm.description}*/}
+                        {/*    onChange={handleChange}*/}
+                        {/*    rows="3"*/}
+                        {/*/>*/}
+
                     </div>
                     <div className="mb-3 W-input-label-review-info">
-                        {/*{props.errors.rating && (*/}
-                        {/*    <p style={{ color: '#b21e26' }}>{props.errors.rating}</p>*/}
-                        {/*)}*/}
+                        {ratingError &&
+                            <p style={{color: '#b21e26'}}>Error</p>
+                        }
                         <label htmlFor="rating" className="form-label">
                             {t('CreateReview.ReviewRating')}
                             <span className="W-red-asterisco"> {t('Asterisk')}</span>
