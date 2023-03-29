@@ -113,7 +113,7 @@
   "EditProfile.Upload.Password.Error": "Error while updating password",
 
 
-  "Comment.Owner": "Comment owner: {username}",
+  "Comment.Owner": "Comment owner: {{username}}",
   "Comment.Title": "Comment",
   "Comment.Title2": "Comment",
   "Comments.Title": "Comments",
@@ -125,7 +125,7 @@
 
   "Search.Title": "The result of: {{query}}",
 
-  "Review.Owner": "Review owner: {username}",
+  "Review.Owner": "Review owner: {{username}}",
   "Review.Mine": "My review",
   "Reviews.ReadMore": "See more reviews",
   "Review.WarningAdd": "To make a review, you must be logged in.",

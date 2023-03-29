@@ -112,7 +112,7 @@
   "EditProfile.Upload.Password.Error": "Error al actualizar la contraseña",
 
 
-  "Comment.Owner": "Creador del comentario: {username}",
+  "Comment.Owner": "Creador del comentario: {{username}}",
   "Comment.Title": "Comentar",
   "Comment.Title2": "Comentario",
   "Comments.Title": "Comentarios",
@@ -125,7 +125,7 @@
 
   "Search.Title": "Los resultados de: {{query}}",
 
-  "Review.Owner": "Creador de la reseña: {username}",
+  "Review.Owner": "Creador de la reseña: {{username}}",
   "Review.Mine": "Mi reseña",
   "Reviews.ReadMore": "Ver mas reseñas",
   "Review.WarningAdd": "Para hacer una reseña, tienes que iniciar sesión.",
