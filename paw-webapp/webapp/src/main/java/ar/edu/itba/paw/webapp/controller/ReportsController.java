@@ -48,7 +48,7 @@ public class ReportsController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getReportsByType(@PathParam("type") final String type,
                                      @QueryParam("page")@DefaultValue("1")final int page,
-                                     @RequestParam(value = "reason",required = false)ReportReason reason) {
+                                     @QueryParam(value = "reason") @DefaultValue("") ReportReason reason) {
         LOGGER.info("GET /{}: Called", uriInfo.getPath());
 
         final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(ForbiddenException::new);

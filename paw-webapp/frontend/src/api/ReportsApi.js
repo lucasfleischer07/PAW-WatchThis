@@ -7,10 +7,10 @@ export class ReportsApi {
         this.basePath = `${paths.BASE_URL_API}${paths.REPORTS}`
     }
 
-    async getReportsByType(type, pageNumber) {
+    async getReportsByType(type, pageNumber, filter= 'ANY') {
         try {
             const apiUrl = `${this.basePath}/${type}`
-            const params = {pageNumber: pageNumber, pageSize: 10}
+            const params = {reason: filter, pageNumber: pageNumber, pageSize: 10}
             const options = {headers: authCheck({})}
             const res = await fetchWithQueryParamsApi(apiUrl, params, options)
             if(res.status !== 204) {
@@ -23,7 +23,7 @@ export class ReportsApi {
         }
     }
 
-    // TODO: VERIFICAR VIEN ESTE PORUQE NI IDEA
+    // TODO: VERIFICAR BIEN ESTE PORUQE NI IDEA
     async addReviewReport(reviewId, reviewReportReasons) {
         try {
             const res = await fetch(`${this.basePath}/review/${reviewId}`, {
@@ -42,7 +42,7 @@ export class ReportsApi {
         }
     }
 
-    // TODO: VERIFICAR VIEN ESTE PORUQE NI IDEA
+    // TODO: VERIFICAR BIEN ESTE PORUQE NI IDEA
     async addCommentReport(reviewId, commentReportReasons) {
         try {
             const res = await fetch(`${this.basePath}/comment/${reviewId}`, {

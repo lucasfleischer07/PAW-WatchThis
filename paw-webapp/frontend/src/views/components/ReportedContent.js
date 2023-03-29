@@ -1,6 +1,6 @@
 import {Link} from "react-router-dom";
 import {useTranslation} from "react-i18next";
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import { Modal, Button } from 'react-bootstrap';
 import Markdown from 'marked-react';
 import {commentService, reportsService, reviewService} from "../../services";
@@ -12,36 +12,36 @@ export default function ReportedContent(props) {
     const [showModal, setShowModal] = useState(false);
     const [showModalDismiss, setShowModalDismiss] = useState(false);
 
-    // const userName = props.userName
-    // const userId = props.userId
-    // const contentId = props.contentId
-    // const contentName = props.contentName
-    // const contentType = props.contentType
-    // const reportTitle = props.reportTitle
-    // const reportDescription = props.reportDescription
-    // const reportReasons = props.reportReasons
-    // const reportsAmount = props.reportsAmount
-    // const typeId = props.typeId
-    // const reportType = props.reportType
-    // const reviewCreatorUserName = props.reviewCreatorUserName
-    // const reviewCreatorUserId = props.reviewCreatorUserId
-    // const reviewNameOfReportedComment = props.reviewNameOfReportedComment
+    const userName = props.userName
+    const userId = props.userId
+    const contentId = props.contentId
+    const contentName = props.contentName
+    const contentType = props.contentType
+    const reportTitle = props.reportTitle
+    const reportDescription = props.reportDescription
+    const reportReasons = props.reportReasons
+    const reportsAmount = props.reportsAmount
+    const typeId = props.typeId
+    const reportType = props.reportType
+    const reviewCreatorUserName = props.reviewCreatorUserName
+    const reviewCreatorUserId = props.reviewCreatorUserId
+    const reviewNameOfReportedComment = props.reviewNameOfReportedComment
 
     // TODO: Borrar esto hardcodeado y descomentar lo de arriba cuando se haga el componente padre
-    const userName = "Juan"
-    const userId = 12
-    const contentId = 13
-    const contentName ="PAW: la pelicula"
-    const contentType = "review"
-    const reportTitle = "Una re verga"
-    const reportDescription = "una malaeducacion la verdad"
-    const reportReasons = "Span, Boludo"
-    const reportsAmount = 3
-    const typeId = 45
-    const reportType = "movie"
-    const reviewCreatorUserName = "malena"
-    const reviewCreatorUserId = 12
-    const reviewNameOfReportedComment = "Juancitooooooooooo"
+    // const userName = "Juan"
+    // const userId = 12
+    // const contentId = 13
+    // const contentName ="PAW: la pelicula"
+    // const contentType = "review"
+    // const reportTitle = "Una re verga"
+    // const reportDescription = "una malaeducacion la verdad"
+    // const reportReasons = "Span, Boludo"
+    // const reportsAmount = 3
+    // const typeId = 45
+    // const reportType = "movie"
+    // const reviewCreatorUserName = "malena"
+    // const reviewCreatorUserId = 12
+    // const reviewNameOfReportedComment = "Juancitooooooooooo"
 
 
     const handleShowModal = () => {
@@ -228,7 +228,7 @@ export default function ReportedContent(props) {
                             )}
                         </div>
                         <div>
-                            {reportType === "review" ? (
+                            {reportType === "reviews" ? (
                                 <p className="W-report-margin-zero W-color-report-type">{t('Profile.Review')}</p>
                             ) : (
                                 <p className="W-report-margin-zero W-color-report-type">{t('Comment.Title')}</p>

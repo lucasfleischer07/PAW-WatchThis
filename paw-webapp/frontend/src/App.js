@@ -17,6 +17,7 @@ import ReviewRegistrationPage from "./views/ReviewRegistrationPage";
 import ReviewEditionPage from "./views/ReviewEditionPage";
 import ReportedContent from "./views/components/ReportedContent";
 import ContentCreatePage from "./views/ContentCreatePage";
+import ReportedPage from "./views/ReportedPage";
 
 function App() {
   return (
@@ -25,8 +26,8 @@ function App() {
               <Routes>
                   <Route path='/' element={<Home/>}/>
                   <Route path='/content/:contentType' element={<ContentPage/>}/>
-                  {/*<Route path='/content/form/:formType' element={<ContentCreatePage/>}/>*/}
-                  {/*<Route path='/content/form/:formType/:contentId' element={<ContentCreatePage/>}/>*/}
+                  <Route path='/content/form/:formType' element={<ContentCreatePage/>}/>
+                  <Route path='/content/form/:formType/:contentId' element={<ContentCreatePage/>}/>
                   <Route path='/content/:contentType/:contentId/reviewRegistration' element={<ReviewRegistrationPage/>}/>
                   <Route path='/content/:contentType/:contentId/:reviewId/reviewEdition' element={<ReviewEditionPage/>}/>
                   <Route path='/login' element={<LoginPage/>}>
@@ -40,7 +41,7 @@ function App() {
                       <Route path='viewedList' element={<ViewedListPage/>}/>
                   </Route>
 
-                  <Route path='/reported' element={<ReportedContent/>}/>
+                  <Route path='/reports/:reportedType' element={<ReportedPage/>}/>
 
               </Routes>
 
