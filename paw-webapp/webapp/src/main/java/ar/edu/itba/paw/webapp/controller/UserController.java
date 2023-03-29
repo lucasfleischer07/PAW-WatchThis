@@ -126,6 +126,8 @@ public class UserController {
     public Response updateUserProfileImage(@FormDataParam("image") byte[] imageBytes,
                                            @PathParam("id") final long id) {
         LOGGER.info("PUT /{}: Called", uriInfo.getPath());
+        if(imageBytes==null)
+            throw new BadRequestException("Must include image data");
         final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
         if(user.getId() != id) {
             throw new ForbiddenException();
@@ -148,7 +150,8 @@ public class UserController {
     public Response updateUserProfileInfo(@Valid EditProfileDto editProfileDto,
                                           @PathParam("id") final long id) {
         LOGGER.info("PUT /{}: Called", uriInfo.getPath());
-
+        if(editProfileDto==null)
+            throw new BadRequestException("Must include edit data");
         final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
         if(user.getId() != id) {
             throw new ForbiddenException();

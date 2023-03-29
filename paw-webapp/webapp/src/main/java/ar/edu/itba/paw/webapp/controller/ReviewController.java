@@ -91,6 +91,8 @@ public class ReviewController {
                             @PathParam("contentId") final long contentId,
                             @Valid NewReviewDto reviewDto) {
         LOGGER.info("POST /{}: Called", uriInfo.getPath());
+        if(reviewDto==null)
+            throw new BadRequestException("Must include review data");
         final Content content = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
         final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(ForbiddenException::new);
         final List<User> userList = cs.getContentReviewers(contentId);
@@ -153,7 +155,8 @@ public class ReviewController {
                                   @Valid final NewReviewDto reviewDto) {
 
         LOGGER.info("PUT /{}: Called", uriInfo.getPath());
-
+        if(reviewDto==null)
+            throw new BadRequestException("Must include edit data");
         final Review oldReview = rs.findById(reviewId).orElseThrow(ReviewNotFoundException::new);
         User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(ForbiddenException::new);
         if(!oldReview.getUser().getUserName().equals(user.getUserName())){

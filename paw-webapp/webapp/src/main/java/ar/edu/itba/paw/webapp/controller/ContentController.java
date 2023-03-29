@@ -121,8 +121,9 @@ public class ContentController {
     public Response updateContentImage(@Size(max = 1024 * 1024 * 2) @FormDataParam("image") byte[] imageBytes,
                                        @PathParam("contentId") final long contentId) {
         LOGGER.info("PUT /{}: Called", uriInfo.getPath());
+        if(imageBytes==null)
+            throw new BadRequestException("Must include edit data");
         Content content = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
-
         cs.updateContent(content.getId(), content.getName(), content.getDescription(), content.getReleased(), content.getGenre(), content.getCreator(), content.getDurationNum(), content.getType(), imageBytes);
         LOGGER.info("PUT /{}: Content {} Image Updated", uriInfo.getPath(), contentId);
         return Response.noContent().contentLocation(ContentDto.getContentUriBuilder(uriInfo).path("content").path(String.valueOf(content.getId())).path("contentImage").build()).build();
@@ -143,7 +144,8 @@ public class ContentController {
         LOGGER.info("PUT /{}: Called", uriInfo.getPath());
         final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
         final Content content = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
-
+        if(contentDto==null)
+            throw new BadRequestException("Must include edit data");
         String auxGenre = "";
         for(String genre : contentDto.getGenre()) {
             auxGenre = auxGenre + " " + genre;
@@ -180,6 +182,8 @@ public class ContentController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response createContent(@Valid NewContentDto contentDto) {
         LOGGER.info("POST /{}: Called", uriInfo.getPath());
+        if(contentDto==null)
+            throw new BadRequestException("Must include content data");
         User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
 
         String auxGenre = "";

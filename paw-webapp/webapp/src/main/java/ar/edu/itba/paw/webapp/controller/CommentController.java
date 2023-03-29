@@ -69,7 +69,8 @@ public class CommentController {
     @Path("/{reviewId}/add")
     public Response commentReviewAdd(@PathParam("reviewId")final long reviewId, @Valid NewCommentDto commentDto) {
         LOGGER.info("POST /{}: Called", uriInfo.getPath());
-
+        if(commentDto==null)
+            throw new BadRequestException("Must include comment data");
         Optional<Review> review = rs.getReview(reviewId);
         Optional<User> user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
 

@@ -86,6 +86,8 @@ public class ReportsController {
     public Response addReviewReport(@PathParam("reviewId") long reviewId,
                                     @Valid NewReportCommentDto commentReportDto) {
         LOGGER.info("POST /{}: Called", uriInfo.getPath());
+        if(commentReportDto==null)
+            throw new BadRequestException("Must include report data");
         final Review review = rs.findById(reviewId).orElseThrow(ReviewNotFoundException::new);
         final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(ForbiddenException::new);
         rrs.addReport(review, user, commentReportDto.getReportType());
@@ -103,7 +105,8 @@ public class ReportsController {
     public Response addCommentReport(@PathParam("commentId") long commentId,
                                      @Valid NewReportCommentDto commentReportDto) {
         LOGGER.info("POST /{}: Called", uriInfo.getPath());
-
+        if(commentReportDto==null)
+            throw new BadRequestException("Must include report data");
         final Comment comment = ccs.getComment(commentId).orElseThrow(CommentNotFoundException::new);
         final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(ForbiddenException::new);
         rrs.addReport(comment, user, commentReportDto.getReportType());
