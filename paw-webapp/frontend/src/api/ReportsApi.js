@@ -61,9 +61,9 @@ export class ReportsApi {
         }
     }
 
-    async deleteReport(contentId, type) {
+    async deleteReport(commentOrReviewId, type) {
         try {
-            await fetch(`${this.basePath}/deleteReport/${type}/${contentId}`, {
+            await fetch(`${this.basePath}/deleteReport/${type}/${commentOrReviewId}`, {
                 method: 'DELETE',
                 headers: authCheck({})
             })

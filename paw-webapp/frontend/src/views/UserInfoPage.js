@@ -1,13 +1,13 @@
 import {useTranslation} from "react-i18next";
 import {useEffect, useState} from "react";
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-import {Link, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import {userService} from "../services";
 import {toast} from "react-toastify";
 
 export default function UserInfoPage() {
     const {t} = useTranslation()
-    // let {isLogged} = useContext(AuthContext)
+    let navigate = useNavigate()
     const { userProfileId } = useParams();
 
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
@@ -45,10 +45,19 @@ export default function UserInfoPage() {
                              .then((data) => {
                                  if(!data.error) {
                                     setReviewOwnerUser(data.data)
+                                     if(user.role === 'admin' && data.data.role !== 'admin') {
+                                         setCanPromote(true)
+                                     } else {
+                                         setCanPromote(false)
+                                     }
+                                 } else {
+                                     //     TODO: Pagina de error diciendo que el id de ese usuario no existe
+                                     navigate("/error", {replace: true})
                                  }
                              })
                             .catch(e => {
-                            //     TODO: Pagina de error
+                            //     TODO: Pagina de error diciendo que el id de ese usuario no existe
+                                navigate("/error", {replace: true})
                             })
                         setReputation(0)
                     } else {
@@ -58,6 +67,12 @@ export default function UserInfoPage() {
                             reputation += reviews.data[i].reputation
                         }
                         setReputation(reputation)
+
+                        if(user.role === 'admin' && reviews.data[0].user.role !== 'admin') {
+                            setCanPromote(true)
+                        } else {
+                            setCanPromote(false)
+                        }
                     }
                     setTotalPages(reviews.totalPages)
 
@@ -67,16 +82,15 @@ export default function UserInfoPage() {
                         setIsSameUser(false)
                     }
 
-                    if(user.role === 'admin' && reviews.data[0].user.role !== 'admin') {
-                        setCanPromote(true)
-                    } else {
-                        setCanPromote(false)
-                    }
+                } else {
+            //     TODO: Pagina de error diciendo que el id de ese usuario no existe
+                    navigate("/error", {replace: true})
                 }
 
             })
             .catch(e => {
             //     TODO: Si no existe el usuario, hay que llevar a la pagina de error
+                navigate("/error", {replace: true})
             })
 
     }, [])
@@ -114,9 +128,9 @@ export default function UserInfoPage() {
                                         )}
                                         <h4 className="W-username-profilepage">{reviewOwnerUser.username}</h4>
                                     </div>
-                                    {/*<div className="W-margin-left-label">*/}
-                                    {/*    <p className="W-quote-in-profile">{quote}</p>*/}
-                                    {/*</div>*/}
+                                    <div className="W-margin-left-label">
+                                        {/*<p className="W-quote-in-profile">{quote}</p>*/}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -147,10 +161,6 @@ export default function UserInfoPage() {
                                 )}
                             </li>
                             {tooltip}
-                            {/*<li className="list-inline-item" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title={t('Reputation.Tooltip')}>*/}
-                            {/*    <h4 className="font-weight-bold mb-0 d-block">{reputation}</h4>*/}
-                            {/*    <span className="text-muted"><i className="fas fa-image mr-1"></i>{t('Profile.Reputation')}</span>*/}
-                            {/*</li>*/}
                         </ul>
                     </div>
 

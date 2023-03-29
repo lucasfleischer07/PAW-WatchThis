@@ -112,7 +112,7 @@
   "EditProfile.Upload.Password.Error": "Error al actualizar la contraseña",
 
 
-  "Comment.Owner": "Creador del comentario: {0}",
+  "Comment.Owner": "Creador del comentario: {username}",
   "Comment.Title": "Comentar",
   "Comment.Title2": "Comentario",
   "Comments.Title": "Comentarios",
@@ -125,7 +125,7 @@
 
   "Search.Title": "Los resultados de: {{query}}",
 
-  "Review.Owner": "Creador de la reseña: {0}",
+  "Review.Owner": "Creador de la reseña: {username}",
   "Review.Mine": "Mi reseña",
   "Reviews.ReadMore": "Ver mas reseñas",
   "Review.WarningAdd": "Para hacer una reseña, tienes que iniciar sesión.",
@@ -184,7 +184,7 @@
   "Content.NoReviewMessage.Movie": "No hay reseñas para esta película todavía.¡Sea el primero en crear una!",
   "Content.NoReviewMessage.Serie": "No hay reseñas para esta serie todavía.¡Sea el primero en crear una!",
   "Content.NoContent": "Buscamos {{query}} por todos lados, pero no pudimos encontrar nada de lo que estas buscando.",
-  "Content.NoContent.Filters": "Oh no! Parece que no hubo resultados.¡Prueba buscando otro genero y duración!",
+  "Content.NoContent.Filters": "Oh no! Parece que no hubo resultados.¡Prueba buscando otro género y duración!",
   "Content.Carousel.BestRatedContent": "Mejor puntuado",
   "Content.Carousel.LastAdded": "Ultimas agregadas",
   "Content.Carousel.RecommendedForYou": "Recomendado para tí",
@@ -202,10 +202,10 @@
   "CreateContent.ContentType.Movie": "Película",
   "CreateContent.ContentType.Serie": "Serie",
   "CreateContent.ContentReleaseDate": "Año de estreno",
-  "CreateContent.ContentGenre": "Genero",
+  "CreateContent.ContentGenre": "Género",
   "CreateContent.ContentCreator": "Director",
   "CreateContent.ContentDuration": "Duración en minutos",
-  "CreateContent.CharacterLimits": "(Debe estar entre {0} y {1} caracteres)",
+  "CreateContent.CharacterLimits": "(Debe estar entre {{min}} y {{max}} caracteres)",
   "DeleteContent": "Estas seguro que quieres borrar el contenido?",
 
   "Pagination.Prev": "Anterior",
@@ -262,8 +262,8 @@
   "Report.Other": "Otros",
   "Report.ReportedContent": "Contenido reportado",
   "Report.Empty": "No hay contenido reportado",
-  "Report.Report": "{0} denuncia",
-  "Report.Reports": "{0} denuncias",
+  "Report.Report": "{{reportsAmount}} denuncia",
+  "Report.Reports": "{{reportsAmount}} denuncias",
   "Report.Filter": "Filtrar",
   "Report.Dismiss": "Descartar denuncia",
 
@@ -300,5 +300,6 @@
   "Error.Body403": "No tiene permisos para acceder este recurso.",
   "Error.Body404": "No hemos podido encontrar esta página, intenta regresar.",
   "Error.Body405": "Esta acción no está permitida para esta url.",
-  "Error.Body500": "Hubo un error de servidor mientras se procesaba tu petición."
+  "Error.Body500": "Hubo un error de servidor mientras se procesaba tu petición.",
+  "Error.Genre": "Por favor seleccione al menos un género"
 }

@@ -99,6 +99,13 @@ export default function ProfileEditionPage() {
     }
 
     useEffect(() => {
+        // Si no esta logeado, lo mando a pagina de login
+        if(!isLogged()) {
+            navigate("/login", {replace: true})
+        }
+    }, [])
+
+    useEffect(() => {
         document.title = t('Profile')
     })
 
