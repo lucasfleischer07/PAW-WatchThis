@@ -12,6 +12,7 @@ export default function ProfileEditionPage() {
     let navigate = useNavigate()
     let location = useLocation()
     let {isLogged} = useContext(AuthContext)
+    // TODO: Chequear el tema de la redireccion a la pagina anterior
     let origin = location.state?.from?.pathname || "/";
 
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
@@ -47,6 +48,7 @@ export default function ProfileEditionPage() {
                         setError(false)
                         reset()
                         toast.info(t('EditProfile.Upload.Password.Success'))
+                        navigate(origin, {replace: true})
                     }
                 })
                 .catch(e => {
@@ -70,6 +72,7 @@ export default function ProfileEditionPage() {
                         setError(false)
                         reset()
                         toast.success(t('EditProfile.Upload.Image'));
+                        navigate(origin, {replace: true})
                     } else {
                         setError(true)
                     }
