@@ -1,8 +1,8 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.exceptions.CommentNotFoundException;
-import ar.edu.itba.paw.exceptions.ReviewNotFoundException;
-import ar.edu.itba.paw.exceptions.UserNotFoundException;
+import ar.edu.itba.paw.webapp.exceptions.CommentNotFoundException;
+import ar.edu.itba.paw.webapp.exceptions.ReviewNotFoundException;
+import ar.edu.itba.paw.webapp.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.models.Comment;
 import ar.edu.itba.paw.models.PageWrapper;
 import ar.edu.itba.paw.models.Review;
@@ -23,6 +23,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.util.Collection;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 @Path("comments")
 @Component
@@ -48,6 +49,7 @@ public class CommentController {
     public Response getReviewComments(@PathParam("reviewId") final long reviewId,
                                       @QueryParam("pageNumber") @DefaultValue("1") int pageNum,
                                       @QueryParam("pageSize") @DefaultValue("10") int pageSize) {
+
         LOGGER.info("GET /{}: Called", uriInfo.getPath());
         Review review = rs.findById(reviewId).orElseThrow(ReviewNotFoundException::new);
         PageWrapper<Comment> commentsPaginated = ccs.getReviewComments(review,pageNum,CONTENT_AMOUNT);

@@ -1,13 +1,13 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.exceptions.CommentNotFoundException;
-import ar.edu.itba.paw.exceptions.ContentNotFoundException;
-import ar.edu.itba.paw.exceptions.ReviewNotFoundException;
+import ar.edu.itba.paw.webapp.exceptions.CommentNotFoundException;
+import ar.edu.itba.paw.webapp.exceptions.ContentNotFoundException;
+import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
+import ar.edu.itba.paw.webapp.exceptions.ReviewNotFoundException;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.services.*;
 import ar.edu.itba.paw.webapp.dto.request.NewReportCommentDto;
 import ar.edu.itba.paw.webapp.dto.response.CommentReportDto;
-import ar.edu.itba.paw.webapp.dto.response.ContentDto;
 import ar.edu.itba.paw.webapp.dto.response.ReviewReportDto;
 import ar.edu.itba.paw.webapp.utilities.ResponseBuildingUtils;
 import org.slf4j.Logger;
@@ -21,7 +21,6 @@ import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 
 @Path("reports")
@@ -74,7 +73,7 @@ public class ReportsController {
             ResponseBuildingUtils.setPaginationLinks(response,commentsReported , uriInfo);
             return response.build();
         } else {
-            throw new ContentNotFoundException();
+            throw new PageNotFoundException();
         }
     }
 
@@ -122,7 +121,9 @@ public class ReportsController {
     public Response deleteReport(@PathParam("commentOrReviewId") long commentOrReviewId,
                                  @PathParam("type") String type) {
         LOGGER.info("DELETE /{}: Called", uriInfo.getPath());
-
+        if(!type.equals("reviews") && !type.equals("comments")){
+            throw new PageNotFoundException();
+        }
         rrs.removeReports(type, commentOrReviewId);
         LOGGER.info("DELETE /{}: {} on contentId {} report deleted", uriInfo.getPath(), type, commentOrReviewId);
         return Response.noContent().build();

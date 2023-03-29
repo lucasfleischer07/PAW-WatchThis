@@ -1,7 +1,8 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.exceptions.ContentNotFoundException;
-import ar.edu.itba.paw.exceptions.UserNotFoundException;
+import ar.edu.itba.paw.webapp.exceptions.ContentNotFoundException;
+import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
+import ar.edu.itba.paw.webapp.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.models.Content;
 import ar.edu.itba.paw.models.PageWrapper;
 import ar.edu.itba.paw.models.Sorting;
@@ -28,7 +29,6 @@ import javax.validation.constraints.Size;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.net.URLConnection;
 import java.util.*;
 
@@ -144,11 +144,6 @@ public class ContentController {
         final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
         final Content content = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
 
-//        TODO: VER ESTO SI ERA ADMIN O QUE
-        if(!Objects.equals(user.getRole(), "admin")) {
-            throw new ForbiddenException();
-        }
-
         String auxGenre = "";
         for(String genre : contentDto.getGenre()) {
             auxGenre = auxGenre + " " + genre;
@@ -207,7 +202,9 @@ public class ContentController {
                                      @QueryParam("pageNumber") @DefaultValue("1") Integer pageNum,
                                      @QueryParam("pageSize") @DefaultValue("10") int pageSize) {
         LOGGER.info("GET /{}: Called", uriInfo.getPath());
-
+        if(!contentType.equals("movie") && !contentType.equals("serie")){
+            throw new PageNotFoundException();
+        }
         int page= pageNum;
         PageWrapper<Content> contentList = cs.getAllContent(contentType, null, page, CONTENT_AMOUNT);
         Collection<ContentDto> contentListPaginatedDto = null;
@@ -245,20 +242,17 @@ public class ContentController {
                                         @Valid GenreFilterDto genreFilterDto) {
 
         LOGGER.info("GET /{}: Called", uriInfo.getPath());
-
+        if(!contentType.equals("movie") && !contentType.equals("serie") && !contentType.equals("all")){
+            throw new PageNotFoundException();
+        }
         int page= pageNum;
         String auxType;
-        if(!Objects.equals(contentType, "movie") && !Objects.equals(contentType, "serie")) {
-            auxType = "all";
-        } else {
-            auxType = contentType;
-        }
 
 //        TODO: VER ESTO DEL GENRE, NO SE PASABA COMO QUERYPARAM Y AHORA NI IDEA COMO SERIA. EL ORIGINAL ESTA EN EL ARCHIVO
 //        TODO: MovieAndSerieController linea 76 (esta comentado)
         List<String> genreList = genre;
 
-        PageWrapper<Content> contentListFilter = cs.getMasterContent(auxType, genre, durationFrom, durationTo, sorting, query,page,CONTENT_AMOUNT);
+        PageWrapper<Content> contentListFilter = cs.getMasterContent(contentType, genre, durationFrom, durationTo, sorting, query,page,CONTENT_AMOUNT);
         List<Content> contentListFilterPaginated = contentListFilter.getPageContent();
         long amountOfPages;
         if(contentListFilterPaginated == null) {

@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.exceptions.ContentNotFoundException;
-import ar.edu.itba.paw.exceptions.ReviewNotFoundException;
+import ar.edu.itba.paw.webapp.exceptions.ContentNotFoundException;
+import ar.edu.itba.paw.webapp.exceptions.ReviewNotFoundException;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.services.*;
 import ar.edu.itba.paw.webapp.dto.request.NewReviewDto;
@@ -104,7 +104,7 @@ public class ReviewController {
             LOGGER.info("POST /{}: Review added", uriInfo.getPath());
 
         } catch (DuplicateKeyException e) {
-            LOGGER.warn("POST /{}: Duplicate review", uriInfo.getPath(), new ContentNotFoundException());
+            LOGGER.warn("POST /{}: Duplicate review", uriInfo.getPath(), new BadRequestException());
         }
 
         return Response.created(ReviewDto.getReviewUriBuilder(content, uriInfo).build()).build();

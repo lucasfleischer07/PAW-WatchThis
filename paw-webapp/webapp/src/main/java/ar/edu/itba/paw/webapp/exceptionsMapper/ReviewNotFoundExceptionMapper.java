@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.webapp.exceptionsMapper;
 
-import ar.edu.itba.paw.exceptions.ReviewNotFoundException;
+import ar.edu.itba.paw.webapp.exceptions.ReviewNotFoundException;
 import ar.edu.itba.paw.webapp.dto.response.ErrorDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.webapp.exceptionsMapper;
 
-import ar.edu.itba.paw.exceptions.UserNotFoundException;
+import ar.edu.itba.paw.webapp.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.webapp.dto.response.ErrorDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

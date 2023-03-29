@@ -309,9 +309,11 @@ public class ContentJpaDao implements ContentDao{
         for (Integer big:resulList) {
             longList.add(big.longValue());
         }
+        if(longList.size()>0){
         TypedQuery<Content> query= em.createQuery(" FROM Content WHERE id IN ( :resultList ) ",Content.class);
         query.setParameter("resultList",longList);
-        return query.getResultList();
+        return query.getResultList();}
+        else return new ArrayList<Content>();
     }
 
     @Override
