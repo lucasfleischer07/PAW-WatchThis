@@ -33,7 +33,7 @@ export default function Home() {
                 //     TODO: Meter un toast o algo asi
             })
 
-        listsService.getUserWatchListContentIds(user.id)
+        listsService.getUserWatchListContentIds(user?.id)
             .then(watchList => {
                 if(!watchList.error) {
                     setUserWatchListIds(watchList.data)
