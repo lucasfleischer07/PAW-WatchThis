@@ -74,6 +74,7 @@ public class ReportJpaDao implements ReportDao{
         query.setFirstResult((page - 1) * pageSize);
         query.setMaxResults(pageSize);
 
+
         long totalContent = PageWrapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
 
         return new PageWrapper<ReviewReport>(page,totalContent,pageSize,query.getResultList(),countQuery.getResultList().size());
@@ -84,6 +85,7 @@ public class ReportJpaDao implements ReportDao{
     public PageWrapper<ReviewReport> getReportedReviewsByReason(ReportReason reason,int page,int pageSize){
         TypedQuery<ReviewReport>query= em.createQuery("select r from ReviewReport r where  r.id in(select min(r2.id) from ReviewReport r2 where r2.reportReason = :reason group by r2.review) order by r.id asc", ReviewReport.class);
         TypedQuery<ReviewReport>countQuery= em.createQuery("select r from ReviewReport r where  r.id in(select min(r2.id) from ReviewReport r2 where r2.reportReason = :reason group by r2.review) order by r.id asc", ReviewReport.class);
+        countQuery.setParameter("reason",reason);
         query.setParameter("reason",reason);
         query.setFirstResult((page - 1) * pageSize);
         query.setMaxResults(pageSize);
@@ -109,6 +111,7 @@ public class ReportJpaDao implements ReportDao{
     public PageWrapper<CommentReport> getReportedCommentsByReason(ReportReason reason,int page,int pageSize){
         TypedQuery<CommentReport>query= em.createQuery("select r from CommentReport r  where r.id in(select min(r2.id) from CommentReport r2 where r2.reportReason = :reason group by r2.comment) order by r.id asc", CommentReport.class);
         TypedQuery<CommentReport>countQuery= em.createQuery("select r from CommentReport r  where r.id in(select min(r2.id) from CommentReport r2 where r2.reportReason = :reason group by r2.comment) order by r.id asc", CommentReport.class);
+        countQuery.setParameter("reason",reason);
 
         query.setParameter("reason",reason);
         query.setFirstResult((page - 1) * pageSize);
