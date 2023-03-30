@@ -44,7 +44,6 @@ function App() {
 
                   <Route path='/reports/:reportedType' element={<ReportedPage/>}/>
 
-
                   <Route path='*' element={<ErrorPage errorCode={404}/>}/>
               </Routes>
 
