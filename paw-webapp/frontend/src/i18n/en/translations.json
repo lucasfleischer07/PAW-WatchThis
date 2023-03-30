@@ -288,7 +288,7 @@
 
   "Error.Opps": "Opps!",
   "Error.HomeButton": "Go Home",
-  "Error.Title": "Error {0}",
+  "Error.Title": "Error {{errorCode}}",
   "Error.Body": "Something went wrong.",
   "Error.Title400": "Bad Request",
   "Error.Title401": "Unauthorized",
