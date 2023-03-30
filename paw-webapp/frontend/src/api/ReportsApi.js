@@ -7,7 +7,7 @@ export class ReportsApi {
         this.basePath = `${paths.BASE_URL_API}${paths.REPORTS}`
     }
 
-    async getReportsByType(type, pageNumber, filter= 'ANY') {
+    async getReportsByType(type, pageNumber, filter= '') {
         try {
             const apiUrl = `${this.basePath}/${type}`
             const params = {reason: filter, pageNumber: pageNumber, pageSize: 10}
