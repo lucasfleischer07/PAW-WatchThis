@@ -230,7 +230,7 @@ export default function ReportedPage() {
                                 )}
                                 <ul className="dropdown-menu">
                                     <li>
-                                        <a className="dropdown-item" onClick={() => handleOnClickFilter("ANY")}>
+                                        <a className="dropdown-item" onClick={() => handleOnClickFilter("")}>
                                             {t('Duration.Clear')}
                                         </a>
                                     </li>
