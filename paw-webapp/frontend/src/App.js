@@ -44,6 +44,7 @@ function App() {
 
                   <Route path='/reports/:reportedType' element={<ReportedPage/>}/>
 
+                  <Route path='error500' element={<ErrorPage errorCode={500}/>}/>
                   <Route path='*' element={<ErrorPage errorCode={404}/>}/>
               </Routes>
 
