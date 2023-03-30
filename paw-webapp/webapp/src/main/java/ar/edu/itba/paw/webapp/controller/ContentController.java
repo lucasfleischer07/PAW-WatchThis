@@ -29,6 +29,7 @@ import javax.validation.constraints.Size;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.net.URLConnection;
 import java.util.*;
 
@@ -118,9 +119,11 @@ public class ContentController {
     @PUT
     @Path("/{contentId}/contentImage")
     @Produces(value = {MediaType.APPLICATION_JSON,})
-    public Response updateContentImage(@Size(max = 1024 * 1024 * 2) @FormDataParam("image") byte[] imageBytes,
+    public Response updateContentImage(@FormDataParam("image") byte[] imageBytes,
                                        @PathParam("contentId") final long contentId) {
         LOGGER.info("PUT /{}: Called", uriInfo.getPath());
+        LOGGER.info("PUT /{}: BYTESSSSSSS", imageBytes);
+
         if(imageBytes==null)
             throw new BadRequestException("Must include edit data");
         Content content = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
@@ -140,7 +143,7 @@ public class ContentController {
     @Produces(value = {MediaType.APPLICATION_JSON,})
     public Response updateContentInfo(@PathParam("contentId") final long contentId,
                                       @Valid NewContentDto contentDto,
-                                      @Context final HttpServletRequest request) {
+                                      @Context final HttpServletRequest request) throws IOException {
         LOGGER.info("PUT /{}: Called", uriInfo.getPath());
         final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
         final Content content = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
@@ -151,8 +154,11 @@ public class ContentController {
             auxGenre = auxGenre + " " + genre;
         }
 
-//        TODO: NOSE BIEN COMO SERIA ESTO, HAY QUE VERLO MEJOR (POR EL MOMENTO, ESTA PUESTO LA IMAGEN ORIGINAL, NOSE BIEN COMO HACER PARA CAMBIAR SOLO LA IMAGEN, HAY QUE HACER UN BOTON APARTE Y ESO)
-        cs.updateContent(contentId, contentDto.getName(), contentDto.getDescription(), contentDto.getReleaseDate(), auxGenre, contentDto.getCreator(), contentDto.getDuration(), contentDto.getType(), content.getImage());
+        if(contentDto.getContentPicture() == null) {
+            cs.updateContent(contentId, contentDto.getName(), contentDto.getDescription(), contentDto.getReleaseDate(), auxGenre, contentDto.getCreator(), contentDto.getDuration(), contentDto.getType(), content.getImage());
+        } else {
+            cs.updateContent(contentId, contentDto.getName(), contentDto.getDescription(), contentDto.getReleaseDate(), auxGenre, contentDto.getCreator(), contentDto.getDuration(), contentDto.getType(), content.getImage());
+        }
         LOGGER.info("PUT /{}: Content {} Info Updated", uriInfo.getPath(), contentId);
         return Response.ok().build();
     }

@@ -34,6 +34,17 @@ export class ContentApi {
 
     async updateContent(contentId, contentDetails) {
         try {
+            console.log(contentDetails.contentPicture)
+            contentDetails.genre = contentDetails.genre.split(" ")
+            if(typeof contentDetails.contentPicture == 'string' || contentDetails.contentPicture == null) {
+                delete contentDetails.contentPicture
+            }
+            else {
+                console.log("Entro")
+                await this.updateContentImage(contentId, contentDetails.contentPicture)
+                delete contentDetails.contentPicture
+            }
+
             const res = await fetch(`${this.basePath}/editInfo/${contentId}`, {
                 method: 'PUT',
                 headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}),
@@ -54,7 +65,6 @@ export class ContentApi {
         try {
             const formData = new FormData();
             formData.append("image", image, image.name)
-            // TODO: Verificar si esta bien el contentDetails.id o como seria esa parte
             const res = await fetch(`${this.basePath}/${contentId}/contentImage`, {
                 method: 'PUT',
                 headers: authCheck({}),

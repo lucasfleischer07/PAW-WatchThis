@@ -33,7 +33,6 @@ public class NewContentDto {
     @NotNull(message = "...")
     private String type;
 
-    @ImageNotNull(message = "...")
     private MultipartFile contentPicture;
 
 
