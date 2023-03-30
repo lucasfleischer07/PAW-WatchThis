@@ -45,20 +45,6 @@ export default function Home() {
             })
     }, [])
 
-    useEffect(() => {
-        if(isLogged()) {
-            listsService.getUserWatchListContentIds(user.id)
-                .then(data => {
-                    if(!data.error) {
-                        setUserWatchListIds(data.data)
-                    }
-                })
-                .catch(() => {
-                    //     TODO: Meter un toast o algo asi
-                })
-        }
-    }, [userWatchListIds, user.id])
-
 
     useEffect(() => {
         document.title = t('WatchThisMessage')
