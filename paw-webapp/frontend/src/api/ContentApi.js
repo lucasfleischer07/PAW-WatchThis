@@ -34,13 +34,11 @@ export class ContentApi {
 
     async updateContent(contentId, contentDetails) {
         try {
-            console.log(contentDetails.contentPicture)
             contentDetails.genre = contentDetails.genre.split(" ")
             if(typeof contentDetails.contentPicture == 'string' || contentDetails.contentPicture == null) {
                 delete contentDetails.contentPicture
             }
             else {
-                console.log("Entro")
                 await this.updateContentImage(contentId, contentDetails.contentPicture)
                 delete contentDetails.contentPicture
             }

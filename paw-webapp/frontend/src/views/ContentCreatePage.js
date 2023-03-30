@@ -205,13 +205,12 @@ export default function ContentCreatePage() {
                         }
                     })
                     .catch(e => {
-                    //     TODO: Error
                         navigate("/login", {replace: true})
-
                     })
+            } else if((formType !== 'edition') && (formType !== 'create')) {
+                navigate("/login", {replace: true})
             }
         } else {
-        //     TODO: Llevar a la pagina de error con forbidden
             navigate("/login", {replace: true})
         }
     }, [])
