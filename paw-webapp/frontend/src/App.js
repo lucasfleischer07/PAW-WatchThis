@@ -18,6 +18,7 @@ import ReviewEditionPage from "./views/ReviewEditionPage";
 import ReportedContent from "./views/components/ReportedContent";
 import ContentCreatePage from "./views/ContentCreatePage";
 import ReportedPage from "./views/ReportedPage";
+import ErrorPage from "./views/ErrorPage";
 
 function App() {
   return (
@@ -43,6 +44,8 @@ function App() {
 
                   <Route path='/reports/:reportedType' element={<ReportedPage/>}/>
 
+
+                  <Route path='*' element={<ErrorPage errorCode={404}/>}/>
               </Routes>
 
               <ToastContainer
