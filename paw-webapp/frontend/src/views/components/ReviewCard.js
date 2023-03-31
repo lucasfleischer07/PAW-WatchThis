@@ -25,6 +25,7 @@ export default function ReviewCard(props){
                 </svg>
             )
         );
+    }
 
     return(
         <div className="accordion W-accordion-margin" id={`accordion${reviewId}`}>
@@ -210,5 +211,5 @@ export default function ReviewCard(props){
                 </div>
             </div>
         </div>
-                                )
+    );
 }

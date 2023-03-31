@@ -43,9 +43,9 @@ export class ReportsApi {
     }
 
     // TODO: VERIFICAR BIEN ESTE PORUQE NI IDEA
-    async addCommentReport(reviewId, commentReportReasons) {
+    async addCommentReport(commentId, commentReportReasons) {
         try {
-            const res = await fetch(`${this.basePath}/comment/${reviewId}`, {
+            const res = await fetch(`${this.basePath}/comment/${commentId}`, {
                 method: 'POST',
                 headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}),
                 body: JSON.stringify(commentReportReasons)

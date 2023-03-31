@@ -27,22 +27,6 @@ export default function ReportedContent(props) {
     const reviewCreatorUserId = props.reviewCreatorUserId
     const reviewNameOfReportedComment = props.reviewNameOfReportedComment
 
-    // TODO: Borrar esto hardcodeado y descomentar lo de arriba cuando se haga el componente padre
-    // const userName = "Juan"
-    // const userId = 12
-    // const contentId = 13
-    // const contentName ="PAW: la pelicula"
-    // const contentType = "review"
-    // const reportTitle = "Una re verga"
-    // const reportDescription = "una malaeducacion la verdad"
-    // const reportReasons = "Span, Boludo"
-    // const reportsAmount = 3
-    // const typeId = 45
-    // const reportType = "movie"
-    // const reviewCreatorUserName = "malena"
-    // const reviewCreatorUserId = 12
-    // const reviewNameOfReportedComment = "Juancitooooooooooo"
-
 
     const handleShowModal = () => {
         setShowModal(true);

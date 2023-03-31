@@ -267,6 +267,7 @@
   "Report.Reports": "{{reportsAmount}} reports",
   "Report.Filter": "Filter by",
   "Report.Dismiss": "Dismiss report",
+  "Report.Success": "Your report has been successfully submitted",
 
   "Report.CommentTitle": "Report comment",
   "Report.Add": "Report comment",
