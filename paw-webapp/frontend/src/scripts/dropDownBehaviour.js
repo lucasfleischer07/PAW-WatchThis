@@ -31,9 +31,9 @@
         });
     }
 
+
     function dropDownStayGenreCreate() {
         const genreCreateContent = document.getElementById('drop3');
-
         genreCreateContent.addEventListener('click', function (event) {
             event.stopPropagation();
         });

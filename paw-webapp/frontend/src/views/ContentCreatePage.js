@@ -4,7 +4,7 @@ import {Link, useLocation, useNavigate, useParams} from "react-router-dom";
 import {AuthContext} from "../context/AuthContext";
 import {contentService} from "../services";
 import SimpleMDE from "react-simplemde-editor";
-import {dropDownStayGenreCreate, update} from "../scripts/dropDownBehaviour";
+import {dropDownStayGenreCreate} from "../scripts/dropDownBehaviour";
 
 
 export default function ContentCreatePage() {
@@ -32,7 +32,7 @@ export default function ContentCreatePage() {
         name: "",
         description: "",
         releaseDate: "",
-        genre: [],
+        genre: "",
         creator: "",
         duration: 0,
         type: "",
@@ -165,15 +165,19 @@ export default function ContentCreatePage() {
     const handleChange = (e) => {
         // TODO: Ver problema de como solucionar el tema de que no me accede a los parametros type ni checked cuando esta dentro del boton
         const {name, value, type, checked} = e.target
+        console.log("Type: " + type)
         if(type === "checkbox") {
+            console.log("Es un checkbox: " + checked)
             if(checked) {
                 const aux = contentForm.genre
-                aux.push(value)
-                setContentForm({...contentForm, genre: aux})
-                setGenreButtonLabel(contentForm.genre.join(", "))
+                contentForm.genre = aux + " " + value
+                setContentForm({...contentForm, genre: contentForm.genre})
+                setGenreButtonLabel(contentForm.genre)
             } else {
-                setContentForm({...contentForm, genre: contentForm.genre.filter(g => g !== value)})
-                setGenreButtonLabel(contentForm.genre.join(", "))
+                const aux = contentForm.genre
+                contentForm.genre = aux.replace(value, " ")
+                setContentForm({...contentForm, genre: contentForm.genre})
+                setGenreButtonLabel(contentForm.genre)
             }
         } else if (name === 'contentPicture') {
             const file = e.target.files[0];
@@ -316,7 +320,8 @@ export default function ContentCreatePage() {
                                 {t('CreateContent.ContentGenre')}
                                 <span className="W-red-asterisco">{t('Asterisk')}</span>
                             </label>
-                            <button  id="createGenre" name="genre" onClick={dropDownStayGenreCreate} type="button" className="W-genre-create-button btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+
+                            <button id="createGenre"  name="genre" type="button" className="W-genre-create-button btn dropdown-toggle" data-bs-toggle="dropdown" datatype="button" aria-expanded="false">
                                 {t('Genre.Message2')} {genreButtonLabel}
                             </button>
                             <ul className="dropdown-menu" id="drop3">
