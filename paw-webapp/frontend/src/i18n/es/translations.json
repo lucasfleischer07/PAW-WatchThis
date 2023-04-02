@@ -191,7 +191,7 @@
   "Content.Carousel.MostSaved": "Lo más guardado",
   "Content.Carousel.PreviousButton": "Anterior",
   "Content.Carousel.NextButton": "Próximo",
-  "Content.Review.Amount.One": "({0} reseña)",
+  "Content.Review.Amount.One": "({{reviewsAmount}} reseña)",
   "Content.Review.Create.Error": "Usted ya tienen una review en este contenido.",
 
 

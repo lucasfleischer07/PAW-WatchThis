@@ -191,7 +191,7 @@
   "Content.Carousel.LastAdded": "Last added",
   "Content.Carousel.PreviousButton": "Previous",
   "Content.Carousel.NextButton": "Next",
-  "Content.Review.Amount.One": "({0} review)",
+  "Content.Review.Amount.One": "({{reviewsAmount}} review)",
   "Content.Review.Create.Error": "You already have a review in this content",
 
 

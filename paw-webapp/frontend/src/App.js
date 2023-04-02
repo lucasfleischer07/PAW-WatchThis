@@ -19,6 +19,8 @@ import ReportedContent from "./views/components/ReportedContent";
 import ContentCreatePage from "./views/ContentCreatePage";
 import ReportedPage from "./views/ReportedPage";
 import ErrorPage from "./views/ErrorPage";
+import Comments from "./views/components/Comments";
+import InfoPage from "./views/InfoPage";
 
 function App() {
   return (
@@ -27,6 +29,7 @@ function App() {
               <Routes>
                   <Route path='/' element={<Home/>}/>
                   <Route path='/content/:contentType' element={<ContentPage/>}/>
+                  <Route path='/content/:contentType/:contentId' element={<InfoPage/>}/>
                   <Route path='/content/form/:formType' element={<ContentCreatePage/>}/>
                   <Route path='/content/form/:formType/:contentId' element={<ContentCreatePage/>}/>
                   <Route path='/content/:contentType/:contentId/reviewRegistration' element={<ReviewRegistrationPage/>}/>
@@ -46,6 +49,8 @@ function App() {
 
                   <Route path='error500' element={<ErrorPage errorCode={500}/>}/>
                   <Route path='*' element={<ErrorPage errorCode={404}/>}/>
+
+                  <Route path='/comment/hola' element={<Comments/>}/>
               </Routes>
 
               <ToastContainer
