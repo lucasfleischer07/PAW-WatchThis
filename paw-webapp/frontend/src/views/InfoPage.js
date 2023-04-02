@@ -9,7 +9,7 @@ import {contentService, listsService, reviewService} from "../services";
 import {toast} from "react-toastify";
 
 export default function InfoPage() {
-    const user= useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
+    const [user, setUser]= useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
     let {isLogged} = useContext(AuthContext)
     let navigate = useNavigate()
     const {t} = useTranslation()
@@ -158,9 +158,8 @@ export default function InfoPage() {
             .then(data => {
                 if(!data.error) {
                     setReviews(data.data)
-                    console.log(data.data)
                     for(let i = 0; i < data.data.length; i++) {
-                        if(data.data[i].user.username === user[0].username) {
+                        if(data.data[i].user.username === user.username) {
                             setAlreadyReviewed(true)
                         }
                     }
@@ -173,15 +172,14 @@ export default function InfoPage() {
             })
 
         if(isLogged()) {
-            console.log(user)
-            listsService.getUserWatchListContentIds(user[0].id)
+            listsService.getUserWatchListContentIds(user.id)
                 .then(watchList => {
                     if(!watchList.error) {
                         setIsInWatchList(watchList.data.some(item => item.id === contentId))
                     }
                 })
 
-            listsService.getUserViewedListContentIds(user[0].id)
+            listsService.getUserViewedListContentIds(user.id)
                 .then(viewedList => {
                     if(!viewedList.error) {
                         setIsInViewedList(viewedList.data.some(item => item.id === contentId))
@@ -382,7 +380,7 @@ export default function InfoPage() {
                     <div className="card-header W-card-header">
                         <h3 className="W-title-review">{t('Content.Review')}</h3>
                         <div className="W-add-review">
-                            {user[0].username == null ? (
+                            {user.username == null ? (
                                 <>
                                     <button type="button" className="btn btn-dark W-add-review-button W-reviewText" data-bs-toggle="modal" data-bs-target="#reviewLoginModal" onClick={handleShowAddReviewLoginModal}>{t('Content.AddReview')}</button>
 
