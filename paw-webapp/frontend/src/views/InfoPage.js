@@ -57,7 +57,7 @@ export default function InfoPage() {
 
     const handleSubmitDeleteContent = (e) => {
         e.preventDefault()
-        if(isLogged() && user.role === 'admin') {
+        if(user?.role === 'admin') {
             contentService.deleteContent(parseInt(contentId))
                 .then(data => {
                     if(!data.error) {
@@ -159,7 +159,7 @@ export default function InfoPage() {
                 if(!data.error) {
                     setReviews(data.data)
                     for(let i = 0; i < data.data.length; i++) {
-                        if(data.data[i].user.username === user.username) {
+                        if(data.data[i].user.username === user?.username) {
                             setAlreadyReviewed(true)
                         }
                     }
@@ -191,7 +191,7 @@ export default function InfoPage() {
     return(
         <>
             {/*TODO: Meter header*/}
-            {user.role === 'admin' ? (
+            {user?.role === 'admin' ? (
                 <div className="W-delete-edit-buttons-content">
                     <form className="W-delete-form" id="formDeleteContent" method="post">
                         <button className="btn btn-danger text-nowrap" type="button" data-bs-toggle="modal" data-bs-target="#modalDelete" onClick={handleShowDeleteContentModal}>
@@ -380,7 +380,7 @@ export default function InfoPage() {
                     <div className="card-header W-card-header">
                         <h3 className="W-title-review">{t('Content.Review')}</h3>
                         <div className="W-add-review">
-                            {user.username == null ? (
+                            {user?.username == null ? (
                                 <>
                                     <button type="button" className="btn btn-dark W-add-review-button W-reviewText" data-bs-toggle="modal" data-bs-target="#reviewLoginModal" onClick={handleShowAddReviewLoginModal}>{t('Content.AddReview')}</button>
 
@@ -428,7 +428,7 @@ export default function InfoPage() {
                     {/*                contentId={content.id}*/}
                     {/*                contentType={review.type}*/}
                     {/*                loggedUserName={user.username}*/}
-                    {/*                isAdmin={user.role === 'admin'}*/}
+                    {/*                isAdmin={user?.role === 'admin'}*/}
                     {/*                isLikeReviews={userLikeReviews.includes(review.id)}*/}
                     {/*                isDislikeReviews={userDislikeReviews.includes(review.id)}*/}
                     {/*                alreadyReport={review.reporterUsernames.includes(userName)}*/}
