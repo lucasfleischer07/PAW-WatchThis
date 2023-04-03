@@ -1,5 +1,5 @@
 import {useTranslation} from "react-i18next";
-import {useContext, useEffect, useRef, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {Link, useLocation, useNavigate, useParams} from "react-router-dom";
 import {AuthContext} from "../context/AuthContext";
 import {contentService} from "../services";
@@ -10,10 +10,8 @@ import {dropDownStayGenreCreate} from "../scripts/dropDownBehaviour";
 export default function ContentCreatePage() {
     const {t} = useTranslation()
     const { formType, contentId } = useParams();
-    let location = useLocation()
     let navigate = useNavigate()
     let {isLogged} = useContext(AuthContext)
-    let origin = location.state?.from?.pathname || "/";
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
 
     const [nameError, setNameError] = useState(false)
@@ -27,7 +25,6 @@ export default function ContentCreatePage() {
 
     const [genreButtonLabel, setGenreButtonLabel] = useState("")
 
-    // tODO: Ver poque no anda. Es por el genre creo que no lo toma como array, sino como string
     const [contentForm, setContentForm] = useState({
         name: "",
         description: "",
@@ -134,6 +131,7 @@ export default function ContentCreatePage() {
             contentService.createContent(contentForm)
                 .then(data => {
                     if(!data.error) {
+                        navigate(`/content/${data.data.type}/${data.data.id}`, {replace:true})
                     } else {
                         //     TODO: Pagina de error
                     }
@@ -148,9 +146,8 @@ export default function ContentCreatePage() {
             contentService.updateContent(contentId, contentForm)
                 .then(data => {
                     if(!data.error) {
-                    //     TODO: Meter toast
+                        navigate(`/content/${contentForm.type}/${contentId}`, {replace:true})
                     } else {
-
                     }
                 })
                 .catch(e => {
@@ -165,9 +162,9 @@ export default function ContentCreatePage() {
     const handleChange = (e) => {
         // TODO: Ver problema de como solucionar el tema de que no me accede a los parametros type ni checked cuando esta dentro del boton
         const {name, value, type, checked} = e.target
-        console.log("Type: " + type)
+        // console.log("Type: " + type)
         if(type === "checkbox") {
-            console.log("Es un checkbox: " + checked)
+            // console.log("Es un checkbox: " + checked)
             if(checked) {
                 const aux = contentForm.genre
                 contentForm.genre = aux + " " + value

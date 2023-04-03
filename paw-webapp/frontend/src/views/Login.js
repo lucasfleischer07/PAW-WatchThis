@@ -10,7 +10,7 @@ export default function Login() {
     let location = useLocation()
     let navigate = useNavigate()
     let {signIn} = useContext(AuthContext)
-    let origin = location.state?.from?.pathname || "/";
+    const previousPath = location.state?.from || '/';
 
     const [userForm, setUserForm] = useState({
         email: undefined,
@@ -49,7 +49,12 @@ export default function Login() {
             .then((user) => {
                 if(!user.error) {
                     signIn(user.data, user.header, userForm.rememberMe)
-                    navigate(origin, {replace: true})
+                    // toDO: Testear esto de la redireccion
+                    if(previousPath === '/login/forgotPassword' || previousPath === '/login/sign-up') {
+                        navigate("/", {replace: true})
+                    } else {
+                        navigate(-1)
+                    }
                     toast.success(t('Login.Success'))
                 }
                 else {

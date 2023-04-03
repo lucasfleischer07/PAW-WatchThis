@@ -49,12 +49,13 @@ export class ContentApi {
                 body: JSON.stringify(contentDetails)
             })
 
-            if(res.status !== 204) {
+            if(res.status !== 204 && res.status !== 200) {
                 return {error: false, data: await res.json()}
             } else {
                 return {error: false, data: []}
             }
         } catch (e) {
+            console.log(e)
             return {error: true}
         }
     }

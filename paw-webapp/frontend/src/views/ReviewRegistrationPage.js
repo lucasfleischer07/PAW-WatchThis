@@ -77,7 +77,7 @@ export default function ReviewRegistrationPage() {
             return
         }
 
-        reviewService.reviewsCreation(contentId, contentType, reviewForm)
+        reviewService.reviewsCreation(parseInt(contentId), contentType, reviewForm)
             .then(data => {
                 if(!data.error) {
                     navigate(origin, {replace: true})
