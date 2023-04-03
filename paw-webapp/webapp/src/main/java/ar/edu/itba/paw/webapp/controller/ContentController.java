@@ -198,7 +198,8 @@ public class ContentController {
         }
 
         Content newContent = cs.contentCreate(contentDto.getName(),contentDto.getDescription(),contentDto.getReleaseDate(), auxGenre, contentDto.getCreator(),contentDto.getDuration(),contentDto.getType(),null);
-        return Response.created(ContentDto.getContentUriBuilder(uriInfo).path("content").path(String.valueOf(newContent.getId())).build()).build();
+        ContentDto newContentDto = new ContentDto(uriInfo, newContent);
+        return Response.created(ContentDto.getContentUriBuilder(uriInfo).path("content").path(String.valueOf(newContent.getId())).build()).entity(newContentDto).build();
     }
 
     // * ---------------------------------------------------------------------------------------------------------------

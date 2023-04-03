@@ -32,7 +32,7 @@ export default function ContentCreatePage() {
         genre: "",
         creator: "",
         duration: 0,
-        type: "",
+        type: "movie",
         contentPicture: undefined
     })
 

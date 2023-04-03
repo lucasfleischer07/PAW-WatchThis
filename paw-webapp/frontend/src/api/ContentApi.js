@@ -94,15 +94,19 @@ export class ContentApi {
 
     async createContent(contentDetails) {
         try {
-            // TODO: Verificar si esta bien el contentDetails.id o como seria esa parte
+            contentDetails.genre = contentDetails.genre.split(" ")
+            const contentDetailsAux = contentDetails
+            delete contentDetailsAux.contentPicture
             const res = await fetch(`${this.basePath}/create`, {
                 method: 'POST',
                 headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}),
-                // TODO: contentDetails ya tiene que ser un objeto en formato JSON para mandarle con al info
                 body: JSON.stringify(contentDetails)
             })
+            // TODO: verificar bien si realmente se actualiza la imagen
             if(res.status !== 204) {
-                return {error: false, data: await res.json()}
+                const contentData = await res.json()
+                await this.updateContentImage(contentData.id, contentDetails.contentPicture)
+                return {error: false, data: contentData}
             } else {
                 return {error: false, data: []}
             }
