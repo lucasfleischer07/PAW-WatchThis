@@ -15,7 +15,6 @@ import LoginPage from "./views/LoginPage";
 import ForgotPassword from "./views/ForgotPassword";
 import ReviewRegistrationPage from "./views/ReviewRegistrationPage";
 import ReviewEditionPage from "./views/ReviewEditionPage";
-import ReportedContent from "./views/components/ReportedContent";
 import ContentCreatePage from "./views/ContentCreatePage";
 import ReportedPage from "./views/ReportedPage";
 import ErrorPage from "./views/ErrorPage";
@@ -55,7 +54,7 @@ function App() {
 
               <ToastContainer
                   position="top-right"
-                  autoClose={5000}
+                  autoClose={2000}
                   hideProgressBar={false}
                   newestOnTop={false}
                   closeOnClick
@@ -63,7 +62,7 @@ function App() {
                   pauseOnFocusLoss
                   draggable
                   pauseOnHover
-                  theme="colored"
+                  theme="dark"
               />
 
           </BrowserRouter>

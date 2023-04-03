@@ -1,10 +1,11 @@
 import {useTranslation} from "react-i18next";
 import {useContext, useEffect, useState} from "react";
-import {Link, useLocation, useNavigate, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import {AuthContext} from "../context/AuthContext";
 import {contentService} from "../services";
 import SimpleMDE from "react-simplemde-editor";
 import {dropDownStayGenreCreate} from "../scripts/dropDownBehaviour";
+// import {dropDownStayGenreCreate} from "../scripts/dropDownBehaviour";
 
 
 export default function ContentCreatePage() {
@@ -37,7 +38,7 @@ export default function ContentCreatePage() {
     })
 
     const validateName = () => {
-        const regex = /([a-zA-Z0-9ñáéíóú!,.:;=+\-_()?<>$%&#@{}\[\]|*"'~/`^\s]+)?/
+        const regex = /([a-zA-Z0-9ñáéíóú!,.:;=+\-_()?<>$%&#@{}[\]|*"'~/`^\s]+)?/
         if(contentForm.name.length < 1 || contentForm.name.length > 55 || !regex.test(contentForm.name)) {
             setNameError(true)
             return false
@@ -47,7 +48,7 @@ export default function ContentCreatePage() {
     }
 
     const validateDescription = () => {
-        const regex = /([a-zA-Z0-9ñáéíóú!,.:;=+\- _()?<>$%&#@{}\[\]|*"'~/`^\s]+)?/
+        const regex = /([a-zA-Z0-9ñáéíóú!,.:;=+\- _()?<>$%&#@{}[\]|*"'~/`^\s]+)?/
         if(contentForm.description.length < 20 || contentForm.description.length > 2000) {
             setDescriptionError(true)
             return false
@@ -128,7 +129,7 @@ export default function ContentCreatePage() {
             if(!validateForm()) {
                 return
             }
-            contentService.createContent(contentForm)
+            contentService.createContent(contentForm, contentForm.contentPicture)
                 .then(data => {
                     if(!data.error) {
                         navigate(`/content/${data.data.type}/${data.data.id}`, {replace:true})
@@ -318,7 +319,7 @@ export default function ContentCreatePage() {
                                 <span className="W-red-asterisco">{t('Asterisk')}</span>
                             </label>
 
-                            <button id="createGenre"  name="genre" type="button" className="W-genre-create-button btn dropdown-toggle" data-bs-toggle="dropdown" datatype="button" aria-expanded="false">
+                            <button id="createGenre" name="genre" type="button" className="W-genre-create-button btn dropdown-toggle" data-bs-toggle="dropdown"  datatype="button" aria-expanded="false">
                                 {t('Genre.Message2')} {genreButtonLabel}
                             </button>
                             <ul className="dropdown-menu" id="drop3">

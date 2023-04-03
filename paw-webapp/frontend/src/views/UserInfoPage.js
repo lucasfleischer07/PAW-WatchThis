@@ -4,6 +4,7 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import {Link, useNavigate, useParams} from "react-router-dom";
 import {userService} from "../services";
 import {toast} from "react-toastify";
+import TooltipComponent from "./components/Tooltip";
 
 export default function UserInfoPage() {
     const {t} = useTranslation()
@@ -96,20 +97,6 @@ export default function UserInfoPage() {
     }, [])
 
 
-    const tooltip =
-        <OverlayTrigger
-            placement="bottom"
-            overlay = {
-                <Tooltip>
-                    {t('Reputation.Tooltip')}
-                </Tooltip>
-            }>
-            <li className="list-inline-item">
-                <h4 className="font-weight-bold mb-0 d-block">{reputation}</h4>
-                <span className="text-muted"><i className="fas fa-image mr-1"></i>{t('Profile.Reputation')}</span>
-            </li>
-        </OverlayTrigger>
-
     return(
         // TODO: METER HEADER
 
@@ -160,7 +147,12 @@ export default function UserInfoPage() {
                                     <span className="text-muted"><i className="fas fa-image mr-1"></i>{t('Profile.Reviews')}</span>
                                 )}
                             </li>
-                            {tooltip}
+                            <TooltipComponent text={t('Reputation.Tooltip')}>
+                                <li className="list-inline-item">
+                                    <h4 className="font-weight-bold mb-0 d-block">{reputation}</h4>
+                                    <span className="text-muted"><i className="fas fa-image mr-1"></i>{t('Profile.Reputation')}</span>
+                                </li>
+                            </TooltipComponent>
                         </ul>
                     </div>
 
@@ -182,7 +174,6 @@ export default function UserInfoPage() {
                                 ) : (
                                     reviews.map((review) => (
                                         <div key={review.id}>
-                                            {/*TODO: CAMBIAR EL TO, deberia ser el content con el id*/}
                                             <Link className="W-movie-title" to={`/content/${review.content.type}/${review.content.id}`}>
                                                 <h5>{review.content.name}</h5>
                                             </Link>
@@ -227,7 +218,5 @@ export default function UserInfoPage() {
                 </div>
             </div>
         </div>
-
-
     );
 }

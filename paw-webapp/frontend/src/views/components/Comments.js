@@ -5,6 +5,7 @@ import {Button, Modal, OverlayTrigger, Tooltip} from "react-bootstrap";
 import {AuthContext} from "../../context/AuthContext";
 import {commentService, reportsService} from "../../services";
 import {toast} from "react-toastify";
+import TooltipComponent from './Tooltip';
 
 
 export default function Comments(props) {
@@ -104,39 +105,39 @@ export default function Comments(props) {
         })
     }
 
-    const tooltipReportModal =
-        <OverlayTrigger
-            // ver si bottom o top
-            placement="bottom"
-            overlay = {
-                <Tooltip>
-                    {t('Report.Add')}
-                </Tooltip>
-            }>
-            <button id={`reportCommentButton${commentId}`} type="button" className="btn btn-light W-background-color-report" data-bs-toggle="modal" data-bs-target={`#reportCommentModal${commentId}`} onClick={handleShowReportModal}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#b21e26" className="bi bi-exclamation-circle" viewBox="0 0 16 16">
-                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                    <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
-                </svg>
-            </button>
-        </OverlayTrigger>
-
-    const tooltipGoToLogin =
-        <OverlayTrigger
-            // ver si bottom o top
-            placement="bottom"
-            overlay = {
-                <Tooltip>
-                    {t('Report.Add')}
-                </Tooltip>
-            }>
-            <button id="reportCommentButtonNoLogin" type="button" className="btn btn-light" data-bs-toggle="modal" data-bs-target="#reportCommentModalNoLogin" onClick={handleShowLoginModal}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#b21e26" className="bi bi-exclamation-circle" viewBox="0 0 16 16">
-                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                    <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
-                </svg>
-            </button>
-        </OverlayTrigger>
+    // const tooltipReportModal =
+    //     <OverlayTrigger
+    //         // ver si bottom o top
+    //         placement="bottom"
+    //         overlay = {
+    //             <Tooltip>
+    //                 {t('Report.Add')}
+    //             </Tooltip>
+    //         }>
+    //         <button id={`reportCommentButton${commentId}`} type="button" className="btn btn-light W-background-color-report" data-bs-toggle="modal" data-bs-target={`#reportCommentModal${commentId}`} onClick={handleShowReportModal}>
+    //             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#b21e26" className="bi bi-exclamation-circle" viewBox="0 0 16 16">
+    //                 <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+    //                 <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+    //             </svg>
+    //         </button>
+    //     </OverlayTrigger>
+    //
+    // const tooltipGoToLogin =
+    //     <OverlayTrigger
+    //         // ver si bottom o top
+    //         placement="bottom"
+    //         overlay = {
+    //             <Tooltip>
+    //                 {t('Report.Add')}
+    //             </Tooltip>
+    //         }>
+    //         <button id="reportCommentButtonNoLogin" type="button" className="btn btn-light" data-bs-toggle="modal" data-bs-target="#reportCommentModalNoLogin" onClick={handleShowLoginModal}>
+    //             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#b21e26" className="bi bi-exclamation-circle" viewBox="0 0 16 16">
+    //                 <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+    //                 <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+    //             </svg>
+    //         </button>
+    //     </OverlayTrigger>
 
 
     return(
@@ -194,7 +195,15 @@ export default function Comments(props) {
                                         {<>
                                             {userCreatorUsername !== user.username && !alreadyReport ? (
                                                 <>
-                                                    {tooltipReportModal}
+                                                    <TooltipComponent text={t('Report.Add')}>
+                                                        <button id={`reportCommentButton${commentId}`} type="button" className="btn btn-light W-background-color-report" data-bs-toggle="modal" data-bs-target={`#reportCommentModal${commentId}`} onClick={handleShowReportModal}>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#b21e26" className="bi bi-exclamation-circle" viewBox="0 0 16 16">
+                                                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                                                <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+                                                            </svg>
+                                                        </button>
+                                                    </TooltipComponent>
+
                                                     <Modal show={showReportModal} onHide={handleCloseReportModal} aria-labelledby={`reportCommentModal${commentId}`} aria-hidden="true">
                                                         <Modal.Header closeButton>
                                                             <Modal.Title id={`modalLabel${commentId}`}>
@@ -253,7 +262,15 @@ export default function Comments(props) {
                                 ) : (
                                     <>
                                         <div>
-                                            {tooltipGoToLogin}
+                                            {/*{tooltipGoToLogin}*/}
+                                            <TooltipComponent text={t('Report.Add')}>
+                                                <button id="reportCommentButtonNoLogin" type="button" className="btn btn-light" data-bs-toggle="modal" data-bs-target="#reportCommentModalNoLogin" onClick={handleShowLoginModal}>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#b21e26" className="bi bi-exclamation-circle" viewBox="0 0 16 16">
+                                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                                        <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+                                                    </svg>
+                                                </button>
+                                            </TooltipComponent>
                                         </div>
 
                                         <Modal show={showLoginModal} onHide={handleCloseLoginModal} aria-labelledby={`reportCommentModalNoLogin${commentId}`} aria-hidden="true">

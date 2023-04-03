@@ -92,7 +92,7 @@ export class ContentApi {
         }
     }
 
-    async createContent(contentDetails) {
+    async createContent(contentDetails, image) {
         try {
             contentDetails.genre = contentDetails.genre.split(" ")
             const contentDetailsAux = contentDetails
@@ -102,10 +102,9 @@ export class ContentApi {
                 headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}),
                 body: JSON.stringify(contentDetails)
             })
-            // TODO: verificar bien si realmente se actualiza la imagen
             if(res.status !== 204) {
                 const contentData = await res.json()
-                await this.updateContentImage(contentData.id, contentDetails.contentPicture)
+                await this.updateContentImage(contentData.id, image)
                 return {error: false, data: contentData}
             } else {
                 return {error: false, data: []}
