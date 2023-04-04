@@ -141,9 +141,9 @@ export default function ReportedPage() {
                         </ul>
                     </div>
 
-                    <div>
+                    <div className='W-reported-general-div-list'>
                         <Tabs activeKey={tabKey} onSelect={(e) => initTabKey(e)}>
-                            <Tab eventKey="one" title={t('Content.Review')}>
+                            <Tab className='W-reported-div-list' eventKey="one" title={t('Content.Review')} >
                                 {reportedReviewsList.length === 0 ? (
                                     <div className="W-watchlist-div-info-empty">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="bi bi-bookmark-x-fill W-watchlist-empty-icon" viewBox="0 0 16 16">

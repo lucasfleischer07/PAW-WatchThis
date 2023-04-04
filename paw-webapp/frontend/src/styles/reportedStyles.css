@@ -6,11 +6,23 @@
 .W-report-header-div {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    /*align-items: center;*/
 }
 
 .W-reported-reviews-comment-nav {
     color: #636464;
+}
+
+.W-reported-general-div-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.W-reported-div-list {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
 }
 
 .W-report-content-alignment {
@@ -39,7 +51,7 @@
 }
 
 .W-card-reported-width {
-    width: 75%;
+    width: 100%;
     margin-bottom: 1.5vw;
 }
 
@@ -121,7 +133,7 @@
 .W-general-div-reports {
     display: flex;
     align-items: center;
-    padding-right: 0;
+    /*padding-right: 0;*/
 }
 
 .W-delete-form-reported {
