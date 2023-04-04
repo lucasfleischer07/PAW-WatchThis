@@ -42,7 +42,7 @@
     padding: 1vw;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     background-color: #b21e26;
 }
 
@@ -58,7 +58,7 @@
 }
 
 .W-editProfile-button {
-   font-size: 1vw;
+    font-size: 1vw;
 }
 
 .W-watch-viewed-list-title {
@@ -215,4 +215,3 @@
         font-size: 1.5vw;
     }
 }
-

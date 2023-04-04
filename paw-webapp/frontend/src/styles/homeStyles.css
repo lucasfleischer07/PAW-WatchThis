@@ -53,7 +53,7 @@
 
 .W-filter-title {
     font-weight: bold;
-    width: fit-content;
+    width: 9vw;
     min-width: 6vw;
     height: 2vw;
     border-color: black;
@@ -173,7 +173,7 @@
     transform: translateY(-5px);
     transition: 0.1s ;
     box-shadow: -1rem 0 3rem grey;
-  }
+}
 
 .W-card-text:hover ~ .W-card-text {
     position: relative;
@@ -215,7 +215,7 @@
 }
 .W-nested-comment{
     margin-left: 1em;
-    
+
     list-style: none;
 }
 
@@ -227,7 +227,7 @@
 .W-thumb-down {
     text-decoration: none;
     color: #b21e26;
-} 
+}
 
 .W-thumb-orientation {
     margin-left: 5%;
@@ -341,11 +341,16 @@
         font-size: 1.5vw;
         color: black;
     }
+    .W-filter-title{
+        height: 2vw;
+        width: 11.5vw;
+    }
 }
 
 @media (max-width: 1096px) {
     .W-filter-title{
         height: 4vw;
+        width: 14vw;
     }
 
     .W-filter-div {
@@ -372,7 +377,8 @@
     }
 
     .W-filter-title {
-        height: 7vw;
+        height: 5vw;
+        width: 15vw;
     }
 
     .dropdown-menu {
@@ -394,6 +400,9 @@
     .W-watchList-button-div {
         display: none!important;
     }
+    .W-filter-title {
+        width: 16vw;
+    }
 }
 
 @media (max-width: 780px) {
@@ -401,11 +410,17 @@
         max-height: 280px;
         overflow-y: auto;
     }
+    .W-filter-title {
+        width: 18vw;
+    }
 }
 
 @media (max-width: 719px) {
     .W-films-card-body-carousel {
         height: 41vw;
+    }
+    .W-filter-title {
+        width: 19vw;
     }
 }
 

@@ -138,7 +138,7 @@ export default function ContentCreatePage() {
                     }
                 })
                 .catch(e => {
-                //     TODO: pagina de error
+                    //     TODO: pagina de error
                 })
         } else if(formType === 'edition'){
             if(!validateFormEdition()) {
@@ -152,10 +152,10 @@ export default function ContentCreatePage() {
                     }
                 })
                 .catch(e => {
-                //     TODO: HAcer algo
+                    //     TODO: HAcer algo
                 })
         } else {
-        //     TODO: Llevar a pagina de error
+            //     TODO: Llevar a pagina de error
         }
     }
 
@@ -397,7 +397,7 @@ export default function ContentCreatePage() {
                                 </li>
                             </ul>
 
-                            <div className="mb-3 W-input-label-review-info">
+                            <div className="mb-3 W-input-label-review-info-particular">
                                 {typeError &&
                                     <p style={{color: '#b21e26'}}>{t('CreateContent.ContentType')}</p>
                                 }
@@ -415,15 +415,19 @@ export default function ContentCreatePage() {
                                 </select>
                             </div>
 
-                            <div className="mb-3 W-input-label-review-info">
+                            <div className="mb-3 W-input-label-review-info-particular">
                                 {imageError &&
                                     <p style={{color: '#b21e26'}}>{t('ImageNotNull')}</p>
                                 }
-                                <label className="form-label">
-                                    <span className="W-red-asterisco">
-                                        {t('Asterisk')}
-                                    </span>
-                                </label>
+                                {formType === 'create' ?(
+                                    <label className="form-label">
+                                        <span className="W-red-asterisco">
+                                            {t('Asterisk')}
+                                        </span>
+                                    </label>
+                                ): (
+                                    <></>
+                                )}
                                 <input type="file" accept="image/jpeg, image/jpg,  image/png" className="form-control W-input-width" name="contentPicture" onChange={handleChange}/>
                             </div>
                         </div>
