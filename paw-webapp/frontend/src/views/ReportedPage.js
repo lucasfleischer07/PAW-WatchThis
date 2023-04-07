@@ -1,20 +1,21 @@
 import {useTranslation} from "react-i18next";
 import ReportedContent from "./components/ReportedContent";
-import {useLocation, useNavigate, useParams} from "react-router-dom";
+import {useLocation, useNavigate, useParams, } from "react-router-dom";
 import {useContext, useEffect, useState} from "react";
 import {AuthContext} from "../context/AuthContext";
 import {reportsService, userService} from "../services";
+
 import classnames from 'classnames';
 
 import { Nav, NavItem, NavLink, TabContent, TabPane, Tab, Tabs } from 'react-bootstrap';
 
 export default function ReportedPage() {
     const {t} = useTranslation()
-    let location = useLocation()
     let navigate = useNavigate()
-    const { reportedType } = useParams();
+
+
+
     let {isLogged} = useContext(AuthContext)
-    let origin = location.state?.from?.pathname || "/";
 
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
     const [reportedReviewsList, setReportedReviewsList] = useState([])
@@ -23,8 +24,28 @@ export default function ReportedPage() {
     const [currentCommentsReportsPage, setCurrentCommentsReportsPage] = useState(1)
 
     const [filterReason, setFilterReason] = useState('ANY')
+    const [reportType, setReportType] = useState('reviews')
+    const [page, setPage] = useState(1)
 
     const [tabKey, initTabKey] = useState('one')
+
+    const { search } = useLocation();
+
+    useEffect(() => {
+        const queryParams = new URLSearchParams(search);
+        const newFilterReason = queryParams.get('filterReason')
+        const newReportType = queryParams.get('reportType')
+        const newPage = queryParams.get('page')
+        if (newFilterReason !== filterReason && newFilterReason !== null ) {
+            setFilterReason(newFilterReason);
+        }
+        if (newReportType !== reportType && newReportType !== null){
+            setReportType(newReportType)
+        }
+        if ( parseInt(newPage) !== page && newPage !== null){
+            setPage(parseInt(newPage))
+        }
+    }, [search ]);
 
     const handleOnClickFilter = (value) => {
         setFilterReason(value)
@@ -98,6 +119,7 @@ export default function ReportedPage() {
         // TODO: METER EL HEADER
 
         <div className="row px-4">
+            <p>{page}</p>
             <div className="W-report-general-div-display">
                 <div className="bg-white shadow rounded overflow-hidden W-reported-list-general-div">
                     <div className="W-reported-background-color">

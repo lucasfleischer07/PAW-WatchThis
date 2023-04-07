@@ -1,4 +1,4 @@
-import {Link, useLocation, useParams, useNavigate} from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 import { useState, useEffect } from 'react';
 
@@ -190,7 +190,7 @@ export default function Header(props) {
                                                     <Link className="dropdown-item" to="/profile/create">{t('CreateContent.Message')}</Link>
                                                 </li>
                                                 <li>
-                                                    <Link className="dropdown-item" to="/report/reportedContent/reviews">{t('Report.ReportedContent')}</Link>
+                                                    <Link className="dropdown-item" to="/reports">{t('Report.ReportedContent')}</Link>
                                                 </li>
                                             </>
                                         ) : null}
