@@ -3,6 +3,8 @@ import {useTranslation} from "react-i18next";
 import {useContext, useEffect, useState} from "react";
 import {AuthContext} from "../context/AuthContext";
 import {contentService, listsService} from "../services";
+import Header from "./components/Header";
+
 
 export default function Home() {
     const {t} = useTranslation()
@@ -56,6 +58,7 @@ export default function Home() {
         // TODO: FALTA HEADER
 
         <div className="W-carousels-div">
+            <Header type="all" admin={true} userName="Ian"/>
             {isLogged() && userWatchListIds.length !== 0 && recommendedUserList.length !== 0 ? (
                 <>
                     <h3 className="W-carousel-title">{t('Content.Carousel.RecommendedForYou')}</h3>

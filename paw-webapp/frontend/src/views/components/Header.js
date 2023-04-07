@@ -1,11 +1,11 @@
-import {Link} from "react-router-dom";
+import {Link, useLocation, useParams, useNavigate} from "react-router-dom";
 import {useTranslation} from "react-i18next";
-import { useState } from 'react';
-import {contentService} from "../../services";
+import { useState, useEffect } from 'react';
 
 export default function Header(props) {
     const {t} = useTranslation()
 
+    const navigate = useNavigate();
 
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -13,20 +13,51 @@ export default function Header(props) {
         setIsDropdownOpen((prevState) => !prevState);
     };
 
+    const [genreProp, setGenre] = useState("ANY")
+    const [durationFromProp, setDurFrom] = useState("ANY")
+    const [durationToProp, setDurTo] = useState("ANY")
+    const [sortingProp, setSorting] = useState("ANY")
+    const [queryProp, setQuery] = useState("ANY")
+    const [type, setType] = useState(props.type)
+    const [admin, setAdmin] = useState(props.admin)
+    const [userName, setUserName] = useState(props.userName)
 
-    const [queryForm, setQueryForm] = useState({
-        query: props.query,
-        genre: props.genre,
-        durationFrom: props.durationFrom,
-        durationTo: props.durationTo,
-        sorting: props.sorting,
-        userName: props.userName
-    });
+    const { search } = useLocation();
+
+    useEffect(() => {
+        const queryParams = new URLSearchParams(search);
+        const genre = queryParams.get('genre')
+        const durationFrom = queryParams.get('durationFrom')
+        const durationTo = queryParams.get('durationTo')
+        const sorting = queryParams.get('sorting')
+        const query = queryParams.get('query')
+        if (genre !== genreProp && genre !== null ) {
+            setGenre(genre);
+        }
+        if (durationFrom !== durationFromProp && durationFrom !== null){
+            setDurFrom(durationFrom)
+        }
+        if (durationTo !== durationToProp  && durationTo !== null){
+            setDurTo(durationTo)
+        }
+        if (sorting !== sortingProp  && sorting !== null){
+            setSorting(sorting)
+        }
+        if (query !== queryProp && query !== null){
+            setQuery(query)
+        }
+    }, [search ]);
+
+
+
+
+    const [queryForm, setQueryForm] = useState("ALL");
 
     const [contentType, setContentType] = useState("all")
 
     const [currentPage, setCurrentPage] = useState(1)
 
+    //RECORDAR QUE DEPENDIENDO DEL TYPE, EL PATH DEBE CAMBIAR, EL TYPE SE DEBE RECIBIR POR PARAM
     const handleSubmit = (event) => {
         event.preventDefault();
         props.handleQuery(contentType,queryForm)
@@ -35,9 +66,15 @@ export default function Header(props) {
 
     const handleChange = (e) => {
         const {name, value} = e.target
-        setUserForm((prev) => {
+        setQueryForm((prev) => {
             return {...prev, [name]: value}
         })
+    }
+    //Tomo la url actual, y le seteo el parametro deseado
+    const updateUrl = () => {
+        const searchParams = new URLSearchParams(window.location.search);
+        searchParams.set('genre', 'xd');
+        navigate(window.location.pathname + '?' + searchParams.toString());
     }
 
     return(
@@ -48,7 +85,6 @@ export default function Header(props) {
                         <img src={"/images/WatchThisLogo.png"} alt="WatchThisLogo" class="W-img-size2"/>
                     </div>
                 </Link>
-
                 <div>
                     <button className="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar">
                         <span className="navbar-toggler-icon"/>
@@ -63,66 +99,66 @@ export default function Header(props) {
 
                     <div className="offcanvas-body W-navbar-buttons-acomodation">
 
-                        {/*<div className="W-navbar-hamburger-postion">*/}
-                        {/*    <ul className="navbar-nav justify-content-between flex-grow-1 pe-3 W-navitem-list">*/}
-                        {/*        {param.type === 'movies' || param.type === 'movie' ? (*/}
-                        {/*            <>*/}
-                        {/*                <li className="nav-item W-home-button-hamburger-button W-display-none-header">*/}
-                        {/*                    <Link className="nav-link" aria-current="page" to="/">{t('HomeMessage')}</Link>*/}
-                        {/*                </li>*/}
-                        {/*                <li className="nav-item W-nav-item">*/}
-                        {/*                    <Link className="nav-link active" aria-current="page" to="/movies">{t('MovieMessage')}</Link>*/}
-                        {/*                </li>*/}
-                        {/*                <li className="nav-item W-nav-item">*/}
-                        {/*                    <Link className="nav-link" to="/series">{t('SerieMessage')}</Link>*/}
-                        {/*                </li>*/}
-                        {/*            </>*/}
-                        {/*        ) : param.type === 'series' || param.type === 'serie' ? (*/}
-                        {/*            <>*/}
-                        {/*                <li className="nav-item W-home-button-hamburger-button">*/}
-                        {/*                    <Link className="nav-link" aria-current="page" to="/">{t('HomeMessage')}</Link>*/}
-                        {/*                </li>*/}
-                        {/*                <li className="nav-item W-nav-item">*/}
-                        {/*                    <Link className="nav-link" aria-current="page" to="/movies">{t('MovieMessage')}</Link>*/}
-                        {/*                </li>*/}
-                        {/*                <li className="nav-item W-nav-item">*/}
-                        {/*                    <Link className="nav-link active" to="/series">{t('SerieMessage')}</Link>*/}
-                        {/*                </li>*/}
-                        {/*            </>*/}
-                        {/*        ) : (*/}
-                        {/*            <>*/}
-                        {/*                <li className="nav-item W-home-button-hamburger-button">*/}
-                        {/*                    <Link className="nav-link" aria-current="page" to="/">{t('HomeMessage')}</Link>*/}
-                        {/*                </li>*/}
-                        {/*                <li className="nav-item W-nav-item">*/}
-                        {/*                    <Link className="nav-link" aria-current="page" to="/movies">{t('MovieMessage')}</Link>*/}
-                        {/*                </li>*/}
-                        {/*                <li className="nav-item W-nav-item">*/}
-                        {/*                    <Link className="nav-link" to="/series">{t('SerieMessage')}</Link>*/}
-                        {/*                </li>*/}
-                        {/*            </>*/}
-                        {/*        )}*/}
-                        {/*    </ul>*/}
-                        {/*</div>*/}
+                        <div className="W-navbar-hamburger-postion">
+                            <ul className="navbar-nav justify-content-between flex-grow-1 pe-3 W-navitem-list">
+                                {type === 'movies' || type === 'movie' ? (
+                                    <>
+                                        <li className="nav-item W-home-button-hamburger-button W-display-none-header">
+                                            <Link className="nav-link" aria-current="page" to="/">{t('HomeMessage')}</Link>
+                                        </li>
+                                        <li className="nav-item W-nav-item">
+                                            <Link className="nav-link active" aria-current="page" to="/movies">{t('MovieMessage')}</Link>
+                                        </li>
+                                        <li className="nav-item W-nav-item">
+                                            <Link className="nav-link" to="/series">{t('SerieMessage')}</Link>
+                                        </li>
+                                    </>
+                                ) : type === 'series' || type === 'serie' ? (
+                                    <>
+                                        <li className="nav-item W-home-button-hamburger-button">
+                                            <Link className="nav-link" aria-current="page" to="/">{t('HomeMessage')}</Link>
+                                        </li>
+                                        <li className="nav-item W-nav-item">
+                                            <Link className="nav-link" aria-current="page" to="/movies">{t('MovieMessage')}</Link>
+                                        </li>
+                                        <li className="nav-item W-nav-item">
+                                            <Link className="nav-link active" to="/series">{t('SerieMessage')}</Link>
+                                        </li>
+                                    </>
+                                ) : (
+                                    <>
+                                        <li className="nav-item W-home-button-hamburger-button">
+                                            <Link className="nav-link" aria-current="page" to="/">{t('HomeMessage')}</Link>
+                                        </li>
+                                        <li className="nav-item W-nav-item">
+                                            <Link className="nav-link" aria-current="page" to="/movies">{t('MovieMessage')}</Link>
+                                        </li>
+                                        <li className="nav-item W-nav-item">
+                                            <Link className="nav-link" to="/series">{t('SerieMessage')}</Link>
+                                        </li>
+                                    </>
+                                )}
+                            </ul>
+                        </div>
 
                         <div className="d-flex W-navbar-search">
                             <form className="form-inline my-2 my-lg-0 W-searchbar" onSubmit={handleSubmit}>
-                                {t('SerieMessage')}
-                                <input name="query" className="form-control me-2" type="search" placeholder="Search" aria-label="Search" value={query} onChange={handleChange} />
-                                {type === 'movie' && query !== 'ANY' &&
-                                    <input type="hidden" name="query" value={query} />
+                                { queryProp !== 'ANY' ? (
+                                    <input name="query" className="form-control me-2" type="search" placeholder={t('SearchMessage')} aria-label="Search" value={queryProp} onChange={handleChange} />
+                                ) : (
+                                    <input name="query" className="form-control me-2" type="search" placeholder={t('SearchMessage')} aria-label="Search"  onChange={handleChange} />
+                                )}
+                                {genreProp !== 'ANY' && genreProp !== null &&
+                                    <input type="hidden" name="genreProp" value={genreProp} />
                                 }
-                                {genre !== 'ANY' && genre !== null &&
-                                    <input type="hidden" name="genre" value={genre} />
-                                }
-                                {durationFrom !== 'ANY' && durationFrom !== null &&
+                                {durationFromProp !== 'ANY' && durationFromProp !== null &&
                                     <>
-                                        <input type="hidden" name="durationFrom" value={durationFrom} />
-                                        <input type="hidden" name="durationTo" value={durationTo} />
+                                        <input type="hidden" name="durationFrom" value={durationFromProp} />
+                                        <input type="hidden" name="durationTo" value={durationToProp} />
                                     </>
                                 }
-                                {sorting !== 'ANY' && sorting !== null &&
-                                    <input type="hidden" name="sorting" value={sorting} />
+                                {sortingProp !== 'ANY' && sortingProp !== null &&
+                                    <input type="hidden" name="sorting" value={sortingProp} />
                                 }
                                 <button className="btn btn-success W-search-button-color" type="submit">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="bi bi-search W-search-icon" viewBox="0 0 16 16">
