@@ -1,6 +1,7 @@
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 import { useState, useEffect } from 'react';
+import {toast} from "react-toastify";
 
 export default function Header(props) {
     const {t} = useTranslation()
@@ -13,11 +14,7 @@ export default function Header(props) {
         setIsDropdownOpen((prevState) => !prevState);
     };
 
-    const [genreProp, setGenre] = useState("ANY")
-    const [durationFromProp, setDurFrom] = useState("ANY")
-    const [durationToProp, setDurTo] = useState("ANY")
-    const [sortingProp, setSorting] = useState("ANY")
-    const [queryProp, setQuery] = useState("ANY")
+    const [queryProp, setQuery] = useState("")
     const [type, setType] = useState(props.type)
     const [admin, setAdmin] = useState(props.admin)
     const [userName, setUserName] = useState(props.userName)
@@ -26,23 +23,7 @@ export default function Header(props) {
 
     useEffect(() => {
         const queryParams = new URLSearchParams(search);
-        const genre = queryParams.get('genre')
-        const durationFrom = queryParams.get('durationFrom')
-        const durationTo = queryParams.get('durationTo')
-        const sorting = queryParams.get('sorting')
         const query = queryParams.get('query')
-        if (genre !== genreProp && genre !== null ) {
-            setGenre(genre);
-        }
-        if (durationFrom !== durationFromProp && durationFrom !== null){
-            setDurFrom(durationFrom)
-        }
-        if (durationTo !== durationToProp  && durationTo !== null){
-            setDurTo(durationTo)
-        }
-        if (sorting !== sortingProp  && sorting !== null){
-            setSorting(sorting)
-        }
         if (query !== queryProp && query !== null){
             setQuery(query)
         }
@@ -50,17 +31,33 @@ export default function Header(props) {
 
 
 
+    const [queryForm, setQueryForm] = useState({
+        query: ""
+    });
 
-    const [queryForm, setQueryForm] = useState("ALL");
 
     const [contentType, setContentType] = useState("all")
 
     const [currentPage, setCurrentPage] = useState(1)
 
+    const validateSearch = () => {
+        return ( queryForm.query != null && queryForm.query.length > 0 )
+    }
+
     //RECORDAR QUE DEPENDIENDO DEL TYPE, EL PATH DEBE CAMBIAR, EL TYPE SE DEBE RECIBIR POR PARAM
     const handleSubmit = (event) => {
         event.preventDefault();
-        props.handleQuery(contentType,queryForm)
+        const searchParams = new URLSearchParams(window.location.search);
+        if( validateSearch() ){
+            searchParams.set('query', queryForm.query);
+            if (type === 'profile'){
+                navigate('/content/all' + '?' + searchParams.toString());
+            }else if ( type === 'movie'){
+                navigate('/content/movie' + '?' + searchParams.toString());
+            }else{
+                navigate('/content/series' + '?' + searchParams.toString());
+            }
+        }
 
     }
 
@@ -70,6 +67,7 @@ export default function Header(props) {
             return {...prev, [name]: value}
         })
     }
+
     //Tomo la url actual, y le seteo el parametro deseado
     const updateUrl = () => {
         const searchParams = new URLSearchParams(window.location.search);
@@ -143,23 +141,12 @@ export default function Header(props) {
 
                         <div className="d-flex W-navbar-search">
                             <form className="form-inline my-2 my-lg-0 W-searchbar" onSubmit={handleSubmit}>
-                                { queryProp !== 'ANY' ? (
+                                { queryProp !== '' ? (
                                     <input name="query" className="form-control me-2" type="search" placeholder={t('SearchMessage')} aria-label="Search" value={queryProp} onChange={handleChange} />
                                 ) : (
                                     <input name="query" className="form-control me-2" type="search" placeholder={t('SearchMessage')} aria-label="Search"  onChange={handleChange} />
                                 )}
-                                {genreProp !== 'ANY' && genreProp !== null &&
-                                    <input type="hidden" name="genreProp" value={genreProp} />
-                                }
-                                {durationFromProp !== 'ANY' && durationFromProp !== null &&
-                                    <>
-                                        <input type="hidden" name="durationFrom" value={durationFromProp} />
-                                        <input type="hidden" name="durationTo" value={durationToProp} />
-                                    </>
-                                }
-                                {sortingProp !== 'ANY' && sortingProp !== null &&
-                                    <input type="hidden" name="sorting" value={sortingProp} />
-                                }
+
                                 <button className="btn btn-success W-search-button-color" type="submit">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="bi bi-search W-search-icon" viewBox="0 0 16 16">
                                         <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />

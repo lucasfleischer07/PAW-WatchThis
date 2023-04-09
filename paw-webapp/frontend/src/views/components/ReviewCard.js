@@ -109,7 +109,7 @@ export default function ReviewCard(props){
                                 )}
                                 {isLogged ?(
                                     (!props.alreadyReport) && (reviewUser != user.userName) &&(
-                                        <span title=${t('Report.Review.Add')}>
+                                        <span title={t('Report.Review.Add')}>
                                         <button id={`reportReviewButton${props.reviewId}`} type="button"
                                                 className="btn btn-light W-background-color-report"
                                                 data-bs-toggle="modal"  onClick={handleShowReportModal} data-bs-target={`reportReviewModal${props.reviewId}`}>
@@ -127,7 +127,7 @@ export default function ReviewCard(props){
                                         </span>
                                     )
                                 ):( <div>
-                                        <span title=${t('Report.Review.Add')}>
+                                        <span title={t('Report.Review.Add')}>
                                             <button id={`reportReviewButton${props.reviewId}`} type="button"
                                                     className="btn btn-light W-background-color-report"
                                                     data-bs-toggle="modal"  onClick={handleShowLoginModal} data-bs-target={`loginModal${props.reviewId}`}>
@@ -235,7 +235,7 @@ export default function ReviewCard(props){
                                     <ul className="W-no-bullets-list">
                                         <li>
                                             <label>
-                                                <form:radiobutton path="reportType" value="Spam"/>
+                                                <form path="reportType" value="Spam"/>
                                                     {t("Report.Spam")}
                                                 <p className="W-modal-comment-desc">
                                                     {t("Report.Spam.Description")}
@@ -244,7 +244,7 @@ export default function ReviewCard(props){
                                         </li>
                                         <li>
                                             <label>
-                                                <form:radiobutton path="reportType" value="Insult"/>
+                                                <form path="reportType" value="Insult"/>
                                                     {t("Report.Insult")}
                                                 <p className="W-modal-comment-desc">
                                                     {t("Report.Insult.Description")}
@@ -253,7 +253,7 @@ export default function ReviewCard(props){
                                         </li>
                                         <li>
                                             <label>
-                                                <form:radiobutton path="reportType" value="Inappropriate"/>
+                                                <form path="reportType" value="Inappropriate"/>
                                                     {t("Report.Inappropriate")}
                                                 <p className="W-modal-comment-desc">
                                                     {t("Report.Inappropriate.Description")}
@@ -262,7 +262,7 @@ export default function ReviewCard(props){
                                         </li>
                                         <li>
                                             <label>
-                                                <form:radiobutton path="reportType" value="Unrelated"/>
+                                                <form path="reportType" value="Unrelated"/>
                                                     {t("Report.Unrelated")}
                                                 <p className="W-modal-comment-desc">
                                                     {t("Report.Unrelated.Description")}
@@ -271,7 +271,7 @@ export default function ReviewCard(props){
                                         </li>
                                         <li>
                                             <label>
-                                                <form:radiobutton path="reportType" value="Other"/>
+                                                <form path="reportType" value="Other"/>
                                                 {t("Report.Other")}
                                                 <p className="W-modal-comment-desc">
                                                     {t("Report.Other.Description")}
