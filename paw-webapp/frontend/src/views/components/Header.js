@@ -1,12 +1,14 @@
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import {useTranslation} from "react-i18next";
-import { useState, useEffect } from 'react';
+import {useState, useEffect, useContext} from 'react';
 import {toast} from "react-toastify";
+import {AuthContext} from "../../context/AuthContext";
 
 export default function Header(props) {
     const {t} = useTranslation()
 
     const navigate = useNavigate();
+    let {signOut} = useContext(AuthContext)
 
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -15,26 +17,16 @@ export default function Header(props) {
     };
 
     const [queryProp, setQuery] = useState("")
-    const [type, setType] = useState(props.type)
-    const [admin, setAdmin] = useState(props.admin)
-    const [userName, setUserName] = useState(props.userName)
+    const type = props.type
+    const admin = props.admin
+    const userName = props.userName
+    const userId = props.userId
 
     const { search } = useLocation();
-
-    useEffect(() => {
-        const queryParams = new URLSearchParams(search);
-        const query = queryParams.get('query')
-        if (query !== queryProp && query !== null){
-            setQuery(query)
-        }
-    }, [search ]);
-
-
 
     const [queryForm, setQueryForm] = useState({
         query: ""
     });
-
 
     const [contentType, setContentType] = useState("all")
 
@@ -58,7 +50,6 @@ export default function Header(props) {
                 navigate('/content/series' + '?' + searchParams.toString());
             }
         }
-
     }
 
     const handleChange = (e) => {
@@ -75,12 +66,20 @@ export default function Header(props) {
         navigate(window.location.pathname + '?' + searchParams.toString());
     }
 
+    useEffect(() => {
+        const queryParams = new URLSearchParams(search);
+        const query = queryParams.get('query')
+        if (query !== queryProp && query !== null){
+            setQuery(query)
+        }
+    }, [search]);
+
     return(
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark sticky-top W-header-height">
             <div className="W-container-fluid">
                 <Link className="navbar-brand" to="/">
                     <div className="W-logo-div">
-                        <img src={"/images/WatchThisLogo.png"} alt="WatchThisLogo" class="W-img-size2"/>
+                        <img src={"/images/WatchThisLogo.png"} alt="WatchThisLogo" className="W-img-size2"/>
                     </div>
                 </Link>
                 <div>
@@ -96,7 +95,6 @@ export default function Header(props) {
                     </div>
 
                     <div className="offcanvas-body W-navbar-buttons-acomodation">
-
                         <div className="W-navbar-hamburger-postion">
                             <ul className="navbar-nav justify-content-between flex-grow-1 pe-3 W-navitem-list">
                                 {type === 'movies' || type === 'movie' ? (
@@ -105,10 +103,10 @@ export default function Header(props) {
                                             <Link className="nav-link" aria-current="page" to="/">{t('HomeMessage')}</Link>
                                         </li>
                                         <li className="nav-item W-nav-item">
-                                            <Link className="nav-link active" aria-current="page" to="/movies">{t('MovieMessage')}</Link>
+                                            <Link className="nav-link active" aria-current="page" to="/movie">{t('MovieMessage')}</Link>
                                         </li>
                                         <li className="nav-item W-nav-item">
-                                            <Link className="nav-link" to="/series">{t('SerieMessage')}</Link>
+                                            <Link className="nav-link" to="/serie">{t('SerieMessage')}</Link>
                                         </li>
                                     </>
                                 ) : type === 'series' || type === 'serie' ? (
@@ -117,10 +115,10 @@ export default function Header(props) {
                                             <Link className="nav-link" aria-current="page" to="/">{t('HomeMessage')}</Link>
                                         </li>
                                         <li className="nav-item W-nav-item">
-                                            <Link className="nav-link" aria-current="page" to="/movies">{t('MovieMessage')}</Link>
+                                            <Link className="nav-link" aria-current="page" to="/movie">{t('MovieMessage')}</Link>
                                         </li>
                                         <li className="nav-item W-nav-item">
-                                            <Link className="nav-link active" to="/series">{t('SerieMessage')}</Link>
+                                            <Link className="nav-link active" to="/serie">{t('SerieMessage')}</Link>
                                         </li>
                                     </>
                                 ) : (
@@ -129,10 +127,10 @@ export default function Header(props) {
                                             <Link className="nav-link" aria-current="page" to="/">{t('HomeMessage')}</Link>
                                         </li>
                                         <li className="nav-item W-nav-item">
-                                            <Link className="nav-link" aria-current="page" to="/movies">{t('MovieMessage')}</Link>
+                                            <Link className="nav-link" aria-current="page" to="/movie">{t('MovieMessage')}</Link>
                                         </li>
                                         <li className="nav-item W-nav-item">
-                                            <Link className="nav-link" to="/series">{t('SerieMessage')}</Link>
+                                            <Link className="nav-link" to="/serie">{t('SerieMessage')}</Link>
                                         </li>
                                     </>
                                 )}
@@ -156,25 +154,25 @@ export default function Header(props) {
                         </div>
 
                         <div className="W-nav-login-button">
-                            {userName !== "null" && userName !== "" ? (
+                            {userName !== null && userName !== "" && userName !== undefined ? (
                                 <div className="btn-group">
                                     <button type="button" className="btn btn-dark dropdown-toggle W-border-color-user-btn" onClick={handleDropdownToggle} aria-expanded={isDropdownOpen}>
                                         {userName}
                                     </button>
                                     <ul className={`dropdown-menu ${isDropdownOpen ? "show" : ""}`}>
                                         <li>
-                                            <Link className="dropdown-item" to="/profile">{t('Profile')}</Link>
+                                            <Link className="dropdown-item" to={`/user/profile/${userId}`}>{t('Profile')}</Link>
                                         </li>
                                         <li>
-                                            <Link className="dropdown-item" to="/profile/watchList">{t('WatchList')}</Link>
+                                            <Link className="dropdown-item" to="/user/watchList">{t('WatchList')}</Link>
                                         </li>
                                         <li>
-                                            <Link className="dropdown-item" to="/profile/viewedList">{t('ViewedList.Title')}</Link>
+                                            <Link className="dropdown-item" to="/user/viewedList">{t('ViewedList.Title')}</Link>
                                         </li>
                                         {admin === true || admin === "true" ? (
                                             <>
                                                 <li>
-                                                    <Link className="dropdown-item" to="/profile/create">{t('CreateContent.Message')}</Link>
+                                                    <Link className="dropdown-item" to="/content/form/create">{t('CreateContent.Message')}</Link>
                                                 </li>
                                                 <li>
                                                     <Link className="dropdown-item" to="/reports">{t('Report.ReportedContent')}</Link>
@@ -185,12 +183,12 @@ export default function Header(props) {
                                             <hr className="dropdown-divider" />
                                         </li>
                                         <li>
-                                            <Link className="dropdown-item" to="/login/sign-out">{t('LogOutMessage')}</Link>
+                                            <Link className="dropdown-item" to="/" onClick={signOut()}>{t('LogOutMessage')}</Link>
                                         </li>
                                     </ul>
                                 </div>
                             ) : (
-                                <Link className="dropdown-item" to="/login/sign-in">{t('LoginMessage')}</Link>
+                                <Link className="dropdown-item" to="/login">{t('LoginMessage')}</Link>
                             )}
                         </div>
                     </div>

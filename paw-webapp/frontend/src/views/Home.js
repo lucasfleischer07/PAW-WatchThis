@@ -35,16 +35,20 @@ export default function Home() {
                 //     TODO: Meter un toast o algo asi
             })
 
-        listsService.getUserWatchListContentIds(user?.id)
-            .then(watchList => {
-                if(!watchList.error) {
-                    setUserWatchListIds(watchList.data)
-                }
+        if(isLogged()) {
+            listsService.getUserWatchListContentIds(user?.id)
+                .then(watchList => {
+                    if(!watchList.error) {
+                        setUserWatchListIds(watchList.data)
+                    }
 
-            })
-            .catch(e => {
-            //     TODO: Meter toast
-            })
+                })
+                .catch(e => {
+                    //     TODO: Meter toast
+                })
+        }
+        console.log(user?.role === 'admin')
+        console.log(user?.username)
     }, [])
 
 
@@ -55,9 +59,8 @@ export default function Home() {
 
 
     return(
-        // TODO: FALTA HEADER
         <div>
-            <Header type="all" admin={true} userName="Ian"/>
+            <Header type="all" admin={user?.role === 'admin'} userName={user?.username} userId={user?.id}/>
             <div className="W-carousels-div">
                 {isLogged() && userWatchListIds.length !== 0 && recommendedUserList.length !== 0 ? (
                     <>
