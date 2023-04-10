@@ -74,6 +74,7 @@
   "Login.NoAccountMessage": "¿No tiene cuenta?",
   "Login.SignUpMessage": "¡Registrate!",
   "Login.Success": "¡Inicio de sesión exitoso!",
+  "Logout.Success": "Se ha cerrado la sesión.",
   "Login.Error": "Inicio de sesión fallido! Intente nuevamente",
 
   "Signup.PageInfo": "Registrate en Watch This",

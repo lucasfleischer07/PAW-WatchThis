@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 import {useTranslation} from "react-i18next";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {listsService} from "../../services";
 import {toast} from "react-toastify";
 
@@ -115,12 +115,12 @@ export default function ContentCard(props) {
                             <div className="d-grid gap-2 W-watchList-button-div">
                                 {watchListButton}
                             </div>
-                            <a className="card-img-top W-card-link-style" href={`/${contentType}/${contentId}`}>
+                            <Link className="card-img-top W-card-link-style" to={`/content/${contentType}/${contentId}`}>
                                 <img className="card-img-top" src={contentImage} alt={`${contentName}`} />
-                            </a>
+                            </Link>
                         </div>
                         <div className="card-body W-films-card-body-div">
-                            <a className="W-card-link-style" href={`/${contentType}/${contentId}`}>
+                            <Link className="W-card-link-style" to={`/content/${contentType}/${contentId}`}>
                                 <div className="W-margin-one">
                                     <h6 className="card-title W-movie-title">{contentName}</h6>
                                     <div className="W-movie-description">
@@ -148,7 +148,7 @@ export default function ContentCard(props) {
                                         {t('Content.ReviewAmount', {reviewsAmount: reviewsAmount})}
                                     </p>
                                 </div>
-                            </a>
+                            </Link>
                         </div>
                     </div>
                 </div>

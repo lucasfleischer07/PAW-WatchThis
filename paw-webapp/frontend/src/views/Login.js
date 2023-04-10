@@ -74,7 +74,6 @@ export default function Login() {
     
 
     return (
-        // TODO: Meter el header
         <div>
             <div className="W-background">
                 <form onSubmit={handleSubmit}>
@@ -152,10 +151,6 @@ export default function Login() {
                         <hr className="d-flex W-line-style-login" />
                         <div className="W-alignment-signup-div W-margin-bottom">
                             <h5>{t('Login.NoAccountMessage')}</h5>
-                            {/*TODO: Esto tiene que ser un Link no un a*/}
-                            {/*<Link to='/singUp'>*/}
-                            {/*    <button type="button" className="btn btn-secondary W-sign-up-button-link">{t('Login.SignUpMessage')}</button>*/}
-                            {/*</Link>*/}
                             <Link to="/login/sign-up">
                                 <button type="button" className="btn btn-secondary W-sign-up-button-link">{t('Login.SignUpMessage')}</button>
                             </Link>

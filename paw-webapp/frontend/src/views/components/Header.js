@@ -52,6 +52,12 @@ export default function Header(props) {
         }
     }
 
+    const handleLogOut = (e) => {
+        e.preventDefault();
+        signOut()
+        toast.success(t('Logout.Success'))
+    }
+
     const handleChange = (e) => {
         const {name, value} = e.target
         setQueryForm((prev) => {
@@ -103,10 +109,10 @@ export default function Header(props) {
                                             <Link className="nav-link" aria-current="page" to="/">{t('HomeMessage')}</Link>
                                         </li>
                                         <li className="nav-item W-nav-item">
-                                            <Link className="nav-link active" aria-current="page" to="/movie">{t('MovieMessage')}</Link>
+                                            <Link className="nav-link active" aria-current="page" to="/content/movie">{t('MovieMessage')}</Link>
                                         </li>
                                         <li className="nav-item W-nav-item">
-                                            <Link className="nav-link" to="/serie">{t('SerieMessage')}</Link>
+                                            <Link className="nav-link" to="/content/serie">{t('SerieMessage')}</Link>
                                         </li>
                                     </>
                                 ) : type === 'series' || type === 'serie' ? (
@@ -115,10 +121,10 @@ export default function Header(props) {
                                             <Link className="nav-link" aria-current="page" to="/">{t('HomeMessage')}</Link>
                                         </li>
                                         <li className="nav-item W-nav-item">
-                                            <Link className="nav-link" aria-current="page" to="/movie">{t('MovieMessage')}</Link>
+                                            <Link className="nav-link" aria-current="page" to="/content/movie">{t('MovieMessage')}</Link>
                                         </li>
                                         <li className="nav-item W-nav-item">
-                                            <Link className="nav-link active" to="/serie">{t('SerieMessage')}</Link>
+                                            <Link className="nav-link active" to="/content/serie">{t('SerieMessage')}</Link>
                                         </li>
                                     </>
                                 ) : (
@@ -127,10 +133,10 @@ export default function Header(props) {
                                             <Link className="nav-link" aria-current="page" to="/">{t('HomeMessage')}</Link>
                                         </li>
                                         <li className="nav-item W-nav-item">
-                                            <Link className="nav-link" aria-current="page" to="/movie">{t('MovieMessage')}</Link>
+                                            <Link className="nav-link" aria-current="page" to="/content/movie">{t('MovieMessage')}</Link>
                                         </li>
                                         <li className="nav-item W-nav-item">
-                                            <Link className="nav-link" to="/serie">{t('SerieMessage')}</Link>
+                                            <Link className="nav-link" to="/content/serie">{t('SerieMessage')}</Link>
                                         </li>
                                     </>
                                 )}
@@ -183,7 +189,7 @@ export default function Header(props) {
                                             <hr className="dropdown-divider" />
                                         </li>
                                         <li>
-                                            <Link className="dropdown-item" to="/" onClick={signOut()}>{t('LogOutMessage')}</Link>
+                                            <Link className="dropdown-item" to="/" onClick={handleLogOut}>{t('LogOutMessage')}</Link>
                                         </li>
                                     </ul>
                                 </div>

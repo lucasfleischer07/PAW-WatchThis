@@ -3,6 +3,7 @@ import {useTranslation} from "react-i18next";
 import {contentService, listsService} from "../services";
 import ContentCard from "./components/ContentCard";
 import {Link, useParams} from "react-router-dom";
+import Header from "./components/Header";
 
 // TODO: Desde el HEADER, le tengo que pasar el tipo ('movie' o 'serie') que se lo paso por URL,
 //  El tema es como le paso la query (lo que busco en la search bar), el genero y el durationFrom por parametro ya que uso Link
@@ -41,7 +42,7 @@ export default function ContentPage(props) {
             })
             .catch(e => {
             })
-    }, [actualPage])
+    }, [actualPage, contentType])
 
 
     // TODO: Ver tema de useEffect de cuando tengo que ponerle nada y cunado tengo que ponerle dependencia.
@@ -60,17 +61,8 @@ export default function ContentPage(props) {
 
     return (
         <div>
-            {/*<Header*/}
-            {/*    type={contentType}*/}
-            {/*    type2={contentType2}*/}
-            {/*    genre={genre}*/}
-            {/*    durationFrom={durationFrom}*/}
-            {/*    durationTo={durationTo}*/}
-            {/*    sorting={sorting}*/}
-            {/*    userName={userName}*/}
-            {/*    userId={userId}*/}
-            {/*    admin={admin}*/}
-            {/*    query={query}/>*/}
+            <Header type={contentType} admin={user?.role === 'admin'} userName={user?.username} userId={user?.id}/>
+
             {/*<Filter*/}
             {/*    query={query}*/}
             {/*    genre={genre}*/}

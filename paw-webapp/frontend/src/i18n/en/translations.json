@@ -75,6 +75,7 @@
   "Login.NoAccountMessage": "Do not have an account?",
   "Login.SignUpMessage": "Sign up!",
   "Login.Success": "Login succeeded!",
+  "Logout.Success": "Logout succeeded!",
   "Login.Error": "Login failed! Please try again",
 
 

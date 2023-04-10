@@ -1,10 +1,11 @@
 import {useTranslation} from "react-i18next";
-import {useContext, useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {AuthContext} from "../context/AuthContext";
 import {userService} from "../services";
 import {useForm} from "react-hook-form";
 import {toast} from "react-toastify";
 import {useLocation, useNavigate} from "react-router-dom";
+import Header from "./components/Header";
 
 
 export default function ProfileEditionPage() {
@@ -114,96 +115,100 @@ export default function ProfileEditionPage() {
 
 
     return(
-        <div className="row py-5 px-4 W-set-margins">
-            <div className="col-md-5 mx-auto W-edit-profile-display">
-                <div className="bg-white shadow rounded overflow-hidden W-profile-general-div">
-                    <div className="W-profile-background-color bg-dark">
-                        <div>
-                            <div className="profile mr-3">
-                                <div className="W-img-and-quote-div">
-                                    <div className="W-div-img-quote">
-                                        {user.image == null ? (
-                                            <img src={"/images/defaultUserImg.png"} alt="User_img" className="W-edit-profile-picture"/>
-                                        ) : (
-                                            <img src={user.image} alt="User_img" className="W-edit-profile-picture"/>
-                                        )}
-                                        <h4 className="W-username-profilepage">{user.username}</h4>
+        <>
+            <Header type="all" admin={user?.role === 'admin'} userName={user?.username} userId={user?.id}/>
+            
+            <div className="row py-5 px-4 W-set-margins">
+                <div className="col-md-5 mx-auto W-edit-profile-display">
+                    <div className="bg-white shadow rounded overflow-hidden W-profile-general-div">
+                        <div className="W-profile-background-color bg-dark">
+                            <div>
+                                <div className="profile mr-3">
+                                    <div className="W-img-and-quote-div">
+                                        <div className="W-div-img-quote">
+                                            {user.image == null ? (
+                                                <img src={"/images/defaultUserImg.png"} alt="User_img" className="W-edit-profile-picture"/>
+                                            ) : (
+                                                <img src={user.image} alt="User_img" className="W-edit-profile-picture"/>
+                                            )}
+                                            <h4 className="W-username-profilepage">{user.username}</h4>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div className="W-edit-profile-div">
-                        <form onSubmit={onSubmitImage} method="post" encType="multipart/form-data">
-                            <div className="W-picture-upload-button-text">
-                                <div className="W-input-profile-picture">
-                                    <h5 className="W-edit-picture-text">{t('EditProfile.EditPicture')}</h5>
-                                    <div className="bg-light W-div-img-username">
+                        <div className="W-edit-profile-div">
+                            <form onSubmit={onSubmitImage} method="post" encType="multipart/form-data">
+                                <div className="W-picture-upload-button-text">
+                                    <div className="W-input-profile-picture">
+                                        <h5 className="W-edit-picture-text">{t('EditProfile.EditPicture')}</h5>
+                                        <div className="bg-light W-div-img-username">
+                                            <div>
+                                                <input onChange={handleImageChange}
+                                                       name="image"
+                                                       type="file"
+                                                       accept=" image/jpeg, image/jpg,  image/png"
+                                                       className="form-control W-input-width"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="W-submit-changes-edit-profile">
+                                    <button type="submit" className="btn btn-success">
+                                        {/*TODO: Cambair este mensaje por el de Upload Image*/}
+                                        {t('EditProfile.Upload')}
+                                    </button>
+                                </div>
+                            </form>
+
+                            <form onSubmit={onSubmitPassword} method="post" encType="multipart/form-data">
+                                <div className="W-div-margin">
+                                    <h5 className="W-margin-bottom">{t('EditProfile.ChangePassword')}</h5>
+                                    <div className="bg-light d-flex justify-content-end text-center W-edit-divs-display">
                                         <div>
-                                            <input onChange={handleImageChange}
-                                                   name="image"
-                                                   type="file"
-                                                   accept=" image/jpeg, image/jpg,  image/png"
-                                                   className="form-control W-input-width"/>
+                                            <div className="mb-3 W-input-label-edit-password">
+                                                <input onChange={handleChange}
+                                                       name="currentPassword"
+                                                       type="password"
+                                                       className="form-control"
+                                                       value={userForm.currentPassword}
+                                                       placeholder={t('EditProfile.CurrentPassword')}/>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div className="mb-3 W-input-label-edit-password">
+                                                <input onChange={handleChange}
+                                                       name="newPassword"
+                                                       type="password"
+                                                       className="form-control"
+                                                       value={userForm.newPassword}
+                                                       placeholder={t('EditProfile.NewPassword')}/>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div className="mb-3 W-input-label-edit-password">
+                                                <input onChange={handleChange}
+                                                       name="confirmPassword"
+                                                       type="password"
+                                                       className="form-control"
+                                                       value={userForm.confirmPassword}
+                                                       placeholder={t('EditProfile.ConfirmPassword')}/>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div className="W-submit-changes-edit-profile">
-                                <button type="submit" className="btn btn-success">
-                                    {/*TODO: Cambair este mensaje por el de Upload Image*/}
-                                    {t('EditProfile.Upload')}
-                                </button>
-                            </div>
-                        </form>
-
-                        <form onSubmit={onSubmitPassword} method="post" encType="multipart/form-data">
-                            <div className="W-div-margin">
-                                <h5 className="W-margin-bottom">{t('EditProfile.ChangePassword')}</h5>
-                                <div className="bg-light d-flex justify-content-end text-center W-edit-divs-display">
-                                    <div>
-                                        <div className="mb-3 W-input-label-edit-password">
-                                            <input onChange={handleChange}
-                                                   name="currentPassword"
-                                                   type="password"
-                                                   className="form-control"
-                                                   value={userForm.currentPassword}
-                                                   placeholder={t('EditProfile.CurrentPassword')}/>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div className="mb-3 W-input-label-edit-password">
-                                            <input onChange={handleChange}
-                                                   name="newPassword"
-                                                   type="password"
-                                                   className="form-control"
-                                                   value={userForm.newPassword}
-                                                   placeholder={t('EditProfile.NewPassword')}/>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div className="mb-3 W-input-label-edit-password">
-                                            <input onChange={handleChange}
-                                                   name="confirmPassword"
-                                                   type="password"
-                                                   className="form-control"
-                                                   value={userForm.confirmPassword}
-                                                   placeholder={t('EditProfile.ConfirmPassword')}/>
-                                        </div>
-                                    </div>
+                                <div className="W-submit-changes-edit-profile">
+                                    <button type="submit" className="btn btn-success">
+                                        {t('EditProfile.Upload')}
+                                    </button>
                                 </div>
-                            </div>
-                            <div className="W-submit-changes-edit-profile">
-                                <button type="submit" className="btn btn-success">
-                                    {t('EditProfile.Upload')}
-                                </button>
-                            </div>
-                        </form>
+                            </form>
 
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     )
 
 }

@@ -47,8 +47,6 @@ export default function Home() {
                     //     TODO: Meter toast
                 })
         }
-        console.log(user?.role === 'admin')
-        console.log(user?.username)
     }, [])
 
 
@@ -223,7 +221,6 @@ export default function Home() {
                         </button>
                     </div>
                 </div>
-
             </div>
         </div>
 

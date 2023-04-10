@@ -8,6 +8,7 @@ import ReviewCard from "./components/ReviewCard";
 import {contentService, listsService, reviewService} from "../services";
 import {toast} from "react-toastify";
 import TooltipComponent from './components/Tooltip';
+import Header from "./components/Header";
 
 
 export default function InfoPage() {
@@ -192,7 +193,8 @@ export default function InfoPage() {
 
     return(
         <>
-            {/*TODO: Meter header*/}
+            <Header type={contentType} admin={user?.role === 'admin'} userName={user?.username} userId={user?.id}/>
+
             {user?.role === 'admin' ? (
                 <div className="W-delete-edit-buttons-content">
                     <form className="W-delete-form" id="formDeleteContent" method="post">
