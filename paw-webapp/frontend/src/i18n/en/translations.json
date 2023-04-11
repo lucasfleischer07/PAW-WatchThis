@@ -122,7 +122,7 @@
   "Comment.Here": "Comment!",
   "Comment.WarningAdd": "To comment a review, you must be logged in.",
   "Comment.EmptyComment": "The comment is empty",
-  "Comment.LenghtComment": "The comment must have between 10 and 500 characters",
+  "Comment.LengthComment": "The comment must have between 10 and 500 characters",
 
   "Search.Title": "The result of: {{query}}",
 

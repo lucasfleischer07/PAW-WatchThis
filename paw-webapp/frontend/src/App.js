@@ -20,6 +20,7 @@ import ReportedPage from "./views/ReportedPage";
 import ErrorPage from "./views/ErrorPage";
 import Comments from "./views/components/Comments";
 import InfoPage from "./views/InfoPage";
+import Reputation from "./views/components/Reputation";
 
 function App() {
   return (
@@ -48,7 +49,8 @@ function App() {
                   <Route path='error500' element={<ErrorPage errorCode={500}/>}/>
                   <Route path='*' element={<ErrorPage errorCode={404}/>}/>
 
-                  <Route path='/comment/hola' element={<Comments/>}/>
+                  <Route path='/reputation/hola' element={<Reputation/>}/>
+
               </Routes>
 
               <ToastContainer

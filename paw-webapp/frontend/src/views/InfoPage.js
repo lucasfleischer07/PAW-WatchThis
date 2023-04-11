@@ -430,31 +430,39 @@ export default function InfoPage() {
                         </div>
                     </div>
 
-                    {/*<div className="card-body">*/}
-                    {/*    {reviews.map((review) => {*/}
-                    {/*        return (*/}
-                    {/*            <ReviewCard*/}
-                    {/*                reviewTitle={review.name}*/}
-                    {/*                reviewDescription={review.description}*/}
-                    {/*                reviewRating={review.rating}*/}
-                    {/*                reviewId={review.id}*/}
-                    {/*                reviewReputation={review.reputation}*/}
-                    {/*                userName={review.user.userName}*/}
-                    {/*                contentId={content.id}*/}
-                    {/*                contentType={review.type}*/}
-                    {/*                loggedUserName={user.username}*/}
-                    {/*                isAdmin={user?.role === 'admin'}*/}
-                    {/*                isLikeReviews={userLikeReviews.includes(review.id)}*/}
-                    {/*                isDislikeReviews={userDislikeReviews.includes(review.id)}*/}
-                    {/*                alreadyReport={review.reporterUsernames.includes(userName)}*/}
-                    {/*                canComment={true}*/}
-                    {/*            />*/}
-                    {/*        );*/}
-                    {/*    })}*/}
+                    <div className="card-body">
+                        {reviews.length > 0 ? (
+                            <>
+                                {reviews.map((review) => {
+                                    return (
+                                        <ReviewCard
+                                            key = {review.id}
+                                            reviewTitle={review.name}
+                                            reviewDescription={review.description}
+                                            reviewRating={review.rating}
+                                            reviewId={review.id}
+                                            reviewReputation={review.reputation}
+                                            reviewUser={review.user.userName}
+                                            contentId={content.id}
+                                            contentType={review.type}
+                                            loggedUserName={user.username}
+                                            isAdmin={user?.role === 'admin'}
+                                            isLikeReviews={false}
+                                            isDislikeReviews={true}
+                                            alreadyReport={false}
+                                            // isLikeReviews={userLikeReviews.includes(review.id)}
+                                            // isDislikeReviews={userDislikeReviews.includes(review.id)}
+                                            // alreadyReport={review.reporterUsernames.includes(userName)}
+                                            canComment={true}
+                                        />
+                                    );
+                                })}
+                            </>
+                        ) : (
+                            <></>
+                        )}
 
-                    {/*/!*    TODO: Meter paginacion aca*!/*/}
-
-                    {/*</div>*/}
+                    </div>
                 </div>
             </div>
         </>

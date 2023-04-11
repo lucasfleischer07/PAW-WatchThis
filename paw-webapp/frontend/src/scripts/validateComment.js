@@ -1,7 +1,7 @@
 function validate(reviewId){
     let f=document.getElementById("commentInput"+reviewId);
     if(validateComment(f)){
-        handleAddComment(f["comment"].value)
+        // handleAddComment(f["comment"].value)
         f["comment"].value=null
     }
 }
