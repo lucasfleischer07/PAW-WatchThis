@@ -1,13 +1,15 @@
 import Reputation from "./Reputation";
 import {useTranslation} from "react-i18next";
 import {Modal, ModalBody, ModalDialog, ModalFooter, ModalHeader, ModalTitle} from "react-bootstrap";
-import {useContext, useState} from "@types/react";
+import {useContext, useState} from "react";
 import {AuthContext} from "../../context/AuthContext";
 import {useNavigate} from "react-router-dom";
 export default function ReviewCard(props){
     const reviewId=props.reviewId
     const reviewUser=props.reviewUser
     const reviewRating=props.reviewRating
+    const reviewDescription=props.reviewDescription
+    const content=props.content
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
     const ratingStars = [];
     const reviewTitle=props.reviewTitle
@@ -81,7 +83,7 @@ export default function ReviewCard(props){
                                                 </svg>
                                             </button>
                                             <link className="W-edit-button-review"
-                                               to={`/reviewForm/edit/${contentType}/${contentId}/${reviewId}`}>
+                                               to={`/reviewForm/edit/${content.contentType}/${content.contentId}/${reviewId}`}>
                                                 <button id={`editReviewButton${reviewId}`} className="btn btn-dark text-nowrap">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                                          fill="currentColor" className="bi bi-pencil-square"
@@ -224,7 +226,7 @@ export default function ReviewCard(props){
                     <form id={`reportReviewForm${reviewId}`} modelAttribute="reportReviewForm"
                                action={handleAddReport} method="post" enctype="multipart/form-data">
                             <ModalHeader className="modal-header">
-                                <ModalTitle className="modal-title" id={`reportReviewModalLabel${param.reviewId}`}>
+                                <ModalTitle className="modal-title" id={`reportReviewModalLabel${reviewId}`}>
                                     {t("Report.ReviewTitle")}
                                 </ModalTitle>
                                 <button type="button" onClick={handleCloseReportModal} className="btn-close" data-bs-dismiss="modal"

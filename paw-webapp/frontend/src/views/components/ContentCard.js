@@ -106,6 +106,7 @@ export default function ContentCard(props) {
         );
 
 
+
     return (
         <div className="W-movie-card-size">
             <div className="card-group W-card-text W-films-margin">

@@ -13,6 +13,7 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
@@ -93,12 +94,15 @@ public class UserController {
     // * ----------------------------------------------- User Image ----------------------------------------------------
 
     // Endpoint para getear la imagen del usuario
+
     @GET
     @Produces(value = {"image/*", MediaType.APPLICATION_JSON})
     @Path("/{id}/profileImage")
+    @Cacheable
     public Response getUserProfileImage(@PathParam("id") final long id,
                                         @Context Request request) {
         LOGGER.info("GET /{}: Called", uriInfo.getPath());
+
         final User user = us.findById(id).orElseThrow(UserNotFoundException::new);
         if(user.getImage() == null) {
             return Response.noContent().build();
