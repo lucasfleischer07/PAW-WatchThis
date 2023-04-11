@@ -222,6 +222,10 @@ export default function ContentCreatePage() {
         document.title = t('CreateContent.Message')
     })
 
+    const dropdownHandle = (event) => {
+        event.stopPropagation();
+    }
+
     return(
         <>
             <Header type="all" admin={user?.role === 'admin'} userName={user?.username} userId={user?.id}/>
@@ -323,10 +327,10 @@ export default function ContentCreatePage() {
                                     <span className="W-red-asterisco">{t('Asterisk')}</span>
                                 </label>
 
-                                <button id="createGenre" name="genre" type="button" className="W-genre-create-button btn dropdown-toggle" data-bs-toggle="dropdown"  datatype="button" aria-expanded="false">
+                                <button  name="genre" type="button" className="W-genre-create-button btn dropdown-toggle" data-bs-toggle="dropdown"  datatype="button" aria-expanded="false">
                                     {t('Genre.Message2')} {genreButtonLabel}
                                 </button>
-                                <ul className="dropdown-menu" id="drop3">
+                                <ul className="dropdown-menu" onClick={dropdownHandle}>
                                     <li className="mb-1 px-2">
                                         <label>
                                             <input type="checkbox" checked={contentForm.genre.includes("Action")} className="px-2" name="genre" value="Action" onChange={handleChange}/>{" "}
