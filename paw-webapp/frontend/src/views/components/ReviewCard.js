@@ -1,15 +1,16 @@
 import React, {useContext, useEffect, useState} from "react";
 import Reputation from "./Reputation";
 import {useTranslation} from "react-i18next";
-import {Modal} from "react-bootstrap";
+import {Button, Modal} from "react-bootstrap";
 import {AuthContext} from "../../context/AuthContext";
 import {Link, useNavigate} from "react-router-dom";
+import {reportsService} from "../../services";
+import {toast} from "react-toastify";
 export default function ReviewCard(props) {
     const {t} = useTranslation()
     let navigate = useNavigate()
     // const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
     let {isLogged} = useContext(AuthContext)
-
     const reviewId = props.reviewId
     const reviewUser = props.reviewUser
     const reviewRating = props.reviewRating
@@ -17,15 +18,16 @@ export default function ReviewCard(props) {
     const ratingStars = [];
     const reviewDescription = props.reviewDescription
     const reviewReputation = props.reviewReputation
+    const reviewUserId = props.revireUserId
 
     const userName = props.userName
     const loggedUserName = props.loggedUserName
     const isAdmin = useState(props.isAdmin);
 
-    const isLikeReviews = props.isLikeReviews
-    const isDislikeReviews = props.isDislikeReviews
+    const [isLikeReviews, setIsLikeReviews] = useState(props.isLikeReviews);
+    const [isDislikeReviews, setIsDislikeReviews] = useState(props.isDislikeReviews);
 
-    const alreadyReport = useState(props.alreadyReport)
+    const [alreadyReport, setAlreadyReport] = useState(props.alreadyReport)
     const canComment = useState(props.canComment)
 
     const contentType = props.contentType
@@ -34,6 +36,10 @@ export default function ReviewCard(props) {
     const [showReportModal, setShowReportModal] = useState(false);
     const [showDeleteReviewModal, setShowDeleteReviewModal] = useState(false);
     const [showLoginModal, setShowLoginModal] = useState(false);
+
+    const [reportFrom, setReportForm] = useState({
+        reportType: ""
+    })
 
     const handleShowReportModal = () => {
         setShowReportModal(true);
@@ -58,6 +64,13 @@ export default function ReviewCard(props) {
         navigate("/login", {replace: true})
     }
 
+    const handleChange = (e) => {
+        const {name, value} = e.target
+        setReportForm((prev) => {
+            return {...prev, [name]: value}
+        })
+    }
+
     for (let i = 1; i <= 5; i++) {
         ratingStars.push(
             i <= reviewRating ? (
@@ -74,9 +87,26 @@ export default function ReviewCard(props) {
     const handleDelete = () => {
 
     }
-    const handleAddReport = () => {
 
-    }
+    const handleSubmitReport = () => {
+        if(isLogged() && (isAdmin)) {
+            reportsService.addReviewReport(reviewId, reportFrom)
+                .then(data => {
+                    if(!data.error) {
+                        toast.success(t('Report.Success'))
+                        handleCloseReportModal()
+                        setAlreadyReport(true)
+                    } else {
+                        //     TODO: llegvar a pagina de errro
+                        navigate("/error", {replace: true})
+                    }
+                })
+                .catch(e => {
+                    //     TODO: llevatr a pagina de erorr
+                    navigate("/error", {replace: true})
+                })
+        }
+    };
 
     return(
         <div className="accordion W-accordion-margin" id={`accordion${reviewId}`}>
@@ -84,14 +114,14 @@ export default function ReviewCard(props) {
                 <div className="accordion-header" id={`heading${reviewId}`}>
                     <div className="card">
                         <div className="card-header W-accordion-card-header">
-                            <Link to={`/user/profile/${reviewId}`} className="W-creator-review">
+                            <Link to={`/user/profile/${reviewUserId}`} className="W-creator-review">
                                 {reviewUser}
                             </Link>
                             <div className="W-delete-edit-report-review-buttons">
                                 {isLogged() && (reviewUser === loggedUserName) && (
                                     <div>
                                         <div className="W-delete-edit-buttons">
-                                            <button className="W-delete-form" id={`deleteReviewButton${reviewId}`} onClick={handleShowDeleteReviewModal}>
+                                            <button className="btn btn-danger text-nowrap" id={`deleteReviewButton${reviewId}`} onClick={handleShowDeleteReviewModal}>
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-trash3" viewBox="0 0 16 16">
                                                     <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z"/>
                                                 </svg>
@@ -108,22 +138,22 @@ export default function ReviewCard(props) {
                                     </div>
 
                                 )}
-                                {isLogged() && isAdmin &&(
-                                    <button className="W-delete-form" id={`deleteReviewButton${reviewId}`} onClick={handleShowDeleteReviewModal}>
+                                {isLogged() && isAdmin && (reviewUser !== loggedUserName) &&(
+                                    <button className="btn btn-danger text-nowrap" id={`deleteReviewButton${reviewId}`} onClick={handleShowDeleteReviewModal}>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-trash3" viewBox="0 0 16 16">
                                             <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z"/>
                                         </svg>
                                     </button>
                                 )}
-                                {isLogged ? (
-                                    (!props.alreadyReport) && (reviewUser !== userName) && (
+                                {isLogged() ? (
+                                    (!alreadyReport) && (reviewUser !== userName) && (
                                         <span title={t('Report.Review.Add')}>
-                                        <button id={`reportReviewButton${props.reviewId}`} type="button" className="btn btn-light W-background-color-report" data-bs-toggle="modal"  onClick={handleShowReportModal} data-bs-target={`reportReviewModal${props.reviewId}`}>
-                                            <svg data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title={t("Report.Review.Add")} xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#b21e26" className="bi bi-exclamation-circle" viewBox="0 0 16 16">
-                                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                                                <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
-                                            </svg>
-                                        </button>
+                                            <button id={`reportReviewButton${props.reviewId}`} type="button" className="btn btn-light W-background-color-report" data-bs-toggle="modal"  onClick={handleShowReportModal} data-bs-target={`reportReviewModal${props.reviewId}`}>
+                                                <svg data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title={t("Report.Review.Add")} xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#b21e26" className="bi bi-exclamation-circle" viewBox="0 0 16 16">
+                                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                                    <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+                                                </svg>
+                                            </button>
                                         </span>
                                     )
                                 ):(
@@ -137,7 +167,6 @@ export default function ReviewCard(props) {
                                             </button>
                                         </span>
                                         <Modal show={showLoginModal} id={`reportReviewModalNoLogin${props.reviewId}`} tabIndex="-1" aria-labelledby={`reportReviewModalNoLoginLabel${props.reviewId}`} aria-hidden="true">
-                                            <Modal.Dialog >
                                                 <Modal.Header >
                                                     <Modal.Title id={`reportReviewModalNoLoginLabel${props.reviewId}`}>{t("Report.ReviewTitle")}</Modal.Title>
                                                     <button type="button" onClick={handleCloseLoginModal} className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -150,7 +179,6 @@ export default function ReviewCard(props) {
                                                     <button type="button" onClick={handleCloseLoginModal} className="btn btn-secondary" data-bs-dismiss="modal">{t("Close")}</button>
                                                     <button type="button" onClick={handleGoToLogin} className="btn btn-success">{t("Login.LoginMessage")}</button>
                                                 </Modal.Footer>
-                                            </Modal.Dialog>
                                         </Modal>
                                     </div>
                                 )}
@@ -173,113 +201,91 @@ export default function ReviewCard(props) {
                 <div id={`collapse${reviewId}`} className="accordion-collapse collapse" aria-labelledby={`heading${reviewId}`} data-bs-parent={`#accordion${reviewId}`}>
                     <div className="accordion-body">
                         <Reputation
+                            key ={`reputation ${reviewId}`}
                             reviewId={reviewId}
+                            isLikeReviews={isLikeReviews}
+                            isDislikeReviews={isDislikeReviews}
+                            reviewReputation={reviewReputation}
                             reviewDescription={reviewDescription}
                         />
                     </div>
                 </div>
             </div>
 
-            {/*<Modal show={showDeleteReviewModal} onHide={handleCloseDeleteReviewModal} id={`modalDeleteReview${reviewId}`} tabIndex="-1" aria-labelledby={`modalLabel${reviewId}`} aria-hidden="true">*/}
-            {/*    <Modal.Dialog>*/}
-            {/*        <div className="modal-content">*/}
-            {/*            <Modal.Header className="modal-header">*/}
-            {/*                <Modal.Title className="modal-title" id={`modalLabel${reviewId}`}>*/}
-            {/*                    {t("Delete.Confirmation")}*/}
-            {/*                </Modal.Title>*/}
-            {/*                <button type="button" onClick={handleCloseDeleteReviewModal} className="btn-close" data-bs-dismiss="modal"*/}
-            {/*                        aria-label="Close"></button>*/}
-            {/*            </Modal.Header>*/}
-            {/*            <Modal.Body className="modal-body">*/}
-            {/*                <p>*/}
-            {/*                    {t("DeleteReview")}*/}
-            {/*                </p>*/}
-            {/*            </Modal.Body>*/}
-            {/*            <Modal.Footer className="modal-footer">*/}
-            {/*                <button type="button" onClick={handleCloseDeleteReviewModal} className="btn btn-secondary" data-bs-dismiss="modal">*/}
-            {/*                    {t("No")}*/}
-            {/*                </button>*/}
-            {/*                <button type="submit" form={`formDeleteReview${reviewId}`} className="btn btn-success" onClick={handleDelete}>*/}
-            {/*                    {t("Yes")}*/}
-            {/*                </button>*/}
-            {/*            </Modal.Footer>*/}
-            {/*        </div>*/}
-            {/*    </Modal.Dialog>*/}
-            {/*</Modal>*/}
+            <Modal show={showDeleteReviewModal} onHide={handleCloseDeleteReviewModal} id={`modalDeleteReview${reviewId}`} tabIndex="-1" aria-labelledby={`modalLabel${reviewId}`} aria-hidden="true">
+                <div className="modal-content">
+                    <Modal.Header className="modal-header">
+                        <Modal.Title className="modal-title" id={`modalLabel${reviewId}`}>
+                            {t("Delete.Confirmation")}
+                        </Modal.Title>
+                        <button type="button" onClick={handleCloseDeleteReviewModal} className="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                    </Modal.Header>
+                    <Modal.Body className="modal-body">
+                        <p>
+                            {t("DeleteReview")}
+                        </p>
+                    </Modal.Body>
+                    <Modal.Footer className="modal-footer">
+                        <button type="button" onClick={handleCloseDeleteReviewModal} className="btn btn-secondary" data-bs-dismiss="modal">
+                            {t("No")}
+                        </button>
+                        <button type="submit" form={`formDeleteReview${reviewId}`} className="btn btn-success" onClick={handleDelete}>
+                            {t("Yes")}
+                        </button>
+                    </Modal.Footer>
+                </div>
+            </Modal>
 
-            {/*<Modal show={showReportModal} onHide={handleCloseReportModal} id={`reportReviewModal${reviewId}`} tabIndex="-1" aria-labelledby={`reportReviewModalLabel${reviewId}`} aria-hidden="true">*/}
-            {/*    <Modal.Dialog>*/}
-            {/*        <form id={`reportReviewForm${reviewId}`} action={handleAddReport} method="post" enctype="multipart/form-data">*/}
-            {/*            <Modal.Header className="modal-header">*/}
-            {/*                <Modal.Title className="modal-title" id={`reportReviewModalLabel${param.reviewId}`}>*/}
-            {/*                    {t("Report.ReviewTitle")}*/}
-            {/*                </Modal.Title>*/}
-            {/*                <button type="button" onClick={handleCloseReportModal} className="btn-close" data-bs-dismiss="modal"*/}
-            {/*                        aria-label="Close"></button>*/}
-            {/*            </Modal.Header>*/}
-            {/*            <Modal.Body>*/}
-            {/*                /!*TODO: Rehacer esto*!/*/}
-            {/*                <div>*/}
-            {/*                    <ul className="W-no-bullets-list">*/}
-            {/*                        <li>*/}
-            {/*                            <label>*/}
-            {/*                                <form path="reportType" value="Spam"/>*/}
-            {/*                                    {t("Report.Spam")}*/}
-            {/*                                <p className="W-modal-comment-desc">*/}
-            {/*                                    {t("Report.Spam.Description")}*/}
-            {/*                                </p>*/}
-            {/*                            </label>*/}
-            {/*                        </li>*/}
-            {/*                        <li>*/}
-            {/*                            <label>*/}
-            {/*                                <form path="reportType" value="Insult"/>*/}
-            {/*                                    {t("Report.Insult")}*/}
-            {/*                                <p className="W-modal-comment-desc">*/}
-            {/*                                    {t("Report.Insult.Description")}*/}
-            {/*                                </p>*/}
-            {/*                            </label>*/}
-            {/*                        </li>*/}
-            {/*                        <li>*/}
-            {/*                            <label>*/}
-            {/*                                <form path="reportType" value="Inappropriate"/>*/}
-            {/*                                    {t("Report.Inappropriate")}*/}
-            {/*                                <p className="W-modal-comment-desc">*/}
-            {/*                                    {t("Report.Inappropriate.Description")}*/}
-            {/*                                </p>*/}
-            {/*                            </label>*/}
-            {/*                        </li>*/}
-            {/*                        <li>*/}
-            {/*                            <label>*/}
-            {/*                                <form path="reportType" value="Unrelated"/>*/}
-            {/*                                    {t("Report.Unrelated")}*/}
-            {/*                                <p className="W-modal-comment-desc">*/}
-            {/*                                    {t("Report.Unrelated.Description")}*/}
-            {/*                                </p>*/}
-            {/*                            </label>*/}
-            {/*                        </li>*/}
-            {/*                        <li>*/}
-            {/*                            <label>*/}
-            {/*                                <form path="reportType" value="Other"/>*/}
-            {/*                                {t("Report.Other")}*/}
-            {/*                                <p className="W-modal-comment-desc">*/}
-            {/*                                    {t("Report.Other.Description")}*/}
-            {/*                                </p>*/}
-            {/*                            </label>*/}
-            {/*                        </li>*/}
-            {/*                    </ul>*/}
-            {/*                </div>*/}
-            {/*            </Modal.Body>*/}
-            {/*            <Modal.Footer>*/}
-            {/*                <button type="button" onClick={handleCloseReportModal} className="btn btn-secondary" data-bs-dismiss="modal">*/}
-            {/*                    {t("Close")}*/}
-            {/*                </button>*/}
-            {/*                <button type="submit" className="btn btn-success" onClick="this.form.submit()">*/}
-            {/*                    {t("Form.Submit")}*/}
-            {/*                </button>*/}
-            {/*            </Modal.Footer>*/}
-            {/*        </form>*/}
-            {/*    </Modal.Dialog>*/}
-            {/*</Modal>*/}
+            <Modal show={showReportModal} onHide={handleCloseReportModal} aria-labelledby={`reportReviewModal${reviewId}`} aria-hidden="true">
+                <Modal.Header closeButton>
+                    <Modal.Title id={`modalLabel${reviewId}`}>
+                        {t('Report.CommentTitle')}
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <ul className="W-no-bullets-list">
+                        <li>
+                            <label>
+                                <input type="radio" name="reportType" value="Spam" onChange={handleChange}/> {t('Report.Spam')}
+                                <p className="W-modal-comment-desc">{t('Report.Spam.Description')}</p>
+                            </label>
+                        </li>
+                        <li>
+                            <label>
+                                <input type="radio" name="reportType" value="Insult"/> {t('Report.Insult')}
+                                <p className="W-modal-comment-desc">{t('Report.Insult.Description')}</p>
+                            </label>
+                        </li>
+                        <li>
+                            <label>
+                                <input type="radio" name="reportType" value="Inappropriate"/> {t('Report.Inappropriate')}
+                                <p className="W-modal-comment-desc">{t('Report.Insult.Description')}</p>
+                            </label>
+                        </li>
+                        <li>
+                            <label>
+                                <input type="radio" name="reportType" value="Unrelated"/> {t('Report.Unrelated')}
+                                <p className="W-modal-comment-desc">{t('Report.Unrelated.Description')}</p>
+                            </label>
+                        </li>
+                        <li>
+                            <label>
+                                <input type="radio" name="reportType" value="Other"/> {t('Report.Other')}
+                                <p className="W-modal-comment-desc">{t('Report.Other.Description')}</p>
+                            </label>
+                        </li>
+                    </ul>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCloseReportModal}>
+                        {t('No')}
+                    </Button>
+                    <Button variant="success" onClick={handleSubmitReport}>
+                        {t('Yes')}
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </div>
     );
 }

@@ -16,7 +16,7 @@ export default function Reputation(props) {
 
     const reviewId = props.reviewId;
     const reviewDescription = props.reviewDescription;
-    const [reviewReputation, setReviewReputation] = useState(props.reputation)
+    const [reviewReputation, setReviewReputation] = useState(props.reviewReputation)
 
     const [isLikeReviews, setIsLikeReviews] = useState(props.isLikeReviews);
     const [isDislikeReviews, setIsDislikeReviews] = useState(props.isDislikeReviews);
@@ -49,8 +49,8 @@ export default function Reputation(props) {
     };
 
     const validateComment = () => {
-        const regex = /([a-zA-Z0-9ñáéíóú!,.:;=+\-_()?<>$%&#@{}\[\]|*"'~/`^\s]+)?/
-        if(commentForm.comment.length < 1 || !regex.test(commentForm.comment)) {
+        const regex = /([a-zA-Z0-9ñáéíóú!,.:;=+\-_()?<>$%&#@{}[\]|*"'~/`^\s]+)?/
+        if(commentForm.comment.length < 10 || commentForm.comment.length > 500 || !regex.test(commentForm.comment)) {
             setCommentError(true)
             return false
         }
@@ -66,11 +66,14 @@ export default function Reputation(props) {
             .then(data => {
               if(!data.error){
                   setAdded(!added)
+                  changeVisibility(`commentInput${reviewId}`)
+              } else {
+                  // TODO: Error
               }
           })
             .catch(e => {
-              console.log("error creating comments")
-          })
+                // TODO: Error
+            })
     }
     const handleLike = () => {
         reviewService.reviewThumbUp(reviewId)
@@ -128,13 +131,16 @@ export default function Reputation(props) {
 
     // TODO: Chequear este useEffect
     useEffect(() => {
-        commentService.getReviewComments(reviewId,1)
+        commentService.getReviewComments(parseInt(reviewId),1)
             .then(data => {
                 if(!data.error){
                     setComments(data.data)
+                } else {
+                    console.log("Hola")
                 }
             })
             .catch(e => {
+                console.log(e)
                 console.log("error retrieving comments")
             })
     },[added])
@@ -192,7 +198,6 @@ export default function Reputation(props) {
                                     </svg>
                                 </a>
                                 <Modal show={showLoginModal} onHide={handleCloseLoginModal} id="thumbsModal" tabIndex="-1" aria-labelledby="thumbsModalLabel" aria-hidden="true">
-                                    <Modal.Dialog className="modal-dialog">
                                             <Modal.Header>
                                                 <Modal.Title className="modal-title" id="thumbsModalLabel">
                                                     {t('Reputation.Title')}
@@ -211,7 +216,6 @@ export default function Reputation(props) {
                                                     {t('Login.LoginMessage')}
                                                 </button>
                                             </Modal.Footer>
-                                    </Modal.Dialog>
                                 </Modal>
                             </>
                         )}
@@ -245,7 +249,6 @@ export default function Reputation(props) {
                                     <span>{t('Comment.Here')}</span>
                                 </button>
                                 <Modal show={showCommentModal} onHide={handleCloseCommentModal} id="commentModal" tabIndex="-1" aria-labelledby="commentModalLabel" aria-hidden="true">
-                                    <Modal.Dialog>
                                             <Modal.Header>
                                                 <Modal.Title  id="commentModalLabel">{t('Comment.Title')}</Modal.Title>
                                                 <button type="button" onClick={handleCloseCommentModal} className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -258,7 +261,6 @@ export default function Reputation(props) {
                                                 <button type="button" onClick={handleCloseCommentModal} className="btn btn-secondary" data-bs-dismiss="modal">{t('Close')}</button>
                                                 <button type="button" className="btn btn-success" onClick={handleGoToLogin}>{t('Login.LoginMessage')}</button>
                                             </Modal.Footer>
-                                    </Modal.Dialog>
                                 </Modal>
                             </>
                         )}
@@ -270,7 +272,9 @@ export default function Reputation(props) {
                             <p id="shortComment" className="W-short-comment-error">{t('Comment.LengthComment')}</p>
                             <form method="post" id={`commentInput${reviewId}`} className="W-comment-form">
                                 <p className="W-comment-length">{t('CreateContent.CharacterLimits',{min:'10', max:'500'})}</p>
-                                <textarea className="form-control" id="comment" placeholder={t('Comment.Placeholder')} value={commentForm.comment} onChange={handleChange}/>
+
+                                <textarea className="form-control" name="comment" placeholder={t('Comment.Placeholder')} id="comment" cols="10" rows="2" onChange={handleChange} value={commentForm.comment}/>
+
                                 <div className="W-submit-comment-button">
                                     <button type="button" id={`subButton${reviewId}`} className="btn btn-success" onClick={handleAddComment}>{t('Comment.Title')}</button>
                                 </div>
@@ -283,13 +287,16 @@ export default function Reputation(props) {
             <div className="W-comment-section-general-div">
                 {comments.map((comment) => (
                     <Comments
+                        key ={`comment ${comment.id}`}
                         commentId={comment.commentId}
                         commentText={comment.text}
                         userCreatorId={comment.user.id}
                         userCreatorImage={comment.user.image}
                         userCreatorRole={comment.user.role}
                         userCreatorUsername={comment.user.username}
-                        alreadyReport={comment.reporterUsernames.contains(user.userName)}
+                        added={added}
+                        setAdded={setAdded}
+                        alreadyReport={comment.commentReportersUrl.includes(user.userName)}
                     />
                 ))}
             </div>

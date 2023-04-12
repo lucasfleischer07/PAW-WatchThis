@@ -22,6 +22,9 @@ export default function InfoPage() {
     const [reviews, setReviews] = useState({})
     const [currentPage, setCurrentPage] = useState(1)
 
+    const [isLikeReviewsList, setIsLikeReviewsList] = useState(false);
+    const [isDislikeReviewsList, setIsDislikeReviewsList] = useState(false);
+
     const [showDeleteContentModal, setShowDeleteContentModal] = useState(false)
     const [showWatchListModal, setShowWatchListModal] = useState(false)
     const [showViewedListModal, setShowViewedListModal] = useState(false)
@@ -188,7 +191,32 @@ export default function InfoPage() {
                         setIsInViewedList(viewedList.data.some(item => item.id === contentId))
                     }
                 })
+
+            reviewService.getReviewsLike()
+                .then(data => {
+                    if(!data.error) {
+                        setIsLikeReviewsList(data.data)
+                    } else {
+                    //     TODO: Error
+                    }
+                })
+                .catch(e => {
+                //     TODO: error
+                })
+
+            reviewService.getReviewsDislike()
+                .then(data => {
+                    if(!data.error) {
+                        setIsDislikeReviewsList(data.data)
+                    } else {
+                        //     TODO: Error
+                    }
+                })
+                .catch(e => {
+                    //     TODO: error
+                })
         }
+
     }, [])
 
     return(
@@ -436,23 +464,21 @@ export default function InfoPage() {
                                 {reviews.map((review) => {
                                     return (
                                         <ReviewCard
-                                            key = {review.id}
+                                            key ={`reviewCard ${review.id}`}
                                             reviewTitle={review.name}
                                             reviewDescription={review.description}
                                             reviewRating={review.rating}
                                             reviewId={review.id}
                                             reviewReputation={review.reputation}
-                                            reviewUser={review.user.userName}
+                                            reviewUser={review.user.username}
+                                            reviewUserId={review.user.id}
                                             contentId={content.id}
                                             contentType={review.type}
                                             loggedUserName={user.username}
                                             isAdmin={user?.role === 'admin'}
-                                            isLikeReviews={false}
-                                            isDislikeReviews={true}
-                                            alreadyReport={false}
-                                            // isLikeReviews={userLikeReviews.includes(review.id)}
-                                            // isDislikeReviews={userDislikeReviews.includes(review.id)}
-                                            // alreadyReport={review.reporterUsernames.includes(userName)}
+                                            isLikeReviews={isLikeReviewsList.length > 0 ? isLikeReviewsList.some(item => item.id === review.id) : false}
+                                            isDislikeReviews={isDislikeReviewsList.length > 0 ? isDislikeReviewsList.some(item => item.id === review.id) : false}
+                                            alreadyReport={review.reviewReporters.includes(user.username)}
                                             canComment={true}
                                         />
                                     );

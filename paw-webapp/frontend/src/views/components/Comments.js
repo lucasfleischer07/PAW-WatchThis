@@ -17,21 +17,12 @@ export default function Comments(props) {
         reportType: ""
     })
 
-    // const commentId = props.commentId
-    // const commentText = props.commentText
-    // const userCreatorId = props.userCreatorId
-    // const userCreatorImage = props.userCreatorImage
-    // const userCreatorUsername = props.userCreatorUsername
-    // const alreadyReport = props.alreadyReport
-
-
-    const commentId = 1
-    const commentText = "Soy traviesa Male!!!"
-    const userCreatorId = 86
-    const userCreatorImage = "http://localhost:8080/webapp_war/api/users/85/profileImage"
-    const userCreatorRole = "admin"
-    const userCreatorUsername = "Carlos2"
-    const alreadyReport = false
+    const commentId = props.commentId
+    const commentText = props.commentText
+    const userCreatorId = props.userCreatorId
+    const userCreatorImage = props.userCreatorImage
+    const userCreatorUsername = props.userCreatorUsername
+    const alreadyReport = props.alreadyReport
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const handleShowDeleteModal = () => {
@@ -48,6 +39,7 @@ export default function Comments(props) {
                     if(!data.error) {
                         toast.success(t('Mail.CommentDeleted'))
                         handleCloseDeleteModal()
+                        props.setAdded(!props.added)
                     } else {
                     //     TODO: Redirigir a error
                     }
@@ -68,7 +60,6 @@ export default function Comments(props) {
 
     const handleSubmitReport = () => {
         if(isLogged() && (user.role === 'admin')) {
-            console.log(reportFrom)
             reportsService.addCommentReport(commentId, reportFrom)
                 .then(data => {
                     if(!data.error) {

@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.webapp.dto.response.LongDto;
 import ar.edu.itba.paw.webapp.exceptions.ContentNotFoundException;
 import ar.edu.itba.paw.webapp.exceptions.ReviewNotFoundException;
 import ar.edu.itba.paw.models.*;
@@ -66,8 +67,6 @@ public class ReviewController {
 
 
     }
-
-
 
     @GET
     @Path("/specificReview/{reviewId}")
@@ -211,5 +210,35 @@ public class ReviewController {
     }
 
     // * ---------------------------------------------------------------------------------------------------------------
+
+    // Endpoint para getear los ids de los usuarios que likearon la review
+    @GET
+    @Path("/likedByUsers")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getUserIdLikeReviews() {
+        LOGGER.info("GET /{}: Called", uriInfo.getPath());
+        if(us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).isPresent()) {
+            User loggedUser = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).get();
+            rs.userLikeAndDislikeReviewsId(loggedUser.getUserVotes());
+        }
+        List<Long> userIdsLikeReviews = rs.getUserLikeReviews();
+        Collection<LongDto> userIdsLikeReviewsDto = LongDto.mapLongToLongDto(userIdsLikeReviews);
+        return Response.ok(new GenericEntity<Collection<LongDto>>(userIdsLikeReviewsDto) {}).build();
+    }
+
+    // Endpoint para getear los ids de los usuarios que dislikearon la review
+    @GET
+    @Path("/dislikedByUsers")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getUserIdDislikeReviews() {
+        LOGGER.info("GET /{}: Called", uriInfo.getPath());
+        if(us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).isPresent()) {
+            User loggedUser = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).get();
+            rs.userLikeAndDislikeReviewsId(loggedUser.getUserVotes());
+        }
+        List<Long> userIdsDislikeReviews = rs.getUserDislikeReviews();
+        Collection<LongDto> userIdsDislikeReviewsDto = LongDto.mapLongToLongDto(userIdsDislikeReviews);
+        return Response.ok(new GenericEntity<Collection<LongDto>>(userIdsDislikeReviewsDto) {}).build();
+    }
 
 }

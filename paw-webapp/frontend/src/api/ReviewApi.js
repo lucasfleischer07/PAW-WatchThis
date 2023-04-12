@@ -129,4 +129,52 @@ export class ReviewApi {
         }
     }
 
+    async getReviewsLike() {
+        try {
+            const res = await fetch(`${this.basePath}/likedByUsers`, {
+                method: 'GET',
+                headers: authCheck({}),
+            })
+
+            if(res.status !== 204) {
+                const jsonData = await res.json();
+                const jsonString = JSON.stringify(jsonData);
+                if (jsonString === '{}') {
+                    return { error: false, data: [] };
+                } else {
+                    return { error: false, data: jsonData };
+                }
+            } else {
+                return {error: false, data: []}
+            }
+
+        } catch (e) {
+            return {error: true}
+        }
+    }
+
+    async getReviewsDislike() {
+        try {
+            const res = await fetch(`${this.basePath}/dislikedByUsers`, {
+                method: 'GET',
+                headers: authCheck({}),
+            })
+
+            if(res.status !== 204) {
+                const jsonData = await res.json();
+                const jsonString = JSON.stringify(jsonData);
+                if (jsonString === '{}') {
+                    return { error: false, data: [] };
+                } else {
+                    return { error: false, data: jsonData };
+                }
+            } else {
+                return {error: false, data: []}
+            }
+
+        } catch (e) {
+            return {error: true}
+        }
+    }
+
 }
