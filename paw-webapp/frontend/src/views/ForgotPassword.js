@@ -28,10 +28,12 @@ export default function ForgotPassword() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
         if (!validEmail()) {
             setError(true)
             return
         }
+
         userService.loginForgotPassword(userForm.email)
             .then(data => {
                 if(!data.error) {
@@ -41,8 +43,8 @@ export default function ForgotPassword() {
                     setError(true)
                 }
             })
-            .catch(e => {
-            //     TODO: TIrara a pagian de error
+            .catch(() => {
+                navigate("/error", { replace: true, state: {errorCode: 404} })
             })
     }
 
@@ -61,12 +63,11 @@ export default function ForgotPassword() {
                         {t('Login.ForgotPass.msg')}
                     </h5>
                     <div className="mb-3 W-input-label-login-info">
-                        {/*TODO: VER ESTO DEL TEMA DE ERRORES, EL CARTEL QUE MANDA Y ESO*/}
-                        {/*{error && (*/}
-                        {/*    <div className="W-register-errorMsg">*/}
-                        {/*        {t('Login.WrongEmail')}*/}
-                        {/*    </div>*/}
-                        {/*)}*/}
+                        {error && (
+                            <div className="W-register-errorMsg">
+                                {t('Login.WrongEmail')}
+                            </div>
+                        )}
                         <label htmlFor="email" className="form-label">
                             {t('Signup.Email')}<span className="W-red-asterisco">{t('Asterisk')}</span>
                         </label>

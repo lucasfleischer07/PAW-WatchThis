@@ -19,7 +19,7 @@ export class ReviewApi {
                 return {error: false, data: [], totalPages: res.totalPages}
             }
         } catch (e) {
-            return {error: true}
+            return {error: true, errorCode: e.statusCode || e.status || 500}
         }
 
     }
@@ -36,7 +36,7 @@ export class ReviewApi {
                 return {error: false, data: []}
             }
         } catch (e) {
-            return {error: true}
+            return {error: true, errorCode: e.statusCode || e.status || 500}
         }
 
     }
@@ -55,7 +55,7 @@ export class ReviewApi {
                 return {error: true, data: []}
             }
         } catch (e) {
-            return {error: true}
+            return {error: true, errorCode: e.statusCode || e.status || 500}
         }
     }
 
@@ -85,7 +85,7 @@ export class ReviewApi {
                 return {error: false, data: []}
             }
         } catch (e) {
-            return {error: true}
+            return {error: true, errorCode: e.statusCode || e.status || 500}
         }
     }
 
@@ -149,7 +149,7 @@ export class ReviewApi {
             }
 
         } catch (e) {
-            return {error: true}
+            return {error: true, errorCode: e.statusCode || e.status || 500}
         }
     }
 
@@ -173,7 +173,7 @@ export class ReviewApi {
             }
 
         } catch (e) {
-            return {error: true}
+            return {error: true, errorCode: e.statusCode || e.status || 500}
         }
     }
 

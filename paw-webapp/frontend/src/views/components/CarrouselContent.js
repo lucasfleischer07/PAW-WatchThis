@@ -72,7 +72,7 @@ export default function CarrouselContent(props) {
                 <div className="card W-films-card-body-carousel W-more-style">
                     <div className="W-img-watchList-button-div">
                         <div className="d-grid gap-2 W-watchList-button-div">
-                            {isLogged && !isInWatchList ? (
+                            {isLogged() && !isInWatchList ? (
                                 <form id={`form${props.id}`} onSubmit={handleAddToWatchlist}>
                                     <button id="buttonAddToWatchList" className="btn btn-secondary W-watchList-button" type="submit">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="bi bi-bookmark-plus W-watchList-icon" viewBox="0 0 16 16">
@@ -81,7 +81,7 @@ export default function CarrouselContent(props) {
                                         </svg>
                                     </button>
                                 </form>
-                            ) : isLogged && isInWatchList ? (
+                            ) : isLogged() && isInWatchList ? (
                                 <form id={`form${props.id}`} onSubmit={handleRemoveFromWatchlist}>
                                     <button className="btn btn-secondary W-watchList-button" type="submit">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="bi bi-bookmark-plus W-watchList-icon" viewBox="0 0 16 16">

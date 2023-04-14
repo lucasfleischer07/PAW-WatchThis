@@ -3,33 +3,35 @@ import ContentCard from "./components/ContentCard";
 import {useTranslation} from "react-i18next";
 import {AuthContext} from "../context/AuthContext";
 import {listsService} from "../services";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import Header from "./components/Header";
 
 export default function WatchListPage(props) {
-
     const {t} = useTranslation()
+    let navigate = useNavigate()
     let {isLogged} = useContext(AuthContext)
+
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
     const [currentPage, setCurrentPage] = useState(1)
     const [totalPages, setTotalPages] = useState(undefined)
     const [watchList, setWatchList] = useState([])
 
     const getUserWatchList = () => {
-        if(isLogged) {
+        if(isLogged()) {
             listsService.getUserWatchList(user.id, currentPage)
                 .then(watchList => {
                     if(!watchList.error) {
                         setWatchList(watchList.data)
                         setTotalPages(watchList.totalPages)
+                    } else {
+                        navigate("/error", { replace: true, state: {errorCode: watchList.errorCode} })
                     }
-
                 })
-                .catch(e => {
-                    //     TODO: Meter toasts
+                .catch(() => {
+                    navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
         } else {
-            //     TODO: Tirar a la pagina de error de que no tiene permisos
+            navigate("/error", { replace: true, state: {errorCode: 401} })
         }
     }
 

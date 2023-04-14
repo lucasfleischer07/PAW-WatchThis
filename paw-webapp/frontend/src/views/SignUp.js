@@ -4,6 +4,7 @@ import {useContext, useEffect, useState} from "react";
 import {userService} from "../services";
 import {AuthContext} from "../context/AuthContext";
 import {toast} from "react-toastify";
+import Header from "./components/Header";
 
 export default function SignUp() {
     const {t} = useTranslation()
@@ -79,18 +80,18 @@ export default function SignUp() {
                                 navigate("/", {replace: true})
                                 toast.success(t('Login.Success'))
                             } else {
-                                navigate("/error", { replace: true, state: { errorCode: 404, message: "Page not found" } })
+                                navigate("/error", { replace: true, state: {errorCode: user2.errorCode} })
                             }
                         })
                         .catch(e => {
-                        //     TODO: Pagina de error
+                            navigate("/error", { replace: true, state: {errorCode: 401} })
                         })
                 } else {
-                //     TODO: meter error
+                    navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                 }
             })
             .catch(e => {
-            //     TODO: Meter pagina de error
+                navigate("/error", { replace: true, state: {errorCode: 404} })
             })
     }
 

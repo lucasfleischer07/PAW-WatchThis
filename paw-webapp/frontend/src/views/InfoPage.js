@@ -71,13 +71,14 @@ export default function InfoPage() {
                         handleCloseDeleteContentModal()
                         navigate("/", {replace: true})
                     } else {
-                    //     TODO
-                        navigate("/error", {replace: true})
+                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                     }
                 })
-                .catch(e => {
-                    navigate("/error", {replace: true})
+                .catch(() => {
+                    navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
+        } else {
+            navigate("/error", { replace: true, state: {errorCode: 401} })
         }
     }
 
@@ -88,11 +89,12 @@ export default function InfoPage() {
                 if(!data.error) {
                     setIsInWatchList(true);
                     toast.success(t('WatchList.Added'))
+                } else {
+                    navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                 }
             })
             .catch(() => {
-                //     TODO: Meter un toast o algo asi
-                //     TODO Llegar a pagina de error
+                navigate("/error", { replace: true, state: {errorCode: 404} })
             })
     }
     const handleDeleteFromWatchList = (e) => {
@@ -103,12 +105,11 @@ export default function InfoPage() {
                     setIsInWatchList(false);
                     toast.success(t('WatchList.Removed'))
                 } else {
-                    //     ToDO: Meter algo
+                    navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                 }
             })
             .catch(() => {
-                //     TODO: Meter un toast o algo asi
-                //     TODO Llegar a pagina de error
+                navigate("/error", { replace: true, state: {errorCode: 404} })
             })
     }
     const handleAddToViewedList = (e) => {
@@ -117,13 +118,13 @@ export default function InfoPage() {
             .then(data => {
                 if(!data.error) {
                     setIsInViewedList(true);
-                    // TODO: Toast exitoso
-                    // toast.success(t('WatchList.Added'))
+                    toast.success(t('ViewedList.Added'))
+                } else {
+                    navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                 }
             })
             .catch(() => {
-                //     TODO: Meter un toast o algo asi
-                //     TODO Llegar a pagina de error
+                navigate("/error", { replace: true, state: {errorCode: 404} })
             })
     }
     const handleDeleteFromViewedList = (e) => {
@@ -132,13 +133,13 @@ export default function InfoPage() {
             .then(data => {
                 if(!data.error) {
                     setIsInViewedList(false);
-                    // TODO: Toast exitoso
-                    // toast.success(t('WatchList.Added'))
+                    toast.success(t('ViewedList.Added'))
+                } else {
+                    navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                 }
             })
             .catch(() => {
-                //     TODO: Meter un toast o algo asi
-                //     TODO Llegar a pagina de error
+                navigate("/error", { replace: true, state: {errorCode: 404} })
             })
     }
 
@@ -153,11 +154,11 @@ export default function InfoPage() {
                 if(!data.error) {
                     setContent(data.data)
                 } else {
-                //     TODO: Pagina de error
+                    navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                 }
             })
             .catch(() => {
-            //     TODO: Pagina de error
+                navigate("/error", { replace: true, state: {errorCode: 404} })
             })
 
         reviewService.reviews(parseInt(contentId), currentPage)
@@ -170,11 +171,11 @@ export default function InfoPage() {
                         }
                     }
                 } else {
-                //     TODO: Pagina de error
+                    navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                 }
             })
             .catch(() => {
-            //     TODO: Pagina de error
+                navigate("/error", { replace: true, state: {errorCode: 404} })
             })
 
         if(isLogged()) {
@@ -182,14 +183,24 @@ export default function InfoPage() {
                 .then(watchList => {
                     if(!watchList.error) {
                         setIsInWatchList(watchList.data.some(item => item.id === contentId))
+                    } else {
+                        navigate("/error", { replace: true, state: {errorCode: watchList.errorCode} })
                     }
+                })
+                .catch(() => {
+                    navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
 
             listsService.getUserViewedListContentIds(user.id)
                 .then(viewedList => {
                     if(!viewedList.error) {
                         setIsInViewedList(viewedList.data.some(item => item.id === contentId))
+                    } else {
+                        navigate("/error", { replace: true, state: {errorCode: viewedList.errorCode} })
                     }
+                })
+                .catch(() => {
+                    navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
 
             reviewService.getReviewsLike()
@@ -197,11 +208,11 @@ export default function InfoPage() {
                     if(!data.error) {
                         setIsLikeReviewsList(data.data)
                     } else {
-                    //     TODO: Error
+                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                     }
                 })
-                .catch(e => {
-                //     TODO: error
+                .catch(() => {
+                    navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
 
             reviewService.getReviewsDislike()
@@ -209,11 +220,11 @@ export default function InfoPage() {
                     if(!data.error) {
                         setIsDislikeReviewsList(data.data)
                     } else {
-                        //     TODO: Error
+                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                     }
                 })
-                .catch(e => {
-                    //     TODO: error
+                .catch(() => {
+                    navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
         }
 

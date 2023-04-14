@@ -3,9 +3,7 @@ import ReportedContent from "./components/ReportedContent";
 import {useLocation, useNavigate } from "react-router-dom";
 import {useContext, useEffect, useState} from "react";
 import {AuthContext} from "../context/AuthContext";
-import {reportsService, userService} from "../services";
-
-import classnames from 'classnames';
+import {reportsService} from "../services";
 
 import { Tab, Tabs } from 'react-bootstrap';
 import Header from "./components/Header";
@@ -13,9 +11,6 @@ import Header from "./components/Header";
 export default function ReportedPage() {
     const {t} = useTranslation()
     let navigate = useNavigate()
-
-
-
     let {isLogged} = useContext(AuthContext)
 
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
@@ -52,33 +47,38 @@ export default function ReportedPage() {
         setFilterReason(value)
     }
 
-    useEffect(() => {
-        // TODO: Ver que pagina pasarle, si hacer una nueva o se resetea
-        setCurrentCommentsReportsPage(1)
-        setCurrentReviewsReportsPage(1)
-        reportsService.getReportsByType('reviews', currentReviewsReportsPage, filterReason)
-            .then(data => {
-                if(!data.error) {
-                    setReportedReviewsList(data.data)
-                } else {
-                    //     TODO: Ver que hacer aca, si llevar a pagina de error o que
-                }
-            })
-            .catch(e => {
-                //     TODO: Ver que hace y meter error o pagian de forbidden
-            })
 
-        reportsService.getReportsByType('comments', currentCommentsReportsPage, filterReason)
-            .then(data => {
-                if(!data.error) {
-                    setReportedCommentsList(data.data)
-                } else {
-                    //     TODO: Ver que hacer aca, si llevar a pagina de error o que
-                }
-            })
-            .catch(e => {
-                //     TODO: Ver que hace y meter error o pagian de forbidden
-            })
+    useEffect(() => {
+        if(isLogged() && user.role === 'admin') {
+            setCurrentCommentsReportsPage(1)
+            setCurrentReviewsReportsPage(1)
+            reportsService.getReportsByType('reviews', currentReviewsReportsPage, filterReason)
+                .then(data => {
+                    if(!data.error) {
+                        setReportedReviewsList(data.data)
+                    } else {
+                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                    }
+                })
+                .catch(() => {
+                    navigate("/error", { replace: true, state: {errorCode: 404} })
+                })
+
+            reportsService.getReportsByType('comments', currentCommentsReportsPage, filterReason)
+                .then(data => {
+                    if(!data.error) {
+                        setReportedCommentsList(data.data)
+                    } else {
+                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                    }
+                })
+                .catch(() => {
+                    navigate("/error", { replace: true, state: {errorCode: 404} })
+                })
+        } else {
+            navigate("/error", { replace: true, state: {errorCode: 401} })
+        }
+
     }, [filterReason])
 
 
@@ -90,11 +90,11 @@ export default function ReportedPage() {
                     if(!data.error) {
                         setReportedReviewsList(data.data)
                     } else {
-                        //     TODO: Ver que hacer aca, si llevar a pagina de error o que
+                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                     }
                 })
-                .catch(e => {
-                    //     TODO: Ver que hace y meter error o pagian de forbidden
+                .catch(() => {
+                    navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
 
             reportsService.getReportsByType('comments', currentCommentsReportsPage)
@@ -102,14 +102,14 @@ export default function ReportedPage() {
                     if(!data.error) {
                         setReportedCommentsList(data.data)
                     } else {
-                        //     TODO: Ver que hacer aca, si llevar a pagina de error o que
+                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                     }
                 })
-                .catch(e => {
-                    //     TODO: Ver que hace y meter error o pagian de forbidden
+                .catch(() => {
+                    navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
         } else {
-            navigate("/error", {replace: true})
+            navigate("/error", { replace: true, state: {errorCode: 401} })
         }
 
     }, [])

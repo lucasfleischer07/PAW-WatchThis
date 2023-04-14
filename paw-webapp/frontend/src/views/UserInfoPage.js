@@ -30,10 +30,11 @@ export default function UserInfoPage() {
                     toast.success(t('Profile.PromoteUser.Success'))
                 } else {
                     toast.error(t('Profile.PromoteUser.Error'))
+                    navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                 }
             })
             .catch(e => {
-            //     TODO: LLEVAR A PAGINA DE ERROR O ALGO ASI
+                navigate("/error", { replace: true, state: {errorCode: 404} })
             })
     }
 
@@ -53,13 +54,11 @@ export default function UserInfoPage() {
                                          setCanPromote(false)
                                      }
                                  } else {
-                                     //     TODO: Pagina de error diciendo que el id de ese usuario no existe
-                                     navigate("/error", {replace: true})
+                                     navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                                  }
                              })
-                            .catch(e => {
-                            //     TODO: Pagina de error diciendo que el id de ese usuario no existe
-                                navigate("/error", {replace: true})
+                            .catch(() => {
+                                navigate("/error", { replace: true, state: {errorCode: 404} })
                             })
                         setReputation(0)
                     } else {
@@ -85,14 +84,12 @@ export default function UserInfoPage() {
                     }
 
                 } else {
-            //     TODO: Pagina de error diciendo que el id de ese usuario no existe
-                    navigate("/error", {replace: true})
+                    navigate("/error", { replace: true, state: {errorCode: reviews.errorCode} })
                 }
 
             })
-            .catch(e => {
-            //     TODO: Si no existe el usuario, hay que llevar a la pagina de error
-                navigate("/error", {replace: true})
+            .catch(() => {
+                navigate("/error", { replace: true, state: {errorCode: 404} })
             })
 
     }, [])

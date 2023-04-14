@@ -1,9 +1,16 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useTranslation} from "react-i18next";
+import {useLocation} from "react-router-dom";
 
 function ErrorPage(props) {
-    const errorCode = props.errorCode;
+    const { state } = useLocation();
+
+    const errorCode = state?.errorCode || props.errorCode;
     const {t} = useTranslation()
+
+    useEffect(() => {
+        document.title = t('Error.Opps')
+    })
 
     return (
             <div className="d-flex align-items-center justify-content-center vh-100">

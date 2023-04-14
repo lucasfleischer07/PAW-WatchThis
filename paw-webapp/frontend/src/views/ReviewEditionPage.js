@@ -83,13 +83,12 @@ export default function ReviewEditionPage() {
             .then(data => {
                 if(!data.error) {
                     navigate(origin, {replace: true})
-                    // toast.success()
                 } else {
-                    //     TODO: Error
+                    navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                 }
             })
-            .catch(e => {
-                //     TODO: Llevar a la pagian de error
+            .catch(() => {
+                navigate("/error", { replace: true, state: {errorCode: 404} })
             })
     }
 
@@ -105,12 +104,11 @@ export default function ReviewEditionPage() {
                             type: data.data.type
                         })
                     } else {
-                        navigate("/error", {replace: true})
-                    //     TODO: Meter error de forbiden access y llevar a pagina de errror
+                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                     }
                 })
-                .catch(e => {
-                //     TODO: Tirar algo de errror
+                .catch(() => {
+                    navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
 
 
@@ -119,18 +117,16 @@ export default function ReviewEditionPage() {
                     if(!data.error) {
                         setContent(data.data)
                     } else {
-                        //     TODO: Ver que hacer
+                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                     }
                 })
-                .catch(e => {
-                    //     TODO: Ver que hacer
+                .catch(() => {
+                    navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
         } else {
-            //     TODO: Llevar a la pagian de error
+            navigate("/error", { replace: true, state: {errorCode: 401} })
         }
     }, [])
-
-
 
 
     return(

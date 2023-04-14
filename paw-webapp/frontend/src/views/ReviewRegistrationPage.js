@@ -84,13 +84,13 @@ export default function ReviewRegistrationPage() {
                     navigate(origin, {replace: true})
                 } else {
                     toast.error(t('Content.Review.Create.Error'))
+                    navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                 }
             })
-            .catch(e => {
-            //     TODO: Llevar a la pagian de error
+            .catch(() => {
+                navigate("/error", { replace: true, state: {errorCode: 404} })
             })
     }
-
 
 
     useEffect(() => {
@@ -100,14 +100,14 @@ export default function ReviewRegistrationPage() {
                     if(!data.error) {
                         setContent(data.data)
                     } else {
-                    //     TODO: Ver que hacer
+                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                     }
                 })
-                .catch(e => {
-                //     TODO: Ver que hacer
+                .catch(() => {
+                    navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
         } else {
-            //     TODO: Llevar a la pagian de error
+            navigate("/error", { replace: true, state: {errorCode: 401} })
         }
     }, [])
 
@@ -127,7 +127,6 @@ export default function ReviewRegistrationPage() {
                             {nameError &&
                                 <p style={{color: '#b21e26'}}>{t('Pattern.contentCreate.name')}</p>
                             }
-                            {/*<p style={{ color: '#b21e26' }}>{nameErrors}</p>*/}
                             <label className="form-label">
                                 {t('CreateReview.ReviewName')}<span className="W-red-asterisco">{t('Asterisk')}</span>
                             </label>

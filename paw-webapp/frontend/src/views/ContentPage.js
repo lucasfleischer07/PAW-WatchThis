@@ -2,13 +2,14 @@ import {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {contentService, listsService} from "../services";
 import ContentCard from "./components/ContentCard";
-import {Link, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import Header from "./components/Header";
 
 // TODO: Desde el HEADER, le tengo que pasar el tipo ('movie' o 'serie') que se lo paso por URL,
 //  El tema es como le paso la query (lo que busco en la search bar), el genero y el durationFrom por parametro ya que uso Link
 export default function ContentPage(props) {
     const {t} = useTranslation()
+    let navigate = useNavigate()
     const { contentType } = useParams();
 
     const [allContent, setAllContent] = useState([])
@@ -38,21 +39,24 @@ export default function ContentPage(props) {
                 if(!data.error) {
                     setAllContent(data.data)
                     setTotalPages(data.totalPages)
+                } else {
+                    navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                 }
             })
-            .catch(e => {
+            .catch(() => {
+                navigate("/error", { replace: true, state: {errorCode: 404} })
             })
     }, [actualPage, contentType])
 
 
-    // TODO: Ver tema de useEffect de cuando tengo que ponerle nada y cunado tengo que ponerle dependencia.
-    //  Si a este no le pongo nada, va bien pero si lo pongo deps, no me carga al entrar a la pagina
     useEffect(() => {
-        user !== null?
+        user !== null || undefined?
             listsService.getUserWatchListContentIds(user.id)
                 .then(watchList => {
                     if(!watchList.error) {
                         setUserWatchListIds(watchList.data)
+                    } else {
+                        navigate("/error", { replace: true, state: {errorCode: watchList.errorCode} })
                     }
                 })
             : setUserWatchListIds(null)

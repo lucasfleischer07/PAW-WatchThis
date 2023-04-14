@@ -19,7 +19,7 @@ export class ReportsApi {
                 return {error: false, data: [], totalPages: res.totalPages}
             }
         } catch (e) {
-            return {error: true}
+            return {error: true, errorCode: e.statusCode || e.status || 500}
         }
     }
 

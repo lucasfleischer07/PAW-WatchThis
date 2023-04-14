@@ -49,20 +49,21 @@ export default function Login() {
                 if(!user.error) {
                     signIn(user.data, user.header)
                     // toDO: Testear esto de la redireccion
-                    if(previousPath === '/login/forgotPassword' || previousPath === '/login/sign-up') {
+                    if(previousPath === '/login/forgotPassword' || previousPath === '/login/signUp') {
                         navigate("/", {replace: true})
                     } else {
                         navigate(-1)
                     }
                     toast.success(t('Login.Success'))
-                }
-                else {
+                } else {
                     setError(true)
+                    navigate("/error", { replace: true, state: {errorCode: user.errorCode} })
                 }
             })
             .catch(() => {
                 setError(true)
                 toast.error(t('Login.Error'))
+                navigate("/error", { replace: true, state: {errorCode: 404} })
             })
     };
 
@@ -117,10 +118,6 @@ export default function Login() {
                                     required
                                 />
                                 <div>
-                                    {/*<Link to='/login/forgot-password'>*/}
-                                    {/*    <div className="W-forgot-password">{t('Login.ForgotPassword')}</div>*/}
-                                    {/*</Link>*/}
-                                    {/*TODO: Esto no es un tag a, tiene que ser un Link creo*/}
                                     <Link className="W-forgot-password" to="/login/forgotPassword">{t('Login.ForgotPassword')}</Link>
                                 </div>
                             </div>

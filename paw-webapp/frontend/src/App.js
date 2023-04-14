@@ -47,8 +47,9 @@ function App() {
                       <Route path='viewedList' element={<ViewedListPage/>}/>
                   </Route>
                   <Route path='/reports' element={<ReportedPage/>}/>
-                  
-                  <Route path='/error' element={<ErrorPage/>}/>
+
+                  <Route path='/error' element={<ErrorPage errorCode={404}/>}/>
+                  <Route path='*' element={<ErrorPage errorCode={404}/>}/>
 
               </Routes>
 
