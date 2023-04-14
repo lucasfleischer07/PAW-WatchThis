@@ -23,7 +23,6 @@ export class ReportsApi {
         }
     }
 
-    // TODO: VERIFICAR BIEN ESTE PORUQE NI IDEA
     async addReviewReport(reviewId, reviewReportReasons) {
         try {
             const res = await fetch(`${this.basePath}/review/${reviewId}`, {
@@ -33,8 +32,6 @@ export class ReportsApi {
             })
 
             if(res.status !== 204) {
-                return {error: false, data: await res.json()}
-            } else {
                 return {error: false, data: []}
             }
         } catch (e) {
@@ -42,7 +39,6 @@ export class ReportsApi {
         }
     }
 
-    // TODO: VERIFICAR BIEN ESTE PORUQE NI IDEA
     async addCommentReport(commentId, commentReportReasons) {
         try {
             const res = await fetch(`${this.basePath}/comment/${commentId}`, {
@@ -52,8 +48,6 @@ export class ReportsApi {
             })
 
             if(res.status !== 204) {
-                return {error: false, data: await res.json()}
-            } else {
                 return {error: false, data: []}
             }
         } catch (e) {

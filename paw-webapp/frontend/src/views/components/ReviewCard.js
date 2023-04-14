@@ -97,12 +97,10 @@ export default function ReviewCard(props) {
                         handleCloseReportModal()
                         setAlreadyReport(true)
                     } else {
-                        //     TODO: llegvar a pagina de errro
                         navigate("/error", {replace: true})
                     }
                 })
-                .catch(e => {
-                    //     TODO: llevatr a pagina de erorr
+                .catch(() => {
                     navigate("/error", {replace: true})
                 })
         }

@@ -133,7 +133,7 @@ export default function InfoPage() {
             .then(data => {
                 if(!data.error) {
                     setIsInViewedList(false);
-                    toast.success(t('ViewedList.Added'))
+                    toast.success(t('ViewedList.Removed'))
                 } else {
                     navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                 }
