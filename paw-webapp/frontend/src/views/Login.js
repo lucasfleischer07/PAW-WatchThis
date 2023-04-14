@@ -44,7 +44,6 @@ export default function Login() {
         if (!validForm()) {
             return
         }
-        console.log(previousPath)
         userService.login(userForm.email, userForm.password)
             .then((user) => {
                 if(!user.error) {

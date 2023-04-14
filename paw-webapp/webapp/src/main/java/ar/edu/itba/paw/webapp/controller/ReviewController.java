@@ -21,6 +21,7 @@ import javax.ws.rs.core.*;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Path("reviews")
 @Component
@@ -220,9 +221,12 @@ public class ReviewController {
         if(us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).isPresent()) {
             User loggedUser = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).get();
             rs.userLikeAndDislikeReviewsId(loggedUser.getUserVotes());
+            LOGGER.info("GET /{}: USer logged votes {}", uriInfo.getPath(), loggedUser.getUserVotes());
         }
-        List<Long> userIdsLikeReviews = rs.getUserLikeReviews();
+
+        Set<Long> userIdsLikeReviews = rs.getUserLikeReviews();
         Collection<LongDto> userIdsLikeReviewsDto = LongDto.mapLongToLongDto(userIdsLikeReviews);
+        LOGGER.info("GET /{}: Devuelvo {}", uriInfo.getPath(), userIdsLikeReviews);
         return Response.ok(new GenericEntity<Collection<LongDto>>(userIdsLikeReviewsDto) {}).build();
     }
 
@@ -236,7 +240,7 @@ public class ReviewController {
             User loggedUser = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).get();
             rs.userLikeAndDislikeReviewsId(loggedUser.getUserVotes());
         }
-        List<Long> userIdsDislikeReviews = rs.getUserDislikeReviews();
+        Set<Long> userIdsDislikeReviews = rs.getUserDislikeReviews();
         Collection<LongDto> userIdsDislikeReviewsDto = LongDto.mapLongToLongDto(userIdsDislikeReviews);
         return Response.ok(new GenericEntity<Collection<LongDto>>(userIdsDislikeReviewsDto) {}).build();
     }

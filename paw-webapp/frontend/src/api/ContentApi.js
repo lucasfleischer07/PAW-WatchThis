@@ -125,7 +125,6 @@ export class ContentApi {
                 return {error: false, data: []}
             }
         } catch (e) {
-            console.log(e)
             return {error: true, errorCode: e.statusCode || e.status || 500}
         }
     }

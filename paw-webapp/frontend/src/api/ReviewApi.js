@@ -21,7 +21,6 @@ export class ReviewApi {
                 return {error: false, data: await res.data, totalPages: res.totalPages}
             }
         } catch (e) {
-            console.log(e)
             return {error: true, errorCode: e.statusCode || e.status || 500}
         }
 
@@ -137,16 +136,12 @@ export class ReviewApi {
                 headers: authCheck({}),
             })
 
-            if(res.status !== 204) {
-                const jsonData = await res.json();
-                const jsonString = JSON.stringify(jsonData);
-                if (jsonString === '{}') {
-                    return { error: false, data: [] };
-                } else {
-                    return { error: false, data: jsonData };
-                }
+            const jsonData = await res.json();
+            const jsonString = JSON.stringify(jsonData);
+            if (jsonString === '{}') {
+                return { error: false, data: [] };
             } else {
-                return {error: false, data: []}
+                return { error: false, data: jsonData };
             }
 
         } catch (e) {
@@ -161,16 +156,12 @@ export class ReviewApi {
                 headers: authCheck({}),
             })
 
-            if(res.status !== 204) {
-                const jsonData = await res.json();
-                const jsonString = JSON.stringify(jsonData);
-                if (jsonString === '{}') {
-                    return { error: false, data: [] };
-                } else {
-                    return { error: false, data: jsonData };
-                }
+            const jsonData = await res.json();
+            const jsonString = JSON.stringify(jsonData);
+            if (jsonString === '{}') {
+                return { error: false, data: [] };
             } else {
-                return {error: false, data: []}
+                return { error: false, data: jsonData };
             }
 
         } catch (e) {

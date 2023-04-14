@@ -13,8 +13,8 @@ import java.util.*;
 public class ReviewServiceImpl implements ReviewService{
 
     private final ReviewDao reviewDao;
-    private List<Long> userLikeReviews = new ArrayList<>();
-    private List<Long> userDislikeReviews = new ArrayList<>();
+    private Set<Long> userLikeReviews = new HashSet<>();
+    private Set<Long> userDislikeReviews = new HashSet<>();
 
     @Autowired
     public ReviewServiceImpl(final ReviewDao reviewDao) {
@@ -94,11 +94,11 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     @Override
-    public List<Long> getUserLikeReviews() {
+    public Set<Long> getUserLikeReviews() {
         return userLikeReviews;
     }
     @Override
-    public List<Long> getUserDislikeReviews() {
+    public Set<Long> getUserDislikeReviews() {
         return userDislikeReviews;
     }
 

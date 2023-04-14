@@ -24,8 +24,8 @@ export default function UserInfoPage() {
     const [reviews, setReviews] = useState([])
     const [reputation, setReputation] = useState(0)
 
-    const [isLikeReviewsList, setIsLikeReviewsList] = useState(false);
-    const [isDislikeReviewsList, setIsDislikeReviewsList] = useState(false);
+    const [isLikeReviewsList, setIsLikeReviewsList] = useState([]);
+    const [isDislikeReviewsList, setIsDislikeReviewsList] = useState([]);
 
     const handlePromoteUser = (e) => {
         e.preventDefault();
@@ -209,7 +209,7 @@ export default function UserInfoPage() {
                                                     <h5>{review.content.name}</h5>
                                                 </Link>
                                                 <ReviewCard
-                                                    key ={`reviewCardUser ${review.id}`}
+                                                    key ={`reviewCardUser${review.id}`}
                                                     reviewTitle={review.name}
                                                     reviewDescription={review.description}
                                                     reviewRating={review.rating}

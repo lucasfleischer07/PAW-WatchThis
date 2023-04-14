@@ -52,7 +52,6 @@ export class UserApi {
                 return {error: false, data: [], totalPages: res.totalPages}
             }
         } catch (e) {
-            console.log(e)
             return {error: true, errorCode: e.statusCode || e.status || 500}
         }
     }
