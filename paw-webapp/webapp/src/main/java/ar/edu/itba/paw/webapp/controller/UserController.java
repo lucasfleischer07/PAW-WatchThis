@@ -41,8 +41,9 @@ public class UserController {
     public Response userCreate(@Valid final NewUser newUser) {
         LOGGER.info("POST /{}: Called", uriInfo.getPath());
         final User user = us.register(newUser.getEmail(), newUser.getUsername(), newUser.getPassword()).orElseThrow(UserNotFoundException::new);
+        UserDto userDto = new UserDto(uriInfo, user);
         LOGGER.info("POST /{}: New user created with id {}", uriInfo.getPath(), user.getId());
-        return Response.created(UserDto.getUserUriBuilder(user, uriInfo).build()).build();
+        return Response.created(UserDto.getUserUriBuilder(user, uriInfo).build()).entity(userDto).build();
     }
 
     // * ---------------------------------------------------------------------------------------------------------------

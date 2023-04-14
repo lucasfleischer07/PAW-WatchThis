@@ -53,9 +53,7 @@ export default function ViewedListPage(props) {
                             </div>
                         </div>
                         <div className="bg-light p-4 d-flex text-center">
-                            <h4>
-                                <h4>{t('WatchList.Titles', {titlesAmount: viewedList.length})}</h4>
-                            </h4>
+                            <h4>{t('WatchList.Titles', {titlesAmount: viewedList.length})}</h4>
                         </div>
                         {viewedList.length === 0 ? (
                             <div className="W-watchlist-div-info-empty">

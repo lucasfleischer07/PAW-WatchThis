@@ -249,18 +249,18 @@ export default function Reputation(props) {
                                     <span>{t('Comment.Here')}</span>
                                 </button>
                                 <Modal show={showCommentModal} onHide={handleCloseCommentModal} id="commentModal" tabIndex="-1" aria-labelledby="commentModalLabel" aria-hidden="true">
-                                            <Modal.Header>
-                                                <Modal.Title  id="commentModalLabel">{t('Comment.Title')}</Modal.Title>
-                                                <button type="button" onClick={handleCloseCommentModal} className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </Modal.Header>
-                                            <Modal.Body>
-                                                <span>{t('Comment.WarningAdd')}</span>
-                                                <span>{t('Review.WarningAddMessage')}</span>
-                                            </Modal.Body>
-                                            <Modal.Footer>
-                                                <button type="button" onClick={handleCloseCommentModal} className="btn btn-secondary" data-bs-dismiss="modal">{t('Close')}</button>
-                                                <button type="button" className="btn btn-success" onClick={handleGoToLogin}>{t('Login.LoginMessage')}</button>
-                                            </Modal.Footer>
+                                    <Modal.Header>
+                                        <Modal.Title  id="commentModalLabel">{t('Comment.Title')}</Modal.Title>
+                                        <button type="button" onClick={handleCloseCommentModal} className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </Modal.Header>
+                                    <Modal.Body>
+                                        <span>{t('Comment.WarningAdd')}</span>
+                                        <span>{t('Review.WarningAddMessage')}</span>
+                                    </Modal.Body>
+                                    <Modal.Footer>
+                                        <button type="button" onClick={handleCloseCommentModal} className="btn btn-secondary" data-bs-dismiss="modal">{t('Close')}</button>
+                                        <button type="button" className="btn btn-success" onClick={handleGoToLogin}>{t('Login.LoginMessage')}</button>
+                                    </Modal.Footer>
                                 </Modal>
                             </>
                         )}
@@ -270,6 +270,10 @@ export default function Reputation(props) {
                         <div className="W-comment-form-div">
                             <p id="emptyComment" className="W-empty-comment-error">{t('Comment.EmptyComment')}</p>
                             <p id="shortComment" className="W-short-comment-error">{t('Comment.LengthComment')}</p>
+                            {commentError &&
+                                <p style={{color: '#b21e26'}}>{t('Comment.LenghtComment')}</p>
+                            }
+
                             <form method="post" id={`commentInput${reviewId}`} className="W-comment-form">
                                 <p className="W-comment-length">{t('CreateContent.CharacterLimits',{min:'10', max:'500'})}</p>
 

@@ -56,25 +56,6 @@ export class UserApi {
         }
     }
 
-    // TODO: Chequear bien este
-    async getUserProfileImage(userId) {
-        try {
-            const res = await fetch(`${this.basePath}/${userId}/profileImage`, {
-                method: 'GET',
-                headers: authCheck({})
-            })
-            if(res.status !== 204) {
-                return {error: false, data: await res.json()}
-            } else {
-                return {error: false, data: []}
-            }
-        } catch (e) {
-            return {error: true}
-
-        }
-
-    }
-
     async updateUserProfileImage(userId, image) {
         try {
             const formData = new FormData();
@@ -143,12 +124,12 @@ export class UserApi {
             if(res.status !== 204 && res.status !== 401) {
                 return {error: false, data: await res.json(), header: res.headers.get("Authorization")?.toString().split(" ")[1]}
             } else if(res.status === 401) {
-                return {error: true, data: []}
+                return {error: true, data: [], errorCode: res.status}
             } else {
                 return {error: false, data: []}
             }
         } catch (e) {
-            return {error: true}
+            return {error: true, errorCode: e.statusCode || e.status || 500}
         }
     }
 

@@ -15,7 +15,6 @@ export default function Login() {
     const [userForm, setUserForm] = useState({
         email: undefined,
         password: "",
-        rememberMe: false
     });
 
     const [error, setError] = useState(false)
@@ -48,7 +47,7 @@ export default function Login() {
         userService.login(userForm.email, userForm.password)
             .then((user) => {
                 if(!user.error) {
-                    signIn(user.data, user.header, userForm.rememberMe)
+                    signIn(user.data, user.header)
                     // toDO: Testear esto de la redireccion
                     if(previousPath === '/login/forgotPassword' || previousPath === '/login/sign-up') {
                         navigate("/", {replace: true})
@@ -127,17 +126,6 @@ export default function Login() {
                             </div>
                         </div>
                         <div className="W-div-login-rememberMe">
-                            <div className="form-check">
-                                <input
-                                    type="checkbox"
-                                    id="rememberMe"
-                                    name="rememberMe"
-                                    className="form-check-input"
-                                    checked={userForm.rememberMe}
-                                    onChange={handleChange}
-                                />
-                                <label htmlFor="rememberMe">{t('Login.RememberMe')}</label>
-                            </div>
                             <div className="W-div-login-button">
                                 <button
                                     type="submit"
@@ -151,7 +139,7 @@ export default function Login() {
                         <hr className="d-flex W-line-style-login" />
                         <div className="W-alignment-signup-div W-margin-bottom">
                             <h5>{t('Login.NoAccountMessage')}</h5>
-                            <Link to="/login/sign-up">
+                            <Link to="/login/signUp">
                                 <button type="button" className="btn btn-secondary W-sign-up-button-link">{t('Login.SignUpMessage')}</button>
                             </Link>
                         </div>

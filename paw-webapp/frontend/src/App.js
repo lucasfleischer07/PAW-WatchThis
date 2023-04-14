@@ -21,6 +21,7 @@ import ErrorPage from "./views/ErrorPage";
 import Comments from "./views/components/Comments";
 import InfoPage from "./views/InfoPage";
 import Reputation from "./views/components/Reputation";
+import SignUp from "./views/SignUp";
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
                   <Route path='/login' element={<LoginPage/>}>
                       <Route index element={<Login/>}/>
                       <Route path='forgotPassword' element={<ForgotPassword/>}/>
+                      <Route path='signUp' element={<SignUp/>}/>
                   </Route>
                   <Route path='/user' element={<UserPage/>}>
                       <Route path='profile/:userProfileId' element={<UserInfoPage/>}/>
@@ -44,12 +46,9 @@ function App() {
                       <Route path='watchList' element={<WatchListPage/>}/>
                       <Route path='viewedList' element={<ViewedListPage/>}/>
                   </Route>
-
                   <Route path='/reports' element={<ReportedPage/>}/>
-                  <Route path='error500' element={<ErrorPage errorCode={500}/>}/>
-                  <Route path='*' element={<ErrorPage errorCode={404}/>}/>
-
-                  <Route path='/reputation/hola' element={<Reputation/>}/>
+                  
+                  <Route path='/error' element={<ErrorPage/>}/>
 
               </Routes>
 

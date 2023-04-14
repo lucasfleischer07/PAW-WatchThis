@@ -38,8 +38,10 @@ import java.util.*;
 public class ContentController {
     @Autowired
     private ContentService cs;
+
     @Autowired
     private UserService us;
+
     @Context
     UriInfo uriInfo;
     private static final int CONTENT_AMOUNT = 18;
