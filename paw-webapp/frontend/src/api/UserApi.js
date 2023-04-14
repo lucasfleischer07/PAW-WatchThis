@@ -78,7 +78,7 @@ export class UserApi {
 
     async updateUserProfileInfo(userId, userDetails) {
         try {
-            const res = await fetch(`${this.basePath}/editInfo/${userId}`, {
+            const res = await fetch(`${this.basePath}/${userId}/editProfile`, {
                 method: 'PUT',
                 headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}),
                 body: JSON.stringify(userDetails)
