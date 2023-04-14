@@ -167,18 +167,18 @@ export default function ReviewCard(props) {
                                             </button>
                                         </span>
                                         <Modal show={showLoginModal} id={`reportReviewModalNoLogin${props.reviewId}`} tabIndex="-1" aria-labelledby={`reportReviewModalNoLoginLabel${props.reviewId}`} aria-hidden="true">
-                                                <Modal.Header >
-                                                    <Modal.Title id={`reportReviewModalNoLoginLabel${props.reviewId}`}>{t("Report.ReviewTitle")}</Modal.Title>
-                                                    <button type="button" onClick={handleCloseLoginModal} className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </Modal.Header>
-                                                <Modal.Body >
-                                                    <span>{t("Report.ReviewWarningAdd")}</span>
-                                                    <span>{t("Review.WarningAddMessage")}</span>
-                                                </Modal.Body>
-                                                    <Modal.Footer >
-                                                    <button type="button" onClick={handleCloseLoginModal} className="btn btn-secondary" data-bs-dismiss="modal">{t("Close")}</button>
-                                                    <button type="button" onClick={handleGoToLogin} className="btn btn-success">{t("Login.LoginMessage")}</button>
-                                                </Modal.Footer>
+                                            <Modal.Header >
+                                                <Modal.Title id={`reportReviewModalNoLoginLabel${props.reviewId}`}>{t("Report.ReviewTitle")}</Modal.Title>
+                                                <button type="button" onClick={handleCloseLoginModal} className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </Modal.Header>
+                                            <Modal.Body >
+                                                <span>{t("Report.ReviewWarningAdd")}</span>
+                                                <span>{t("Review.WarningAddMessage")}</span>
+                                            </Modal.Body>
+                                                <Modal.Footer >
+                                                <button type="button" onClick={handleCloseLoginModal} className="btn btn-secondary" data-bs-dismiss="modal">{t("Close")}</button>
+                                                <button type="button" onClick={handleGoToLogin} className="btn btn-success">{t("Login.LoginMessage")}</button>
+                                            </Modal.Footer>
                                         </Modal>
                                     </div>
                                 )}

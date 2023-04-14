@@ -48,7 +48,7 @@ export default function UserInfoPage() {
                              .then((data) => {
                                  if(!data.error) {
                                     setReviewOwnerUser(data.data)
-                                     if(user.role === 'admin' && data.data.role !== 'admin') {
+                                     if(user?.role === 'admin' && data.data.role !== 'admin') {
                                          setCanPromote(true)
                                      } else {
                                          setCanPromote(false)
@@ -69,7 +69,7 @@ export default function UserInfoPage() {
                         }
                         setReputation(reputation)
 
-                        if(user.role === 'admin' && reviews.data[0].user.role !== 'admin') {
+                        if(user?.role === 'admin' && reviews.data[0].user.role !== 'admin') {
                             setCanPromote(true)
                         } else {
                             setCanPromote(false)
@@ -77,7 +77,7 @@ export default function UserInfoPage() {
                     }
                     setTotalPages(reviews.totalPages)
 
-                    if(user.id === parseInt(userProfileId)) {
+                    if(user?.id === parseInt(userProfileId)) {
                         setIsSameUser(true)
                     } else {
                         setIsSameUser(false)

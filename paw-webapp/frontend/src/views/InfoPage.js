@@ -485,11 +485,11 @@ export default function InfoPage() {
                                             reviewUserId={review.user.id}
                                             contentId={content.id}
                                             contentType={review.type}
-                                            loggedUserName={user.username}
+                                            loggedUserName={user?.username}
                                             isAdmin={user?.role === 'admin'}
                                             isLikeReviews={isLikeReviewsList.length > 0 ? isLikeReviewsList.some(item => item.id === review.id) : false}
                                             isDislikeReviews={isDislikeReviewsList.length > 0 ? isDislikeReviewsList.some(item => item.id === review.id) : false}
-                                            alreadyReport={review.reviewReporters.includes(user.username)}
+                                            alreadyReport={review.reviewReporters.includes(user?.username)}
                                             canComment={true}
                                         />
                                     );

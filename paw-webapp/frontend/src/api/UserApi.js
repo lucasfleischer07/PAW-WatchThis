@@ -43,15 +43,16 @@ export class UserApi {
     async getUserReviews(userId, pageNumber) {
         try {
             const apiUrl = `${this.basePath}/${userId}/reviews`
-            const params = {pageNumber: pageNumber}
+            const params = {page: pageNumber}
             const options = {headers: authCheck({})}
             const res = await fetchWithQueryParamsApi(apiUrl, params, options)
-            if(res.status !== 204) {
+            if(!res.error) {
                 return {error: false, data: res.data, totalPages: res.totalPages}
             } else {
                 return {error: false, data: [], totalPages: res.totalPages}
             }
         } catch (e) {
+            console.log(e)
             return {error: true, errorCode: e.statusCode || e.status || 500}
         }
     }
