@@ -67,7 +67,7 @@ export class ReviewApi {
             })
             return {error: false, data: []}
         } catch (e) {
-            return {error: true}
+            return {error: true, errorCode: e.statusCode || e.status || 500}
         }
     }
 
@@ -91,7 +91,6 @@ export class ReviewApi {
 
     async reviewThumbUp(reviewId) {
         try {
-            // TODO: Verificar si esta bien el contentId o seri el contentDetails.id o como seria esa parte
             const res = await fetch(`${this.basePath}/reviewReputation/thumbUp/${reviewId}`, {
                 method: 'PUT',
                 headers: authCheck({}),
@@ -105,13 +104,12 @@ export class ReviewApi {
             }
 
         } catch (e) {
-            return {error: true}
+            return {error: true, errorCode: e.statusCode || e.status || 500}
         }
     }
 
     async reviewThumbDown(reviewId) {
         try {
-            // TODO: Verificar si esta bien el contentId o seri el contentDetails.id o como seria esa parte
             const res = await fetch(`${this.basePath}/reviewReputation/thumbDown/${reviewId}`, {
                 method: 'PUT',
                 headers: authCheck({}),
@@ -125,7 +123,7 @@ export class ReviewApi {
             }
 
         } catch (e) {
-            return {error: true}
+            return {error: true, errorCode: e.statusCode || e.status || 500}
         }
     }
 

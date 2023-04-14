@@ -6,7 +6,6 @@ import {AuthContext} from "../../context/AuthContext";
 
 export default function Header(props) {
     const {t} = useTranslation()
-
     const navigate = useNavigate();
     let {signOut} = useContext(AuthContext)
 

@@ -12,7 +12,7 @@ export default function Comments(props) {
     const {t} = useTranslation()
     let navigate = useNavigate()
     let {isLogged} = useContext(AuthContext)
-    const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
+
     const [reportFrom, setReportForm] = useState({
         reportType: ""
     })
@@ -23,6 +23,9 @@ export default function Comments(props) {
     const userCreatorImage = props.userCreatorImage
     const userCreatorUsername = props.userCreatorUsername
     const alreadyReport = props.alreadyReport
+    const loggedUserIsAdmin = props.loggedUserIsAdmin
+    const loggedUserId = props.loggedUserId
+    const loggedUserName = props.loggedUserName
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const handleShowDeleteModal = () => {
@@ -33,7 +36,7 @@ export default function Comments(props) {
     };
 
     const handleSubmitDeleteComment = () => {
-        if(isLogged() && (user.role === 'admin' || user.id === userCreatorId)) {
+        if(isLogged() && (loggedUserIsAdmin || loggedUserId === userCreatorId)) {
             commentService.commentDelete(commentId)
                 .then(data => {
                     if(!data.error) {
@@ -41,12 +44,14 @@ export default function Comments(props) {
                         handleCloseDeleteModal()
                         props.setAdded(!props.added)
                     } else {
-                    //     TODO: Redirigir a error
+                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                     }
                 })
-                .catch(e => {
-                //     TODO: Redirigir a errro
+                .catch(() => {
+                    navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
+        } else {
+            navigate("/error", { replace: true, state: {errorCode: 401} })
         }
     }
 
@@ -59,20 +64,18 @@ export default function Comments(props) {
     };
 
     const handleSubmitReport = () => {
-        if(isLogged() && (user.role === 'admin')) {
+        if(isLogged() && (loggedUserIsAdmin)) {
             reportsService.addCommentReport(commentId, reportFrom)
                 .then(data => {
                     if(!data.error) {
                         toast.success(t('Report.Success'))
                         handleCloseReportModal()
                     } else {
-                    //     TODO: llegvar a pagina de errro
-                        navigate("/error", {replace: true})
+                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                     }
                 })
-                .catch(e => {
-                //     TODO: llevatr a pagina de erorr
-                    navigate("/error", {replace: true})
+                .catch(() => {
+                    navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
         }
     };
@@ -116,7 +119,7 @@ export default function Comments(props) {
                             <div className="W-report-and-delete-comment-buttons">
                                 {isLogged() ? (
                                     <>
-                                        {userCreatorUsername === user.username || user.role === 'admin' ? (
+                                        {userCreatorUsername === loggedUserName || loggedUserIsAdmin ? (
                                             <>
                                                 <form className="W-delete-form" id={`formDeleteComment${commentId}`} method="post">
                                                     <button className="btn btn-danger text-nowrap W-prueba" type="button" data-bs-toggle="modal" data-bs-target={`#deleteCommentModal${commentId}`} onClick={handleShowDeleteModal}>
@@ -149,7 +152,7 @@ export default function Comments(props) {
                                             <></>
                                         )}
                                         {<>
-                                            {userCreatorUsername !== user.username && !alreadyReport ? (
+                                            {userCreatorUsername !== loggedUserName && !alreadyReport ? (
                                                 <>
                                                     <TooltipComponent text={t('Report.Add')}>
                                                         <button id={`reportCommentButton${commentId}`} type="button" className="btn btn-light W-background-color-report" data-bs-toggle="modal" data-bs-target={`#reportCommentModal${commentId}`} onClick={handleShowReportModal}>

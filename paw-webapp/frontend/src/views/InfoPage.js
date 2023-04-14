@@ -486,6 +486,7 @@ export default function InfoPage() {
                                             contentId={content.id}
                                             contentType={review.type}
                                             loggedUserName={user?.username}
+                                            loggedUserId={user?.id}
                                             isAdmin={user?.role === 'admin'}
                                             isLikeReviews={isLikeReviewsList.length > 0 ? isLikeReviewsList.some(item => item.id === review.id) : false}
                                             isDislikeReviews={isDislikeReviewsList.length > 0 ? isDislikeReviewsList.some(item => item.id === review.id) : false}

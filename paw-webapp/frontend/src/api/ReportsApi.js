@@ -35,7 +35,7 @@ export class ReportsApi {
                 return {error: false, data: []}
             }
         } catch (e) {
-            return {error: true}
+            return {error: true, errorCode: e.statusCode || e.status || 500}
         }
     }
 
@@ -51,7 +51,7 @@ export class ReportsApi {
                 return {error: false, data: []}
             }
         } catch (e) {
-            return {error: true}
+            return {error: true, errorCode: e.statusCode || e.status || 500}
         }
     }
 
@@ -63,7 +63,7 @@ export class ReportsApi {
             })
             return {error: false, data: []}
         } catch (e) {
-            return {error: true}
+            return {error: true, errorCode: e.statusCode || e.status || 500}
         }
     }
 }

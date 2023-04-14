@@ -1,4 +1,4 @@
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 import React, {useState} from "react";
 import { Modal, Button } from 'react-bootstrap';
@@ -9,6 +9,7 @@ import TooltipComponent from "./Tooltip";
 
 export default function ReportedContent(props) {
     const {t} = useTranslation()
+    let navigate = useNavigate()
 
     const [showModal, setShowModal] = useState(false);
     const [showModalDismiss, setShowModalDismiss] = useState(false);
@@ -25,7 +26,7 @@ export default function ReportedContent(props) {
     const typeId = props.typeId
     const reportType = props.reportType
     const reviewCreatorUserName = props.reviewCreatorUserName
-    const reviewCreatorUserId = props.reviewCreatorUserId
+    const reviewCreatorUserId = props.reviewCreatorId
     const reviewNameOfReportedComment = props.reviewNameOfReportedComment
 
 
@@ -51,26 +52,31 @@ export default function ReportedContent(props) {
             commentService.commentDelete(typeId)
                 .then(data => {
                     if(!data.error) {
-                        // TODO: HAcer este toast
+                        // TODO: HAcer este toast de coemntario eliminado
                         handleCloseModal()
-                        // toast.success()
+                    } else {
+                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                     }
                 })
-                .catch(e => {
-                    // TODO: Llevar a pagina de errror
+                .catch(() => {
+                    navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
-        } else {
+        } else if(reportType === 'review') {
             reviewService.deleteReview(typeId)
                 .then(data => {
                     if(!data.error) {
                         handleCloseModal()
-                        // TODO: HAcer este toast
+                        // TODO: HAcer este toast de review eliminada
                         // toast.success()
+                    } else {
+                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                     }
                 })
-                .catch(e => {
-                    // TODO: Llevar a pagina de errror
+                .catch(() => {
+                    navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
+        } else {
+            navigate("/error", { replace: true, state: {errorCode: 404} })
         }
     }
 
@@ -83,10 +89,12 @@ export default function ReportedContent(props) {
                     handleCloseModalDismiss()
                     // TODO: HAcer este toast
                     // toast.success()
+                } else {
+                    navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                 }
             })
-            .catch(e => {
-                // TODO: Llevar a pagina de errror
+            .catch(() => {
+                navigate("/error", { replace: true, state: {errorCode: 404} })
             })
     }
 

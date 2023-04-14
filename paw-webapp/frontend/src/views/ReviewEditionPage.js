@@ -15,7 +15,7 @@ export default function ReviewEditionPage() {
     let {isLogged} = useContext(AuthContext)
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
 
-    let origin = location.state?.from?.pathname || "/";
+    let origin = location.pathname || "/";
     const { contentType, contentId, reviewId } = useParams();
     const [content, setContent] = useState({})
     const [error, setError] = useState(false)

@@ -18,8 +18,8 @@ export class CommentApi {
             } else {
                 return {error: false, data: [], totalPages: res.totalPages}
             }
-        } catch (error) {
-            return {error: true}
+        } catch (e) {
+            return {error: true, errorCode: e.statusCode || e.status || 500}
         }
 
     }
@@ -38,7 +38,7 @@ export class CommentApi {
             }
         } catch (e) {
             console.log(e)
-            return {error: true}
+            return {error: true, errorCode: e.statusCode || e.status || 500}
         }
 
     }
@@ -51,7 +51,7 @@ export class CommentApi {
             })
             return {error: false, data: []}
         } catch (e) {
-            return {error: true}
+            return {error: true, errorCode: e.statusCode || e.status || 500}
         }
 
     }

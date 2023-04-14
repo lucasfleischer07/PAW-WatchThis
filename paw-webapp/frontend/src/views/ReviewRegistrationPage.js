@@ -14,7 +14,7 @@ export default function ReviewRegistrationPage() {
     let location = useLocation()
     let navigate = useNavigate()
     let {isLogged} = useContext(AuthContext)
-    let origin = location.state?.from?.pathname || "/";
+    let origin = location.pathname || "/";
 
     const { contentType, contentId } = useParams();
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)

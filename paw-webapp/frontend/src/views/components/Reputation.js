@@ -12,7 +12,6 @@ export default function Reputation(props) {
     const {t} = useTranslation()
     let navigate = useNavigate()
     let {isLogged} = useContext(AuthContext)
-    const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
 
     const reviewId = props.reviewId;
     const reviewDescription = props.reviewDescription;
@@ -68,11 +67,11 @@ export default function Reputation(props) {
                   setAdded(!added)
                   changeVisibility(`commentInput${reviewId}`)
               } else {
-                  // TODO: Error
+                  navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
               }
           })
-            .catch(e => {
-                // TODO: Error
+            .catch(() => {
+                navigate("/error", { replace: true, state: {errorCode: 404} })
             })
     }
     const handleLike = () => {
@@ -90,9 +89,11 @@ export default function Reputation(props) {
                         setReviewReputation(reviewReputation+1)
                         setIsLikeReviews(true)
                     }
+                } else {
+                    navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                 }
-            }).catch(e => {
-            console.log("error liking review")
+            }).catch(() => {
+                navigate("/error", { replace: true, state: {errorCode: 404} })
         })
     }
 
@@ -111,10 +112,11 @@ export default function Reputation(props) {
                         setReviewReputation(reviewReputation-1)
                         setIsDislikeReviews(true)
                     }
-
+                } else {
+                    navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                 }
-            }).catch(e => {
-            console.log("error disliking review")
+            }).catch(() => {
+                navigate("/error", { replace: true, state: {errorCode: 404} })
         })
     }
 
@@ -129,19 +131,17 @@ export default function Reputation(props) {
         })
     }
 
-    // TODO: Chequear este useEffect
     useEffect(() => {
         commentService.getReviewComments(parseInt(reviewId),1)
             .then(data => {
                 if(!data.error){
                     setComments(data.data)
                 } else {
-                    console.log("Hola")
+                    navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                 }
             })
-            .catch(e => {
-                console.log(e)
-                console.log("error retrieving comments")
+            .catch(() => {
+                navigate("/error", { replace: true, state: {errorCode: 404} })
             })
     },[added])
 
@@ -298,9 +298,12 @@ export default function Reputation(props) {
                         userCreatorImage={comment.user.image}
                         userCreatorRole={comment.user.role}
                         userCreatorUsername={comment.user.username}
+                        loggedUserIsAdmin={props.loggedUserIsAdmin}
+                        loggedUserId={props.loggedUserId}
+                        loggedUserName={props.loggedUserName}
                         added={added}
                         setAdded={setAdded}
-                        alreadyReport={comment.commentReportersUrl.includes(user.userName)}
+                        alreadyReport={comment.commentReportersUrl.includes(props.loggedUserName)}
                     />
                 ))}
             </div>

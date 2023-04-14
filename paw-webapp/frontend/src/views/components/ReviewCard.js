@@ -4,13 +4,13 @@ import {useTranslation} from "react-i18next";
 import {Button, Modal} from "react-bootstrap";
 import {AuthContext} from "../../context/AuthContext";
 import {Link, useNavigate} from "react-router-dom";
-import {reportsService} from "../../services";
+import {reportsService, reviewService} from "../../services";
 import {toast} from "react-toastify";
 export default function ReviewCard(props) {
     const {t} = useTranslation()
     let navigate = useNavigate()
-    // const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
     let {isLogged} = useContext(AuthContext)
+
     const reviewId = props.reviewId
     const reviewUser = props.reviewUser
     const reviewRating = props.reviewRating
@@ -85,7 +85,22 @@ export default function ReviewCard(props) {
         );
     }
     const handleDelete = () => {
-
+        if(isLogged() && (isAdmin)) {
+            reviewService.deleteReview(parseInt(reviewId))
+                .then(data => {
+                    if(!data.error) {
+                    //     TODO: HAcer toast de review deleteada con exito
+                        handleCloseDeleteReviewModal()
+                    } else {
+                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                    }
+                })
+                .catch(() => {
+                    navigate("/error", { replace: true, state: {errorCode: 404} })
+                })
+        } else {
+            navigate("/error", { replace: true, state: {errorCode: 401} })
+        }
     }
 
     const handleSubmitReport = () => {
@@ -97,11 +112,11 @@ export default function ReviewCard(props) {
                         handleCloseReportModal()
                         setAlreadyReport(true)
                     } else {
-                        navigate("/error", {replace: true})
+                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                     }
                 })
                 .catch(() => {
-                    navigate("/error", {replace: true})
+                    navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
         }
     };
@@ -205,6 +220,9 @@ export default function ReviewCard(props) {
                             isDislikeReviews={isDislikeReviews}
                             reviewReputation={reviewReputation}
                             reviewDescription={reviewDescription}
+                            loggedUserIsAdmin={isAdmin}
+                            loggedUserId={props.loggedUserId}
+                            loggedUserName={loggedUserName}
                         />
                     </div>
                 </div>
@@ -220,9 +238,7 @@ export default function ReviewCard(props) {
                                 aria-label="Close"></button>
                     </Modal.Header>
                     <Modal.Body className="modal-body">
-                        <p>
-                            {t("DeleteReview")}
-                        </p>
+                        <p>{t("DeleteReview")}</p>
                     </Modal.Body>
                     <Modal.Footer className="modal-footer">
                         <button type="button" onClick={handleCloseDeleteReviewModal} className="btn btn-secondary" data-bs-dismiss="modal">

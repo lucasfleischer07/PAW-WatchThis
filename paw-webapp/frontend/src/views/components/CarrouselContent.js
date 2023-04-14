@@ -19,11 +19,12 @@ export default function CarrouselContent(props) {
                 if(!data.error) {
                     setIsInWatchList(true);
                     toast.success(t('WatchList.Added'))
+                } else {
+                    navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                 }
             })
             .catch(() => {
-            //     TODO: Meter un toast o algo asi
-            //     TODO Llegar a pagina de error
+                navigate("/error", { replace: true, state: {errorCode: 404} })
             })
     }
 
@@ -34,11 +35,12 @@ export default function CarrouselContent(props) {
                 if(!data.error) {
                     setIsInWatchList(false);
                     toast.success(t('WatchList.Removed'))
+                } else {
+                    navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                 }
             })
             .catch(() => {
-                //     TODO: Meter un toast o algo asi
-                //     TODO Llegar a pagina de error
+                navigate("/error", { replace: true, state: {errorCode: 404} })
              })
     }
 
@@ -52,10 +54,12 @@ export default function CarrouselContent(props) {
             .then(watchList => {
                 if(!watchList.error) {
                     setIsInWatchList(watchList.data.some(item => item.id === props.id))
+                } else {
+                    navigate("/error", { replace: true, state: {errorCode: watchList.errorCode} })
                 }
             })
-            .catch(e => {
-                //     TODO: Meter algo
+            .catch(() => {
+                navigate("/error", { replace: true, state: {errorCode: 404} })
             })
     }
 
