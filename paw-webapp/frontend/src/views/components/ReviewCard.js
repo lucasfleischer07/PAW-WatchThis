@@ -18,7 +18,7 @@ export default function ReviewCard(props) {
     const ratingStars = [];
     const reviewDescription = props.reviewDescription
     const reviewReputation = props.reviewReputation
-    const reviewUserId = props.revireUserId
+    const reviewUserId = props.reviewUserId
 
     const userName = props.userName
     const loggedUserName = props.loggedUserName

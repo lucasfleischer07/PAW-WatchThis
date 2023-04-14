@@ -10,7 +10,7 @@ export default function Login() {
     let location = useLocation()
     let navigate = useNavigate()
     let {signIn} = useContext(AuthContext)
-    const previousPath = location.state?.from || '/';
+    const previousPath = location.pathname || '/';
 
     const [userForm, setUserForm] = useState({
         email: undefined,
@@ -44,11 +44,11 @@ export default function Login() {
         if (!validForm()) {
             return
         }
+        console.log(previousPath)
         userService.login(userForm.email, userForm.password)
             .then((user) => {
                 if(!user.error) {
                     signIn(user.data, user.header)
-                    // toDO: Testear esto de la redireccion
                     if(previousPath === '/login/forgotPassword' || previousPath === '/login/signUp') {
                         navigate("/", {replace: true})
                     } else {
