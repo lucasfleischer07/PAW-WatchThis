@@ -10,7 +10,7 @@ export class ReportsApi {
     async getReportsByType(type, pageNumber, filter= '') {
         try {
             const apiUrl = `${this.basePath}/${type}`
-            const params = {reason: filter, pageNumber: pageNumber, pageSize: 10}
+            const params = {reason: filter, page: pageNumber}
             const options = {headers: authCheck({})}
             const res = await fetchWithQueryParamsApi(apiUrl, params, options)
             if(res.status !== 204) {

@@ -19,7 +19,7 @@ export default function ReportedPage() {
     const [currentReviewsReportsPage, setCurrentReviewsReportsPage] = useState(1)
     const [currentCommentsReportsPage, setCurrentCommentsReportsPage] = useState(1)
 
-    const [filterReason, setFilterReason] = useState('ANY')
+    const [filterReason, setFilterReason] = useState('')
     const [reportType, setReportType] = useState('reviews')
     const [page, setPage] = useState(1)
 
@@ -230,6 +230,7 @@ export default function ReportedPage() {
                                 <>
                                     {reportedReviewsList.map((content) => (
                                             <ReportedContent
+                                                key={`reportedContent${content.id}`}
                                                 userName={content.review.user.username}
                                                 userId={content.review.user.id}
                                                 contentId={content.review.content.id}

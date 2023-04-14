@@ -79,6 +79,7 @@ export default function ViewedListPage(props) {
                                 <div className="row row-cols-1 row-cols-md-2 g-2 W-content-alignment">
                                     {viewedList.map((content) => (
                                         <ContentCard
+                                            key={`viewedListContentCard${content.id}`}
                                             contentName={content.name}
                                             contentReleased={content.releaseDate}
                                             contentCreator={content.creator}
@@ -89,7 +90,6 @@ export default function ViewedListPage(props) {
                                             contentRating={content.rating}
                                             reviewsAmount={content.reviewsAmount}
                                             isInWatchList={viewedList.length > 0 ? viewedList.some(item => item.id === content.id) : false}
-                                            key={content.id}
                                         />
                                     ))}
                                 </div>

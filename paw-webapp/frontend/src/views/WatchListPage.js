@@ -79,6 +79,7 @@ export default function WatchListPage(props) {
                                 <div className="row row-cols-1 row-cols-md-2 g-2 W-content-alignment">
                                     {watchList.map((content) => (
                                         <ContentCard
+                                            key={`watchListContentCard${content.id}`}
                                             contentName={content.name}
                                             contentReleased={content.releaseDate}
                                             contentCreator={content.creator}
@@ -89,7 +90,6 @@ export default function WatchListPage(props) {
                                             contentRating={content.rating}
                                             reviewsAmount={content.reviewsAmount}
                                             isInWatchList={watchList.length > 0 ? watchList.some(item => item.id === content.id) : false}
-                                            key={content.id}
                                         />
                                     ))}
                                 </div>
