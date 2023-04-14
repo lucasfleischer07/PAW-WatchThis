@@ -43,6 +43,7 @@ export default function ContentCard(props) {
             .then(data => {
                 if(!data.error) {
                     setIsInWatchList(false);
+                    props.setAdded(!props.added)
                     toast.success(t('WatchList.Removed'))
                 } else {
                     navigate("/error", { replace: true, state: {errorCode: data.errorCode} })

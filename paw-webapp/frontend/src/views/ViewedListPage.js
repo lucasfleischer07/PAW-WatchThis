@@ -15,6 +15,7 @@ export default function ViewedListPage(props) {
     const [currentPage, setCurrentPage] = useState(1)
     const [totalPages, setTotalPages] = useState(undefined)
     const [viewedList, setViewedList] = useState([])
+    const [added, setAdded] = useState(false)
 
     const getUserViewedList = () => {
         if(isLogged()) {
@@ -41,7 +42,7 @@ export default function ViewedListPage(props) {
 
     useEffect(() => {
         getUserViewedList()
-    }, [viewedList, currentPage])
+    }, [added, currentPage])
 
     return (
         <>
@@ -89,6 +90,8 @@ export default function ViewedListPage(props) {
                                             contentType={content.type}
                                             contentRating={content.rating}
                                             reviewsAmount={content.reviewsAmount}
+                                            added={added}
+                                            setAdded={setAdded}
                                             isInWatchList={viewedList.length > 0 ? viewedList.some(item => item.id === content.id) : false}
                                         />
                                     ))}

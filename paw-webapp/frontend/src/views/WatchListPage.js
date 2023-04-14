@@ -5,6 +5,7 @@ import {AuthContext} from "../context/AuthContext";
 import {listsService} from "../services";
 import {Link, useNavigate} from "react-router-dom";
 import Header from "./components/Header";
+import {set} from "react-hook-form";
 
 export default function WatchListPage(props) {
     const {t} = useTranslation()
@@ -15,10 +16,11 @@ export default function WatchListPage(props) {
     const [currentPage, setCurrentPage] = useState(1)
     const [totalPages, setTotalPages] = useState(undefined)
     const [watchList, setWatchList] = useState([])
+    const [added, setAdded] = useState(false)
 
     const getUserWatchList = () => {
         if(isLogged()) {
-            listsService.getUserWatchList(user.id, currentPage)
+            listsService.getUserWatchList(user?.id, currentPage)
                 .then(watchList => {
                     if(!watchList.error) {
                         setWatchList(watchList.data)
@@ -41,7 +43,7 @@ export default function WatchListPage(props) {
 
     useEffect(() => {
         getUserWatchList()
-    }, [watchList, currentPage])
+    }, [added, currentPage])
 
     return (
         <>
@@ -89,6 +91,8 @@ export default function WatchListPage(props) {
                                             contentType={content.type}
                                             contentRating={content.rating}
                                             reviewsAmount={content.reviewsAmount}
+                                            added={added}
+                                            setAdded={setAdded}
                                             isInWatchList={watchList.length > 0 ? watchList.some(item => item.id === content.id) : false}
                                         />
                                     ))}
