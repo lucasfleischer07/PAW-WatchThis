@@ -1,15 +1,18 @@
 import {useTranslation} from "react-i18next";
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import {Link, useNavigate, useParams} from "react-router-dom";
-import {userService} from "../services";
+import {reviewService, userService} from "../services";
 import {toast} from "react-toastify";
 import TooltipComponent from "./components/Tooltip";
 import Header from "./components/Header";
+import ReviewCard from "./components/ReviewCard";
+import {AuthContext} from "../context/AuthContext";
 
 export default function UserInfoPage() {
     const {t} = useTranslation()
     let navigate = useNavigate()
+    let {isLogged} = useContext(AuthContext)
     const { userProfileId } = useParams();
 
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
@@ -20,6 +23,9 @@ export default function UserInfoPage() {
     const [totalPages, setTotalPages] = useState(undefined)
     const [reviews, setReviews] = useState([])
     const [reputation, setReputation] = useState(0)
+
+    const [isLikeReviewsList, setIsLikeReviewsList] = useState(false);
+    const [isDislikeReviewsList, setIsDislikeReviewsList] = useState(false);
 
     const handlePromoteUser = (e) => {
         e.preventDefault();
@@ -91,6 +97,32 @@ export default function UserInfoPage() {
             .catch(() => {
                 navigate("/error", { replace: true, state: {errorCode: 404} })
             })
+
+        if(isLogged()) {
+            reviewService.getReviewsLike()
+                .then(data => {
+                    if(!data.error) {
+                        setIsLikeReviewsList(data.data)
+                    } else {
+                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                    }
+                })
+                .catch(() => {
+                    navigate("/error", { replace: true, state: {errorCode: 404} })
+                })
+
+            reviewService.getReviewsDislike()
+                .then(data => {
+                    if(!data.error) {
+                        setIsDislikeReviewsList(data.data)
+                    } else {
+                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                    }
+                })
+                .catch(() => {
+                    navigate("/error", { replace: true, state: {errorCode: 404} })
+                })
+        }
 
     }, [])
 
@@ -176,22 +208,26 @@ export default function UserInfoPage() {
                                                 <Link className="W-movie-title" to={`/content/${review.content.type}/${review.content.id}`}>
                                                     <h5>{review.content.name}</h5>
                                                 </Link>
-                                                {/*<ReviewCard*/}
-                                                {/*    reviewTitle={review.name}*/}
-                                                {/*    reviewDescription={review.description}*/}
-                                                {/*    reviewRating={review.rating}*/}
-                                                {/*    reviewId={review.id}*/}
-                                                {/*    userName={review.user.name}*/}
-                                                {/*    contentId={review.content.id}*/}
-                                                {/*    reviewReputation={review.reputation}*/}
-                                                {/*    contentType={review.type}*/}
-                                                {/*    loggedUserName={user}*/}
-                                                {/*    isAdmin={canPromote}*/}
-                                                {/*    isLikeReviews={userLikeReviews.includes(review.id)}*/}
-                                                {/*    isDislikeReviews={userDislikeReviews.includes(review.id)}*/}
-                                                {/*    alreadyReport={review.reporterUsernames.includes(userName)}*/}
-                                                {/*    canComment={false}*/}
-                                                {/*/>*/}
+                                                <ReviewCard
+                                                    key ={`reviewCardUser ${review.id}`}
+                                                    reviewTitle={review.name}
+                                                    reviewDescription={review.description}
+                                                    reviewRating={review.rating}
+                                                    reviewId={review.id}
+                                                    reviewReputation={review.reputation}
+                                                    reviewUser={review.user.username}
+                                                    reviewUserId={review.user.id}
+                                                    contentId={review.content.id}
+                                                    contentType={review.type}
+                                                    loggedUserName={user?.username}
+                                                    loggedUserId={user?.id}
+                                                    isAdmin={user?.role === 'admin'}
+                                                    isLikeReviews={isLikeReviewsList.length > 0 ? isLikeReviewsList.some(item => item.id === review.id) : false}
+                                                    isDislikeReviews={isDislikeReviewsList.length > 0 ? isDislikeReviewsList.some(item => item.id === review.id) : false}
+                                                    alreadyReport={review.reviewReporters.includes(user?.username)}
+                                                    canComment={false}
+                                                    seeComments={false}
+                                                />
                                             </div>
                                         ))
                                     )}

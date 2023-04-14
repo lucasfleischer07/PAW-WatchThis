@@ -20,7 +20,9 @@ export default function Reputation(props) {
     const [isLikeReviews, setIsLikeReviews] = useState(props.isLikeReviews);
     const [isDislikeReviews, setIsDislikeReviews] = useState(props.isDislikeReviews);
 
-    const canComment = true;
+    const canComment = props.canComment;
+    const seeComments = props.seeComments
+
     const [comments, setComments] = useState([]);
     const [added, setAdded] = useState(false)
 
@@ -288,25 +290,29 @@ export default function Reputation(props) {
                 </>
             )}
 
-            <div className="W-comment-section-general-div">
-                {comments.map((comment) => (
-                    <Comments
-                        key ={`comment ${comment.id}`}
-                        commentId={comment.commentId}
-                        commentText={comment.text}
-                        userCreatorId={comment.user.id}
-                        userCreatorImage={comment.user.image}
-                        userCreatorRole={comment.user.role}
-                        userCreatorUsername={comment.user.username}
-                        loggedUserIsAdmin={props.loggedUserIsAdmin}
-                        loggedUserId={props.loggedUserId}
-                        loggedUserName={props.loggedUserName}
-                        added={added}
-                        setAdded={setAdded}
-                        alreadyReport={comment.commentReportersUrl.includes(props.loggedUserName)}
-                    />
-                ))}
-            </div>
+            {seeComments ? (
+                <div className="W-comment-section-general-div">
+                    {comments.map((comment) => (
+                        <Comments
+                            key ={`comment ${comment.id}`}
+                            commentId={comment.commentId}
+                            commentText={comment.text}
+                            userCreatorId={comment.user.id}
+                            userCreatorImage={comment.user.image}
+                            userCreatorRole={comment.user.role}
+                            userCreatorUsername={comment.user.username}
+                            loggedUserIsAdmin={props.loggedUserIsAdmin}
+                            loggedUserId={props.loggedUserId}
+                            loggedUserName={props.loggedUserName}
+                            added={added}
+                            setAdded={setAdded}
+                            alreadyReport={comment.commentReportersUrl.includes(props.loggedUserName)}
+                        />
+                    ))}
+                </div>
+            ) : (
+                <></>
+            )}
         </div>
 
     );

@@ -12,11 +12,12 @@ import Header from "./components/Header";
 
 
 export default function InfoPage() {
-    const [user, setUser]= useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
-    let {isLogged} = useContext(AuthContext)
-    let navigate = useNavigate()
     const {t} = useTranslation()
+    let navigate = useNavigate()
+    let {isLogged} = useContext(AuthContext)
     const { contentType, contentId} = useParams();
+
+    const [user, setUser]= useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
 
     const [content, setContent] = useState({})
     const [reviews, setReviews] = useState({})
@@ -492,6 +493,7 @@ export default function InfoPage() {
                                             isDislikeReviews={isDislikeReviewsList.length > 0 ? isDislikeReviewsList.some(item => item.id === review.id) : false}
                                             alreadyReport={review.reviewReporters.includes(user?.username)}
                                             canComment={true}
+                                            seeComments={true}
                                         />
                                     );
                                 })}

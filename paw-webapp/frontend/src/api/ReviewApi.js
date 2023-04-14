@@ -13,12 +13,15 @@ export class ReviewApi {
             const params = {pageNumber: pageNumber, pageSize: 10}
             const options = {headers: authCheck({})}
             const res =  await fetchWithQueryParamsApi(apiUrl, params, options)
-            if(res.status !== 204) {
-                return {error: false, data: await res.data, totalPages: res.totalPages}
-            } else {
+            const jsonData = await res.data;
+            const jsonString = JSON.stringify(jsonData);
+            if (jsonString === '{}') {
                 return {error: false, data: [], totalPages: res.totalPages}
+            } else {
+                return {error: false, data: await res.data, totalPages: res.totalPages}
             }
         } catch (e) {
+            console.log(e)
             return {error: true, errorCode: e.statusCode || e.status || 500}
         }
 

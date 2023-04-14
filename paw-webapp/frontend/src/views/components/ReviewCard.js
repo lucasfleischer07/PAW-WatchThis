@@ -28,7 +28,8 @@ export default function ReviewCard(props) {
     const [isDislikeReviews, setIsDislikeReviews] = useState(props.isDislikeReviews);
 
     const [alreadyReport, setAlreadyReport] = useState(props.alreadyReport)
-    const canComment = useState(props.canComment)
+    const canComment = props.canComment
+    const seeComments = props.seeComments
 
     const contentType = props.contentType
     const contentId = props.contentId
@@ -223,6 +224,8 @@ export default function ReviewCard(props) {
                             loggedUserIsAdmin={isAdmin}
                             loggedUserId={props.loggedUserId}
                             loggedUserName={loggedUserName}
+                            canComment={canComment}
+                            seeComments={seeComments}
                         />
                     </div>
                 </div>
