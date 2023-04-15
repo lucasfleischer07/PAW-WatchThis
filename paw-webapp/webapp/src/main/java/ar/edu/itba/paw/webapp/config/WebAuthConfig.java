@@ -129,7 +129,6 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         return new UnauthorizedRequestHandler();
     }
 
-//    TODO: VER BIEN ESTO
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();

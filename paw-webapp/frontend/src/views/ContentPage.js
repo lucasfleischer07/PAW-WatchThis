@@ -5,8 +5,6 @@ import ContentCard from "./components/ContentCard";
 import {Link, useNavigate, useParams} from "react-router-dom";
 import Header from "./components/Header";
 
-// TODO: Desde el HEADER, le tengo que pasar el tipo ('movie' o 'serie') que se lo paso por URL,
-//  El tema es como le paso la query (lo que busco en la search bar), el genero y el durationFrom por parametro ya que uso Link
 export default function ContentPage(props) {
     const {t} = useTranslation()
     let navigate = useNavigate()

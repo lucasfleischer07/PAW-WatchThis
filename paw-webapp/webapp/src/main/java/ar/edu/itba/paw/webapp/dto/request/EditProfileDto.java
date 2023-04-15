@@ -6,8 +6,6 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class EditProfileDto {
-//    TODO: METER LOS MENSAJES DE ERROR EN CASO DE QUE ESTE VACIO
-
     @Size(min = 6, max = 50, message = "...")
     @Pattern(regexp	= "([a-zA-Z0-9ñáéíóú!,.:;=+\n\\-_()?<>$%&#@{}\\[\\]|*\"'~/`^\\s]+)?", message = "...")
     private String password;

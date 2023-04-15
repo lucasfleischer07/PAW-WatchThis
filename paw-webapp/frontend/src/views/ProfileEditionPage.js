@@ -63,7 +63,6 @@ export default function ProfileEditionPage() {
         }
     }
 
-    // TODO: FALTA AHCER QUE SE RESETEE LA IMAGEN CUANOD SE PONE EL UPLOAD
     const onSubmitImage = (e) => {
         e.preventDefault();
         if(isLogged() && image !== undefined) {
@@ -152,7 +151,7 @@ export default function ProfileEditionPage() {
                                 </div>
                                 <div className="W-submit-changes-edit-profile">
                                     <button type="submit" className="btn btn-success">
-                                        {/*TODO: Cambair este mensaje por el de Upload Image*/}
+                                        {/*TODO: Cambair este mensaje por uno que diga: Upload Image*/}
                                         {t('EditProfile.Upload')}
                                     </button>
                                 </div>

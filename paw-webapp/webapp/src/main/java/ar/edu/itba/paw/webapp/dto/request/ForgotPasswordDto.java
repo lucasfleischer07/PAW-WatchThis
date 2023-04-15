@@ -6,7 +6,6 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class ForgotPasswordDto {
-//    TODO: METER LOS MENSAJES DE ERROR EN CASO DE QUE ESTE VACIO
     @ExistingEmail
     @Size(min = 10, max = 50, message = "...")
     @Pattern(regexp	= "([+\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+", message = "...")

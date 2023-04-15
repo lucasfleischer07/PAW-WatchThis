@@ -107,7 +107,6 @@ public class CommentController {
         if(user.get().getUserName().equals(deleteComment.get().getUser().getUserName())) {
             ccs.deleteComment(deleteComment.get());
         }
-//        TODO: CHEQUEAR ESTO DEL ADMIN< SI HACERLO ASI O TRAERLO DE LA BDD COMO  HACEMOS EN OTROS CASOS
         else if(auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
             rrs.delete(deleteComment.get(), deleteComment.get().getReports());
         } else {

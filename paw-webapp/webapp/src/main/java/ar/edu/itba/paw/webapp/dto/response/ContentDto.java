@@ -43,11 +43,9 @@ public class ContentDto {
         // For Jersey
     }
 
-//    TODO: Ver si le pasamos o no el user
     public ContentDto(UriInfo url, Content content) {
         this.myUrl = url.getBaseUriBuilder().path("content").path("specificContent").path(String.valueOf(content.getId())).build().toString();
         this.reviewsUrl = url.getBaseUriBuilder().path("reviews").path(String.valueOf(content.getId())).build().toString();
-//        TODO: Hayq ue hacer un metodo que me traiga quienes ya hicieron una review en este contendio
         this.contentReviewers = url.getBaseUriBuilder().path("content").path(String.valueOf(content.getId())).path("reviewers").build().toString();
 
         this.id = content.getId();

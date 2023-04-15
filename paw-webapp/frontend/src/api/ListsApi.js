@@ -19,7 +19,7 @@ export class ListsApi {
                 return {error: false, data: [], totalPages: res.totalPages}
             }
         } catch (e) {
-            return {error: true, errorCode: e.statusCode || e.status || 500}
+            return {error: true, errorCode: e.response.status || 500}
         }
     }
 
@@ -36,7 +36,7 @@ export class ListsApi {
                 return {error: false, data: []}
             }
         } catch (e) {
-            return {error: true, errorCode: e.statusCode || e.status || 500}
+            return {error: true, errorCode: e.response.status || 500}
         }
     }
 
@@ -54,7 +54,7 @@ export class ListsApi {
                 return {error: false, data: []}
             }
         } catch (e) {
-            return {error: true, errorCode: e.statusCode || e.status || 500}
+            return {error: true, errorCode: e.response.status || 500}
         }
     }
 
@@ -67,7 +67,7 @@ export class ListsApi {
             })
             return {error: false, data: []}
         } catch (e) {
-            return {error: true, errorCode: e.statusCode || e.status || 500}
+            return {error: true, errorCode: e.response.status || 500}
         }
     }
 
@@ -83,7 +83,7 @@ export class ListsApi {
                 return {error: false, data: [], totalPages: res.totalPages}
             }
         } catch (e) {
-            return {error: true, errorCode: e.statusCode || e.status || 500}
+            return {error: true, errorCode: e.response.status || 500}
         }
     }
 
@@ -100,7 +100,7 @@ export class ListsApi {
                 return {error: false, data: []}
             }
         } catch (e) {
-            return {error: true, errorCode: e.statusCode || e.status || 500}
+            return {error: true, errorCode: e.response.status || 500}
         }
     }
 
@@ -118,7 +118,7 @@ export class ListsApi {
                 return {error: false, data: []}
             }
         } catch (e) {
-            return {error: true, errorCode: e.statusCode || e.status || 500}
+            return {error: true, errorCode: e.response.status || 500}
         }
     }
 
@@ -136,7 +136,7 @@ export class ListsApi {
                 return {error: false, data: []}
             }
         } catch (e) {
-            return {error: true, errorCode: e.statusCode || e.status || 500}
+            return {error: true, errorCode: e.response.status || 500}
         }
     }
 }

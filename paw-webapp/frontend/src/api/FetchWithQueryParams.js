@@ -11,7 +11,8 @@ export async function fetchWithQueryParamsApi(url, queryParams = {}, options = {
         }
         return res.json().then(data => ({ error:false, data, totalPages}));
     } catch (e) {
-        return {error: true}
+        console.log("Hola desde fetchsWithQueryParams")
+        return {error: true, errorCode: e.response.status}
     }
 
 }
