@@ -65,10 +65,10 @@ export class UserApi {
                 headers: authCheck({}),
                 body: formData
             })
-            if(res.status !== 204) {
-                return {error: false, data: await res.json()}
-            } else {
+            if(res.status === 204) {
                 return {error: false, data: []}
+            } else {
+                return {error: true, errorCode: res.status}
             }
         } catch (e) {
             return {error: true, errorCode: e.response.status || 500}
@@ -84,10 +84,10 @@ export class UserApi {
                 body: JSON.stringify(userDetails)
             })
 
-            if(res.status !== 204) {
-                return {error: false, data: await res.json()}
-            } else {
+            if(res.status === 200) {
                 return {error: false, data: []}
+            } else {
+                return {error: false, errorCode: res.status}
             }
         } catch (e) {
             return {error: true, errorCode: e.response.status || 500}

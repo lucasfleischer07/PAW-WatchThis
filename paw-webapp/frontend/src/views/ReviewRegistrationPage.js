@@ -83,7 +83,6 @@ export default function ReviewRegistrationPage() {
                 if(!data.error) {
                     navigate(origin, {replace: true})
                 } else {
-                    toast.error(t('Content.Review.Create.Error'))
                     navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                 }
             })

@@ -15,8 +15,6 @@ export default function ProfileEditionPage() {
     const {reset} = useForm()
     let {isLogged} = useContext(AuthContext)
 
-    let origin = location.pathname || "/";
-
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
     const [error, setError] = useState(undefined)
     const [image, setImage] = useState(undefined)

@@ -13,10 +13,10 @@ export class ReportsApi {
             const params = {reason: filter, page: pageNumber}
             const options = {headers: authCheck({})}
             const res = await fetchWithQueryParamsApi(apiUrl, params, options)
-            if(res.status !== 204) {
+            if(res.status === 200) {
                 return {error: false, data: await res.data, totalPages: res.totalPages}
             } else {
-                return {error: false, data: [], totalPages: res.totalPages}
+                return {error: true, errorCode: res.status}
             }
         } catch (e) {
             return {error: true, errorCode: e.response.status || 500}

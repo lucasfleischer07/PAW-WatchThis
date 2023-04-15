@@ -51,10 +51,10 @@ export class ReviewApi {
                 body: JSON.stringify(reviewDetails)
             })
 
-            if(res.status !== 204) {
+            if(res.status === 201) {
                 return {error: false, data: await res.json()}
             } else {
-                return {error: true, data: []}
+                return {error: true, data: [], errorCode: res.status }
             }
         } catch (e) {
             return {error: true, errorCode: e.response.status || 500}
@@ -81,10 +81,10 @@ export class ReviewApi {
                 body: JSON.stringify(reviewDetails)
             })
 
-            if(res.status !== 204) {
-                return {error: false, data: await res.json()}
-            } else {
+            if(res.status === 204) {
                 return {error: false, data: []}
+            } else {
+                return {error: true, data: [], errorCode: res.status}
             }
         } catch (e) {
             return {error: true, errorCode: e.response.status || 500}

@@ -104,7 +104,7 @@ export default function ReviewEditionPage() {
                             type: data.data.type
                         })
                     } else {
-                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                        navigate("/error", { replace: true, state: {errorCode: data.errorCode || 500} })
                     }
                 })
                 .catch(() => {

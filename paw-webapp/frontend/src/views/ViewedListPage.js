@@ -18,7 +18,7 @@ export default function ViewedListPage(props) {
     const [added, setAdded] = useState(false)
 
     const getUserViewedList = () => {
-        if(isLogged()) {
+        // if(isLogged()) {
             listsService.getUserViewedList(user.id, currentPage)
                 .then(watchList => {
                     if(!watchList.error) {
@@ -31,9 +31,9 @@ export default function ViewedListPage(props) {
                 .catch(() => {
                     navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
-        } else {
-            navigate("/error", { replace: true, state: {errorCode: 401} })
-        }
+        // } else {
+        //     navigate("/error", { replace: true, state: {errorCode: 401} })
+        // }
     }
 
     useEffect(() => {
