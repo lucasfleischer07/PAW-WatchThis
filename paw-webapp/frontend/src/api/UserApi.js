@@ -14,10 +14,10 @@ export class UserApi {
                 headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}),
                 body: JSON.stringify(userDetails)
             })
-            if(res.status !== 204) {
+            if(res.status === 201) {
                 return {error: false, data: await res.json()}
             } else {
-                return {error: false, data: []}
+                return {error: true, errorCode: res.status}
             }
         } catch (e) {
             return {error: true, errorCode: e.response.status || 500}
@@ -30,10 +30,10 @@ export class UserApi {
                 method: 'GET',
                 headers: authCheck({})
             })
-            if(res.status !== 204) {
+            if(res.status === 200) {
                 return {error: false, data: await res.json()}
             } else {
-                return {error: false, data: []}
+                return {error: true, errorCode: res.status}
             }
         } catch (e) {
             return {error: true, errorCode: e.response.status || 500 }
@@ -46,10 +46,10 @@ export class UserApi {
             const params = {page: pageNumber}
             const options = {headers: authCheck({})}
             const res = await fetchWithQueryParamsApi(apiUrl, params, options)
-            if(!res.error) {
+            if(res.status === 200) {
                 return {error: false, data: res.data, totalPages: res.totalPages}
             } else {
-                return {error: false, data: [], totalPages: res.totalPages}
+                return {error: true, errorCode: res.status}
             }
         } catch (e) {
             return {error: true, errorCode: e.response.status || 500}
@@ -83,7 +83,7 @@ export class UserApi {
                 headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}),
                 body: JSON.stringify(userDetails)
             })
-
+            // TODO: Ver que error tira si la current password no es igual a la que esta en la bdd y ver de como tirarlo en el front. Eso no deberia llevar a pagina de error, sino un mensajito
             if(res.status === 200) {
                 return {error: false, data: []}
             } else {
@@ -101,10 +101,10 @@ export class UserApi {
                 headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE}),
                 body: {}
             })
-            if(res.status !== 204) {
-                return {error: false, data: await res.json()}
-            } else {
+            if(res.status === 204) {
                 return {error: false, data: []}
+            } else {
+                return {error: false, errorCode: res.status}
             }
         } catch (e) {
             return {error: true, errorCode: e.response.status || 500}
@@ -140,8 +140,11 @@ export class UserApi {
                 headers: authCheck({}),
                 body: {}
             })
-
-            return {error: false, data: []}
+            if(res.status === 204) {
+                return {error: false, data: []}
+            } else {
+                return {error: true, errorCode: res.status}
+            }
 
         } catch (e) {
             return {error: true}

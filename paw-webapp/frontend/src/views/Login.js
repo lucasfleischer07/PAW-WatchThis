@@ -56,7 +56,7 @@ export default function Login() {
                     toast.success(t('Login.Success'))
                 } else {
                     setError(true)
-                    navigate("/error", { replace: true, state: {errorCode: user.errorCode} })
+                    // navigate("/error", { replace: true, state: {errorCode: user.errorCode} })
                 }
             })
             .catch(() => {

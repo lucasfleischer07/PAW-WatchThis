@@ -69,6 +69,7 @@ export default function SignUp() {
         }
         userService.userCreate(userForm)
             .then(data => {
+                // TODO: Ver como manejar el tema de ususario que ay existe y eso
                 if(!data.error) {
                     userService.login(data.data.email, userForm.password)
                         .then(user2 => {
@@ -101,10 +102,6 @@ export default function SignUp() {
             return {...prev, [name]: value}
         })
     }
-
-    useEffect(() => {
-
-    }, [])
 
     useEffect(() => {
         document.title = t('Login.SignUpMessage')

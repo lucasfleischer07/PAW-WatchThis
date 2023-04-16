@@ -65,8 +65,6 @@ public class ReviewController {
         final Response.ResponseBuilder response = Response.ok(new GenericEntity<Collection<ReviewDto>>(reviewDtoList){});
         ResponseBuildingUtils.setPaginationLinks(response,reviewList , uriInfo);
         return response.build();
-
-
     }
 
     @GET

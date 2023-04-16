@@ -19,7 +19,7 @@ export default function WatchListPage(props) {
     const [added, setAdded] = useState(false)
 
     const getUserWatchList = () => {
-        // if(isLogged()) {
+        if(isLogged()) {
             listsService.getUserWatchList(user?.id, currentPage)
                 .then(watchList => {
                     if(!watchList.error) {
@@ -32,9 +32,9 @@ export default function WatchListPage(props) {
                 .catch(() => {
                     navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
-        // } else {
-        //     navigate("/error", { replace: true, state: {errorCode: 401} })
-        // }
+        } else {
+            navigate("/error", { replace: true, state: {errorCode: 401} })
+        }
     }
 
     useEffect(() => {

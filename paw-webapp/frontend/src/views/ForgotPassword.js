@@ -40,7 +40,11 @@ export default function ForgotPassword() {
                     toast.success(t('Login.ForgotPass.Snackbar'))
                     navigate("/login", {replace: true})
                 } else {
-                    setError(true)
+                    if(data.errorCode === 404) {
+                        setError(true)
+                    } else {
+                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                    }
                 }
             })
             .catch(() => {

@@ -13,12 +13,16 @@ export class ReviewApi {
             const params = {pageNumber: pageNumber, pageSize: 10}
             const options = {headers: authCheck({})}
             const res =  await fetchWithQueryParamsApi(apiUrl, params, options)
-            const jsonData = await res.data;
-            const jsonString = JSON.stringify(jsonData);
-            if (jsonString === '{}') {
-                return {error: false, data: [], totalPages: res.totalPages}
+            if(res.status === 200) {
+                const jsonData = await res.data;
+                const jsonString = JSON.stringify(jsonData);
+                if (jsonString === '{}') {
+                    return {error: false, data: [], totalPages: res.totalPages}
+                } else {
+                    return {error: false, data: await res.data, totalPages: res.totalPages}
+                }
             } else {
-                return {error: false, data: await res.data, totalPages: res.totalPages}
+                return {error: true, errorCode: res.status}
             }
         } catch (e) {
             return {error: true, errorCode: e.response.status || 500}
@@ -32,10 +36,10 @@ export class ReviewApi {
                 method: 'GET',
                 headers: authCheck({})
             })
-            if(res.status !== 204) {
+            if(res.status === 200) {
                 return {error: false, data: await res.json()}
             } else {
-                return {error: false, data: []}
+                return {error: true, errorCode: res.status}
             }
         } catch (e) {
             return {error: true, errorCode: e.response.status || 500}
@@ -54,7 +58,7 @@ export class ReviewApi {
             if(res.status === 201) {
                 return {error: false, data: await res.json()}
             } else {
-                return {error: true, data: [], errorCode: res.status }
+                return {error: true, errorCode: res.status }
             }
         } catch (e) {
             return {error: true, errorCode: e.response.status || 500}
@@ -136,12 +140,16 @@ export class ReviewApi {
                 headers: authCheck({}),
             })
 
-            const jsonData = await res.json();
-            const jsonString = JSON.stringify(jsonData);
-            if (jsonString === '{}') {
-                return { error: false, data: [] };
+            if(res.status === 200) {
+                const jsonData = await res.json();
+                const jsonString = JSON.stringify(jsonData);
+                if (jsonString === '{}') {
+                    return { error: false, data: [] };
+                } else {
+                    return { error: false, data: jsonData };
+                }
             } else {
-                return { error: false, data: jsonData };
+                return {error: true, errorCode: res.status}
             }
 
         } catch (e) {
@@ -155,13 +163,16 @@ export class ReviewApi {
                 method: 'GET',
                 headers: authCheck({}),
             })
-
-            const jsonData = await res.json();
-            const jsonString = JSON.stringify(jsonData);
-            if (jsonString === '{}') {
-                return { error: false, data: [] };
+            if(res.status === 200) {
+                const jsonData = await res.json();
+                const jsonString = JSON.stringify(jsonData);
+                if (jsonString === '{}') {
+                    return { error: false, data: [] };
+                } else {
+                    return { error: false, data: jsonData };
+                }
             } else {
-                return { error: false, data: jsonData };
+                return {error: true, errorCode: res.status}
             }
 
         } catch (e) {

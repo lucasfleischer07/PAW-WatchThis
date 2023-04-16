@@ -111,7 +111,7 @@ export default function ReviewEditionPage() {
                     navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
 
-
+            // TODO: Revisar esto y ver si se puede evitar
             contentService.getSpecificContent(parseInt(contentId))
                 .then(data => {
                     if(!data.error) {

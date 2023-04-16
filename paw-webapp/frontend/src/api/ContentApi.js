@@ -21,10 +21,10 @@ export class ContentApi {
                 method: 'GET',
                 headers: authCheck({})
             })
-            if(res.status !== 204) {
+            if(res.status === 200) {
                 return {error: false, data: await res.json()}
             } else {
-                return {error: false, data: []}
+                return {error: true, errorCode: res.status}
             }
         } catch (e) {
             return {error: true, errorCode: e.response.status || 500}
@@ -49,10 +49,10 @@ export class ContentApi {
                 body: JSON.stringify(contentDetails)
             })
 
-            if(res.status !== 204 && res.status !== 200) {
-                return {error: false, data: await res.json()}
-            } else {
+            if(res.status === 200) {
                 return {error: false, data: []}
+            } else {
+                return {error: true, errorCode: res.status}
             }
         } catch (e) {
             return {error: true, errorCode: e.response.status || 500}
@@ -81,11 +81,15 @@ export class ContentApi {
 
     async deleteContent(contentId) {
         try {
-            await fetch(`${this.basePath}/${contentId}/deleteContent`, {
+            const res = await fetch(`${this.basePath}/${contentId}/deleteContent`, {
                 method: 'DELETE',
                 headers: authCheck({})
             })
-            return {error: false, data: []}
+            if(res.status === 204) {
+                return {error: false, data: []}
+            } else {
+                return {error: true, errorCode: res.status}
+            }
         } catch (e) {
             return {error: true, errorCode: e.response.status || 500}
         }
@@ -101,12 +105,12 @@ export class ContentApi {
                 headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}),
                 body: JSON.stringify(contentDetails)
             })
-            if(res.status !== 204) {
+            if(res.status === 201) {
                 const contentData = await res.json()
                 await this.updateContentImage(contentData.id, image)
                 return {error: false, data: contentData}
             } else {
-                return {error: false, data: []}
+                return {error: true, errorCode: res.status}
             }
         } catch (e) {
             return {error: true, errorCode: e.response.status || 500}
@@ -119,10 +123,10 @@ export class ContentApi {
             const params = {pageNumber: pageNumber, pageSize: 10}
             const options = {headers: authCheck({})}
             const res = await fetchWithQueryParamsApi(apiUrl, params, options)
-            if(res.status !== 204) {
+            if(res.status === 200) {
                 return {error: false, totalPages: res.totalPages, data: res.data}
             } else {
-                return {error: false, data: []}
+                return {error: true, errorCode: res.status}
             }
         } catch (e) {
             return {error: true, errorCode: e.response.status || 500}
