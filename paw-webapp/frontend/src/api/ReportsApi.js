@@ -31,8 +31,10 @@ export class ReportsApi {
                 body: JSON.stringify(reviewReportReasons)
             })
 
-            if(res.status !== 204) {
+            if(res.status === 200) {
                 return {error: false, data: []}
+            } else {
+                return {error: true, errorCode: res.status}
             }
         } catch (e) {
             return {error: true, errorCode: e.response.status || 500}
@@ -47,8 +49,10 @@ export class ReportsApi {
                 body: JSON.stringify(commentReportReasons)
             })
 
-            if(res.status !== 204) {
+            if(res.status === 200) {
                 return {error: false, data: []}
+            } else {
+                return {error: true, errorCode: res.status}
             }
         } catch (e) {
             return {error: true, errorCode: e.response.status || 500}
@@ -57,11 +61,16 @@ export class ReportsApi {
 
     async deleteReport(commentOrReviewId, type) {
         try {
-            await fetch(`${this.basePath}/deleteReport/${type}/${commentOrReviewId}`, {
+            const res = await fetch(`${this.basePath}/deleteReport/${type}/${commentOrReviewId}`, {
                 method: 'DELETE',
                 headers: authCheck({})
             })
-            return {error: false, data: []}
+
+            if(res.status === 204) {
+                return {error: false, data: []}
+            } else {
+                return {error: true, errorCode: res.status}
+            }
         } catch (e) {
             return {error: true, errorCode: e.response.status || 500}
         }

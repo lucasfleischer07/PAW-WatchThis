@@ -67,11 +67,16 @@ export class ReviewApi {
 
     async deleteReview(reviewId) {
         try {
-            await fetch(`${this.basePath}/delete/${reviewId}`, {
+            const res = await fetch(`${this.basePath}/delete/${reviewId}`, {
                 method: 'DELETE',
                 headers: authCheck({})
             })
-            return {error: false, data: []}
+
+            if(res.status === 204) {
+                return {error: false, data: []}
+            } else {
+                return {error: true, errorCode: res.status}
+            }
         } catch (e) {
             return {error: true, errorCode: e.response.status || 500}
         }
@@ -103,10 +108,10 @@ export class ReviewApi {
                 body: {}
             })
 
-            if(res.status !== 204) {
-                return {error: false, data: await res.json()}
-            } else {
+            if(res.status === 204) {
                 return {error: false, data: []}
+            } else {
+                return {error: true, errorCode: res.status}
             }
 
         } catch (e) {
@@ -122,10 +127,10 @@ export class ReviewApi {
                 body: {}
             })
 
-            if(res.status !== 204) {
-                return {error: false, data: await res.json()}
-            } else {
+            if(res.status === 204) {
                 return {error: false, data: []}
+            } else {
+                return {error: true, errorCode: res.status}
             }
 
         } catch (e) {
