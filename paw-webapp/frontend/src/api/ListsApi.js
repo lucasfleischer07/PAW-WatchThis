@@ -13,13 +13,13 @@ export class ListsApi {
             const params = {pageNumber: pageNumber, pageSize: 10}
             const options = {headers: authCheck({})}
             const res = await fetchWithQueryParamsApi(apiUrl, params, options)
-            if(res.status !== 204) {
+            if(res.status === 200) {
                 return {error: false, data: await res.data, totalPages: res.totalPages}
             } else {
-                return {error: false, data: [], totalPages: res.totalPages}
+                return {error: false, errorCode: res.status}
             }
         } catch (e) {
-            return {error: true}
+            return {error: true, errorCode: e.response.status || 500}
         }
     }
 
@@ -30,13 +30,13 @@ export class ListsApi {
                 headers: authCheck({}),
             })
 
-            if(res.status !== 204) {
+            if(res.status === 200) {
                 return {error: false, data: await res.json()}
             } else {
-                return {error: false, data: []}
+                return {error: true, errorCode: res.status}
             }
         } catch (e) {
-            return {error: true}
+            return {error: true, errorCode: e.response.status || 500}
         }
     }
 
@@ -48,26 +48,30 @@ export class ListsApi {
                 body: {}
             })
 
-            if(res.status !== 204) {
-                return {error: false, data: await res.json()}
-            } else {
+            if(res.status === 204) {
                 return {error: false, data: []}
+            } else {
+                return {error: true, errorCode: res.status}
             }
         } catch (e) {
-            return {error: true}
+            return {error: true, errorCode: e.response.status || 500}
         }
     }
 
     async deleteUserWatchList(contentId) {
         try {
-            await fetch(`${this.basePath}/watchList/delete/${contentId}`, {
+            const res = await fetch(`${this.basePath}/watchList/delete/${contentId}`, {
                 method: 'DELETE',
                 headers: authCheck({}),
                 body: {}
             })
-            return {error: false, data: []}
+            if(res.status === 204) {
+                return {error: false, data: []}
+            } else {
+                return {error: true, errorCode: res.status}
+            }
         } catch (e) {
-            return {error: true}
+            return {error: true, errorCode: e.response.status || 500}
         }
     }
 
@@ -77,13 +81,13 @@ export class ListsApi {
             const params = {pageNumber: pageNumber, pageSize: 10}
             const options = {headers: authCheck({})}
             const res = await fetchWithQueryParamsApi(apiUrl, params, options)
-            if(res.status !== 204) {
+            if(res.status === 200) {
                 return {error: false, data: await res.data, totalPages: res.totalPages}
             } else {
-                return {error: false, data: [], totalPages: res.totalPages}
+                return {error: true, errorCode: res.status}
             }
         } catch (e) {
-            return {error: true}
+            return {error: true, errorCode: e.response.status || 500}
         }
     }
 
@@ -94,13 +98,13 @@ export class ListsApi {
                 headers: authCheck({}),
             })
 
-            if(res.status !== 204) {
+            if(res.status === 200) {
                 return {error: false, data: await res.json()}
             } else {
-                return {error: false, data: []}
+                return {error: true, errorCode: res.status}
             }
         } catch (e) {
-            return {error: true}
+            return {error: true, errorCode: e.response.status || 500}
         }
     }
 
@@ -112,13 +116,13 @@ export class ListsApi {
                 body: {}
             })
 
-            if(res.status !== 204) {
-                return {error: false, data: await res.json()}
-            } else {
+            if(res.status === 204) {
                 return {error: false, data: []}
+            } else {
+                return {error: true, errorCode: res.status}
             }
         } catch (e) {
-            return {error: true}
+            return {error: true, errorCode: e.response.status || 500}
         }
     }
 
@@ -130,13 +134,13 @@ export class ListsApi {
                 body: {}
             })
 
-            if(res.status !== 204) {
-                return {error: false, data: await res.json()}
-            } else {
+            if(res.status === 204) {
                 return {error: false, data: []}
+            } else {
+                return {error: true, errorCode: res.status}
             }
         } catch (e) {
-            return {error: true}
+            return {error: true, errorCode: e.response.status || 500}
         }
     }
 }

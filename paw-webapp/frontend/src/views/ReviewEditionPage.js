@@ -15,7 +15,7 @@ export default function ReviewEditionPage() {
     let {isLogged} = useContext(AuthContext)
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
 
-    let origin = location.state?.from?.pathname || "/";
+    let origin = location.pathname || "/";
     const { contentType, contentId, reviewId } = useParams();
     const [content, setContent] = useState({})
     const [error, setError] = useState(false)
@@ -83,13 +83,12 @@ export default function ReviewEditionPage() {
             .then(data => {
                 if(!data.error) {
                     navigate(origin, {replace: true})
-                    // toast.success()
                 } else {
-                    //     TODO: Error
+                    navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                 }
             })
-            .catch(e => {
-                //     TODO: Llevar a la pagian de error
+            .catch(() => {
+                navigate("/error", { replace: true, state: {errorCode: 404} })
             })
     }
 
@@ -105,32 +104,29 @@ export default function ReviewEditionPage() {
                             type: data.data.type
                         })
                     } else {
-                        navigate("/error", {replace: true})
-                    //     TODO: Meter error de forbiden access y llevar a pagina de errror
+                        navigate("/error", { replace: true, state: {errorCode: data.errorCode || 500} })
                     }
                 })
-                .catch(e => {
-                //     TODO: Tirar algo de errror
+                .catch(() => {
+                    navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
 
-
+            // TODO: Revisar esto y ver si se puede evitar
             contentService.getSpecificContent(parseInt(contentId))
                 .then(data => {
                     if(!data.error) {
                         setContent(data.data)
                     } else {
-                        //     TODO: Ver que hacer
+                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                     }
                 })
-                .catch(e => {
-                    //     TODO: Ver que hacer
+                .catch(() => {
+                    navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
         } else {
-            //     TODO: Llevar a la pagian de error
+            navigate("/error", { replace: true, state: {errorCode: 401} })
         }
     }, [])
-
-
 
 
     return(

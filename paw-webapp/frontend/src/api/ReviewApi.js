@@ -13,13 +13,19 @@ export class ReviewApi {
             const params = {pageNumber: pageNumber, pageSize: 10}
             const options = {headers: authCheck({})}
             const res =  await fetchWithQueryParamsApi(apiUrl, params, options)
-            if(res.status !== 204) {
-                return {error: false, data: await res.data, totalPages: res.totalPages}
+            if(res.status === 200) {
+                const jsonData = await res.data;
+                const jsonString = JSON.stringify(jsonData);
+                if (jsonString === '{}') {
+                    return {error: false, data: [], totalPages: res.totalPages}
+                } else {
+                    return {error: false, data: await res.data, totalPages: res.totalPages}
+                }
             } else {
-                return {error: false, data: [], totalPages: res.totalPages}
+                return {error: true, errorCode: res.status}
             }
         } catch (e) {
-            return {error: true}
+            return {error: true, errorCode: e.response.status || 500}
         }
 
     }
@@ -30,13 +36,13 @@ export class ReviewApi {
                 method: 'GET',
                 headers: authCheck({})
             })
-            if(res.status !== 204) {
+            if(res.status === 200) {
                 return {error: false, data: await res.json()}
             } else {
-                return {error: false, data: []}
+                return {error: true, errorCode: res.status}
             }
         } catch (e) {
-            return {error: true}
+            return {error: true, errorCode: e.response.status || 500}
         }
 
     }
@@ -49,25 +55,30 @@ export class ReviewApi {
                 body: JSON.stringify(reviewDetails)
             })
 
-            if(res.status !== 204) {
+            if(res.status === 201) {
                 return {error: false, data: await res.json()}
             } else {
-                return {error: true, data: []}
+                return {error: true, errorCode: res.status }
             }
         } catch (e) {
-            return {error: true}
+            return {error: true, errorCode: e.response.status || 500}
         }
     }
 
     async deleteReview(reviewId) {
         try {
-            await fetch(`${this.basePath}/delete/${reviewId}`, {
+            const res = await fetch(`${this.basePath}/delete/${reviewId}`, {
                 method: 'DELETE',
                 headers: authCheck({})
             })
-            return {error: false, data: []}
+
+            if(res.status === 204) {
+                return {error: false, data: []}
+            } else {
+                return {error: true, errorCode: res.status}
+            }
         } catch (e) {
-            return {error: true}
+            return {error: true, errorCode: e.response.status || 500}
         }
     }
 
@@ -79,53 +90,98 @@ export class ReviewApi {
                 body: JSON.stringify(reviewDetails)
             })
 
-            if(res.status !== 204) {
-                return {error: false, data: await res.json()}
-            } else {
+            if(res.status === 204) {
                 return {error: false, data: []}
+            } else {
+                return {error: true, data: [], errorCode: res.status}
             }
         } catch (e) {
-            return {error: true}
+            return {error: true, errorCode: e.response.status || 500}
         }
     }
 
     async reviewThumbUp(reviewId) {
         try {
-            // TODO: Verificar si esta bien el contentId o seri el contentDetails.id o como seria esa parte
             const res = await fetch(`${this.basePath}/reviewReputation/thumbUp/${reviewId}`, {
                 method: 'PUT',
                 headers: authCheck({}),
                 body: {}
             })
 
-            if(res.status !== 204) {
-                return {error: false, data: await res.json()}
-            } else {
+            if(res.status === 204) {
                 return {error: false, data: []}
+            } else {
+                return {error: true, errorCode: res.status}
             }
 
         } catch (e) {
-            return {error: true}
+            return {error: true, errorCode: e.response.status || 500}
         }
     }
 
     async reviewThumbDown(reviewId) {
         try {
-            // TODO: Verificar si esta bien el contentId o seri el contentDetails.id o como seria esa parte
             const res = await fetch(`${this.basePath}/reviewReputation/thumbDown/${reviewId}`, {
                 method: 'PUT',
                 headers: authCheck({}),
                 body: {}
             })
 
-            if(res.status !== 204) {
-                return {error: false, data: await res.json()}
-            } else {
+            if(res.status === 204) {
                 return {error: false, data: []}
+            } else {
+                return {error: true, errorCode: res.status}
             }
 
         } catch (e) {
-            return {error: true}
+            return {error: true, errorCode: e.response.status || 500}
+        }
+    }
+
+    async getReviewsLike() {
+        try {
+            const res = await fetch(`${this.basePath}/likedByUsers`, {
+                method: 'GET',
+                headers: authCheck({}),
+            })
+
+            if(res.status === 200) {
+                const jsonData = await res.json();
+                const jsonString = JSON.stringify(jsonData);
+                if (jsonString === '{}') {
+                    return { error: false, data: [] };
+                } else {
+                    return { error: false, data: jsonData };
+                }
+            } else {
+                return {error: true, errorCode: res.status}
+            }
+
+        } catch (e) {
+            return {error: true, errorCode: e.response.status || 500}
+        }
+    }
+
+    async getReviewsDislike() {
+        try {
+            const res = await fetch(`${this.basePath}/dislikedByUsers`, {
+                method: 'GET',
+                headers: authCheck({}),
+            })
+            if(res.status === 200) {
+                const jsonData = await res.json();
+                const jsonString = JSON.stringify(jsonData);
+                if (jsonString === '{}') {
+                    return { error: false, data: [] };
+                } else {
+                    return { error: false, data: jsonData };
+                }
+            } else {
+                return {error: true, errorCode: res.status}
+            }
+
+        } catch (e) {
+            return {error: true, errorCode: e.response.status || 500}
         }
     }
 

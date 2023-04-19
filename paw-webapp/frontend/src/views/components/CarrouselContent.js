@@ -19,11 +19,12 @@ export default function CarrouselContent(props) {
                 if(!data.error) {
                     setIsInWatchList(true);
                     toast.success(t('WatchList.Added'))
+                } else {
+                    navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                 }
             })
             .catch(() => {
-            //     TODO: Meter un toast o algo asi
-            //     TODO Llegar a pagina de error
+                navigate("/error", { replace: true, state: {errorCode: 404} })
             })
     }
 
@@ -34,11 +35,12 @@ export default function CarrouselContent(props) {
                 if(!data.error) {
                     setIsInWatchList(false);
                     toast.success(t('WatchList.Removed'))
+                } else {
+                    navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                 }
             })
             .catch(() => {
-                //     TODO: Meter un toast o algo asi
-                //     TODO Llegar a pagina de error
+                navigate("/error", { replace: true, state: {errorCode: 404} })
              })
     }
 
@@ -52,10 +54,12 @@ export default function CarrouselContent(props) {
             .then(watchList => {
                 if(!watchList.error) {
                     setIsInWatchList(watchList.data.some(item => item.id === props.id))
+                } else {
+                    navigate("/error", { replace: true, state: {errorCode: watchList.errorCode} })
                 }
             })
-            .catch(e => {
-                //     TODO: Meter algo
+            .catch(() => {
+                navigate("/error", { replace: true, state: {errorCode: 404} })
             })
     }
 
@@ -72,7 +76,7 @@ export default function CarrouselContent(props) {
                 <div className="card W-films-card-body-carousel W-more-style">
                     <div className="W-img-watchList-button-div">
                         <div className="d-grid gap-2 W-watchList-button-div">
-                            {isLogged && !isInWatchList ? (
+                            {isLogged() && !isInWatchList ? (
                                 <form id={`form${props.id}`} onSubmit={handleAddToWatchlist}>
                                     <button id="buttonAddToWatchList" className="btn btn-secondary W-watchList-button" type="submit">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="bi bi-bookmark-plus W-watchList-icon" viewBox="0 0 16 16">
@@ -81,7 +85,7 @@ export default function CarrouselContent(props) {
                                         </svg>
                                     </button>
                                 </form>
-                            ) : isLogged && isInWatchList ? (
+                            ) : isLogged() && isInWatchList ? (
                                 <form id={`form${props.id}`} onSubmit={handleRemoveFromWatchlist}>
                                     <button className="btn btn-secondary W-watchList-button" type="submit">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="bi bi-bookmark-plus W-watchList-icon" viewBox="0 0 16 16">

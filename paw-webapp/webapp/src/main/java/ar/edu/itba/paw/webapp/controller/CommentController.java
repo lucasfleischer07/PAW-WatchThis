@@ -67,7 +67,8 @@ public class CommentController {
     @POST
     @Produces(value = {MediaType.APPLICATION_JSON})
     @Path("/{reviewId}/add")
-    public Response commentReviewAdd(@PathParam("reviewId")final long reviewId, @Valid NewCommentDto commentDto) {
+    public Response commentReviewAdd(@PathParam("reviewId")final long reviewId,
+                                     @Valid NewCommentDto commentDto) {
         LOGGER.info("POST /{}: Called", uriInfo.getPath());
         if(commentDto==null)
             throw new BadRequestException("Must include comment data");
@@ -83,7 +84,7 @@ public class CommentController {
         Comment newComment = ccs.addComment(review.get(), user.get(), commentDto.getComment());
 
         LOGGER.info("POST /{}: Comment created with id {}", uriInfo.getPath(), newComment.getCommentId());
-        return Response.created(CommentDto.getCommentUriBuilder(newComment, uriInfo).build()).build();
+        return Response.created(CommentDto.getCommentUriBuilder(newComment, uriInfo).build()).entity(newComment).build();
     }
     // * ---------------------------------------------------------------------------------------------------------------
 
@@ -106,7 +107,6 @@ public class CommentController {
         if(user.get().getUserName().equals(deleteComment.get().getUser().getUserName())) {
             ccs.deleteComment(deleteComment.get());
         }
-//        TODO: CHEQUEAR ESTO DEL ADMIN< SI HACERLO ASI O TRAERLO DE LA BDD COMO  HACEMOS EN OTROS CASOS
         else if(auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
             rrs.delete(deleteComment.get(), deleteComment.get().getReports());
         } else {

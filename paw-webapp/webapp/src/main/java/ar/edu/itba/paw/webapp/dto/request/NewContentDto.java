@@ -7,7 +7,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.constraints.*;
 
 public class NewContentDto {
-//    TODO: METER LOS MENSAJES DE ERROR EN CASO DE QUE ESTE VACIO
     @Size(min = 1, max = 55, message = "...")
     @Pattern(regexp	= "([a-zA-Z0-9ñáéíóú!,.:;=+\n\\-_()?<>$%&#@{}\\[\\]|*\"'~/`^\\s]+)?", message = "...")
     private String name;

@@ -10,20 +10,19 @@ export class ReportsApi {
     async getReportsByType(type, pageNumber, filter= '') {
         try {
             const apiUrl = `${this.basePath}/${type}`
-            const params = {reason: filter, pageNumber: pageNumber, pageSize: 10}
+            const params = {reason: filter, page: pageNumber}
             const options = {headers: authCheck({})}
             const res = await fetchWithQueryParamsApi(apiUrl, params, options)
-            if(res.status !== 204) {
+            if(res.status === 200) {
                 return {error: false, data: await res.data, totalPages: res.totalPages}
             } else {
-                return {error: false, data: [], totalPages: res.totalPages}
+                return {error: true, errorCode: res.status}
             }
         } catch (e) {
-            return {error: true}
+            return {error: true, errorCode: e.response.status || 500}
         }
     }
 
-    // TODO: VERIFICAR BIEN ESTE PORUQE NI IDEA
     async addReviewReport(reviewId, reviewReportReasons) {
         try {
             const res = await fetch(`${this.basePath}/review/${reviewId}`, {
@@ -32,17 +31,16 @@ export class ReportsApi {
                 body: JSON.stringify(reviewReportReasons)
             })
 
-            if(res.status !== 204) {
-                return {error: false, data: await res.json()}
-            } else {
+            if(res.status === 200) {
                 return {error: false, data: []}
+            } else {
+                return {error: true, errorCode: res.status}
             }
         } catch (e) {
-            return {error: true}
+            return {error: true, errorCode: e.response.status || 500}
         }
     }
 
-    // TODO: VERIFICAR BIEN ESTE PORUQE NI IDEA
     async addCommentReport(commentId, commentReportReasons) {
         try {
             const res = await fetch(`${this.basePath}/comment/${commentId}`, {
@@ -51,25 +49,30 @@ export class ReportsApi {
                 body: JSON.stringify(commentReportReasons)
             })
 
-            if(res.status !== 204) {
-                return {error: false, data: await res.json()}
-            } else {
+            if(res.status === 200) {
                 return {error: false, data: []}
+            } else {
+                return {error: true, errorCode: res.status}
             }
         } catch (e) {
-            return {error: true}
+            return {error: true, errorCode: e.response.status || 500}
         }
     }
 
     async deleteReport(commentOrReviewId, type) {
         try {
-            await fetch(`${this.basePath}/deleteReport/${type}/${commentOrReviewId}`, {
+            const res = await fetch(`${this.basePath}/deleteReport/${type}/${commentOrReviewId}`, {
                 method: 'DELETE',
                 headers: authCheck({})
             })
-            return {error: false, data: []}
+
+            if(res.status === 204) {
+                return {error: false, data: []}
+            } else {
+                return {error: true, errorCode: res.status}
+            }
         } catch (e) {
-            return {error: true}
+            return {error: true, errorCode: e.response.status || 500}
         }
     }
 }

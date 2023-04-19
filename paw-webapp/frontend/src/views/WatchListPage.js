@@ -3,33 +3,37 @@ import ContentCard from "./components/ContentCard";
 import {useTranslation} from "react-i18next";
 import {AuthContext} from "../context/AuthContext";
 import {listsService} from "../services";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import Header from "./components/Header";
+import {set} from "react-hook-form";
 
 export default function WatchListPage(props) {
-
     const {t} = useTranslation()
+    let navigate = useNavigate()
     let {isLogged} = useContext(AuthContext)
+
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
     const [currentPage, setCurrentPage] = useState(1)
     const [totalPages, setTotalPages] = useState(undefined)
     const [watchList, setWatchList] = useState([])
+    const [added, setAdded] = useState(false)
 
     const getUserWatchList = () => {
-        if(isLogged) {
-            listsService.getUserWatchList(user.id, currentPage)
+        if(isLogged()) {
+            listsService.getUserWatchList(user?.id, currentPage)
                 .then(watchList => {
                     if(!watchList.error) {
                         setWatchList(watchList.data)
                         setTotalPages(watchList.totalPages)
+                    } else {
+                        navigate("/error", { replace: true, state: {errorCode: watchList.errorCode} })
                     }
-
                 })
-                .catch(e => {
-                    //     TODO: Meter toasts
+                .catch(() => {
+                    navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
         } else {
-            //     TODO: Tirar a la pagina de error de que no tiene permisos
+            navigate("/error", { replace: true, state: {errorCode: 401} })
         }
     }
 
@@ -39,7 +43,7 @@ export default function WatchListPage(props) {
 
     useEffect(() => {
         getUserWatchList()
-    }, [watchList, currentPage])
+    }, [added, currentPage])
 
     return (
         <>
@@ -77,6 +81,7 @@ export default function WatchListPage(props) {
                                 <div className="row row-cols-1 row-cols-md-2 g-2 W-content-alignment">
                                     {watchList.map((content) => (
                                         <ContentCard
+                                            key={`watchListContentCard${content.id}`}
                                             contentName={content.name}
                                             contentReleased={content.releaseDate}
                                             contentCreator={content.creator}
@@ -86,8 +91,9 @@ export default function WatchListPage(props) {
                                             contentType={content.type}
                                             contentRating={content.rating}
                                             reviewsAmount={content.reviewsAmount}
+                                            added={added}
+                                            setAdded={setAdded}
                                             isInWatchList={watchList.length > 0 ? watchList.some(item => item.id === content.id) : false}
-                                            key={content.id}
                                         />
                                     ))}
                                 </div>

@@ -12,14 +12,12 @@ export default function ProfileEditionPage() {
     const {t} = useTranslation()
     let navigate = useNavigate()
     let location = useLocation()
+    const {reset} = useForm()
     let {isLogged} = useContext(AuthContext)
-    // TODO: Chequear el tema de la redireccion a la pagina anterior
-    let origin = location.state?.from?.pathname || "/";
 
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
     const [error, setError] = useState(undefined)
     const [image, setImage] = useState(undefined)
-    const {reset} = useForm()
 
 
     const [userForm, setUserForm] = useState({
@@ -49,21 +47,20 @@ export default function ProfileEditionPage() {
                         setError(false)
                         reset()
                         toast.info(t('EditProfile.Upload.Password.Success'))
-                        navigate(origin, {replace: true})
+                        navigate(-1)
+                    } else {
+                        toast.error(t('EditProfile.Upload.Password.Error'))
+                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                     }
                 })
-                .catch(e => {
-                    toast.error(t('EditProfile.Upload.Password.Error'))
+                .catch(() => {
+                    navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
         } else {
-            if(!isLogged()) {
-                toast.warn(t('Action.Forbidden.Login'))
-                navigate(origin, {replace: true})
-            }
+            navigate("/error", { replace: true, state: {errorCode: 401} })
         }
     }
 
-    // TODO: FALTA AHCER QUE SE RESETEE LA IMAGEN CUANOD SE PONE EL UPLOAD
     const onSubmitImage = (e) => {
         e.preventDefault();
         if(isLogged() && image !== undefined) {
@@ -71,21 +68,19 @@ export default function ProfileEditionPage() {
                 .then(data => {
                     if (!data.error) {
                         setError(false)
-                        reset()
                         toast.success(t('EditProfile.Upload.Image'));
-                        navigate(origin, {replace: true})
+                        navigate(-1)
                     } else {
                         setError(true)
+                        toast.error(t('EditProfile.Upload.Image.Error'));
+                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                     }
                 })
-                .catch(e => {
-                    toast.error(t('EditProfile.Upload.Image.Error'));
+                .catch(() => {
+                    navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
         } else {
-            if(!isLogged()) {
-                toast.warn(t('Action.Forbidden.Login'));
-                navigate(origin, {replace: true})
-            }
+            navigate("/error", { replace: true, state: {errorCode: 401} })
         }
 
     }
@@ -103,7 +98,6 @@ export default function ProfileEditionPage() {
     }
 
     useEffect(() => {
-        // Si no esta logeado, lo mando a pagina de login
         if(!isLogged()) {
             navigate("/login", {replace: true})
         }
@@ -155,7 +149,7 @@ export default function ProfileEditionPage() {
                                 </div>
                                 <div className="W-submit-changes-edit-profile">
                                     <button type="submit" className="btn btn-success">
-                                        {/*TODO: Cambair este mensaje por el de Upload Image*/}
+                                        {/*TODO: Cambair este mensaje por uno que diga: Upload Image*/}
                                         {t('EditProfile.Upload')}
                                     </button>
                                 </div>

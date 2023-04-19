@@ -14,13 +14,13 @@ export class UserApi {
                 headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}),
                 body: JSON.stringify(userDetails)
             })
-            if(res.status !== 204) {
+            if(res.status === 201) {
                 return {error: false, data: await res.json()}
             } else {
-                return {error: false, data: []}
+                return {error: true, errorCode: res.status}
             }
         } catch (e) {
-            return {error: true}
+            return {error: true, errorCode: e.response.status || 500}
         }
     }
 
@@ -30,49 +30,30 @@ export class UserApi {
                 method: 'GET',
                 headers: authCheck({})
             })
-            if(res.status !== 204) {
+            if(res.status === 200) {
                 return {error: false, data: await res.json()}
             } else {
-                return {error: false, data: []}
+                return {error: true, errorCode: res.status}
             }
         } catch (e) {
-            return {error: true}
+            return {error: true, errorCode: e.response.status || 500 }
         }
     }
 
     async getUserReviews(userId, pageNumber) {
         try {
             const apiUrl = `${this.basePath}/${userId}/reviews`
-            const params = {pageNumber: pageNumber}
+            const params = {page: pageNumber}
             const options = {headers: authCheck({})}
             const res = await fetchWithQueryParamsApi(apiUrl, params, options)
-            if(res.status !== 204) {
+            if(res.status === 200) {
                 return {error: false, data: res.data, totalPages: res.totalPages}
             } else {
-                return {error: false, data: [], totalPages: res.totalPages}
+                return {error: true, errorCode: res.status}
             }
         } catch (e) {
-            return {error: true}
+            return {error: true, errorCode: e.response.status || 500}
         }
-    }
-
-    // TODO: Chequear bien este
-    async getUserProfileImage(userId) {
-        try {
-            const res = await fetch(`${this.basePath}/${userId}/profileImage`, {
-                method: 'GET',
-                headers: authCheck({})
-            })
-            if(res.status !== 204) {
-                return {error: false, data: await res.json()}
-            } else {
-                return {error: false, data: []}
-            }
-        } catch (e) {
-            return {error: true}
-
-        }
-
     }
 
     async updateUserProfileImage(userId, image) {
@@ -84,32 +65,32 @@ export class UserApi {
                 headers: authCheck({}),
                 body: formData
             })
-            if(res.status !== 204) {
-                return {error: false, data: await res.json()}
-            } else {
+            if(res.status === 204) {
                 return {error: false, data: []}
+            } else {
+                return {error: true, errorCode: res.status}
             }
         } catch (e) {
-            return {error: true}
+            return {error: true, errorCode: e.response.status || 500}
 
         }
     }
 
     async updateUserProfileInfo(userId, userDetails) {
         try {
-            const res = await fetch(`${this.basePath}/editInfo/${userId}`, {
+            const res = await fetch(`${this.basePath}/${userId}/editProfile`, {
                 method: 'PUT',
                 headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}),
                 body: JSON.stringify(userDetails)
             })
-
-            if(res.status !== 204) {
-                return {error: false, data: await res.json()}
-            } else {
+            // TODO: Ver que error tira si la current password no es igual a la que esta en la bdd y ver de como tirarlo en el front. Eso no deberia llevar a pagina de error, sino un mensajito
+            if(res.status === 200) {
                 return {error: false, data: []}
+            } else {
+                return {error: false, errorCode: res.status}
             }
         } catch (e) {
-            return {error: true}
+            return {error: true, errorCode: e.response.status || 500}
         }
     }
 
@@ -120,13 +101,13 @@ export class UserApi {
                 headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE}),
                 body: {}
             })
-            if(res.status !== 204) {
-                return {error: false, data: await res.json()}
-            } else {
+            if(res.status === 204) {
                 return {error: false, data: []}
+            } else {
+                return {error: false, errorCode: res.status}
             }
         } catch (e) {
-            return {error: true}
+            return {error: true, errorCode: e.response.status || 500}
         }
     }
 
@@ -143,12 +124,12 @@ export class UserApi {
             if(res.status !== 204 && res.status !== 401) {
                 return {error: false, data: await res.json(), header: res.headers.get("Authorization")?.toString().split(" ")[1]}
             } else if(res.status === 401) {
-                return {error: true, data: []}
+                return {error: true, data: [], errorCode: res.status}
             } else {
                 return {error: false, data: []}
             }
         } catch (e) {
-            return {error: true}
+            return {error: true, errorCode: e.response.status || 500}
         }
     }
 
@@ -159,8 +140,11 @@ export class UserApi {
                 headers: authCheck({}),
                 body: {}
             })
-
-            return {error: false, data: []}
+            if(res.status === 204) {
+                return {error: false, data: []}
+            } else {
+                return {error: true, errorCode: res.status}
+            }
 
         } catch (e) {
             return {error: true}

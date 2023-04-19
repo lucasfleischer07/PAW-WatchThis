@@ -79,7 +79,7 @@
 
   "Signup.PageInfo": "Registrate en Watch This",
   "Signup.Username": "nombre",
-  "Signup.CharacterLimits": "(Debe estar entre {0} y {1} caracteres)",
+  "Signup.CharacterLimits": "(Debe estar entre {{min}} y {{max}} caracteres)",
   "Signup.Email": "Email",
   "Signup.Password": "Contraseña",
   "Signup.ConfirmPassword": "Confirmar contraseña",
@@ -121,7 +121,7 @@
   "Comment.Here": "¡Comentar!",
   "Comment.WarningAdd": "Para comentar una reseña, tienes que iniciar sesión.",
   "Comment.EmptyComment": "El comentario esta vacío",
-  "Comment.LenghtComment": "El comentario debe tener entre 10 y 500 caracteres",
+  "Comment.LengthComment": "El comentario debe tener entre 10 y 500 caracteres",
 
 
   "Search.Title": "Los resultados de: {{query}}",
@@ -142,6 +142,7 @@
   "CreateContent.YearCharacterLimits": "Deben ser 4 dígitos",
   "DeleteReview": "¿Desea eliminar esta reseña?",
   "DeleteComment": "¿Desea eliminar este comentario?",
+  "Comment.LenghtComment":"El comentario debe tener entre 10 y 500 caracteres",
 
   "GenreMessage": "Género",
   "Genre.Message2": "Género:",

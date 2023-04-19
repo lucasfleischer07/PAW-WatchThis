@@ -4,11 +4,14 @@ import {useContext, useEffect, useState} from "react";
 import {AuthContext} from "../context/AuthContext";
 import {contentService, listsService} from "../services";
 import Header from "./components/Header";
+import {useNavigate} from "react-router-dom";
 
 
 export default function Home() {
     const {t} = useTranslation()
+    let navigate = useNavigate()
     let {isLogged} = useContext(AuthContext)
+
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
     const [bestRatedList, setBestRatedList] = useState([])
     const [lastAddedList, setLastAddedList] = useState([])
@@ -31,8 +34,8 @@ export default function Home() {
                 }
 
             })
-            .catch((e) => {
-                //     TODO: Meter un toast o algo asi
+            .catch(() => {
+                navigate("/error", { replace: true, state: {errorCode: 404} })
             })
 
         if(isLogged()) {
@@ -40,11 +43,12 @@ export default function Home() {
                 .then(watchList => {
                     if(!watchList.error) {
                         setUserWatchListIds(watchList.data)
+                    } else {
+                        navigate("/error", { replace: true, state: {errorCode: watchList.errorCode} })
                     }
-
                 })
-                .catch(e => {
-                    //     TODO: Meter toast
+                .catch(() => {
+                    navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
         }
     }, [])

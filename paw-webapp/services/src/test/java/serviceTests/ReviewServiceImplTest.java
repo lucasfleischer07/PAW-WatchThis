@@ -92,8 +92,8 @@ public class ReviewServiceImplTest {
         checkDownvoteList.add(3L);
         checkDownvoteList.add(12L);
 
-        List<Long> upVotes = rs.getUserLikeReviews();
-        List<Long> downVotes = rs.getUserDislikeReviews();
+        Set<Long> upVotes = rs.getUserLikeReviews();
+        Set<Long> downVotes = rs.getUserDislikeReviews();
 
         Assert.assertNotNull(upVotes);
         Assert.assertNotNull(downVotes);

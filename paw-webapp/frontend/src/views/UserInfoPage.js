@@ -1,15 +1,18 @@
 import {useTranslation} from "react-i18next";
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import {Link, useNavigate, useParams} from "react-router-dom";
-import {userService} from "../services";
+import {reviewService, userService} from "../services";
 import {toast} from "react-toastify";
 import TooltipComponent from "./components/Tooltip";
 import Header from "./components/Header";
+import ReviewCard from "./components/ReviewCard";
+import {AuthContext} from "../context/AuthContext";
 
 export default function UserInfoPage() {
     const {t} = useTranslation()
     let navigate = useNavigate()
+    let {isLogged} = useContext(AuthContext)
     const { userProfileId } = useParams();
 
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
@@ -21,6 +24,9 @@ export default function UserInfoPage() {
     const [reviews, setReviews] = useState([])
     const [reputation, setReputation] = useState(0)
 
+    const [isLikeReviewsList, setIsLikeReviewsList] = useState([]);
+    const [isDislikeReviewsList, setIsDislikeReviewsList] = useState([]);
+
     const handlePromoteUser = (e) => {
         e.preventDefault();
         userService.promoteUserToAdmin(reviewOwnerUser.id)
@@ -30,10 +36,11 @@ export default function UserInfoPage() {
                     toast.success(t('Profile.PromoteUser.Success'))
                 } else {
                     toast.error(t('Profile.PromoteUser.Error'))
+                    navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                 }
             })
             .catch(e => {
-            //     TODO: LLEVAR A PAGINA DE ERROR O ALGO ASI
+                navigate("/error", { replace: true, state: {errorCode: 404} })
             })
     }
 
@@ -47,19 +54,17 @@ export default function UserInfoPage() {
                              .then((data) => {
                                  if(!data.error) {
                                     setReviewOwnerUser(data.data)
-                                     if(user.role === 'admin' && data.data.role !== 'admin') {
+                                     if(user?.role === 'admin' && data.data.role !== 'admin') {
                                          setCanPromote(true)
                                      } else {
                                          setCanPromote(false)
                                      }
                                  } else {
-                                     //     TODO: Pagina de error diciendo que el id de ese usuario no existe
-                                     navigate("/error", {replace: true})
+                                     navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                                  }
                              })
-                            .catch(e => {
-                            //     TODO: Pagina de error diciendo que el id de ese usuario no existe
-                                navigate("/error", {replace: true})
+                            .catch(() => {
+                                navigate("/error", { replace: true, state: {errorCode: 404} })
                             })
                         setReputation(0)
                     } else {
@@ -70,7 +75,7 @@ export default function UserInfoPage() {
                         }
                         setReputation(reputation)
 
-                        if(user.role === 'admin' && reviews.data[0].user.role !== 'admin') {
+                        if(user?.role === 'admin' && reviews.data[0].user.role !== 'admin') {
                             setCanPromote(true)
                         } else {
                             setCanPromote(false)
@@ -78,22 +83,46 @@ export default function UserInfoPage() {
                     }
                     setTotalPages(reviews.totalPages)
 
-                    if(user.id === parseInt(userProfileId)) {
+                    if(user?.id === parseInt(userProfileId)) {
                         setIsSameUser(true)
                     } else {
                         setIsSameUser(false)
                     }
 
                 } else {
-            //     TODO: Pagina de error diciendo que el id de ese usuario no existe
-                    navigate("/error", {replace: true})
+                    navigate("/error", { replace: true, state: {errorCode: reviews.errorCode} })
                 }
 
             })
-            .catch(e => {
-            //     TODO: Si no existe el usuario, hay que llevar a la pagina de error
-                navigate("/error", {replace: true})
+            .catch(() => {
+                navigate("/error", { replace: true, state: {errorCode: 404} })
             })
+
+        if(isLogged()) {
+            reviewService.getReviewsLike()
+                .then(data => {
+                    if(!data.error) {
+                        setIsLikeReviewsList(data.data)
+                    } else {
+                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                    }
+                })
+                .catch(() => {
+                    navigate("/error", { replace: true, state: {errorCode: 404} })
+                })
+
+            reviewService.getReviewsDislike()
+                .then(data => {
+                    if(!data.error) {
+                        setIsDislikeReviewsList(data.data)
+                    } else {
+                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                    }
+                })
+                .catch(() => {
+                    navigate("/error", { replace: true, state: {errorCode: 404} })
+                })
+        }
 
     }, [])
 
@@ -179,22 +208,26 @@ export default function UserInfoPage() {
                                                 <Link className="W-movie-title" to={`/content/${review.content.type}/${review.content.id}`}>
                                                     <h5>{review.content.name}</h5>
                                                 </Link>
-                                                {/*<ReviewCard*/}
-                                                {/*    reviewTitle={review.name}*/}
-                                                {/*    reviewDescription={review.description}*/}
-                                                {/*    reviewRating={review.rating}*/}
-                                                {/*    reviewId={review.id}*/}
-                                                {/*    userName={review.user.name}*/}
-                                                {/*    contentId={review.content.id}*/}
-                                                {/*    reviewReputation={review.reputation}*/}
-                                                {/*    contentType={review.type}*/}
-                                                {/*    loggedUserName={user}*/}
-                                                {/*    isAdmin={canPromote}*/}
-                                                {/*    isLikeReviews={userLikeReviews.includes(review.id)}*/}
-                                                {/*    isDislikeReviews={userDislikeReviews.includes(review.id)}*/}
-                                                {/*    alreadyReport={review.reporterUsernames.includes(userName)}*/}
-                                                {/*    canComment={false}*/}
-                                                {/*/>*/}
+                                                <ReviewCard
+                                                    key ={`reviewCardUser${review.id}`}
+                                                    reviewTitle={review.name}
+                                                    reviewDescription={review.description}
+                                                    reviewRating={review.rating}
+                                                    reviewId={review.id}
+                                                    reviewReputation={review.reputation}
+                                                    reviewUser={review.user.username}
+                                                    reviewUserId={review.user.id}
+                                                    contentId={review.content.id}
+                                                    contentType={review.type}
+                                                    loggedUserName={user?.username}
+                                                    loggedUserId={user?.id}
+                                                    isAdmin={user?.role === 'admin'}
+                                                    isLikeReviews={isLikeReviewsList.length > 0 ? isLikeReviewsList.some(item => item.id === review.id) : false}
+                                                    isDislikeReviews={isDislikeReviewsList.length > 0 ? isDislikeReviewsList.some(item => item.id === review.id) : false}
+                                                    alreadyReport={review.reviewReporters.includes(user?.username)}
+                                                    canComment={false}
+                                                    seeComments={false}
+                                                />
                                             </div>
                                         ))
                                     )}

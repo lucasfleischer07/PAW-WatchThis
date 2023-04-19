@@ -42,8 +42,9 @@ public class UserController {
     public Response userCreate(@Valid final NewUser newUser) {
         LOGGER.info("POST /{}: Called", uriInfo.getPath());
         final User user = us.register(newUser.getEmail(), newUser.getUsername(), newUser.getPassword()).orElseThrow(UserNotFoundException::new);
+        UserDto userDto = new UserDto(uriInfo, user);
         LOGGER.info("POST /{}: New user created with id {}", uriInfo.getPath(), user.getId());
-        return Response.created(UserDto.getUserUriBuilder(user, uriInfo).build()).build();
+        return Response.created(UserDto.getUserUriBuilder(user, uriInfo).build()).entity(userDto).build();
     }
 
     // * ---------------------------------------------------------------------------------------------------------------
@@ -154,15 +155,15 @@ public class UserController {
     public Response updateUserProfileInfo(@Valid EditProfileDto editProfileDto,
                                           @PathParam("id") final long id) {
         LOGGER.info("PUT /{}: Called", uriInfo.getPath());
-        if(editProfileDto==null)
+        if(editProfileDto==null) {
             throw new BadRequestException("Must include edit data");
+        }
         final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
         if(user.getId() != id) {
             throw new ForbiddenException();
         }
         us.setPassword(editProfileDto.getPassword(), user, "restore");
 
-//      TODO: Hay que hace un boton para cambiar solamente la imagen y otro boton para cambiar la info, ya no puede ser le mismo boton para ambos
         LOGGER.info("PUT /{}: User {} profile Updated", uriInfo.getPath(), id);
         return Response.ok().build();
     }

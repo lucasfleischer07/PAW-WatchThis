@@ -12,15 +12,19 @@ import Header from "./components/Header";
 
 
 export default function InfoPage() {
-    const [user, setUser]= useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
-    let {isLogged} = useContext(AuthContext)
-    let navigate = useNavigate()
     const {t} = useTranslation()
+    let navigate = useNavigate()
+    let {isLogged} = useContext(AuthContext)
     const { contentType, contentId} = useParams();
+
+    const [user, setUser]= useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
 
     const [content, setContent] = useState({})
     const [reviews, setReviews] = useState({})
     const [currentPage, setCurrentPage] = useState(1)
+
+    const [isLikeReviewsList, setIsLikeReviewsList] = useState(false);
+    const [isDislikeReviewsList, setIsDislikeReviewsList] = useState(false);
 
     const [showDeleteContentModal, setShowDeleteContentModal] = useState(false)
     const [showWatchListModal, setShowWatchListModal] = useState(false)
@@ -68,13 +72,14 @@ export default function InfoPage() {
                         handleCloseDeleteContentModal()
                         navigate("/", {replace: true})
                     } else {
-                    //     TODO
-                        navigate("/error", {replace: true})
+                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                     }
                 })
-                .catch(e => {
-                    navigate("/error", {replace: true})
+                .catch(() => {
+                    navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
+        } else {
+            navigate("/error", { replace: true, state: {errorCode: 401} })
         }
     }
 
@@ -85,11 +90,12 @@ export default function InfoPage() {
                 if(!data.error) {
                     setIsInWatchList(true);
                     toast.success(t('WatchList.Added'))
+                } else {
+                    navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                 }
             })
             .catch(() => {
-                //     TODO: Meter un toast o algo asi
-                //     TODO Llegar a pagina de error
+                navigate("/error", { replace: true, state: {errorCode: 404} })
             })
     }
     const handleDeleteFromWatchList = (e) => {
@@ -100,12 +106,11 @@ export default function InfoPage() {
                     setIsInWatchList(false);
                     toast.success(t('WatchList.Removed'))
                 } else {
-                    //     ToDO: Meter algo
+                    navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                 }
             })
             .catch(() => {
-                //     TODO: Meter un toast o algo asi
-                //     TODO Llegar a pagina de error
+                navigate("/error", { replace: true, state: {errorCode: 404} })
             })
     }
     const handleAddToViewedList = (e) => {
@@ -114,13 +119,13 @@ export default function InfoPage() {
             .then(data => {
                 if(!data.error) {
                     setIsInViewedList(true);
-                    // TODO: Toast exitoso
-                    // toast.success(t('WatchList.Added'))
+                    toast.success(t('ViewedList.Added'))
+                } else {
+                    navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                 }
             })
             .catch(() => {
-                //     TODO: Meter un toast o algo asi
-                //     TODO Llegar a pagina de error
+                navigate("/error", { replace: true, state: {errorCode: 404} })
             })
     }
     const handleDeleteFromViewedList = (e) => {
@@ -129,13 +134,13 @@ export default function InfoPage() {
             .then(data => {
                 if(!data.error) {
                     setIsInViewedList(false);
-                    // TODO: Toast exitoso
-                    // toast.success(t('WatchList.Added'))
+                    toast.success(t('ViewedList.Removed'))
+                } else {
+                    navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                 }
             })
             .catch(() => {
-                //     TODO: Meter un toast o algo asi
-                //     TODO Llegar a pagina de error
+                navigate("/error", { replace: true, state: {errorCode: 404} })
             })
     }
 
@@ -150,11 +155,11 @@ export default function InfoPage() {
                 if(!data.error) {
                     setContent(data.data)
                 } else {
-                //     TODO: Pagina de error
+                    navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                 }
             })
             .catch(() => {
-            //     TODO: Pagina de error
+                navigate("/error", { replace: true, state: {errorCode: 404} })
             })
 
         reviewService.reviews(parseInt(contentId), currentPage)
@@ -167,11 +172,11 @@ export default function InfoPage() {
                         }
                     }
                 } else {
-                //     TODO: Pagina de error
+                    navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                 }
             })
             .catch(() => {
-            //     TODO: Pagina de error
+                navigate("/error", { replace: true, state: {errorCode: 404} })
             })
 
         if(isLogged()) {
@@ -179,16 +184,51 @@ export default function InfoPage() {
                 .then(watchList => {
                     if(!watchList.error) {
                         setIsInWatchList(watchList.data.some(item => item.id === contentId))
+                    } else {
+                        navigate("/error", { replace: true, state: {errorCode: watchList.errorCode} })
                     }
+                })
+                .catch(() => {
+                    navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
 
             listsService.getUserViewedListContentIds(user.id)
                 .then(viewedList => {
                     if(!viewedList.error) {
                         setIsInViewedList(viewedList.data.some(item => item.id === contentId))
+                    } else {
+                        navigate("/error", { replace: true, state: {errorCode: viewedList.errorCode} })
                     }
                 })
+                .catch(() => {
+                    navigate("/error", { replace: true, state: {errorCode: 404} })
+                })
+
+            reviewService.getReviewsLike()
+                .then(data => {
+                    if(!data.error) {
+                        setIsLikeReviewsList(data.data)
+                    } else {
+                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                    }
+                })
+                .catch(() => {
+                    navigate("/error", { replace: true, state: {errorCode: 404} })
+                })
+
+            reviewService.getReviewsDislike()
+                .then(data => {
+                    if(!data.error) {
+                        setIsDislikeReviewsList(data.data)
+                    } else {
+                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                    }
+                })
+                .catch(() => {
+                    navigate("/error", { replace: true, state: {errorCode: 404} })
+                })
         }
+
     }, [])
 
     return(
@@ -430,31 +470,39 @@ export default function InfoPage() {
                         </div>
                     </div>
 
-                    {/*<div className="card-body">*/}
-                    {/*    {reviews.map((review) => {*/}
-                    {/*        return (*/}
-                    {/*            <ReviewCard*/}
-                    {/*                reviewTitle={review.name}*/}
-                    {/*                reviewDescription={review.description}*/}
-                    {/*                reviewRating={review.rating}*/}
-                    {/*                reviewId={review.id}*/}
-                    {/*                reviewReputation={review.reputation}*/}
-                    {/*                userName={review.user.userName}*/}
-                    {/*                contentId={content.id}*/}
-                    {/*                contentType={review.type}*/}
-                    {/*                loggedUserName={user.username}*/}
-                    {/*                isAdmin={user?.role === 'admin'}*/}
-                    {/*                isLikeReviews={userLikeReviews.includes(review.id)}*/}
-                    {/*                isDislikeReviews={userDislikeReviews.includes(review.id)}*/}
-                    {/*                alreadyReport={review.reporterUsernames.includes(userName)}*/}
-                    {/*                canComment={true}*/}
-                    {/*            />*/}
-                    {/*        );*/}
-                    {/*    })}*/}
+                    <div className="card-body">
+                        {reviews.length > 0 ? (
+                            <>
+                                {reviews.map((review) => {
+                                    return (
+                                        <ReviewCard
+                                            key ={`reviewCard ${review.id}`}
+                                            reviewTitle={review.name}
+                                            reviewDescription={review.description}
+                                            reviewRating={review.rating}
+                                            reviewId={review.id}
+                                            reviewReputation={review.reputation}
+                                            reviewUser={review.user.username}
+                                            reviewUserId={review.user.id}
+                                            contentId={content.id}
+                                            contentType={review.type}
+                                            loggedUserName={user?.username}
+                                            loggedUserId={user?.id}
+                                            isAdmin={user?.role === 'admin'}
+                                            isLikeReviews={isLikeReviewsList.length > 0 ? isLikeReviewsList.some(item => item.id === review.id) : false}
+                                            isDislikeReviews={isDislikeReviewsList.length > 0 ? isDislikeReviewsList.some(item => item.id === review.id) : false}
+                                            alreadyReport={review.reviewReporters.includes(user?.username)}
+                                            canComment={true}
+                                            seeComments={true}
+                                        />
+                                    );
+                                })}
+                            </>
+                        ) : (
+                            <></>
+                        )}
 
-                    {/*/!*    TODO: Meter paginacion aca*!/*/}
-
-                    {/*</div>*/}
+                    </div>
                 </div>
             </div>
         </>

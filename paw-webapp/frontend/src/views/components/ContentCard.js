@@ -28,10 +28,12 @@ export default function ContentCard(props) {
                 if(!data.error) {
                     setIsInWatchList(true);
                     toast.success(t('WatchList.Added'))
+                } else {
+                    navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                 }
             })
             .catch(() => {
-                //     TODO Llegar a pagina de error
+                navigate("/error", { replace: true, state: {errorCode: 404} })
             })
     }
 
@@ -41,11 +43,14 @@ export default function ContentCard(props) {
             .then(data => {
                 if(!data.error) {
                     setIsInWatchList(false);
+                    props.setAdded(!props.added)
                     toast.success(t('WatchList.Removed'))
+                } else {
+                    navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                 }
             })
             .catch(() => {
-                //     TODO Llegar a pagina de error
+                navigate("/error", { replace: true, state: {errorCode: 404} })
             })
     }
 

@@ -135,11 +135,11 @@ export default function ContentCreatePage() {
                     if(!data.error) {
                         navigate(`/content/${data.data.type}/${data.data.id}`, {replace:true})
                     } else {
-                        //     TODO: Pagina de error
+                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                     }
                 })
-                .catch(e => {
-                    //     TODO: pagina de error
+                .catch(() => {
+                    navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
         } else if(formType === 'edition'){
             if(!validateFormEdition()) {
@@ -150,23 +150,21 @@ export default function ContentCreatePage() {
                     if(!data.error) {
                         navigate(`/content/${contentForm.type}/${contentId}`, {replace:true})
                     } else {
+                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                     }
                 })
-                .catch(e => {
-                    //     TODO: HAcer algo
+                .catch(() => {
+                    navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
         } else {
-            //     TODO: Llevar a pagina de error
+            navigate("/error", { replace: true, state: {errorCode: 404} })
         }
     }
 
 
     const handleChange = (e) => {
-        // TODO: Ver problema de como solucionar el tema de que no me accede a los parametros type ni checked cuando esta dentro del boton
         const {name, value, type, checked} = e.target
-        // console.log("Type: " + type)
         if(type === "checkbox") {
-            // console.log("Es un checkbox: " + checked)
             if(checked) {
                 const aux = contentForm.genre
                 contentForm.genre = aux + " " + value
@@ -205,16 +203,18 @@ export default function ContentCreatePage() {
                                 contentPicture: data.data.contentPictureUrl
                             })
                             setGenreButtonLabel(data.data.genre)
+                        } else {
+                            navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                         }
                     })
-                    .catch(e => {
-                        navigate("/login", {replace: true})
+                    .catch(() => {
+                        navigate("/error", { replace: true, state: {errorCode: 404} })
                     })
             } else if((formType !== 'edition') && (formType !== 'create')) {
-                navigate("/login", {replace: true})
+                navigate("/error", { replace: true, state: {errorCode: 404} })
             }
         } else {
-            navigate("/login", {replace: true})
+            navigate("/error", { replace: true, state: {errorCode: 401} })
         }
     }, [])
 

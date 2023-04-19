@@ -5,15 +5,13 @@ export const AuthContext = createContext(null);
 
 export function AuthProvider ({children}) {
 
-    const signIn = (user, authToken, rememberMe) => {
+    const signIn = (user, authToken) => {
         localStorage.setItem("user", JSON.stringify(user))
         localStorage.setItem("userAuthToken", authToken)
         localStorage.setItem("isAdmin", user.role === 'admin' ? "true" : "false")
-        localStorage.setItem("rememberMe", rememberMe ? "true" : "false")
-
     }
 
-    const signOut = (email, password) => {
+    const signOut = () => {
         localStorage.removeItem("user");
         localStorage.removeItem("userAuthToken");
         localStorage.removeItem("isAdmin");

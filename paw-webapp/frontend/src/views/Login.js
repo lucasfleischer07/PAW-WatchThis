@@ -10,12 +10,11 @@ export default function Login() {
     let location = useLocation()
     let navigate = useNavigate()
     let {signIn} = useContext(AuthContext)
-    const previousPath = location.state?.from || '/';
+    const previousPath = location.pathname || '/';
 
     const [userForm, setUserForm] = useState({
         email: undefined,
         password: "",
-        rememberMe: false
     });
 
     const [error, setError] = useState(false)
@@ -48,22 +47,22 @@ export default function Login() {
         userService.login(userForm.email, userForm.password)
             .then((user) => {
                 if(!user.error) {
-                    signIn(user.data, user.header, userForm.rememberMe)
-                    // toDO: Testear esto de la redireccion
-                    if(previousPath === '/login/forgotPassword' || previousPath === '/login/sign-up') {
+                    signIn(user.data, user.header)
+                    if(previousPath === '/login/forgotPassword' || previousPath === '/login/signUp') {
                         navigate("/", {replace: true})
                     } else {
                         navigate(-1)
                     }
                     toast.success(t('Login.Success'))
-                }
-                else {
+                } else {
                     setError(true)
+                    // navigate("/error", { replace: true, state: {errorCode: user.errorCode} })
                 }
             })
             .catch(() => {
                 setError(true)
                 toast.error(t('Login.Error'))
+                navigate("/error", { replace: true, state: {errorCode: 404} })
             })
     };
 
@@ -118,26 +117,11 @@ export default function Login() {
                                     required
                                 />
                                 <div>
-                                    {/*<Link to='/login/forgot-password'>*/}
-                                    {/*    <div className="W-forgot-password">{t('Login.ForgotPassword')}</div>*/}
-                                    {/*</Link>*/}
-                                    {/*TODO: Esto no es un tag a, tiene que ser un Link creo*/}
                                     <Link className="W-forgot-password" to="/login/forgotPassword">{t('Login.ForgotPassword')}</Link>
                                 </div>
                             </div>
                         </div>
                         <div className="W-div-login-rememberMe">
-                            <div className="form-check">
-                                <input
-                                    type="checkbox"
-                                    id="rememberMe"
-                                    name="rememberMe"
-                                    className="form-check-input"
-                                    checked={userForm.rememberMe}
-                                    onChange={handleChange}
-                                />
-                                <label htmlFor="rememberMe">{t('Login.RememberMe')}</label>
-                            </div>
                             <div className="W-div-login-button">
                                 <button
                                     type="submit"
@@ -151,7 +135,7 @@ export default function Login() {
                         <hr className="d-flex W-line-style-login" />
                         <div className="W-alignment-signup-div W-margin-bottom">
                             <h5>{t('Login.NoAccountMessage')}</h5>
-                            <Link to="/login/sign-up">
+                            <Link to="/login/signUp">
                                 <button type="button" className="btn btn-secondary W-sign-up-button-link">{t('Login.SignUpMessage')}</button>
                             </Link>
                         </div>

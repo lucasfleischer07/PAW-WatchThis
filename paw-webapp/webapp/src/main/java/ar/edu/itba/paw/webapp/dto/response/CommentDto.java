@@ -20,7 +20,6 @@ public class CommentDto {
     }
 
     public static UriBuilder getCommentUriBuilder(Comment comment, UriInfo uriInfo) {
-//        TODO: VERIFICAR ESTA URL
         return uriInfo.getBaseUriBuilder().path("comments").path(String.valueOf(comment.getReview().getId()));
     }
 

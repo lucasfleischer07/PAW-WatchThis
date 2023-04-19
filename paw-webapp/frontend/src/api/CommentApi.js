@@ -13,13 +13,14 @@ export class CommentApi {
             const params = {pageNumber: pageNumber, pageSize: 10}
             const options = {headers: authCheck({})}
             const res = await fetchWithQueryParamsApi(apiUrl, params, options)
-            if(res.status !== 204) {
+            // TODO: Ver si meter lo del vacio o no
+            if(res.status === 200) {
                 return {error: false, data: await res.data, totalPages: res.totalPages}
             } else {
-                return {error: false, data: [], totalPages: res.totalPages}
+                return {error: true, errorCode: res.status}
             }
-        } catch (error) {
-            return {error: true}
+        } catch (e) {
+            return {error: true, errorCode: e.response.status || 500}
         }
 
     }
@@ -31,26 +32,31 @@ export class CommentApi {
                 headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}),
                 body: JSON.stringify(commentDetails)
             })
-            if(res.status !== 204) {
+            if(res.status === 201) {
                 return {error: false, data: await res.json()}
             } else {
-                return {error: false, data: []}
+                return {error: true, errorCode: res.status}
             }
         } catch (e) {
-            return {error: true}
+            return {error: true, errorCode: e.response.status || 500}
         }
 
     }
 
     async commentDelete(commentId) {
         try {
-            await fetch(`${this.basePath}/delete/${commentId}`, {
+            const res = await fetch(`${this.basePath}/delete/${commentId}`, {
                 method: 'DELETE',
                 headers: authCheck({})
             })
-            return {error: false, data: []}
+
+            if(res.status === 204) {
+                return {error: false, data: []}
+            } else {
+                return {error: true, errorCode: res.status}
+            }
         } catch (e) {
-            return {error: true}
+            return {error: true, errorCode: e.response.status || 500}
         }
 
     }

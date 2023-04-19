@@ -9,9 +9,9 @@ export async function fetchWithQueryParamsApi(url, queryParams = {}, options = {
         if(res.headers.get('Link')) {
             totalPages = parse(res.headers.get('Link')).last.page;
         }
-        return res.json().then(data => ({ error:false, data, totalPages}));
+        return res.json().then(data => ({ error:false, data, totalPages, status: res.status}));
     } catch (e) {
-        return {error: true}
+        return {error: true, errorCode: e.response.status}
     }
 
 }

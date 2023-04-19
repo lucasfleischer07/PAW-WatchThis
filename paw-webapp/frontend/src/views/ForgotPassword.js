@@ -1,7 +1,6 @@
 import {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {useLocation, useNavigate} from "react-router-dom";
-import {set} from "react-hook-form";
 import {userService} from "../services";
 import {toast} from "react-toastify";
 
@@ -29,21 +28,27 @@ export default function ForgotPassword() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
         if (!validEmail()) {
             setError(true)
             return
         }
+
         userService.loginForgotPassword(userForm.email)
             .then(data => {
                 if(!data.error) {
                     toast.success(t('Login.ForgotPass.Snackbar'))
                     navigate("/login", {replace: true})
                 } else {
-                    setError(true)
+                    if(data.errorCode === 404) {
+                        setError(true)
+                    } else {
+                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                    }
                 }
             })
-            .catch(e => {
-            //     TODO: TIrara a pagian de error
+            .catch(() => {
+                navigate("/error", { replace: true, state: {errorCode: 404} })
             })
     }
 
@@ -62,12 +67,11 @@ export default function ForgotPassword() {
                         {t('Login.ForgotPass.msg')}
                     </h5>
                     <div className="mb-3 W-input-label-login-info">
-                        {/*TODO: VER ESTO DEL TEMA DE ERRORES, EL CARTEL QUE MANDA Y ESO*/}
-                        {/*{error && (*/}
-                        {/*    <div className="W-register-errorMsg">*/}
-                        {/*        {t('Login.WrongEmail')}*/}
-                        {/*    </div>*/}
-                        {/*)}*/}
+                        {error && (
+                            <div className="W-register-errorMsg">
+                                {t('Login.WrongEmail')}
+                            </div>
+                        )}
                         <label htmlFor="email" className="form-label">
                             {t('Signup.Email')}<span className="W-red-asterisco">{t('Asterisk')}</span>
                         </label>

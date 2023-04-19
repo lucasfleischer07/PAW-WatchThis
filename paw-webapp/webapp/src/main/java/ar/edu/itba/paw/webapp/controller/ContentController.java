@@ -39,8 +39,10 @@ import java.util.*;
 public class ContentController {
     @Autowired
     private ContentService cs;
+
     @Autowired
     private UserService us;
+
     @Context
     UriInfo uriInfo;
     private static final int CONTENT_AMOUNT = 18;
@@ -184,7 +186,6 @@ public class ContentController {
 
     // * ----------------------------------- Content Creation ----------------------------------------------------------
     // Endpoint para crear un contenido
-//    TODO: VER BIEN
     @POST
     @Path("/create")
     @Produces(MediaType.APPLICATION_JSON)
@@ -261,8 +262,6 @@ public class ContentController {
         int page= pageNum;
         String auxType;
 
-//        TODO: VER ESTO DEL GENRE, NO SE PASABA COMO QUERYPARAM Y AHORA NI IDEA COMO SERIA. EL ORIGINAL ESTA EN EL ARCHIVO
-//        TODO: MovieAndSerieController linea 76 (esta comentado)
         List<String> genreList = genre;
 
         PageWrapper<Content> contentListFilter = cs.getMasterContent(contentType, genre, durationFrom, durationTo, sorting, query,page,CONTENT_AMOUNT);

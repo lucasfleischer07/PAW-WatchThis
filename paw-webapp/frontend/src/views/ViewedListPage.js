@@ -3,32 +3,36 @@ import ContentCard from "./components/ContentCard";
 import {useTranslation} from "react-i18next";
 import {AuthContext} from "../context/AuthContext";
 import {listsService} from "../services";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import Header from "./components/Header";
 
 export default function ViewedListPage(props) {
-
     const {t} = useTranslation()
+    let navigate = useNavigate()
     let {isLogged} = useContext(AuthContext)
+
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
     const [currentPage, setCurrentPage] = useState(1)
     const [totalPages, setTotalPages] = useState(undefined)
     const [viewedList, setViewedList] = useState([])
+    const [added, setAdded] = useState(false)
 
     const getUserViewedList = () => {
-        if(isLogged) {
+        if(isLogged()) {
             listsService.getUserViewedList(user.id, currentPage)
                 .then(watchList => {
                     if(!watchList.error) {
                         setViewedList(watchList.data)
                         setTotalPages(watchList.totalPages)
+                    } else {
+                        navigate("/error", { replace: true, state: {errorCode: watchList.errorCode} })
                     }
                 })
-                .catch(e => {
-                    //     TODO: Meter toasts o tirar a apagina de error
+                .catch(() => {
+                    navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
         } else {
-            //     TODO: Tirar a la pagina de error de que no tiene permisos
+            navigate("/error", { replace: true, state: {errorCode: 401} })
         }
     }
 
@@ -38,7 +42,7 @@ export default function ViewedListPage(props) {
 
     useEffect(() => {
         getUserViewedList()
-    }, [viewedList, currentPage])
+    }, [added, currentPage])
 
     return (
         <>
@@ -53,9 +57,7 @@ export default function ViewedListPage(props) {
                             </div>
                         </div>
                         <div className="bg-light p-4 d-flex text-center">
-                            <h4>
-                                <h4>{t('WatchList.Titles', {titlesAmount: viewedList.length})}</h4>
-                            </h4>
+                            <h4>{t('WatchList.Titles', {titlesAmount: viewedList.length})}</h4>
                         </div>
                         {viewedList.length === 0 ? (
                             <div className="W-watchlist-div-info-empty">
@@ -78,6 +80,7 @@ export default function ViewedListPage(props) {
                                 <div className="row row-cols-1 row-cols-md-2 g-2 W-content-alignment">
                                     {viewedList.map((content) => (
                                         <ContentCard
+                                            key={`viewedListContentCard${content.id}`}
                                             contentName={content.name}
                                             contentReleased={content.releaseDate}
                                             contentCreator={content.creator}
@@ -87,8 +90,9 @@ export default function ViewedListPage(props) {
                                             contentType={content.type}
                                             contentRating={content.rating}
                                             reviewsAmount={content.reviewsAmount}
+                                            added={added}
+                                            setAdded={setAdded}
                                             isInWatchList={viewedList.length > 0 ? viewedList.some(item => item.id === content.id) : false}
-                                            key={content.id}
                                         />
                                     ))}
                                 </div>
