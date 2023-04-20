@@ -32,7 +32,10 @@ public class UserServiceImpl implements UserService{
     private final UserDao userDao;
     private final EmailService emailService;
 
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
+
+
+
     @Autowired
     private MessageSource messageSource;
     private final Locale locale = LocaleContextHolder.getLocale();
@@ -173,6 +176,11 @@ public class UserServiceImpl implements UserService{
             contentIdList.add(content.getId());
         }
         return contentIdList;
+    }
+
+    @Override
+    public boolean checkPassword( String uncheckedPassword, User user){
+        return passwordEncoder.matches(user.getPassword(),uncheckedPassword);
     }
 
 

@@ -28,5 +28,6 @@ public interface UserService {
     void promoteUser(User userId);
     List<Long>getUserWatchListContent(User user);
     List<Long>getUserViewedListContent(User user);
+    boolean checkPassword( String uncheckedPassword, User user);
     void authWithAuthManager(HttpServletRequest request, String email, String password, AuthenticationManager authenticationManager);
 }
