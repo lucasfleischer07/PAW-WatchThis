@@ -216,7 +216,7 @@ public class ContentController {
                                      @QueryParam("pageNumber") @DefaultValue("1") Integer pageNum,
                                      @QueryParam("pageSize") @DefaultValue("10") int pageSize) {
         LOGGER.info("GET /{}: Called", uriInfo.getPath());
-        if(!contentType.equals("movie") && !contentType.equals("serie")){
+        if(!contentType.equals("movie") && !contentType.equals("serie") && !contentType.equals("all")){
             throw new PageNotFoundException();
         }
         int page= pageNum;
