@@ -83,11 +83,11 @@ export class UserApi {
                 headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}),
                 body: JSON.stringify(userDetails)
             })
-            // TODO: Ver que error tira si la current password no es igual a la que esta en la bdd y ver de como tirarlo en el front. Eso no deberia llevar a pagina de error, sino un mensajito
+            console.log(res.status)
             if(res.status === 200) {
                 return {error: false, data: []}
             } else {
-                return {error: false, errorCode: res.status}
+                return {error: true, errorCode: res.status}
             }
         } catch (e) {
             return {error: true, errorCode: e.response.status || 500}

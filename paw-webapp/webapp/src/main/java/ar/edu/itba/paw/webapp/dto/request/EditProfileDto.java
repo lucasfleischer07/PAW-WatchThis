@@ -18,14 +18,6 @@ public class EditProfileDto {
     @Pattern(regexp	= "([a-zA-Z0-9ñáéíóú!,.:;=+\n\\-_()?<>$%&#@{}\\[\\]|*\"'~/`^\\s]+)?", message = "...")
     private String currentPassword;
 
-    private MultipartFile profilePicture;
-
-    public MultipartFile getProfilePicture() {
-        return profilePicture;
-    }
-    public void setProfilePicture(MultipartFile profilePicture) {
-        this.profilePicture = profilePicture;
-    }
     public String getPassword() {
         return password;
     }

@@ -155,14 +155,19 @@ public class UserController {
     public Response updateUserProfileInfo(@Valid EditProfileDto editProfileDto,
                                           @PathParam("id") final long id) {
         LOGGER.info("PUT /{}: Called", uriInfo.getPath());
-        if(editProfileDto==null) {
+        if(editProfileDto == null) {
             throw new BadRequestException("Must include edit data");
         }
         final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
         if(user.getId() != id) {
             throw new ForbiddenException();
         }
-        us.setPassword(editProfileDto.getPassword(), user, "restore");
+
+        if(us.checkPassword(editProfileDto.getCurrentPassword(), user)) {
+            us.setPassword(editProfileDto.getPassword(), user, "restore");
+        } else {
+            throw new BadRequestException();
+        }
 
         LOGGER.info("PUT /{}: User {} profile Updated", uriInfo.getPath(), id);
         return Response.ok().build();

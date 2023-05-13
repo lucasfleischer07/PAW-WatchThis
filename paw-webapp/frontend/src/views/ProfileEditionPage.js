@@ -16,7 +16,8 @@ export default function ProfileEditionPage() {
     let {isLogged} = useContext(AuthContext)
 
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
-    const [error, setError] = useState(undefined)
+    const [error, setError] = useState(false)
+    const [errorPassword, setErrorPassword] = useState(false)
     const [image, setImage] = useState(undefined)
 
 
@@ -28,8 +29,8 @@ export default function ProfileEditionPage() {
 
 
     const validatePasswords = () => {
-        if(userForm.newPassword !== userForm.confirmPassword || !userForm.newPassword.length < 6) {
-            setError(true)
+        if(userForm.newPassword !== userForm.confirmPassword || (userForm.newPassword.length < 6 && userForm.newPassword.length > 0)) {
+            setErrorPassword(true)
             return false
         } else {
             return true
@@ -39,15 +40,24 @@ export default function ProfileEditionPage() {
     const onSubmitPassword = (e) => {
         // TODO: FAlta manda al back la actual y checkear de que sean iguales
         if(isLogged()) {
-            validatePasswords()
             e.preventDefault();
-            userService.updateUserProfileInfo(user.id, userForm.newPassword)
+
+            if(!validatePasswords()) {
+                return
+            }
+            if(userForm.currentPassword.length === 0 && userForm.newPassword.length === 0 && userForm.confirmPassword.length === 0) {
+                navigate(-1)
+            }
+
+            userService.updateUserProfileInfo(user.id, userForm)
                 .then(data => {
                     if(!data.error) {
-                        setError(false)
+                        setErrorPassword(false)
                         reset()
                         toast.info(t('EditProfile.Upload.Password.Success'))
                         navigate(-1)
+                    } else if(data.errorCode === 400){
+                        setErrorPassword(true)
                     } else {
                         toast.error(t('EditProfile.Upload.Password.Error'))
                         navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
@@ -159,6 +169,13 @@ export default function ProfileEditionPage() {
                                 <div className="W-div-margin">
                                     <h5 className="W-margin-bottom">{t('EditProfile.ChangePassword')}</h5>
                                     <div className="bg-light d-flex justify-content-end text-center W-edit-divs-display">
+                                        {errorPassword && (
+                                            <div className="alert alert-danger d-flex align-items-center" role="alert">
+                                                <div className="W-register-errorMsg">
+                                                    {t('EditProfile.NotSamePassword')}
+                                                </div>
+                                            </div>
+                                        )}
                                         <div>
                                             <div className="mb-3 W-input-label-edit-password">
                                                 <input onChange={handleChange}
