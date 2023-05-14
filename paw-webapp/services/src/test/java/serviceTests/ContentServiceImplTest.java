@@ -40,7 +40,7 @@ public class ContentServiceImplTest {
         List<Content> responseContent=new ArrayList<>();
         responseContent.add(new Content(1L,"The Lord of The Rings",null,"Gandalf and Aragorn lead the World of Men against Sauron's army to draw his gaze from Frodo and Sam as they approach Mount Doom with the One Ring.","2003","Action","Peter Jackson","3 hours",130,"movie"));
         responseContent.add(new Content(4L,"Inception",null,"A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O., but his tragic past may doom the project and his team to disaster.","2010","Action","Christopher Nolan","2 hours 28 minutes",140,"movie"));
-        Mockito.when(mockDao.getAllContent(Mockito.eq(TYPE),Mockito.eq(SORT),1,CONTENT_AMOUNT)).thenReturn(new PageWrapper<>(1,1,CONTENT_AMOUNT,responseContent,2));
+        Mockito.when(mockDao.getAllContent(Mockito.eq(TYPE),Mockito.eq(SORT),Mockito.eq(1),Mockito.eq(CONTENT_AMOUNT))).thenReturn(new PageWrapper<>(1,1,CONTENT_AMOUNT,responseContent,2));
 
         List<Content> contentList = cs.getMasterContent(TYPE,null,"ANY","ANY",SORT,"ANY",1,CONTENT_AMOUNT).getPageContent();
 
@@ -56,7 +56,7 @@ public class ContentServiceImplTest {
         List<Content> responseContent=new ArrayList<>();
         responseContent.add(new Content(1L,"The Lord of The Rings",null,"Gandalf and Aragorn lead the World of Men against Sauron's army to draw his gaze from Frodo and Sam as they approach Mount Doom with the One Ring.","2003","Action","Peter Jackson","3 hours",130,"movie"));
         responseContent.add(new Content(4L,"Inception",null,"A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O., but his tragic past may doom the project and his team to disaster.","2010","Action","Christopher Nolan","2 hours 28 minutes",140,"movie"));
-        Mockito.when(mockDao.findByGenre(Mockito.eq(TYPE),Mockito.eq(GENRE),Mockito.eq(SORT),1,CONTENT_AMOUNT)).thenReturn(new PageWrapper<>(1,1,CONTENT_AMOUNT,responseContent,2));
+        Mockito.when(mockDao.findByGenre(Mockito.eq(TYPE),Mockito.eq(GENRE),Mockito.eq(SORT),Mockito.eq(1),Mockito.eq(CONTENT_AMOUNT))).thenReturn(new PageWrapper<>(1,1,CONTENT_AMOUNT,responseContent,2));
 
         List<Content> contentList = cs.getMasterContent(TYPE,GENRES,"ANY","ANY",SORT,"ANY",1,CONTENT_AMOUNT).getPageContent();
 
@@ -69,7 +69,7 @@ public class ContentServiceImplTest {
         List<Content> responseContent=new ArrayList<>();
         responseContent.add(new Content(1L,"The Lord of The Rings",null,"Gandalf and Aragorn lead the World of Men against Sauron's army to draw his gaze from Frodo and Sam as they approach Mount Doom with the One Ring.","2003","Action","Peter Jackson","3 hours",180,"movie"));
         responseContent.add(new Content(4L,"Inception",null,"A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O., but his tragic past may doom the project and his team to disaster.","2010","Action","Christopher Nolan","2 hours 28 minutes",160,"movie"));
-        Mockito.when(mockDao.findByDuration(Mockito.eq(TYPE),Mockito.eq(Integer.parseInt(DURATION_FROM)),Mockito.eq(Integer.parseInt(DURATION_TO)),Mockito.eq(SORT),1,CONTENT_AMOUNT)).thenReturn(new PageWrapper<>(1,1,CONTENT_AMOUNT,responseContent,2));
+        Mockito.when(mockDao.findByDuration(Mockito.eq(TYPE),Mockito.eq(Integer.parseInt(DURATION_FROM)),Mockito.eq(Integer.parseInt(DURATION_TO)),Mockito.eq(SORT),Mockito.eq(1),Mockito.eq(CONTENT_AMOUNT))).thenReturn(new PageWrapper<>(1,1,CONTENT_AMOUNT,responseContent,2));
 
         List<Content> contentList = cs.getMasterContent(TYPE,null,DURATION_FROM,DURATION_TO,SORT,"ANY",1,CONTENT_AMOUNT).getPageContent();
 
@@ -81,7 +81,7 @@ public class ContentServiceImplTest {
     public void getMasterContentSearchedContentTest(){
         List<Content> responseContent=new ArrayList<>();
         responseContent.add(new Content(1L,"The Lord of The Rings",null,"Gandalf and Aragorn lead the World of Men against Sauron's army to draw his gaze from Frodo and Sam as they approach Mount Doom with the One Ring.","2003","Action","Peter Jackson","3 hours",180,"movie"));
-        Mockito.when(mockDao.getSearchedContent(Mockito.eq(TYPE),Mockito.eq(QUERY),1,CONTENT_AMOUNT)).thenReturn(new PageWrapper<>(1,1,CONTENT_AMOUNT,responseContent,1));
+        Mockito.when(mockDao.getSearchedContent(Mockito.eq(TYPE),Mockito.eq(QUERY),Mockito.eq(1),Mockito.eq(CONTENT_AMOUNT))).thenReturn(new PageWrapper<>(1,1,CONTENT_AMOUNT,responseContent,1));
 
         List<Content> contentList = cs.getMasterContent(TYPE,null,"ANY","ANY",null,QUERY,1,CONTENT_AMOUNT).getPageContent();
 
@@ -96,7 +96,7 @@ public class ContentServiceImplTest {
         List<Content> responseContent=new ArrayList<>();
         responseContent.add(new Content(1L,"The Lord of The Rings",null,"Gandalf and Aragorn lead the World of Men against Sauron's army to draw his gaze from Frodo and Sam as they approach Mount Doom with the One Ring.","2003","Action","Peter Jackson","3 hours",180,"movie"));
         responseContent.add(new Content(1L,"The Lord of The Rings 2",null,"While Frodo and Sam edge closer to Mordor with the help of the shifty Gollum, the divided fellowship makes a stand against Sauron's new ally, Saruman, and his hordes of Isengard.","2002","Action","Peter Jackson","3 hours",180,"movie"));
-        Mockito.when(mockDao.getSearchedContentByGenre(Mockito.eq(TYPE),Mockito.eq(GENRE),Mockito.eq(SORT),Mockito.eq(QUERY),1,CONTENT_AMOUNT)).thenReturn(new PageWrapper<>(1,1,CONTENT_AMOUNT,responseContent,2));
+        Mockito.when(mockDao.getSearchedContentByGenre(Mockito.eq(TYPE),Mockito.eq(GENRE),Mockito.eq(SORT),Mockito.eq(QUERY),Mockito.eq(1),Mockito.eq(CONTENT_AMOUNT))).thenReturn(new PageWrapper<>(1,1,CONTENT_AMOUNT,responseContent,2));
 
         List<Content> contentList = cs.getMasterContent(TYPE,GENRES,"ANY","ANY",SORT,QUERY,1,CONTENT_AMOUNT).getPageContent();
 
@@ -109,7 +109,7 @@ public class ContentServiceImplTest {
         List<Content> responseContent=new ArrayList<>();
         responseContent.add(new Content(1L,"The Lord of The Rings",null,"Gandalf and Aragorn lead the World of Men against Sauron's army to draw his gaze from Frodo and Sam as they approach Mount Doom with the One Ring.","2003","Action","Peter Jackson","3 hours",180,"movie"));
         responseContent.add(new Content(1L,"The Lord of The Rings 2",null,"While Frodo and Sam edge closer to Mordor with the help of the shifty Gollum, the divided fellowship makes a stand against Sauron's new ally, Saruman, and his hordes of Isengard.","2002","Action","Peter Jackson","3 hours",180,"movie"));
-        Mockito.when(mockDao.getSearchedContentByDuration(Mockito.eq(TYPE),Mockito.eq(Integer.parseInt(DURATION_FROM)),Mockito.eq(Integer.parseInt(DURATION_TO)),Mockito.eq(SORT),Mockito.eq(QUERY),1,CONTENT_AMOUNT)).thenReturn(new PageWrapper<>(1,1,CONTENT_AMOUNT,responseContent,2));
+        Mockito.when(mockDao.getSearchedContentByDuration(Mockito.eq(TYPE),Mockito.eq(Integer.parseInt(DURATION_FROM)),Mockito.eq(Integer.parseInt(DURATION_TO)),Mockito.eq(SORT),Mockito.eq(QUERY),Mockito.eq(1),Mockito.eq(CONTENT_AMOUNT))).thenReturn(new PageWrapper<>(1,1,CONTENT_AMOUNT,responseContent,2));
 
         List<Content> contentList = cs.getMasterContent(TYPE,null,DURATION_FROM,DURATION_TO,SORT,QUERY,1,CONTENT_AMOUNT).getPageContent();
 
@@ -124,7 +124,7 @@ public class ContentServiceImplTest {
         List<Content> responseContent=new ArrayList<>();
         responseContent.add(new Content(1L,"The Lord of The Rings",null,"Gandalf and Aragorn lead the World of Men against Sauron's army to draw his gaze from Frodo and Sam as they approach Mount Doom with the One Ring.","2003","Action","Peter Jackson","3 hours",180,"movie"));
         responseContent.add(new Content(1L,"The Lord of The Rings 2",null,"While Frodo and Sam edge closer to Mordor with the help of the shifty Gollum, the divided fellowship makes a stand against Sauron's new ally, Saruman, and his hordes of Isengard.","2002","Action","Peter Jackson","3 hours",180,"movie"));
-        Mockito.when(mockDao.getSearchedContentByDurationAndGenre(Mockito.eq(TYPE),Mockito.eq(GENRE),Mockito.eq(Integer.parseInt(DURATION_FROM)),Mockito.eq(Integer.parseInt(DURATION_TO)),Mockito.eq(SORT),Mockito.eq(QUERY),1,CONTENT_AMOUNT)).thenReturn(new PageWrapper<>(1,1,CONTENT_AMOUNT,responseContent,2));
+        Mockito.when(mockDao.getSearchedContentByDurationAndGenre(Mockito.eq(TYPE),Mockito.eq(GENRE),Mockito.eq(Integer.parseInt(DURATION_FROM)),Mockito.eq(Integer.parseInt(DURATION_TO)),Mockito.eq(SORT),Mockito.eq(QUERY),Mockito.eq(1),Mockito.eq(CONTENT_AMOUNT))).thenReturn(new PageWrapper<>(1,1,CONTENT_AMOUNT,responseContent,2));
 
         List<Content> contentList = cs.getMasterContent(TYPE,GENRES,DURATION_FROM,DURATION_TO,SORT,QUERY,1,CONTENT_AMOUNT).getPageContent();
 

@@ -166,8 +166,8 @@
   "Duration.90_120": "90-120 minutes",
   "Duration.120_150": "120-150 minutes",
   "Duration.150_more": "150 or more",
-  "Duration.Or_more": "{0} or more",
-  "Duration.From.To": "{0}-{1} minutes",
+  "Duration.Or_more": "{{durationArgument}} or more",
+  "Duration.From.To": "{{durationFromArgument}}-{{durationToArgument}} minutes",
 
   "SortMessage": "Sort By",
   "Sort.OlderReleased": "Latest releases",

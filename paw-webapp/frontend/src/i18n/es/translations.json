@@ -166,8 +166,8 @@
   "Duration.90_120": "90-120 minutos",
   "Duration.120_150": "120-150 minutos",
   "Duration.150_more": "150 o más",
-  "Duration.Or_more": "{0} o mas",
-  "Duration.From.To": "{0}-{1} minutos",
+  "Duration.Or_more": "{{durationArgument}} o mas",
+  "Duration.From.To": "{{durationFromArgument}}-{{durationToArgument}} minutos",
 
   "SortMessage": "Ordenar",
   "Sort.OlderReleased": "Últimos lanzamientos",

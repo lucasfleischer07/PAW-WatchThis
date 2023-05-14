@@ -1,232 +1,253 @@
-// import {useTranslation} from "react-i18next";
-// import {useContext, useEffect, useState} from "react";
-// import {dropDownStayGenreFilters} from "../../scripts/dropDownBehaviour";
-// import {Link} from "react-router-dom";
-//
-//
-// export default function Filters() {
-//
-//     const {t} = useTranslation()
-//     const [genre, setGenre] = useState('');
-//     const [durationFrom, setDurationFrom] = useState(undefined);
-//     const [durationTo, setDurationTo] = useState(undefined);
-//     const [sorting, setSorting] = useState(undefined);
-//     const [pageType, setPageType] = useState('all');
-//     const [query, setQuery] = useState(undefined);
-//
-//
-//     const handleTypeChange = (type) => {
-//         if (type === 'movie' || type === 'movies') {
-//             setPageType('movies');
-//         } else if (type === 'serie' || type === 'series') {
-//             setPageType('series');
-//         } else {
-//             setPageType('all');
-//         }
-//     };
-//
-//     const handleGenreChange = (genre) => {
-//         setGenre(genre);
-//     };
-//
-//     let durationMessage = "";
-//     if (param.durationTo === "1000") {
-//         durationMessage = `Or more (${param.durationFrom})`;
-//     } else if (param.durationFrom !== "" && param.durationFrom !== "ANY") {
-//         durationMessage = `From ${param.durationFrom} to ${param.durationTo}`;
-//     } else {
-//         durationMessage = "Duration";
-//     }
-//
-//     const handleDurationClick = (event) => {
-//         const { durationFrom, durationTo } = event.currentTarget.dataset;
-//         setSelectedDuration(`${durationFrom}_${durationTo}`);
-//     };
-//
-//     return(
-//         <div className="W-filter-div">
-//             <div className="W-genre-duration-div">
-//                 <div className="list-group">
-//                     <div className="dropdown W-dropdown-button">
-//                         {/*{param.type === 'movie' || param.type === 'movies' ? (*/}
-//                         {/*    <sessionStorage.setItem('pageType', 'movies') />*/}
-//                         {/*    ) : param.type === 'serie' || param.type === 'series' ? (*/}
-//                         {/*    <sessionStorage.setItem('pageType', 'series') />*/}
-//                         {/*    ) : (*/}
-//                         {/*    <sessionStorage.setItem('pageType', 'all') />*/}
-//                         {/*    )}*/}
-//                         {genre !== '' && genre !== 'ANY' ? (
-//                             <button id="genreGroupDrop" type="button" onClick={() => dropDownStayGenreFilters()} className="W-filter-title W-genre-filter btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-//                                 {genre}
-//                             </button>
-//                         ) : (
-//                             <button id="genreGroupDrop" type="button" onClick={() => dropDownStayGenreFilters()} className="W-filter-title W-genre-filter btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-//                                 {t('GenreMessage')}
-//                             </button>
-//                         )}
-//                         <ul className="dropdown-menu" id="drop1">
-//                             {/*<c:url value={`/${pageType}/filters`} var="postPath">*/}
-//                             {/*    { query !== undefined && query !== '' ? (*/}
-//                             {/*        <c:param name="query" value={query} />*/}
-//                             {/*    ) : null}*/}
-//                             {/*    {durationFrom !== 'ANY' && durationFrom !== undefined ? (*/}
-//                             {/*        <>*/}
-//                             {/*            <c:param name="durationFrom" value={durationFrom} />*/}
-//                             {/*            <c:param name="durationTo" value={durationTo} />*/}
-//                             {/*        </>*/}
-//                             {/*    ) : null}*/}
-//                             {/*    {sorting !== 'ANY' && sorting != null ? (*/}
-//                             {/*        <c:param name="sorting" value={sorting} />*/}
-//                             {/*    ) : null}*/}
-//                             {/*</c:url>*/}
-//                             <form onSubmit={handleSubmit} encType="multipart/form-data" method="post">
-//                                 <li className="mb-1 px-2">
-//                                     <label>
-//                                         <input type="checkbox" className="px-2" value="Action" onChange={() => handleGenreChange('Action')}/>
-//                                         {' '} {t('Genre.Action')}
-//                                     </label>
-//                                 </li>
-//                                 <li className="mb-1 px-2">
-//                                     <label>
-//                                         <input type="checkbox" className="px-2" value="Sci-Fi" onChange={() => handleGenreChange('Sci-Fi')}/>
-//                                         {' '} {t('Genre.Science')}
-//                                     </label>
-//                                 </li>
-//                                 <li className="mb-1 px-2">
-//                                     <label>
-//                                         <input type="checkbox" className="px-2" value="Comedy" onChange={() => handleGenreChange('Comedy')}/>
-//                                         {' '} {t('Genre.Comedy')}
-//                                     </label>
-//                                 </li>
-//                                 <li className="mb-1 px-2">
-//                                     <label>
-//                                         <input type="checkbox" className="px-2" value="Adventure" onChange={() => handleGenreChange('Adventure')}/>
-//                                         {' '} {t('Genre.Adventure')}
-//                                     </label>
-//                                 </li>
-//                                 <li className="mb-1 px-2">
-//                                     <label>
-//                                         <input type="checkbox" className="px-2" value="Drama" onChange={() => handleGenreChange('Drama')}/>
-//                                         {' '} {t('Genre.Drama')}
-//                                     </label>
-//                                 </li>
-//                                 <li className="mb-1 px-2">
-//                                     <label>
-//                                         <input type="checkbox" className="px-2" value="Horror" onChange={() => handleGenreChange('Horror')}/>
-//                                         {' '} {t('Genre.Horror')}
-//                                     </label>
-//                                 </li>
-//                                 <li className="mb-1 px-2">
-//                                     <label>
-//                                         <input type="checkbox" className="px-2" value="Animation" onChange={() => handleGenreChange('Animation')}/>
-//                                         {' '} {t('Genre.Animation')}
-//                                     </label>
-//                                 </li>
-//                                 <li className="mb-1 px-2">
-//                                     <label>
-//                                         <input type="checkbox" className="px-2" value="Thriller" onChange={() => handleGenreChange('Thriller')}/>
-//                                         {' '} {t('Genre.Thriller')}
-//                                     </label>
-//                                 </li>
-//                                 <li className="mb-1 px-2">
-//                                     <label>
-//                                         <input type="checkbox" className="px-2" value="Mystery" onChange={() => handleGenreChange('Mystery')}/>
-//                                         {' '} {t('Genre.Mystery')}
-//                                     </label>
-//                                 </li>
-//                                 <li className="mb-1 px-2">
-//                                     <label>
-//                                         <input type="checkbox" className="px-2" value="Crime" onChange={() => handleGenreChange('Crime')}/>
-//                                         {' '} {t('Genre.Crime')}
-//                                     </label>
-//                                 </li>
-//                                 <li className="mb-1 px-2">
-//                                     <label>
-//                                         <input type="checkbox" className="px-2" value="Fantasy" onChange={() => handleGenreChange('Fantasy')}/>
-//                                         {' '} {t('Genre.Fantasy')}
-//                                     </label>
-//                                 </li>
-//                                 <li className="mb-1 px-2">
-//                                     <label>
-//                                         <input type="checkbox" className="px-2" value="Romance" onChange={() => handleGenreChange('Romance')}/>
-//                                         {' '} {t('Genre.Romance')}
-//                                     </label>
-//                                 </li>
-//
-//                                 <div className="W-apply-button">
-//                                     <button type="submit" className="btn btn-danger mb-1 px-2">
-//                                         {t('Apply')}
-//                                     </button>
-//                                 </div>
-//                             </form>
-//                         </ul>
-//                     </div>
-//                 </div>
-//
-//                 <div className="list-group">
-//                     <div className="dropdown W-dropdown-button">
-//                         <button id="genreGroupDrop" type="button" className="W-filter-title btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-//                             {durationMessage}
-//                         </button>
-//                         <ul className="dropdown-menu">
-//                             <li>
-//                                 {/*estos no sabemos si son links ni lo de href*/}
-//                                 <Link
-//                                     className="dropdown-item"
-//                                     href={`/filters?pageTpye=${pageTpye}&genre=${param.genre}&sorting=${param.sorting}&query=${param.query}`}
-//                                     onClick={() => showDuration(this)}
-//                                 >
-//                                     <spring:message code="Duration.Clear" />
-//                                 </Link>
-//                             </li>
-//                             <li>
-//                                 <Link
-//                                     className="dropdown-item"
-//                                     href={`/filters?pageTpye=${pageTpye}&genre=${param.genre}&sorting=${param.sorting}&query=${param.query}&durationFrom=0&durationTo=90`}
-//                                     onClick={() => handleDropdownClick(0, 90)}
-//                                 >
-//                                     {t('Duration.90_90')}
-//                                 </Link>
-//                             </li>
-//                             <li>
-//                                 <Link
-//                                     className="dropdown-item"
-//                                     href={`/filters?pageTpye=${pageTpye}&genre=${param.genre}&sorting=${param.sorting}&query=${param.query}&durationFrom=90&durationTo=120`}
-//                                     onClick={() => handleDropdownClick(90, 120)}
-//                                 >
-//                                     {t('Duration.90_120')}
-//                                 </Link>
-//                             </li>
-//                             <li>
-//                                 <Link
-//                                     className="dropdown-item"
-//                                     href={`/filters?pageTpye=${pageTpye}&genre=${param.genre}&sorting=${param.sorting}&query=${param.query}&durationFrom=120&durationTo=150`}
-//                                     onClick={() => handleDropdownClick(120, 150)}
-//                                 >
-//                                     {t('Duration.120_150')}
-//
-//                                 </Link>
-//                             </li>
-//                             <li>
-//                                 <Link
-//                                     className="dropdown-item"
-//                                     href={`/filters?pageTpye=${pageTpye}&genre=${param.genre}&sorting=${param.sorting}&query=${param.query}&durationFrom=150&durationTo=180`}
-//                                     onClick={() => handleDropdownClick(150, 180)}
-//                                 >
-//                                     {t('Duration.150_180')}
-//
-//                                 </Link>
-//                             </li>
-//                         </ul>
-//                     </div>
-//                 </div>
-//
-//                 <div className="list-group">
-//                     <div className="dropdown W-dropdown-button-sorting">
-//                         {/*aca va lo de sorting pero mismo problema*/}
-//                     </div>
-//                 </div>
-//             </div>
-//         </div>
-//     )
-// }
+import {useTranslation} from "react-i18next";
+import {useContext, useEffect, useState} from "react";
+import {dropDownStayGenreFilters} from "../../scripts/dropDownBehaviour";
+import {useLocation, useNavigate} from "react-router-dom";
+import PropTypes from 'prop-types';
+
+
+export default function Filters() {
+
+    const {t} = useTranslation()
+    const navigate = useNavigate();
+    const { search } = useLocation();
+
+    const [genre, setGenre] = useState('');
+    const [durationFrom, setDurationFrom] = useState('');
+    const [durationTo, setDurationTo] = useState('');
+    const [sorting, setSorting] = useState('');
+
+    const [selectedGenresForm, setSelectedGenresForm] = useState([] );
+
+    const sortingTypes = ["OlderReleased","NewestReleased","MostRated","NameAsc","NameDesc"]
+
+    const updateVariable = (param,paramPulled,setter) => {
+        if( param !== paramPulled && paramPulled !== null ){
+            setter(paramPulled)
+        }
+    }
+
+    updateVariable.propTypes = {
+        param: PropTypes.any.isRequired,
+        paramPulled: PropTypes.any,
+        setter: PropTypes.func.isRequired,
+    };
+
+    useEffect(() => {
+        const queryParams = new URLSearchParams(search);
+        updateVariable(genre, queryParams.get('genre'),() => setGenre())
+        updateVariable(durationFrom, queryParams.get('durationFrom'),() => setDurationFrom())
+        updateVariable(durationTo, queryParams.get('durationTo'),() => setDurationTo())
+        updateVariable(sorting, queryParams.get('sorting'),() => setSorting())
+    }, [search]);
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        onGenreSubmit(selectedGenresForm);
+    }
+
+    const onGenreSubmit = ( genres ) => {
+        alert(genres.length)
+        const queryParams = new URLSearchParams(window.location.search);
+        if (genres.length === 0) {
+            queryParams.delete('genre');
+        } else {
+            queryParams.set('genre', genres.join(','));
+        }
+        navigate(window.location.pathname + '?' + queryParams.toString());
+    }
+
+    const handleGenreFormChange = (e) => {
+        alert(e.target.value)
+        const genre = e.target.value;
+        if (e.target.checked) {
+            setSelectedGenresForm([...selectedGenresForm, genre]);
+        } else {
+            setSelectedGenresForm(selectedGenresForm.filter((g) => g !== genre));
+        }
+    }
+
+    const changeDuration = (durationFrom, durationTo) => {
+        const searchParams = new URLSearchParams(window.location.search);
+        if( durationFrom === 0 && durationTo === 0 ){
+            searchParams.delete('durationFrom');
+            searchParams.delete('durationTo');
+        }else{
+            searchParams.set('durationFrom', durationFrom);
+            searchParams.set('durationTo', durationTo);
+        }
+        navigate(window.location.pathname + '?' + searchParams.toString());
+    }
+
+    const changeSorting = (sorting) => {
+        const searchParams = new URLSearchParams(window.location.search);
+        searchParams.set('sorting', sorting);
+        navigate(window.location.pathname + '?' + searchParams.toString());
+    }
+
+
+    return(
+        <div className="W-filter-div">
+            <div className="W-genre-duration-div">
+                <div className="list-group">
+                    <div className="dropdown W-dropdown-button">
+                        {genre !== '' && genre !== 'ANY' && genre != null ? (
+                            <button id="genreGroupDrop" type="button" onClick={() => dropDownStayGenreFilters()} className="W-filter-title W-genre-filter btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                {genre}
+                            </button>
+                        ) : (
+                            <button id="genreGroupDrop" type="button" onClick={() => dropDownStayGenreFilters()} className="W-filter-title W-genre-filter btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                {t('GenreMessage')}
+                            </button>
+                        )}
+                        <form onSubmit={handleSubmit} encType="multipart/form-data" method="post">
+                            <ul className="dropdown-menu" id="drop1">
+                                <li className="mb-1 px-2">
+                                    <label>
+                                        <input type="checkbox" className="px-2" name="Action"  onChange={handleGenreFormChange}/>
+                                        {' '} {t('Genre.Action')}
+                                    </label>
+                                </li>
+                                <li className="mb-1 px-2">
+                                    <label>
+                                        <input type="checkbox" className="px-2" name="Sci-Fi"  onChange={handleGenreFormChange}/>
+                                        {' '} {t('Genre.Science')}
+                                    </label>
+                                </li>
+                                <li className="mb-1 px-2">
+                                    <label>
+                                        <input type="checkbox" className="px-2" name="Comedy"  onChange={handleGenreFormChange}/>
+                                        {' '} {t('Genre.Comedy')}
+                                    </label>
+                                </li>
+                                <li className="mb-1 px-2">
+                                    <label>
+                                        <input type="checkbox" className="px-2" name="Adventure" onChange={handleGenreFormChange}/>
+                                        {' '} {t('Genre.Adventure')}
+                                    </label>
+                                </li>
+                                <li className="mb-1 px-2">
+                                    <label>
+                                        <input type="checkbox" className="px-2" name="Drama" onChange={handleGenreFormChange}/>
+                                        {' '} {t('Genre.Drama')}
+                                    </label>
+                                </li>
+                                <li className="mb-1 px-2">
+                                    <label>
+                                        <input type="checkbox" className="px-2" name="Horror" onChange={handleGenreFormChange}/>
+                                        {' '} {t('Genre.Horror')}
+                                    </label>
+                                </li>
+                                <li className="mb-1 px-2">
+                                    <label>
+                                        <input type="checkbox" className="px-2" name="Animation" onChange={handleGenreFormChange}/>
+                                        {' '} {t('Genre.Animation')}
+                                    </label>
+                                </li>
+                                <li className="mb-1 px-2">
+                                    <label>
+                                        <input type="checkbox" className="px-2" name="Thriller" onChange={handleGenreFormChange}/>
+                                        {' '} {t('Genre.Thriller')}
+                                    </label>
+                                </li>
+                                <li className="mb-1 px-2">
+                                    <label>
+                                        <input type="checkbox" className="px-2" name="Mystery" onChange={handleGenreFormChange}/>
+                                        {' '} {t('Genre.Mystery')}
+                                    </label>
+                                </li>
+                                <li className="mb-1 px-2">
+                                    <label>
+                                        <input type="checkbox" className="px-2" name="Crime" onChange={handleGenreFormChange}/>
+                                        {' '} {t('Genre.Crime')}
+                                    </label>
+                                </li>
+                                <li className="mb-1 px-2">
+                                    <label>
+                                        <input type="checkbox" className="px-2" name="Fantasy" onChange={handleGenreFormChange}/>
+                                        {' '} {t('Genre.Fantasy')}
+                                    </label>
+                                </li>
+                                <li className="mb-1 px-2">
+                                    <label>
+                                        <input type="checkbox" className="px-2" name="Romance" onChange={handleGenreFormChange}/>
+                                        {' '} {t('Genre.Romance')}
+                                    </label>
+                                </li>
+
+                                <div className="W-apply-button">
+                                    <button type="submit" className="btn btn-danger mb-1 px-2">
+                                        {t('Apply')}
+                                    </button>
+                                </div>
+                            </ul>
+                        </form>
+                    </div>
+                </div>
+
+                <div className="list-group">
+                    <div className="dropdown W-dropdown-button">
+                        <button id="genreGroupDrop" type="button" className="W-filter-title btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            {durationTo === '1000' ? (
+                                t('Duration.Or_more',{"durationArgument":durationFrom})
+                            ) : durationFrom !== '' &&  durationFrom !== 'ANY' && durationFrom != null ?(
+                                t('Duration.From.To',{"durationFromArgument":durationFrom,"durationToArgument":durationTo})
+                            ) : (
+                                t('DurationMessage')
+                            )}
+                        </button>
+                        <ul className="dropdown-menu">
+                            <li>
+                                <p className="dropdown-item" onClick={() => changeDuration(0,0)}>
+                                    {t('Duration.Clear')}
+                                </p>
+                            </li>
+                            <li>
+                                <p className="dropdown-item" onClick={() => changeDuration(0,90)}>
+                                    {t('Duration.0_90')}
+                                </p>
+                            </li>
+                            <li>
+                                <p className="dropdown-item" onClick={() => changeDuration(90,120)}>
+                                    {t('Duration.90_120')}
+                                </p>
+                            </li>
+                            <li>
+                                <p className="dropdown-item" onClick={() => changeDuration(120,150)}>
+                                    {t('Duration.120_150')}
+                                </p>
+                            </li>
+                            <li>
+                                <p className="dropdown-item" onClick={() => changeDuration(150,180)}>
+                                    {t('Duration.150_more')}
+                                </p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div className="list-group">
+                <div className="dropdown W-dropdown-button-sorting">
+                    <button id="genreGroupDrop" type="button" className="W-filter-title btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        { sorting !== '' &&  sorting !== 'ANY' && sorting != null ? (
+                            t('Sort.' + sorting )
+                        ) : (
+                            t('SortMessage')
+                        )}
+                    </button>
+                    <ul className="dropdown-menu">
+                        {sortingTypes.map((sortingType) => (
+                            <li key={sortingType}>
+                                <p className="dropdown-item" onClick={() => changeSorting(sortingType)}>
+                                    {t(`Sort.${sortingType}`)}
+                                </p>
+                            </li>
+                        ))}
+                    </ul>
+
+
+                </div>
+            </div>
+        </div>
+    )
+}

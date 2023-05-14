@@ -92,7 +92,7 @@ public class ContentJpaDao implements ContentDao{
         TypedQuery<Content> query= em.createQuery("From Content",Content.class);
         TypedQuery<Content> countQuery;
         if(!Objects.equals(type, "all")) {
-            query = em.createQuery("SELECT c FROM Content c WHERE c.durationnum > :durationFrom AND c.durationnum <= :durationTo AND c.type = :type " + sortString, Content.class);
+            query = em.createQuery("FROM Content WHERE durationnum > :durationFrom AND durationnum <= :durationTo AND type = :type " + sortString, Content.class);
             countQuery = em.createQuery("FROM Content WHERE durationnum > :durationFrom  AND durationnum <= :durationTo AND type = :type",Content.class);
             countQuery.setParameter("type",type);
             query.setParameter("type",type);
@@ -310,10 +310,12 @@ public class ContentJpaDao implements ContentDao{
             longList.add(big.longValue());
         }
         if(longList.size()>0){
-        TypedQuery<Content> query= em.createQuery(" FROM Content WHERE id IN ( :resultList ) ",Content.class);
-        query.setParameter("resultList",longList);
-        return query.getResultList();}
-        else return new ArrayList<Content>();
+            TypedQuery<Content> query= em.createQuery(" FROM Content WHERE id IN ( :resultList ) ",Content.class);
+            query.setParameter("resultList",longList);
+            return query.getResultList();
+        }
+        return new ArrayList<Content>();
+
     }
 
     @Override
@@ -324,9 +326,13 @@ public class ContentJpaDao implements ContentDao{
         for (Integer big:resulList) {
             longList.add(big.longValue());
         }
-        TypedQuery<Content> query= em.createQuery(" FROM Content WHERE id IN ( :resultList ) ",Content.class);
-        query.setParameter("resultList",longList);
-        return query.getResultList();
+        if(longList.size()>0) {
+            TypedQuery<Content> query = em.createQuery(" FROM Content WHERE id IN ( :resultList ) ", Content.class);
+            query.setParameter("resultList", longList);
+            return query.getResultList();
+        }
+        return new ArrayList<Content>();
+
     }
 
     @Override
@@ -394,8 +400,11 @@ public class ContentJpaDao implements ContentDao{
         for (Integer big:resulList) {
             longList.add(big.longValue());
         }
-        TypedQuery<User> query= em.createQuery(" FROM User WHERE id IN ( :resultList ) ",User.class);
-        query.setParameter("resultList",longList);
-        return query.getResultList();
+        if(longList.size()>0) {
+            TypedQuery<User> query = em.createQuery(" FROM User WHERE id IN ( :resultList ) ", User.class);
+            query.setParameter("resultList", longList);
+            return query.getResultList();
+        }
+        return new ArrayList<User>();
     }
 }

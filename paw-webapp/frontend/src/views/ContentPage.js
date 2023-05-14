@@ -2,27 +2,39 @@ import {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {contentService, listsService} from "../services";
 import ContentCard from "./components/ContentCard";
-import {Link, useNavigate, useParams} from "react-router-dom";
+import {Link, useLocation, useNavigate, useParams} from "react-router-dom";
 import Header from "./components/Header";
+import Filters from "./components/Filters";
 
 export default function ContentPage(props) {
     const {t} = useTranslation()
     let navigate = useNavigate()
     const { contentType } = useParams();
+    const { search } = useLocation();
 
     const [allContent, setAllContent] = useState([])
     const [actualPage, setActualPage] = useState(1)
-    const [totalPages, setTotalPages] = useState(undefined)
+    const [amountPages, setAmountPages] = useState(1)
     const [userWatchListIds, setUserWatchListIds] = useState([])
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
-
+    const [genre, setGenre] = useState('');
+    const [durationFrom, setDurationFrom] = useState('');
+    const [durationTo, setDurationTo] = useState('');
+    const [sorting, setSorting] = useState('');
+    const [query, setQuery] = useState('')
     // TODO: Esto esta asi porque necesito pasarselo por parametro, pero mientras para probar
     // const query = "props.query"
     // const genre = "props.genre"
     // const durationFrom = "props.durationFrom"
-    const query = null
-    const genre = null
-    const durationFrom = null
+
+
+    const updateVariable = (param,paramPulled,setter) => {
+        if( paramPulled !== null && paramPulled !== undefined && param !== paramPulled ){
+
+            console.log("Entra")
+            setter(paramPulled)
+        }
+    }
 
     useEffect(() => {
         if(user === undefined) {
@@ -36,12 +48,14 @@ export default function ContentPage(props) {
             .then(data => {
                 if(!data.error) {
                     setAllContent(data.data)
-                    setTotalPages(data.totalPages)
+                    const aux = data.totalPages
+                    setAmountPages(aux);
                 } else {
                     navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                 }
             })
-            .catch(() => {
+            .catch((e) => {
+                console.log(e)
                 navigate("/error", { replace: true, state: {errorCode: 404} })
             })
     }, [actualPage, contentType])
@@ -60,11 +74,40 @@ export default function ContentPage(props) {
             : setUserWatchListIds(null)
     }, [user])
 
+    useEffect(() => {
+        const queryParams = new URLSearchParams(search);
+        updateVariable(genre, queryParams.get('genre'),(x) => setGenre(x))
+        updateVariable(durationFrom, queryParams.get('durationFrom'), (x) => setDurationFrom(x))
+        updateVariable(durationTo, queryParams.get('durationTo'), (x) =>setDurationTo(x))
+        updateVariable(sorting, queryParams.get('sorting'),(x) => setSorting(x))
+        updateVariable(actualPage, queryParams.get('page'), (x) =>setActualPage(x))
+    }, [search]);
+
+    const prevPage = () => {
+        setActualPage(actualPage - 1)
+        changeUrlPage(actualPage - 1)
+    }
+
+    const nextPage = () => {
+        setActualPage(actualPage + 1)
+        changeUrlPage(actualPage + 1)
+    }
+
+    const changePage = ( newPage) => {
+        setActualPage(newPage)
+        changeUrlPage(newPage)
+    }
+
+    const changeUrlPage = (page) => {
+        const searchParams = new URLSearchParams(window.location.search);
+        searchParams.set('page', page);
+        navigate(window.location.pathname + '?' + searchParams.toString());
+    }
 
     return (
         <div>
             <Header type={contentType} admin={user?.role === 'admin'} userName={user?.username} userId={user?.id}/>
-
+            <Filters/>
             {/*<Filter*/}
             {/*    query={query}*/}
             {/*    genre={genre}*/}
@@ -99,6 +142,75 @@ export default function ContentPage(props) {
                     ))}
                 </div>
             </div>
+            <div>
+                <ul className="pagination justify-content-center W-pagination">
+                    {actualPage > 1 ? (
+                        <li className="page-item">
+                            <p className="page-link W-pagination-color" onClick={() => prevPage()}>
+                                {t('Pagination.Prev')}
+                            </p>
+                        </li>
+                    ) : (
+                        <li className="page-item disabled">
+                            <p className="page-link W-pagination-color">{t('Pagination.Prev')}</p>
+                        </li>
+                    )}
+                    {amountPages > 10 ? (
+                        Array.from({ length: amountPages }, (_, index) => (
+                            index + 1 === parseInt(actualPage) ? (
+                                <li className="page-item active">
+                                    <p className="page-link W-pagination-color">{index + 1}</p>
+                                </li>
+                            ): index + 1 === parseInt(actualPage) + 4 ? (
+                                <li className="page-item">
+                                    <p className="page-link W-pagination-color" onClick={() => changePage(index + 1)}>
+                                        ...
+                                    </p>
+                                </li>
+                            ): index + 1 === parseInt(actualPage) - 4 ? (
+                                <li className="page-item">
+                                    <p className="page-link W-pagination-color" onClick={() => changePage(index + 1)}>
+                                        ...
+                                    </p>
+                                </li>
+                            ) : ( index + 1 > parseInt(actualPage) - 4 && index + 1 < parseInt(actualPage) + 4 ) && (
+                                <li className="page-item">
+                                    <p className="page-link W-pagination-color" onClick={() => changePage(index + 1)}>
+                                        {index + 1}
+                                    </p>
+                                </li>
+                            )
+                        ))
+                    ) : (
+                        Array.from({ length: amountPages }, (_, index) => (
+                            index + 1 === actualPage ? (
+                                <li className="page-item active">
+                                    <p className="page-link W-pagination-color">{index + 1}</p>
+                                </li>
+                            ) : (
+                                <li className="page-item">
+                                    <p className="page-link W-pagination-color" onClick={() => changePage(index + 1)}>
+                                        {index + 1}
+                                    </p>
+                                </li>
+                            )
+                        ))
+                    )}
+                    {actualPage < amountPages ? (
+                        <li className="page-item">
+                            <p className="page-link W-pagination-color" onClick={() => nextPage()}>
+                                {t('Pagination.Next')}
+                            </p>
+                        </li>
+                    ) : (
+                        <li className="page-item disabled">
+                            <p className="page-link W-pagination-color">{t('Pagination.Next')}</p>
+                        </li>
+                    )}
+                </ul>
+            </div>
+
+
             {(allContent.length === 0) && (
                 <div className="card W-not-found-card">
                     <div className="card-body W-row-display">

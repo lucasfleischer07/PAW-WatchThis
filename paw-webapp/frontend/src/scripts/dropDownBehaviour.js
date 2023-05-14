@@ -40,7 +40,7 @@
     }
 
 
-        function update(feature) {
+    function update(feature) {
         const genreButton = document.getElementById('createGenre').innerHTML;
 
         if(feature.checked === true){
@@ -53,4 +53,4 @@
         }
     }
 
-    export {update, dropDownStayGenreCreate, showGenre, showDuration, showSorting, dropDownStayGenreFiltersHamburger, showRating}
+    export {update, dropDownStayGenreCreate, showGenre, showDuration, showSorting, dropDownStayGenreFilters, dropDownStayGenreFiltersHamburger, showRating}
