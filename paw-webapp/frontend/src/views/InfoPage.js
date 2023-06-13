@@ -14,7 +14,7 @@ import Header from "./components/Header";
 export default function InfoPage() {
     const {t} = useTranslation()
     let navigate = useNavigate()
-    let {isLogged} = useContext(AuthContext)
+    let {isLogged, signOut} = useContext(AuthContext)
     const { contentType, contentId} = useParams();
 
     const [user, setUser]= useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
@@ -184,7 +184,11 @@ export default function InfoPage() {
                 .then(watchList => {
                     if(!watchList.error) {
                         setIsInWatchList(watchList.data.some(item => item.id === contentId))
-                    } else {
+                    } else if(watchList.errorCode === 404) {
+                        signOut()
+                        navigate("/", { replace: true })
+                    }
+                    else {
                         navigate("/error", { replace: true, state: {errorCode: watchList.errorCode} })
                     }
                 })

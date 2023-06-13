@@ -18,15 +18,14 @@ import ReviewEditionPage from "./views/ReviewEditionPage";
 import ContentCreatePage from "./views/ContentCreatePage";
 import ReportedPage from "./views/ReportedPage";
 import ErrorPage from "./views/ErrorPage";
-import Comments from "./views/components/Comments";
 import InfoPage from "./views/InfoPage";
-import Reputation from "./views/components/Reputation";
 import SignUp from "./views/SignUp";
 
 function App() {
   return (
-      <AuthProvider>
-          <BrowserRouter basename={process.env.REACT_APP_CONTEXT}>
+      <BrowserRouter basename={process.env.REACT_APP_CONTEXT}>
+          <AuthProvider>
+
               <Routes>
                   <Route path='/' element={<Home/>}/>
                   <Route path='/content/:contentType' element={<ContentPage/>}/>
@@ -65,9 +64,9 @@ function App() {
                   pauseOnHover
                   theme="dark"
               />
+          </AuthProvider>
 
-          </BrowserRouter>
-      </AuthProvider>
+      </BrowserRouter>
   );
 }
 

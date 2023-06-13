@@ -10,7 +10,7 @@ import {useNavigate} from "react-router-dom";
 export default function Home() {
     const {t} = useTranslation()
     let navigate = useNavigate()
-    let {isLogged} = useContext(AuthContext)
+    let {isLogged, signOut, listApi} = useContext(AuthContext)
 
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
     const [bestRatedList, setBestRatedList] = useState([])
@@ -39,12 +39,17 @@ export default function Home() {
             })
 
         if(isLogged()) {
-            listsService.getUserWatchListContentIds(user?.id)
+            listApi.getUserWatchListContentIds(user?.id)
                 .then(watchList => {
                     if(!watchList.error) {
                         setUserWatchListIds(watchList.data)
                     } else {
-                        navigate("/error", { replace: true, state: {errorCode: watchList.errorCode} })
+                        if(watchList.errorCode === 404) {
+                            signOut()
+                            navigate("/", { replace: true })
+                        } else {
+                            navigate("/error", { replace: true, state: {errorCode: watchList.errorCode} })
+                        }
                     }
                 })
                 .catch(() => {

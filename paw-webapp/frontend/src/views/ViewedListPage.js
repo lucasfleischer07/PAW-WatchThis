@@ -2,14 +2,13 @@ import React, {useContext, useEffect, useState} from "react";
 import ContentCard from "./components/ContentCard";
 import {useTranslation} from "react-i18next";
 import {AuthContext} from "../context/AuthContext";
-import {listsService} from "../services";
 import {Link, useNavigate} from "react-router-dom";
 import Header from "./components/Header";
 
 export default function ViewedListPage(props) {
     const {t} = useTranslation()
     let navigate = useNavigate()
-    let {isLogged} = useContext(AuthContext)
+    let {isLogged, signOut, listApi} = useContext(AuthContext)
 
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
     const [currentPage, setCurrentPage] = useState(1)
@@ -19,16 +18,22 @@ export default function ViewedListPage(props) {
 
     const getUserViewedList = () => {
         if(isLogged()) {
-            listsService.getUserViewedList(user.id, currentPage)
+            listApi.getUserViewedList(user.id, currentPage)
                 .then(watchList => {
                     if(!watchList.error) {
                         setViewedList(watchList.data)
                         setTotalPages(watchList.totalPages)
                     } else {
-                        navigate("/error", { replace: true, state: {errorCode: watchList.errorCode} })
+                        console.log(watchList.errorCode)
+                        if(watchList.errorCode === 404) {
+                            signOut()
+                            navigate("/", { replace: true })
+                        } else {
+                            navigate("/error", { replace: true, state: {errorCode: watchList.errorCode} })
+                        }
                     }
                 })
-                .catch(() => {
+                .catch((e) => {
                     navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
         } else {

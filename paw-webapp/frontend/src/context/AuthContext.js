@@ -1,9 +1,11 @@
 import { createContext } from "react";
+import {useListApi} from "../api/ListsApi";
+import {useNavigate} from "react-router-dom";
 
 export const AuthContext = createContext(null);
 
-
 export function AuthProvider ({children}) {
+    const navigate = useNavigate()
 
     const signIn = (user, authToken) => {
         localStorage.setItem("user", JSON.stringify(user))
@@ -26,6 +28,7 @@ export function AuthProvider ({children}) {
         signIn,
         signOut,
         isLogged,
+        listApi: useListApi(signOut, navigate),
     };
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

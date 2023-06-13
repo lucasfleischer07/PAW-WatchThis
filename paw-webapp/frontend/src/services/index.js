@@ -5,7 +5,6 @@ import {ReportsApi} from "../api/ReportsApi";
 import {ReviewApi} from "../api/ReviewApi";
 import {UserApi} from "../api/UserApi";
 
-
 const commentService = new CommentApi();
 const contentService = new ContentApi();
 const listsService = new ListsApi();

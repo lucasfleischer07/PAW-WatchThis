@@ -89,7 +89,7 @@ public class WatchAndViewedListsController {
     public Response addUserWatchList(@PathParam("contentId") final long contentId) {
         LOGGER.info("POST /{}: Called", uriInfo.getPath());
         final Content content = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
-        final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(ForbiddenException::new);
+        final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
 
         try {
             us.addToWatchList(user, content);
