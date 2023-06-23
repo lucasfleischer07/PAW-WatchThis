@@ -1,15 +1,14 @@
 import {useTranslation} from "react-i18next";
-import {useLocation, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {useContext, useEffect, useState} from "react";
 import {userService} from "../services";
 import {AuthContext} from "../context/AuthContext";
 import {toast} from "react-toastify";
-import Header from "./components/Header";
 
 export default function SignUp() {
     const {t} = useTranslation()
     let navigate = useNavigate()
-    let {signIn, signOut} = useContext(AuthContext)
+    let {signIn, signOut, userApi} = useContext(AuthContext)
 
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
     const [usernameError, setUsernameError] = useState(false)
@@ -67,7 +66,7 @@ export default function SignUp() {
         if(!validateForm()) {
             return
         }
-        userService.userCreate(userForm)
+        userApi.userCreate(userForm)
             .then(data => {
                 // TODO: Ver como manejar el tema de ususario que ay existe y eso
                 if(!data.error) {

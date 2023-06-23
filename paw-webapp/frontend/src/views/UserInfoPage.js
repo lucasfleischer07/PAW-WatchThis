@@ -12,7 +12,7 @@ import {AuthContext} from "../context/AuthContext";
 export default function UserInfoPage() {
     const {t} = useTranslation()
     let navigate = useNavigate()
-    let {isLogged} = useContext(AuthContext)
+    let {isLogged, signOut, userApi, reviewApi} = useContext(AuthContext)
     const { userProfileId } = useParams();
 
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
@@ -29,14 +29,19 @@ export default function UserInfoPage() {
 
     const handlePromoteUser = (e) => {
         e.preventDefault();
-        userService.promoteUserToAdmin(reviewOwnerUser.id)
+        userApi.promoteUserToAdmin(reviewOwnerUser.id)
             .then(data => {
                 if(!data.error) {
                     setCanPromote(false)
                     toast.success(t('Profile.PromoteUser.Success'))
                 } else {
-                    toast.error(t('Profile.PromoteUser.Error'))
-                    navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                    if(data.errorCode === 404) {
+                        toast.error(t('Profile.PromoteUser.Error'))
+                        signOut()
+                        navigate("/", { replace: true })
+                    } else {
+                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                    }
                 }
             })
             .catch(e => {
@@ -45,12 +50,13 @@ export default function UserInfoPage() {
     }
 
     useEffect(() => {
-        userService.getUserReviews(parseInt(userProfileId), currentPage)
+        // TODO: HAY QUE VER COMO HACER PARA QUE CUANDO SE VENZA LA COOKIE, ME DEJE EN ESTA PAGE PERO QUE ARRIBA ME DESAPAREZCA EL QUE ESTOY LOGUEADO PORQUE TANTO PARA OWNER COMO PARA USER ES EL MISMO PATH
+        userApi.getUserReviews(parseInt(userProfileId), currentPage)
             .then(reviews => {
                 if(!reviews.error) {
                     setReviews(reviews.data)
                     if(reviews.data.length === 0) {
-                         userService.getUserInfo(parseInt(userProfileId))
+                        userApi.getUserInfo(parseInt(userProfileId))
                              .then((data) => {
                                  if(!data.error) {
                                     setReviewOwnerUser(data.data)
@@ -99,7 +105,7 @@ export default function UserInfoPage() {
             })
 
         if(isLogged()) {
-            reviewService.getReviewsLike()
+            reviewApi.getReviewsLike()
                 .then(data => {
                     if(!data.error) {
                         setIsLikeReviewsList(data.data)
@@ -111,7 +117,7 @@ export default function UserInfoPage() {
                     navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
 
-            reviewService.getReviewsDislike()
+            reviewApi.getReviewsDislike()
                 .then(data => {
                     if(!data.error) {
                         setIsDislikeReviewsList(data.data)

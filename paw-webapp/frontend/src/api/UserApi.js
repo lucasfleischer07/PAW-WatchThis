@@ -1,10 +1,17 @@
 import {APPLICATION_JSON_TYPE, paths} from "../paths";
 import {fetchWithQueryParamsApi} from "./FetchWithQueryParams";
 import {authCheck} from "../scripts/authCheck";
+import {ListsApi} from "./ListsApi";
+
+export const useUserApi = (signOut, navigate) => {
+    return new UserApi(navigate, signOut)
+}
 
 export class UserApi {
-    constructor() {
+    constructor(navigate, signOut) {
         this.basePath = `${paths.BASE_URL_API}${paths.USERS}`
+        this.navigate = navigate
+        this.signOut = signOut
     }
 
     async userCreate(userDetails) {
@@ -147,7 +154,11 @@ export class UserApi {
             }
 
         } catch (e) {
-            return {error: true}
+            if(e.response.status === 404) {
+                this.signOut()
+                this.navigate("/", {replace: true})
+            }
+            return {error: true, errorCode: e.response.status || 500}
         }
     }
     

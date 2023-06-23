@@ -2,7 +2,7 @@ import CarrouselContent from "./components/CarrouselContent";
 import {useTranslation} from "react-i18next";
 import {useContext, useEffect, useState} from "react";
 import {AuthContext} from "../context/AuthContext";
-import {contentService, listsService} from "../services";
+import {contentService} from "../services";
 import Header from "./components/Header";
 import {useNavigate} from "react-router-dom";
 
