@@ -1,19 +1,19 @@
 import {useTranslation} from "react-i18next";
 import React, {useContext, useEffect, useState} from "react";
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import {Link, useNavigate, useParams} from "react-router-dom";
-import {reviewService, userService} from "../services";
 import {toast} from "react-toastify";
 import TooltipComponent from "./components/Tooltip";
 import Header from "./components/Header";
 import ReviewCard from "./components/ReviewCard";
 import {AuthContext} from "../context/AuthContext";
+import ExpiredCookieModal from "./components/ExpiredCookieModal";
 
 export default function UserInfoPage() {
     const {t} = useTranslation()
     let navigate = useNavigate()
-    let {isLogged, signOut, userApi, reviewApi} = useContext(AuthContext)
+    let {isLogged, userApi, reviewApi} = useContext(AuthContext)
     const { userProfileId } = useParams();
+    const [showExpiredCookiesModal, setShowExpiredCookiesModal] = useState(false)
 
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
     const [reviewOwnerUser, setReviewOwnerUser] = useState({})
@@ -37,8 +37,7 @@ export default function UserInfoPage() {
                 } else {
                     if(data.errorCode === 404) {
                         toast.error(t('Profile.PromoteUser.Error'))
-                        signOut()
-                        navigate("/", { replace: true })
+                        setShowExpiredCookiesModal(true)
                     } else {
                         navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                     }
@@ -135,6 +134,10 @@ export default function UserInfoPage() {
 
     return(
         <>
+            {showExpiredCookiesModal && (
+                <ExpiredCookieModal/>
+            )}
+
             <Header type="all" admin={user?.role === 'admin'} userName={user?.username} userId={user?.id}/>
 
             <div className="row py-5 px-4 W-set-margins">

@@ -112,6 +112,8 @@
   "EditProfile.Upload.Password.Success": "Contraseña actualizada correctamente",
   "EditProfile.Upload.Password.Error": "Error al actualizar la contraseña",
 
+  "Cookies.Title": "Sesión expiradaa",
+  "Cookies.Body": "Tu sesión ha expirado. Por favor inicie sesión devuelta.",
 
   "Comment.Owner": "Creador del comentario: {{username}}",
   "Comment.Title": "Comentar",

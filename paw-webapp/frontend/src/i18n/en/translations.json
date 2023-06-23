@@ -113,6 +113,8 @@
   "EditProfile.Upload.Password.Success": "Profile password uploaded",
   "EditProfile.Upload.Password.Error": "Error while updating password",
 
+  "Cookies.Title": "Session expired",
+  "Cookies.Body": "Your session have expired. Please log in again.",
 
   "Comment.Owner": "Comment owner: {{username}}",
   "Comment.Title": "Comment",

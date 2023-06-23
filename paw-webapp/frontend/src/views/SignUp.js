@@ -70,7 +70,7 @@ export default function SignUp() {
             .then(data => {
                 // TODO: Ver como manejar el tema de ususario que ay existe y eso
                 if(!data.error) {
-                    userService.login(data.data.email, userForm.password)
+                    userApi.login(data.data.email, userForm.password)
                         .then(user2 => {
                             if(!user2.error) {
                                 if(user != null) {
@@ -83,14 +83,14 @@ export default function SignUp() {
                                 navigate("/error", { replace: true, state: {errorCode: user2.errorCode} })
                             }
                         })
-                        .catch(e => {
+                        .catch(() => {
                             navigate("/error", { replace: true, state: {errorCode: 401} })
                         })
                 } else {
                     navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                 }
             })
-            .catch(e => {
+            .catch(() => {
                 navigate("/error", { replace: true, state: {errorCode: 404} })
             })
     }

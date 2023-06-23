@@ -2,19 +2,19 @@ import {useTranslation} from "react-i18next";
 import {Link, useLocation, useNavigate, useParams} from "react-router-dom";
 import React, {useContext, useEffect, useState} from "react";
 import {AuthContext} from "../context/AuthContext";
-import {contentService, reviewService, userService} from "../services";
-import {toast} from "react-toastify";
-import SimpleMDE from 'react-simplemde-editor';
+import {contentService, reviewService} from "../services";
 import 'easymde/dist/easymde.min.css';
 import Header from "./components/Header";
+import ExpiredCookieModal from "./components/ExpiredCookieModal";
 
 
 export default function ReviewRegistrationPage() {
     const {t} = useTranslation()
     let location = useLocation()
     let navigate = useNavigate()
-    let {isLogged} = useContext(AuthContext)
+    let {isLogged, reviewApi} = useContext(AuthContext)
     let origin = location.pathname || "/";
+    const [showExpiredCookiesModal, setShowExpiredCookiesModal] = useState(false)
 
     const { contentType, contentId } = useParams();
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
@@ -78,12 +78,16 @@ export default function ReviewRegistrationPage() {
             return
         }
 
-        reviewService.reviewsCreation(parseInt(contentId), contentType, reviewForm)
+        reviewApi.reviewsCreation(parseInt(contentId), contentType, reviewForm)
             .then(data => {
                 if(!data.error) {
-                    navigate(origin, {replace: true})
+                    navigate(-1)
                 } else {
-                    navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                    if(data.errorCode === 401) {
+                        setShowExpiredCookiesModal(true)
+                    } else {
+                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                    }
                 }
             })
             .catch(() => {
@@ -113,6 +117,10 @@ export default function ReviewRegistrationPage() {
 
     return (
         <>
+            {showExpiredCookiesModal && (
+                <ExpiredCookieModal/>
+            )}
+
             <Header type="all" admin={user?.role === 'admin'} userName={user?.username} userId={user?.id}/>
 
             <form method="post" onSubmit={handleSubmit}>

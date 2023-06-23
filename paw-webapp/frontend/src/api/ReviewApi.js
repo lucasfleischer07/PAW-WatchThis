@@ -62,7 +62,7 @@ export class ReviewApi {
             })
 
             if(res.status === 201) {
-                return {error: false, data: await res.json()}
+                return {error: false}
             } else {
                 return {error: true, errorCode: res.status }
             }
