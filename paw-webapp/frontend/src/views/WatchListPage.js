@@ -2,15 +2,13 @@ import React, {useContext, useEffect, useState} from "react";
 import ContentCard from "./components/ContentCard";
 import {useTranslation} from "react-i18next";
 import {AuthContext} from "../context/AuthContext";
-import {listsService} from "../services";
 import {Link, useNavigate} from "react-router-dom";
 import Header from "./components/Header";
-import {set} from "react-hook-form";
 
 export default function WatchListPage(props) {
     const {t} = useTranslation()
     let navigate = useNavigate()
-    let {isLogged} = useContext(AuthContext)
+    let {isLogged, signOut, listApi} = useContext(AuthContext)
 
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
     const [currentPage, setCurrentPage] = useState(1)
@@ -20,13 +18,18 @@ export default function WatchListPage(props) {
 
     const getUserWatchList = () => {
         if(isLogged()) {
-            listsService.getUserWatchList(user?.id, currentPage)
+            listApi.getUserWatchList(user?.id, currentPage)
                 .then(watchList => {
                     if(!watchList.error) {
                         setWatchList(watchList.data)
                         setTotalPages(watchList.totalPages)
                     } else {
-                        navigate("/error", { replace: true, state: {errorCode: watchList.errorCode} })
+                        if(watchList.errorCode === 404) {
+                            signOut()
+                            navigate("/", { replace: true })
+                        } else {
+                            navigate("/error", { replace: true, state: {errorCode: watchList.errorCode} })
+                        }
                     }
                 })
                 .catch(() => {

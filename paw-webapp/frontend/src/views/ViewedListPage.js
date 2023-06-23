@@ -24,7 +24,6 @@ export default function ViewedListPage(props) {
                         setViewedList(watchList.data)
                         setTotalPages(watchList.totalPages)
                     } else {
-                        console.log(watchList.errorCode)
                         if(watchList.errorCode === 404) {
                             signOut()
                             navigate("/", { replace: true })

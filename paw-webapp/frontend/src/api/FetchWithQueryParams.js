@@ -1,5 +1,4 @@
 import parse from "parse-link-header";
-import {json} from "react-router-dom";
 
 export async function fetchWithQueryParamsApi(url, queryParams = {}, options = {}) {
     try {

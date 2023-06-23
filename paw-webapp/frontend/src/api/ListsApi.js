@@ -20,10 +20,18 @@ export class ListsApi {
             const res = await fetchWithQueryParamsApi(apiUrl, params, options)
             if(res.status === 200) {
                 return {error: false, data: await res.data, totalPages: res.totalPages}
+            } else if(res.status === 404) {
+                this.signOut()
+                this.navigate("/", {replace: true})
+                return {error: true, errorCode: res.status}
             } else {
-                return {error: false, errorCode: res.status}
+                return {error: true, errorCode: res.status}
             }
         } catch (e) {
+            if(e.response.status === 404) {
+                this.signOut()
+                this.navigate("/", {replace: true})
+            }
             return {error: true, errorCode: e.response.status || 500}
         }
     }
