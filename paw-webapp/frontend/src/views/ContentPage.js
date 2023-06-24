@@ -1,16 +1,18 @@
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {contentService, listsService} from "../services";
 import ContentCard from "./components/ContentCard";
 import {Link, useLocation, useNavigate, useParams} from "react-router-dom";
 import Header from "./components/Header";
 import Filters from "./components/Filters";
+import ExpiredCookieModal from "./components/ExpiredCookieModal";
 
 export default function ContentPage(props) {
     const {t} = useTranslation()
     let navigate = useNavigate()
     const { contentType } = useParams();
     const { search } = useLocation();
+    const [showExpiredCookiesModal, setShowExpiredCookiesModal] = useState(false)
 
     const [allContent, setAllContent] = useState([])
     const [actualPage, setActualPage] = useState(1)
@@ -30,7 +32,6 @@ export default function ContentPage(props) {
 
     const updateVariable = (param,paramPulled,setter) => {
         if( paramPulled !== null && paramPulled !== undefined && param !== paramPulled ){
-
             console.log("Entra")
             setter(paramPulled)
         }
@@ -68,7 +69,11 @@ export default function ContentPage(props) {
                     if(!watchList.error) {
                         setUserWatchListIds(watchList.data)
                     } else {
-                        navigate("/error", { replace: true, state: {errorCode: watchList.errorCode} })
+                        if(watchList.errorCode === 404) {
+                            setShowExpiredCookiesModal(true)
+                        } else {
+                            navigate("/error", { replace: true, state: {errorCode: watchList.errorCode} })
+                        }
                     }
                 })
             : setUserWatchListIds(null)
@@ -106,6 +111,10 @@ export default function ContentPage(props) {
 
     return (
         <div>
+            {showExpiredCookiesModal && (
+                <ExpiredCookieModal/>
+            )}
+
             <Header type={contentType} admin={user?.role === 'admin'} userName={user?.username} userId={user?.id}/>
             <Filters/>
             {/*<Filter*/}

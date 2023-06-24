@@ -44,10 +44,6 @@ export class ListsApi {
                 return {error: true, errorCode: res.status}
             }
         } catch (e) {
-            if(e.response.status === 404) {
-                this.signOut()
-                this.navigate("/", {replace: true})
-            }
             return {error: true, errorCode: e.response.status || 500}
         }
     }
@@ -99,9 +95,6 @@ export class ListsApi {
                 return {error: true, errorCode: res.status}
             }
         } catch (e) {
-            if(e.response.status === 404) {
-                return {error: true, errorCode: 404}
-            }
             return {error: true, errorCode: e.response.status || 500}
         }
     }

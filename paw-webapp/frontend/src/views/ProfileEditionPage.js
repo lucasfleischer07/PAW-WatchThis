@@ -6,6 +6,7 @@ import {useForm} from "react-hook-form";
 import {toast} from "react-toastify";
 import {useLocation, useNavigate} from "react-router-dom";
 import Header from "./components/Header";
+import ExpiredCookieModal from "./components/ExpiredCookieModal";
 
 
 export default function ProfileEditionPage() {
@@ -14,6 +15,7 @@ export default function ProfileEditionPage() {
     let location = useLocation()
     const {reset} = useForm()
     let {isLogged} = useContext(AuthContext)
+    const [showExpiredCookiesModal, setShowExpiredCookiesModal] = useState(false)
 
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
     const [error, setError] = useState(false)
@@ -38,7 +40,7 @@ export default function ProfileEditionPage() {
     }
 
     const onSubmitPassword = (e) => {
-        // TODO: FAlta manda al back la actual y checkear de que sean iguales
+        // TODO: FAlta manda al back la actual y checkear de que sean iguales, no anda todavia
         if(isLogged()) {
             e.preventDefault();
 
@@ -59,8 +61,12 @@ export default function ProfileEditionPage() {
                     } else if(data.errorCode === 400){
                         setErrorPassword(true)
                     } else {
-                        toast.error(t('EditProfile.Upload.Password.Error'))
-                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                        if(data.errorCode === 404) {
+                            setShowExpiredCookiesModal(true)
+                        } else {
+                            toast.error(t('EditProfile.Upload.Password.Error'))
+                            navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                        }
                     }
                 })
                 .catch(() => {
@@ -81,9 +87,13 @@ export default function ProfileEditionPage() {
                         toast.success(t('EditProfile.Upload.Image'));
                         navigate(-1)
                     } else {
-                        setError(true)
-                        toast.error(t('EditProfile.Upload.Image.Error'));
-                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                        if(data.errorCode === 404) {
+                            setShowExpiredCookiesModal(true)
+                        } else {
+                            setError(true)
+                            toast.error(t('EditProfile.Upload.Image.Error'));
+                            navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                        }
                     }
                 })
                 .catch(() => {
@@ -120,6 +130,9 @@ export default function ProfileEditionPage() {
 
     return(
         <>
+            {showExpiredCookiesModal && (
+                <ExpiredCookieModal/>
+            )}
             <Header type="all" admin={user?.role === 'admin'} userName={user?.username} userId={user?.id}/>
             
             <div className="row py-5 px-4 W-set-margins">

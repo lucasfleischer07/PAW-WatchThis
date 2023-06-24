@@ -9,6 +9,7 @@ import {contentService, listsService, reviewService} from "../services";
 import {toast} from "react-toastify";
 import TooltipComponent from './components/Tooltip';
 import Header from "./components/Header";
+import ExpiredCookieModal from "./components/ExpiredCookieModal";
 
 
 export default function InfoPage() {
@@ -16,6 +17,7 @@ export default function InfoPage() {
     let navigate = useNavigate()
     let {isLogged, signOut} = useContext(AuthContext)
     const { contentType, contentId} = useParams();
+    const [showExpiredCookiesModal, setShowExpiredCookiesModal] = useState(false)
 
     const [user, setUser]= useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
 
@@ -91,7 +93,11 @@ export default function InfoPage() {
                     setIsInWatchList(true);
                     toast.success(t('WatchList.Added'))
                 } else {
-                    navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                    if(data.errorCode === 404) {
+                        setShowExpiredCookiesModal(true)
+                    } else {
+                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                    }
                 }
             })
             .catch(() => {
@@ -106,7 +112,11 @@ export default function InfoPage() {
                     setIsInWatchList(false);
                     toast.success(t('WatchList.Removed'))
                 } else {
-                    navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                    if(data.errorCode === 404) {
+                        setShowExpiredCookiesModal(true)
+                    } else {
+                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                    }
                 }
             })
             .catch(() => {
@@ -121,7 +131,11 @@ export default function InfoPage() {
                     setIsInViewedList(true);
                     toast.success(t('ViewedList.Added'))
                 } else {
-                    navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                    if(data.errorCode === 404) {
+                        setShowExpiredCookiesModal(true)
+                    } else {
+                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                    }
                 }
             })
             .catch(() => {
@@ -136,7 +150,11 @@ export default function InfoPage() {
                     setIsInViewedList(false);
                     toast.success(t('ViewedList.Removed'))
                 } else {
-                    navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                    if(data.errorCode === 404) {
+                        setShowExpiredCookiesModal(true)
+                    } else {
+                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                    }
                 }
             })
             .catch(() => {
@@ -185,10 +203,8 @@ export default function InfoPage() {
                     if(!watchList.error) {
                         setIsInWatchList(watchList.data.some(item => item.id === contentId))
                     } else if(watchList.errorCode === 404) {
-                        signOut()
-                        navigate("/", { replace: true })
-                    }
-                    else {
+                        setShowExpiredCookiesModal(true)
+                    } else {
                         navigate("/error", { replace: true, state: {errorCode: watchList.errorCode} })
                     }
                 })
@@ -201,7 +217,11 @@ export default function InfoPage() {
                     if(!viewedList.error) {
                         setIsInViewedList(viewedList.data.some(item => item.id === contentId))
                     } else {
-                        navigate("/error", { replace: true, state: {errorCode: viewedList.errorCode} })
+                        if(viewedList.errorCode === 404 && !showExpiredCookiesModal) {
+                            setShowExpiredCookiesModal(true)
+                        } else {
+                            navigate("/error", { replace: true, state: {errorCode: viewedList.errorCode} })
+                        }
                     }
                 })
                 .catch(() => {
@@ -213,7 +233,11 @@ export default function InfoPage() {
                     if(!data.error) {
                         setIsLikeReviewsList(data.data)
                     } else {
-                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                        if(data.errorCode === 404 && !showExpiredCookiesModal) {
+                            setShowExpiredCookiesModal(true)
+                        } else {
+                            navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                        }
                     }
                 })
                 .catch(() => {
@@ -225,7 +249,11 @@ export default function InfoPage() {
                     if(!data.error) {
                         setIsDislikeReviewsList(data.data)
                     } else {
-                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                        if(data.errorCode === 404 && !showExpiredCookiesModal) {
+                            setShowExpiredCookiesModal(true)
+                        } else {
+                            navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                        }
                     }
                 })
                 .catch(() => {
@@ -237,6 +265,10 @@ export default function InfoPage() {
 
     return(
         <>
+            {showExpiredCookiesModal && (
+                <ExpiredCookieModal/>
+            )}
+
             <Header type={contentType} admin={user?.role === 'admin'} userName={user?.username} userId={user?.id}/>
 
             {user?.role === 'admin' ? (

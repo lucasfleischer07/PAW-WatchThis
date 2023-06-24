@@ -1,10 +1,16 @@
 import {APPLICATION_JSON_TYPE, paths} from "../paths";
 import {fetchWithQueryParamsApi} from "./FetchWithQueryParams";
 import {authCheck} from "../scripts/authCheck";
+import {ListsApi} from "./ListsApi";
 
+export const useContentApi = (signOut, navigate) => {
+    return new ListsApi(navigate, signOut)
+}
 export class ContentApi {
-    constructor() {
+    constructor(navigate, signOut) {
         this.basePath = `${paths.BASE_URL_API}${paths.CONTENT}`
+        this.navigate = navigate
+        this.signOut = signOut
     }
 
     async getLandingPage() {

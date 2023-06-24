@@ -1,10 +1,11 @@
 import {useTranslation} from "react-i18next";
-import {Link, Outlet, useLocation, useNavigate, useParams} from "react-router-dom";
-import React, {useContext, useEffect, useRef, useState} from "react";
+import {Link, useLocation, useNavigate, useParams} from "react-router-dom";
+import React, {useContext, useEffect, useState} from "react";
 import {AuthContext} from "../context/AuthContext";
 import {contentService, reviewService} from "../services";
 import SimpleMDE from "react-simplemde-editor";
 import Header from "./components/Header";
+import ExpiredCookieModal from "./components/ExpiredCookieModal";
 
 
 
@@ -14,6 +15,7 @@ export default function ReviewEditionPage() {
     let location = useLocation()
     let {isLogged} = useContext(AuthContext)
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
+    const [showExpiredCookiesModal, setShowExpiredCookiesModal] = useState(false)
 
     let origin = location.pathname || "/";
     const { contentType, contentId, reviewId } = useParams();
@@ -82,9 +84,14 @@ export default function ReviewEditionPage() {
         reviewService.reviewEdition(reviewId, reviewForm)
             .then(data => {
                 if(!data.error) {
-                    navigate(origin, {replace: true})
+                    navigate(-1)
                 } else {
-                    navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                    // TODO: VER COMO DIFERENCIAMOS ENTRE UN FORBIDDEN DE QUE NO ECONTRO AL USUSARIO Y UN FORBIDDEN DE QUE NO ES EL DUENIO DE LA RESENIA
+                    if(data.errorCode === 401) {
+                        setShowExpiredCookiesModal(true)
+                    } else {
+                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                    }
                 }
             })
             .catch(() => {
@@ -131,6 +138,10 @@ export default function ReviewEditionPage() {
 
     return(
         <>
+            {showExpiredCookiesModal && (
+                <ExpiredCookieModal/>
+            )}
+
             <Header type="all" admin={user?.role === 'admin'} userName={user?.username} userId={user?.id}/>
 
             <form method="post" onSubmit={handleSubmit}>

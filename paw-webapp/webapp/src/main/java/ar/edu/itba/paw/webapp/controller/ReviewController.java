@@ -156,7 +156,7 @@ public class ReviewController {
         if(reviewDto==null)
             throw new BadRequestException("Must include edit data");
         final Review oldReview = rs.findById(reviewId).orElseThrow(ReviewNotFoundException::new);
-        User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(ForbiddenException::new);
+        User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(() -> new ForbiddenException("User not found"));
         if(!oldReview.getUser().getUserName().equals(user.getUserName())){
             LOGGER.warn("PUT /{}: The editor is not owner of the review", uriInfo.getPath());
             throw new ForbiddenException();

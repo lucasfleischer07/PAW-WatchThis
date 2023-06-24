@@ -8,7 +8,7 @@ import {toast} from "react-toastify";
 export default function SignUp() {
     const {t} = useTranslation()
     let navigate = useNavigate()
-    let {signIn, signOut, userApi} = useContext(AuthContext)
+    let {signIn, signOut} = useContext(AuthContext)
 
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
     const [usernameError, setUsernameError] = useState(false)
@@ -66,11 +66,11 @@ export default function SignUp() {
         if(!validateForm()) {
             return
         }
-        userApi.userCreate(userForm)
+        userService.userCreate(userForm)
             .then(data => {
                 // TODO: Ver como manejar el tema de ususario que ay existe y eso
                 if(!data.error) {
-                    userApi.login(data.data.email, userForm.password)
+                    userService.login(data.data.email, userForm.password)
                         .then(user2 => {
                             if(!user2.error) {
                                 if(user != null) {

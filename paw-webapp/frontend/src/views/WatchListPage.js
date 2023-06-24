@@ -5,11 +5,12 @@ import {AuthContext} from "../context/AuthContext";
 import {Link, useNavigate} from "react-router-dom";
 import Header from "./components/Header";
 import ExpiredCookieModal from "./components/ExpiredCookieModal";
+import {listsService} from "../services";
 
 export default function WatchListPage(props) {
     const {t} = useTranslation()
     let navigate = useNavigate()
-    let {isLogged, signOut, listApi} = useContext(AuthContext)
+    let {isLogged} = useContext(AuthContext)
     const [showExpiredCookiesModal, setShowExpiredCookiesModal] = useState(false)
 
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
@@ -20,7 +21,7 @@ export default function WatchListPage(props) {
 
     const getUserWatchList = () => {
         if(isLogged()) {
-            listApi.getUserWatchList(user?.id, currentPage)
+            listsService.getUserWatchList(user?.id, currentPage)
                 .then(watchList => {
                     if(!watchList.error) {
                         setWatchList(watchList.data)

@@ -3,6 +3,7 @@ import {useListApi} from "../api/ListsApi";
 import {useNavigate} from "react-router-dom";
 import {useUserApi} from "../api/UserApi";
 import {useReviewApi} from "../api/ReviewApi";
+import {useContentApi} from "../api/ContentApi";
 
 export const AuthContext = createContext(null);
 
@@ -33,6 +34,7 @@ export function AuthProvider ({children}) {
         listApi: useListApi(signOut, navigate),
         userApi: useUserApi(signOut, navigate),
         reviewApi: useReviewApi(signOut, navigate),
+        contentApi: useContentApi(signOut, navigate),
     };
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

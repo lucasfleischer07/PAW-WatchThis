@@ -1,17 +1,19 @@
 import {useTranslation} from "react-i18next";
 import ReportedContent from "./components/ReportedContent";
 import {useLocation, useNavigate } from "react-router-dom";
-import {useContext, useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {AuthContext} from "../context/AuthContext";
 import {reportsService} from "../services";
 
 import { Tab, Tabs } from 'react-bootstrap';
 import Header from "./components/Header";
+import ExpiredCookieModal from "./components/ExpiredCookieModal";
 
 export default function ReportedPage() {
     const {t} = useTranslation()
     let navigate = useNavigate()
     let {isLogged} = useContext(AuthContext)
+    const [showExpiredCookiesModal, setShowExpiredCookiesModal] = useState(false)
 
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
     const [reportedReviewsList, setReportedReviewsList] = useState([])
@@ -57,7 +59,11 @@ export default function ReportedPage() {
                     if(!data.error) {
                         setReportedReviewsList(data.data)
                     } else {
-                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                        if(data.errorCode === 404) {
+                            setShowExpiredCookiesModal(true)
+                        } else {
+                            navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                        }
                     }
                 })
                 .catch(() => {
@@ -69,7 +75,11 @@ export default function ReportedPage() {
                     if(!data.error) {
                         setReportedCommentsList(data.data)
                     } else {
-                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                        if(data.errorCode === 404) {
+                            setShowExpiredCookiesModal(true)
+                        } else {
+                            navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                        }
                     }
                 })
                 .catch(() => {
@@ -82,7 +92,6 @@ export default function ReportedPage() {
     }, [filterReason])
 
 
-
     useEffect(() => {
         if(isLogged() && user.role === 'admin') {
             reportsService.getReportsByType('reviews', currentReviewsReportsPage)
@@ -90,7 +99,11 @@ export default function ReportedPage() {
                     if(!data.error) {
                         setReportedReviewsList(data.data)
                     } else {
-                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                        if(data.errorCode === 404) {
+                            setShowExpiredCookiesModal(true)
+                        } else {
+                            navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                        }
                     }
                 })
                 .catch(() => {
@@ -102,7 +115,11 @@ export default function ReportedPage() {
                     if(!data.error) {
                         setReportedCommentsList(data.data)
                     } else {
-                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                        if(data.errorCode === 404) {
+                            setShowExpiredCookiesModal(true)
+                        } else {
+                            navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                        }
                     }
                 })
                 .catch(() => {
@@ -118,6 +135,10 @@ export default function ReportedPage() {
 
     return(
         <>
+            {showExpiredCookiesModal && (
+                <ExpiredCookieModal/>
+            )}
+
             <Header type="all" admin={user?.role === 'admin'} userName={user?.username} userId={user?.id}/>
 
             <div className="row px-4">

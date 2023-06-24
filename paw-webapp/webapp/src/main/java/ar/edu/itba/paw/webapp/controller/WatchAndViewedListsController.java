@@ -107,7 +107,7 @@ public class WatchAndViewedListsController {
         LOGGER.info("DELETE /{}: Called", uriInfo.getPath());
 
         final Content content = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
-        final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(ForbiddenException::new);
+        final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
 
         try {
             us.deleteFromWatchList(user, content);
@@ -177,7 +177,7 @@ public class WatchAndViewedListsController {
         LOGGER.info("PUT /{}: Called", uriInfo.getPath());
 
         final Content content = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
-        final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(ForbiddenException::new);
+        final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
 
         try {
             us.addToViewedList(user, content);
@@ -195,7 +195,7 @@ public class WatchAndViewedListsController {
         LOGGER.info("DELETE /{}: Called", uriInfo.getPath());
 
         final Content content = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
-        final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(ForbiddenException::new);
+        final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
 
         try {
             us.deleteFromViewedList(user, content);

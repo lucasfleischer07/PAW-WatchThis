@@ -1,12 +1,11 @@
 import {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
-import {useLocation, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {userService} from "../services";
 import {toast} from "react-toastify";
 
 export default function ForgotPassword() {
     const {t} = useTranslation()
-    let location = useLocation()
     let navigate = useNavigate()
 
     const [error, setError] = useState(false)

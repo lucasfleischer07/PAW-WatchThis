@@ -95,10 +95,11 @@ export class ReviewApi {
                 headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}),
                 body: JSON.stringify(reviewDetails)
             })
-
+            console.log(res)
             if(res.status === 204) {
                 return {error: false, data: []}
             } else {
+                // TODO: VER ACA COMO DIFERENCIAMOS ENTRE QUE NO HAY USER Y QUE NO ES EL DUENIO (HAY QUE VERLO MAS EN LE BACK CREO)
                 return {error: true, data: [], errorCode: res.status}
             }
         } catch (e) {

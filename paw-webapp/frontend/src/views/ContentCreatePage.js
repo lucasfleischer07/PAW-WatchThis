@@ -6,6 +6,7 @@ import {contentService} from "../services";
 import SimpleMDE from "react-simplemde-editor";
 import {dropDownStayGenreCreate} from "../scripts/dropDownBehaviour";
 import Header from "./components/Header";
+import ExpiredCookieModal from "./components/ExpiredCookieModal";
 // import {dropDownStayGenreCreate} from "../scripts/dropDownBehaviour";
 
 
@@ -15,6 +16,7 @@ export default function ContentCreatePage() {
     let navigate = useNavigate()
     let {isLogged} = useContext(AuthContext)
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
+    const [showExpiredCookiesModal, setShowExpiredCookiesModal] = useState(false)
 
     const [nameError, setNameError] = useState(false)
     const [descriptionError, setDescriptionError] = useState(false)
@@ -135,7 +137,11 @@ export default function ContentCreatePage() {
                     if(!data.error) {
                         navigate(`/content/${data.data.type}/${data.data.id}`, {replace:true})
                     } else {
-                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                        if(data.errorCode === 404) {
+                            setShowExpiredCookiesModal(true)
+                        } else {
+                            navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                        }
                     }
                 })
                 .catch(() => {
@@ -150,7 +156,11 @@ export default function ContentCreatePage() {
                     if(!data.error) {
                         navigate(`/content/${contentForm.type}/${contentId}`, {replace:true})
                     } else {
-                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                        if(data.errorCode === 401) {
+                            setShowExpiredCookiesModal(true)
+                        } else {
+                            navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                        }
                     }
                 })
                 .catch(() => {
@@ -228,6 +238,10 @@ export default function ContentCreatePage() {
 
     return(
         <>
+            {showExpiredCookiesModal && (
+                <ExpiredCookieModal/>
+            )}
+
             <Header type="all" admin={user?.role === 'admin'} userName={user?.username} userId={user?.id}/>
 
             <div>

@@ -1,9 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.webapp.exceptions.CommentNotFoundException;
-import ar.edu.itba.paw.webapp.exceptions.ContentNotFoundException;
-import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
-import ar.edu.itba.paw.webapp.exceptions.ReviewNotFoundException;
+import ar.edu.itba.paw.webapp.exceptions.*;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.services.*;
 import ar.edu.itba.paw.webapp.dto.request.NewReportCommentDto;
@@ -51,7 +48,7 @@ public class ReportsController {
                                      @QueryParam(value = "reason") @DefaultValue("") ReportReason reason) {
         LOGGER.info("GET /{}: Called", uriInfo.getPath());
 
-        final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(ForbiddenException::new);
+        final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
 
         if(!Objects.equals(user.getRole(), "admin")) {
             LOGGER.warn("GET /{}: Login user {} not an admin", uriInfo.getPath(), user.getId());
@@ -73,7 +70,7 @@ public class ReportsController {
             ResponseBuildingUtils.setPaginationLinks(response,commentsReported , uriInfo);
             return response.build();
         } else {
-            throw new PageNotFoundException();
+            throw new BadRequestException();
         }
     }
 

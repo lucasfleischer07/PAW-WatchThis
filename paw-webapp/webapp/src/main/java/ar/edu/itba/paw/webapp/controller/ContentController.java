@@ -149,7 +149,7 @@ public class ContentController {
                                       @Valid NewContentDto contentDto,
                                       @Context final HttpServletRequest request) throws IOException {
         LOGGER.info("PUT /{}: Called", uriInfo.getPath());
-        final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
+        final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(ForbiddenException::new);
         final Content content = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
         if(contentDto==null)
             throw new BadRequestException("Must include edit data");

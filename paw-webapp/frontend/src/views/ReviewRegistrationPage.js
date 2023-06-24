@@ -1,5 +1,5 @@
 import {useTranslation} from "react-i18next";
-import {Link, useLocation, useNavigate, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import React, {useContext, useEffect, useState} from "react";
 import {AuthContext} from "../context/AuthContext";
 import {contentService, reviewService} from "../services";
@@ -10,10 +10,8 @@ import ExpiredCookieModal from "./components/ExpiredCookieModal";
 
 export default function ReviewRegistrationPage() {
     const {t} = useTranslation()
-    let location = useLocation()
     let navigate = useNavigate()
-    let {isLogged, reviewApi} = useContext(AuthContext)
-    let origin = location.pathname || "/";
+    let {isLogged} = useContext(AuthContext)
     const [showExpiredCookiesModal, setShowExpiredCookiesModal] = useState(false)
 
     const { contentType, contentId } = useParams();
@@ -78,7 +76,7 @@ export default function ReviewRegistrationPage() {
             return
         }
 
-        reviewApi.reviewsCreation(parseInt(contentId), contentType, reviewForm)
+        reviewService.reviewsCreation(parseInt(contentId), contentType, reviewForm)
             .then(data => {
                 if(!data.error) {
                     navigate(-1)

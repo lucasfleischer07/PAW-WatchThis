@@ -7,11 +7,12 @@ import Header from "./components/Header";
 import ReviewCard from "./components/ReviewCard";
 import {AuthContext} from "../context/AuthContext";
 import ExpiredCookieModal from "./components/ExpiredCookieModal";
+import {reviewService, userService} from "../services";
 
 export default function UserInfoPage() {
     const {t} = useTranslation()
     let navigate = useNavigate()
-    let {isLogged, userApi, reviewApi} = useContext(AuthContext)
+    let {isLogged} = useContext(AuthContext)
     const { userProfileId } = useParams();
     const [showExpiredCookiesModal, setShowExpiredCookiesModal] = useState(false)
 
@@ -29,7 +30,7 @@ export default function UserInfoPage() {
 
     const handlePromoteUser = (e) => {
         e.preventDefault();
-        userApi.promoteUserToAdmin(reviewOwnerUser.id)
+        userService.promoteUserToAdmin(reviewOwnerUser.id)
             .then(data => {
                 if(!data.error) {
                     setCanPromote(false)
@@ -43,19 +44,19 @@ export default function UserInfoPage() {
                     }
                 }
             })
-            .catch(e => {
+            .catch(() => {
                 navigate("/error", { replace: true, state: {errorCode: 404} })
             })
     }
 
     useEffect(() => {
         // TODO: HAY QUE VER COMO HACER PARA QUE CUANDO SE VENZA LA COOKIE, ME DEJE EN ESTA PAGE PERO QUE ARRIBA ME DESAPAREZCA EL QUE ESTOY LOGUEADO PORQUE TANTO PARA OWNER COMO PARA USER ES EL MISMO PATH
-        userApi.getUserReviews(parseInt(userProfileId), currentPage)
+        userService.getUserReviews(parseInt(userProfileId), currentPage)
             .then(reviews => {
                 if(!reviews.error) {
                     setReviews(reviews.data)
                     if(reviews.data.length === 0) {
-                        userApi.getUserInfo(parseInt(userProfileId))
+                        userService.getUserInfo(parseInt(userProfileId))
                              .then((data) => {
                                  if(!data.error) {
                                     setReviewOwnerUser(data.data)
@@ -104,7 +105,7 @@ export default function UserInfoPage() {
             })
 
         if(isLogged()) {
-            reviewApi.getReviewsLike()
+            reviewService.getReviewsLike()
                 .then(data => {
                     if(!data.error) {
                         setIsLikeReviewsList(data.data)
@@ -116,7 +117,7 @@ export default function UserInfoPage() {
                     navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
 
-            reviewApi.getReviewsDislike()
+            reviewService.getReviewsDislike()
                 .then(data => {
                     if(!data.error) {
                         setIsDislikeReviewsList(data.data)
