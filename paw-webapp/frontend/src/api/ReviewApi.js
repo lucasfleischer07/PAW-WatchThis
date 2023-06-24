@@ -3,14 +3,9 @@ import {fetchWithQueryParamsApi} from "./FetchWithQueryParams";
 import {authCheck} from "../scripts/authCheck";
 import {ListsApi} from "./ListsApi";
 
-export const useReviewApi = (signOut, navigate) => {
-    return new ReviewApi(navigate, signOut)
-}
 export class ReviewApi {
-    constructor(navigate, signOut) {
+    constructor() {
         this.basePath = `${paths.BASE_URL_API}${paths.REVIEWS}`
-        this.navigate = navigate
-        this.signOut = signOut
     }
 
     async reviews(contentId, pageNumber) {

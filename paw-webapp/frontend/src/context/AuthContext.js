@@ -32,9 +32,6 @@ export function AuthProvider ({children}) {
         signOut,
         isLogged,
         listApi: useListApi(signOut, navigate),
-        userApi: useUserApi(signOut, navigate),
-        reviewApi: useReviewApi(signOut, navigate),
-        contentApi: useContentApi(signOut, navigate),
     };
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
