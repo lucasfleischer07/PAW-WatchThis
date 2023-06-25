@@ -213,8 +213,7 @@ public class ContentController {
     @Path("/{contentType}")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getContentByType(@PathParam("contentType") final String contentType,
-                                     @QueryParam("pageNumber") @DefaultValue("1") Integer pageNum,
-                                     @QueryParam("pageSize") @DefaultValue("10") int pageSize) {
+                                     @QueryParam("pageNumber") @DefaultValue("1") Integer pageNum) {
         LOGGER.info("GET /{}: Called", uriInfo.getPath());
         if(!contentType.equals("movie") && !contentType.equals("serie") && !contentType.equals("all")){
             throw new PageNotFoundException();
@@ -247,7 +246,6 @@ public class ContentController {
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response filterContentByType(@PathParam("contentType") final String contentType,
                                         @QueryParam("pageNumber") @DefaultValue("1") Integer pageNum,
-                                        @QueryParam("pageSize") @DefaultValue("10") int pageSize,
                                         @QueryParam("durationFrom") @DefaultValue("ANY") final String durationFrom,
                                         @QueryParam("durationTo") @DefaultValue("ANY") final String durationTo,
                                         @QueryParam("sorting") final Sorting sorting,

@@ -40,8 +40,7 @@ public class WatchAndViewedListsController {
     @Path("/watchList/{userId}")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getUserWatchList(@PathParam("userId") final long userId,
-                                     @QueryParam("pageNumber") @DefaultValue("1") int page,
-                                     @QueryParam("pageSize") @DefaultValue("10") int pageSize) {
+                                     @QueryParam("pageNumber") @DefaultValue("1") int page) {
         LOGGER.info("GET /{}: Called", uriInfo.getPath());
 
         final User user = us.findById(userId).orElseThrow(UserNotFoundException::new);
@@ -127,8 +126,7 @@ public class WatchAndViewedListsController {
     @Path("/viewedList/{userId}")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getUserViewedList(@PathParam("userId") final long userId,
-                                      @QueryParam("pageNumber") @DefaultValue("1") int page,
-                                      @QueryParam("pageSize") @DefaultValue("10") int pageSize) {
+                                      @QueryParam("pageNumber") @DefaultValue("1") int page) {
         LOGGER.info("GET /{}: Called", uriInfo.getPath());
 
         final User user = us.findById(userId).orElseThrow(UserNotFoundException::new);
@@ -138,7 +136,7 @@ public class WatchAndViewedListsController {
             LOGGER.warn("GET /{}: Logged user {} is different from viewedlist owner {}", uriInfo.getPath(), user2.getId(), userId);
             throw new ForbiddenException();
         }
-        PageWrapper<Content> viewedList = us.getUserViewedList(user,page,pageSize);
+        PageWrapper<Content> viewedList = us.getUserViewedList(user,page,CONTENT_AMOUNT);
         Collection<ContentDto> viewedListDto = ContentDto.mapContentToContentDto(uriInfo,viewedList.getPageContent());
 
         LOGGER.info("GET /{}: Viewedlist from user {}", uriInfo.getPath(),userId);

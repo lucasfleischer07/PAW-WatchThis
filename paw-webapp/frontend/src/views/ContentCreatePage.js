@@ -344,7 +344,7 @@ export default function ContentCreatePage() {
                                 <button  name="genre" type="button" className="W-genre-create-button btn dropdown-toggle" data-bs-toggle="dropdown"  datatype="button" aria-expanded="false">
                                     {t('Genre.Message2')} {genreButtonLabel}
                                 </button>
-                                <ul className="dropdown-menu" onClick={dropdownHandle}>
+                                <ul className="dropdown-menu" >
                                     <li className="mb-1 px-2">
                                         <label>
                                             <input type="checkbox" checked={contentForm.genre.includes("Action")} className="px-2" name="genre" value="Action" onChange={handleChange}/>{" "}

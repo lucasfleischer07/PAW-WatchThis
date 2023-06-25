@@ -11,7 +11,7 @@ export class ReviewApi {
     async reviews(contentId, pageNumber) {
         try {
             const apiUrl = `${this.basePath}/${contentId}`
-            const params = {pageNumber: pageNumber, pageSize: 10}
+            const params = {pageNumber: pageNumber}
             const options = {headers: authCheck({})}
             const res =  await fetchWithQueryParamsApi(apiUrl, params, options)
             if(res.status === 200) {

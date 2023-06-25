@@ -15,7 +15,7 @@ export class ListsApi {
     async getUserWatchList(userId, pageNumber) {
         try {
             const apiUrl = `${this.basePath}/watchList/${userId}`
-            const params = {pageNumber: pageNumber, pageSize: 10}
+            const params = {pageNumber: pageNumber}
             const options = {headers: authCheck({})}
             const res = await fetchWithQueryParamsApi(apiUrl, params, options)
             if(res.status === 200) {
@@ -86,7 +86,7 @@ export class ListsApi {
     async getUserViewedList(userId, pageNumber) {
         try {
             const apiUrl = `${this.basePath}/viewedList/${userId}`
-            const params = {pageNumber: pageNumber, pageSize: 10}
+            const params = {pageNumber: pageNumber}
             const options = {headers: authCheck({})}
             const res = await fetchWithQueryParamsApi(apiUrl, params, options)
             if(res.status === 200) {

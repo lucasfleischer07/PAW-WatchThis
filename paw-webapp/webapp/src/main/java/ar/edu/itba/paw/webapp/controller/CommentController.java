@@ -47,8 +47,7 @@ public class CommentController {
     @Path("/{reviewId}")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getReviewComments(@PathParam("reviewId") final long reviewId,
-                                      @QueryParam("pageNumber") @DefaultValue("1") int pageNum,
-                                      @QueryParam("pageSize") @DefaultValue("10") int pageSize) {
+                                      @QueryParam("pageNumber") @DefaultValue("1") int pageNum) {
 
         LOGGER.info("GET /{}: Called", uriInfo.getPath());
         Review review = rs.findById(reviewId).orElseThrow(ReviewNotFoundException::new);

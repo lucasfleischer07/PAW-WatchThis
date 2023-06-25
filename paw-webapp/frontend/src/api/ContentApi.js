@@ -121,7 +121,7 @@ export class ContentApi {
     async getContentByType(contentType, pageNumber) {
         try {
             const apiUrl = `${this.basePath}/${contentType}`
-            const params = {pageNumber: pageNumber, pageSize: 10}
+            const params = {pageNumber: pageNumber}
             const options = {headers: authCheck({})}
             const res = await fetchWithQueryParamsApi(apiUrl, params, options)
             if(res.status === 200) {
@@ -139,7 +139,7 @@ export class ContentApi {
     async filterContentByType(contentType, pageNumber, filters) {
         try {
             const apiUrl = `${this.basePath}/${contentType}/filters`
-            const params = {pageNumber: pageNumber, pageSize: 10, ...filters}
+            const params = {pageNumber: pageNumber, ...filters}
             const options = {headers: authCheck({})}
             const res = await fetchWithQueryParamsApi(apiUrl, params, options)
             if(res.status !== 204) {

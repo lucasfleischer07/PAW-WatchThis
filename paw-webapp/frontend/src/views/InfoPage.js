@@ -23,8 +23,8 @@ export default function InfoPage() {
 
     const [content, setContent] = useState({})
     const [reviews, setReviews] = useState({})
-    const [currentPage, setCurrentPage] = useState(1)
-
+    const [actualPage, setActualPage] = useState(1)
+    const [amountPages, setAmountPages] = useState(1)
     const [isLikeReviewsList, setIsLikeReviewsList] = useState(false);
     const [isDislikeReviewsList, setIsDislikeReviewsList] = useState(false);
 
@@ -62,6 +62,27 @@ export default function InfoPage() {
     }
     const handleCloseAddReviewLoginModal = () => {
         setShowAddReviewLoginModal(false)
+    }
+
+    const prevPage = () => {
+        setActualPage(actualPage - 1)
+        changeUrlPage(actualPage - 1)
+    }
+
+    const nextPage = () => {
+        setActualPage(actualPage + 1)
+        changeUrlPage(actualPage + 1)
+    }
+
+    const changePage = ( newPage) => {
+        setActualPage(newPage)
+        changeUrlPage(newPage)
+    }
+
+    const changeUrlPage = (page) => {
+        const searchParams = new URLSearchParams(window.location.search);
+        searchParams.set('page', page);
+        navigate(window.location.pathname + '?' + searchParams.toString());
     }
 
     const handleSubmitDeleteContent = (e) => {
@@ -179,10 +200,14 @@ export default function InfoPage() {
             .catch(() => {
                 navigate("/error", { replace: true, state: {errorCode: 404} })
             })
+    }, [])
 
-        reviewService.reviews(parseInt(contentId), currentPage)
+    useEffect(() => {
+        reviewService.reviews(parseInt(contentId), actualPage)
             .then(data => {
                 if(!data.error) {
+                    console.log("data is" + data)
+                    console.log(data.data)
                     setReviews(data.data)
                     for(let i = 0; i < data.data.length; i++) {
                         if(data.data[i].user.username === user?.username) {
@@ -261,7 +286,7 @@ export default function InfoPage() {
                 })
         }
 
-    }, [])
+    }, [actualPage])
 
     return(
         <>
@@ -539,6 +564,74 @@ export default function InfoPage() {
                         )}
 
                     </div>
+                </div>
+                <div>
+                    {(reviews.length > 0) && (
+                        <ul className="pagination justify-content-center W-pagination">
+                            {actualPage > 1 ? (
+                                <li className="page-item">
+                                    <p className="page-link W-pagination-color" onClick={() => prevPage()}>
+                                        {t('Pagination.Prev')}
+                                    </p>
+                                </li>
+                            ) : (
+                                <li className="page-item disabled">
+                                    <p className="page-link W-pagination-color">{t('Pagination.Prev')}</p>
+                                </li>
+                            )}
+                            {amountPages > 10 ? (
+                                Array.from({ length: amountPages }, (_, index) => (
+                                    index + 1 === parseInt(actualPage) ? (
+                                        <li className="page-item active">
+                                            <p className="page-link W-pagination-color">{index + 1}</p>
+                                        </li>
+                                    ): index + 1 === parseInt(actualPage) + 4 ? (
+                                        <li className="page-item">
+                                            <p className="page-link W-pagination-color" onClick={() => changePage(index + 1)}>
+                                                ...
+                                            </p>
+                                        </li>
+                                    ): index + 1 === parseInt(actualPage) - 4 ? (
+                                        <li className="page-item">
+                                            <p className="page-link W-pagination-color" onClick={() => changePage(index + 1)}>
+                                                ...
+                                            </p>
+                                        </li>
+                                    ) : ( index + 1 > parseInt(actualPage) - 4 && index + 1 < parseInt(actualPage) + 4 ) && (
+                                        <li className="page-item">
+                                            <p className="page-link W-pagination-color" onClick={() => changePage(index + 1)}>
+                                                {index + 1}
+                                            </p>
+                                        </li>
+                                    )
+                                ))
+                            ) : (
+                                Array.from({ length: amountPages }, (_, index) => (
+                                    index + 1 === actualPage ? (
+                                        <li className="page-item active">
+                                            <p className="page-link W-pagination-color">{index + 1}</p>
+                                        </li>
+                                    ) : (
+                                        <li className="page-item">
+                                            <p className="page-link W-pagination-color" onClick={() => changePage(index + 1)}>
+                                                {index + 1}
+                                            </p>
+                                        </li>
+                                    )
+                                ))
+                            )}
+                            {actualPage < amountPages ? (
+                                <li className="page-item">
+                                    <p className="page-link W-pagination-color" onClick={() => nextPage()}>
+                                        {t('Pagination.Next')}
+                                    </p>
+                                </li>
+                            ) : (
+                                <li className="page-item disabled">
+                                    <p className="page-link W-pagination-color">{t('Pagination.Next')}</p>
+                                </li>
+                            )}
+                        </ul>)}
                 </div>
             </div>
         </>

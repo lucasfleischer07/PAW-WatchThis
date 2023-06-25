@@ -49,8 +49,7 @@ public class ReviewController {
     @Path("/{contentId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response reviews(@PathParam("contentId") final long contentId,
-                            @QueryParam("pageNumber") @DefaultValue("1") int pageNumber,
-                            @QueryParam("pageSize") @DefaultValue("10") int pageSize) {
+                            @QueryParam("pageNumber") @DefaultValue("1") int pageNumber) {
         LOGGER.info("GET /{}: Called",uriInfo.getPath());
         Content content = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
         PageWrapper<Review> reviewList = rs.getAllReviews(content,pageNumber,REVIEW_AMOUNT);
