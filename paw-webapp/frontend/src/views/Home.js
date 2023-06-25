@@ -55,6 +55,8 @@ export default function Home() {
                 .catch(() => {
                     navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
+        } else {
+            setUser(null)
         }
     }, [])
 
