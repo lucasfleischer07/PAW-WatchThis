@@ -118,10 +118,26 @@ export class ContentApi {
         }
     }
 
-    async getContentByType(contentType, pageNumber) {
+    async getContentByType(contentType, pageNumber,genre,durationFrom,durationTo,sorting,query) {
+        const params = {pageNumber: pageNumber}
+        if(genre !== ''){
+            params.genre = genre
+        }
+        if(durationFrom !== ''){
+            params.durationFrom = durationFrom
+        }
+        if(durationTo !== ''){
+            params.durationTo = durationTo
+        }
+        if(sorting !== ''){
+            params.sorting = sorting
+        }
+        if(query !== ''){
+            params.query = query
+        }
+
         try {
-            const apiUrl = `${this.basePath}/${contentType}`
-            const params = {pageNumber: pageNumber}
+            const apiUrl = `${this.basePath}/${contentType}/filters`
             const options = {headers: authCheck({})}
             const res = await fetchWithQueryParamsApi(apiUrl, params, options)
             if(res.status === 200) {

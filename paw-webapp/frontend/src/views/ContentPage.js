@@ -24,10 +24,7 @@ export default function ContentPage(props) {
     const [durationTo, setDurationTo] = useState('');
     const [sorting, setSorting] = useState('');
     const [query, setQuery] = useState('')
-    // TODO: Esto esta asi porque necesito pasarselo por parametro, pero mientras para probar
-    // const query = "props.query"
-    // const genre = "props.genre"
-    // const durationFrom = "props.durationFrom"
+
 
 
     const updateVariable = (param,paramPulled,setter) => {
@@ -45,7 +42,7 @@ export default function ContentPage(props) {
 
 
     useEffect(() => {
-        contentService.getContentByType(contentType, actualPage)
+        contentService.getContentByType(contentType, actualPage,genre,durationFrom,durationTo,sorting,query)
             .then(data => {
                 if(!data.error) {
                     setAllContent(data.data)
@@ -59,7 +56,7 @@ export default function ContentPage(props) {
                 console.log(e)
                 navigate("/error", { replace: true, state: {errorCode: 404} })
             })
-    }, [actualPage, contentType])
+    }, [actualPage, contentType,genre,durationFrom,durationTo,sorting,query])
 
 
     useEffect(() => {

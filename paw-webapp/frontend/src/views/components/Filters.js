@@ -34,10 +34,10 @@ export default function Filters() {
 
     useEffect(() => {
         const queryParams = new URLSearchParams(search);
-        updateVariable(genre, queryParams.get('genre'),() => setGenre())
-        updateVariable(durationFrom, queryParams.get('durationFrom'),() => setDurationFrom())
-        updateVariable(durationTo, queryParams.get('durationTo'),() => setDurationTo())
-        updateVariable(sorting, queryParams.get('sorting'),() => setSorting())
+        updateVariable(genre, queryParams.get('genre'),(x) => setGenre(x))
+        updateVariable(durationFrom, queryParams.get('durationFrom'),(x) => setDurationFrom(x))
+        updateVariable(durationTo, queryParams.get('durationTo'),(x) => setDurationTo(x))
+        updateVariable(sorting, queryParams.get('sorting'),(x) => setSorting(x))
     }, [search]);
 
     const dropdownHandle = (event) => {
@@ -67,7 +67,7 @@ export default function Filters() {
 
     const changeDuration = (durationFrom, durationTo) => {
         const searchParams = new URLSearchParams(window.location.search);
-        if( durationFrom === 0 && durationTo === 0 ){
+        if( durationFrom === '0' && durationTo === '0' ){
             searchParams.delete('durationFrom');
             searchParams.delete('durationTo');
         }else{
@@ -185,9 +185,7 @@ export default function Filters() {
                 <div className="list-group">
                     <div className="dropdown W-dropdown-button">
                         <button id="genreGroupDrop" type="button" className="W-filter-title btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                            {durationTo === '1000' ? (
-                                t('Duration.Or_more',{"durationArgument":durationFrom})
-                            ) : durationFrom !== '' &&  durationFrom !== 'ANY' && durationFrom != null ?(
+                            { durationFrom !== '' && durationTo !== '0' ?(
                                 t('Duration.From.To',{"durationFromArgument":durationFrom,"durationToArgument":durationTo})
                             ) : (
                                 t('DurationMessage')
@@ -195,27 +193,27 @@ export default function Filters() {
                         </button>
                         <ul className="dropdown-menu">
                             <li>
-                                <p className="dropdown-item" onClick={() => changeDuration(0,0)}>
+                                <p className="dropdown-item" onClick={() => changeDuration('0','0')}>
                                     {t('Duration.Clear')}
                                 </p>
                             </li>
                             <li>
-                                <p className="dropdown-item" onClick={() => changeDuration(0,90)}>
+                                <p className="dropdown-item" onClick={() => changeDuration('0','90')}>
                                     {t('Duration.0_90')}
                                 </p>
                             </li>
                             <li>
-                                <p className="dropdown-item" onClick={() => changeDuration(90,120)}>
+                                <p className="dropdown-item" onClick={() => changeDuration('90','120')}>
                                     {t('Duration.90_120')}
                                 </p>
                             </li>
                             <li>
-                                <p className="dropdown-item" onClick={() => changeDuration(120,150)}>
+                                <p className="dropdown-item" onClick={() => changeDuration('120','150')}>
                                     {t('Duration.120_150')}
                                 </p>
                             </li>
                             <li>
-                                <p className="dropdown-item" onClick={() => changeDuration(150,180)}>
+                                <p className="dropdown-item" onClick={() => changeDuration('150','180')}>
                                     {t('Duration.150_more')}
                                 </p>
                             </li>

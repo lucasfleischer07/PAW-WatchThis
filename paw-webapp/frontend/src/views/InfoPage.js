@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState} from "react";
 import {AuthContext} from "../context/AuthContext";
-import {Link, useNavigate, useParams} from "react-router-dom";
+import {Link, useLocation, useNavigate, useParams} from "react-router-dom";
 import {Button, Modal} from "react-bootstrap";
 import {useTranslation} from "react-i18next";
 import Markdown from "marked-react";
@@ -14,6 +14,7 @@ import ExpiredCookieModal from "./components/ExpiredCookieModal";
 
 export default function InfoPage() {
     const {t} = useTranslation()
+    const { search } = useLocation();
     let navigate = useNavigate()
     let {isLogged, signOut} = useContext(AuthContext)
     const { contentType, contentId} = useParams();
@@ -187,6 +188,13 @@ export default function InfoPage() {
         navigate("/login", {replace: true})
     }
 
+    const updateVariable = (param,paramPulled,setter) => {
+        if( paramPulled !== null && paramPulled !== undefined && param !== paramPulled ){
+            console.log("Entra")
+            setter(paramPulled)
+        }
+    }
+
 
     useEffect(() => {
         contentService.getSpecificContent(parseInt(contentId))
@@ -201,6 +209,11 @@ export default function InfoPage() {
                 navigate("/error", { replace: true, state: {errorCode: 404} })
             })
     }, [])
+
+    useEffect(() => {
+        const queryParams = new URLSearchParams(search);
+        updateVariable(actualPage, queryParams.get('page'), (x) =>setActualPage(x))
+    }, [search]);
 
     useEffect(() => {
         reviewService.reviews(parseInt(contentId), actualPage)
