@@ -36,7 +36,7 @@ describe('ReviewCard', () => {
         const { getByTestId, getByText } = render(
             <Router>
                 <AuthContext.Provider value={mockAuthContextValue}>
-                    <ReviewCard />
+                    <ReviewCard reviewId={1} reviewUser={"other"} userName={"me"} reviewUserId={2}/>
                 </AuthContext.Provider>
             </Router>
         );

@@ -17,7 +17,31 @@ export default function ViewedListPage(props) {
     const [currentPage, setCurrentPage] = useState(1)
     const [totalPages, setTotalPages] = useState(undefined)
     const [viewedList, setViewedList] = useState([])
+    const [watchList, setWatchList] = useState([])
     const [added, setAdded] = useState(false)
+
+    const getUserWatchList = () => {
+        if(isLogged()) {
+            listsService.getUserWatchList(user?.id, currentPage)
+                .then(watchList => {
+                    if(!watchList.error) {
+                        setWatchList(watchList.data)
+                        setTotalPages(watchList.totalPages)
+                    } else {
+                        if(watchList.errorCode === 404) {
+                            setShowExpiredCookiesModal(true)
+                        } else {
+                            navigate("/error", { replace: true, state: {errorCode: watchList.errorCode} })
+                        }
+                    }
+                })
+                .catch(() => {
+                    navigate("/error", { replace: true, state: {errorCode: 404} })
+                })
+        } else {
+            navigate("/error", { replace: true, state: {errorCode: 401} })
+        }
+    }
 
     const getUserViewedList = () => {
         if(isLogged()) {
@@ -44,10 +68,12 @@ export default function ViewedListPage(props) {
 
     useEffect(() => {
         getUserViewedList()
+        getUserWatchList()
     }, [])
 
     useEffect(() => {
         getUserViewedList()
+        getUserWatchList()
     }, [added, currentPage])
 
     return (
@@ -102,7 +128,7 @@ export default function ViewedListPage(props) {
                                             reviewsAmount={content.reviewsAmount}
                                             added={added}
                                             setAdded={setAdded}
-                                            isInWatchList={viewedList.length > 0 ? viewedList.some(item => item.id === content.id) : false}
+                                            isInWatchList={watchList.length > 0 ? watchList.some(item => item.id === content.id) : false}
                                         />
                                     ))}
                                 </div>

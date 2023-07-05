@@ -190,7 +190,6 @@ export default function InfoPage() {
 
     const updateVariable = (param,paramPulled,setter) => {
         if( paramPulled !== null && paramPulled !== undefined && param !== paramPulled ){
-            console.log("Entra")
             setter(paramPulled)
         }
     }
@@ -219,8 +218,6 @@ export default function InfoPage() {
         reviewService.reviews(parseInt(contentId), actualPage)
             .then(data => {
                 if(!data.error) {
-                    console.log("data is" + data)
-                    console.log(data.data)
                     setReviews(data.data)
                     for(let i = 0; i < data.data.length; i++) {
                         if(data.data[i].user.username === user?.username) {
@@ -239,7 +236,7 @@ export default function InfoPage() {
             listsService.getUserWatchListContentIds(user.id)
                 .then(watchList => {
                     if(!watchList.error) {
-                        setIsInWatchList(watchList.data.some(item => item.id === contentId))
+                        setIsInWatchList(watchList.data.some(item => item.id === parseInt(contentId)))
                     } else if(watchList.errorCode === 404) {
                         setShowExpiredCookiesModal(true)
                     } else {
@@ -253,7 +250,7 @@ export default function InfoPage() {
             listsService.getUserViewedListContentIds(user.id)
                 .then(viewedList => {
                     if(!viewedList.error) {
-                        setIsInViewedList(viewedList.data.some(item => item.id === contentId))
+                        setIsInViewedList(viewedList.data.some(item => item.id === parseInt(contentId)))
                     } else {
                         if(viewedList.errorCode === 404 && !showExpiredCookiesModal) {
                             setShowExpiredCookiesModal(true)

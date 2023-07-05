@@ -54,6 +54,7 @@ export default function Header(props) {
     const handleLogOut = (e) => {
         e.preventDefault();
         signOut()
+        navigate("/",{replace:true})
         toast.success(t('Logout.Success'))
     }
 
