@@ -22,7 +22,7 @@ export default function ReviewCard(props) {
 
     const userName = props.userName
     const loggedUserName = props.loggedUserName
-    const isAdmin = useState(props.isAdmin);
+    const [isAdmin,setIsAdmin] = useState(props.isAdmin);
 
     const [isLikeReviews, setIsLikeReviews] = useState(props.isLikeReviews);
     const [isDislikeReviews, setIsDislikeReviews] = useState(props.isDislikeReviews);
@@ -105,7 +105,7 @@ export default function ReviewCard(props) {
     }
 
     const handleSubmitReport = () => {
-        if(isLogged() && (isAdmin)) {
+        if(isLogged() && (!isAdmin)) {
             reportsService.addReviewReport(reviewId, reportFrom)
                 .then(data => {
                     if(!data.error) {
@@ -160,7 +160,7 @@ export default function ReviewCard(props) {
                                     </button>
                                 )}
                                 {isLogged() ? (
-                                    (!alreadyReport) && (reviewUser !== userName) && (
+                                    (!alreadyReport) && (reviewUser !== loggedUserName) && !isAdmin &&(
                                         <span title={t('Report.Review.Add')}>
                                             <button id={`reportReviewButton${props.reviewId}`} type="button" className="btn btn-light W-background-color-report" data-bs-toggle="modal" data-testid={'report'}  onClick={handleShowReportModal} data-bs-target={`reportReviewModal${props.reviewId}`}>
                                                 <svg data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title={t("Report.Review.Add")} xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#b21e26" className="bi bi-exclamation-circle" viewBox="0 0 16 16">

@@ -23,7 +23,8 @@ export default function Comments(props) {
     const userCreatorImage = props.userCreatorImage
     const userCreatorUsername = props.userCreatorUsername
     const alreadyReport = props.alreadyReport
-    const loggedUserIsAdmin = props.loggedUserIsAdmin
+    const [loggedUserIsAdmin,setIsAdmin] = useState(props.loggedUserIsAdmin);
+
     const loggedUserId = props.loggedUserId
     const loggedUserName = props.loggedUserName
 
@@ -64,7 +65,7 @@ export default function Comments(props) {
     };
 
     const handleSubmitReport = () => {
-        if(isLogged() && (loggedUserIsAdmin)) {
+        if(isLogged() && (!loggedUserIsAdmin)) {
             reportsService.addCommentReport(commentId, reportFrom)
                 .then(data => {
                     if(!data.error) {
@@ -112,7 +113,7 @@ export default function Comments(props) {
                     <div className="W-comment-username-report-description-div ">
                         <div className="W-comment-username-and-report">
                             <div>
-                                <Link to={`/profile/${userCreatorId}`} className="W-creator-review">
+                                <Link to={`/user/profile/${userCreatorId}`} className="W-creator-review">
                                     {userCreatorUsername}
                                 </Link>
                             </div>
@@ -152,7 +153,7 @@ export default function Comments(props) {
                                             <></>
                                         )}
                                         {<>
-                                            {userCreatorUsername !== loggedUserName && !alreadyReport ? (
+                                            {userCreatorUsername !== loggedUserName && !alreadyReport && !loggedUserIsAdmin ? (
                                                 <>
                                                     <TooltipComponent text={t('Report.Add')}>
                                                         <button id={`reportCommentButton${commentId}`} type="button" className="btn btn-light W-background-color-report" data-bs-toggle="modal" data-bs-target={`#reportCommentModal${commentId}`} onClick={handleShowReportModal} data-testid={`report${commentId}`}>
