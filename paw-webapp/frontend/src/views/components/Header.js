@@ -9,11 +9,11 @@ export default function Header(props) {
     const navigate = useNavigate();
     let {signOut} = useContext(AuthContext)
 
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
-    const handleDropdownToggle = () => {
-        setIsDropdownOpen((prevState) => !prevState);
-    };
+    // const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    //
+    // const handleDropdownToggle = () => {
+    //     setIsDropdownOpen((prevState) => !prevState);
+    // };
 
     const [queryProp, setQuery] = useState("")
     const type = props.type
@@ -161,11 +161,17 @@ export default function Header(props) {
 
                         <div className="W-nav-login-button">
                             {userName !== null && userName !== "" && userName !== undefined ? (
-                                <div className="btn-group">
-                                    <button type="button" className="btn btn-dark dropdown-toggle W-border-color-user-btn" onClick={handleDropdownToggle} aria-expanded={isDropdownOpen}>
+                                <div className="dropdown">
+                                        <button type="button"
+                                                className="btn btn-dark dropdown-toggle W-border-color-user-btn"
+                                                data-bs-toggle="dropdown"
+                                                aria-expanded="false">
+
                                         {userName}
                                     </button>
-                                    <ul className={`dropdown-menu ${isDropdownOpen ? "show" : ""}`}>
+
+                                    <ul className="dropdown-menu">
+
                                         <li>
                                             <Link className="dropdown-item" to={`/user/profile/${userId}`}>{t('Profile')}</Link>
                                         </li>
@@ -201,9 +207,5 @@ export default function Header(props) {
                 </div>
             </div>
         </nav>
-
     );
-
-
-
 }
