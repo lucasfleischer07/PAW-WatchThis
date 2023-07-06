@@ -68,6 +68,11 @@
 
 .W-img-size{
     width: 60%;
+    height: 100% !important;
+}
+
+.W-accordion-border-transparent {
+    border: transparent;
 }
 
 .W-star-style-info-page{

@@ -62,6 +62,7 @@
 
 .W-img-size{
     width: 60%;
+    height: 100% !important; ;
 }
 
 .W-star-style-info-page{
@@ -316,10 +317,6 @@
     margin-top: 1vw;
 }
 
-/*.W-hands-style{*/
-/*    height: 2vw;*/
-/*    width: 2vw;*/
-/*}*/
 
 .W-thumbsButton-orientation {
     margin-bottom: 60%;
