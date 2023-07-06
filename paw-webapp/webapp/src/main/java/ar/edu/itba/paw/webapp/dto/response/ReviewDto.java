@@ -19,8 +19,6 @@ public class ReviewDto {
     private UserDto user;
     private ContentDto content;
     private String commentUrl;
-    private String isLikeReviewsUrl;
-    private String isDislikeReviewsUrl;
 
     private String reviewReporters;
 
@@ -40,8 +38,6 @@ public class ReviewDto {
     public ReviewDto(UriInfo uriInfo, Review review) {
         this.commentUrl = uriInfo.getBaseUriBuilder().path("comments").path(String.valueOf(review.getId())).build().toString();
         this.reviewReporters = review.getReporterUsernames();
-        this.isLikeReviewsUrl = uriInfo.getBaseUriBuilder().path("reviews").path("likedByUsers").build().toString();
-        this.isDislikeReviewsUrl = uriInfo.getBaseUriBuilder().path("reviews").path("dislikedByUsers").build().toString();
         this.id = review.getId();
         this.name = review.getName();
         this.description = review.getDescription();
@@ -133,19 +129,4 @@ public class ReviewDto {
         this.content = content;
     }
 
-    public String getIsLikeReviewsUrl() {
-        return isLikeReviewsUrl;
-    }
-
-    public void setIsLikeReviewsUrl(String isLikeReviewsUrl) {
-        this.isLikeReviewsUrl = isLikeReviewsUrl;
-    }
-
-    public String getIsDislikeReviewsUrl() {
-        return isDislikeReviewsUrl;
-    }
-
-    public void setIsDislikeReviewsUrl(String isDislikeReviewsUrl) {
-        this.isDislikeReviewsUrl = isDislikeReviewsUrl;
-    }
 }

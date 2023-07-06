@@ -19,6 +19,8 @@ public class UserDto {
     private String userWatchListURL;
     private String userViewedListURL;
     private String userReviews;
+    private String isLikeReviewsUrl;
+    private String isDislikeReviewsUrl;
 
     public static Collection<UserDto> mapUserToUserDto(UriInfo uriInfo, Collection<User> user) {
         return user.stream().map(u -> new UserDto(uriInfo, u)).collect(Collectors.toList());
@@ -43,6 +45,8 @@ public class UserDto {
         this.reputation = user.getReputation();
         this.image = url.getBaseUriBuilder().path("users").path(String.valueOf(user.getId())).path("profileImage").build().toString();
         this.role = user.getRole();
+        this.isLikeReviewsUrl = url.getBaseUriBuilder().path("users").path(String.valueOf(user.getId())).path("reviewsLikedByUser").build().toString();
+        this.isDislikeReviewsUrl = url.getBaseUriBuilder().path("users").path(String.valueOf(user.getId())).path("reviewsDislikedByUser").build().toString();
     }
 
     public String getUsername() {
@@ -115,5 +119,21 @@ public class UserDto {
 
     public void setUserReviews(String userReviews) {
         this.userReviews = userReviews;
+    }
+
+    public String getIsLikeReviewsUrl() {
+        return isLikeReviewsUrl;
+    }
+
+    public void setIsLikeReviewsUrl(String isLikeReviewsUrl) {
+        this.isLikeReviewsUrl = isLikeReviewsUrl;
+    }
+
+    public String getIsDislikeReviewsUrl() {
+        return isDislikeReviewsUrl;
+    }
+
+    public void setIsDislikeReviewsUrl(String isDislikeReviewsUrl) {
+        this.isDislikeReviewsUrl = isDislikeReviewsUrl;
     }
 }

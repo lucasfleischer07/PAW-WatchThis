@@ -150,5 +150,52 @@ export class UserApi {
             return {error: true, errorCode: e.response.status || 500}
         }
     }
+
+    async getReviewsLike(userId) {
+        try {
+            const res = await fetch(`${this.basePath}/${userId}/reviewsLikedByUser`, {
+                method: 'GET',
+                headers: authCheck({}),
+            })
+
+            if(res.status === 200) {
+                const jsonData = await res.json();
+                const jsonString = JSON.stringify(jsonData);
+                if (jsonString === '{}') {
+                    return { error: false, data: [] };
+                } else {
+                    return { error: false, data: jsonData };
+                }
+            } else {
+                return {error: true, errorCode: res.status}
+            }
+
+        } catch (e) {
+            return {error: true, errorCode: e.response.status || 500}
+        }
+    }
+
+    async getReviewsDislike(userId) {
+        try {
+            const res = await fetch(`${this.basePath}/${userId}/reviewsDislikedByUser`, {
+                method: 'GET',
+                headers: authCheck({}),
+            })
+            if(res.status === 200) {
+                const jsonData = await res.json();
+                const jsonString = JSON.stringify(jsonData);
+                if (jsonString === '{}') {
+                    return { error: false, data: [] };
+                } else {
+                    return { error: false, data: jsonData };
+                }
+            } else {
+                return {error: true, errorCode: res.status}
+            }
+
+        } catch (e) {
+            return {error: true, errorCode: e.response.status || 500}
+        }
+    }
     
 }

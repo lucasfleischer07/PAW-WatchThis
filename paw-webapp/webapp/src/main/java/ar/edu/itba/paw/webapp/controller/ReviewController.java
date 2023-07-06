@@ -7,6 +7,7 @@ import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.services.*;
 import ar.edu.itba.paw.webapp.dto.request.NewReviewDto;
 import ar.edu.itba.paw.webapp.dto.response.ReviewDto;
+import ar.edu.itba.paw.webapp.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.webapp.utilities.ResponseBuildingUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -209,37 +210,5 @@ public class ReviewController {
 
     // * ---------------------------------------------------------------------------------------------------------------
 
-    // Endpoint para getear los ids de los usuarios que likearon la review
-    @GET
-    @Path("/likedByUsers")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getUserIdLikeReviews() {
-        LOGGER.info("GET /{}: Called", uriInfo.getPath());
-        if(us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).isPresent()) {
-            User loggedUser = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).get();
-            rs.userLikeAndDislikeReviewsId(loggedUser.getUserVotes());
-            LOGGER.info("GET /{}: USer logged votes {}", uriInfo.getPath(), loggedUser.getUserVotes());
-        }
-
-        Set<Long> userIdsLikeReviews = rs.getUserLikeReviews();
-        Collection<LongDto> userIdsLikeReviewsDto = LongDto.mapLongToLongDto(userIdsLikeReviews);
-        LOGGER.info("GET /{}: Devuelvo {}", uriInfo.getPath(), userIdsLikeReviews);
-        return Response.ok(new GenericEntity<Collection<LongDto>>(userIdsLikeReviewsDto) {}).build();
-    }
-
-    // Endpoint para getear los ids de los usuarios que dislikearon la review
-    @GET
-    @Path("/dislikedByUsers")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getUserIdDislikeReviews() {
-        LOGGER.info("GET /{}: Called", uriInfo.getPath());
-        if(us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).isPresent()) {
-            User loggedUser = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).get();
-            rs.userLikeAndDislikeReviewsId(loggedUser.getUserVotes());
-        }
-        Set<Long> userIdsDislikeReviews = rs.getUserDislikeReviews();
-        Collection<LongDto> userIdsDislikeReviewsDto = LongDto.mapLongToLongDto(userIdsDislikeReviews);
-        return Response.ok(new GenericEntity<Collection<LongDto>>(userIdsDislikeReviewsDto) {}).build();
-    }
 
 }

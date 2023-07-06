@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.webapp.dto.response.LongDto;
 import ar.edu.itba.paw.webapp.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.models.PageWrapper;
 import ar.edu.itba.paw.models.Review;
@@ -204,4 +205,33 @@ public class UserController {
     }
     // * ---------------------------------------------------------------------------------------------------------------
 
+    // Endpoint para getear los ids de las reviews likeadas por un usuario
+    @GET
+    @Path("/{userId}/reviewsLikedByUser")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getUserIdLikeReviews(@PathParam("userId") final long userId) {
+        LOGGER.info("GET /{}: Called", uriInfo.getPath());
+        User user = us.findById(userId).orElseThrow(UserNotFoundException::new);
+        rs.userLikeAndDislikeReviewsId(user.getUserVotes());
+        LOGGER.info("GET /{}: User  votes {}", uriInfo.getPath(), user.getUserVotes());
+
+        Set<Long> userIdsLikeReviews = rs.getUserLikeReviews();
+        Collection<LongDto> userIdsLikeReviewsDto = LongDto.mapLongToLongDto(userIdsLikeReviews);
+        LOGGER.info("GET /{}: Devuelvo {}", uriInfo.getPath(), userIdsLikeReviews);
+        return Response.ok(new GenericEntity<Collection<LongDto>>(userIdsLikeReviewsDto) {}).build();
+    }
+
+    // Endpoint para getear los ids de las reviews dislikeadas por un usuario
+    @GET
+    @Path("/{userId}/reviewsDislikedByUser")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getUserIdDislikeReviews(@PathParam("userId") final long userId) {
+        LOGGER.info("GET /{}: Called", uriInfo.getPath());
+        User user = us.findById(userId).orElseThrow(UserNotFoundException::new);
+        rs.userLikeAndDislikeReviewsId(user.getUserVotes());
+        LOGGER.info("GET /{}: User  votes {}", uriInfo.getPath(), user.getUserVotes());
+        Set<Long> userIdsDislikeReviews = rs.getUserDislikeReviews();
+        Collection<LongDto> userIdsDislikeReviewsDto = LongDto.mapLongToLongDto(userIdsDislikeReviews);
+        return Response.ok(new GenericEntity<Collection<LongDto>>(userIdsDislikeReviewsDto) {}).build();
+    }
 }

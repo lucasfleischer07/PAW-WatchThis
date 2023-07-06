@@ -98,14 +98,13 @@ export default function UserInfoPage() {
                 } else {
                     navigate("/error", { replace: true, state: {errorCode: reviews.errorCode} })
                 }
-
             })
             .catch(() => {
                 navigate("/error", { replace: true, state: {errorCode: 404} })
             })
 
         if(isLogged()) {
-            reviewService.getReviewsLike()
+            reviewService.getReviewsLike(user?.id)
                 .then(data => {
                     if(!data.error) {
                         setIsLikeReviewsList(data.data)
@@ -117,7 +116,7 @@ export default function UserInfoPage() {
                     navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
 
-            reviewService.getReviewsDislike()
+            reviewService.getReviewsDislike(user?.id)
                 .then(data => {
                     if(!data.error) {
                         setIsDislikeReviewsList(data.data)
@@ -128,9 +127,12 @@ export default function UserInfoPage() {
                 .catch(() => {
                     navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
+
         }
 
     }, [])
+
+
 
 
     return(
@@ -219,7 +221,8 @@ export default function UserInfoPage() {
                                                     <h5>{review.content.name}</h5>
                                                 </Link>
                                                 <ReviewCard
-                                                    key ={`reviewCardUser${review.id}`}
+                                                    id={`reviewCardUser${review.id}`}
+                                                    key={isLikeReviewsList && isDislikeReviewsList }
                                                     reviewTitle={review.name}
                                                     reviewDescription={review.description}
                                                     reviewRating={review.rating}
@@ -232,8 +235,8 @@ export default function UserInfoPage() {
                                                     loggedUserName={user?.username}
                                                     loggedUserId={user?.id}
                                                     isAdmin={user?.role === 'admin'}
-                                                    isLikeReviews={isLikeReviewsList.length > 0 ? isLikeReviewsList.some(item => item.id === review.id) : false}
-                                                    isDislikeReviews={isDislikeReviewsList.length > 0 ? isDislikeReviewsList.some(item => item.id === review.id) : false}
+                                                    isLikeReviews={isLikeReviewsList.length > 0 ? isLikeReviewsList.some(item => parseInt(item.id) === parseInt(review.id)) : false}
+                                                    isDislikeReviews={isDislikeReviewsList.length > 0 ? isDislikeReviewsList.some(item => parseInt(item.id) === parseInt(review.id)) : false}
                                                     alreadyReport={review.reviewReporters.includes(user?.username)}
                                                     canComment={false}
                                                     seeComments={false}

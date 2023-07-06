@@ -5,7 +5,7 @@ import {Button, Modal} from "react-bootstrap";
 import {useTranslation} from "react-i18next";
 import Markdown from "marked-react";
 import ReviewCard from "./components/ReviewCard";
-import {contentService, listsService, reviewService} from "../services";
+import {contentService, listsService, reviewService, userService} from "../services";
 import {toast} from "react-toastify";
 import TooltipComponent from './components/Tooltip';
 import Header from "./components/Header";
@@ -264,7 +264,7 @@ export default function InfoPage() {
                     navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
 
-            reviewService.getReviewsLike()
+            userService.getReviewsLike(user?.id)
                 .then(data => {
                     if(!data.error) {
                         setIsLikeReviewsList(data.data)
@@ -280,7 +280,7 @@ export default function InfoPage() {
                     navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
 
-            reviewService.getReviewsDislike()
+            userService.getReviewsDislike(user?.id)
                 .then(data => {
                     if(!data.error) {
                         setIsDislikeReviewsList(data.data)
@@ -547,26 +547,29 @@ export default function InfoPage() {
                             <>
                                 {reviews.map((review) => {
                                     return (
-                                        <ReviewCard
-                                            key ={`reviewCard ${review.id}`}
-                                            reviewTitle={review.name}
-                                            reviewDescription={review.description}
-                                            reviewRating={review.rating}
-                                            reviewId={review.id}
-                                            reviewReputation={review.reputation}
-                                            reviewUser={review.user.username}
-                                            reviewUserId={review.user.id}
-                                            contentId={content.id}
-                                            contentType={review.type}
-                                            loggedUserName={user?.username}
-                                            loggedUserId={user?.id}
-                                            isAdmin={user?.role === 'admin'}
-                                            isLikeReviews={isLikeReviewsList.length > 0 ? isLikeReviewsList.some(item => item.id === review.id) : false}
-                                            isDislikeReviews={isDislikeReviewsList.length > 0 ? isDislikeReviewsList.some(item => item.id === review.id) : false}
-                                            alreadyReport={review.reviewReporters.includes(user?.username)}
-                                            canComment={true}
-                                            seeComments={true}
-                                        />
+                                        <div key={review.id}>
+                                            <ReviewCard
+                                                id={`reviewCardUser${review.id}`}
+                                                key ={isLikeReviewsList && isDislikeReviewsList}
+                                                reviewTitle={review.name}
+                                                reviewDescription={review.description}
+                                                reviewRating={review.rating}
+                                                reviewId={review.id}
+                                                reviewReputation={review.reputation}
+                                                reviewUser={review.user.username}
+                                                reviewUserId={review.user.id}
+                                                contentId={content.id}
+                                                contentType={review.type}
+                                                loggedUserName={user?.username}
+                                                loggedUserId={user?.id}
+                                                isAdmin={user?.role === 'admin'}
+                                                isLikeReviews={isLikeReviewsList.length > 0 ? isLikeReviewsList.some(item => item.id === parseInt(review.id)) : false}
+                                                isDislikeReviews={isDislikeReviewsList.length > 0 ? isDislikeReviewsList.some(item => item.id === parseInt(review.id)) : false}
+                                                alreadyReport={review.reviewReporters.includes(user?.username)}
+                                                canComment={true}
+                                                seeComments={true}
+                                            />
+                                        </div>
                                     );
                                 })}
 

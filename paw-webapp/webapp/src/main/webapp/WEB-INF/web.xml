@@ -141,10 +141,7 @@
     <filter-name>unconditionalCacheFilter</filter-name>
     <url-pattern>/js/*</url-pattern>
   </filter-mapping>
-  <filter-mapping>
-    <filter-name>unconditionalCacheFilter</filter-name>
-    <url-pattern>*.png</url-pattern>
-  </filter-mapping>
+
   <filter-mapping>
     <filter-name>unconditionalCacheFilter</filter-name>
     <url-pattern>*.jpg</url-pattern>
@@ -156,6 +153,10 @@
   <filter-mapping>
     <filter-name>unconditionalCacheFilter</filter-name>
     <url-pattern>*.svg</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>unconditionalCacheFilter</filter-name>
+    <url-pattern>*.png</url-pattern>
   </filter-mapping>
 
 <!--  Esto es lo de la pagina de errores-->
