@@ -124,7 +124,7 @@ export default function ReviewCard(props) {
 
     return(
         <div className="accordion W-accordion-margin" id={`accordion${reviewId}`}>
-            <div className="accordion-item">
+            <div className="accordion-item W-accordion-border-transparent">
                 <div className="accordion-header" id={`heading${reviewId}`}>
                     <div className="card">
                         <div className="card-header W-accordion-card-header">

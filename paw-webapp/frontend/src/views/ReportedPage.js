@@ -49,7 +49,6 @@ export default function ReportedPage() {
         setFilterReason(value)
     }
 
-
     useEffect(() => {
         if(isLogged() && user.role === 'admin') {
             setCurrentCommentsReportsPage(1)
@@ -253,55 +252,48 @@ export default function ReportedPage() {
                         </div>
                     </div>
                 </div>
+
                 <div className='W-reported-general-div-list'>
                     <Tabs activeKey={tabKey} onSelect={(e) => initTabKey(e)}>
-                        <Tab className='W-reported-div-list' eventKey="one" title={t('Content.Review')} >
-                            {reportedReviewsList.length === 0 ? (
-                                <div className="W-watchlist-div-info-empty">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="bi bi-bookmark-x-fill W-watchlist-empty-icon" viewBox="0 0 16 16">
-                                        <path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7.029 7.029 0 0 0 2.79-.588zM5.21 3.088A7.028 7.028 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474L5.21 3.089z"/>
-                                        <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829l-2.83-2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12-.708.708z"/>
-                                    </svg>
-                                    <div>
-                                        <p>{t('Report.Review.Empty')}</p>
+                            <Tab eventKey="one" title={t('Content.Review')} >
+                                {reportedReviewsList.length > 0 ? (
+                                    <>
+                                        {reportedReviewsList.map((content) => (
+                                                <ReportedContent
+                                                    key={`reportedContent${content.id}`}
+                                                    userName={content.review.user.username}
+                                                    userId={content.review.user.id}
+                                                    contentId={content.review.content.id}
+                                                    contentName={content.review.content.name}
+                                                    contentType={content.review.content.type}
+                                                    reportTitle={content.review.name}
+                                                    reportDescription={content.review.description}
+                                                    reportReasons={content.review.reportReasons}
+                                                    reportsAmount={content.review.reportAmount}
+                                                    typeId={content.review.id}
+                                                    reviewCreatorId={content.review.user.id}
+                                                    reviewNameOfReportedComment={content.review.name}
+                                                    reportType="reviews"
+                                                />
+                                            )
+                                        )}
+                                    </>
+                                ) : (
+                                    <div className="W-watchlist-div-info-empty">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="bi bi-bookmark-x-fill W-watchlist-empty-icon" viewBox="0 0 16 16">
+                                            <path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7.029 7.029 0 0 0 2.79-.588zM5.21 3.088A7.028 7.028 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474L5.21 3.089z"/>
+                                            <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829l-2.83-2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12-.708.708z"/>
+                                        </svg>
+                                        <div>
+                                            <p>{t('Report.Review.Empty')}</p>
+                                        </div>
                                     </div>
-                                </div>
-                            ) : (
-                                <>
-                                    {reportedReviewsList.map((content) => (
-                                            <ReportedContent
-                                                key={`reportedContent${content.id}`}
-                                                userName={content.review.user.username}
-                                                userId={content.review.user.id}
-                                                contentId={content.review.content.id}
-                                                contentName={content.review.content.name}
-                                                contentType={content.review.content.type}
-                                                reportTitle={content.review.name}
-                                                reportDescription={content.review.description}
-                                                reportReasons={content.review.reportReasons}
-                                                reportsAmount={content.review.reportAmount}
-                                                typeId={content.review.id}
-                                                reviewCreatorId={content.review.user.id}
-                                                reviewNameOfReportedComment={content.review.name}
-                                                reportType="reviews"
-                                            />
-                                        )
-                                    )}
-                                </>
-                            )}
-                        </Tab>
+                                )}
+
+                            </Tab>
+
                         <Tab eventKey="two" title={t('Comments.Title')}>
-                            {reportedCommentsList.length === 0 ? (
-                                <div className="W-watchlist-div-info-empty">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="bi bi-bookmark-x-fill W-watchlist-empty-icon" viewBox="0 0 16 16">
-                                        <path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7.029 7.029 0 0 0 2.79-.588zM5.21 3.088A7.028 7.028 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474L5.21 3.089z"/>
-                                        <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829l-2.83-2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12-.708.708z"/>
-                                    </svg>
-                                    <div>
-                                        <p>{t('Report.Comment.Empty')}</p>
-                                    </div>
-                                </div>
-                            ) : (
+                            {reportedCommentsList.length > 0 ? (
                                 <>
                                     {reportedCommentsList.map((content) => (
                                             <ReportedContent
@@ -323,11 +315,23 @@ export default function ReportedPage() {
                                         )
                                     )}
                                 </>
+                            ) : (
+                                <div className="W-watchlist-div-info-empty">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="bi bi-bookmark-x-fill W-watchlist-empty-icon" viewBox="0 0 16 16">
+                                        <path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7.029 7.029 0 0 0 2.79-.588zM5.21 3.088A7.028 7.028 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474L5.21 3.089z"/>
+                                        <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829l-2.83-2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12-.708.708z"/>
+                                    </svg>
+                                    <div>
+                                        <p>{t('Report.Comment.Empty')}</p>
+                                    </div>
+                                </div>
                             )}
                         </Tab>
                     </Tabs>
                 </div>
             </div>
+
+
             <div>
                 <ul className="pagination justify-content-center W-pagination">
                     {page > 1 ? (
@@ -397,6 +401,5 @@ export default function ReportedPage() {
             </div>
         </>
 
-        // {/TODO PAGINACION/}
     )
 }
