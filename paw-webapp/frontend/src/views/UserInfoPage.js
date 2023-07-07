@@ -104,7 +104,7 @@ export default function UserInfoPage() {
             })
 
         if(isLogged()) {
-            reviewService.getReviewsLike(user?.id)
+            userService.getReviewsLike(user?.id)
                 .then(data => {
                     if(!data.error) {
                         setIsLikeReviewsList(data.data)
@@ -116,7 +116,7 @@ export default function UserInfoPage() {
                     navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
 
-            reviewService.getReviewsDislike(user?.id)
+            userService.getReviewsDislike(user?.id)
                 .then(data => {
                     if(!data.error) {
                         setIsDislikeReviewsList(data.data)

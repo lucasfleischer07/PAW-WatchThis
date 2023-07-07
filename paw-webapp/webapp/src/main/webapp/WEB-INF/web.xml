@@ -124,40 +124,7 @@
     <url-pattern>/api/*</url-pattern>
   </filter-mapping>
 
-  <filter>
-    <filter-name>unconditionalCacheFilter</filter-name>
-    <filter-class>ar.edu.itba.paw.webapp.config.UnconditionalCacheFilter</filter-class>
-  </filter>
 
-  <filter-mapping>
-    <filter-name>unconditionalCacheFilter</filter-name>
-    <url-pattern>/static/*</url-pattern>
-  </filter-mapping>
-  <filter-mapping>
-    <filter-name>unconditionalCacheFilter</filter-name>
-    <url-pattern>/img/*</url-pattern>
-  </filter-mapping>
-  <filter-mapping>
-    <filter-name>unconditionalCacheFilter</filter-name>
-    <url-pattern>/js/*</url-pattern>
-  </filter-mapping>
-
-  <filter-mapping>
-    <filter-name>unconditionalCacheFilter</filter-name>
-    <url-pattern>*.jpg</url-pattern>
-  </filter-mapping>
-  <filter-mapping>
-    <filter-name>unconditionalCacheFilter</filter-name>
-    <url-pattern>*.jpeg</url-pattern>
-  </filter-mapping>
-  <filter-mapping>
-    <filter-name>unconditionalCacheFilter</filter-name>
-    <url-pattern>*.svg</url-pattern>
-  </filter-mapping>
-  <filter-mapping>
-    <filter-name>unconditionalCacheFilter</filter-name>
-    <url-pattern>*.png</url-pattern>
-  </filter-mapping>
 
 <!--  Esto es lo de la pagina de errores-->
   <error-page>

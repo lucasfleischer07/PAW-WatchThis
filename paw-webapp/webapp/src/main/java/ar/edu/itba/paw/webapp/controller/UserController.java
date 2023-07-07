@@ -110,7 +110,7 @@ public class UserController {
             return Response.noContent().build();
         }
 
-        EntityTag eTag = new EntityTag(String.valueOf(user.getId()));
+        EntityTag eTag = new EntityTag(us.getUserImageHash(user));
         final CacheControl cacheControl = new CacheControl();
         cacheControl.setNoCache(true);
         Response.ResponseBuilder response = request.evaluatePreconditions(eTag);

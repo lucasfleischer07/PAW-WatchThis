@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.services;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
 import java.util.*;
 
@@ -193,6 +195,22 @@ public class UserServiceImpl implements UserService{
         token.setDetails(new WebAuthenticationDetails(request));
         Authentication authentication = authenticationManager.authenticate(token);
         SecurityContextHolder.getContext().setAuthentication(authentication);
+    }
+
+    @Override
+    public String getUserImageHash(User user){
+        byte[] hash;
+        try{
+            hash= MessageDigest.getInstance("SHA-256").digest(user.getImage());
+
+        }catch (NoSuchAlgorithmException e){
+            hash=null;
+        }
+        StringBuilder sb = new StringBuilder();
+        for (byte b : hash) {
+            sb.append(String.format("%02x", b));
+        }
+        return sb.toString();
     }
 
 }

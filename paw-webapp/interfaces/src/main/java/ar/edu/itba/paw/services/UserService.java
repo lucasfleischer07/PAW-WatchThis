@@ -30,4 +30,5 @@ public interface UserService {
     List<Long>getUserViewedListContent(User user);
     boolean checkPassword( String uncheckedPassword, User user);
     void authWithAuthManager(HttpServletRequest request, String email, String password, AuthenticationManager authenticationManager);
+    String getUserImageHash(User user);
 }

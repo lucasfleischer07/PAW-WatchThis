@@ -32,4 +32,5 @@ public interface ContentService {
     void deleteContent(Long id);
     String getGenreString(List<String> genres);
     List<User> getContentReviewers(Long id);
+    String getContentImageHash(Content content);
 }

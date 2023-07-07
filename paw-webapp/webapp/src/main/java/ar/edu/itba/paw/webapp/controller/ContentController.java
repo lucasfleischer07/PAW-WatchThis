@@ -25,6 +25,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.MessageInterpolator;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
 import javax.ws.rs.*;
@@ -32,6 +33,8 @@ import javax.ws.rs.core.*;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URLConnection;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 @Path("content")
@@ -99,8 +102,7 @@ public class ContentController {
         if(content.getImage() == null) {
             return Response.noContent().build();
         }
-
-        EntityTag eTag = new EntityTag(String.valueOf(content.getId()));
+        EntityTag eTag=new EntityTag(cs.getContentImageHash(content));
         final CacheControl cacheControl = new CacheControl();
         cacheControl.setNoCache(true);
         Response.ResponseBuilder response = request.evaluatePreconditions(eTag);

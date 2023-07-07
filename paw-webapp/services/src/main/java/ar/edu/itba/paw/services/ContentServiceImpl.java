@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -226,4 +228,19 @@ public class ContentServiceImpl implements ContentService {
         return ContentDao.getContentReviewers(id);
     }
 
+    @Override
+    public String getContentImageHash(Content content){
+        byte[] hash;
+        try{
+            hash= MessageDigest.getInstance("SHA-256").digest(content.getImage());
+
+        }catch (NoSuchAlgorithmException e){
+            hash=null;
+        }
+        StringBuilder sb = new StringBuilder();
+        for (byte b : hash) {
+            sb.append(String.format("%02x", b));
+        }
+        return sb.toString();
+    }
 }
