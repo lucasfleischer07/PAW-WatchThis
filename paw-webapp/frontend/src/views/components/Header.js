@@ -41,7 +41,7 @@ export default function Header(props) {
         const searchParams = new URLSearchParams(window.location.search);
         if( validateSearch() ){
             searchParams.set('query', queryForm.query);
-            if (type === 'profile'){
+            if (type === 'all'){
                 navigate('/content/all' + '?' + searchParams.toString());
             }else if ( type === 'movie'){
                 navigate('/content/movie' + '?' + searchParams.toString());

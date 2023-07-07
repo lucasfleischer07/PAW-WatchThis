@@ -169,7 +169,8 @@
 }
 
 .W-no-reviews-image{
-    max-width: 4vw;
+    max-width: 4vw!important;
+    max-height: 4vw!important;
 }
 
 .W-no-reviews-text{
@@ -418,8 +419,8 @@
 }
 
 .W-comment-profile-picture {
-    width: 3vw;
-    height: 3vw;
+    width: 4vw;
+    height: 4vw!important;
     border-radius: 50%!important;
 }
 
