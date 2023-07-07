@@ -49,26 +49,6 @@ export default function CarrouselContent(props) {
         navigate('/login', {replace: true})
     }
 
-    const watchListHandle = () => {
-        listsService.getUserWatchListContentIds(props.user.id)
-            .then(watchList => {
-                if(!watchList.error) {
-                    setIsInWatchList(watchList.data.some(item => item.id === props.id))
-                } else {
-                    navigate("/error", { replace: true, state: {errorCode: watchList.errorCode} })
-                }
-            })
-            .catch(() => {
-                navigate("/error", { replace: true, state: {errorCode: 404} })
-            })
-    }
-
-    useEffect(() => {
-        if(isLogged()) {
-            watchListHandle()
-        }
-    }, [isInWatchList])
-
 
     return (
         <div className="card-group W-card-text-carousel W-films-margin-carrousel">
