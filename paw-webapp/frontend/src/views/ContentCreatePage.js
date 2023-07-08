@@ -4,10 +4,8 @@ import {Link, useNavigate, useParams} from "react-router-dom";
 import {AuthContext} from "../context/AuthContext";
 import {contentService} from "../services";
 import SimpleMDE from "react-simplemde-editor";
-import {dropDownStayGenreCreate} from "../scripts/dropDownBehaviour";
 import Header from "./components/Header";
 import ExpiredCookieModal from "./components/ExpiredCookieModal";
-// import {dropDownStayGenreCreate} from "../scripts/dropDownBehaviour";
 
 
 export default function ContentCreatePage() {

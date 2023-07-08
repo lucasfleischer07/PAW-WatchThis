@@ -245,12 +245,7 @@ export default function UserInfoPage() {
                                         ))
                                     )}
 
-                                    {/*TODO: NOSE QUE ES ESTO DE c:set*/}
-                                    {/*{isSameUser ? (*/}
-                                    {/*    <c:set var="readMorepath" value="/profile/${userProfile}" />*/}
-                                    {/*) : (*/}
-                                    {/*    <c:set var="readMorepath" value="/profile" />*/}
-                                    {/*)}*/}
+
 
                                     {/*TODO: METER PAGINACION*/}
                                     {/*{pageSelected < amountPages && (*/}

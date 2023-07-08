@@ -1,13 +1,12 @@
 package ar.edu.itba.paw.webapp.dto.request;
 
-import ar.edu.itba.paw.webapp.validations.AvailableEmail;
-import ar.edu.itba.paw.webapp.validations.AvailableUserName;
+import ar.edu.itba.paw.webapp.dto.validations.AvailableEmail;
+import ar.edu.itba.paw.webapp.dto.validations.AvailableUserName;
 
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class NewUser {
-//    TODO: METER LOS MENSAJES DE ERROR EN CASO DE QUE ESTE VACIO
 
     @AvailableEmail
     @Size(min = 10, max = 50, message = "...")

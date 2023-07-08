@@ -308,7 +308,7 @@
 }
 
 .W-not-found{
-    height: 10vw;
+    height: 10vw!important;
     width: 10vw;
 }
 

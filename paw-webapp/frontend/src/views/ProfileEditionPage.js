@@ -47,31 +47,29 @@ export default function ProfileEditionPage() {
             if(!validatePasswords()) {
                 return
             }
-            if(userForm.currentPassword.length === 0 && userForm.newPassword.length === 0 && userForm.confirmPassword.length === 0) {
-                navigate(-1)
-            }
-
-            userService.updateUserProfileInfo(user.id, userForm)
-                .then(data => {
-                    if(!data.error) {
-                        setErrorPassword(false)
-                        reset()
-                        toast.info(t('EditProfile.Upload.Password.Success'))
-                        navigate(-1)
-                    } else if(data.errorCode === 400){
-                        setErrorPassword(true)
-                    } else {
-                        if(data.errorCode === 404) {
-                            setShowExpiredCookiesModal(true)
+            if(userForm.currentPassword.length !== 0 && userForm.newPassword.length !== 0 && userForm.confirmPassword.length !== 0) {
+                userService.updateUserProfileInfo(user.id, userForm)
+                    .then(data => {
+                        if (!data.error) {
+                            setErrorPassword(false)
+                            reset()
+                            toast.info(t('EditProfile.Upload.Password.Success'))
+                            navigate(-1)
+                        } else if (data.errorCode === 400) {
+                            setErrorPassword(true)
                         } else {
-                            toast.error(t('EditProfile.Upload.Password.Error'))
-                            navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                            if (data.errorCode === 404) {
+                                setShowExpiredCookiesModal(true)
+                            } else {
+                                toast.error(t('EditProfile.Upload.Password.Error'))
+                                navigate("/error", {replace: true, state: {errorCode: data.errorCode}})
+                            }
                         }
-                    }
-                })
-                .catch(() => {
-                    navigate("/error", { replace: true, state: {errorCode: 404} })
-                })
+                    })
+                    .catch(() => {
+                        navigate("/error", {replace: true, state: {errorCode: 404}})
+                    })
+            }
         } else {
             navigate("/error", { replace: true, state: {errorCode: 401} })
         }
@@ -99,8 +97,6 @@ export default function ProfileEditionPage() {
                 .catch(() => {
                     navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
-        } else {
-            navigate("/error", { replace: true, state: {errorCode: 401} })
         }
 
     }

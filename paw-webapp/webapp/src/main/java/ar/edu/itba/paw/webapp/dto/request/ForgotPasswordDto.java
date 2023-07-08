@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.webapp.dto.request;
 
-import ar.edu.itba.paw.webapp.validations.ExistingEmail;
+import ar.edu.itba.paw.webapp.dto.validations.ExistingEmail;
 
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;

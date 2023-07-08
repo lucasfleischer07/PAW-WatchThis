@@ -1,6 +1,5 @@
 import {useTranslation} from "react-i18next";
 import {useContext, useEffect, useState} from "react";
-import {dropDownStayGenreFilters} from "../../scripts/dropDownBehaviour";
 import {useLocation, useNavigate} from "react-router-dom";
 import PropTypes from 'prop-types';
 
