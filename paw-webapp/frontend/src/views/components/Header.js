@@ -65,13 +65,6 @@ export default function Header(props) {
         })
     }
 
-    //Tomo la url actual, y le seteo el parametro deseado
-    const updateUrl = () => {
-        const searchParams = new URLSearchParams(window.location.search);
-        searchParams.set('genre', 'xd');
-        navigate(window.location.pathname + '?' + searchParams.toString());
-    }
-
     useEffect(() => {
         const queryParams = new URLSearchParams(search);
         const query = queryParams.get('query')
@@ -146,7 +139,7 @@ export default function Header(props) {
                         <div className="d-flex W-navbar-search">
                             <form className="form-inline my-2 my-lg-0 W-searchbar" onSubmit={handleSubmit}>
                                 { queryProp !== '' ? (
-                                    <input name="query" className="form-control me-2" type="search" placeholder={t('SearchMessage')} aria-label="Search" value={queryProp} onChange={handleChange} />
+                                    <input name="query" className="form-control me-2" type="search" placeholder={t('SearchMessage')} aria-label="Search" value={queryForm.query} onChange={handleChange} />
                                 ) : (
                                     <input name="query" className="form-control me-2" type="search" placeholder={t('SearchMessage')} aria-label="Search"  onChange={handleChange} />
                                 )}

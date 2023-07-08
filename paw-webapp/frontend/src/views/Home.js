@@ -5,6 +5,7 @@ import {AuthContext} from "../context/AuthContext";
 import {contentService} from "../services";
 import Header from "./components/Header";
 import {useNavigate} from "react-router-dom";
+import Filters from "./components/Filters";
 
 
 export default function Home() {
@@ -70,6 +71,7 @@ export default function Home() {
     return(
         <div>
             <Header type="all" admin={user?.role === 'admin'} userName={user?.username} userId={user?.id}/>
+            <Filters type="all"/>
             <div className="W-carousels-div">
                 {isLogged() && userWatchListIds.length !== 0 && recommendedUserList.length !== 0 ? (
                     <>

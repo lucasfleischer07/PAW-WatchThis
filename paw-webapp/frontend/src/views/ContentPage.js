@@ -6,6 +6,7 @@ import {Link, useLocation, useNavigate, useParams} from "react-router-dom";
 import Header from "./components/Header";
 import Filters from "./components/Filters";
 import ExpiredCookieModal from "./components/ExpiredCookieModal";
+import {updateUrlVariable, validateParam} from "../scripts/validateParam";
 
 export default function ContentPage(props) {
     const {t} = useTranslation()
@@ -76,11 +77,12 @@ export default function ContentPage(props) {
 
     useEffect(() => {
         const queryParams = new URLSearchParams(search);
-        updateVariable(genre, queryParams.get('genre'),(x) => setGenre(x))
-        updateVariable(durationFrom, queryParams.get('durationFrom'), (x) => setDurationFrom(x))
-        updateVariable(durationTo, queryParams.get('durationTo'), (x) =>setDurationTo(x))
-        updateVariable(sorting, queryParams.get('sorting'),(x) => setSorting(x))
-        updateVariable(actualPage, queryParams.get('page'), (x) =>setActualPage(x))
+        updateUrlVariable(genre, queryParams.get('genre'),(x) => setGenre(x))
+        updateUrlVariable(durationFrom, queryParams.get('durationFrom'), (x) => setDurationFrom(x))
+        updateUrlVariable(durationTo, queryParams.get('durationTo'), (x) =>setDurationTo(x))
+        updateUrlVariable(sorting, queryParams.get('sorting'),(x) => setSorting(x))
+        updateUrlVariable(actualPage, queryParams.get('page'), (x) =>setActualPage(x))
+        updateUrlVariable(actualPage, queryParams.get('query'), (x) =>setQuery(x))
     }, [search]);
 
     const prevPage = () => {
@@ -111,7 +113,7 @@ export default function ContentPage(props) {
             )}
 
             <Header type={contentType} admin={user?.role === 'admin'} userName={user?.username} userId={user?.id}/>
-            <Filters/>
+            <Filters type={contentType}/>
             {/*<Filter*/}
             {/*    query={query}*/}
             {/*    genre={genre}*/}
@@ -146,74 +148,78 @@ export default function ContentPage(props) {
                     ))}
                 </div>
             </div>
-            <div>
-                {(allContent.length > 0) && (
-                    <ul className="pagination justify-content-center W-pagination">
-                        {actualPage > 1 ? (
-                            <li className="page-item">
-                                <p className="page-link W-pagination-color" onClick={() => prevPage()}>
-                                    {t('Pagination.Prev')}
-                                </p>
-                            </li>
-                        ) : (
-                            <li className="page-item disabled">
-                                <p className="page-link W-pagination-color">{t('Pagination.Prev')}</p>
-                            </li>
-                        )}
-                        {amountPages > 10 ? (
-                            Array.from({ length: amountPages }, (_, index) => (
-                                index + 1 === parseInt(actualPage) ? (
-                                    <li className="page-item active">
-                                        <p className="page-link W-pagination-color">{index + 1}</p>
-                                    </li>
-                                ): index + 1 === parseInt(actualPage) + 4 ? (
-                                    <li className="page-item">
-                                        <p className="page-link W-pagination-color" onClick={() => changePage(index + 1)}>
-                                            ...
-                                        </p>
-                                    </li>
-                                ): index + 1 === parseInt(actualPage) - 4 ? (
-                                    <li className="page-item">
-                                        <p className="page-link W-pagination-color" onClick={() => changePage(index + 1)}>
-                                            ...
-                                        </p>
-                                    </li>
-                                ) : ( index + 1 > parseInt(actualPage) - 4 && index + 1 < parseInt(actualPage) + 4 ) && (
-                                    <li className="page-item">
-                                        <p className="page-link W-pagination-color" onClick={() => changePage(index + 1)}>
-                                            {index + 1}
-                                        </p>
-                                    </li>
-                                )
-                            ))
-                        ) : (
-                            Array.from({ length: amountPages }, (_, index) => (
-                                index + 1 === actualPage ? (
-                                    <li className="page-item active">
-                                        <p className="page-link W-pagination-color">{index + 1}</p>
-                                    </li>
-                                ) : (
-                                    <li className="page-item">
-                                        <p className="page-link W-pagination-color" onClick={() => changePage(index + 1)}>
-                                            {index + 1}
-                                        </p>
-                                    </li>
-                                )
-                            ))
-                        )}
-                        {actualPage < amountPages ? (
-                            <li className="page-item">
-                                <p className="page-link W-pagination-color" onClick={() => nextPage()}>
-                                    {t('Pagination.Next')}
-                                </p>
-                            </li>
-                        ) : (
-                            <li className="page-item disabled">
-                                <p className="page-link W-pagination-color">{t('Pagination.Next')}</p>
-                            </li>
-                        )}
-                    </ul>)}
-            </div>
+            {amountPages > 1 && (
+                <div>
+                    {(allContent.length > 0) && (
+                        <ul className="pagination justify-content-center W-pagination">
+                            {actualPage > 1 ? (
+                                <li className="page-item">
+                                    <p className="page-link W-pagination-color" onClick={() => prevPage()}>
+                                        {t('Pagination.Prev')}
+                                    </p>
+                                </li>
+                            ) : (
+                                <li className="page-item disabled">
+                                    <p className="page-link W-pagination-color">{t('Pagination.Prev')}</p>
+                                </li>
+                            )}
+                            {amountPages > 10 ? (
+                                Array.from({ length: amountPages }, (_, index) => (
+                                    index + 1 === parseInt(actualPage) ? (
+                                        <li className="page-item active">
+                                            <p className="page-link W-pagination-color">{index + 1}</p>
+                                        </li>
+                                    ): index + 1 === parseInt(actualPage) + 4 ? (
+                                        <li className="page-item">
+                                            <p className="page-link W-pagination-color" onClick={() => changePage(index + 1)}>
+                                                ...
+                                            </p>
+                                        </li>
+                                    ): index + 1 === parseInt(actualPage) - 4 ? (
+                                        <li className="page-item">
+                                            <p className="page-link W-pagination-color" onClick={() => changePage(index + 1)}>
+                                                ...
+                                            </p>
+                                        </li>
+                                    ) : ( index + 1 > parseInt(actualPage) - 4 && index + 1 < parseInt(actualPage) + 4 ) && (
+                                        <li className="page-item">
+                                            <p className="page-link W-pagination-color" onClick={() => changePage(index + 1)}>
+                                                {index + 1}
+                                            </p>
+                                        </li>
+                                    )
+                                ))
+                            ) : (
+                                Array.from({ length: amountPages }, (_, index) => (
+                                    index + 1 === actualPage ? (
+                                        <li className="page-item active">
+                                            <p className="page-link W-pagination-color">{index + 1}</p>
+                                        </li>
+                                    ) : (
+                                        <li className="page-item">
+                                            <p className="page-link W-pagination-color" onClick={() => changePage(index + 1)}>
+                                                {index + 1}
+                                            </p>
+                                        </li>
+                                    )
+                                ))
+                            )}
+                            {actualPage < amountPages ? (
+                                <li className="page-item">
+                                    <p className="page-link W-pagination-color" onClick={() => nextPage()}>
+                                        {t('Pagination.Next')}
+                                    </p>
+                                </li>
+                            ) : (
+                                <li className="page-item disabled">
+                                    <p className="page-link W-pagination-color">{t('Pagination.Next')}</p>
+                                </li>
+                            )}
+                        </ul>)}
+                </div>
+            )
+            }
+
 
 
             {(allContent.length === 0) && (

@@ -98,7 +98,7 @@ public class ContentJpaDao implements ContentDao{
             query.setParameter("type",type);
         } else {
             countQuery = em.createQuery("FROM Content WHERE durationnum > :durationFrom  AND durationnum <= :durationTo",Content.class);
-            query = em.createQuery("SELECT c FROM Content c WHERE c.durationnum > :durationFrom AND c.durationnum <= :durationTo " + sortString, Content.class);
+            query = em.createQuery("FROM Content WHERE durationnum > :durationFrom AND durationnum <= :durationTo " + sortString, Content.class);
         }
         countQuery.setParameter("durationFrom",durationFrom);
         countQuery.setParameter("durationTo",durationTo);

@@ -261,17 +261,13 @@ public class ContentController {
         int page= pageNum;
         String auxType;
 
-        List<String> genreList = genre;
-
         PageWrapper<Content> contentListFilter = cs.getMasterContent(contentType, genre, durationFrom, durationTo, sorting, query,page,CONTENT_AMOUNT);
         List<Content> contentListFilterPaginated = contentListFilter.getPageContent();
-        long amountOfPages;
         if(contentListFilterPaginated == null) {
             LOGGER.warn("GET /{}: Failed at requesting content", uriInfo.getPath());
             throw new ContentNotFoundException();
         }
 
-        amountOfPages = contentListFilter.getPageAmount();
         Collection<ContentDto> contentListFilterPaginatedDto = ContentDto.mapContentToContentDto(uriInfo, contentListFilterPaginated);
         LOGGER.info("GET /{}: Success filtering the content", uriInfo.getPath());
         final Response.ResponseBuilder response = Response.ok(new GenericEntity<Collection<ContentDto>>(contentListFilterPaginatedDto){});

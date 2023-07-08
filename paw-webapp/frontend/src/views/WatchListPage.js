@@ -2,30 +2,59 @@ import React, {useContext, useEffect, useState} from "react";
 import ContentCard from "./components/ContentCard";
 import {useTranslation} from "react-i18next";
 import {AuthContext} from "../context/AuthContext";
-import {Link, useNavigate} from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import Header from "./components/Header";
 import ExpiredCookieModal from "./components/ExpiredCookieModal";
 import {listsService} from "../services";
+import {updateUrlVariable} from "../scripts/validateParam";
 
 export default function WatchListPage(props) {
     const {t} = useTranslation()
+    const { search } = useLocation();
+
     let navigate = useNavigate()
     let {isLogged} = useContext(AuthContext)
     const [showExpiredCookiesModal, setShowExpiredCookiesModal] = useState(false)
 
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
-    const [currentPage, setCurrentPage] = useState(1)
-    const [totalPages, setTotalPages] = useState(undefined)
+    const [page, setPage] = useState(1)
+    const [amountPages, setAmountPages] = useState(1)
     const [watchList, setWatchList] = useState([])
     const [added, setAdded] = useState(false)
 
+    useEffect(() => {
+        const queryParams = new URLSearchParams(search);
+        updateUrlVariable(page, queryParams.get('page'), (x) =>setPage(x))
+    }, [search]);
+
+    const prevPage = () => {
+        setPage(page - 1)
+        changeUrlPage(page - 1)
+    }
+
+    const nextPage = () => {
+        setPage(page + 1)
+        changeUrlPage(page + 1)
+    }
+
+    const changePage = ( newPage) => {
+        setPage(newPage)
+        changeUrlPage(newPage)
+    }
+
+    const changeUrlPage = (page) => {
+        const searchParams = new URLSearchParams(window.location.search);
+        searchParams.set('page', page);
+        navigate(window.location.pathname + '?' + searchParams.toString());
+    }
+
     const getUserWatchList = () => {
         if(isLogged()) {
-            listsService.getUserWatchList(user?.id, currentPage)
+            listsService.getUserWatchList(user?.id, page)
                 .then(watchList => {
                     if(!watchList.error) {
                         setWatchList(watchList.data)
-                        setTotalPages(watchList.totalPages)
+                        setAmountPages(watchList.totalPages)
                     } else {
                         if(watchList.errorCode === 404) {
                             setShowExpiredCookiesModal(true)
@@ -48,7 +77,7 @@ export default function WatchListPage(props) {
 
     useEffect(() => {
         getUserWatchList()
-    }, [added, currentPage])
+    }, [added, page])
 
     return (
         <>
@@ -112,6 +141,75 @@ export default function WatchListPage(props) {
                     </div>
                 </div>
             </div>
+            {amountPages > 1 && (
+                <div>
+                    <ul className="pagination justify-content-center W-pagination">
+                        {page > 1 ? (
+                            <li className="page-item">
+                                <p className="page-link W-pagination-color" onClick={() => prevPage()}>
+                                    {t('Pagination.Prev')}
+                                </p>
+                            </li>
+                        ) : (
+                            <li className="page-item disabled">
+                                <p className="page-link W-pagination-color">{t('Pagination.Prev')}</p>
+                            </li>
+                        )}
+                        {amountPages > 10 ? (
+                            Array.from({ length: amountPages }, (_, index) => (
+                                index + 1 === parseInt(page) ? (
+                                    <li className="page-item active">
+                                        <p className="page-link W-pagination-color">{index + 1}</p>
+                                    </li>
+                                ): index + 1 === parseInt(page) + 4 ? (
+                                    <li className="page-item">
+                                        <p className="page-link W-pagination-color" onClick={() => changePage(index + 1)}>
+                                            ...
+                                        </p>
+                                    </li>
+                                ): index + 1 === parseInt(page) - 4 ? (
+                                    <li className="page-item">
+                                        <p className="page-link W-pagination-color" onClick={() => changePage(index + 1)}>
+                                            ...
+                                        </p>
+                                    </li>
+                                ) : ( index + 1 > parseInt(page) - 4 && index + 1 < parseInt(page) + 4 ) && (
+                                    <li className="page-item">
+                                        <p className="page-link W-pagination-color" onClick={() => changePage(index + 1)}>
+                                            {index + 1}
+                                        </p>
+                                    </li>
+                                )
+                            ))
+                        ) : (
+                            Array.from({ length: amountPages }, (_, index) => (
+                                index + 1 === page ? (
+                                    <li className="page-item active">
+                                        <p className="page-link W-pagination-color">{index + 1}</p>
+                                    </li>
+                                ) : (
+                                    <li className="page-item">
+                                        <p className="page-link W-pagination-color" onClick={() => changePage(index + 1)}>
+                                            {index + 1}
+                                        </p>
+                                    </li>
+                                )
+                            ))
+                        )}
+                        {page < amountPages ? (
+                            <li className="page-item">
+                                <p className="page-link W-pagination-color" onClick={() => nextPage()}>
+                                    {t('Pagination.Next')}
+                                </p>
+                            </li>
+                        ) : (
+                            <li className="page-item disabled">
+                                <p className="page-link W-pagination-color">{t('Pagination.Next')}</p>
+                            </li>
+                        )}
+                    </ul>
+                </div>
+            )}
         </>
     )
 }
