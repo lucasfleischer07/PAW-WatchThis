@@ -118,10 +118,10 @@ export class ContentApi {
         }
     }
 
-    async getContentByType(contentType, pageNumber,genre,durationFrom,durationTo,sorting,query) {
+    async getContentByType(contentType, pageNumber, genre, durationFrom, durationTo, sorting, query) {
         const params = {pageNumber: pageNumber}
         if(genre !== ''){
-            params.genre = genre
+            params.genre = genre.split(",")
         }
         if(durationFrom !== ''){
             params.durationFrom = durationFrom
@@ -135,6 +135,8 @@ export class ContentApi {
         if(query !== ''){
             params.query = query
         }
+
+        console.log(params)
 
         try {
             const apiUrl = `${this.basePath}/${contentType}/filters`

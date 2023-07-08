@@ -25,7 +25,7 @@ public class ContentJpaDao implements ContentDao{
         String sortString = sort == null ? "" : sort.getQueryString();
         TypedQuery<Content> countQuery;
         if (Objects.equals(type, "movie") || Objects.equals(type, "serie")) {
-            query= em.createQuery("SELECT c FROM Content c WHERE type = :type" + sortString,Content.class);
+            query= em.createQuery("FROM Content WHERE type = :type" + sortString,Content.class);
             countQuery = em.createQuery("FROM Content WHERE type = :type",Content.class);
             countQuery.setParameter("type",type);
             query.setParameter("type",type);
@@ -67,14 +67,15 @@ public class ContentJpaDao implements ContentDao{
         TypedQuery<Content> query;
         TypedQuery<Content> countQuery;
         if (Objects.equals(type, "movie") || Objects.equals(type, "serie")) {
-            query=em.createQuery("SELECT c FROM Content c WHERE c.id IN (:resultList) AND c.type = :type " + sortString, Content.class);
-            countQuery = em.createQuery("FROM Content WHERE id IN ( :resultList ) AND type = :type",Content.class);
+            query=em.createQuery("FROM Content WHERE id IN (:resultList) AND type = :type " + sortString, Content.class);
+            countQuery = em.createQuery("FROM Content WHERE id IN (:resultList) AND type = :type ",Content.class);
             countQuery.setParameter("type",type);
             query.setParameter("type",type);
         } else {
-            query = em.createQuery("SELECT c FROM Content c WHERE c.id IN (:resultList) " + sortString, Content.class);
-            countQuery = em.createQuery("FROM Content WHERE id IN ( :resultList )",Content.class);
+            query = em.createQuery("FROM Content WHERE id IN (:resultList) " + sortString, Content.class);
+            countQuery = em.createQuery("FROM Content WHERE id IN (:resultList) ",Content.class);
         }
+
         countQuery.setParameter("resultList",longList);
         query.setParameter("resultList",longList);
         query.setFirstResult((page - 1) * pageSize);

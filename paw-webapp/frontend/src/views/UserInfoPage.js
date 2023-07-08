@@ -1,6 +1,6 @@
 import {useTranslation} from "react-i18next";
 import React, {useContext, useEffect, useState} from "react";
-import {Link, useNavigate, useParams} from "react-router-dom";
+import {Link, useLocation, useNavigate, useParams} from "react-router-dom";
 import {toast} from "react-toastify";
 import TooltipComponent from "./components/Tooltip";
 import Header from "./components/Header";
@@ -8,10 +8,12 @@ import ReviewCard from "./components/ReviewCard";
 import {AuthContext} from "../context/AuthContext";
 import ExpiredCookieModal from "./components/ExpiredCookieModal";
 import {reviewService, userService} from "../services";
+import {updateUrlVariable} from "../scripts/validateParam";
 
 export default function UserInfoPage() {
     const {t} = useTranslation()
     let navigate = useNavigate()
+    const { search } = useLocation();
     let {isLogged} = useContext(AuthContext)
     const { userProfileId } = useParams();
     const [showExpiredCookiesModal, setShowExpiredCookiesModal] = useState(false)
@@ -20,13 +22,40 @@ export default function UserInfoPage() {
     const [reviewOwnerUser, setReviewOwnerUser] = useState({})
     const [isSameUser, setIsSameUser] = useState(undefined)
     const [canPromote, setCanPromote] = useState(undefined)
-    const [currentPage, setCurrentPage] = useState(1)
-    const [totalPages, setTotalPages] = useState(undefined)
+    const [page, setPage] = useState(1)
+    const [amountPages, setAmountPages] = useState(1)
     const [reviews, setReviews] = useState([])
     const [reputation, setReputation] = useState(0)
 
     const [isLikeReviewsList, setIsLikeReviewsList] = useState([]);
     const [isDislikeReviewsList, setIsDislikeReviewsList] = useState([]);
+
+    useEffect(() => {
+        const queryParams = new URLSearchParams(search);
+        updateUrlVariable(page, queryParams.get('page'), (x) =>setPage(x))
+    }, [search]);
+
+    const prevPage = () => {
+        setPage(page - 1)
+        changeUrlPage(page - 1)
+    }
+
+    const nextPage = () => {
+        setPage(page + 1)
+        changeUrlPage(page + 1)
+    }
+
+    const changePage = ( newPage) => {
+        setPage(newPage)
+        changeUrlPage(newPage)
+    }
+
+    const changeUrlPage = (page) => {
+        const searchParams = new URLSearchParams(window.location.search);
+        searchParams.set('page', page);
+        navigate(window.location.pathname + '?' + searchParams.toString());
+    }
+
 
     const handlePromoteUser = (e) => {
         e.preventDefault();
@@ -51,7 +80,7 @@ export default function UserInfoPage() {
 
     useEffect(() => {
         // TODO: HAY QUE VER COMO HACER PARA QUE CUANDO SE VENZA LA COOKIE, ME DEJE EN ESTA PAGE PERO QUE ARRIBA ME DESAPAREZCA EL QUE ESTOY LOGUEADO PORQUE TANTO PARA OWNER COMO PARA USER ES EL MISMO PATH
-        userService.getUserReviews(parseInt(userProfileId), currentPage)
+        userService.getUserReviews(parseInt(userProfileId), page)
             .then(reviews => {
                 if(!reviews.error) {
                     setReviews(reviews.data)
@@ -87,7 +116,7 @@ export default function UserInfoPage() {
                             setCanPromote(false)
                         }
                     }
-                    setTotalPages(reviews.totalPages)
+                    setAmountPages(reviews.totalPages)
 
                     if(user?.id === parseInt(userProfileId)) {
                         setIsSameUser(true)
@@ -247,20 +276,82 @@ export default function UserInfoPage() {
 
 
 
-                                    {/*TODO: METER PAGINACION*/}
-                                    {/*{pageSelected < amountPages && (*/}
-                                    {/*    <div className="W-readMore-button">*/}
-                                    {/*        <a id="readMore" className="W-readMore-a" href={`${readMorepath}/page/${pageSelected + 1}`}>*/}
-                                    {/*            <button type="button" className="btn btn-dark W-add-review-button W-reviewText">Reviews.ReadMore</button>*/}
-                                    {/*        </a>*/}
-                                    {/*    </div>*/}
-                                    {/*)}*/}
+
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            {amountPages > 1 && (
+                <div>
+                    <ul className="pagination justify-content-center W-pagination">
+                        {page > 1 ? (
+                            <li className="page-item">
+                                <p className="page-link W-pagination-color" onClick={() => prevPage()}>
+                                    {t('Pagination.Prev')}
+                                </p>
+                            </li>
+                        ) : (
+                            <li className="page-item disabled">
+                                <p className="page-link W-pagination-color">{t('Pagination.Prev')}</p>
+                            </li>
+                        )}
+                        {amountPages > 10 ? (
+                            Array.from({ length: amountPages }, (_, index) => (
+                                index + 1 === parseInt(page) ? (
+                                    <li className="page-item active">
+                                        <p className="page-link W-pagination-color">{index + 1}</p>
+                                    </li>
+                                ): index + 1 === parseInt(page) + 4 ? (
+                                    <li className="page-item">
+                                        <p className="page-link W-pagination-color" onClick={() => changePage(index + 1)}>
+                                            ...
+                                        </p>
+                                    </li>
+                                ): index + 1 === parseInt(page) - 4 ? (
+                                    <li className="page-item">
+                                        <p className="page-link W-pagination-color" onClick={() => changePage(index + 1)}>
+                                            ...
+                                        </p>
+                                    </li>
+                                ) : ( index + 1 > parseInt(page) - 4 && index + 1 < parseInt(page) + 4 ) && (
+                                    <li className="page-item">
+                                        <p className="page-link W-pagination-color" onClick={() => changePage(index + 1)}>
+                                            {index + 1}
+                                        </p>
+                                    </li>
+                                )
+                            ))
+                        ) : (
+                            Array.from({ length: amountPages }, (_, index) => (
+                                index + 1 === page ? (
+                                    <li className="page-item active">
+                                        <p className="page-link W-pagination-color">{index + 1}</p>
+                                    </li>
+                                ) : (
+                                    <li className="page-item">
+                                        <p className="page-link W-pagination-color" onClick={() => changePage(index + 1)}>
+                                            {index + 1}
+                                        </p>
+                                    </li>
+                                )
+                            ))
+                        )}
+                        {page < amountPages ? (
+                            <li className="page-item">
+                                <p className="page-link W-pagination-color" onClick={() => nextPage()}>
+                                    {t('Pagination.Next')}
+                                </p>
+                            </li>
+                        ) : (
+                            <li className="page-item disabled">
+                                <p className="page-link W-pagination-color">{t('Pagination.Next')}</p>
+                            </li>
+                        )}
+                    </ul>
+                </div>
+            )}
         </>
     );
 }

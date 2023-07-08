@@ -8,6 +8,11 @@ import {useNavigate} from "react-router-dom";
 import Filters from "./components/Filters";
 
 
+// import { css } from '@emotion/react';
+// import { RingLoader } from 'react-spinners';
+// import 'react-spinners/css/Spinners.css';
+
+
 export default function Home() {
     const {t} = useTranslation()
     let navigate = useNavigate()
@@ -21,7 +26,10 @@ export default function Home() {
 
     const [userWatchListIds, setUserWatchListIds] = useState(new Array(0))
 
+    // const [loading, setLoading] = useState(true)
+
     useEffect(() => {
+        // setLoading(true);
         contentService.getLandingPage()
             .then(list => {
                 if(!list.error) {
@@ -33,9 +41,10 @@ export default function Home() {
                         setMostSavedContentByUsersList(list.data.mostSavedContentByUsersList)
                     }
                 }
-
+                // setLoading(false);
             })
             .catch(() => {
+                // setLoading(false);
                 navigate("/error", { replace: true, state: {errorCode: 404} })
             })
 
@@ -66,6 +75,19 @@ export default function Home() {
         document.title = t('WatchThisMessage')
     })
 
+    // if (loading) {
+    //     const override = css`
+    //   display: block;
+    //   margin: 0 auto;
+    //   border-color: red;
+    // `;
+    //
+    //     return (
+    //         <div className="spinner-container">
+    //             <RingLoader color="#000" css={override} loading={loading} size={150} />
+    //         </div>
+    //     );
+    // }
 
 
     return(

@@ -42,7 +42,8 @@ export default function ContentPage(props) {
 
 
     useEffect(() => {
-        contentService.getContentByType(contentType, actualPage,genre,durationFrom,durationTo,sorting,query)
+        console.log(genre)
+        contentService.getContentByType(contentType, actualPage, genre, durationFrom, durationTo, sorting, query)
             .then(data => {
                 if(!data.error) {
                     setAllContent(data.data)
