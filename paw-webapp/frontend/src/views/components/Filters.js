@@ -6,12 +6,13 @@ import PropTypes from 'prop-types';
 import {updateUrlVariable, validateParam} from "../../scripts/validateParam";
 
 
-export default function Filters() {
+export default function Filters(props) {
 
     const {t} = useTranslation()
     const navigate = useNavigate();
     const { search } = useLocation();
 
+    const type = props.type
     const [genre, setGenre] = useState('');
     const [durationFrom, setDurationFrom] = useState('');
     const [durationTo, setDurationTo] = useState('');
@@ -45,7 +46,7 @@ export default function Filters() {
         } else {
             queryParams.set('genre', genres.join(','));
         }
-        navigate(window.location.pathname + '?' + queryParams.toString());
+        navigate((type === 'all' ? '/content/all' : window.location.pathname) + '?' + queryParams.toString());
     }
 
     const handleGenreFormChange = (e) => {
@@ -67,13 +68,13 @@ export default function Filters() {
             searchParams.set('durationFrom', durationFrom);
             searchParams.set('durationTo', durationTo);
         }
-        navigate(window.location.pathname + '?' + searchParams.toString());
+        navigate((type === 'all' ? '/content/all' : window.location.pathname) + '?' + searchParams.toString());
     }
 
     const changeSorting = (sorting) => {
         const searchParams = new URLSearchParams(window.location.search);
         searchParams.set('sorting', sorting);
-        navigate(window.location.pathname + '?' + searchParams.toString());
+        navigate((type === 'all' ? '/content/all' : window.location.pathname) + '?' + searchParams.toString());
     }
 
 

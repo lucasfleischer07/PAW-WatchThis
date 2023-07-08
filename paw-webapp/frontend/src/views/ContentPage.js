@@ -106,7 +106,7 @@ export default function ContentPage(props) {
             )}
 
             <Header type={contentType} admin={user?.role === 'admin'} userName={user?.username} userId={user?.id}/>
-            <Filters/>
+            <Filters type={contentType}/>
             {/*<Filter*/}
             {/*    query={query}*/}
             {/*    genre={genre}*/}
