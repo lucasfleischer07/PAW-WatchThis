@@ -3,6 +3,7 @@ import {useContext, useEffect, useState} from "react";
 import {dropDownStayGenreFilters} from "../../scripts/dropDownBehaviour";
 import {useLocation, useNavigate} from "react-router-dom";
 import PropTypes from 'prop-types';
+import {updateUrlVariable, validateParam} from "../../scripts/validateParam";
 
 
 export default function Filters() {
@@ -20,24 +21,16 @@ export default function Filters() {
 
     const sortingTypes = ["OlderReleased","NewestReleased","MostRated","NameAsc","NameDesc"]
 
-    const updateVariable = (param,paramPulled,setter) => {
-        if( param !== paramPulled && paramPulled !== null ){
-            setter(paramPulled)
-        }
-    }
 
-    updateVariable.propTypes = {
-        param: PropTypes.any.isRequired,
-        paramPulled: PropTypes.any,
-        setter: PropTypes.func.isRequired,
-    };
+
+
 
     useEffect(() => {
         const queryParams = new URLSearchParams(search);
-        updateVariable(genre, queryParams.get('genre'),(x) => setGenre(x))
-        updateVariable(durationFrom, queryParams.get('durationFrom'),(x) => setDurationFrom(x))
-        updateVariable(durationTo, queryParams.get('durationTo'),(x) => setDurationTo(x))
-        updateVariable(sorting, queryParams.get('sorting'),(x) => setSorting(x))
+        updateUrlVariable(genre, queryParams.get('genre'),(x) => setGenre(x))
+        updateUrlVariable(durationFrom, queryParams.get('durationFrom'),(x) => setDurationFrom(x))
+        updateUrlVariable(durationTo, queryParams.get('durationTo'),(x) => setDurationTo(x))
+        updateUrlVariable(sorting, queryParams.get('sorting'),(x) => setSorting(x))
     }, [search]);
 
     const dropdownHandle = (event) => {

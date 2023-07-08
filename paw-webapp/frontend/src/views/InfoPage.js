@@ -11,6 +11,7 @@ import TooltipComponent from './components/Tooltip';
 import Header from "./components/Header";
 import ExpiredCookieModal from "./components/ExpiredCookieModal";
 import {type} from "@testing-library/user-event/dist/type";
+import {updateUrlVariable, validateParam} from "../scripts/validateParam";
 
 
 export default function InfoPage() {
@@ -189,12 +190,6 @@ export default function InfoPage() {
         navigate("/login", {replace: true})
     }
 
-    const updateVariable = (param,paramPulled,setter) => {
-        if( paramPulled !== null && paramPulled !== undefined && param !== paramPulled ){
-            setter(paramPulled)
-        }
-    }
-
 
     useEffect(() => {
         contentService.getSpecificContent(parseInt(contentId))
@@ -212,7 +207,7 @@ export default function InfoPage() {
 
     useEffect(() => {
         const queryParams = new URLSearchParams(search);
-        updateVariable(actualPage, queryParams.get('page'), (x) =>setActualPage(x))
+        updateUrlVariable(actualPage, queryParams.get('page'), (x) =>setActualPage(x))
     }, [search]);
 
     useEffect(() => {
