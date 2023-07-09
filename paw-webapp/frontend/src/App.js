@@ -23,7 +23,7 @@ import SignUp from "./views/SignUp";
 
 function App() {
   return (
-      <BrowserRouter basename={process.env.REACT_APP_CONTEXT}>
+      <BrowserRouter basename={"/paw-2022b-3/"}>
           <AuthProvider>
 
               <Routes>
