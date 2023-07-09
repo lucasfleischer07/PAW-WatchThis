@@ -13,7 +13,7 @@ public class Content {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "content_id_seq")
     @SequenceGenerator(name= "content_id_seq",sequenceName = "content_id_seq",allocationSize = 1)
-    private Long id;
+    private long id;
     @Column(nullable = false)
     private String name;
     @Column(nullable = false)
@@ -31,7 +31,7 @@ public class Content {
     @Column(nullable = true)
     private byte[] image;
     @Column
-    private Integer durationNum;
+    private int durationNum;
 
     @OneToMany(orphanRemoval = true,fetch = FetchType.LAZY,mappedBy = "content")
     @OrderBy(value = "reputation desc")
@@ -52,10 +52,10 @@ public class Content {
     private List<User> viewedlist;
 
     @Formula(value = "(select coalesce(count(*),0) from review where review.contentid=id)")
-    private Integer reviewsAmount;
+    private int reviewsAmount;
 
     @Formula(value="(select coalesce(avg(review.rating),0) from review where review.contentid=id and review.rating <> 0)")
-    private Integer rating;
+    private int rating;
 
 
 

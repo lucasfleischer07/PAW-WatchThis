@@ -13,7 +13,7 @@ public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "review_reviewid_seq1")
     @SequenceGenerator(name= "review_reviewid_seq1",sequenceName = "review_reviewid_seq1",allocationSize = 1)
-    private Long id;
+    private long id;
     @Column(nullable = false)
     private String name;
     @Column(nullable = false)

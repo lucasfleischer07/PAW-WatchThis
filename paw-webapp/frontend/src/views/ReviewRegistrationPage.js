@@ -95,7 +95,7 @@ export default function ReviewRegistrationPage() {
 
 
     useEffect(() => {
-        if(isLogged() && user.role === 'admin') {
+        if(isLogged()) {
             contentService.getSpecificContent(parseInt(contentId))
                 .then(data => {
                     if(!data.error) {

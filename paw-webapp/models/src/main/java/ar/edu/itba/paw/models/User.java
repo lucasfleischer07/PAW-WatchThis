@@ -13,10 +13,10 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "userdata_userid_seq")
     @SequenceGenerator(name= "userdata_userid_seq",sequenceName = "userdata_userid_seq",allocationSize = 1)
-    private Long id;
+    private long id;
 
     @Formula(value = "(SELECT coalesce(count(CASE WHEN r.upvote THEN 1 END),0) - coalesce(count(CASE WHEN r.downvote THEN 1 END),0) FROM reputation r join review r2 on r2.reviewid = r.reviewid  where r2.userid=userid)")
-    private Long reputation;
+    private long reputation;
     @Column(unique = true,nullable = false)
     private String email;
     @Column(name = "name",unique = true,nullable = false)
