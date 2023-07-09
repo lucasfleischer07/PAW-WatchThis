@@ -66,6 +66,9 @@ public class ContentJpaDao implements ContentDao{
         List<Long> longList = genreBaseQuery(genre);
         TypedQuery<Content> query;
         TypedQuery<Content> countQuery;
+        if (longList.size() == 0){
+            return new PageWrapper<>(0,0,0,Collections.emptyList(),0);
+        }
         if (Objects.equals(type, "movie") || Objects.equals(type, "serie")) {
             query=em.createQuery("FROM Content WHERE id IN (:resultList) AND type = :type " + sortString, Content.class);
             countQuery = em.createQuery("FROM Content WHERE id IN (:resultList) AND type = :type ",Content.class);
@@ -119,6 +122,9 @@ public class ContentJpaDao implements ContentDao{
         List<Long> longList = genreBaseQuery(genre);
         TypedQuery<Content> query;
         TypedQuery<Content> countQuery;
+        if (longList.size() == 0){
+            return new PageWrapper<>(0,0,0,Collections.emptyList(),0);
+        }
         if (Objects.equals(type, "movie") || Objects.equals(type, "serie")) {
             query= em.createQuery("FROM Content WHERE id IN ( :resultList ) AND type = :type and durationnum > :durationFrom  AND durationnum <= :durationTo" + sortString,Content.class);
             countQuery = em.createQuery("FROM Content WHERE id IN ( :resultList ) AND type = :type and durationnum > :durationFrom  AND durationnum <= :durationTo" + sortString,Content.class);
@@ -176,6 +182,9 @@ public class ContentJpaDao implements ContentDao{
         List<Long> longList = genreBaseQuery(genre);
         TypedQuery<Content> query;
         TypedQuery<Content> countQuery;
+        if (longList.size() == 0){
+            return new PageWrapper<>(0,0,0,Collections.emptyList(),0);
+        }
         String sortString = sort == null ? "" : sort.getQueryString();
         if (Objects.equals(type, "movie") || Objects.equals(type, "serie")) {
             query= em.createQuery(" FROM Content WHERE id IN ( :resultList ) AND type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)" + sortString,Content.class);
@@ -232,6 +241,9 @@ public class ContentJpaDao implements ContentDao{
         String sortString = sort == null ? "" : sort.getQueryString();
         List<Long> longList = genreBaseQuery(genre);
         TypedQuery<Content> query;
+        if (longList.size() == 0){
+            return new PageWrapper<>(0,0,0,Collections.emptyList(),0);
+        }
         TypedQuery<Content> countQuery;
         if (Objects.equals(type, "movie") || Objects.equals(type, "serie")) {
             query= em.createQuery(" FROM Content WHERE id IN ( :resultList ) AND type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) AND durationnum > :durationFrom  AND durationnum <= :durationTo" + sortString,Content.class);

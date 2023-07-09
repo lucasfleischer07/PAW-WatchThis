@@ -121,7 +121,7 @@ export class ContentApi {
     async getContentByType(contentType, pageNumber, genre, durationFrom, durationTo, sorting, query) {
         const params = {pageNumber: pageNumber}
         if(genre !== ''){
-            params.genre = genre.split(",")
+            params.genre = genre
         }
         if(durationFrom !== ''){
             params.durationFrom = durationFrom

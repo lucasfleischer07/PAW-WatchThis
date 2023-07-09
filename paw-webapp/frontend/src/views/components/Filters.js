@@ -17,6 +17,21 @@ export default function Filters(props) {
     const [durationTo, setDurationTo] = useState('');
     const [sorting, setSorting] = useState('');
 
+    const [genreState, setGenreState] = useState({
+        Action: false,
+        "Sci-Fi": false,
+        Comedy: false,
+        Adventure: false,
+        Drama: false,
+        Horror: false,
+        Animation: false,
+        Thriller: false,
+        Mystery: false,
+        Crime: false,
+        Fantasy: false,
+        Romance: false,
+    });
+
     const sortingTypes = ["OlderReleased","NewestReleased","MostRated","NameAsc","NameDesc"]
 
 
@@ -47,12 +62,19 @@ export default function Filters(props) {
 
     const handleGenreFormChange = (e) => {
         const genreChecked = e.target.value;
+        setGenreState((prevGenre) => ({
+            ...prevGenre,
+            [genreChecked]: !prevGenre[genreChecked],
+        }));
         if (e.target.checked) {
             const aux = genre + " " + genreChecked
             setGenre(aux)
         } else {
-            const aux = genre.replace(genreChecked + " ", "")
-            setGenre(aux)
+            // Escapar caracteres especiales en la palabra buscada armo la regExp y reemplazo
+            const genreEscaped = genreChecked.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+            const regularExp = new RegExp("(,\\s*)?" + genreEscaped + "\\s?", "gi");
+            const finalGenre = genre.replace(regularExp, "");
+            setGenre(finalGenre)
         }
     }
 
@@ -93,73 +115,73 @@ export default function Filters(props) {
                         <ul className="dropdown-menu" id="drop1" onClick={dropdownHandle}>
                             <li className="mb-1 px-2">
                                 <label>
-                                    <input type="checkbox" className="px-2" name="Action" value="Action" onChange={(e) => handleGenreFormChange(e)}/>
+                                    <input type="checkbox" className="px-2" name="Action" value="Action" checked={genreState.Action} onChange={(e) => handleGenreFormChange(e)}/>
                                     {' '} {t('Genre.Action')}
                                 </label>
                             </li>
                             <li className="mb-1 px-2">
                                 <label>
-                                    <input type="checkbox" className="px-2" name="Sci-Fi" value="Sci-Fi" onChange={(e) => handleGenreFormChange(e)}/>
+                                    <input type="checkbox" className="px-2" name="Sci-Fi" value="Sci-Fi" checked={genreState["Sci-Fi"]} onChange={(e) => handleGenreFormChange(e)}/>
                                     {' '} {t('Genre.Science')}
                                 </label>
                             </li>
                             <li className="mb-1 px-2">
                                 <label>
-                                    <input type="checkbox" className="px-2" name="Comedy" value="Comedy" onChange={(e) => handleGenreFormChange(e)}/>
+                                    <input type="checkbox" className="px-2" name="Comedy" value="Comedy" checked={genreState.Comedy} onChange={(e) => handleGenreFormChange(e)}/>
                                     {' '} {t('Genre.Comedy')}
                                 </label>
                             </li>
                             <li className="mb-1 px-2">
                                 <label>
-                                    <input type="checkbox" className="px-2" name="Adventure" value="Adventure" onChange={(e) => handleGenreFormChange(e)}/>
+                                    <input type="checkbox" className="px-2" name="Adventure" value="Adventure" checked={genreState.Adventure} onChange={(e) => handleGenreFormChange(e)}/>
                                     {' '} {t('Genre.Adventure')}
                                 </label>
                             </li>
                             <li className="mb-1 px-2">
                                 <label>
-                                    <input type="checkbox" className="px-2" name="Drama" value="Drama" onChange={(e) => handleGenreFormChange(e)}/>
+                                    <input type="checkbox" className="px-2" name="Drama" value="Drama" checked={genreState.Drama} onChange={(e) => handleGenreFormChange(e)}/>
                                     {' '} {t('Genre.Drama')}
                                 </label>
                             </li>
                             <li className="mb-1 px-2">
                                 <label>
-                                    <input type="checkbox" className="px-2" name="Horror" value="Horror" onChange={(e) => handleGenreFormChange(e)}/>
+                                    <input type="checkbox" className="px-2" name="Horror" value="Horror" checked={genreState.Horror} onChange={(e) => handleGenreFormChange(e)}/>
                                     {' '} {t('Genre.Horror')}
                                 </label>
                             </li>
                             <li className="mb-1 px-2">
                                 <label>
-                                    <input type="checkbox" className="px-2" name="Animation" value="Animation" onChange={(e) => handleGenreFormChange(e)}/>
+                                    <input type="checkbox" className="px-2" name="Animation" value="Animation" checked={genreState.Animation} onChange={(e) => handleGenreFormChange(e)}/>
                                     {' '} {t('Genre.Animation')}
                                 </label>
                             </li>
                             <li className="mb-1 px-2">
                                 <label>
-                                    <input type="checkbox" className="px-2" name="Thriller" value="Thriller" onChange={(e) => handleGenreFormChange(e)}/>
+                                    <input type="checkbox" className="px-2" name="Thriller" value="Thriller" checked={genreState.Thriller} onChange={(e) => handleGenreFormChange(e)}/>
                                     {' '} {t('Genre.Thriller')}
                                 </label>
                             </li>
                             <li className="mb-1 px-2">
                                 <label>
-                                    <input type="checkbox" className="px-2" name="Mystery" value="Mystery" onChange={(e) => handleGenreFormChange(e)}/>
+                                    <input type="checkbox" className="px-2" name="Mystery" value="Mystery" checked={genreState.Mystery} onChange={(e) => handleGenreFormChange(e)}/>
                                     {' '} {t('Genre.Mystery')}
                                 </label>
                             </li>
                             <li className="mb-1 px-2">
                                 <label>
-                                    <input type="checkbox" className="px-2" name="Crime" value="Crime" onChange={(e) => handleGenreFormChange(e)}/>
+                                    <input type="checkbox" className="px-2" name="Crime" value="Crime" checked={genreState.Crime} onChange={(e) => handleGenreFormChange(e)}/>
                                     {' '} {t('Genre.Crime')}
                                 </label>
                             </li>
                             <li className="mb-1 px-2">
                                 <label>
-                                    <input type="checkbox" className="px-2" name="Fantasy" value="Fantasy" onChange={(e) => handleGenreFormChange(e)}/>
+                                    <input type="checkbox" className="px-2" name="Fantasy" value="Fantasy" checked={genreState.Fantasy} onChange={(e) => handleGenreFormChange(e)}/>
                                     {' '} {t('Genre.Fantasy')}
                                 </label>
                             </li>
                             <li className="mb-1 px-2">
                                 <label>
-                                    <input type="checkbox" className="px-2" name="Romance" value="Romance" onChange={(e) => handleGenreFormChange(e)}/>
+                                    <input type="checkbox" className="px-2" name="Romance" value="Romance" checked={genreState.Romance} onChange={(e) => handleGenreFormChange(e)}/>
                                     {' '} {t('Genre.Romance')}
                                 </label>
                             </li>

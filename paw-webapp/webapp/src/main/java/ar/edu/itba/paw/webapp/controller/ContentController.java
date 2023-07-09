@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.MessageInterpolator;
@@ -251,17 +252,22 @@ public class ContentController {
                                         @QueryParam("durationTo") @DefaultValue("ANY") final String durationTo,
                                         @QueryParam("sorting") final Sorting sorting,
                                         @QueryParam("query") @DefaultValue("ANY") final String query,
-                                        @QueryParam("genre") final List<String> genre,
-                                        @Valid GenreFilterDto genreFilterDto) {
+                                        @QueryParam("genre") final String genre) {
 
-        LOGGER.info("GET /{}: Called", uriInfo.getPath());
+        LOGGER.info("GET /{}: Called",uriInfo.getPath());
         if(!contentType.equals("movie") && !contentType.equals("serie") && !contentType.equals("all")){
             throw new PageNotFoundException();
+        }
+        List<String> genreList = Arrays.asList(genre);
+        if (genre == null || genre.equals("")){
+            genreList = new ArrayList<>();
+        } else {
+            genreList = Arrays.asList(genre.split(","));
         }
         int page= pageNum;
         String auxType;
 
-        PageWrapper<Content> contentListFilter = cs.getMasterContent(contentType, genre, durationFrom, durationTo, sorting, query,page,CONTENT_AMOUNT);
+        PageWrapper<Content> contentListFilter = cs.getMasterContent(contentType, genreList, durationFrom, durationTo, sorting, query,page,CONTENT_AMOUNT);
         List<Content> contentListFilterPaginated = contentListFilter.getPageContent();
         if(contentListFilterPaginated == null) {
             LOGGER.warn("GET /{}: Failed at requesting content", uriInfo.getPath());
