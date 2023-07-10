@@ -210,6 +210,8 @@ export default function InfoPage() {
         const queryParams = new URLSearchParams(search);
         updateUrlVariable(actualPage, queryParams.get('page'), (x) =>setActualPage(x))
     }, [search]);
+
+
     useEffect(() => {
         if(isLogged()) {
             listsService.getUserWatchListContentIds(user.id)
@@ -273,9 +275,6 @@ export default function InfoPage() {
                 .catch(() => {
                     navigate("/error", { replace: true, state: {errorCode: 404} })
                 })}
-    }, );
-
-    useEffect(() => {
         reviewService.reviews(parseInt(contentId), actualPage)
             .then(data => {
                 if(!data.error) {
@@ -294,7 +293,7 @@ export default function InfoPage() {
             })
 
 
-    }, [actualPage,reviewsChange])
+    }, [actualPage])
 
     return(
         <>
