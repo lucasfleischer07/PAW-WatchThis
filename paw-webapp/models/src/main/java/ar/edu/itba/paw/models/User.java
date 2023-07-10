@@ -69,7 +69,7 @@ public class User {
     }
 
     public User(String userName,String userEmail,String password){
-        this(null,userEmail,userName,password,null,null,"user");
+        this(0L,userEmail,userName,password,0L,null,"user");
     }
 
     /* package */ User() {

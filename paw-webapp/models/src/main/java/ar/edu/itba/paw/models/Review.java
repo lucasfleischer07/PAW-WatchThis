@@ -64,7 +64,7 @@ public class Review {
 
     }
     public Review(String type, String name, String description, Integer rating,User creator,Content content) {
-        this(null,type,name,description,rating,creator,content);
+        this(0L,type,name,description,rating,creator,content);
 
     }
 

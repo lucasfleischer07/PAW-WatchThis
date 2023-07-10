@@ -74,7 +74,7 @@ public class Content {
     }
 
     public Content(String name, byte[] image, String description, String released, String genre, String creator, String duration,int durationNum,String type) {
-        this(null,name,image,description,released,genre,creator,duration,durationNum,type);
+        this(0L,name,image,description,released,genre,creator,duration,durationNum,type);
     }
 
     /* package */ Content() {
