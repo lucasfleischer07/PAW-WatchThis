@@ -18,7 +18,10 @@
   </properties>
 
   <dependencies>
-
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
+    </dependency>
     <!--Para el modulo models-->
     <dependency>
       <groupId>ar.edu.itba.paw</groupId>
