@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {useTranslation} from "react-i18next";
-import {useLocation} from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
 
 function ErrorPage(props) {
     const { state } = useLocation();
@@ -22,7 +22,7 @@ function ErrorPage(props) {
                     <p className="lead">
                         {t("Error.Body"+([401, 404, 400, 405, 403, 500].includes(errorCode)?errorCode.toString():""))}
                     </p>
-                    <a href="/" className="btn btn-success">{t("Error.HomeButton")}</a>
+                    <Link to={"/"} className="btn btn-success">{t("Error.HomeButton")}</Link>
                 </div>
             </div>
     );

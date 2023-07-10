@@ -19,7 +19,7 @@ export default function ReviewCard(props) {
     const reviewDescription = props.reviewDescription
     const reviewReputation = props.reviewReputation
     const reviewUserId = props.reviewUserId
-
+    const {setReviewsChange}=props.setReviewsChange
     const userName = props.userName
     const loggedUserName = props.loggedUserName
     const [isAdmin,setIsAdmin] = useState(props.isAdmin);
@@ -86,40 +86,37 @@ export default function ReviewCard(props) {
         );
     }
     const handleDelete = () => {
-        if(isLogged() && (isAdmin)) {
-            reviewService.deleteReview(parseInt(reviewId))
-                .then(data => {
-                    if(!data.error) {
-                    //     TODO: HAcer toast de review deleteada con exito
-                        handleCloseDeleteReviewModal()
-                    } else {
-                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
-                    }
-                })
-                .catch(() => {
-                    navigate("/error", { replace: true, state: {errorCode: 404} })
-                })
-        } else {
-            navigate("/error", { replace: true, state: {errorCode: 401} })
-        }
+        reviewService.deleteReview(parseInt(reviewId))
+            .then(data => {
+                if(!data.error) {
+                //     TODO: HAcer toast de review deleteada con exito
+                    handleCloseDeleteReviewModal()
+                    setReviewsChange(!props.reviewsChange)
+                } else {
+                    navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                }
+            })
+            .catch(() => {
+                navigate("/error", { replace: true, state: {errorCode: 404} })
+            })
     }
 
     const handleSubmitReport = () => {
-        if(isLogged() && (!isAdmin)) {
-            reportsService.addReviewReport(reviewId, reportFrom)
-                .then(data => {
-                    if(!data.error) {
-                        toast.success(t('Report.Success'))
-                        handleCloseReportModal()
-                        setAlreadyReport(true)
-                    } else {
-                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
-                    }
-                })
-                .catch(() => {
-                    navigate("/error", { replace: true, state: {errorCode: 404} })
-                })
-        }
+
+        reportsService.addReviewReport(reviewId, reportFrom)
+            .then(data => {
+                if(!data.error) {
+                    toast.success(t('Report.Success'))
+                    handleCloseReportModal()
+                    setAlreadyReport(true)
+                } else {
+                    navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                }
+            })
+            .catch(() => {
+                navigate("/error", { replace: true, state: {errorCode: 404} })
+            })
+
     };
 
     return(

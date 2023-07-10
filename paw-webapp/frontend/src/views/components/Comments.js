@@ -37,23 +37,19 @@ export default function Comments(props) {
     };
 
     const handleSubmitDeleteComment = () => {
-        if(isLogged() && (loggedUserIsAdmin || loggedUserId === userCreatorId)) {
-            commentService.commentDelete(commentId)
-                .then(data => {
-                    if(!data.error) {
-                        toast.success(t('Mail.CommentDeleted'))
-                        handleCloseDeleteModal()
-                        props.setAdded(!props.added)
-                    } else {
-                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
-                    }
-                })
-                .catch(() => {
-                    navigate("/error", { replace: true, state: {errorCode: 404} })
-                })
-        } else {
-            navigate("/error", { replace: true, state: {errorCode: 401} })
-        }
+        commentService.commentDelete(commentId)
+            .then(data => {
+                if(!data.error) {
+                    toast.success(t('Mail.CommentDeleted'))
+                    handleCloseDeleteModal()
+                    props.setAdded(!props.added)
+                } else {
+                    navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                }
+            })
+            .catch(() => {
+                navigate("/error", { replace: true, state: {errorCode: 404} })
+            })
     }
 
     const [showReportModal, setShowReportModal] = useState(false);
@@ -65,20 +61,18 @@ export default function Comments(props) {
     };
 
     const handleSubmitReport = () => {
-        if(isLogged() && (!loggedUserIsAdmin)) {
-            reportsService.addCommentReport(commentId, reportFrom)
-                .then(data => {
-                    if(!data.error) {
-                        toast.success(t('Report.Success'))
-                        handleCloseReportModal()
-                    } else {
-                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
-                    }
-                })
-                .catch(() => {
-                    navigate("/error", { replace: true, state: {errorCode: 404} })
-                })
-        }
+        reportsService.addCommentReport(commentId, reportFrom)
+            .then(data => {
+                if(!data.error) {
+                    toast.success(t('Report.Success'))
+                    handleCloseReportModal()
+                } else {
+                    navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                }
+            })
+            .catch(() => {
+                navigate("/error", { replace: true, state: {errorCode: 404} })
+            })
     };
 
     const [showLoginModal, setShowLoginModal] = useState(false);
@@ -105,7 +99,7 @@ export default function Comments(props) {
                 <div className="card-body W-general-div-comment">
                     <div className="W-img-comment-div-margin-right">
                         {userCreatorImage == null ? (
-                            <img src="/resources/img/defaultUserImg.png" alt="User_img" className="W-comment-profile-picture" />
+                            <img src="/paw-2022b-3/images/defaultUserImg.png" alt="User_img" className="W-comment-profile-picture" />
                         ) : (
                             <img src={userCreatorImage} alt="User_img" className="W-comment-profile-picture" />
                         )}

@@ -86,7 +86,6 @@ export default function ReviewEditionPage() {
                 if(!data.error) {
                     navigate(-1)
                 } else {
-                    // TODO: VER COMO DIFERENCIAMOS ENTRE UN FORBIDDEN DE QUE NO ECONTRO AL USUSARIO Y UN FORBIDDEN DE QUE NO ES EL DUENIO DE LA RESENIA
                     if(data.errorCode === 401) {
                         setShowExpiredCookiesModal(true)
                     } else {
@@ -118,7 +117,6 @@ export default function ReviewEditionPage() {
                     navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
 
-            // TODO: Revisar esto y ver si se puede evitar
             contentService.getSpecificContent(parseInt(contentId))
                 .then(data => {
                     if(!data.error) {

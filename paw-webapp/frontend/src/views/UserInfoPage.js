@@ -79,7 +79,6 @@ export default function UserInfoPage() {
     }
 
     useEffect(() => {
-        // TODO: HAY QUE VER COMO HACER PARA QUE CUANDO SE VENZA LA COOKIE, ME DEJE EN ESTA PAGE PERO QUE ARRIBA ME DESAPAREZCA EL QUE ESTOY LOGUEADO PORQUE TANTO PARA OWNER COMO PARA USER ES EL MISMO PATH
         userService.getUserReviews(parseInt(userProfileId), page)
             .then(reviews => {
                 if(!reviews.error) {
@@ -181,7 +180,7 @@ export default function UserInfoPage() {
                                     <div className="W-img-and-quote-div">
                                         <div>
                                             {reviewOwnerUser.image == null ? (
-                                                <img src={"/images/defaultUserImg.png"} alt="User_img" className="W-edit-profile-picture" />
+                                                <img src={"/paw-2022b-3/images/defaultUserImg.png"} alt="User_img" className="W-edit-profile-picture" />
                                             ) : (
                                                 <img src={reviewOwnerUser.image} alt="User_img" className="W-edit-profile-picture" />
                                             )}
@@ -236,7 +235,7 @@ export default function UserInfoPage() {
                                 <div className="card-body">
                                     {reviews.length === 0 ? (
                                         <div className="W-no-reviews-icon">
-                                            <img className="W-no-reviews-image" src={"/images/noReviews.png"} alt="No_Review_Img"/>
+                                            <img className="W-no-reviews-image" src={"/paw-2022b-3/images/noReviews.png"} alt="No_Review_Img"/>
                                             {isSameUser ? (
                                                 <h4 className="W-no-reviews-text">{t('Profile.NoReviews.Owner')}</h4>
                                             ) : (

@@ -39,6 +39,7 @@ export default function InfoPage() {
     const [isInWatchList, setIsInWatchList] = useState(false)
     const [isInViewedList, setIsInViewedList] = useState(false)
     const [alreadyReviewed, setAlreadyReviewed] = useState(false)
+    const [reviewsChange,setReviewsChange]=useState(false)
     const handleShowDeleteContentModal = () => {
         setShowDeleteContentModal(true)
     }
@@ -209,25 +210,7 @@ export default function InfoPage() {
         const queryParams = new URLSearchParams(search);
         updateUrlVariable(actualPage, queryParams.get('page'), (x) =>setActualPage(x))
     }, [search]);
-
     useEffect(() => {
-        reviewService.reviews(parseInt(contentId), actualPage)
-            .then(data => {
-                if(!data.error) {
-                    setReviews(data.data)
-                    for(let i = 0; i < data.data.length; i++) {
-                        if(data.data[i].user.username === user?.username) {
-                            setAlreadyReviewed(true)
-                        }
-                    }
-                } else {
-                    navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
-                }
-            })
-            .catch(() => {
-                navigate("/error", { replace: true, state: {errorCode: 404} })
-            })
-
         if(isLogged()) {
             listsService.getUserWatchListContentIds(user.id)
                 .then(watchList => {
@@ -289,10 +272,29 @@ export default function InfoPage() {
                 })
                 .catch(() => {
                     navigate("/error", { replace: true, state: {errorCode: 404} })
-                })
-        }
+                })}
+    }, );
 
-    }, [actualPage])
+    useEffect(() => {
+        reviewService.reviews(parseInt(contentId), actualPage)
+            .then(data => {
+                if(!data.error) {
+                    setReviews(data.data)
+                    for(let i = 0; i < data.data.length; i++) {
+                        if(data.data[i].user.username === user?.username) {
+                            setAlreadyReviewed(true)
+                        }
+                    }
+                } else {
+                    navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                }
+            })
+            .catch(() => {
+                navigate("/error", { replace: true, state: {errorCode: 404} })
+            })
+
+
+    }, [actualPage,reviewsChange])
 
     return(
         <>
@@ -563,6 +565,8 @@ export default function InfoPage() {
                                                 alreadyReport={review.reviewReporters.includes(user?.username)}
                                                 canComment={true}
                                                 seeComments={true}
+                                                reviewsChange={reviewsChange}
+                                                setReviewsChange={setReviewsChange}
                                             />
                                         </div>
                                     );
@@ -639,7 +643,7 @@ export default function InfoPage() {
                         ) : (
                             <div>
                                 <div className="W-no-reviews-icon">
-                                    <img className={"W-img-not-review"} src={"/images/noReviews.png"} alt="No_Review_Img"/>
+                                    <img className={"W-img-not-review"} src={"/paw-2022b-3/images/noReviews.png"} alt="No_Review_Img"/>
                                 </div>
                                 {contentType === 'movie' ? (
                                     <h3 className="W-no-reviews-text">{t('Content.NoReviewMessage.Movie')}</h3>

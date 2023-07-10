@@ -78,7 +78,7 @@ export default function Header(props) {
             <div className="W-container-fluid">
                 <Link className="navbar-brand" to="/">
                     <div className="W-logo-div">
-                        <img src={"/images/WatchThisLogo.png"} alt="WatchThisLogo" className="W-img-size2"/>
+                        <img src={"/paw-2022b-3/images/WatchThisLogo.png"} alt="WatchThisLogo" className="W-img-size2"/>
                     </div>
                 </Link>
                 <div>

@@ -229,7 +229,7 @@ export default function ContentPage(props) {
                 <div className="card W-not-found-card">
                     <div className="card-body W-row-display">
                         <div className="W-search-notFound-image">
-                            <img className="W-not-found" src={"/images/noResults.png"} alt="Not_Found_Img"/>
+                            <img className="W-not-found" src={"/paw-2022b-3/images/noResults.png"} alt="Not_Found_Img"/>
                         </div>
                         <div className="W-search-notFound-text">
                             {((query == null || query === '' || query === 'ANY') && (genre != null || durationFrom !== 'ANY')) ? (

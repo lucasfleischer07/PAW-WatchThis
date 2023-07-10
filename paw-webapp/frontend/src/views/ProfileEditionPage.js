@@ -40,7 +40,6 @@ export default function ProfileEditionPage() {
     }
 
     const onSubmitPassword = (e) => {
-        // TODO: FAlta manda al back la actual y checkear de que sean iguales, no anda todavia
         if(isLogged()) {
             e.preventDefault();
 
@@ -140,7 +139,7 @@ export default function ProfileEditionPage() {
                                     <div className="W-img-and-quote-div">
                                         <div className="W-div-img-quote">
                                             {user.image == null ? (
-                                                <img src={"/images/defaultUserImg.png"} alt="User_img" className="W-edit-profile-picture"/>
+                                                <img src={"/paw-2022b-3/images/defaultUserImg.png"} alt="User_img" className="W-edit-profile-picture"/>
                                             ) : (
                                                 <img src={user.image} alt="User_img" className="W-edit-profile-picture"/>
                                             )}
