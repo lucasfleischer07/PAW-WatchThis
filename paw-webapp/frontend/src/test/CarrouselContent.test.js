@@ -2,6 +2,8 @@ import * as React from 'react';
 import {render, fireEvent, waitFor, getByRole, getByTestId, queryByTestId} from '@testing-library/react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import CarrouselContent from "../views/components/CarrouselContent";
+import { AuthContext } from '../context/AuthContext';
+
 
 // Import the service mocks
 import {
@@ -34,10 +36,11 @@ describe('ContentCard', () => {
             const container = document.createElement('div'); // Create a valid container element
             render((
                 <Router>
+                    <AuthContext.Provider value={mockAuthContextValue}>
                     <CarrouselContent
                         user={"test"}
                         isInWatchList={false}
-                        contentId={1}
+                        id={1}
                         contentName={"name"}
                         contentReleased={"2000"}
                         reviewsAmount={5}
@@ -46,7 +49,7 @@ describe('ContentCard', () => {
                         contentImage={"img"}
                         contentGenre={"action"}
                         contentCreator={"yo"}
-                    /></Router>
+                    /></AuthContext.Provider></Router>
             ), { container });
             const removeButton = queryByTestId(container,'remove');
             expect(removeButton).toBeNull()
