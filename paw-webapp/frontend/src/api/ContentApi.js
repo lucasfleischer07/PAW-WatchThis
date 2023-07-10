@@ -136,8 +136,6 @@ export class ContentApi {
             params.query = query
         }
 
-        console.log(params)
-
         try {
             const apiUrl = `${this.basePath}/${contentType}/filters`
             const options = {headers: authCheck({})}

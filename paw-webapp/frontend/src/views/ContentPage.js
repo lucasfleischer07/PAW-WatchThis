@@ -25,6 +25,7 @@ export default function ContentPage(props) {
     const [durationTo, setDurationTo] = useState('');
     const [sorting, setSorting] = useState('');
     const [query, setQuery] = useState('')
+    const [settedParams,isSettedParams]=useState(false)
 
 
 
@@ -42,7 +43,7 @@ export default function ContentPage(props) {
 
 
     useEffect(() => {
-        console.log(genre)
+        if(settedParams===true){
         contentService.getContentByType(contentType, actualPage, genre, durationFrom, durationTo, sorting, query)
             .then(data => {
                 if(!data.error) {
@@ -55,8 +56,8 @@ export default function ContentPage(props) {
             })
             .catch((e) => {
                 navigate("/error", { replace: true, state: {errorCode: 404} })
-            })
-    }, [actualPage, contentType,genre,durationFrom,durationTo,sorting,query])
+            })}
+    }, [actualPage, contentType,genre,durationFrom,durationTo,sorting,query,settedParams])
 
 
     useEffect(() => {
@@ -84,6 +85,7 @@ export default function ContentPage(props) {
         updateUrlVariable(sorting, queryParams.get('sorting'),(x) => setSorting(x))
         updateUrlVariable(actualPage, queryParams.get('page'), (x) =>setActualPage(x))
         updateUrlVariable(actualPage, queryParams.get('query'), (x) =>setQuery(x))
+        isSettedParams(true)
     }, [search]);
 
     const prevPage = () => {

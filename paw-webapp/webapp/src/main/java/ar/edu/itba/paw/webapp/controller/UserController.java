@@ -20,6 +20,8 @@ import org.springframework.stereotype.Component;
 import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+import java.io.ByteArrayInputStream;
+import java.net.URLConnection;
 import java.util.*;
 
 @Path("users")
@@ -112,15 +114,21 @@ public class UserController {
         final CacheControl cacheControl = new CacheControl();
         cacheControl.setNoCache(true);
         Response.ResponseBuilder response = request.evaluatePreconditions(eTag);
-
+        String contentType;
+        try {
+            contentType = URLConnection.guessContentTypeFromStream(new ByteArrayInputStream(user.getImage()));
+        } catch (Exception e) {
+            contentType = "image/png";
+        }
         if (response == null) {
             final byte[] userImage = user.getImage();
-            response = Response.ok(userImage).tag(eTag);
+            response = Response.ok(userImage).type(contentType).tag(eTag);
         }
-
         LOGGER.info("GET /{}: User {} Profile Image", uriInfo.getPath(), id);
-
         return response.cacheControl(cacheControl).build();
+
+
+
     }
 
 //    Endpoint para editar la imagen de perfil del usuario

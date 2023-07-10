@@ -114,11 +114,10 @@ public class ContentController {
         }
         if (response == null) {
             final byte[] contentImage = content.getImage();
-            response = Response.ok(contentImage).tag(eTag);
+            response = Response.ok(contentImage).type(contentType).tag(eTag);
         }
-
         LOGGER.info("GET /{}: Content {} Image", uriInfo.getPath(), contentId);
-        return response.cacheControl(cacheControl).type(contentType).build();
+        return response.cacheControl(cacheControl).build();
     }
 
     //Endpoint para editar la imagen del contenido

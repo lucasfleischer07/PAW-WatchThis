@@ -46,7 +46,7 @@ export default function Header(props) {
             }else if ( type === 'movie'){
                 navigate('/content/movie' + '?' + searchParams.toString());
             }else{
-                navigate('/content/series' + '?' + searchParams.toString());
+                navigate('/content/serie' + '?' + searchParams.toString());
             }
         }
     }
