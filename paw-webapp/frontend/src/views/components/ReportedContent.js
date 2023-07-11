@@ -105,9 +105,9 @@ export default function ReportedContent(props) {
                     <div className="W-comment-username-and-report">
                         <div>
                             {reportType === 'comment' ? (
-                                <Link to={`/user/profile/${userId}`} className="W-creator-review W-margin-right-reports">{t('Comment.Owner', {username: userName})}</Link>
+                                <Link to={`/user/profile/${reviewCreatorUserId}`} className="W-creator-review W-margin-right-reports">{t('Comment.Owner', {username: reviewCreatorUserName})}</Link>
                             ) : (
-                                <Link to={`/user/profile/${userId}`} className="W-creator-review W-margin-right-reports">{t('Review.Owner', {username: userName})}</Link>
+                                <Link to={`/user/profile/${reviewCreatorUserId}`} className="W-creator-review W-margin-right-reports">{t('Review.Owner', {username: reviewCreatorUserName})}</Link>
                             )}
                             {reportType === 'comment' && (
                                 <Link to={`/user/profile/${reviewCreatorUserId}`} className="W-creator-review W-margin-right-reports">{t('Review.Owner', {username: reviewCreatorUserName})}</Link>
