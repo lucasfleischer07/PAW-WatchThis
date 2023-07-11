@@ -48,11 +48,7 @@ export default function Login() {
             .then((user) => {
                 if(!user.error) {
                     signIn(user.data, user.header)
-                    if(previousPath === '/login/forgotPassword' || previousPath === '/login/signUp') {
-                        navigate("/", {replace: true})
-                    } else {
-                        navigate(-1)
-                    }
+                    navigate("/", {replace: true})
                     toast.success(t('Login.Success'))
                 } else {
                     setError(true)
