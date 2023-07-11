@@ -38,6 +38,7 @@ public class CommentServiceImpl implements CommentService{
                 mailVariables.put("to", review.getUser().getEmail());
                 mailVariables.put("userName", review.getUser().getUserName());
                 mailVariables.put("reviewComment", review.getName());
+                mailVariables.put("contentURL", "http://pawserver.it.itba.edu.ar/paw-2022b-3/content/" + review.getContent().getType() + "/" + review.getContent().getId());
                 mailVariables.put("comment", text);
                 emailService.sendMail("addedComment", messageSource.getMessage("Mail.CommentAdded", new Object[]{}, locale), mailVariables, locale);
             }

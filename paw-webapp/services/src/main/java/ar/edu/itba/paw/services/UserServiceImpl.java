@@ -64,6 +64,7 @@ public class UserServiceImpl implements UserService{
             Map<String, Object> mailVariables = new HashMap<>();
             mailVariables.put("to", userEmail);
             mailVariables.put("userName", userName);
+            mailVariables.put("loginURL", "http://pawserver.it.itba.edu.ar/paw-2022b-3/login");
             emailService.sendMail("registration", messageSource.getMessage("Mail.RegistrationSubject", new Object[]{}, locale), mailVariables, locale);
             return userDao.create(userEmail, userName,passwordEncoder.encode(password));
         } catch (MessagingException e) {}
@@ -91,6 +92,7 @@ public class UserServiceImpl implements UserService{
             Map<String, Object> mailVariables = new HashMap<>();
             mailVariables.put("to", user.getEmail());
             mailVariables.put("userName", user.getUserName());
+            mailVariables.put("loginURL", "http://pawserver.it.itba.edu.ar/paw-2022b-3/login");
             if(Objects.equals(type, "forgotten")) {
                 String newPassword = generateRandomWord();
                 mailVariables.put("newPassword", newPassword);
@@ -157,6 +159,7 @@ public class UserServiceImpl implements UserService{
             Map<String, Object> mailVariables = new HashMap<>();
             mailVariables.put("to", user.getEmail());
             mailVariables.put("userName", user.getUserName());
+            mailVariables.put("profileURL", "http://pawserver.it.itba.edu.ar/paw-2022b-3/user/profile/" + user.getId());
             userDao.promoteUser(user);
             emailService.sendMail("adminConfirmation", messageSource.getMessage("Mail.AdminConfirmation", new Object[]{}, locale), mailVariables, locale);
         } catch (MessagingException ignored) {}

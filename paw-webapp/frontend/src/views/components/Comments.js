@@ -181,7 +181,7 @@ export default function Comments(props) {
                                                                 <li>
                                                                     <label>
                                                                         <input type="radio" name="reportType" value="Inappropriate"/> {t('Report.Inappropriate')}
-                                                                        <p className="W-modal-comment-desc">{t('Report.Insult.Description')}</p>
+                                                                        <p className="W-modal-comment-desc">{t('Report.Inappropriate.Description')}</p>
                                                                     </label>
                                                                 </li>
                                                                 <li>
