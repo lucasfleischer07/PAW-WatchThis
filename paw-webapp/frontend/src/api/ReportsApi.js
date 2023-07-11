@@ -13,6 +13,7 @@ export class ReportsApi {
             const params = {reason: filter, page: pageNumber}
             const options = {headers: authCheck({})}
             const res = await fetchWithQueryParamsApi(apiUrl, params, options)
+            // console.log(res.data)
             if(res.status === 200) {
                 return {error: false, data: await res.data, totalPages: res.totalPages}
             } else {

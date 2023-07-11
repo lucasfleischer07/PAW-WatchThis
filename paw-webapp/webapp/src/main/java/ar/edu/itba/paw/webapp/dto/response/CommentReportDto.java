@@ -17,6 +17,7 @@ public class CommentReportDto {
 
     private String eliminateComment;
     private String dismissReport;
+    private ReviewDto review;
 
     public static Collection<CommentReportDto> mapCommentReportToCommentReportDto(UriInfo uriInfo, Collection<CommentReport> commentsReported) {
         return commentsReported.stream().map(cr -> new CommentReportDto(uriInfo, cr)).collect(Collectors.toList());
@@ -31,16 +32,13 @@ public class CommentReportDto {
     }
 
     public CommentReportDto(UriInfo url, CommentReport commentReport){
-        //Este path deberia ir con un metodo delete
-//        Lucas:La acabo de hacer, solo habria que verificar
         this.eliminateComment = url.getBaseUriBuilder().path("comments").path("delete").path(String.valueOf(commentReport.getComment().getCommentId())).build().toString();
-        //Este path tambien deberia ser con un metodo delete
-//        Lucas:La acabo de hacer, solo habria que verificar
         this.dismissReport = url.getBaseUriBuilder().path("reports").path("deleteReport").path("comment").path(String.valueOf(commentReport.getComment().getReview().getContent().getId())).build().toString();
         this.id = commentReport.getId();
-        this.user = new UserDto(url,commentReport.getUser());
-        this.comment = new CommentDto(url,commentReport.getComment());
+        this.user = new UserDto(url, commentReport.getUser());
+        this.comment = new CommentDto(url, commentReport.getComment());
         this.reportReason = commentReport.getReportReason();
+        this.review = new ReviewDto(url, commentReport.getComment().getReview());
     }
 
     public long getId() {
@@ -93,5 +91,13 @@ public class CommentReportDto {
 
     public void setDismissReport(String dismissReport) {
         this.dismissReport = dismissReport;
+    }
+
+    public ReviewDto getReview() {
+        return review;
+    }
+
+    public void setReview(ReviewDto review) {
+        this.review = review;
     }
 }

@@ -291,24 +291,24 @@ export default function ReportedPage() {
                             {reportedCommentsList.length > 0 ? (
                                 <>
                                     {reportedCommentsList.map((content) => (
-                                            <ReportedContent
-                                                userName={content.comment.user.username}
-                                                userId={content.comment.user.id}
-                                                contentId={content.comment.review.content.id}
-                                                contentName={content.comment.review.content.name}
-                                                contentType={content.comment.review.content.type}
-                                                reportTitle={content.comment.review.name}
-                                                reportDescription={content.comment.text}
-                                                reportReasons={content.comment.reportReasons}
-                                                reportsAmount={content.comment.reportAmount}
-                                                typeId={content.comment.commentId}
-                                                reviewCreatorUserName={content.comment.review.user.userName}
-                                                reviewCreatorId={content.comment.review.user.id}
-                                                reviewNameOfReportedComment={content.comment.review.name}
-                                                reportType="comments"
-                                            />
-                                        )
-                                    )}
+                                        <ReportedContent
+                                            userName={content.comment.user.username}
+                                            userId={content.comment.user.id}
+                                            contentId={content.review.content?.id}
+                                            contentName={content.review.content.name}
+                                            contentType={content.review.content.type}
+                                            reportTitle={content.review.name}
+                                            reportDescription={content.comment.text}
+                                            reportReasons={content.comment.reportReasons}
+                                            reportsAmount={content.comment.reportAmount}
+                                            typeId={content.comment.commentId}
+                                            reviewCreatorUserName={content.review.user.userName}
+                                            reviewCreatorId={content.review.user.id}
+                                            reviewNameOfReportedComment={content.review.name}
+                                            reportType="comments"
+                                        />
+                                    ))}
+
                                 </>
                             ) : (
                                 <div className="W-watchlist-div-info-empty">

@@ -49,7 +49,7 @@ public class ContentController {
 
     @Context
     UriInfo uriInfo;
-    private static final int CONTENT_AMOUNT = 18;
+    private static final int CONTENT_AMOUNT = 20;
     private static final Logger LOGGER = LoggerFactory.getLogger(ContentController.class);
 
     // * ----------------------------------- Home Page -----------------------------------------------------------------
