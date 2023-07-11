@@ -6,6 +6,7 @@ import {contentService} from "../services";
 import Header from "./components/Header";
 import {useNavigate} from "react-router-dom";
 import Filters from "./components/Filters";
+import {displayName} from "react-quill";
 
 
 // import { css } from '@emotion/react';
@@ -35,7 +36,7 @@ export default function Home() {
                 if(!list.error) {
                     setBestRatedList(list.data.bestRatedList)
                     setLastAddedList(list.data.lastAddedList)
-                    if(list.data.hasOwnProperty("recommendedUserList")) {
+                    if(list.data.hasOwnProperty("recommendedUserList") && (list.data.recommendedUserList.length > 0)) {
                         setRecommendedUserList(list.data.recommendedUserList)
                     } else {
                         setMostSavedContentByUsersList(list.data.mostSavedContentByUsersList)

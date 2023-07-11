@@ -11,6 +11,7 @@ public class UserLandingPageDto {
     private Collection<ContentDto> bestRatedList;
     private Collection<ContentDto> lastAddedList;
     private Collection<ContentDto> recommendedUserList;
+    private Collection<ContentDto> mostSavedContentByUsersList;
 
     public UserLandingPageDto() {
     }
@@ -19,6 +20,7 @@ public class UserLandingPageDto {
         this.bestRatedList = ContentDto.mapContentToContentDto(uriInfo, landindPageContentList.get(0));
         this.lastAddedList = ContentDto.mapContentToContentDto(uriInfo, landindPageContentList.get(1));
         this.recommendedUserList = ContentDto.mapContentToContentDto(uriInfo, landindPageContentList.get(2));
+        this.mostSavedContentByUsersList = ContentDto.mapContentToContentDto(uriInfo, landindPageContentList.get(3));
     }
 
     public Collection<ContentDto> getBestRatedList() {
@@ -43,5 +45,13 @@ public class UserLandingPageDto {
 
     public void setRecommendedUserList(Collection<ContentDto> recommendedUserList) {
         this.recommendedUserList = recommendedUserList;
+    }
+
+    public Collection<ContentDto> getMostSavedContentByUsersList() {
+        return mostSavedContentByUsersList;
+    }
+
+    public void setMostSavedContentByUsersList(Collection<ContentDto> mostSavedContentByUsersList) {
+        this.mostSavedContentByUsersList = mostSavedContentByUsersList;
     }
 }

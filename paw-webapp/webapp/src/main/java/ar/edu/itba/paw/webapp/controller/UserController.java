@@ -43,6 +43,14 @@ public class UserController {
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response userCreate(@Valid final NewUser newUser) {
         LOGGER.info("POST /{}: Called", uriInfo.getPath());
+        final Optional<User> user1 = us.findByEmail(newUser.getEmail());
+        if(user1.isPresent()) {
+            if(Objects.equals(user1.get().getUserName(), newUser.getUsername())) {
+                throw new BadRequestException("Username already register");
+            } else if(Objects.equals(user1.get().getEmail(), newUser.getEmail())) {
+                throw new BadRequestException("Email already register");
+            }
+        }
         final User user = us.register(newUser.getEmail(), newUser.getUsername(), newUser.getPassword()).orElseThrow(UserNotFoundException::new);
         UserDto userDto = new UserDto(uriInfo, user);
         LOGGER.info("POST /{}: New user created with id {}", uriInfo.getPath(), user.getId());

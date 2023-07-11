@@ -3,6 +3,8 @@
     display: inline;
 }
 
+
+
 .W-list{
     list-style: none;
 }
@@ -342,14 +344,31 @@
     }
     .W-filter-title{
         height: 2vw;
-        width: 11.5vw;
+        width: auto;
     }
+}
+
+@media (max-width: 1310px) {
+    .W-filter-title{
+        height: 2vw;
+        max-width: 70vw;
+    }
+
+    .W-filter-div {
+        height: 4vw;
+    }
+
+    .W-genre-filter {
+        word-break: break-all;
+        white-space: normal;
+    }
+
 }
 
 @media (max-width: 1096px) {
     .W-filter-title{
         height: 4vw;
-        width: 14vw;
+        max-width: 65vw;
     }
 
     .W-filter-div {
@@ -377,7 +396,9 @@
 
     .W-filter-title {
         height: 5vw;
-        width: 15vw;
+        max-width: auto;
+        word-break: break-all;
+        white-space: normal;
     }
 
     .dropdown-menu {
@@ -400,7 +421,7 @@
         display: none!important;
     }
     .W-filter-title {
-        width: 16vw;
+        width: auto;
     }
 }
 
@@ -410,7 +431,7 @@
         overflow-y: auto;
     }
     .W-filter-title {
-        width: 18vw;
+        width: auto;
     }
 }
 
@@ -419,7 +440,7 @@
         height: 41vw;
     }
     .W-filter-title {
-        width: 19vw;
+        width: auto;
     }
 }
 
