@@ -12,6 +12,7 @@ export default function SignUp() {
 
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
     const [usernameError, setUsernameError] = useState(false)
+    const [usernameError2, setUsernameError2] = useState(false)
     const [emailError, setEmailError] = useState(false)
     const [emailError2, setEmailError2] = useState(false)
     const [passwordError, setPasswordError] = useState(false)
@@ -27,10 +28,10 @@ export default function SignUp() {
     const validateUsername = () => {
         const usernameRegex = /([a-zA-Z0-9ñ\s]+)?/
         if(userForm.username.length < 4 || userForm.username.length > 30 || !usernameRegex.test(userForm.username)) {
-            setUsernameError(true)
+            setUsernameError2(true)
             return false
         }
-        setUsernameError(false)
+        setUsernameError2(false)
         return true
     }
 
@@ -89,9 +90,10 @@ export default function SignUp() {
                 } else {
                     if(data.errorCode === 400) {
                         if(data.data.message.include("username")){
-                        setUsernameError(true)}
-                        if(data.data.message.include("mail")){
-                            setEmailError(true)}
+                            setUsernameError(true)
+                        } else if(data.data.message.include("mail")){
+                            setEmailError(true)
+                        }
                     } else {
                         navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                     }
@@ -125,6 +127,9 @@ export default function SignUp() {
                         <div className="mb-3 W-input-label-login-info">
                             <div className="mb-3 W-input-label-login-info">
                                 {usernameError &&
+                                    <p style={{color: "#b21e26"}}>{t('AvailableUserName')}</p>
+                                }
+                                {usernameError2 &&
                                     <p style={{color: "#b21e26"}}>{t('Pattern.loginForm.username')}</p>
                                 }
                                 <label className="form-label" htmlFor="username">{t('Signup.Username')} <span className="W-red-asterisco">{t('Asterisk')}</span></label>

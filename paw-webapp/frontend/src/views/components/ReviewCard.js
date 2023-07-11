@@ -253,7 +253,7 @@ export default function ReviewCard(props) {
             <Modal show={showReportModal} onHide={handleCloseReportModal} aria-labelledby={`reportReviewModal${reviewId}`} aria-hidden="true">
                 <Modal.Header closeButton>
                     <Modal.Title id={`modalLabel${reviewId}`}>
-                        {t('Report.CommentTitle')}
+                        {t('Report.ReviewTitle')}
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
@@ -273,7 +273,7 @@ export default function ReviewCard(props) {
                         <li>
                             <label>
                                 <input type="radio" name="reportType" value="Inappropriate"/> {t('Report.Inappropriate')}
-                                <p className="W-modal-comment-desc">{t('Report.Insult.Description')}</p>
+                                <p className="W-modal-comment-desc">{t('Report.Inappropriate.Description')}</p>
                             </label>
                         </li>
                         <li>
