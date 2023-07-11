@@ -104,9 +104,11 @@ export default function ContentPage(props) {
     }
 
     const changeUrlPage = (page) => {
-        const searchParams = new URLSearchParams(window.location.search);
+        const searchParams = new URLSearchParams(search);
         searchParams.set('page', page);
-        navigate(window.location.pathname + '?' + searchParams.toString());
+        const currentPath = window.location.pathname.substring('/paw-2022b-3'.length);
+        console.log(currentPath)
+        navigate(currentPath + '?' + searchParams.toString());
     }
 
     return (

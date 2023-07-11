@@ -57,7 +57,8 @@ export default function Filters(props) {
             aux = aux.filter((element) => element !== '');
             queryParams.set('genre', aux);
         }
-        navigate((type === 'all' ? '/content/all' : window.location.pathname) + '?' + queryParams.toString());
+        const currentPath = window.location.pathname.substring('/paw-2022b-3'.length);
+        navigate((type === 'all' ? '/content/all' : currentPath) + '?' + queryParams.toString());
     }
 
     const handleGenreFormChange = (e) => {
@@ -87,13 +88,15 @@ export default function Filters(props) {
             searchParams.set('durationFrom', durationFrom);
             searchParams.set('durationTo', durationTo);
         }
-        navigate((type === 'all' ? '/content/all' : window.location.pathname) + '?' + searchParams.toString());
+        const currentPath = window.location.pathname.substring('/paw-2022b-3'.length);
+        navigate((type === 'all' ? '/content/all' : currentPath) + '?' + searchParams.toString());
     }
 
     const changeSorting = (sorting) => {
         const searchParams = new URLSearchParams(window.location.search);
         searchParams.set('sorting', sorting);
-        navigate((type === 'all' ? '/content/all' : window.location.pathname) + '?' + searchParams.toString());
+        const currentPath = window.location.pathname.substring('/paw-2022b-3'.length);
+        navigate((type === 'all' ? '/content/all' : currentPath) + '?' + searchParams.toString());
     }
 
 
