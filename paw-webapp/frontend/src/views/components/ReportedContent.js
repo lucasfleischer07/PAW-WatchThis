@@ -52,7 +52,7 @@ export default function ReportedContent(props) {
             commentService.commentDelete(typeId)
                 .then(data => {
                     if(!data.error) {
-                        // TODO: HAcer este toast de coemntario eliminado
+                        toast.success(t('Comment.Deleted'))
                         handleCloseModal()
                     } else {
                         navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
@@ -65,9 +65,9 @@ export default function ReportedContent(props) {
             reviewService.deleteReview(typeId)
                 .then(data => {
                     if(!data.error) {
+                        toast.success(t('Review.Deleted'))
                         handleCloseModal()
-                        // TODO: HAcer este toast de review eliminada
-                        // toast.success()
+
                     } else {
                         navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                     }
@@ -86,9 +86,8 @@ export default function ReportedContent(props) {
         reportsService.deleteReport(typeId, reportType)
             .then(data => {
                 if(!data.error) {
+                    toast.success(t('Report.Deleted'))
                     handleCloseModalDismiss()
-                    // TODO: HAcer este toast
-                    // toast.success()
                 } else {
                     navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                 }

@@ -127,6 +127,7 @@
   "Comment.WarningAdd": "To comment a review, you must be logged in.",
   "Comment.EmptyComment": "The comment is empty",
   "Comment.LengthComment": "The comment must have between 10 and 500 characters",
+  "Comment.Deleted": "Comment deleted successfully",
 
   "Search.Title": "The result of: {{query}}",
 
@@ -274,6 +275,7 @@
   "Report.Filter": "Filter by",
   "Report.Dismiss": "Dismiss report",
   "Report.Success": "Your report has been successfully submitted",
+  "Report.Deletes": "Report deleted successfully",
 
   "Report.CommentTitle": "Report comment",
   "Report.Add": "Report comment",

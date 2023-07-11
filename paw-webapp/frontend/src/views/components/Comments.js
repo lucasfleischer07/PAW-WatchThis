@@ -22,7 +22,7 @@ export default function Comments(props) {
     const userCreatorId = props.userCreatorId
     const userCreatorImage = props.userCreatorImage
     const userCreatorUsername = props.userCreatorUsername
-    const alreadyReport = props.alreadyReport
+    const [alreadyReport, setAlreadyReport] = useState(props.alreadyReport)
     const [loggedUserIsAdmin,setIsAdmin] = useState(props.loggedUserIsAdmin);
 
     const loggedUserId = props.loggedUserId
@@ -64,6 +64,7 @@ export default function Comments(props) {
         reportsService.addCommentReport(commentId, reportFrom)
             .then(data => {
                 if(!data.error) {
+                    setAlreadyReport(!alreadyReport)
                     toast.success(t('Report.Success'))
                     handleCloseReportModal()
                 } else {
@@ -174,25 +175,25 @@ export default function Comments(props) {
                                                                 </li>
                                                                 <li>
                                                                     <label>
-                                                                        <input type="radio" name="reportType" value="Insult"/> {t('Report.Insult')}
+                                                                        <input type="radio" name="reportType" value="Insult" onChange={handleChange}/> {t('Report.Insult')}
                                                                         <p className="W-modal-comment-desc">{t('Report.Insult.Description')}</p>
                                                                     </label>
                                                                 </li>
                                                                 <li>
                                                                     <label>
-                                                                        <input type="radio" name="reportType" value="Inappropriate"/> {t('Report.Inappropriate')}
+                                                                        <input type="radio" name="reportType" value="Inappropriate" onChange={handleChange}/> {t('Report.Inappropriate')}
                                                                         <p className="W-modal-comment-desc">{t('Report.Inappropriate.Description')}</p>
                                                                     </label>
                                                                 </li>
                                                                 <li>
                                                                     <label>
-                                                                        <input type="radio" name="reportType" value="Unrelated"/> {t('Report.Unrelated')}
+                                                                        <input type="radio" name="reportType" value="Unrelated" onChange={handleChange}/> {t('Report.Unrelated')}
                                                                         <p className="W-modal-comment-desc">{t('Report.Unrelated.Description')}</p>
                                                                     </label>
                                                                 </li>
                                                                 <li>
                                                                     <label>
-                                                                        <input type="radio" name="reportType" value="Other"/> {t('Report.Other')}
+                                                                        <input type="radio" name="reportType" value="Other" onChange={handleChange}/> {t('Report.Other')}
                                                                         <p className="W-modal-comment-desc">{t('Report.Other.Description')}</p>
                                                                     </label>
                                                                 </li>

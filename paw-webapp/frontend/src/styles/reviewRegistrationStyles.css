@@ -70,7 +70,7 @@
 }
 
 .W-review-registration-text {
-    font-size: 0.6vw;
+    font-size: 0.9vw;
     color: #636464;
 }
 
@@ -130,6 +130,13 @@
     margin-top: 1%;
     margin-bottom: 1%;
 }
+
+@media(max-width: 1010px){
+    .W-review-registration-text {
+        font-size: 1.2vw;
+    }
+}
+
 
 @media (max-width: 591px) {
     .W-submit-cancel-buttons {

@@ -3,8 +3,6 @@
     display: inline;
 }
 
-
-
 .W-list{
     list-style: none;
 }
@@ -113,7 +111,7 @@
     border: 0;
     border-top: 1px solid;
     opacity: .85;
-    margin: 0vw;
+    margin: 0;
 }
 
 .W-films-card-body {
@@ -187,7 +185,7 @@
 
 .W-movie-card-size {
     width: 15vw;
-    margin: 1vm;
+    margin: 1vw;
     height: auto;
     display: flex;
     word-break: break-word;
@@ -296,7 +294,7 @@
 .accordion {
     margin-left: 5%;
     margin-bottom: 5%;
-    size: 20vm;
+    size: 20vw;
 }
 
 .W-filter-padding {
@@ -365,7 +363,7 @@
 
 }
 
-@media (max-width: 1096px) {
+@media (max-width: 1230px) {
     .W-filter-title{
         height: 4vw;
         max-width: 65vw;
@@ -376,8 +374,14 @@
     }
 
     .W-genre-filter {
-        word-break: break-all;
+        word-break: break-word;
         white-space: normal;
+    }
+}
+
+@media(max-width: 1153px){
+    .W-films-card-body-carousel {
+        height: 35vw;
     }
 }
 
@@ -396,9 +400,6 @@
 
     .W-filter-title {
         height: 5vw;
-        max-width: auto;
-        word-break: break-all;
-        white-space: normal;
     }
 
     .dropdown-menu {

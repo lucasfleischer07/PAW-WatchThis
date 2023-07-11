@@ -20,12 +20,14 @@ export default function ReviewCard(props) {
     const reviewReputation = props.reviewReputation
     const reviewUserId = props.reviewUserId
     const setReviewsChange = props.setReviewsChange
-    const userName = props.userName
     const loggedUserName = props.loggedUserName
     const [isAdmin,setIsAdmin] = useState(props.isAdmin);
 
     const [isLikeReviews, setIsLikeReviews] = useState(props.isLikeReviews);
     const [isDislikeReviews, setIsDislikeReviews] = useState(props.isDislikeReviews);
+
+    const alreadyReviewed = props.alreadyReviewed
+    const setAlreadyReviewed = props.setAlreadyReviewed
 
     const [alreadyReport, setAlreadyReport] = useState(props.alreadyReport)
     const canComment = props.canComment
@@ -92,6 +94,7 @@ export default function ReviewCard(props) {
                     handleCloseDeleteReviewModal()
                     setReviewsChange(!props.reviewsChange)
                     toast.success(t('Review.Deleted'))
+                    setAlreadyReviewed(!alreadyReviewed)
                 } else {
                     navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                 }
@@ -266,25 +269,25 @@ export default function ReviewCard(props) {
                         </li>
                         <li>
                             <label>
-                                <input type="radio" name="reportType" value="Insult"/> {t('Report.Insult')}
+                                <input type="radio" name="reportType" value="Insult" onChange={handleChange}/> {t('Report.Insult')}
                                 <p className="W-modal-comment-desc">{t('Report.Insult.Description')}</p>
                             </label>
                         </li>
                         <li>
                             <label>
-                                <input type="radio" name="reportType" value="Inappropriate"/> {t('Report.Inappropriate')}
+                                <input type="radio" name="reportType" value="Inappropriate" onChange={handleChange}/> {t('Report.Inappropriate')}
                                 <p className="W-modal-comment-desc">{t('Report.Inappropriate.Description')}</p>
                             </label>
                         </li>
                         <li>
                             <label>
-                                <input type="radio" name="reportType" value="Unrelated"/> {t('Report.Unrelated')}
+                                <input type="radio" name="reportType" value="Unrelated" onChange={handleChange}/> {t('Report.Unrelated')}
                                 <p className="W-modal-comment-desc">{t('Report.Unrelated.Description')}</p>
                             </label>
                         </li>
                         <li>
                             <label>
-                                <input type="radio" name="reportType" value="Other"/> {t('Report.Other')}
+                                <input type="radio" name="reportType" value="Other" onChange={handleChange}/> {t('Report.Other')}
                                 <p className="W-modal-comment-desc">{t('Report.Other.Description')}</p>
                             </label>
                         </li>

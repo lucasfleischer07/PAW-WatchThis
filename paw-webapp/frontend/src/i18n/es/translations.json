@@ -126,7 +126,7 @@
   "Comment.WarningAdd": "Para comentar una reseña, tienes que iniciar sesión.",
   "Comment.EmptyComment": "El comentario esta vacío",
   "Comment.LengthComment": "El comentario debe tener entre 10 y 500 caracteres",
-
+  "Comment.Deleted": "Comentario eliminado exitosamente",
 
   "Search.Title": "Los resultados de: {{query}}",
 
@@ -273,6 +273,7 @@
   "Report.Filter": "Filtrar",
   "Report.Dismiss": "Descartar denuncia",
   "Report.Success": "Su reporte fue exitoso",
+  "Report.Deletes": "Reporte eliminado exitosamente",
 
   "Report.CommentTitle": "Reportar comentario",
   "Report.Add": "Reportar comentario",

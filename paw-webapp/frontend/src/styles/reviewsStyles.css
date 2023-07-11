@@ -83,6 +83,7 @@
 .W-span-text-info-card-movie {
     font-weight: bold;
     font-style: italic;
+    margin-right: 0.5vw;
 }
 
 .W-watchlist-button-div-infopage {
@@ -155,7 +156,7 @@
 }
 
 .W-subTitles-font-size {
-    font-size: 1vw;
+    font-size: 1.3vw;
 }
 
 .W-card-body-aligment {
@@ -218,7 +219,7 @@
 }
 
 .W-creator-review {
-    font-size: 1vw;
+    font-size: 1.3vw;
     color: #636464;
     position: relative;
 }
@@ -277,8 +278,8 @@
 }
 
 .W-background-color-report {
-    background-color: transparent;
-    border-color: transparent;
+    background-color: #90ee905e;
+    border-color: green;
 }
 
 .W-card-width {
