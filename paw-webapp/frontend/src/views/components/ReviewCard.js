@@ -19,7 +19,7 @@ export default function ReviewCard(props) {
     const reviewDescription = props.reviewDescription
     const reviewReputation = props.reviewReputation
     const reviewUserId = props.reviewUserId
-    const {setReviewsChange}=props.setReviewsChange
+    const setReviewsChange = props.setReviewsChange
     const userName = props.userName
     const loggedUserName = props.loggedUserName
     const [isAdmin,setIsAdmin] = useState(props.isAdmin);
@@ -86,23 +86,22 @@ export default function ReviewCard(props) {
         );
     }
     const handleDelete = () => {
-        reviewService.deleteReview(parseInt(reviewId))
+        reviewService.deleteReview(reviewId)
             .then(data => {
                 if(!data.error) {
-                //     TODO: HAcer toast de review deleteada con exito
                     handleCloseDeleteReviewModal()
                     setReviewsChange(!props.reviewsChange)
+                    toast.success(t('Review.Deleted'))
                 } else {
                     navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                 }
             })
-            .catch(() => {
+            .catch((e) => {
                 navigate("/error", { replace: true, state: {errorCode: 404} })
             })
     }
 
     const handleSubmitReport = () => {
-
         reportsService.addReviewReport(reviewId, reportFrom)
             .then(data => {
                 if(!data.error) {

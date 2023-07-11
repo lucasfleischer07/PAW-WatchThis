@@ -55,7 +55,7 @@ public class ReviewController {
         Content content = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
         PageWrapper<Review> reviewList = rs.getAllReviews(content,pageNumber,REVIEW_AMOUNT);
         if(reviewList == null) {
-            LOGGER.warn("GET /{}: Cant find a the content specified",uriInfo.getPath());
+            LOGGER.warn("GET /{}: Cant find a the content specifispecified",uriInfo.getPath());
             throw new ContentNotFoundException();
         }
         Collection<ReviewDto> reviewDtoList = ReviewDto.mapReviewToReviewDto(uriInfo, reviewList.getPageContent());
@@ -126,9 +126,7 @@ public class ReviewController {
             rs.deleteReview(reviewId);
             LOGGER.info("DELETE /{}: Review Deleted by user owner", uriInfo.getPath());
             return Response.noContent().build();
-        }
-//        TODO: VER ESTE QUE SERIA SI UN ADIN LO ELIMINA
-        else if(Objects.equals(user.getRole(), "admin")) {
+        } else if(Objects.equals(user.getRole(), "admin")) {
             rrs.delete(review, null);
             LOGGER.info("DELETE /{}: Review Deleted by admin", uriInfo.getPath());
             return Response.noContent().build();

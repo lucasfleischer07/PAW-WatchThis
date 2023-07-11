@@ -35,8 +35,8 @@ public class ReportServiceImpl implements ReportService{
     @Override
     public void delete(Object reviewOrComment, Set<CommentReport> reasonsOfDelete) {
         String reasons = "";
-        if(reasonsOfDelete != null) {
-            for(CommentReport string : reasonsOfDelete) {
+        if (reasonsOfDelete != null) {
+            for (CommentReport string : reasonsOfDelete) {
                 switch (string.getReportReason().toString()) {
                     case "Spam":
                         reasons = reasons + messageSource.getMessage("Report.Spam", new Object[]{}, locale) + ", ";
@@ -58,11 +58,13 @@ public class ReportServiceImpl implements ReportService{
                 }
             }
         }
-        if(reviewOrComment instanceof Review)
-            adminDeleteReview((Review) reviewOrComment,reasons);
-        else if(reviewOrComment instanceof Comment){
+        if (reviewOrComment instanceof Review) {
+            adminDeleteReview((Review) reviewOrComment, reasons);
+        } else if(reviewOrComment instanceof Comment){
             adminDeleteComment((Comment) reviewOrComment,reasons);
-        } else throw new IllegalArgumentException();
+        } else {
+            throw new IllegalArgumentException();
+        }
     }
 
     private void adminDeleteComment(Comment comment, String reason){

@@ -39,6 +39,8 @@
   "Delete": "Delete",
   "Apply": "Apply",
 
+  "Review.Deleted": "Review deleted successfully",
+
   "WatchThisMessage": "Watch This",
   "SearchMessage": "Search movies or tv shows",
   "HomeMessage": "Home",
