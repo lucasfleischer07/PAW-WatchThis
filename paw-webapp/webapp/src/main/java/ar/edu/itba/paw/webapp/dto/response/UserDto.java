@@ -43,7 +43,7 @@ public class UserDto {
         this.username = user.getUserName();
         this.id = user.getId();
         this.reputation = user.getReputation();
-        this.image = url.getBaseUriBuilder().path("users").path(String.valueOf(user.getId())).path("profileImage").build().toString();
+        this.image = user.getImage()!= null ? url.getBaseUriBuilder().path("users").path(String.valueOf(user.getId())).path("profileImage").build().toString():null;
         this.role = user.getRole();
         this.isLikeReviewsUrl = url.getBaseUriBuilder().path("users").path(String.valueOf(user.getId())).path("reviewsLikedByUser").build().toString();
         this.isDislikeReviewsUrl = url.getBaseUriBuilder().path("users").path(String.valueOf(user.getId())).path("reviewsDislikedByUser").build().toString();

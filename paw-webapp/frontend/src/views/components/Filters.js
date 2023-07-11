@@ -41,6 +41,21 @@ export default function Filters(props) {
         updateUrlVariable(durationFrom, queryParams.get('durationFrom'),(x) => setDurationFrom(x))
         updateUrlVariable(durationTo, queryParams.get('durationTo'),(x) => setDurationTo(x))
         updateUrlVariable(sorting, queryParams.get('sorting'),(x) => setSorting(x))
+        let genres=queryParams.get('genre')
+        if(genres!==null) {
+            genreState.Action = genres.includes("Action")
+            genreState["Sci-Fi"] = genres.includes("Sci-Fi")
+            genreState.Comedy = genres.includes("Comedy")
+            genreState.Adventure = genres.includes("Adventure")
+            genreState.Animation = genres.includes("Animation")
+            genreState.Drama = genres.includes("Drama")
+            genreState.Horror = genres.includes("Horror")
+            genreState.Thriller = genres.includes("Thriller")
+            genreState.Mystery = genres.includes("Mystery")
+            genreState.Crime = genres.includes("Crime")
+            genreState.Fantasy = genres.includes("Fantasy")
+            genreState.Romance = genres.includes("Romance")
+        }
     }, [search]);
 
     const dropdownHandle = (event) => {
