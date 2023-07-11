@@ -13,6 +13,7 @@ export default function SignUp() {
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
     const [usernameError, setUsernameError] = useState(false)
     const [emailError, setEmailError] = useState(false)
+    const [emailError2, setEmailError2] = useState(false)
     const [passwordError, setPasswordError] = useState(false)
     const [confirmPasswordError, setConfirmPasswordError] = useState(false)
 
@@ -36,10 +37,10 @@ export default function SignUp() {
     const validEmail = () => {
         const emailRegex = /^((([+.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3}))+)?$/
         if(userForm.email.length < 10 || userForm.email.length > 50 || !emailRegex.test(userForm.email)) {
-            setEmailError(true)
+            setEmailError2(true)
             return false
         }
-        setEmailError(false)
+        setEmailError2(false)
         return true
     }
 
@@ -68,7 +69,6 @@ export default function SignUp() {
         }
         userService.userCreate(userForm)
             .then(data => {
-                // TODO: Ver como manejar el tema de ususario que ay existe y eso
                 if(!data.error) {
                     userService.login(data.data.email, userForm.password)
                         .then(user2 => {
@@ -87,7 +87,11 @@ export default function SignUp() {
                             navigate("/error", { replace: true, state: {errorCode: 401} })
                         })
                 } else {
-                    navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                    if(data.errorCode === 400) {
+                        setEmailError(true)
+                    } else {
+                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                    }
                 }
             })
             .catch(() => {
@@ -118,7 +122,7 @@ export default function SignUp() {
                         <div className="mb-3 W-input-label-login-info">
                             <div className="mb-3 W-input-label-login-info">
                                 {usernameError &&
-                                    <p style={{color: "#b21e26"}}>Meter el error</p>
+                                    <p style={{color: "#b21e26"}}>{t('Pattern.loginForm.username')}</p>
                                 }
                                 <label className="form-label" htmlFor="username">{t('Signup.Username')} <span className="W-red-asterisco">{t('Asterisk')}</span></label>
                                 <p className="W-review-registration-text">{t('Signup.CharacterLimits', {min: "4", max: "30"})}</p>
@@ -129,7 +133,10 @@ export default function SignUp() {
                         <div className="mb-3 W-input-label-login-info">
                             <div className="mb-3 W-input-label-login-info">
                                 {emailError &&
-                                    <p style={{color: "#b21e26"}}>Meter el error</p>
+                                    <p style={{color: "#b21e26"}}>{t('AvailableEmail')}</p>
+                                }
+                                {emailError2 &&
+                                    <p style={{color: "#b21e26"}}>{t('Pattern.forgotPasswordForm.email')}</p>
                                 }
                                 <label className="form-label" htmlFor="username">{t('Signup.Email')} <span className="W-red-asterisco">{t('Asterisk')}</span></label>
                                 <p className="W-review-registration-text">{t('Signup.CharacterLimits', {min: "4", max: "30"})}</p>
@@ -140,7 +147,7 @@ export default function SignUp() {
                         <div className="mb-3 W-input-label-login-info">
                             <div className="mb-3 W-input-label-login-info">
                                 {passwordError &&
-                                    <p style={{color: "#b21e26"}}>Meter el error</p>
+                                    <p style={{color: "#b21e26"}}>{t('Pattern.EditProfile.password')}</p>
                                 }
                                 <label className="form-label" htmlFor="username">{t('Signup.Password')} <span className="W-red-asterisco">{t('Asterisk')}</span></label>
                                 <p className="W-review-registration-text">{t('Signup.CharacterLimits', {min: "6", max: "50"})}</p>
@@ -151,7 +158,7 @@ export default function SignUp() {
                         <div className="mb-3 W-input-label-login-info">
                             <div className="mb-3 W-input-label-login-info">
                                 {confirmPasswordError &&
-                                    <p style={{color: "#b21e26"}}>Meter el error</p>
+                                    <p style={{color: "#b21e26"}}>{t('EditProfile.NotSamePassword')}</p>
                                 }
                                 <label className="form-label" htmlFor="username">{t('Signup.ConfirmPassword')} <span className="W-red-asterisco">{t('Asterisk')}</span></label>
                                 <p className="W-review-registration-text">{t('Signup.CharacterLimits', {min: "6", max: "50"})}</p>

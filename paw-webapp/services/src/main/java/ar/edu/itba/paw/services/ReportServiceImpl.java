@@ -72,6 +72,8 @@ public class ReportServiceImpl implements ReportService{
             mailVariables.put("to", comment.getUser().getEmail());
             mailVariables.put("userName", comment.getUser().getUserName());
             mailVariables.put("deletedComment", comment.getText());
+            mailVariables.put("profileURL", "http://pawserver.it.itba.edu.ar/paw-2022b-3/user/profile/" + comment.getUser().getId());
+
             if(!Objects.equals(reason, "")){
                 mailVariables.put("reasonsOfDelete", reason);
             }else{
@@ -90,6 +92,7 @@ public class ReportServiceImpl implements ReportService{
             mailVariables.put("to",deletedReview.getUser().getEmail());
             mailVariables.put("userName", deletedReview.getUser().getUserName());
             mailVariables.put("deletedReview", deletedReview.getName());
+            mailVariables.put("profileURL", "http://pawserver.it.itba.edu.ar/paw-2022b-3/user/profile/" + deletedReview.getUser().getId());
             if(!Objects.equals(reasonsOfDelete, "")) {
                 mailVariables.put("reasonsOfDelete", reasonsOfDelete);
             }else{

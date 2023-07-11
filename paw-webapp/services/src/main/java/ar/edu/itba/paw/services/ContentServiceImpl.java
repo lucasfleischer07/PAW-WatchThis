@@ -11,10 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
+
 @Transactional
 @Service
 public class ContentServiceImpl implements ContentService {
@@ -64,12 +62,15 @@ public class ContentServiceImpl implements ContentService {
             if(userWatchListContentId.size() != 0) {
                 List<Content> recommendedUserList = getUserRecommended(user);
                 if (recommendedUserList.size() == 0) {
+                    mainList.add(Collections.emptyList());   // Esta seria la de recommended que esta vacia
                     List<Content> mostSavedContentByUsersList = getMostUserSaved();
                     mainList.add(mostSavedContentByUsersList);
                 } else {
                     mainList.add(recommendedUserList);
+                    mainList.add(Collections.emptyList());   // Esta seria la de most que esta vacia
                 }
             } else {
+                mainList.add(Collections.emptyList());   // Esta seria la de recommended que esta vacia
                 List<Content> mostSavedContentByUsersList = getMostUserSaved();
                 mainList.add(mostSavedContentByUsersList);
             }
