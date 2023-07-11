@@ -17,7 +17,7 @@ export class UserApi {
             if(res.status === 201) {
                 return {error: false, data: await res.json()}
             } else {
-                return {error: true, errorCode: res.status}
+                return {error: true, errorCode: res.status,data: await res.json()}
             }
         } catch (e) {
             return {error: true, errorCode: e.response.status || 500}

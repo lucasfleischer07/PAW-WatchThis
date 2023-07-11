@@ -88,7 +88,10 @@ export default function SignUp() {
                         })
                 } else {
                     if(data.errorCode === 400) {
-                        setEmailError(true)
+                        if(data.data.message.include("username")){
+                        setUsernameError(true)}
+                        if(data.data.message.include("mail")){
+                            setEmailError(true)}
                     } else {
                         navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                     }
