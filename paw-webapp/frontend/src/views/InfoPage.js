@@ -95,7 +95,6 @@ export default function InfoPage() {
             contentService.deleteContent(parseInt(contentId))
                 .then(data => {
                     if(!data.error) {
-                        // TODO: Meter toast de contenido eliminado correctamente
                         handleCloseDeleteContentModal()
                         navigate("/", {replace: true})
                     } else {
@@ -566,6 +565,8 @@ export default function InfoPage() {
                                                 seeComments={true}
                                                 reviewsChange={reviewsChange}
                                                 setReviewsChange={setReviewsChange}
+                                                setAlreadyReviewed={setAlreadyReviewed}
+                                                alreadyReviewed={alreadyReviewed}
                                             />
                                         </div>
                                     );
