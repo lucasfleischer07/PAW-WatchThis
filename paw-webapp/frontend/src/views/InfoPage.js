@@ -199,12 +199,10 @@ export default function InfoPage() {
                 if(!data.error) {
                     setContent(data.data)
                 } else {
-                    console.log("HOla")
                     navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                 }
             })
             .catch(() => {
-                console.log("HOla1111")
                 navigate("/error", { replace: true, state: {errorCode: 404} })
             })
     }, [])
@@ -224,12 +222,10 @@ export default function InfoPage() {
                     } else if(watchList.errorCode === 404) {
                         setShowExpiredCookiesModal(true)
                     } else {
-                        console.log("Hola 6")
                         navigate("/error", { replace: true, state: {errorCode: watchList.errorCode} })
                     }
                 })
                 .catch(() => {
-                    console.log("Hola 1")
                     navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
 
@@ -241,7 +237,6 @@ export default function InfoPage() {
                         if(viewedList.errorCode === 404 && !showExpiredCookiesModal) {
                             setShowExpiredCookiesModal(true)
                         } else {
-                            console.log("Hola 7")
                             navigate("/error", { replace: true, state: {errorCode: viewedList.errorCode} })
                         }
                     }
@@ -258,13 +253,11 @@ export default function InfoPage() {
                         if(data.errorCode === 404 && !showExpiredCookiesModal) {
                             setShowExpiredCookiesModal(true)
                         } else {
-                            console.log("Hola 8")
                             navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                         }
                     }
                 })
                 .catch(() => {
-                    console.log("Hola 2")
                     navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
 
@@ -276,13 +269,11 @@ export default function InfoPage() {
                         if(data.errorCode === 404 && !showExpiredCookiesModal) {
                             setShowExpiredCookiesModal(true)
                         } else {
-                            console.log("Hola 9")
                             navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                         }
                     }
                 })
                 .catch(() => {
-                    console.log("Hola 3")
                     navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
         }
@@ -299,12 +290,10 @@ export default function InfoPage() {
                         }
                     }
                 } else {
-                    console.log("Hola 10")
                     navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                 }
             })
             .catch(() => {
-                console.log("Hola 4")
                 navigate("/error", { replace: true, state: {errorCode: 404} })
             })
 
@@ -478,7 +467,6 @@ export default function InfoPage() {
                                     )}
                                 </div>
                             </div>
-
 
                             <div className="W-div-img-and-reviewInfo">
                                 <div className="col-md-4 W-img-aligment">
@@ -667,13 +655,11 @@ export default function InfoPage() {
                                 ) : (
                                     <h3 className="W-no-reviews-text">{t('Content.NoReviewMessage.Serie')}</h3>
                                 )}
-
                             </div>
                         )}
                     </div>
                 </div>
             </div>
         </>
-
     )
 }

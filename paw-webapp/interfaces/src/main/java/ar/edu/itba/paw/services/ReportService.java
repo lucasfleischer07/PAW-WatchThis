@@ -10,7 +10,9 @@ public interface ReportService {
     void removeReports(String type, Long contentId);
     void addReport(Object reviewOrComment, User user, String reason);
     PageWrapper<ReviewReport> getReportedReviews(ReportReason reason,int page,int pageSize);
+    int getReportedReviewsAmount(ReportReason reason);
     PageWrapper<CommentReport> getReportedComments(ReportReason reason,int page,int pageSize);
+    int getReportedCommentsAmount(ReportReason reason);
 
 
 

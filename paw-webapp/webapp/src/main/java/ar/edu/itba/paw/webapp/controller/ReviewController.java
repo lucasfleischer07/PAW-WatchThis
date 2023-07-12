@@ -42,9 +42,6 @@ public class ReviewController {
 
 
     // * ----------------------------------- Movies and Series Review Gets ---------------------------------------------
-    /*
-    TODO: HAY QUE VER COMO MANDAMOS LA CANTIDAD DE PAGINAS Y ESO
-     */
 
     @GET
     @Path("/{contentId}")

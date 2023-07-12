@@ -1,7 +1,7 @@
-import {Link, useLocation, useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {useTranslation} from "react-i18next";
-import React, {useContext, useEffect, useState} from 'react';
-import {Button, Modal, OverlayTrigger, Tooltip} from "react-bootstrap";
+import React, {useContext, useState} from 'react';
+import {Button, Modal} from "react-bootstrap";
 import {AuthContext} from "../../context/AuthContext";
 import {commentService, reportsService} from "../../services";
 import {toast} from "react-toastify";
@@ -25,7 +25,6 @@ export default function Comments(props) {
     const [alreadyReport, setAlreadyReport] = useState(props.alreadyReport)
     const [loggedUserIsAdmin,setIsAdmin] = useState(props.loggedUserIsAdmin);
 
-    const loggedUserId = props.loggedUserId
     const loggedUserName = props.loggedUserName
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -217,7 +216,6 @@ export default function Comments(props) {
                                 ) : (
                                     <>
                                         <div>
-                                            {/*{tooltipGoToLogin}*/}
                                             <TooltipComponent text={t('Report.Add')}>
                                                 <button id="reportCommentButtonNoLogin" type="button" className="btn btn-light" data-bs-toggle="modal" data-bs-target="#reportCommentModalNoLogin" onClick={handleShowLoginModal}>
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#b21e26" className="bi bi-exclamation-circle" viewBox="0 0 16 16">

@@ -26,21 +26,23 @@ export default function ReportedPage() {
     const [commentOrReviewDismissedOrDeleted, setCommentOrReviewDismissedOrDeleted] = useState(false)
 
     const [filterReason, setFilterReason] = useState('')
-    const [reportType, setReportType] = useState('reviews')
     const [page, setPage] = useState(1)
     const [amountPages, setAmountPages] = useState(1)
+    const [amountReportedReviews, setAmountReportedReviews] = useState(0)
+    const [amountReportedComments, setAmountReportedComments] = useState(0)
 
     const [tabKey, initTabKey] = useState('one')
+    const [reportType, setReportType] = useState('reviews')
 
     const { search } = useLocation();
-
+    const [paramsSetted, setParamsSetted] = useState(false)
 
 
     useEffect(() => {
         const queryParams = new URLSearchParams(search);
         updateUrlVariable(filterReason, checkIsReason(queryParams.get('reason')),(x) => setFilterReason(x))
-        //updateUrlVariable(reportType, queryParams.get('reportType'), (x) => setReportType(x))
         updateUrlVariable(page,(typeof queryParams.get('page') === 'string' ?  checkIsNumber(queryParams.get('page')) : queryParams.get('page')), (x) =>setPage(x))
+        setParamsSetted(true)
     }, [search]);
 
     const handleOnClickFilter = (value) => {
@@ -54,12 +56,12 @@ export default function ReportedPage() {
     }
 
     const prevPage = () => {
-        setAmountPages(page - 1)
+        setPage(page - 1)
         changeUrlPage(page - 1)
     }
 
     const nextPage = () => {
-        setAmountPages(page + 1)
+        setPage(page + 1)
         changeUrlPage(page + 1)
     }
 
@@ -89,87 +91,63 @@ export default function ReportedPage() {
         navigate(currentPath + '?' + searchParams.toString());
     }
 
-    useEffect(() => {
-        if(isLogged() && user.role === 'admin') {
-            setCurrentCommentsReportsPage(1)
-            setCurrentReviewsReportsPage(1)
-            reportsService.getReportsByType('reviews', currentReviewsReportsPage, filterReason)
-                .then(data => {
-                    if(!data.error) {
-                        setReportedReviewsList(data.data)
-                        setAmountPages(data.totalPages)
-                    } else {
-                        if(data.errorCode === 404) {
-                            setShowExpiredCookiesModal(true)
-                        } else {
-                            navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
-                        }
-                    }
-                })
-                .catch(() => {
-                    navigate("/error", { replace: true, state: {errorCode: 404} })
-                })
-
-            reportsService.getReportsByType('comments', currentCommentsReportsPage, filterReason)
-                .then(data => {
-                    if(!data.error) {
-                        setReportedCommentsList(data.data)
-                    } else {
-                        if(data.errorCode === 404) {
-                            setShowExpiredCookiesModal(true)
-                        } else {
-                            navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
-                        }
-                    }
-                })
-                .catch(() => {
-                    navigate("/error", { replace: true, state: {errorCode: 404} })
-                })
-        } else {
-            navigate("/error", { replace: true, state: {errorCode: 401} })
-        }
-
-    }, [filterReason, commentOrReviewDismissedOrDeleted])
-
+    const tabChange = (e) => {
+        initTabKey(e)
+        setReportType(e === 'one' ? "reviews" : "comments")
+        setPage(1)
+    }
 
     useEffect(() => {
-        if(isLogged() && user.role === 'admin') {
-            reportsService.getReportsByType('reviews', currentReviewsReportsPage)
-                .then(data => {
-                    if(!data.error) {
-                        setReportedReviewsList(data.data)
-                    } else {
-                        if(data.errorCode === 404) {
-                            setShowExpiredCookiesModal(true)
-                        } else {
-                            navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
-                        }
-                    }
-                })
-                .catch(() => {
-                    navigate("/error", { replace: true, state: {errorCode: 404} })
-                })
+        if(paramsSetted) {
+            if (isLogged() && user.role === 'admin') {
+                setCurrentCommentsReportsPage(1)
+                setCurrentReviewsReportsPage(1)
+                if (reportType === "reviews") {
+                    reportsService.getReportsByType('reviews', page, filterReason)
+                        .then(data => {
+                            if (!data.error) {
+                                setReportedReviewsList(data.data)
+                                setAmountPages(data.totalPages)
+                                setAmountReportedComments(data.totalCommentsReports)
+                                setAmountReportedReviews(data.totalReviewsReports)
+                            } else {
+                                if (data.errorCode === 404) {
+                                    setShowExpiredCookiesModal(true)
+                                } else {
+                                    navigate("/error", {replace: true, state: {errorCode: data.errorCode}})
+                                }
+                            }
+                        })
+                        .catch(() => {
+                            navigate("/error", {replace: true, state: {errorCode: 404}})
+                        })
 
-            reportsService.getReportsByType('comments', currentCommentsReportsPage)
-                .then(data => {
-                    if(!data.error) {
-                        setReportedCommentsList(data.data)
-                    } else {
-                        if(data.errorCode === 404) {
-                            setShowExpiredCookiesModal(true)
-                        } else {
-                            navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
-                        }
-                    }
-                })
-                .catch(() => {
-                    navigate("/error", { replace: true, state: {errorCode: 404} })
-                })
-        } else {
-            navigate("/error", { replace: true, state: {errorCode: 401} })
+                } else {
+                    reportsService.getReportsByType('comments', page, filterReason)
+                        .then(data => {
+                            if (!data.error) {
+                                setReportedCommentsList(data.data)
+                                setAmountPages(data.totalPages)
+                                setAmountReportedComments(data.totalCommentsReports)
+                                setAmountReportedReviews(data.totalReviewsReports)
+                            } else {
+                                if (data.errorCode === 404) {
+                                    setShowExpiredCookiesModal(true)
+                                } else {
+                                    navigate("/error", {replace: true, state: {errorCode: data.errorCode}})
+                                }
+                            }
+                        })
+                        .catch(() => {
+                            navigate("/error", {replace: true, state: {errorCode: 404}})
+                        })
+                }
+            } else {
+                navigate("/error", {replace: true, state: {errorCode: 401}})
+            }
         }
 
-    }, [])
+    }, [filterReason, commentOrReviewDismissedOrDeleted,reportType,paramsSetted,page])
 
 
     return(
@@ -194,7 +172,7 @@ export default function ReportedPage() {
                         <div className="W-report-header-qtty-margin">
                             <ul className="list-inline mb-0">
                                 <li className="list-inline-item">
-                                    <h4 className="font-weight-bold mb-0 d-block">{reportedReviewsList.length}</h4>
+                                    <h4 className="font-weight-bold mb-0 d-block">{amountReportedReviews}</h4>
                                     {reportedReviewsList.length === 1 ? (
                                         <span className="text-muted">
                                             <i className="fas fa-image mr-1"></i><span>{t('Profile.Review')}</span>
@@ -208,7 +186,7 @@ export default function ReportedPage() {
                                 </li>
 
                                 <li className="list-inline-item">
-                                    <h4 className="font-weight-bold mb-0 d-block">{reportedCommentsList.length}</h4>
+                                    <h4 className="font-weight-bold mb-0 d-block">{amountReportedComments}</h4>
                                     {reportedCommentsList.length === 1 ? (
                                         <span className="text-muted">
                                             <i className="fas fa-image mr-1"></i>
@@ -275,7 +253,7 @@ export default function ReportedPage() {
                 </div>
 
                 <div className='W-reported-general-div-list'>
-                    <Tabs activeKey={tabKey} onSelect={(e) => initTabKey(e)}>
+                    <Tabs activeKey={tabKey} onSelect={(e) =>  tabChange(e)}>
                         <Tab eventKey="one" title={t('Content.Review')} >
                             {reportedReviewsList.length > 0 ? (
                                 <>
@@ -357,36 +335,36 @@ export default function ReportedPage() {
                 <div>
                     <ul className="pagination justify-content-center W-pagination">
                         {page > 1 ? (
-                            <li className="page-item">
+                            <li key={"prev"}className="page-item">
                                 <p className="page-link W-pagination-color" onClick={() => prevPage()}>
                                     {t('Pagination.Prev')}
                                 </p>
                             </li>
                         ) : (
-                            <li className="page-item disabled">
+                            <li key={"prev"} className="page-item disabled">
                                 <p className="page-link W-pagination-color">{t('Pagination.Prev')}</p>
                             </li>
                         )}
                         {amountPages > 10 ? (
                             Array.from({ length: amountPages }, (_, index) => (
-                                index + 1 === parseInt(page) ? (
-                                    <li className="page-item active">
+                                index + 1 === page ? (
+                                    <li key={index+1} className="page-item active">
                                         <p className="page-link W-pagination-color">{index + 1}</p>
                                     </li>
-                                ): index + 1 === parseInt(page) + 4 ? (
-                                    <li className="page-item">
+                                ): index + 1 === page + 4 ? (
+                                    <li key={index+1} className="page-item">
                                         <p className="page-link W-pagination-color" onClick={() => changePage(index + 1)}>
                                             ...
                                         </p>
                                     </li>
-                                ): index + 1 === parseInt(page) - 4 ? (
-                                    <li className="page-item">
+                                ): index + 1 === page - 4 ? (
+                                    <li key={index+1} className="page-item">
                                         <p className="page-link W-pagination-color" onClick={() => changePage(index + 1)}>
                                             ...
                                         </p>
                                     </li>
-                                ) : ( index + 1 > parseInt(page) - 4 && index + 1 < parseInt(page) + 4 ) && (
-                                    <li className="page-item">
+                                ) : ( index + 1 > page - 4 && index + 1 < page + 4 ) && (
+                                    <li key={index+1} className="page-item">
                                         <p className="page-link W-pagination-color" onClick={() => changePage(index + 1)}>
                                             {index + 1}
                                         </p>
@@ -396,11 +374,11 @@ export default function ReportedPage() {
                         ) : (
                             Array.from({ length: amountPages }, (_, index) => (
                                 index + 1 === page ? (
-                                    <li className="page-item active">
+                                    <li key={index+1} className="page-item active">
                                         <p className="page-link W-pagination-color">{index + 1}</p>
                                     </li>
                                 ) : (
-                                    <li className="page-item">
+                                    <li key={index+1} className="page-item">
                                         <p className="page-link W-pagination-color" onClick={() => changePage(index + 1)}>
                                             {index + 1}
                                         </p>
@@ -409,21 +387,19 @@ export default function ReportedPage() {
                             ))
                         )}
                         {page < amountPages ? (
-                            <li className="page-item">
+                            <li key={"next"} className="page-item">
                                 <p className="page-link W-pagination-color" onClick={() => nextPage()}>
                                     {t('Pagination.Next')}
                                 </p>
                             </li>
                         ) : (
-                            <li className="page-item disabled">
+                            <li key={"next"} className="page-item disabled">
                                 <p className="page-link W-pagination-color">{t('Pagination.Next')}</p>
                             </li>
                         )}
                     </ul>
                 </div>
             )}
-
         </>
-
     )
 }

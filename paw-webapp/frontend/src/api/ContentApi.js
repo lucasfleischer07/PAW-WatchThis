@@ -148,8 +148,6 @@ export class ContentApi {
         }
     }
 
-    // TODO: Ver bien ste que seria con paginacion y filtros
-    // TODO: Filters seria un objeto que adentro tiene el genre, duration y sortBy
     async filterContentByType(contentType, pageNumber, filters) {
         try {
             const apiUrl = `${this.basePath}/${contentType}/filters`

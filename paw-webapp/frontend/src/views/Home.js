@@ -5,15 +5,6 @@ import {AuthContext} from "../context/AuthContext";
 import {contentService} from "../services";
 import Header from "./components/Header";
 import {useNavigate} from "react-router-dom";
-import Filters from "./components/Filters";
-import {displayName} from "react-quill";
-import {set} from "react-hook-form";
-
-
-// import { css } from '@emotion/react';
-// import { RingLoader } from 'react-spinners';
-// import 'react-spinners/css/Spinners.css';
-
 
 export default function Home() {
     const {t} = useTranslation()
@@ -30,10 +21,8 @@ export default function Home() {
 
     const [logOut, setLogOut] = useState(false)
 
-    // const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        // setLoading(true);
         contentService.getLandingPage()
             .then(list => {
                 if(!list.error) {
@@ -45,10 +34,8 @@ export default function Home() {
                         setMostSavedContentByUsersList(list.data.mostSavedContentByUsersList)
                     }
                 }
-                // setLoading(false);
             })
             .catch(() => {
-                // setLoading(false);
                 navigate("/error", { replace: true, state: {errorCode: 404} })
             })
 
@@ -72,47 +59,14 @@ export default function Home() {
         } else {
             setUser(null)
         }
-    }, [])
-
-    useEffect(() => {
-        contentService.getLandingPage()
-            .then(list => {
-                if(!list.error) {
-                    setBestRatedList(list.data.bestRatedList)
-                    setLastAddedList(list.data.lastAddedList)
-                    if(list.data.hasOwnProperty("recommendedUserList") && (list.data.recommendedUserList.length > 0)) {
-                        setRecommendedUserList(list.data.recommendedUserList)
-                    } else {
-                        setMostSavedContentByUsersList(list.data.mostSavedContentByUsersList)
-                    }
-                }
-                // setLoading(false);
-            })
-            .catch(() => {
-                // setLoading(false);
-                navigate("/error", { replace: true, state: {errorCode: 404} })
-            })
     }, [logOut])
+
+
 
 
     useEffect(() => {
         document.title = t('WatchThisMessage')
     })
-
-    // if (loading) {
-    //     const override = css`
-    //   display: block;
-    //   margin: 0 auto;
-    //   border-color: red;
-    // `;
-    //
-    //     return (
-    //         <div className="spinner-container">
-    //             <RingLoader color="#000" css={override} loading={loading} size={150} />
-    //         </div>
-    //     );
-    // }
-
 
     return(
         <div>
@@ -124,8 +78,6 @@ export default function Home() {
                 userId={user?.id}
                 setLogOut={setLogOut}
             />
-
-            {/*<Filters type="all"/>*/}
 
             <div className="W-carousels-div">
                 {isLogged() && userWatchListIds.length !== 0 && recommendedUserList.length !== 0 ? (
@@ -291,6 +243,5 @@ export default function Home() {
                 </div>
             </div>
         </div>
-
     )
 }

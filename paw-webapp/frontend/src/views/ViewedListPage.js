@@ -31,12 +31,12 @@ export default function ViewedListPage(props) {
     }, [search]);
 
     const prevPage = () => {
-        setAmountPages(page - 1)
+        setPage(page - 1)
         changeUrlPage(page - 1)
     }
 
     const nextPage = () => {
-        setAmountPages(page + 1)
+        setPage(page + 1)
         changeUrlPage(page + 1)
     }
 
@@ -97,11 +97,6 @@ export default function ViewedListPage(props) {
             navigate("/error", { replace: true, state: {errorCode: 401} })
         }
     }
-
-    useEffect(() => {
-        getUserViewedList()
-        getUserWatchList()
-    }, [])
 
     useEffect(() => {
         getUserViewedList()
@@ -185,23 +180,23 @@ export default function ViewedListPage(props) {
                         )}
                         {amountPages > 10 ? (
                             Array.from({ length: amountPages }, (_, index) => (
-                                index + 1 === parseInt(page) ? (
+                                index + 1 === page ? (
                                     <li className="page-item active">
                                         <p className="page-link W-pagination-color">{index + 1}</p>
                                     </li>
-                                ): index + 1 === parseInt(page) + 4 ? (
+                                ): index + 1 === page + 4 ? (
                                     <li className="page-item">
                                         <p className="page-link W-pagination-color" onClick={() => changePage(index + 1)}>
                                             ...
                                         </p>
                                     </li>
-                                ): index + 1 === parseInt(page) - 4 ? (
+                                ): index + 1 === page - 4 ? (
                                     <li className="page-item">
                                         <p className="page-link W-pagination-color" onClick={() => changePage(index + 1)}>
                                             ...
                                         </p>
                                     </li>
-                                ) : ( index + 1 > parseInt(page) - 4 && index + 1 < parseInt(page) + 4 ) && (
+                                ) : ( index + 1 > page - 4 && index + 1 < page + 4 ) && (
                                     <li className="page-item">
                                         <p className="page-link W-pagination-color" onClick={() => changePage(index + 1)}>
                                             {index + 1}

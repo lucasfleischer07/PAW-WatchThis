@@ -59,7 +59,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     public DataSource dataSource(){
         LOGGER.info("Data base set up");
 //      * Conexion a localhost
-       /*String dbUrl="jdbc:postgresql://localhost:5432/postgres";
+      /* String dbUrl="jdbc:postgresql://localhost:5432/postgres";
         String username = "postgres";
         String password = "postgres";
         final SimpleDriverDataSource basicDataSource = new SimpleDriverDataSource();
@@ -149,6 +149,4 @@ public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
     public void configurePathMatch(PathMatchConfigurer configurer){
         configurer.setUseTrailingSlashMatch(false);
     }
-
-
 }

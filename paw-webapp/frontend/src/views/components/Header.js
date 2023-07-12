@@ -19,9 +19,7 @@ export default function Header(props) {
 
     const { search } = useLocation();
 
-    const [queryForm, setQueryForm] = useState({
-        query: ""
-    });
+    const [queryForm, setQueryForm] = useState({ query: ''});
 
     const [contentType, setContentType] = useState("all")
 
@@ -35,7 +33,6 @@ export default function Header(props) {
         return ( queryForm.query != null && (queryForm.query.length > 0 || ( queryForm.query.length === 0 && queryProp.length > 0) ))
     }
 
-    //RECORDAR QUE DEPENDIENDO DEL TYPE, EL PATH DEBE CAMBIAR, EL TYPE SE DEBE RECIBIR POR PARAM
     const handleSubmit = (event) => {
         event.preventDefault();
         const searchParams = new URLSearchParams(window.location.search);
@@ -82,9 +79,10 @@ export default function Header(props) {
 
     useEffect(() => {
         const queryParams = new URLSearchParams(search);
-        const query = queryParams.get('query')
+        const query = queryParams.get("query")
         if (query !== queryProp && query !== null){
             setQuery(query)
+            setQueryForm({ query: query})
         }
     }, [search]);
 

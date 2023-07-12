@@ -185,7 +185,17 @@ public class ReportServiceImpl implements ReportService{
     }
 
     @Override
+    public int getReportedReviewsAmount(ReportReason reason){
+        return reason==null ? reportDao.getReportedReviewsAmount() : reportDao.getReportedReviewsAmountByReason(reason);
+    }
+
+    @Override
     public PageWrapper<CommentReport> getReportedComments(ReportReason reason,int page,int pageSize) {
         return reason==null ? reportDao.getReportedComments(page,pageSize) : reportDao.getReportedCommentsByReason(reason,page,pageSize);
+    }
+
+    @Override
+    public int getReportedCommentsAmount(ReportReason reason){
+        return reason==null ? reportDao.getReportedCommentsAmount() : reportDao.getReportedCommentsAmountByReason(reason);
     }
 }

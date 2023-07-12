@@ -271,8 +271,6 @@ export default function Filters(props) {
                             </li>
                         ))}
                     </ul>
-
-
                 </div>
             </div>
         </div>

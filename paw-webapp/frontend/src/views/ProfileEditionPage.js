@@ -22,13 +22,11 @@ export default function ProfileEditionPage() {
     const [errorPassword, setErrorPassword] = useState(false)
     const [image, setImage] = useState(undefined)
 
-
     const [userForm, setUserForm] = useState({
         currentPassword: "",
         newPassword: "",
         confirmPassword: "",
     });
-
 
     const validatePasswords = () => {
         if(userForm.newPassword !== userForm.confirmPassword || (userForm.newPassword.length < 6 && userForm.newPassword.length > 0)) {
@@ -221,12 +219,10 @@ export default function ProfileEditionPage() {
                                     </button>
                                 </div>
                             </form>
-
                         </div>
                     </div>
                 </div>
             </div>
         </>
     )
-
 }

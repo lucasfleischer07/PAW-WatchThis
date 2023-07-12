@@ -12,8 +12,12 @@ public interface ReportDao {
     void addReport(Object reviewOrComment, User user, ReportReason reason);
     PageWrapper<ReviewReport> getReportedReviews(int page,int pageSize);
     PageWrapper<ReviewReport> getReportedReviewsByReason(ReportReason reason,int page,int pageSize);
+    int getReportedReviewsAmount();
+    int getReportedReviewsAmountByReason(ReportReason reason);
     PageWrapper<CommentReport> getReportedComments(int page,int pageSize);
     PageWrapper<CommentReport> getReportedCommentsByReason(ReportReason reason, int page, int pageSize);
+    int getReportedCommentsAmount();
+    int getReportedCommentsAmountByReason(ReportReason reason);
     Optional<CommentReport> findCommentReport(Long id);
     Optional<ReviewReport> findReviewReport(Long id);
 

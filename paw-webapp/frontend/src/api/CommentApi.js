@@ -57,6 +57,5 @@ export class CommentApi {
         } catch (e) {
             return {error: true, errorCode: e.response.status || 500}
         }
-
     }
 }

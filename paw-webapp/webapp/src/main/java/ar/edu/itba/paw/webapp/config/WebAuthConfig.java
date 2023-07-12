@@ -87,10 +87,6 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     private static final String ACCESS_CONTROL_CHECK_REVIEW_NOT_OWNER = "@accessControl.checkReviewNotOwner(request, #id)";
 
 
-
-
-
-
     @Bean
     public AccessDecisionManager accessDecisionManager() {
         List<AccessDecisionVoter<?>> decisionVoters = Arrays.asList(
@@ -133,7 +129,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Collections.singletonList(ALL));
-        configuration.setExposedHeaders(Arrays.asList("Authorization", "Link", "Location", "ETag", "Cache-Control", "Total-Elements", "Content-Type", "Total-Reviews"));
+        configuration.setExposedHeaders(Arrays.asList("Authorization", "Link", "Location", "ETag", "Cache-Control", "Total-Elements", "Content-Type", "Total-Reviews","Total-Review-Reports","Total-Comment-Reports"));
         configuration.setAllowedMethods(Arrays.asList("GET","POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         configuration.addAllowedHeader(ALL);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

@@ -96,6 +96,19 @@ public class ReportJpaDao implements ReportDao{
     }
 
     @Override
+    public int getReportedReviewsAmount(){
+        TypedQuery<ReviewReport> countQuery=em.createQuery("select r from  ReviewReport r where r.id in(select min(r2.id) from ReviewReport r2 group by r2.review) order by r.id asc",ReviewReport.class);
+        return countQuery.getResultList().size();
+    }
+
+    @Override
+    public int getReportedReviewsAmountByReason(ReportReason reason){
+        TypedQuery<ReviewReport>countQuery= em.createQuery("select r from ReviewReport r where  r.id in(select min(r2.id) from ReviewReport r2 where r2.reportReason = :reason group by r2.review) order by r.id asc", ReviewReport.class);
+        countQuery.setParameter("reason",reason);
+        return countQuery.getResultList().size();
+    }
+
+    @Override
     public PageWrapper<CommentReport> getReportedComments(int page,int pageSize) {
         TypedQuery<CommentReport>query= em.createQuery("select r from CommentReport r where r.id in(select min(r2.id) from CommentReport r2 group by r2.comment) order by r.id asc", CommentReport.class);
         TypedQuery<CommentReport>countQuery= em.createQuery("select r from CommentReport r where r.id in(select min(r2.id) from CommentReport r2 group by r2.comment) order by r.id asc", CommentReport.class);
@@ -131,6 +144,19 @@ public class ReportJpaDao implements ReportDao{
     public Optional<ReviewReport> findReviewReport(Long id) {
         return Optional.ofNullable(em.find(ReviewReport.class,id));
 
+    }
+
+    @Override
+    public int getReportedCommentsAmount(){
+        TypedQuery<CommentReport>countQuery= em.createQuery("select r from CommentReport r where r.id in(select min(r2.id) from CommentReport r2 group by r2.comment) order by r.id asc", CommentReport.class);
+        return countQuery.getResultList().size();
+    }
+
+    @Override
+    public int getReportedCommentsAmountByReason(ReportReason reason){
+        TypedQuery<CommentReport>countQuery= em.createQuery("select r from CommentReport r  where r.id in(select min(r2.id) from CommentReport r2 where r2.reportReason = :reason group by r2.comment) order by r.id asc", CommentReport.class);
+        countQuery.setParameter("reason",reason);
+        return countQuery.getResultList().size();
     }
 
 

@@ -111,7 +111,6 @@ export default function ReportedContent(props) {
                         <div>
                             {reportType === 'comment' ? (
                                 <Link to={`/user/profile/${reviewCreatorUserId}`} className="W-creator-review W-margin-right-reports">{t('Review.Owner', {username: reviewCreatorUserName})}</Link>
-
                             ) : (
                                 <Link to={`/user/profile/${reviewCreatorUserId}`} className="W-creator-review W-margin-right-reports">{t('Review.Owner', {username: reviewCreatorUserName})}</Link>
                             )}

@@ -84,7 +84,6 @@ export default function ForgotPassword() {
                             onChange={handleChange}
                             required
                         />
-
                     </div>
                 </div>
             </div>

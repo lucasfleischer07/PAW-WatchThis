@@ -157,24 +157,7 @@ export default function ReviewRegistrationPage() {
                             <p className="W-review-registration-text">
                                 {t('CreateReview.CharacterLimits', {min: 20, max: 2000})}
                             </p>
-
                             <textarea className="form-control" name="description" id="description" cols="30" rows="10" onChange={handleChange} value={reviewForm.description}/>
-
-
-                            {/*TODO: VER PORQUE ESTO NO ANDA*/}
-                            {/*<SimpleMDE*/}
-                            {/*    id="MyTextArea"*/}
-                            {/*    className="form-control"*/}
-                            {/*    name="description"*/}
-                            {/*    options={{*/}
-                            {/*        showIcons: ["strikethrough"],*/}
-                            {/*        hideIcons: ["link", "image","table","preview","fullscreen","guide","side-by-side","quote"]*/}
-                            {/*    }}*/}
-                            {/*    value={reviewForm.description}*/}
-                            {/*    onChange={handleChange}*/}
-                            {/*    rows="3"*/}
-                            {/*/>*/}
-
                         </div>
                         <div className="mb-3 W-input-label-review-info">
                             {ratingError &&
@@ -216,8 +199,6 @@ export default function ReviewRegistrationPage() {
                     <button id="submitButton" type="submit" className="btn btn-success" onClick={handleSubmit}>{t('Form.Submit')}</button>
                 </div>
             </form>
-
         </>
-
     )
 }

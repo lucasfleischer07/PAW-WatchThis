@@ -7,7 +7,7 @@ import java.util.Collection;
 
 //Extiende el User de spring security no el mio
 public class PawUserDetails extends User {
-    //Usamos este constructor, ya que no usamos las flags, etc
+    //Usamos este constructor, ya que no usamos las flags, etc,...
     public PawUserDetails(String username, String password, Collection<? extends GrantedAuthority> authorities) {
         super(username, password, authorities);
     }

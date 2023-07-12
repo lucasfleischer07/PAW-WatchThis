@@ -207,24 +207,23 @@ export default function Reputation(props) {
                                     </svg>
                                 </a>
                                 <Modal show={showLoginModal} onHide={handleCloseLoginModal} id="thumbsModal" tabIndex="-1" aria-labelledby="thumbsModalLabel" aria-hidden="true">
-                                            <Modal.Header>
-                                                <Modal.Title className="modal-title" id="thumbsModalLabel">
-                                                    {t('Reputation.Title')}
-                                                </Modal.Title>
-                                                {/*<button type="button" onClick={handleCloseLoginModal} className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>*/}
-                                            </Modal.Header>
-                                            <Modal.Body >
-                                                <span>{t('Reputation.WarningAdd')}</span>
-                                                <span>{t('Review.WarningAddMessage')}</span>
-                                            </Modal.Body>
-                                            <Modal.Footer >
-                                                <button type="button" onClick={handleCloseLoginModal} className="btn btn-secondary" data-bs-dismiss="modal">
-                                                    {t('Close')}
-                                                </button>
-                                                <button type="button" className="btn btn-success" onClick={handleGoToLogin}>
-                                                    {t('Login.LoginMessage')}
-                                                </button>
-                                            </Modal.Footer>
+                                    <Modal.Header>
+                                        <Modal.Title className="modal-title" id="thumbsModalLabel">
+                                            {t('Reputation.Title')}
+                                        </Modal.Title>
+                                    </Modal.Header>
+                                    <Modal.Body >
+                                        <span>{t('Reputation.WarningAdd')}</span>
+                                        <span>{t('Review.WarningAddMessage')}</span>
+                                    </Modal.Body>
+                                    <Modal.Footer >
+                                        <button type="button" onClick={handleCloseLoginModal} className="btn btn-secondary" data-bs-dismiss="modal">
+                                            {t('Close')}
+                                        </button>
+                                        <button type="button" className="btn btn-success" onClick={handleGoToLogin}>
+                                            {t('Login.LoginMessage')}
+                                        </button>
+                                    </Modal.Footer>
                                 </Modal>
                             </>
                         )}
@@ -321,6 +320,5 @@ export default function Reputation(props) {
                 <></>
             )}
         </div>
-
     );
 }

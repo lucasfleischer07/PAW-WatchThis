@@ -3,10 +3,8 @@ import {Link, useLocation, useNavigate, useParams} from "react-router-dom";
 import React, {useContext, useEffect, useState} from "react";
 import {AuthContext} from "../context/AuthContext";
 import {contentService, reviewService} from "../services";
-import SimpleMDE from "react-simplemde-editor";
 import Header from "./components/Header";
 import ExpiredCookieModal from "./components/ExpiredCookieModal";
-
 
 
 export default function ReviewEditionPage() {
@@ -17,10 +15,8 @@ export default function ReviewEditionPage() {
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
     const [showExpiredCookiesModal, setShowExpiredCookiesModal] = useState(false)
 
-    let origin = location.pathname || "/";
     const { contentType, contentId, reviewId } = useParams();
     const [content, setContent] = useState({})
-    const [error, setError] = useState(false)
 
     const [nameError, setNameError] = useState(false)
     const [descriptionError, setDescriptionError] = useState(false)
@@ -183,20 +179,6 @@ export default function ReviewEditionPage() {
                             </p>
 
                             <textarea className="form-control" name="description" id="description" cols="30" rows="10" onChange={handleChange} value={reviewForm.description}/>
-
-                            {/*TODO: Ver porque no lee el texto de adentro al submitear*/}
-                            {/*<SimpleMDE*/}
-                            {/*    id="description"*/}
-                            {/*    className="form-control"*/}
-                            {/*    name="description"*/}
-                            {/*    options={{*/}
-                            {/*        showIcons: ["strikethrough"],*/}
-                            {/*        hideIcons: ["link", "image","table","preview","fullscreen","guide","side-by-side","quote"]*/}
-                            {/*    }}*/}
-                            {/*    value={reviewForm.description}*/}
-                            {/*    onChange={handleChange}*/}
-                            {/*    rows="3"*/}
-                            {/*/>*/}
 
                         </div>
                         <div className="mb-3 W-input-label-review-info">

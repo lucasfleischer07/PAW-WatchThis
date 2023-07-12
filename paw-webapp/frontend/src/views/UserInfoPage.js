@@ -35,12 +35,12 @@ export default function UserInfoPage() {
 
 
     const prevPage = () => {
-        setAmountPages(page - 1)
+        setPage(page - 1)
         changeUrlPage(page - 1)
     }
 
     const nextPage = () => {
-        setAmountPages(page + 1)
+        setPage(page + 1)
         changeUrlPage(page + 1)
     }
 
@@ -164,9 +164,7 @@ export default function UserInfoPage() {
                 .catch(() => {
                     navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
-
         }
-
     }, [page])
 
 
@@ -286,36 +284,36 @@ export default function UserInfoPage() {
                             <div>
                                 <ul className="pagination justify-content-center W-pagination">
                                     {page > 1 ? (
-                                        <li className="page-item">
+                                        <li key={"prev"} className="page-item">
                                             <p className="page-link W-pagination-color" onClick={() => prevPage()}>
                                                 {t('Pagination.Prev')}
                                             </p>
                                         </li>
                                     ) : (
-                                        <li className="page-item disabled">
+                                        <li key={"prev"} className="page-item disabled">
                                             <p className="page-link W-pagination-color">{t('Pagination.Prev')}</p>
                                         </li>
                                     )}
                                     {amountPages > 10 ? (
                                         Array.from({ length: amountPages }, (_, index) => (
-                                            index + 1 === parseInt(page) ? (
-                                                <li className="page-item active">
+                                            index + 1 === page ? (
+                                                <li key={index+1} className="page-item active">
                                                     <p className="page-link W-pagination-color">{index + 1}</p>
                                                 </li>
-                                            ): index + 1 === parseInt(page) + 4 ? (
-                                                <li className="page-item">
+                                            ): index + 1 === page + 4 ? (
+                                                <li key={index+1} className="page-item">
                                                     <p className="page-link W-pagination-color" onClick={() => changePage(index + 1)}>
                                                         ...
                                                     </p>
                                                 </li>
-                                            ): index + 1 === parseInt(page) - 4 ? (
-                                                <li className="page-item">
+                                            ): index + 1 === page - 4 ? (
+                                                <li key={index+1} className="page-item">
                                                     <p className="page-link W-pagination-color" onClick={() => changePage(index + 1)}>
                                                         ...
                                                     </p>
                                                 </li>
-                                            ) : ( index + 1 > parseInt(page) - 4 && index + 1 < parseInt(page) + 4 ) && (
-                                                <li className="page-item">
+                                            ) : ( index + 1 > page - 4 && index + 1 < page + 4 ) && (
+                                                <li key={index+1} className="page-item">
                                                     <p className="page-link W-pagination-color" onClick={() => changePage(index + 1)}>
                                                         {index + 1}
                                                     </p>
@@ -325,11 +323,11 @@ export default function UserInfoPage() {
                                     ) : (
                                         Array.from({ length: amountPages }, (_, index) => (
                                             index + 1 === page ? (
-                                                <li className="page-item active">
+                                                <li key={index+1} className="page-item active">
                                                     <p className="page-link W-pagination-color">{index + 1}</p>
                                                 </li>
                                             ) : (
-                                                <li className="page-item">
+                                                <li key={index+1} className="page-item">
                                                     <p className="page-link W-pagination-color" onClick={() => changePage(index + 1)}>
                                                         {index + 1}
                                                     </p>
@@ -338,13 +336,13 @@ export default function UserInfoPage() {
                                         ))
                                     )}
                                     {page < amountPages ? (
-                                        <li className="page-item">
+                                        <li key={"next"} className="page-item">
                                             <p className="page-link W-pagination-color" onClick={() => nextPage()}>
                                                 {t('Pagination.Next')}
                                             </p>
                                         </li>
                                     ) : (
-                                        <li className="page-item disabled">
+                                        <li key={"next"} className="page-item disabled">
                                             <p className="page-link W-pagination-color">{t('Pagination.Next')}</p>
                                         </li>
                                     )}

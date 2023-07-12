@@ -6,7 +6,7 @@ import {Link, useLocation, useNavigate, useParams} from "react-router-dom";
 import Header from "./components/Header";
 import Filters from "./components/Filters";
 import ExpiredCookieModal from "./components/ExpiredCookieModal";
-import {updateUrlVariable, validateParam} from "../scripts/validateParam";
+import {updateUrlVariable} from "../scripts/validateParam";
 import {checkIsFrom, checkIsGenre, checkIsNumber, checkIsSort, checkIsTo} from "../scripts/filtersValidations";
 
 export default function ContentPage(props) {
@@ -28,13 +28,6 @@ export default function ContentPage(props) {
     const [query, setQuery] = useState('')
     const [settedParams,isSettedParams]=useState(false)
 
-
-
-    const updateVariable = (param,paramPulled,setter) => {
-        if( paramPulled !== null && paramPulled !== undefined && param !== paramPulled ){
-            setter(paramPulled)
-        }
-    }
 
     useEffect(() => {
         if(user === undefined) {
@@ -113,7 +106,6 @@ export default function ContentPage(props) {
         const searchParams = new URLSearchParams(search);
         searchParams.set('page', page);
         const currentPath = window.location.pathname.substring('/paw-2022b-3'.length);
-        console.log(currentPath)
         navigate(currentPath + '?' + searchParams.toString());
     }
 
@@ -157,36 +149,36 @@ export default function ContentPage(props) {
                     {(allContent.length > 0) && (
                         <ul className="pagination justify-content-center W-pagination">
                             {actualPage > 1 ? (
-                                <li className="page-item">
+                                <li key={"prev"} className="page-item">
                                     <p className="page-link W-pagination-color" onClick={() => prevPage()}>
                                         {t('Pagination.Prev')}
                                     </p>
                                 </li>
                             ) : (
-                                <li className="page-item disabled">
+                                <li key={"prev"} className="page-item disabled">
                                     <p className="page-link W-pagination-color">{t('Pagination.Prev')}</p>
                                 </li>
                             )}
                             {amountPages > 10 ? (
                                 Array.from({ length: amountPages }, (_, index) => (
                                     index + 1 === parseInt(actualPage) ? (
-                                        <li className="page-item active">
+                                        <li key={index+1} className="page-item active">
                                             <p className="page-link W-pagination-color">{index + 1}</p>
                                         </li>
                                     ): index + 1 === parseInt(actualPage) + 4 ? (
-                                        <li className="page-item">
+                                        <li key={index+1} className="page-item">
                                             <p className="page-link W-pagination-color" onClick={() => changePage(index + 1)}>
                                                 ...
                                             </p>
                                         </li>
                                     ): index + 1 === parseInt(actualPage) - 4 ? (
-                                        <li className="page-item">
+                                        <li key={index+1} className="page-item">
                                             <p className="page-link W-pagination-color" onClick={() => changePage(index + 1)}>
                                                 ...
                                             </p>
                                         </li>
                                     ) : ( index + 1 > parseInt(actualPage) - 4 && index + 1 < parseInt(actualPage) + 4 ) && (
-                                        <li className="page-item">
+                                        <li key={index+1} className="page-item">
                                             <p className="page-link W-pagination-color" onClick={() => changePage(index + 1)}>
                                                 {index + 1}
                                             </p>
@@ -196,11 +188,11 @@ export default function ContentPage(props) {
                             ) : (
                                 Array.from({ length: amountPages }, (_, index) => (
                                     index + 1 === actualPage ? (
-                                        <li className="page-item active">
+                                        <li key={index+1} className="page-item active">
                                             <p className="page-link W-pagination-color">{index + 1}</p>
                                         </li>
                                     ) : (
-                                        <li className="page-item">
+                                        <li key={index+1} className="page-item">
                                             <p className="page-link W-pagination-color" onClick={() => changePage(index + 1)}>
                                                 {index + 1}
                                             </p>
@@ -209,13 +201,13 @@ export default function ContentPage(props) {
                                 ))
                             )}
                             {actualPage < amountPages ? (
-                                <li className="page-item">
+                                <li key={"next"} className="page-item">
                                     <p className="page-link W-pagination-color" onClick={() => nextPage()}>
                                         {t('Pagination.Next')}
                                     </p>
                                 </li>
                             ) : (
-                                <li className="page-item disabled">
+                                <li key={"next"} className="page-item disabled">
                                     <p className="page-link W-pagination-color">{t('Pagination.Next')}</p>
                                 </li>
                             )}

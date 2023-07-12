@@ -10,7 +10,6 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 
-// /movies  ---> getAllMovies   ----> List<Content>   --->  List<Contentdto>
 public class ContentDto {
     // Content fields
     private Long id;

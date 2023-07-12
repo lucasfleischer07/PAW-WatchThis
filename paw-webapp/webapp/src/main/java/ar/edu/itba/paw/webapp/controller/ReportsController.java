@@ -60,6 +60,8 @@ public class ReportsController {
             Collection<ReviewReportDto> reviewsReportedListDto = ReviewReportDto.mapReviewReportToReviewReportDto(uriInfo, reviewsReported.getPageContent());
             LOGGER.info("GET /{}: Reported reviews list success for admin user {}", uriInfo.getPath(), user.getId());
             Response.ResponseBuilder response = Response.ok(new GenericEntity<Collection<ReviewReportDto>>(reviewsReportedListDto){});
+            response.header("Total-Review-Reports",rrs.getReportedReviewsAmount(reason));
+            response.header("Total-Comment-Reports",rrs.getReportedCommentsAmount(reason));
             ResponseBuildingUtils.setPaginationLinks(response,reviewsReported , uriInfo);
             return response.build();
         } else if(Objects.equals(type, "comments")) {
@@ -67,6 +69,8 @@ public class ReportsController {
             Collection<CommentReportDto> commentReportedListDto = CommentReportDto.mapCommentReportToCommentReportDto(uriInfo, commentsReported.getPageContent());
             LOGGER.info("GET /{}: Reported comments list success for admin user {}", uriInfo.getPath(), user.getId());
             Response.ResponseBuilder response = Response.ok(new GenericEntity<Collection<CommentReportDto>>(commentReportedListDto){});
+            response.header("Total-Review-Reports",rrs.getReportedReviewsAmount(reason));
+            response.header("Total-Comment-Reports",rrs.getReportedCommentsAmount(reason));
             ResponseBuildingUtils.setPaginationLinks(response,commentsReported , uriInfo);
             return response.build();
         } else {
