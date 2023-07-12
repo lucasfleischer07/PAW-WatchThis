@@ -132,5 +132,7 @@ public class User {
         return userComments;
     }
 
-
+    public void setUserReviews(List<Review> userReviews) {
+        this.userReviews = userReviews;
+    }
 }

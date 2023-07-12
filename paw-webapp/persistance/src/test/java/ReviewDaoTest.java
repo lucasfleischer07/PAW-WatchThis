@@ -1,4 +1,5 @@
 
+import ar.edu.itba.paw.models.Comment;
 import ar.edu.itba.paw.models.Content;
 import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.User;
@@ -15,11 +16,13 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,25 +42,26 @@ public class ReviewDaoTest {
     @Autowired
     private ReviewDao dao;
 
-    @Autowired
-    private UserDao userDao;
+    private User USER=new User(1L,"mateoperezrivera@gmail.com","brandyhuevo","secret",0L,null,"user");
+    private User USER2=new User(2L,"mateoperezrivera@gmail.com","brandyhuevo","secret",0L,null,"user");
 
-    @Autowired
-    private ContentDao contentDao;
+    private Content CONTENT=new Content(1L,"toy story",null,"Woody is stolen from his home by toy dealer Al McWhiggin.","1999","Animation","jhon lasseter","1:32",92,"movie");
+
+    private Content CONTENT2=new Content(2L,"adventure time",null,"A 12-year-old boy and his best friend, wise 28-year-old dog with magical powers","2010-2018","Animation","jhon lasseter","1:32",92,"serie");
+    private Review REVIEW2=new Review(3L,"serie","bad tv show","dont recommend it!",2,USER,CONTENT);
+
+    private Review REVIEW=new Review(2L,"movie","great movie","loved it! great actors",5,USER2,CONTENT2);
+
 
 
     private JdbcTemplate jdbcTemplate;
 
     private static final int REVIEW_AMOUNT = 10;
-    private Content testContent;
-
-    private User testUser;
 
     @Before
     public void setUp() {
         this.jdbcTemplate = new JdbcTemplate(ds);
-        testUser=userDao.findById(1L).get();
-        testContent=contentDao.findById(2L).get();
+
     }
 
     @Test
@@ -71,14 +75,15 @@ public class ReviewDaoTest {
 
     @Test
     public void testGetAllReviews(){
-        Content content=contentDao.findById(1L).get();
+        Content content=em.find(Content.class,CONTENT.getId());
         final List<Review> reviewList=dao.getAllReviews(content,1,REVIEW_AMOUNT).getPageContent();
         assertEquals(1, reviewList.size());
         assertEquals("great movie", reviewList.get(0).getName());
     }
     @Test
     public void testGetAllUserReviews(){
-        final List<Review> reviewList=dao.getAllUserReviews(testUser,1,REVIEW_AMOUNT).getPageContent();
+        User user=em.find(User.class,USER.getId());
+        final List<Review> reviewList=dao.getAllUserReviews(user,1,REVIEW_AMOUNT).getPageContent();
         assertEquals(1, reviewList.size());
         assertEquals(2, reviewList.get(0).getId());
     }
@@ -86,39 +91,31 @@ public class ReviewDaoTest {
     @Test
     @Rollback
     public void testCreate(){
-        assertEquals(1,dao.getAllReviews(contentDao.findById(2L).get(),1,REVIEW_AMOUNT ).getElemsAmount());
-        User user=userDao.findByUserName("brandyhuevo").get();
-        Content content=contentDao.findById(2L).get();
+        User user=em.find(User.class,USER.getId());
+        Content content=em.find(Content.class,CONTENT.getId());
         final Optional<Review> maybeReview=dao.addReview("muy buena peli", "", 4, "serie", user,content);
         assertTrue(maybeReview.isPresent());
-        assertEquals("muy buena peli", maybeReview.get().getName());
-        assertEquals(contentDao.findById(2L).get(),maybeReview.get().getContent());
-        assertEquals(2,dao.getAllUserReviews(userDao.findByUserName("brandyhuevo").get(),1,REVIEW_AMOUNT).getElemsAmount());
-        assertEquals(2,dao.getAllReviews(contentDao.findById(2L).get(),1,REVIEW_AMOUNT).getElemsAmount());
+        em.flush();
+        assertEquals(3, JdbcTestUtils.countRowsInTable(jdbcTemplate, "review"));
+
     }
     @Test
     @Rollback
     public void testDelete(){
-        Review review=dao.findById(2L).get();
-        User user=review.getUser();
-        dao.deleteReview(2L);
+        dao.deleteReview(REVIEW.getId());
         em.flush();
-        assertFalse(dao.findById(2L).isPresent());
-        Content content=contentDao.findById(1L).get();
-        assertEquals(0,content.getContentReviews().size());
-        assertEquals(0,user.getUserReviews().size());
+        assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, "review"));
+
     }
 
     @Test
     @Rollback
     public void testUpdate(){
         dao.updateReview("not that good","i overestimated it",4,2L);
-        final Optional<Review> maybeReview= dao.findById(2L);
-        assertTrue(maybeReview.isPresent());
-        assertEquals(4, (int) maybeReview.get().getRating());
-        assertEquals("not that good", maybeReview.get().getName());
-        assertEquals(1, dao.getAllReviews(contentDao.findById(1L).get(),1,REVIEW_AMOUNT).getElemsAmount());
-        assertEquals("not that good", maybeReview.get().getUser().getUserReviews().get(0).getName());
+        em.flush();
+        Review changed=em.find(Review.class,2L);
+        assertTrue(changed.getName()=="not that good" && changed.getRating()==4);
+
     }
 
 

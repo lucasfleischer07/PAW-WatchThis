@@ -14,6 +14,14 @@ public class CommentReport  {
             this.reportReason=reportReason;
             this.comment=comment;
             this.user=user;
+            this.id=0L;
+        }
+
+        public CommentReport(long id, User user, Comment comment, ReportReason reportReason) {
+                this.id = id;
+                this.user = user;
+                this.comment = comment;
+                this.reportReason = reportReason;
         }
 
         @Id

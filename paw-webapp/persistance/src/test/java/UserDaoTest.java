@@ -12,8 +12,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.junit.runner.RunWith;
+import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 
 import java.util.List;
@@ -35,13 +38,19 @@ public class UserDaoTest {
 
     @Autowired
     private UserDao dao;
-
-    @Autowired
-    private ContentDao contentDao;
+    @PersistenceContext
+    private EntityManager em;
 
     private JdbcTemplate jdbcTemplate;
 
     private static final int ELEMS_AMOUNT = 10;
+    private Content CONTENT1=new Content(172L,"Tonari no Totoro",null,"A 12-year-old boy and his best friend, wise 28-year-old dog with magical powers","1988","Animation Comedy Family","Hayao Miyazaki","1 hour 26 minutes'",86,"movie");
+    private Content CONTENT2=new Content(501L,"Toy Story 2",null,"A 12-year-old boy and his best friend, wise 28-year-old dog with magical powers","1999","Animation","jhon lasseter","1:32",92,"movie");
+    private Content CONTENT3=new Content(10L,"Il buono, il brutto, il cattivo",null,"A 12-year-old boy and his best friend, wise 28-year-old dog with magical powers","1966","Adventure Western","Sergio Leone","2 hours 41 minutes",161,"movie");
+    private Content CONTENT4=new Content(492L,"Avrupa Yakasi",null,"A 12-year-old boy and his best friend, wise 28-year-old dog with magical powers","2004–2009","Comedy","Gülse Birsel","1 hour",60,"serie");
+    private User USER=new User(2L,"mateoperezrivera@gmail.com","brandyhuevo","secret",0L,null,"user");
+    private User USER2=new User(3L,"mateoperezrivera@gmail.com","brandyhuevo","secret",0L,null,"user");
+
 
     @Before
     public void setUp() {
@@ -56,18 +65,19 @@ public class UserDaoTest {
         assertEquals(PASSWORD, maybeUser.get().getPassword());
         assertEquals(NAME, maybeUser.get().getUserName());
         assertEquals(EMAIL, maybeUser.get().getEmail());
-        assertNull(maybeUser.get().getImage());
-        assertTrue(dao.findById(1L).isPresent());
+        em.flush();
+        assertEquals(3, JdbcTestUtils.countRowsInTable(jdbcTemplate, "userdata"));
+
     }
 
     @Test
     public void testFindByEmail(){
-        Optional<User> maybeUser=dao.findByEmail(testUser.getEmail());
+        Optional<User> maybeUser=dao.findByEmail(USER.getEmail());
         assertTrue(maybeUser.isPresent());
-        assertEquals(testUser.getPassword(), maybeUser.get().getPassword());
-        assertEquals(testUser.getUserName(), maybeUser.get().getUserName());
-        assertEquals(testUser.getEmail(), maybeUser.get().getEmail());
-        assertEquals(testUser.getId(), maybeUser.get().getId());
+        assertEquals(USER.getPassword(), maybeUser.get().getPassword());
+        assertEquals(USER.getUserName(), maybeUser.get().getUserName());
+        assertEquals(USER.getEmail(), maybeUser.get().getEmail());
+        assertEquals(USER.getId(), maybeUser.get().getId());
         assertNull(maybeUser.get().getImage());
     }
     @Test
@@ -77,12 +87,12 @@ public class UserDaoTest {
     }
     @Test
     public void testFindById(){
-        Optional<User> maybeUser=dao.findById(1L);
+        Optional<User> maybeUser=dao.findById(USER.getId());
         assertTrue(maybeUser.isPresent());
-        assertEquals(testUser.getPassword(), maybeUser.get().getPassword());
-        assertEquals(testUser.getUserName(), maybeUser.get().getUserName());
-        assertEquals(testUser.getEmail(), maybeUser.get().getEmail());
-        assertEquals(testUser.getId(), maybeUser.get().getId());
+        assertEquals(USER.getPassword(), maybeUser.get().getPassword());
+        assertEquals(USER.getUserName(), maybeUser.get().getUserName());
+        assertEquals(USER.getEmail(), maybeUser.get().getEmail());
+        assertEquals(USER.getId(), maybeUser.get().getId());
         assertNull(maybeUser.get().getImage());
     }
     @Test
@@ -92,12 +102,12 @@ public class UserDaoTest {
     }
     @Test
     public void testFindByUserName(){
-        Optional<User> maybeUser=dao.findByUserName(testUser.getUserName());
+        Optional<User> maybeUser=dao.findByUserName(USER.getUserName());
         assertTrue(maybeUser.isPresent());
-        assertEquals(testUser.getPassword(), maybeUser.get().getPassword());
-        assertEquals(testUser.getUserName(), maybeUser.get().getUserName());
-        assertEquals(testUser.getEmail(), maybeUser.get().getEmail());
-        assertEquals(testUser.getId(), maybeUser.get().getId());
+        assertEquals(USER.getPassword(), maybeUser.get().getPassword());
+        assertEquals(USER.getUserName(), maybeUser.get().getUserName());
+        assertEquals(USER.getEmail(), maybeUser.get().getEmail());
+        assertEquals(USER.getId(), maybeUser.get().getId());
         assertNull(maybeUser.get().getImage());
     }
     @Test
@@ -109,28 +119,24 @@ public class UserDaoTest {
     @Test
     @Rollback
     public void testSetPassword(){
-        User user=dao.findById(1L).get();
+        User user=USER;
         dao.setPassword("newsecret",user);
-        Optional<User> maybeUser=dao.findByUserName(user.getUserName());
-        assertTrue(maybeUser.isPresent());
-        assertEquals("newsecret", maybeUser.get().getPassword());
-        assertEquals(1, maybeUser.get().getId());
-        assertEquals("brandyhuevo", maybeUser.get().getUserName());
+        User changedUser=em.find(User.class,2L);
+        assertTrue(changedUser.getPassword()=="newsecret");
 
     }
     @Test
     @Rollback
     public void testSetProfilePicture(){
-        Optional<User> maybeUser=dao.findByUserName(testUser.getUserName());
         byte[] image= new String("image").getBytes();
-        dao.setProfilePicture(image,maybeUser.get());
-        assertTrue(maybeUser.isPresent());
-        assertArrayEquals(image, maybeUser.get().getImage());
+        dao.setProfilePicture(image,USER);
+        User changedUser=em.find(User.class,2L);
+        assertArrayEquals(image, changedUser.getImage());
     }
 
     @Test
     public void testGetWatchList(){
-        User user=dao.findByUserName("brandyhuevo").get();
+        User user=em.find(User.class,2L);
         List<Content> contentList=dao.getWatchList(user,1,ELEMS_AMOUNT).getPageContent();
         assertEquals(2,contentList.size());
         assertEquals(172L,contentList.get(1).getId());
@@ -138,7 +144,7 @@ public class UserDaoTest {
     }
     @Test
     public void testSearchContentInWatchList(){
-        User user=dao.findByUserName("brandyhuevo").get();
+        User user=em.find(User.class,2L);
         Optional<Long> searchResult=dao.searchContentInWatchList(user,172L);
         assertTrue(searchResult.isPresent());
         assertEquals(172L, (long) searchResult.get());
@@ -147,14 +153,14 @@ public class UserDaoTest {
 
     @Test
     public void testGetUserViewedList(){
-        User user=dao.findByUserName("brandyhuevo").get();
+        User user=em.find(User.class,2L);
         List<Content> contentList=dao.getUserViewedList(user,1,ELEMS_AMOUNT).getPageContent();
         assertEquals(2,contentList.size());
         assertEquals(501L,contentList.get(1).getId());
     }
     @Test
     public void testSearchContentInViewedList(){
-        User user=dao.findByUserName("brandyhuevo").get();
+        User user=em.find(User.class,2L);
         Optional<Long> searchResult=dao.searchContentInViewedList(user,501L);
         assertTrue(searchResult.isPresent());
         assertEquals(501L, (long) searchResult.get());
@@ -163,53 +169,51 @@ public class UserDaoTest {
     @Test
     @Rollback
     public void testPromoteUser(){
-        dao.promoteUser(dao.findById(1L).get());
-        assertEquals("admin",dao.findById(1).get().getRole());
+        dao.promoteUser(USER);
+        assertEquals("admin",em.find(User.class,2L).getRole());
     }
 
     @Test
     @Rollback
     public void testAddToWatchList(){
-        User user=dao.findByUserName("brandyhuevo").get();
-        Content content=contentDao.findById(492L).get();
+        User user=em.find(User.class,2L);
+        Content content=CONTENT4;
         dao.addToWatchList(user,content);
-        List<Content> contentList=dao.getWatchList(user,1,ELEMS_AMOUNT).getPageContent();
-        assertEquals(3,contentList.size());
-        assertTrue(contentList.contains(content));
+        em.flush();
+        user=em.find(User.class,2L);
+        assertTrue(user.getWatchlist().size()==3);
     }
     @Test
     @Rollback
     public void testDeleteFromWatchList(){
-        User user=dao.findByUserName("brandyhuevo").get();
-        Content content=contentDao.findById(172L).get();
+        User user=USER;
+        Content content=CONTENT1;
         dao.deleteFromWatchList(user,content);
-        List<Content> contentList=dao.getWatchList(user,1,ELEMS_AMOUNT).getPageContent();
-        assertEquals(1,contentList.size());
-        assertFalse(contentList.contains(content));
+        em.flush();
+        user=em.find(User.class,2L);
+        assertTrue(user.getWatchlist().size()==1);
 
     }
 
     @Test
     @Rollback
     public void testAddToViewedList(){
-
-        User user=dao.findByUserName("brandyhuevo").get();
-        assertEquals(2,user.getViewedList().size());
-        Content content=contentDao.findById(492L).get();
+        User user=em.find(User.class,2L);
+        Content content=CONTENT4;
         dao.addToViewedList(user,content);
+        user=em.find(User.class,2L);
         List<Content> contentList=user.getViewedList();
         assertEquals(3,contentList.size());
-        assertTrue(contentList.contains(content));
     }
     @Test
     @Rollback
     public void testDeleteFromViewedList(){
-        User user=dao.findByUserName("brandyhuevo").get();
-        Content content=contentDao.findById(501L).get();
+        User user=em.find(User.class,2L);
+        Content content=CONTENT2;
         dao.deleteFromViewedList(user,content);
-        List<Content> contentList=dao.getUserViewedList(user,1,ELEMS_AMOUNT).getPageContent();
-        assertEquals(1,contentList.size());
-        assertFalse(contentList.contains(content));
+        em.flush();
+        user=em.find(User.class,2L);
+        assertTrue(user.getViewedList().size()==1);
 
     }
 

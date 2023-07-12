@@ -159,6 +159,10 @@ public class Review {
         return reviewReports;
     }
 
+    public void setReviewReports(Set<ReviewReport> reviewReports) {
+        this.reviewReports = reviewReports;
+    }
+
     @Transient
     public String getReporterUsernames() {
         return reporterUsernames;

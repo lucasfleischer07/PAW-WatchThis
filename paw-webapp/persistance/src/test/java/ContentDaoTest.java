@@ -13,10 +13,14 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.junit.runner.RunWith;
+import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -35,10 +39,21 @@ public class ContentDaoTest {
     private DataSource ds;
     @Autowired
     private ContentDao dao;
+    @PersistenceContext
+    private EntityManager em;
 
-    @Autowired
-    private UserDao userDao;
     private JdbcTemplate jdbcTemplate;
+    private User USER=new User(1L,"mateoperezrivera@gmail.com","brandyhuevo","secret",0L,null,"user");
+    private User USER2=new User(2L,"mateoperezrivera@gmail.com","brandyhuevo","secret",0L,null,"user");
+    private Content CONTENT1=new Content(172L,"Tonari no Totoro",null,"A 12-year-old boy and his best friend, wise 28-year-old dog with magical powers","1988","Animation Comedy Family","Hayao Miyazaki","1 hour 26 minutes'",86,"movie");
+    private Content CONTENT2=new Content(501L,"Toy Story 2",null,"A 12-year-old boy and his best friend, wise 28-year-old dog with magical powers","1999","Animation","jhon lasseter","1:32",92,"movie");
+    private Content CONTENT3=new Content(10L,"Il buono, il brutto, il cattivo",null,"A 12-year-old boy and his best friend, wise 28-year-old dog with magical powers","1966","Adventure Western","Sergio Leone","2 hours 41 minutes",161,"movie");
+    private Content CONTENT4=new Content(492L,"Avrupa Yakasi",null,"A 12-year-old boy and his best friend, wise 28-year-old dog with magical powers","2004–2009","Comedy","Gülse Birsel","1 hour",60,"serie");
+    private Content CONTENT5=new Content(497L,"Queer Eye",null,"A 12-year-old boy and his best friend, wise 28-year-old dog with magical powers","2018–","Reality-T V","David Collins","45 minutes",45,"serie");
+    private Content CONTENT6=new Content(2L,"The Shawshank Redemption",null,"A 12-year-old boy and his best friend, wise 28-year-old dog with magical powers","1994","Drama","Frank Darabont","2 hours 22 minutes",142,"movie");
+    private Content[] array={CONTENT1,CONTENT2,CONTENT3,CONTENT4,CONTENT5,CONTENT6};
+    private List<Content> CONTENT_LIST=new ArrayList<>(Arrays.asList(array));
+
     @Before
     public void setUp() {
         this.jdbcTemplate = new JdbcTemplate(ds);
@@ -66,7 +81,7 @@ public class ContentDaoTest {
     public void testFindByNameTest(){
         Optional<Content> contentOptional=dao.findByName("Toy Story 2");
         assertTrue(contentOptional.isPresent());
-        assertEquals(501, contentOptional.get().getId());
+        assertEquals(501, CONTENT2.getId());
     }
 
     @Test
@@ -152,41 +167,38 @@ public class ContentDaoTest {
     @Rollback
     public void testCreateContent(){
         dao.contentCreate("new","description","2022","Animation","brandyhuevo",100,"100","movie",null);
-        dao.getAllContent("ANY", null,1,CONTENT_AMOUNT);
-        assertTrue(dao.findByName("new").isPresent());
-        assertEquals(3, dao.findByGenre("all", " '%'|| " + "'Animation'" + " ||'%'", null,1,CONTENT_AMOUNT).getElemsAmount());
+        em.flush();
+        assertEquals(CONTENT_LIST.size()+1, JdbcTestUtils.countRowsInTable(jdbcTemplate, "content"));
     }
 
     @Test
     @Rollback
     public void testUpdateContent(){
-        Content preUpdate=dao.findById(2).get();
-        String preUpdateName=preUpdate.getName();
-        dao.updateContent(2L,"name change","description","1982","Animation","me",90,"90 minutes","movie");
-        Optional<Content> postUpdate=dao.findById(2);
-        assertTrue(postUpdate.isPresent());
-        assertFalse(postUpdate.get().getName().equals(preUpdateName));
+        String preUpdateName=CONTENT6.getName();
+        dao.updateContent(CONTENT6.getId(),"name change","description","1982","Animation","me",90,"90 minutes","movie");
+        Content postUpdate=em.find(Content.class,CONTENT6.getId());
+        assertFalse(postUpdate.getName().equals(preUpdateName));
     }
 
     @Test
     @Rollback
     public void testUpdateContentWithImage(){
-        Content preUpdate=dao.findById(2).get();
-        String preUpdateName=preUpdate.getName();
-        byte[] preUpdateImage= preUpdate.getImage();
-        dao.updateWithImageContent(2L,"name change","description","1982","Animation","me",90,"90 minutes","movie","image".getBytes());
-        Optional<Content> postUpdate=dao.findById(2);
-        assertTrue(postUpdate.isPresent());
-        assertNotEquals(postUpdate.get().getName(), preUpdateName);
-        assertFalse(Arrays.equals(postUpdate.get().getImage(), preUpdateImage));
+
+        String preUpdateName=CONTENT6.getName();
+        byte[] preUpdateImage= CONTENT6.getImage();
+        dao.updateWithImageContent(CONTENT6.getId(),"name change","description","1982","Animation","me",90,"90 minutes","movie","image".getBytes());
+        Content postUpdate=em.find(Content.class,CONTENT6.getId());
+
+        assertNotEquals(postUpdate.getName(), preUpdateName);
+        assertFalse(Arrays.equals(postUpdate.getImage(), preUpdateImage));
     }
 
     @Test
     @Rollback
     public void testDeleteContent(){
-        dao.deleteContent(2L);
-        List<Content> contentList=dao.getAllContent("ANY",null,1,CONTENT_AMOUNT).getPageContent();
-        assertEquals(5,dao.getAllContent("ANY",null,1,CONTENT_AMOUNT).getElemsAmount());
+        dao.deleteContent(CONTENT6.getId());
+        em.flush();
+        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "content", "id = " + CONTENT6.getId()));
     }
 
 

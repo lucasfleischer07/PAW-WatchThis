@@ -1,7 +1,4 @@
-import ar.edu.itba.paw.models.Comment;
-import ar.edu.itba.paw.models.Content;
-import ar.edu.itba.paw.models.ReportReason;
-import ar.edu.itba.paw.models.Review;
+import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.persistance.*;
 import config.TestConfig;
 import org.junit.Before;
@@ -13,12 +10,14 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 import static org.junit.Assert.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
+import java.util.HashSet;
 
 @Transactional
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -39,24 +38,17 @@ public class ReportDaoTest {
     private DataSource ds;
     @Autowired
     private ReportDao dao;
-    @Autowired
-    private CommentDao commentDao;
-    @Autowired
-    private ContentDao contentDao;
-    @Autowired
-    private UserDao userDao;
-    @Autowired
-    private ReviewDao reviewDao;
     private JdbcTemplate jdbcTemplate;
-    private Review testReview;
-    private Comment testComment;
-    private Content testContent;
+
+    private User USER=new User(1L,"mateoperezrivera@gmail.com","brandyhuevo","secret",0L,null,"user");
+    private User USER2=new User(2L,"mateoperezrivera@gmail.com","brandyhuevo","secret",0L,null,"user");
+    private Content CONTENT=new Content(2L,"adventure time",null,"A 12-year-old boy and his best friend, wise 28-year-old dog with magical powers","2010-2018","Animation","jhon lasseter","1:32",92,"serie");
+    private Review REVIEW=new Review(3L,"serie","bad tv show","dont recommend it!",2,USER,CONTENT);
+
+    private Comment COMMENT=new Comment(1L,USER2,REVIEW,"comment");
     @Before
     public void setUp() {
         this.jdbcTemplate = new JdbcTemplate(ds);
-        this.testComment=commentDao.getComment(commentId).get();
-        this.testReview=reviewDao.getReview(reviewId).get();
-        this.testContent=contentDao.findById(contentId).get();
     }
 
     @Test
@@ -71,34 +63,35 @@ public class ReportDaoTest {
 
     @Test
     @Rollback
-    public void testDeleteReview(){
-        dao.delete(testReview);
-        assertFalse(commentDao.getComment(commentId).isPresent());
-        assertFalse(reviewDao.findById(reviewId).isPresent());
-        assertFalse(dao.findReviewReport(reviewReportId).isPresent());
-        assertFalse(dao.findCommentReport(commentReportId).isPresent());
-
-    }
+    public void testDeleteComment(){
+        dao.delete(em.find(Comment.class,1L));
+        em.flush();
+        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "comment", "commentId = " + COMMENT.getCommentId()));    }
 
     @Test
     @Rollback
-    public void testDeleteComment(){
-        dao.delete(testComment);
-        assertFalse(commentDao.getComment(commentId).isPresent());
-    }
+    public void testDeleteReview(){
+        dao.delete(em.find(Review.class,3L));
+        em.flush();
+        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "review", "reviewId = " + REVIEW.getId()));
 
+    }
     @Test
     @Rollback
     public void testRemoveReviewReports(){
-        dao.removeReports(testReview);
-        assertFalse(dao.findReviewReport(reviewReportId).isPresent());
+        Review review=em.find(Review.class,REVIEW.getId());
+        dao.removeReports(review);
+        em.flush();
+        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "reviewreport", "reviewId = " + REVIEW.getId()));
     }
 
     @Test
     @Rollback
     public void testRemoveCommentReports(){
-        dao.removeReports(testComment);
-        assertFalse(dao.findCommentReport(commentReportId).isPresent());
+        Comment comment=em.find(Comment.class,COMMENT.getCommentId());
+        dao.removeReports(comment);
+        em.flush();
+        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "commentreport", "commentId = " + COMMENT.getCommentId()));
     }
 
     @Test
@@ -122,18 +115,20 @@ public class ReportDaoTest {
 
     @Test
     public void addReviewReport(){
-        dao.addReport(reviewDao.findById(reviewId).get(),userDao.findById(userId).get(),ReportReason.Inappropriate);
+        Review review=em.find(Review.class,REVIEW.getId());
+        User user2=em.find(User.class,USER2.getId());
+        dao.addReport(review,user2,ReportReason.Inappropriate);
         em.flush();
-        Review review=reviewDao.findById(reviewId).get();
-        assertEquals(2,review.getReports().size());
+        assertEquals(2, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "reviewreport", "reviewId = " + REVIEW.getId()));
     }
 
     @Test
     public void addCommentReport(){
-        assertEquals(1,commentDao.getComment(commentId).get().getReports().size());
-        dao.addReport(commentDao.getComment(commentId).get(),userDao.findById(userId).get(),ReportReason.Inappropriate);
+        Comment comment=em.find(Comment.class,COMMENT.getCommentId());
+        User user2=em.find(User.class,USER2.getId());
+        dao.addReport(comment,user2,ReportReason.Inappropriate);
         em.flush();
-        assertEquals(2,commentDao.getComment(commentId).get().getReports().size());
+        assertEquals(2, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "commentreport", "commentId = " + COMMENT.getCommentId()));
     }
 
 }

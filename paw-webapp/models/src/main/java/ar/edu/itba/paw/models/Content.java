@@ -176,4 +176,7 @@ public class Content {
         return viewedlist;
     }
 
+    public void setContentReviews(List<Review> contentReviews) {
+        this.contentReviews = contentReviews;
+    }
 }

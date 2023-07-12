@@ -13,7 +13,16 @@ public class ReviewReport {
         this.review=review;
         this.user=user;
         this.reportReason=reportReason;
+        this.id=0L;
         }
+
+    public ReviewReport(long id, User user, Review review, ReportReason reportReason) {
+        this.id = id;
+        this.user = user;
+        this.review = review;
+        this.reportReason = reportReason;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "reviewreport_id_seq")
     @SequenceGenerator(allocationSize = 1,sequenceName = "reviewreport_id_seq",name = "reviewreport_id_seq")

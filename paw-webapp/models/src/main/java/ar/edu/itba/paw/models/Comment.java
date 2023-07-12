@@ -17,7 +17,16 @@ public class Comment {
         this.user=user;
         this.review=review;
         this.text=text;
+        this.commentId=0;
     }
+
+    public Comment(long commentId, User user, Review review, String text) {
+        this.commentId = commentId;
+        this.user = user;
+        this.review = review;
+        this.text = text;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "comment_id_seq")
     @SequenceGenerator(allocationSize = 1,sequenceName = "comment_id_seq",name = "comment_id_seq")
@@ -92,6 +101,10 @@ public class Comment {
 
     public String getReportReasons() {
         return reportReasons;
+    }
+
+    public void setCommentReports(Set<CommentReport> commentReports) {
+        this.commentReports = commentReports;
     }
 
     @Transient

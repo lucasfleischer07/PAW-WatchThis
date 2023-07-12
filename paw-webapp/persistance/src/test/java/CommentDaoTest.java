@@ -1,14 +1,21 @@
+import ar.edu.itba.paw.models.Comment;
+import ar.edu.itba.paw.models.Content;
+import ar.edu.itba.paw.models.Review;
+import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.persistance.CommentDao;
 import ar.edu.itba.paw.persistance.ReviewDao;
 import ar.edu.itba.paw.persistance.UserDao;
 import config.TestConfig;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 import static org.junit.Assert.*;
 
@@ -30,26 +37,33 @@ public class CommentDaoTest {
     private DataSource ds;
     @Autowired
     private CommentDao dao;
-    @Autowired
-    private ReviewDao reviewDao;
-    @Autowired
-    private UserDao userDao;
+    private JdbcTemplate jdbcTemplate;
+    @Before
+    public void setUp() {
+        this.jdbcTemplate = new JdbcTemplate(ds);
+    }
+    private User USER=new User(1L,"mateoperezrivera@gmail.com","brandyhuevo","secret",0L,null,"user");
+    private User USER2=new User(2L,"mateoperezrivera@gmail.com","brandyhuevo","secret",0L,null,"user");
+    private Content CONTENT=new Content(2L,"adventure time",null,"A 12-year-old boy and his best friend, wise 28-year-old dog with magical powers","2010-2018","Animation","jhon lasseter","1:32",92,"serie");
+    private Review REVIEW=new Review(3L,"serie","bad tv show","dont recommend it!",2,USER,CONTENT);
+
+    private Comment COMMENT=new Comment(1L,USER2,REVIEW,"comment");
     @Test
     public void getCommentTest(){
-        assertTrue( dao.getComment(commentId).isPresent());
+        assertTrue( dao.getComment(commentId).get().getCommentId()==commentId);
     }
     @Test
     @Rollback
     public void addCommentTest(){
-        dao.addComment(reviewDao.findById(reviewId).get(),userDao.findById(userId).get(),"comment");
+        dao.addComment(REVIEW,USER,"comment");
         em.flush();
-        assertEquals(2,reviewDao.findById(reviewId).get().getComments().size());
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "comment", "commentId != " + commentId));
     }
     @Test
     @Rollback
     public void deleteCommentTest(){
-        dao.deleteComment(dao.getComment(commentId).get());
+        dao.deleteComment(em.find(Comment.class,2L));
         em.flush();
-        assertEquals(0,reviewDao.findById(reviewId).get().getComments().size());
+        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "comment", "commentId = " + COMMENT.getCommentId()));
     }
 }
