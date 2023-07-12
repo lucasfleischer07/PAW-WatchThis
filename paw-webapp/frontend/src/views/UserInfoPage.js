@@ -9,6 +9,7 @@ import {AuthContext} from "../context/AuthContext";
 import ExpiredCookieModal from "./components/ExpiredCookieModal";
 import {reviewService, userService} from "../services";
 import {updateUrlVariable} from "../scripts/validateParam";
+import {checkIsNumber} from "../scripts/filtersValidations";
 
 export default function UserInfoPage() {
     const {t} = useTranslation()
@@ -75,10 +76,10 @@ export default function UserInfoPage() {
             })
     }
 
-    
+
     useEffect(() => {
         const queryParams = new URLSearchParams(search);
-        updateUrlVariable(page, (typeof queryParams.get('page') === 'string' ?  parseInt(queryParams.get('page')) : queryParams.get('page')), (x) =>setPage(x))
+        updateUrlVariable(page, (typeof queryParams.get('page') === 'string' ?  checkIsNumber(queryParams.get('page')) : queryParams.get('page')), (x) =>setPage(x))
     }, [search]);
 
 

@@ -14,5 +14,5 @@ public interface CommentService {
     void deleteComment(Comment comment);
     Optional<Comment> getComment(Long id);
     Set<Comment> getReviewComments(Long reviewId);
-    PageWrapper<Comment> getReviewComments(Review review, int page, int pageSize);
+    List<Comment> getReviewComments(Review review);
 }

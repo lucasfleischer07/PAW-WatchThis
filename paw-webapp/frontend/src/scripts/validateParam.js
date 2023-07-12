@@ -1,8 +1,6 @@
 import PropTypes from "prop-types";
 
 function validateParam(param,paramPulled) {
-    //alert(paramPulled)
-    //alert(param)
     return  param !== paramPulled && (paramPulled !== null || (param.length > 0))
 }
 
@@ -17,5 +15,6 @@ updateUrlVariable.propTypes = {
     paramPulled: PropTypes.any,
     setter: PropTypes.func.isRequired,
 };
+
 
 export {validateParam,updateUrlVariable}

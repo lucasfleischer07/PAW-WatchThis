@@ -7,13 +7,12 @@ export class CommentApi {
         this.basePath = `${paths.BASE_URL_API}${paths.COMMENT}`
     }
 
-    async getReviewComments(reviewId, pageNumber) {
+    async getReviewComments(reviewId) {
         try {
             const apiUrl = `${this.basePath}/${reviewId}`
-            const params = {pageNumber: pageNumber}
             const options = {headers: authCheck({})}
+            const params = {}
             const res = await fetchWithQueryParamsApi(apiUrl, params, options)
-            // TODO: Ver si meter lo del vacio o no
             if(res.status === 200) {
                 return {error: false, data: await res.data, totalPages: res.totalPages}
             } else {

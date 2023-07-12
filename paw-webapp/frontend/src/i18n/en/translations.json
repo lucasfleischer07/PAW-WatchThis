@@ -104,6 +104,7 @@
   "EditProfile.EditPicture": "Edit profile picture:",
   "EditProfile.Upload": "Upload",
   "EditProfile.Upload.Image": "Upload image",
+  "EditProfile.Upload.Image": "Image uploaded successfully",
   "EditProfile.IncorrectOldPassword": "Password do not match the current one",
   "EditProfile.ChangePassword": "Change password:",
   "EditProfile.NewPassword": "New password:",

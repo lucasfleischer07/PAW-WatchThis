@@ -31,12 +31,27 @@ export default function Header(props) {
         return ( queryForm.query != null && queryForm.query.length > 0 )
     }
 
+    const isSearchCleaned = () => {
+        return ( queryForm.query != null && (queryForm.query.length > 0 || ( queryForm.query.length === 0 && queryProp.length > 0) ))
+    }
+
     //RECORDAR QUE DEPENDIENDO DEL TYPE, EL PATH DEBE CAMBIAR, EL TYPE SE DEBE RECIBIR POR PARAM
     const handleSubmit = (event) => {
         event.preventDefault();
         const searchParams = new URLSearchParams(window.location.search);
         if( validateSearch() ){
             searchParams.set('query', queryForm.query);
+            if (type === 'all'){
+                navigate('/content/all' + '?' + searchParams.toString());
+            }else if ( type === 'movie'){
+                const currentPath = window.location.pathname.substring('/paw-2022b-3'.length);
+                navigate(currentPath + '?' + searchParams.toString());
+            }else{
+                const currentPath = window.location.pathname.substring('/paw-2022b-3'.length);
+                navigate(currentPath + '?' + searchParams.toString());
+            }
+        }else if(isSearchCleaned()){
+            searchParams.delete('query');
             if (type === 'all'){
                 navigate('/content/all' + '?' + searchParams.toString());
             }else if ( type === 'movie'){

@@ -64,15 +64,11 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
-    public PageWrapper<Comment> getReviewComments(Review review, int page, int pageSize){
-        List<Comment> comment = new ArrayList<>(review.getComments());
-        long totalPages = PageWrapper.calculatePageAmount(comment.size(),pageSize);
-        if(page > totalPages || page <= 0){
-            return new PageWrapper<Comment>(page,totalPages,pageSize,null,comment.size());
+    public List<Comment> getReviewComments(Review review){
+        List<Comment> comments = new ArrayList<>(review.getComments());
+        if(comments.size() == 0){
+            return Collections.emptyList();
         }
-        if(page < totalPages){
-            return new PageWrapper<Comment>(page,totalPages,pageSize,comment.subList((page-1)*pageSize,page * pageSize),comment.size());
-        }
-        return new PageWrapper<Comment>(page,totalPages,pageSize,comment.subList((page-1)*pageSize,(page-1)*pageSize + (comment.size() % pageSize)),comment.size());
+        return comments;
     }
 }

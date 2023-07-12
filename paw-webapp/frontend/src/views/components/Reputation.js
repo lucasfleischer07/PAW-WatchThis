@@ -141,7 +141,7 @@ export default function Reputation(props) {
     }
 
     useEffect(() => {
-        commentService.getReviewComments(parseInt(reviewId),1)
+        commentService.getReviewComments(parseInt(reviewId))
             .then(data => {
                 if(!data.error){
                     setComments(data.data)

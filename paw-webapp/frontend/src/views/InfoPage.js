@@ -12,6 +12,7 @@ import Header from "./components/Header";
 import ExpiredCookieModal from "./components/ExpiredCookieModal";
 import {type} from "@testing-library/user-event/dist/type";
 import {updateUrlVariable, validateParam} from "../scripts/validateParam";
+import {checkIsNumber} from "../scripts/filtersValidations";
 
 
 export default function InfoPage() {
@@ -198,17 +199,19 @@ export default function InfoPage() {
                 if(!data.error) {
                     setContent(data.data)
                 } else {
+                    console.log("HOla")
                     navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                 }
             })
             .catch(() => {
+                console.log("HOla1111")
                 navigate("/error", { replace: true, state: {errorCode: 404} })
             })
     }, [])
 
     useEffect(() => {
         const queryParams = new URLSearchParams(search);
-        updateUrlVariable(actualPage,(typeof queryParams.get('page') === 'string' ?  parseInt(queryParams.get('page')) : queryParams.get('page')), (x) =>setActualPage(x))
+        updateUrlVariable(actualPage,(typeof queryParams.get('page') === 'string' ?  checkIsNumber(queryParams.get('page')) : queryParams.get('page')), (x) =>setActualPage(x))
     }, [search]);
 
 
@@ -221,10 +224,12 @@ export default function InfoPage() {
                     } else if(watchList.errorCode === 404) {
                         setShowExpiredCookiesModal(true)
                     } else {
+                        console.log("Hola 6")
                         navigate("/error", { replace: true, state: {errorCode: watchList.errorCode} })
                     }
                 })
                 .catch(() => {
+                    console.log("Hola 1")
                     navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
 
@@ -236,6 +241,7 @@ export default function InfoPage() {
                         if(viewedList.errorCode === 404 && !showExpiredCookiesModal) {
                             setShowExpiredCookiesModal(true)
                         } else {
+                            console.log("Hola 7")
                             navigate("/error", { replace: true, state: {errorCode: viewedList.errorCode} })
                         }
                     }
@@ -252,11 +258,13 @@ export default function InfoPage() {
                         if(data.errorCode === 404 && !showExpiredCookiesModal) {
                             setShowExpiredCookiesModal(true)
                         } else {
+                            console.log("Hola 8")
                             navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                         }
                     }
                 })
                 .catch(() => {
+                    console.log("Hola 2")
                     navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
 
@@ -268,14 +276,17 @@ export default function InfoPage() {
                         if(data.errorCode === 404 && !showExpiredCookiesModal) {
                             setShowExpiredCookiesModal(true)
                         } else {
+                            console.log("Hola 9")
                             navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                         }
                     }
                 })
                 .catch(() => {
+                    console.log("Hola 3")
                     navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
         }
+
         reviewService.reviews(parseInt(contentId), actualPage)
             .then(data => {
                 if(!data.error) {
@@ -288,10 +299,12 @@ export default function InfoPage() {
                         }
                     }
                 } else {
+                    console.log("Hola 10")
                     navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                 }
             })
             .catch(() => {
+                console.log("Hola 4")
                 navigate("/error", { replace: true, state: {errorCode: 404} })
             })
 

@@ -22,6 +22,7 @@ import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
@@ -46,17 +47,14 @@ public class CommentController {
     @GET
     @Path("/{reviewId}")
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response getReviewComments(@PathParam("reviewId") final long reviewId,
-                                      @QueryParam("pageNumber") @DefaultValue("1") int pageNum) {
+    public Response getReviewComments(@PathParam("reviewId") final long reviewId) {
 
         LOGGER.info("GET /{}: Called", uriInfo.getPath());
         Review review = rs.findById(reviewId).orElseThrow(ReviewNotFoundException::new);
-        PageWrapper<Comment> commentsPaginated = ccs.getReviewComments(review,pageNum,CONTENT_AMOUNT);
-        Collection<CommentDto> commentListDto = CommentDto.mapCommentToCommentDto(uriInfo, commentsPaginated.getPageContent());
+        List<Comment> comments = ccs.getReviewComments(review);
+        Collection<CommentDto> commentListDto = CommentDto.mapCommentToCommentDto(uriInfo, comments);
         LOGGER.info("GET /{}: Comments got from review with id {}", uriInfo.getPath(), reviewId);
-        Response.ResponseBuilder response = Response.ok(new GenericEntity<Collection<CommentDto>>(commentListDto){});
-        ResponseBuildingUtils.setPaginationLinks(response,commentsPaginated , uriInfo);
-        return response.build();
+        return Response.ok(new GenericEntity<Collection<CommentDto>>(commentListDto){}).build();
     }
     // * ---------------------------------------------------------------------------------------------------------------
 

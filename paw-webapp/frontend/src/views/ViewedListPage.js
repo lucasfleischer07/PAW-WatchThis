@@ -7,6 +7,7 @@ import Header from "./components/Header";
 import ExpiredCookieModal from "./components/ExpiredCookieModal";
 import {listsService} from "../services";
 import {updateUrlVariable} from "../scripts/validateParam";
+import {checkIsNumber} from "../scripts/filtersValidations";
 
 export default function ViewedListPage(props) {
     const {t} = useTranslation()
@@ -26,7 +27,7 @@ export default function ViewedListPage(props) {
 
     useEffect(() => {
         const queryParams = new URLSearchParams(search);
-        updateUrlVariable(page, (typeof queryParams.get('page') === 'string' ?  parseInt(queryParams.get('page')) : queryParams.get('page')), (x) =>setPage(x))
+        updateUrlVariable(page, (typeof queryParams.get('page') === 'string' ?  checkIsNumber(queryParams.get('page')) : queryParams.get('page')), (x) =>setPage(x))
     }, [search]);
 
     const prevPage = () => {

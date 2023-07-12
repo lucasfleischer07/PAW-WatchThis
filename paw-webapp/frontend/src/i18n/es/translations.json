@@ -110,7 +110,9 @@
   "EditProfile.ConfirmPassword": "Confirme la contraseña:",
   "EditProfile.NotSamePassword": "Las contraseñas no coinciden",
   "EditProfile.Change": "Cambiar",
-  "EditProfile.Upload.Image": "Foto de perfil actualizada correctamente",
+  "EditProfile.Upload.Image": "Actualizar foto",
+  "EditProfile.Upload.Image.Toast": "Foto de perfil actualizada correctamente",
+
   "EditProfile.Upload.Image.Error": "Error al actualizar la foto de perfil",
   "EditProfile.Upload.Password.Success": "Contraseña actualizada correctamente",
   "EditProfile.Upload.Password.Error": "Error al actualizar la contraseña",

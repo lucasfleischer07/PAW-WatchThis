@@ -81,7 +81,7 @@ export default function ProfileEditionPage() {
                 .then(data => {
                     if (!data.error) {
                         setError(false)
-                        toast.success(t('EditProfile.Upload.Image'));
+                        toast.success(t('EditProfile.Upload.Image.Toast'));
                         navigate(-1)
                     } else {
                         if(data.errorCode === 404) {

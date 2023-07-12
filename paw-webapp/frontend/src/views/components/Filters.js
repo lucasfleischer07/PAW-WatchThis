@@ -1,8 +1,8 @@
 import {useTranslation} from "react-i18next";
-import {useContext, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
-import PropTypes from 'prop-types';
-import {updateUrlVariable, validateParam} from "../../scripts/validateParam";
+import {updateUrlVariable} from "../../scripts/validateParam";
+import {checkIsGenre, checkIsFrom, checkIsTo, checkIsSort} from "../../scripts/filtersValidations"
 
 
 export default function Filters(props) {
@@ -32,15 +32,15 @@ export default function Filters(props) {
         Romance: false,
     });
 
-    const sortingTypes = ["OlderReleased","NewestReleased","MostRated","NameAsc","NameDesc"]
+    const sortingTypes = ["OlderReleased", "NewestReleased", "MostRated", "NameAsc", "NameDesc"]
 
 
     useEffect(() => {
         const queryParams = new URLSearchParams(search);
-        updateUrlVariable(genre, queryParams.get('genre'),(x) => setGenre(x))
-        updateUrlVariable(durationFrom, queryParams.get('durationFrom'),(x) => setDurationFrom(x))
-        updateUrlVariable(durationTo, queryParams.get('durationTo'),(x) => setDurationTo(x))
-        updateUrlVariable(sorting, queryParams.get('sorting'),(x) => setSorting(x))
+        updateUrlVariable(genre, checkIsGenre(queryParams.get('genre')),(x) => setGenre(x))
+        updateUrlVariable(durationFrom, checkIsFrom(queryParams.get('durationFrom')),(x) => setDurationFrom(x))
+        updateUrlVariable(durationTo, checkIsTo(queryParams.get('durationTo')),(x) => setDurationTo(x))
+        updateUrlVariable(sorting, checkIsSort(queryParams.get('sorting')),(x) => setSorting(x))
         let genres=queryParams.get('genre')
         if(genres!==null) {
             genreState.Action = genres.includes("Action")
@@ -244,7 +244,7 @@ export default function Filters(props) {
                                 </p>
                             </li>
                             <li>
-                                <p className="dropdown-item" onClick={() => changeDuration('150','180')}>
+                                <p className="dropdown-item" onClick={() => changeDuration('150','1000')}>
                                     {t('Duration.150_more')}
                                 </p>
                             </li>

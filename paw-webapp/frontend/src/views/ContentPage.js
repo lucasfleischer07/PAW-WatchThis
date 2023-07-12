@@ -7,6 +7,7 @@ import Header from "./components/Header";
 import Filters from "./components/Filters";
 import ExpiredCookieModal from "./components/ExpiredCookieModal";
 import {updateUrlVariable, validateParam} from "../scripts/validateParam";
+import {checkIsFrom, checkIsGenre, checkIsNumber, checkIsSort, checkIsTo} from "../scripts/filtersValidations";
 
 export default function ContentPage(props) {
     const {t} = useTranslation()
@@ -84,11 +85,11 @@ export default function ContentPage(props) {
 
     useEffect(() => {
         const queryParams = new URLSearchParams(search);
-        updateUrlVariable(genre, queryParams.get('genre'),(x) => setGenre(x))
-        updateUrlVariable(durationFrom, queryParams.get('durationFrom'), (x) => setDurationFrom(x))
-        updateUrlVariable(durationTo, queryParams.get('durationTo'), (x) =>setDurationTo(x))
-        updateUrlVariable(sorting, queryParams.get('sorting'),(x) => setSorting(x))
-        updateUrlVariable(actualPage, (typeof queryParams.get('page') === 'string' ?  parseInt(queryParams.get('page')) : queryParams.get('page')), (x) =>setActualPage(x))
+        updateUrlVariable(genre, checkIsGenre(queryParams.get('genre')),(x) => setGenre(x))
+        updateUrlVariable(durationFrom, checkIsFrom(queryParams.get('durationFrom')),(x) => setDurationFrom(x))
+        updateUrlVariable(durationTo, checkIsTo(queryParams.get('durationTo')),(x) => setDurationTo(x))
+        updateUrlVariable(sorting, checkIsSort(queryParams.get('sorting')),(x) => setSorting(x))
+        updateUrlVariable(actualPage, (typeof queryParams.get('page') === 'string' ?  checkIsNumber(queryParams.get('page')) : queryParams.get('page')), (x) =>setActualPage(x))
         updateUrlVariable(query, queryParams.get('query'), (x) =>setQuery(x))
         isSettedParams(true)
     }, [search]);

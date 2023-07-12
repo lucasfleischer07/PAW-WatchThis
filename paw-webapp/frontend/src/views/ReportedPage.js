@@ -9,6 +9,7 @@ import { Tab, Tabs } from 'react-bootstrap';
 import Header from "./components/Header";
 import ExpiredCookieModal from "./components/ExpiredCookieModal";
 import {updateUrlVariable, validateParam} from "../scripts/validateParam";
+import {checkIsNumber, checkIsReason} from "../scripts/filtersValidations";
 
 export default function ReportedPage() {
     const {t} = useTranslation()
@@ -37,13 +38,19 @@ export default function ReportedPage() {
 
     useEffect(() => {
         const queryParams = new URLSearchParams(search);
-        updateUrlVariable(filterReason, queryParams.get('filterReason'),(x) => setFilterReason(x))
-        updateUrlVariable(reportType, queryParams.get('reportType'), (x) => setReportType(x))
-        updateUrlVariable(page,(typeof queryParams.get('page') === 'string' ?  parseInt(queryParams.get('page')) : queryParams.get('page')), (x) =>setPage(x))
+        updateUrlVariable(filterReason, checkIsReason(queryParams.get('reason')),(x) => setFilterReason(x))
+        //updateUrlVariable(reportType, queryParams.get('reportType'), (x) => setReportType(x))
+        updateUrlVariable(page,(typeof queryParams.get('page') === 'string' ?  checkIsNumber(queryParams.get('page')) : queryParams.get('page')), (x) =>setPage(x))
     }, [search]);
 
     const handleOnClickFilter = (value) => {
         setFilterReason(value)
+        changeUrlReason(value )
+    }
+
+    const handleOnClickFilterClear = () => {
+        setFilterReason("")
+        clearUrlReason()
     }
 
     const prevPage = () => {
@@ -64,6 +71,20 @@ export default function ReportedPage() {
     const changeUrlPage = (page) => {
         const searchParams = new URLSearchParams(window.location.search);
         searchParams.set('page', page);
+        const currentPath = window.location.pathname.substring('/paw-2022b-3'.length);
+        navigate(currentPath + '?' + searchParams.toString());
+    }
+
+    const changeUrlReason = (reason) => {
+        const searchParams = new URLSearchParams(window.location.search);
+        searchParams.set('reason', reason);
+        const currentPath = window.location.pathname.substring('/paw-2022b-3'.length);
+        navigate(currentPath + '?' + searchParams.toString());
+    }
+
+    const clearUrlReason = () => {
+        const searchParams = new URLSearchParams(window.location.search);
+        searchParams.delete('reason');
         const currentPath = window.location.pathname.substring('/paw-2022b-3'.length);
         navigate(currentPath + '?' + searchParams.toString());
     }
@@ -217,7 +238,7 @@ export default function ReportedPage() {
                                     )}
                                     <ul className="dropdown-menu">
                                         <li>
-                                            <a className="dropdown-item" onClick={() => handleOnClickFilter("")}>
+                                            <a className="dropdown-item" onClick={() => handleOnClickFilterClear()}>
                                                 {t('Duration.Clear')}
                                             </a>
                                         </li>
