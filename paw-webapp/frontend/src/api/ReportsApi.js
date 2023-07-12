@@ -66,7 +66,6 @@ export class ReportsApi {
                 method: 'DELETE',
                 headers: authCheck({})
             })
-
             if(res.status === 204) {
                 return {error: false, data: []}
             } else {

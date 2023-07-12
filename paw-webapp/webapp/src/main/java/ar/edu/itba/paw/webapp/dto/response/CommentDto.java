@@ -8,11 +8,10 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 public class CommentDto {
-
     private long commentId;
     private UserDto user;
     private String text;
-
+    private int reportAmount;
     private String commentReportersUrl;
 
     public static Collection<CommentDto> mapCommentToCommentDto(UriInfo uriInfo, Collection<Comment> comments) {
@@ -36,6 +35,7 @@ public class CommentDto {
         this.text = comment.getText();
         this.commentId = comment.getCommentId();
         this.user = new UserDto(uriInfo, comment.getUser());
+        this.reportAmount = comment.getReportAmount();
     }
 
 
@@ -71,7 +71,11 @@ public class CommentDto {
         this.commentReportersUrl = commentReportersUrl;
     }
 
+    public int getReportAmount() {
+        return reportAmount;
+    }
 
-
-
+    public void setReportAmount(int reportAmount) {
+        this.reportAmount = reportAmount;
+    }
 }

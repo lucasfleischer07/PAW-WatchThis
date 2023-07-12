@@ -19,8 +19,8 @@ public class ReviewDto {
     private UserDto user;
     private ContentDto content;
     private String commentUrl;
-
     private String reviewReporters;
+    private int reportAmount;
 
 
     public static Collection<ReviewDto> mapReviewToReviewDto(UriInfo uriInfo, Collection<Review> reviews) {
@@ -46,6 +46,7 @@ public class ReviewDto {
         this.type = review.getType();
         this.user = new UserDto(uriInfo, review.getUser());
         this.content = new ContentDto(uriInfo, review.getContent());
+        this.reportAmount = review.getReportAmount();
 
     }
 
@@ -129,4 +130,11 @@ public class ReviewDto {
         this.content = content;
     }
 
+    public int getReportAmount() {
+        return reportAmount;
+    }
+
+    public void setReportAmount(int reportAmount) {
+        this.reportAmount = reportAmount;
+    }
 }

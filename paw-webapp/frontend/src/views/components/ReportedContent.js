@@ -14,8 +14,8 @@ export default function ReportedContent(props) {
     const [showModal, setShowModal] = useState(false);
     const [showModalDismiss, setShowModalDismiss] = useState(false);
 
-    const userName = props.userName
-    const userId = props.userId
+    const commentUserName = props.commentUserName
+    const commentUserId = props.commentUserId
     const contentId = props.contentId
     const contentName = props.contentName
     const contentType = props.contentType
@@ -28,6 +28,7 @@ export default function ReportedContent(props) {
     const reviewCreatorUserName = props.reviewCreatorUserName
     const reviewCreatorUserId = props.reviewCreatorId
     const reviewNameOfReportedComment = props.reviewNameOfReportedComment
+    const setCommentOrReviewDismissedOrDeleted = props.setCommentOrReviewDismissedOrDeleted
 
 
     const handleShowModal = () => {
@@ -54,6 +55,7 @@ export default function ReportedContent(props) {
                     if(!data.error) {
                         toast.success(t('Comment.Deleted'))
                         handleCloseModal()
+                        setCommentOrReviewDismissedOrDeleted(true)
                     } else {
                         navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                     }
@@ -67,7 +69,7 @@ export default function ReportedContent(props) {
                     if(!data.error) {
                         toast.success(t('Review.Deleted'))
                         handleCloseModal()
-
+                        setCommentOrReviewDismissedOrDeleted(true)
                     } else {
                         navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                     }
@@ -82,12 +84,12 @@ export default function ReportedContent(props) {
 
     const handleDismissReport = (e) => {
         e.preventDefault()
-
         reportsService.deleteReport(typeId, reportType)
             .then(data => {
                 if(!data.error) {
                     toast.success(t('Report.Deleted'))
                     handleCloseModalDismiss()
+                    setCommentOrReviewDismissedOrDeleted(true)
                 } else {
                     navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                 }
@@ -102,21 +104,18 @@ export default function ReportedContent(props) {
         <div className="card W-card-reported-width">
             <div className="card-body W-general-div-reports">
                 <div className="W-username-report-description-div">
+                    <div>
+                        <Link to={`/content/${contentType}/${contentId}`} className="W-creator-review">{contentName}</Link>
+                    </div>
                     <div className="W-comment-username-and-report">
                         <div>
                             {reportType === 'comment' ? (
-                                <Link to={`/user/profile/${reviewCreatorUserId}`} className="W-creator-review W-margin-right-reports">{t('Comment.Owner', {username: reviewCreatorUserName})}</Link>
+                                <Link to={`/user/profile/${reviewCreatorUserId}`} className="W-creator-review W-margin-right-reports">{t('Review.Owner', {username: reviewCreatorUserName})}</Link>
+
                             ) : (
                                 <Link to={`/user/profile/${reviewCreatorUserId}`} className="W-creator-review W-margin-right-reports">{t('Review.Owner', {username: reviewCreatorUserName})}</Link>
                             )}
-                            {reportType === 'comment' && (
-                                <Link to={`/user/profile/${reviewCreatorUserId}`} className="W-creator-review W-margin-right-reports">{t('Review.Owner', {username: reviewCreatorUserName})}</Link>
-                            )}
                         </div>
-                        <div>
-                            <Link to={`/content/${contentType}/${contentId}`} className="W-creator-review">{contentName}</Link>
-                        </div>
-
                         <div className="W-amount-reports-and-delete-button">
                             <div className="W-delete-button-report">
                                 <TooltipComponent text={t('Delete')}>
@@ -193,19 +192,23 @@ export default function ReportedContent(props) {
                         {reportType === "comment" ? (
                             <>
                                 <div>
-                                    <Markdown id={`commentTextArea1${typeId}${reportType}`} className="W-report-review-paragraph">{reviewNameOfReportedComment}</Markdown>
+                                    <p id={`commentTextArea1${typeId}${reportType}`} className="W-report-review-paragraph">{t('CreateReview.ReviewName')}: {reviewNameOfReportedComment}</p>
                                 </div>
+
                                 <div>
-                                    <Markdown id={`commentTextArea${typeId}${reportType}`} className="W-report-description-paragraph">{reportTitle}</Markdown>
+                                    <Link to={`/user/profile/${commentUserId}`} className="W-creator-review-link W-margin-right-reports">{t('Comment.Owner', {username: commentUserName})}</Link>
+                                </div>
+                                <div className="W-reported-border">
+                                    <p id={`commentTextArea${typeId}${reportType}`} className="W-report-description-paragraph">{t('Report.ReportedContent')}: {reportTitle}></p>
                                 </div>
                             </>
                         ) : (
                             <>
                                 <div>
-                                    <Markdown id={`commentTextArea${typeId}${reportType}`} className="W-report-description-paragraph-review">{reportTitle}</Markdown>
+                                    <p id={`commentTextArea${typeId}${reportType}`} className="W-report-review-paragraph-review ">{t('CreateReview.ReviewName')}: {reportTitle}></p>
                                 </div>
-                                <div>
-                                    <Markdown id={`commentTextArea1${typeId}${reportType}`} className="W-report-review-paragraph-review">{reportDescription}</Markdown>
+                                <div className="W-reported-border">
+                                    <p id={`commentTextArea1${typeId}${reportType}`} className=" W-report-description-paragraph">{t('Report.ReportedContent')}: {reportDescription}></p>
                                 </div>
                             </>
                         )}
@@ -219,7 +222,7 @@ export default function ReportedContent(props) {
                             )}
                         </div>
                         <div>
-                            {reportType === "reviews" ? (
+                            {reportType === "review" ? (
                                 <p className="W-report-margin-zero W-color-report-type">{t('Profile.Review')}</p>
                             ) : (
                                 <p className="W-report-margin-zero W-color-report-type">{t('Comment.Title')}</p>

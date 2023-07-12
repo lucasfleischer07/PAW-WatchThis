@@ -121,7 +121,7 @@ public class ReportsController {
     public Response deleteReport(@PathParam("commentOrReviewId") long commentOrReviewId,
                                  @PathParam("type") String type) {
         LOGGER.info("DELETE /{}: Called", uriInfo.getPath());
-        if(!type.equals("reviews") && !type.equals("comments")){
+        if(!type.equals("review") && !type.equals("comment")){
             throw new PageNotFoundException();
         }
         rrs.removeReports(type, commentOrReviewId);
