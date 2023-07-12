@@ -12,6 +12,7 @@ public class CommentDto {
     private UserDto user;
     private String text;
     private int reportAmount;
+    private String reportReason;
     private String commentReportersUrl;
 
     public static Collection<CommentDto> mapCommentToCommentDto(UriInfo uriInfo, Collection<Comment> comments) {
@@ -36,6 +37,7 @@ public class CommentDto {
         this.commentId = comment.getCommentId();
         this.user = new UserDto(uriInfo, comment.getUser());
         this.reportAmount = comment.getReportAmount();
+        this.reportReason = comment.getReportReasons();
     }
 
 
@@ -77,5 +79,13 @@ public class CommentDto {
 
     public void setReportAmount(int reportAmount) {
         this.reportAmount = reportAmount;
+    }
+
+    public String getReportReason() {
+        return reportReason;
+    }
+
+    public void setReportReason(String reportReason) {
+        this.reportReason = reportReason;
     }
 }

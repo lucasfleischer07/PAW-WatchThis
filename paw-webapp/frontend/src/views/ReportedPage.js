@@ -268,7 +268,7 @@ export default function ReportedPage() {
                                                 contentType={content.review.content.type}
                                                 reportTitle={content.review.name}
                                                 reportDescription={content.review.description}
-                                                reportReasons={content.reportReason}
+                                                reportReasons={content.review.reportReason}
                                                 reportsAmount={content.review.reportAmount}
                                                 typeId={content.review.id}
                                                 reviewNameOfReportedComment={content.review.name}
@@ -304,7 +304,7 @@ export default function ReportedPage() {
                                             contentType={content.review.content.type}
                                             reportTitle={content.review.name}
                                             reportDescription={content.comment.text}
-                                            reportReasons={content.reportReason}
+                                            reportReasons={content.comment.reportReason}
                                             reportsAmount={content.comment.reportAmount}
                                             typeId={content.comment.commentId}
                                             reviewCreatorUserName={content.review.user.username}

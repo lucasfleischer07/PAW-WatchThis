@@ -20,6 +20,7 @@ public class ReviewDto {
     private ContentDto content;
     private String commentUrl;
     private String reviewReporters;
+    private String reportReason;
     private int reportAmount;
 
 
@@ -47,6 +48,7 @@ public class ReviewDto {
         this.user = new UserDto(uriInfo, review.getUser());
         this.content = new ContentDto(uriInfo, review.getContent());
         this.reportAmount = review.getReportAmount();
+        this.reportReason = review.getReportReasons();
 
     }
 
@@ -136,5 +138,13 @@ public class ReviewDto {
 
     public void setReportAmount(int reportAmount) {
         this.reportAmount = reportAmount;
+    }
+
+    public String getReportReason() {
+        return reportReason;
+    }
+
+    public void setReportReason(String reportReason) {
+        this.reportReason = reportReason;
     }
 }
