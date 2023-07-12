@@ -9,17 +9,13 @@ export default function Header(props) {
     const navigate = useNavigate();
     let {signOut} = useContext(AuthContext)
 
-    // const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    //
-    // const handleDropdownToggle = () => {
-    //     setIsDropdownOpen((prevState) => !prevState);
-    // };
-
     const [queryProp, setQuery] = useState("")
     const type = props.type
     const admin = props.admin
     const userName = props.userName
     const userId = props.userId
+    const setUser = props.setUser
+    const setLogOut = props.setLogOut
 
     const { search } = useLocation();
 
@@ -55,6 +51,8 @@ export default function Header(props) {
         e.preventDefault();
         signOut()
         navigate("/",{replace:true})
+        setUser(null)
+        setLogOut(true)
         toast.success(t('Logout.Success'))
     }
 

@@ -7,6 +7,7 @@ import Header from "./components/Header";
 import {useNavigate} from "react-router-dom";
 import Filters from "./components/Filters";
 import {displayName} from "react-quill";
+import {set} from "react-hook-form";
 
 
 // import { css } from '@emotion/react';
@@ -26,6 +27,8 @@ export default function Home() {
     const [recommendedUserList, setRecommendedUserList] = useState(new Array(0))
 
     const [userWatchListIds, setUserWatchListIds] = useState(new Array(0))
+
+    const [logOut, setLogOut] = useState(false)
 
     // const [loading, setLoading] = useState(true)
 
@@ -71,6 +74,26 @@ export default function Home() {
         }
     }, [])
 
+    useEffect(() => {
+        contentService.getLandingPage()
+            .then(list => {
+                if(!list.error) {
+                    setBestRatedList(list.data.bestRatedList)
+                    setLastAddedList(list.data.lastAddedList)
+                    if(list.data.hasOwnProperty("recommendedUserList") && (list.data.recommendedUserList.length > 0)) {
+                        setRecommendedUserList(list.data.recommendedUserList)
+                    } else {
+                        setMostSavedContentByUsersList(list.data.mostSavedContentByUsersList)
+                    }
+                }
+                // setLoading(false);
+            })
+            .catch(() => {
+                // setLoading(false);
+                navigate("/error", { replace: true, state: {errorCode: 404} })
+            })
+    }, [logOut])
+
 
     useEffect(() => {
         document.title = t('WatchThisMessage')
@@ -93,7 +116,16 @@ export default function Home() {
 
     return(
         <div>
-            <Header type="all" admin={user?.role === 'admin'} userName={user?.username} userId={user?.id}/>
+            <Header
+                type="all"
+                admin={user?.role === 'admin'}
+                userName={user?.username}
+                setUser={setUser}
+                userId={user?.id}
+                setLogOut={setLogOut}
+            />
+
+
             <Filters type="all"/>
             <div className="W-carousels-div">
                 {isLogged() && userWatchListIds.length !== 0 && recommendedUserList.length !== 0 ? (
