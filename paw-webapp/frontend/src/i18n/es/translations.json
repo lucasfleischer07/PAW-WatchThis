@@ -102,6 +102,7 @@
   "Profile.NoReviews.NotOwner": "{{user}} no realizó ninguna reseña aún",
   "EditProfile.EditPicture": "Editar foto de perfil:",
   "EditProfile.Upload": "Subir",
+  "EditProfile.Upload.Image": "Subir imágen",
   "EditProfile.IncorrectOldPassword": "No coincide con la contraseña actual",
   "EditProfile.ChangePassword": "Cambiar contraseña:",
   "EditProfile.NewPassword": "Nueva contraseña:",

@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,10 +30,13 @@ public class ReviewJpaDao implements ReviewDao{
     public PageWrapper<Review> getAllReviews(Content content, int page, int pageSize){
         List<Review> reviews = content.getContentReviews();
         long totalPages = PageWrapper.calculatePageAmount(reviews.size(),pageSize);
+        if(page == 1 && reviews.size() == 0){
+            return new PageWrapper<Review>(page,totalPages,pageSize,Collections.emptyList(),0);
+        }
         if(page > totalPages || page <= 0){
             return new PageWrapper<Review>(page,totalPages,pageSize,null,reviews.size());
         }
-        if(page < totalPages){
+        if(page < totalPages || (page == totalPages && reviews.size() % pageSize == 0)){
             return new PageWrapper<Review>(page,totalPages,pageSize,reviews.subList((page-1)*pageSize,page * pageSize),reviews.size());
         }
         return new PageWrapper<Review>(page,totalPages,pageSize,reviews.subList((page-1)*pageSize,(page-1)*pageSize + (reviews.size() % pageSize)),reviews.size());
@@ -66,10 +70,13 @@ public class ReviewJpaDao implements ReviewDao{
 
         List<Review> reviews = user.getUserReviews();
         long totalPages = PageWrapper.calculatePageAmount(reviews.size(),pageSize);
+        if(page == 1 && reviews.size() == 0){
+            return new PageWrapper<Review>(page,totalPages,pageSize, Collections.emptyList(),0);
+        }
         if(page > totalPages || page <= 0){
             return new PageWrapper<Review>(page,totalPages,pageSize,null,reviews.size());
         }
-        if(page < totalPages){
+        if(page < totalPages || (page == totalPages && reviews.size() % pageSize == 0)){
             return new PageWrapper<Review>(page,totalPages,pageSize,reviews.subList((page-1)*pageSize,page * pageSize),reviews.size());
         }
         return new PageWrapper<Review>(page,totalPages,pageSize,reviews.subList((page-1)*pageSize,(page-1)*pageSize + (reviews.size() % pageSize)),reviews.size());

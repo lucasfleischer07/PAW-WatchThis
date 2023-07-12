@@ -45,7 +45,6 @@
     color: #636464;
     font-style: italic;
     margin-top: 1vw;
-    margin-left: 1vw;
     overflow: hidden;
     width: 90%;
 }
@@ -79,9 +78,8 @@
 }
 
 .W-report-description-paragraph {
-    margin-top: 1rem;
     font-size: 1vw;
-    margin-left: 1vw;
+    margin: 1vw;
     color: #b21e26;
     font-weight: bold;
 }

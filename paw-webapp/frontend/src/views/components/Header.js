@@ -40,9 +40,11 @@ export default function Header(props) {
             if (type === 'all'){
                 navigate('/content/all' + '?' + searchParams.toString());
             }else if ( type === 'movie'){
-                navigate('/content/movie' + '?' + searchParams.toString());
+                const currentPath = window.location.pathname.substring('/paw-2022b-3'.length);
+                navigate(currentPath + '?' + searchParams.toString());
             }else{
-                navigate('/content/serie' + '?' + searchParams.toString());
+                const currentPath = window.location.pathname.substring('/paw-2022b-3'.length);
+                navigate(currentPath + '?' + searchParams.toString());
             }
         }
     }

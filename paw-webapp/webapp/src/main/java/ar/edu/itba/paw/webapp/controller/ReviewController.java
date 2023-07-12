@@ -55,7 +55,7 @@ public class ReviewController {
         Content content = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
         PageWrapper<Review> reviewList = rs.getAllReviews(content,pageNumber,REVIEW_AMOUNT);
         if(reviewList == null) {
-            LOGGER.warn("GET /{}: Cant find a the content specifispecified",uriInfo.getPath());
+            LOGGER.warn("GET /{}: Invalid page param",uriInfo.getPath());
             throw new ContentNotFoundException();
         }
         Collection<ReviewDto> reviewDtoList = ReviewDto.mapReviewToReviewDto(uriInfo, reviewList.getPageContent());

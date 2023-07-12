@@ -32,16 +32,16 @@ export default function UserInfoPage() {
 
     useEffect(() => {
         const queryParams = new URLSearchParams(search);
-        updateUrlVariable(page, queryParams.get('page'), (x) =>setPage(x))
+        updateUrlVariable(page, (typeof queryParams.get('page') === 'string' ?  parseInt(queryParams.get('page')) : queryParams.get('page')), (x) =>setPage(x))
     }, [search]);
 
     const prevPage = () => {
-        setPage(page - 1)
+        setAmountPages(page - 1)
         changeUrlPage(page - 1)
     }
 
     const nextPage = () => {
-        setPage(page + 1)
+        setAmountPages(page + 1)
         changeUrlPage(page + 1)
     }
 
@@ -53,7 +53,8 @@ export default function UserInfoPage() {
     const changeUrlPage = (page) => {
         const searchParams = new URLSearchParams(window.location.search);
         searchParams.set('page', page);
-        navigate(window.location.pathname + '?' + searchParams.toString());
+        const currentPath = window.location.pathname.substring('/paw-2022b-3'.length);
+        navigate(currentPath + '?' + searchParams.toString());
     }
 
 

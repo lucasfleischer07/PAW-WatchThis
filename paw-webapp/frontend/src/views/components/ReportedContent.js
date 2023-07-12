@@ -1,6 +1,6 @@
 import {Link, useNavigate} from "react-router-dom";
 import {useTranslation} from "react-i18next";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import { Modal, Button } from 'react-bootstrap';
 import Markdown from 'marked-react';
 import {commentService, reportsService, reviewService} from "../../services";
@@ -199,13 +199,13 @@ export default function ReportedContent(props) {
                                     <Link to={`/user/profile/${commentUserId}`} className="W-creator-review-link W-margin-right-reports">{t('Comment.Owner', {username: commentUserName})}</Link>
                                 </div>
                                 <div className="W-reported-border">
-                                    <p id={`commentTextArea${typeId}${reportType}`} className="W-report-description-paragraph">{t('Report.ReportedContent')}: {reportTitle}></p>
+                                    <p id={`commentTextArea${typeId}${reportType}`} className="W-report-description-paragraph">{t('Report.ReportedContent')}: {reportDescription}</p>
                                 </div>
                             </>
                         ) : (
                             <>
                                 <div>
-                                    <p id={`commentTextArea${typeId}${reportType}`} className="W-report-review-paragraph-review ">{t('CreateReview.ReviewName')}: {reportTitle}></p>
+                                    <p id={`commentTextArea${typeId}${reportType}`} className="W-report-review-paragraph-review">{t('CreateReview.ReviewName')}: {reportTitle}</p>
                                 </div>
                                 <div className="W-reported-border">
                                     <p id={`commentTextArea1${typeId}${reportType}`} className=" W-report-description-paragraph">{t('Report.ReportedContent')}: {reportDescription}></p>
@@ -216,16 +216,13 @@ export default function ReportedContent(props) {
                     <div className="W-type-of-report">
                         <div>
                             {reportsAmount === 1 ? (
-                                <span title={reportReasons} className="W-report-margin-zero"> {t('Report.Report', {reportsAmount: reportsAmount})}</span>
+                                <TooltipComponent text={reportReasons}>
+                                    <span className="W-report-margin-zero"> {t('Report.Report', {reportsAmount: reportsAmount})}</span>
+                                </TooltipComponent>
                             ) : (
-                                <span title={reportReasons} className="W-report-margin-zero">{t('Report.Reports', {reportsAmount: reportsAmount})}</span>
-                            )}
-                        </div>
-                        <div>
-                            {reportType === "review" ? (
-                                <p className="W-report-margin-zero W-color-report-type">{t('Profile.Review')}</p>
-                            ) : (
-                                <p className="W-report-margin-zero W-color-report-type">{t('Comment.Title')}</p>
+                                <TooltipComponent text={reportReasons}>
+                                    <span className="W-report-margin-zero">{t('Report.Reports', {reportsAmount: reportsAmount})}</span>
+                                </TooltipComponent>
                             )}
                         </div>
                     </div>

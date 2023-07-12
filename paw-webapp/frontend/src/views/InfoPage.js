@@ -86,7 +86,8 @@ export default function InfoPage() {
     const changeUrlPage = (page) => {
         const searchParams = new URLSearchParams(window.location.search);
         searchParams.set('page', page);
-        navigate(window.location.pathname + '?' + searchParams.toString());
+        const currentPath = window.location.pathname.substring('/paw-2022b-3'.length);
+        navigate(currentPath + '?' + searchParams.toString());
     }
 
     const handleSubmitDeleteContent = (e) => {
@@ -207,7 +208,7 @@ export default function InfoPage() {
 
     useEffect(() => {
         const queryParams = new URLSearchParams(search);
-        updateUrlVariable(actualPage, queryParams.get('page'), (x) =>setActualPage(x))
+        updateUrlVariable(actualPage,(typeof queryParams.get('page') === 'string' ?  parseInt(queryParams.get('page')) : queryParams.get('page')), (x) =>setActualPage(x))
     }, [search]);
 
 
@@ -273,11 +274,14 @@ export default function InfoPage() {
                 })
                 .catch(() => {
                     navigate("/error", { replace: true, state: {errorCode: 404} })
-                })}
+                })
+        }
         reviewService.reviews(parseInt(contentId), actualPage)
             .then(data => {
                 if(!data.error) {
                     setReviews(data.data)
+                    const aux = data.totalPages
+                    setAmountPages(aux)
                     for(let i = 0; i < data.data.length; i++) {
                         if(data.data[i].user.username === user?.username) {
                             setAlreadyReviewed(true)
@@ -587,23 +591,23 @@ export default function InfoPage() {
                                         )}
                                         {amountPages > 10 ? (
                                             Array.from({ length: amountPages }, (_, index) => (
-                                                index + 1 === parseInt(actualPage) ? (
+                                                index + 1 === actualPage ? (
                                                     <li className="page-item active">
                                                         <p className="page-link W-pagination-color">{index + 1}</p>
                                                     </li>
-                                                ): index + 1 === parseInt(actualPage) + 4 ? (
+                                                ): index + 1 === actualPage + 4 ? (
                                                     <li className="page-item">
                                                         <p className="page-link W-pagination-color" onClick={() => changePage(index + 1)}>
                                                             ...
                                                         </p>
                                                     </li>
-                                                ): index + 1 === parseInt(actualPage) - 4 ? (
+                                                ): index + 1 === actualPage - 4 ? (
                                                     <li className="page-item">
                                                         <p className="page-link W-pagination-color" onClick={() => changePage(index + 1)}>
                                                             ...
                                                         </p>
                                                     </li>
-                                                ) : ( index + 1 > parseInt(actualPage) - 4 && index + 1 < parseInt(actualPage) + 4 ) && (
+                                                ) : ( index + 1 > actualPage - 4 && index + 1 < actualPage + 4 ) && (
                                                     <li className="page-item">
                                                         <p className="page-link W-pagination-color" onClick={() => changePage(index + 1)}>
                                                             {index + 1}

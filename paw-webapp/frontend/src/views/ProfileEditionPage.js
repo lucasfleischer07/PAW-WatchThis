@@ -167,8 +167,7 @@ export default function ProfileEditionPage() {
                                 </div>
                                 <div className="W-submit-changes-edit-profile">
                                     <button type="submit" className="btn btn-success">
-                                        {/*TODO: Cambair este mensaje por uno que diga: Upload Image*/}
-                                        {t('EditProfile.Upload')}
+                                        {t('EditProfile.Upload.Image')}
                                     </button>
                                 </div>
                             </form>

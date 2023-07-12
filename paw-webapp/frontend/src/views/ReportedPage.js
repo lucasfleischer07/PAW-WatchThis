@@ -39,7 +39,7 @@ export default function ReportedPage() {
         const queryParams = new URLSearchParams(search);
         updateUrlVariable(filterReason, queryParams.get('filterReason'),(x) => setFilterReason(x))
         updateUrlVariable(reportType, queryParams.get('reportType'), (x) => setReportType(x))
-        updateUrlVariable(page, queryParams.get('page'), (x) =>setPage(x))
+        updateUrlVariable(page,(typeof queryParams.get('page') === 'string' ?  parseInt(queryParams.get('page')) : queryParams.get('page')), (x) =>setPage(x))
     }, [search]);
 
     const handleOnClickFilter = (value) => {
@@ -47,12 +47,12 @@ export default function ReportedPage() {
     }
 
     const prevPage = () => {
-        setPage(page - 1)
+        setAmountPages(page - 1)
         changeUrlPage(page - 1)
     }
 
     const nextPage = () => {
-        setPage(page + 1)
+        setAmountPages(page + 1)
         changeUrlPage(page + 1)
     }
 
@@ -64,7 +64,8 @@ export default function ReportedPage() {
     const changeUrlPage = (page) => {
         const searchParams = new URLSearchParams(window.location.search);
         searchParams.set('page', page);
-        navigate(window.location.pathname + '?' + searchParams.toString());
+        const currentPath = window.location.pathname.substring('/paw-2022b-3'.length);
+        navigate(currentPath + '?' + searchParams.toString());
     }
 
     useEffect(() => {
@@ -75,6 +76,7 @@ export default function ReportedPage() {
                 .then(data => {
                     if(!data.error) {
                         setReportedReviewsList(data.data)
+                        setAmountPages(data.totalPages)
                     } else {
                         if(data.errorCode === 404) {
                             setShowExpiredCookiesModal(true)
@@ -266,7 +268,7 @@ export default function ReportedPage() {
                                                 contentType={content.review.content.type}
                                                 reportTitle={content.review.name}
                                                 reportDescription={content.review.description}
-                                                reportReasons={content.review.reportReasons}
+                                                reportReasons={content.reportReason}
                                                 reportsAmount={content.review.reportAmount}
                                                 typeId={content.review.id}
                                                 reviewNameOfReportedComment={content.review.name}
@@ -302,7 +304,7 @@ export default function ReportedPage() {
                                             contentType={content.review.content.type}
                                             reportTitle={content.review.name}
                                             reportDescription={content.comment.text}
-                                            reportReasons={content.comment.reportReasons}
+                                            reportReasons={content.reportReason}
                                             reportsAmount={content.comment.reportAmount}
                                             typeId={content.comment.commentId}
                                             reviewCreatorUserName={content.review.user.username}

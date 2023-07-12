@@ -5,6 +5,7 @@
 .W-reported-border{
     border: 2px solid #b21e26;
     margin-bottom: 1vw;
+    margin-top: 1vw;
 }
 
 .W-column-display {
@@ -225,12 +226,11 @@
 }
 
 .W-creator-review {
-    font-size: 1.3vw;
+    font-size: 1.2vw;
     color: #636464;
     position: relative;
     display: flex;
     justify-content: center;
-    margin-bottom: 1vw;
 }
 
 .W-creator-review-link {
@@ -277,7 +277,6 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin-bottom: 1vw;
 }
 
 .W-no-bullets-list {

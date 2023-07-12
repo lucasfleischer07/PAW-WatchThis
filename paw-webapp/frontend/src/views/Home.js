@@ -125,8 +125,8 @@ export default function Home() {
                 setLogOut={setLogOut}
             />
 
+            {/*<Filters type="all"/>*/}
 
-            <Filters type="all"/>
             <div className="W-carousels-div">
                 {isLogged() && userWatchListIds.length !== 0 && recommendedUserList.length !== 0 ? (
                     <>

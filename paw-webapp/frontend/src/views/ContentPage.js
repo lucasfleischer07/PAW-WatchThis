@@ -41,22 +41,27 @@ export default function ContentPage(props) {
         }
     }, [user])
 
+    useEffect(() => {
+        setActualPage(1)
+    }, [contentType])
+
 
     useEffect(() => {
-        if(settedParams===true){
-        contentService.getContentByType(contentType, actualPage, genre, durationFrom, durationTo, sorting, query)
-            .then(data => {
-                if(!data.error) {
-                    setAllContent(data.data)
-                    const aux = data.totalPages
-                    setAmountPages(aux);
-                } else {
-                    navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
-                }
-            })
-            .catch((e) => {
-                navigate("/error", { replace: true, state: {errorCode: 404} })
-            })}
+        if(settedParams === true) {
+            contentService.getContentByType(contentType, actualPage, genre, durationFrom, durationTo, sorting, query)
+                .then(data => {
+                    if(!data.error) {
+                        setAllContent(data.data)
+                        const aux = data.totalPages
+                        setAmountPages(aux);
+                    } else {
+                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                    }
+                })
+                .catch((e) => {
+                    navigate("/error", { replace: true, state: {errorCode: 404} })
+                })
+        }
     }, [actualPage, contentType,genre,durationFrom,durationTo,sorting,query,settedParams])
 
 
@@ -83,8 +88,8 @@ export default function ContentPage(props) {
         updateUrlVariable(durationFrom, queryParams.get('durationFrom'), (x) => setDurationFrom(x))
         updateUrlVariable(durationTo, queryParams.get('durationTo'), (x) =>setDurationTo(x))
         updateUrlVariable(sorting, queryParams.get('sorting'),(x) => setSorting(x))
-        updateUrlVariable(actualPage, queryParams.get('page'), (x) =>setActualPage(x))
-        updateUrlVariable(actualPage, queryParams.get('query'), (x) =>setQuery(x))
+        updateUrlVariable(actualPage, (typeof queryParams.get('page') === 'string' ?  parseInt(queryParams.get('page')) : queryParams.get('page')), (x) =>setActualPage(x))
+        updateUrlVariable(query, queryParams.get('query'), (x) =>setQuery(x))
         isSettedParams(true)
     }, [search]);
 
@@ -119,13 +124,6 @@ export default function ContentPage(props) {
 
             <Header type={contentType} admin={user?.role === 'admin'} userName={user?.username} userId={user?.id}/>
             <Filters type={contentType}/>
-            {/*<Filter*/}
-            {/*    query={query}*/}
-            {/*    genre={genre}*/}
-            {/*    durationFrom={durationFrom}*/}
-            {/*    durationTo={durationTo}*/}
-            {/*    type={contentType}*/}
-            {/*    sorting={sorting}/>*/}
 
 
             {(props.query != null && props.query !== '' && props.query !== 'ANY' && allContent.length > 0) && (
