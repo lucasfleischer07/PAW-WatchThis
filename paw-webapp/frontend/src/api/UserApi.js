@@ -82,7 +82,6 @@ export class UserApi {
                 headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}),
                 body: JSON.stringify(userDetails)
             })
-            console.log(res.status)
             if(res.status === 200) {
                 return {error: false, data: []}
             } else {

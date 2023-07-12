@@ -53,7 +53,6 @@ public class UserJpaDao implements UserDao{
     public void setPassword(String password, User user) {
         user.setPassword(password);
         em.merge(user);
-
     }
 
     @Override

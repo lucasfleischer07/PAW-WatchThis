@@ -194,12 +194,13 @@ export default function ReportedContent(props) {
                                 <div>
                                     <p id={`commentTextArea1${typeId}${reportType}`} className="W-report-review-paragraph">{t('CreateReview.ReviewName')}: {reviewNameOfReportedComment}</p>
                                 </div>
-
-                                <div>
-                                    <Link to={`/user/profile/${commentUserId}`} className="W-creator-review-link W-margin-right-reports">{t('Comment.Owner', {username: commentUserName})}</Link>
-                                </div>
-                                <div className="W-reported-border">
-                                    <p id={`commentTextArea${typeId}${reportType}`} className="W-report-description-paragraph">{t('Report.ReportedContent')}: {reportDescription}</p>
+                                <div className="W-reported-content-margin">
+                                   <div>
+                                       <Link to={`/user/profile/${commentUserId}`} className="W-creator-review-link W-margin-right-reports">{t('Comment.Owner', {username: commentUserName})}</Link>
+                                   </div>
+                                   <div className="W-reported-border">
+                                       <p id={`commentTextArea${typeId}${reportType}`} className="W-report-description-paragraph">{t('Report.ReportedContent')}: {reportDescription}</p>
+                                   </div>
                                 </div>
                             </>
                         ) : (
@@ -207,8 +208,8 @@ export default function ReportedContent(props) {
                                 <div>
                                     <p id={`commentTextArea${typeId}${reportType}`} className="W-report-review-paragraph-review">{t('CreateReview.ReviewName')}: {reportTitle}</p>
                                 </div>
-                                <div className="W-reported-border">
-                                    <p id={`commentTextArea1${typeId}${reportType}`} className=" W-report-description-paragraph">{t('Report.ReportedContent')}: {reportDescription}></p>
+                                <div className="W-reported-border W-reported-content-margin">
+                                    <p id={`commentTextArea1${typeId}${reportType}`} className=" W-report-description-paragraph">{t('Report.ReportedContent')}: {reportDescription}</p>
                                 </div>
                             </>
                         )}

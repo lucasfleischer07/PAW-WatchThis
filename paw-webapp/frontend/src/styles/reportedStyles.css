@@ -50,12 +50,16 @@
 }
 
 .W-card-reported-width {
-    width: 50vw;
+    width: 45vw;
     margin-bottom: 1.5vw;
 }
 
 .W-margin-content-name-report {
     margin-right: 5vw;
+}
+
+.W-report-header-qtty-margin {
+    margin-left: 4vw;
 }
 
 .W-general-pagination-reported {
@@ -79,11 +83,14 @@
 
 .W-report-description-paragraph {
     font-size: 1vw;
-    margin: 1vw;
+    margin: 0.5vw;
     color: #b21e26;
     font-weight: bold;
 }
 
+.W-reported-content-margin {
+    margin-left: 1vw;
+}
 
 .W-reported-background-color {
     padding: 1vw;

@@ -30,10 +30,6 @@ export default function UserInfoPage() {
     const [isLikeReviewsList, setIsLikeReviewsList] = useState([]);
     const [isDislikeReviewsList, setIsDislikeReviewsList] = useState([]);
 
-    useEffect(() => {
-        const queryParams = new URLSearchParams(search);
-        updateUrlVariable(page, (typeof queryParams.get('page') === 'string' ?  parseInt(queryParams.get('page')) : queryParams.get('page')), (x) =>setPage(x))
-    }, [search]);
 
     const prevPage = () => {
         setAmountPages(page - 1)
@@ -78,6 +74,13 @@ export default function UserInfoPage() {
                 navigate("/error", { replace: true, state: {errorCode: 404} })
             })
     }
+
+    
+    useEffect(() => {
+        const queryParams = new URLSearchParams(search);
+        updateUrlVariable(page, (typeof queryParams.get('page') === 'string' ?  parseInt(queryParams.get('page')) : queryParams.get('page')), (x) =>setPage(x))
+    }, [search]);
+
 
     useEffect(() => {
         userService.getUserReviews(parseInt(userProfileId), page)
@@ -159,9 +162,7 @@ export default function UserInfoPage() {
 
         }
 
-    }, [])
-
-
+    }, [page])
 
 
     return(
@@ -273,85 +274,81 @@ export default function UserInfoPage() {
                                             </div>
                                         ))
                                     )}
-
-
-
-
                                 </div>
                             </div>
                         </div>
+                        {amountPages > 1 && (
+                            <div>
+                                <ul className="pagination justify-content-center W-pagination">
+                                    {page > 1 ? (
+                                        <li className="page-item">
+                                            <p className="page-link W-pagination-color" onClick={() => prevPage()}>
+                                                {t('Pagination.Prev')}
+                                            </p>
+                                        </li>
+                                    ) : (
+                                        <li className="page-item disabled">
+                                            <p className="page-link W-pagination-color">{t('Pagination.Prev')}</p>
+                                        </li>
+                                    )}
+                                    {amountPages > 10 ? (
+                                        Array.from({ length: amountPages }, (_, index) => (
+                                            index + 1 === parseInt(page) ? (
+                                                <li className="page-item active">
+                                                    <p className="page-link W-pagination-color">{index + 1}</p>
+                                                </li>
+                                            ): index + 1 === parseInt(page) + 4 ? (
+                                                <li className="page-item">
+                                                    <p className="page-link W-pagination-color" onClick={() => changePage(index + 1)}>
+                                                        ...
+                                                    </p>
+                                                </li>
+                                            ): index + 1 === parseInt(page) - 4 ? (
+                                                <li className="page-item">
+                                                    <p className="page-link W-pagination-color" onClick={() => changePage(index + 1)}>
+                                                        ...
+                                                    </p>
+                                                </li>
+                                            ) : ( index + 1 > parseInt(page) - 4 && index + 1 < parseInt(page) + 4 ) && (
+                                                <li className="page-item">
+                                                    <p className="page-link W-pagination-color" onClick={() => changePage(index + 1)}>
+                                                        {index + 1}
+                                                    </p>
+                                                </li>
+                                            )
+                                        ))
+                                    ) : (
+                                        Array.from({ length: amountPages }, (_, index) => (
+                                            index + 1 === page ? (
+                                                <li className="page-item active">
+                                                    <p className="page-link W-pagination-color">{index + 1}</p>
+                                                </li>
+                                            ) : (
+                                                <li className="page-item">
+                                                    <p className="page-link W-pagination-color" onClick={() => changePage(index + 1)}>
+                                                        {index + 1}
+                                                    </p>
+                                                </li>
+                                            )
+                                        ))
+                                    )}
+                                    {page < amountPages ? (
+                                        <li className="page-item">
+                                            <p className="page-link W-pagination-color" onClick={() => nextPage()}>
+                                                {t('Pagination.Next')}
+                                            </p>
+                                        </li>
+                                    ) : (
+                                        <li className="page-item disabled">
+                                            <p className="page-link W-pagination-color">{t('Pagination.Next')}</p>
+                                        </li>
+                                    )}
+                                </ul>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
-            {amountPages > 1 && (
-                <div>
-                    <ul className="pagination justify-content-center W-pagination">
-                        {page > 1 ? (
-                            <li className="page-item">
-                                <p className="page-link W-pagination-color" onClick={() => prevPage()}>
-                                    {t('Pagination.Prev')}
-                                </p>
-                            </li>
-                        ) : (
-                            <li className="page-item disabled">
-                                <p className="page-link W-pagination-color">{t('Pagination.Prev')}</p>
-                            </li>
-                        )}
-                        {amountPages > 10 ? (
-                            Array.from({ length: amountPages }, (_, index) => (
-                                index + 1 === parseInt(page) ? (
-                                    <li className="page-item active">
-                                        <p className="page-link W-pagination-color">{index + 1}</p>
-                                    </li>
-                                ): index + 1 === parseInt(page) + 4 ? (
-                                    <li className="page-item">
-                                        <p className="page-link W-pagination-color" onClick={() => changePage(index + 1)}>
-                                            ...
-                                        </p>
-                                    </li>
-                                ): index + 1 === parseInt(page) - 4 ? (
-                                    <li className="page-item">
-                                        <p className="page-link W-pagination-color" onClick={() => changePage(index + 1)}>
-                                            ...
-                                        </p>
-                                    </li>
-                                ) : ( index + 1 > parseInt(page) - 4 && index + 1 < parseInt(page) + 4 ) && (
-                                    <li className="page-item">
-                                        <p className="page-link W-pagination-color" onClick={() => changePage(index + 1)}>
-                                            {index + 1}
-                                        </p>
-                                    </li>
-                                )
-                            ))
-                        ) : (
-                            Array.from({ length: amountPages }, (_, index) => (
-                                index + 1 === page ? (
-                                    <li className="page-item active">
-                                        <p className="page-link W-pagination-color">{index + 1}</p>
-                                    </li>
-                                ) : (
-                                    <li className="page-item">
-                                        <p className="page-link W-pagination-color" onClick={() => changePage(index + 1)}>
-                                            {index + 1}
-                                        </p>
-                                    </li>
-                                )
-                            ))
-                        )}
-                        {page < amountPages ? (
-                            <li className="page-item">
-                                <p className="page-link W-pagination-color" onClick={() => nextPage()}>
-                                    {t('Pagination.Next')}
-                                </p>
-                            </li>
-                        ) : (
-                            <li className="page-item disabled">
-                                <p className="page-link W-pagination-color">{t('Pagination.Next')}</p>
-                            </li>
-                        )}
-                    </ul>
-                </div>
-            )}
         </>
     );
 }

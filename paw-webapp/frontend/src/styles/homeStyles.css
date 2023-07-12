@@ -363,6 +363,12 @@
 
 }
 
+@media (max-width: 1290px) {
+    .W-dropdown-menu {
+        left: -4vw;
+    }
+}
+
 @media (max-width: 1230px) {
     .W-filter-title{
         height: 4vw;

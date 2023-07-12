@@ -71,19 +71,14 @@ public class CommentController {
         LOGGER.info("POST /{}: Called", uriInfo.getPath());
         if(commentDto==null)
             throw new BadRequestException("Must include comment data");
-        Optional<Review> review = rs.getReview(reviewId);
-        Optional<User> user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
 
-        if(!review.isPresent()) {
-            throw new ReviewNotFoundException();
-        } else if(!user.isPresent()) {
-            throw new UserNotFoundException();
-        }
+        final Review review = rs.getReview(reviewId).orElseThrow(ReviewNotFoundException::new);
+        final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
 
-        Comment newComment = ccs.addComment(review.get(), user.get(), commentDto.getComment());
+        Comment newComment = ccs.addComment(review, user, commentDto.getComment());
 
         LOGGER.info("POST /{}: Comment created with id {}", uriInfo.getPath(), newComment.getCommentId());
-        return Response.created(CommentDto.getCommentUriBuilder(newComment, uriInfo).build()).entity(newComment).build();
+        return Response.created(CommentDto.getCommentUriBuilder(newComment, uriInfo).build()).build();
     }
     // * ---------------------------------------------------------------------------------------------------------------
 

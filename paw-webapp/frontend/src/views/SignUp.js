@@ -89,10 +89,12 @@ export default function SignUp() {
                         })
                 } else {
                     if(data.errorCode === 400) {
-                        if(data.data.message.include("username")){
+                        if(data.data.message === "Username already register"){
                             setUsernameError(true)
-                        } else if(data.data.message.include("mail")){
+                        } else if(data.data.message === "Email already register"){
                             setEmailError(true)
+                        } else {
+                            navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                         }
                     } else {
                         navigate("/error", { replace: true, state: {errorCode: data.errorCode} })

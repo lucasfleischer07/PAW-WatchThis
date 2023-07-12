@@ -26,9 +26,7 @@ public class ReviewJpaDao implements ReviewDao{
         return Optional.of(toAdd);
     }
 
-    @Override
-    public PageWrapper<Review> getAllReviews(Content content, int page, int pageSize){
-        List<Review> reviews = content.getContentReviews();
+    private PageWrapper<Review> genericGetAllReviews(List<Review> reviews,int page,int pageSize){
         long totalPages = PageWrapper.calculatePageAmount(reviews.size(),pageSize);
         if(page == 1 && reviews.size() == 0){
             return new PageWrapper<Review>(page,totalPages,pageSize,Collections.emptyList(),0);
@@ -40,6 +38,12 @@ public class ReviewJpaDao implements ReviewDao{
             return new PageWrapper<Review>(page,totalPages,pageSize,reviews.subList((page-1)*pageSize,page * pageSize),reviews.size());
         }
         return new PageWrapper<Review>(page,totalPages,pageSize,reviews.subList((page-1)*pageSize,(page-1)*pageSize + (reviews.size() % pageSize)),reviews.size());
+    }
+
+    @Override
+    public PageWrapper<Review> getAllReviews(Content content, int page, int pageSize){
+        List<Review> reviews = content.getContentReviews();
+        return genericGetAllReviews(reviews,page,pageSize);
     }
 
     @Override
@@ -67,19 +71,8 @@ public class ReviewJpaDao implements ReviewDao{
 
     @Override
     public PageWrapper<Review> getAllUserReviews(User user, int page, int pageSize) {
-
         List<Review> reviews = user.getUserReviews();
-        long totalPages = PageWrapper.calculatePageAmount(reviews.size(),pageSize);
-        if(page == 1 && reviews.size() == 0){
-            return new PageWrapper<Review>(page,totalPages,pageSize, Collections.emptyList(),0);
-        }
-        if(page > totalPages || page <= 0){
-            return new PageWrapper<Review>(page,totalPages,pageSize,null,reviews.size());
-        }
-        if(page < totalPages || (page == totalPages && reviews.size() % pageSize == 0)){
-            return new PageWrapper<Review>(page,totalPages,pageSize,reviews.subList((page-1)*pageSize,page * pageSize),reviews.size());
-        }
-        return new PageWrapper<Review>(page,totalPages,pageSize,reviews.subList((page-1)*pageSize,(page-1)*pageSize + (reviews.size() % pageSize)),reviews.size());
+        return genericGetAllReviews(reviews,page,pageSize);
     }
 
     @Override

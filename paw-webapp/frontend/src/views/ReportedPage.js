@@ -169,8 +169,8 @@ export default function ReportedPage() {
                         </div>
                     </div>
 
-                    <div className="bg-light p-4 text-center W-report-header-div">
-                        <div>
+                    <div className="bg-light p-1 text-center W-report-header-div">
+                        <div className="W-report-header-qtty-margin">
                             <ul className="list-inline mb-0">
                                 <li className="list-inline-item">
                                     <h4 className="font-weight-bold mb-0 d-block">{reportedReviewsList.length}</h4>

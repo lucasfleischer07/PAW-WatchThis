@@ -33,7 +33,7 @@ export class CommentApi {
                 body: JSON.stringify(commentDetails)
             })
             if(res.status === 201) {
-                return {error: false, data: await res.json()}
+                return {error: false, data: []}
             } else {
                 return {error: true, errorCode: res.status}
             }

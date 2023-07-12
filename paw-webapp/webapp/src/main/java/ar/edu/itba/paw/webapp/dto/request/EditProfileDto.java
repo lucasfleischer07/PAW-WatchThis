@@ -8,7 +8,7 @@ import javax.validation.constraints.Size;
 public class EditProfileDto {
     @Size(min = 6, max = 50, message = "...")
     @Pattern(regexp	= "([a-zA-Z0-9ñáéíóú!,.:;=+\n\\-_()?<>$%&#@{}\\[\\]|*\"'~/`^\\s]+)?", message = "...")
-    private String password;
+    private String newPassword;
 
     @Size(min = 6, max = 50, message = "...")
     @Pattern(regexp	= "([a-zA-Z0-9ñáéíóú!,.:;=+\n\\-_()?<>$%&#@{}\\[\\]|*\"'~/`^\\s]+)?", message = "...")
@@ -18,11 +18,11 @@ public class EditProfileDto {
     @Pattern(regexp	= "([a-zA-Z0-9ñáéíóú!,.:;=+\n\\-_()?<>$%&#@{}\\[\\]|*\"'~/`^\\s]+)?", message = "...")
     private String currentPassword;
 
-    public String getPassword() {
-        return password;
+    public String getNewPassword() {
+        return newPassword;
     }
-    public void setPassword(String password) {
-        this.password = password;
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
     }
 
     public String getCurrentPassword() {

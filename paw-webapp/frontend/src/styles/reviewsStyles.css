@@ -163,7 +163,7 @@
 }
 
 .W-subTitles-font-size {
-    font-size: 1.3vw;
+    font-size: 1vw;
 }
 
 .W-card-body-aligment {
@@ -226,7 +226,7 @@
 }
 
 .W-creator-review {
-    font-size: 1.2vw;
+    font-size: 1.1vw;
     color: #636464;
     position: relative;
     display: flex;

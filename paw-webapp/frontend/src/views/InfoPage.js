@@ -304,7 +304,7 @@ export default function InfoPage() {
                 <ExpiredCookieModal/>
             )}
 
-            <Header type={contentType} admin={user?.role === 'admin'} userName={user?.username} userId={user?.id}/>
+            <Header type={"all"} admin={user?.role === 'admin'} userName={user?.username} userId={user?.id}/>
 
             {user?.role === 'admin' ? (
                 <div className="W-delete-edit-buttons-content">

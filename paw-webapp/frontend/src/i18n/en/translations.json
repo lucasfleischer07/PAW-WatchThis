@@ -111,7 +111,7 @@
   "EditProfile.ConfirmPassword": "Confirm password:",
   "EditProfile.NotSamePassword": "Passwords do not match",
   "EditProfile.Change": "Change",
-  "EditProfile.Upload.Image": "Profile image updated",
+  "EditProfile.Upload.Image": "Upload image",
   "EditProfile.Upload.Image.Error": "Error while updating profile image",
   "EditProfile.Upload.Password.Success": "Profile password uploaded",
   "EditProfile.Upload.Password.Error": "Error while updating password",

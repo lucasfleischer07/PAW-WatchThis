@@ -10,6 +10,7 @@ import ar.edu.itba.paw.webapp.dto.request.EditProfileDto;
 import ar.edu.itba.paw.webapp.dto.request.NewUser;
 import ar.edu.itba.paw.webapp.dto.response.ReviewDto;
 import ar.edu.itba.paw.webapp.dto.response.UserDto;
+import ar.edu.itba.paw.webapp.utilities.ResponseBuildingUtils;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -97,7 +98,9 @@ public class UserController {
         PageWrapper<Review> reviewList = rs.getAllUserReviews(user,page,REVIEW_AMOUNT);
         Collection<ReviewDto> reviewDtoList = ReviewDto.mapReviewToReviewDto(uriInfo, reviewList.getPageContent());
         LOGGER.info("GET /{}: User {} reviews returned with success",  uriInfo.getPath(), id);
-        return Response.ok(new GenericEntity<Collection<ReviewDto>>(reviewDtoList){}).build();
+        final Response.ResponseBuilder response = Response.ok(new GenericEntity<Collection<ReviewDto>>(reviewDtoList){});
+        ResponseBuildingUtils.setPaginationLinks(response,reviewList , uriInfo);
+        return response.build();
     }
 
     // * ---------------------------------------------------------------------------------------------------------------
@@ -179,7 +182,7 @@ public class UserController {
         }
 
         if(us.checkPassword(editProfileDto.getCurrentPassword(), user)) {
-            us.setPassword(editProfileDto.getPassword(), user, "restore");
+            us.setPassword(editProfileDto.getNewPassword(), user, "restore");
         } else {
             throw new BadRequestException();
         }
