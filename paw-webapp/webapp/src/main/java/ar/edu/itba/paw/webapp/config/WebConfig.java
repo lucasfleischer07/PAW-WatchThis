@@ -67,20 +67,19 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         basicDataSource.setUrl(dbUrl);
         basicDataSource.setUsername(username);
         basicDataSource.setPassword(password);
-        return basicDataSource;*/
+        return basicDataSource;
 
 
 //        * Conexion a la db de  la catedra
-        String dbUrl="jdbc:postgresql://10.16.1.110:5432/paw-2022b-3";
-        String username = "paw-2022b-3";
-        String password = "h79KBcheb";
-        final SimpleDriverDataSource basicDataSource = new SimpleDriverDataSource();
-        basicDataSource.setDriverClass(org.postgresql.Driver.class);
-        basicDataSource.setUrl(dbUrl);
-        basicDataSource.setUsername(username);
-        basicDataSource.setPassword(password);
-        return basicDataSource;
-
+//        String dbUrl="jdbc:postgresql://10.16.1.110:5432/paw-2022b-3";
+//        String username = "paw-2022b-3";
+//        String password = "h79KBcheb";
+//        final SimpleDriverDataSource basicDataSource = new SimpleDriverDataSource();
+//        basicDataSource.setDriverClass(org.postgresql.Driver.class);
+//        basicDataSource.setUrl(dbUrl);
+//        basicDataSource.setUsername(username);
+//        basicDataSource.setPassword(password);
+//        return basicDataSource;
 
     }
 
