@@ -46,7 +46,7 @@ export class UserApi {
             const options = {headers: authCheck({})}
             const res = await fetchWithQueryParamsApi(apiUrl, params, options)
             if(res.status === 200) {
-                return {error: false, data: res.data, totalPages: res.totalPages}
+                return {error: false, data: res.data, totalPages: res.totalPages, totalReviews: res.totalReviews}
             } else {
                 return {error: true, errorCode: res.status}
             }

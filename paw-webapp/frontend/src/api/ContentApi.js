@@ -123,10 +123,8 @@ export class ContentApi {
         if(genre !== ''){
             params.genre = genre
         }
-        if(durationFrom !== ''){
+        if(durationFrom !== '' && durationTo !== ''){
             params.durationFrom = durationFrom
-        }
-        if(durationTo !== ''){
             params.durationTo = durationTo
         }
         if(sorting !== ''){

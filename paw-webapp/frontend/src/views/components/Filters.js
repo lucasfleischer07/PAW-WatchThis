@@ -130,7 +130,7 @@ export default function Filters(props) {
                             </button>
                         )}
 
-                        <ul className="dropdown-menu W-dropdown-menu" id="drop1" onClick={dropdownHandle}>
+                        <ul className="dropdown-menu" id="drop1" onClick={dropdownHandle}>
                             <li className="mb-1 px-2">
                                 <label>
                                     <input type="checkbox" className="px-2" name="Action" value="Action" checked={genreState.Action} onChange={(e) => handleGenreFormChange(e)}/>

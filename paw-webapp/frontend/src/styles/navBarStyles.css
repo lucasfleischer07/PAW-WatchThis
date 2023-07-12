@@ -90,6 +90,12 @@
     justify-content: center;
 }
 
+@media (max-width: 1290px) {
+    .W-dropdown-menu {
+        left: -4vw;
+    }
+}
+
 @media (max-width: 991px) {
     .W-header-height {
         min-height: 66px;

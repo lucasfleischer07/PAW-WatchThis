@@ -178,7 +178,7 @@ export default function Header(props) {
                                         {userName}
                                     </button>
 
-                                    <ul className="dropdown-menu">
+                                    <ul className="dropdown-menu W-dropdown-menu">
 
                                         <li>
                                             <Link className="dropdown-item" to={`/user/profile/${userId}`}>{t('Profile')}</Link>

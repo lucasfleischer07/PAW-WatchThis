@@ -320,7 +320,7 @@
     margin-left: 15vw;
 }
 .W-not-found-message{
-    word-break: break-word;
+    word-break: break-all;
     font-size: 2vw;
 }
 
@@ -357,17 +357,13 @@
     }
 
     .W-genre-filter {
-        word-break: break-all;
+        word-break: break-word;
         white-space: normal;
     }
 
 }
 
-@media (max-width: 1290px) {
-    .W-dropdown-menu {
-        left: -6vw;
-    }
-}
+
 
 @media (max-width: 1280px) {
     .W-filter-title{
@@ -379,10 +375,6 @@
         height: 5vw;
     }
 
-    .W-genre-filter {
-        word-break: break-word;
-        white-space: normal;
-    }
 }
 
 @media(max-width: 1153px){

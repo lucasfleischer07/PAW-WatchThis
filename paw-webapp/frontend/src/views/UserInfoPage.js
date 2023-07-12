@@ -27,6 +27,8 @@ export default function UserInfoPage() {
     const [amountPages, setAmountPages] = useState(1)
     const [reviews, setReviews] = useState([])
     const [reputation, setReputation] = useState(0)
+    const [amountReviews, setAmountReviews] =useState(0)
+    const [totalReviews, setTotalReviews] = useState(0)
 
     const [isLikeReviewsList, setIsLikeReviewsList] = useState([]);
     const [isDislikeReviewsList, setIsDislikeReviewsList] = useState([]);
@@ -88,6 +90,7 @@ export default function UserInfoPage() {
             .then(reviews => {
                 if(!reviews.error) {
                     setReviews(reviews.data)
+                    setTotalReviews(reviews.totalReviews)
                     if(reviews.data.length === 0) {
                         userService.getUserInfo(parseInt(userProfileId))
                              .then((data) => {
@@ -120,6 +123,7 @@ export default function UserInfoPage() {
                             setCanPromote(false)
                         }
                     }
+                    setAmountReviews(reviews.totalReviews)
                     setAmountPages(reviews.totalPages)
 
                     if(user?.id === parseInt(userProfileId)) {
@@ -214,7 +218,7 @@ export default function UserInfoPage() {
                             </div>
                             <ul className="list-inline mb-0">
                                 <li className="list-inline-item">
-                                    <h4 className="font-weight-bold mb-0 d-block">{reviews.length}</h4>
+                                    <h4 className="font-weight-bold mb-0 d-block">{totalReviews}</h4>
                                     {reviews.length === 1 ? (
                                         <span className="text-muted"><i className="fas fa-image mr-1"></i>{t('Profile.Review')}</span>
                                     ) : (

@@ -99,7 +99,8 @@ public class UserController {
         Collection<ReviewDto> reviewDtoList = ReviewDto.mapReviewToReviewDto(uriInfo, reviewList.getPageContent());
         LOGGER.info("GET /{}: User {} reviews returned with success",  uriInfo.getPath(), id);
         final Response.ResponseBuilder response = Response.ok(new GenericEntity<Collection<ReviewDto>>(reviewDtoList){});
-        ResponseBuildingUtils.setPaginationLinks(response,reviewList , uriInfo);
+        response.header("Total-Reviews", user.getUserReviews().size());
+        ResponseBuildingUtils.setPaginationLinks(response, reviewList , uriInfo);
         return response.build();
     }
 
