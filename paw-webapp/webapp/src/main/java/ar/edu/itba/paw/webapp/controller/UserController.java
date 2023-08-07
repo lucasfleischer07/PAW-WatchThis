@@ -134,10 +134,10 @@ public class UserController {
         }
         if (response == null) {
             final byte[] userImage = user.getImage();
-            response = Response.ok(userImage).type(contentType).tag(eTag);
+            response = Response.ok(userImage).cacheControl(cacheControl).type(contentType).tag(eTag);
         }
         LOGGER.info("GET /{}: User {} Profile Image", uriInfo.getPath(), id);
-        return response.cacheControl(cacheControl).build();
+        return response.build();
 
 
 

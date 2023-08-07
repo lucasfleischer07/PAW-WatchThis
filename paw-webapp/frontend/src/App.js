@@ -11,6 +11,8 @@ import ProfileEditionPage from "./views/ProfileEditionPage";
 import UserInfoPage from "./views/UserInfoPage";
 
 import {ToastContainer} from "react-toastify";
+import {paths} from "./paths";
+
 import LoginPage from "./views/LoginPage";
 import ForgotPassword from "./views/ForgotPassword";
 import ReviewRegistrationPage from "./views/ReviewRegistrationPage";
@@ -23,7 +25,7 @@ import SignUp from "./views/SignUp";
 
 function App() {
   return (
-      <BrowserRouter basename={"/paw-2022b-3"}>
+      <BrowserRouter basename={paths.BASE_URL_LOCAL}>
           <AuthProvider>
 
               <Routes>

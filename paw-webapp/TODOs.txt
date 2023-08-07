@@ -1,0 +1,32 @@
+Si tiene:
+    - (L) se supone que ya esta listo pero no se borra para corroborarlo despues
+    - (I) hay que investigar mas sobre el tema
+    - (P) Se pregunto y estamos esperando la rta
+    - (C) Todavia hay que hacerlo
+
+- El hash presentado no se corresponde con la versión presentada en la demo. De hecho, el código ni siquiera compila en el hash entregado. Esto es un error grave
+- (I) No usan cache no-condicional, pese a ser requerido y el motivo para implementar cache busting. Esto es un error grave
+- (I) Las imágenes estáticas no usan cache-busting. Esto es un error grave
+- (I) (L) Las imágenes en base de datos usan etag, pero cache-control: no-cache.
+    - Creo que ya esta, habia que cambiar algo en los etags de UserController y ContentController
+- (C) El botón de iniciar sesión tiene el texto en 2 líneas.
+- (P) La api retorna strings vacíos en lugares donde debiera simplemente omitir el atributo (null).
+- (C) El recuperar un usuario inexistente retorna un 404, pero la UI dice que se nos mandó un mail en forma correcta.
+- (C) Al buscar el search box pierde su contenido.
+    - Lo agregamos nosootros este comentario: Es en la home, por algun motivo se borra lo que el usuario busco de la searchbox
+- (C) No cambian el title de la app al navegar, toda la historia dice “Watch This”
+- (P) La API expone en forma pública el mail y el rol de los usuarios. Estos son datos sensibles que debieran ser tratados como tales.
+- (P) La API expone junto a una review la cantidad de reportes y el nombre y la razón de 1 reporte (¿el último?), es decir que reportar una review no es privado.
+- (L) El módulo webapp no tiene una dependencia explícita sobre frontend, por lo que el orden de ejecución no está garantizado y se puede generar un war que no contiene los assets de la SPA.
+- (P) El repositorio incluye binarios completos de node.
+- (C) No hacen uso de interceptors, por lo que toda la lógica de seteo de headers y manejo de errores está esparcida y duplicada por toda la SPA.
+- (C) Tienen muy pocos tests de frontend, pese a tener mucha lógica allí y ser pedido por enunciado.
+- (P) (L) Siguen habilitando Spring WebMVC pese a que ya no se debiera estar usando. Esto es un error conceptual grave
+    - Creo que ya esta, era sacar lo de @EnableWebMvc del WebConfig y la dependencia del pam.xml del paw-webapp
+- La API no es REST / no implementa HATEOAS. Estos son errores conceptuales graves. A continuación se detallan algunos (lista no exhaustiva) de los problemas detectados:
+    - (P) /api/content no denota entidades del dominio. Está diseñada en función de lo que la UI requiere en la home.
+    - (P) No usan URNs. Paths como /users/loggedUser retornarán cosas distintas para distintos usuarios.
+    - (C) Los paths no denotan recursos, usando los verbos HTTP para definir la acción sobre los mismos; sino que los paths incluyen verbos, y a veces más de uno, como ser /users/login/jsotuyod@itba.edu.ar/forgotPassword.
+    - (C) Los verbos en los paths sobreescriben la semántica de los verbos HTTP, por ejemplo PUT /lists/watchList/add/3 agrega un elemento a un watchlist en lugar de sobreescribir el recurso.
+    - (C) Se encuentran API calls llamativas, como /api/reviews/2?pageNumber=1&page=1. Parece ser que el párametro real para paginar es pageNumber, pero los headers Link indican que es page.
+    - (P) Las entidades no están hipervinculadas, sino que se las embebe. Por ejemplo, reviews embebe el contenido y el user completos. Esto querría decir que al modificar / sobreescribir un contenido, debiera poder sobreescribir la review o el user en la misma operación, pero obviamente no es el caso.

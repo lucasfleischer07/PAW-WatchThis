@@ -20,6 +20,7 @@
       <groupId>org.springframework</groupId>
       <artifactId>spring-webmvc</artifactId>
     </dependency>
+
     <!--Para hibernate-->
     <dependency>
       <groupId>org.springframework</groupId>
@@ -52,7 +53,13 @@
       <groupId>ar.edu.itba.paw</groupId>
       <artifactId>interfaces</artifactId>
       <version>${parent.version}</version>
+    </dependency>
 
+    <!--Para el modulo frontend-->
+    <dependency>
+      <groupId>ar.edu.itba.paw</groupId>
+      <artifactId>frontend</artifactId>
+      <version>${parent.version}</version>
     </dependency>
 
     <!--Para JETTY-->

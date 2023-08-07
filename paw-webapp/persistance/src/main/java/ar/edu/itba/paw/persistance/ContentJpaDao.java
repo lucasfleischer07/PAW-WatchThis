@@ -193,7 +193,7 @@ public class ContentJpaDao implements ContentDao{
             query.setParameter("type",type);
         } else {
             query= em.createQuery(" FROM Content WHERE id IN ( :resultList ) AND (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)" + sortString,Content.class);
-            countQuery = em.createQuery("FROM Content WHERE id IN ( :resultList ) AND and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)",Content.class);
+            countQuery = em.createQuery("FROM Content WHERE id IN ( :resultList ) AND (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)",Content.class);
         }
         countQuery.setParameter("query","%" + queryUser.toLowerCase() + "%");
         countQuery.setParameter("resultList",longList);
