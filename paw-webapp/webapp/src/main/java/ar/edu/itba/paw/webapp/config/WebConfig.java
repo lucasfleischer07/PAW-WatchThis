@@ -17,13 +17,13 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-import org.springframework.web.servlet.ViewResolver;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
-import org.springframework.web.servlet.view.JstlView;
+//import org.springframework.web.servlet.ViewResolver;
+//import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+//import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
+//import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+//import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+//import org.springframework.web.servlet.view.InternalResourceViewResolver;
+//import org.springframework.web.servlet.view.JstlView;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -33,33 +33,32 @@ import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 @EnableTransactionManagement
 @EnableAsync
-@EnableWebMvc
 @ComponentScan({
         "ar.edu.itba.paw.webapp.controller",
         "ar.edu.itba.paw.services",
         "ar.edu.itba.paw.persistance"
 })
 @Configuration
-public class WebConfig extends WebMvcConfigurerAdapter {
+public class WebConfig {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WebConfig.class);
 
 
-    @Bean
-    public ViewResolver viewResolver() {
-        final InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
-        viewResolver.setViewClass(JstlView.class);
-        viewResolver.setPrefix("/WEB-INF/views/");
-        viewResolver.setSuffix(".jsp");
-        return viewResolver;
-    }
+//    @Bean
+//    public ViewResolver viewResolver() {
+//        final InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+//        viewResolver.setViewClass(JstlView.class);
+//        viewResolver.setPrefix("/WEB-INF/views/");
+//        viewResolver.setSuffix(".jsp");
+//        return viewResolver;
+//    }
 
 
     @Bean
     public DataSource dataSource(){
         LOGGER.info("Data base set up");
 //      * Conexion a localhost
-      /* String dbUrl="jdbc:postgresql://localhost:5432/postgres";
+        String dbUrl="jdbc:postgresql://localhost:5432/postgres";
         String username = "postgres";
         String password = "postgres";
         final SimpleDriverDataSource basicDataSource = new SimpleDriverDataSource();
@@ -105,11 +104,11 @@ public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
     public PlatformTransactionManager transactionManager(final EntityManagerFactory emf) {
     return new JpaTransactionManager(emf);
 }
-    @Override
-    public void addResourceHandlers(final ResourceHandlerRegistry registry) {
-        super.addResourceHandlers(registry);
-        registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
-    }
+//    @Override
+//    public void addResourceHandlers(final ResourceHandlerRegistry registry) {
+//        super.addResourceHandlers(registry);
+//        registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
+//    }
 
 
 
@@ -117,12 +116,9 @@ public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
     @Bean
     public MessageSource messageSource(){
         final ReloadableResourceBundleMessageSource msgSource = new ReloadableResourceBundleMessageSource();
-
         msgSource.setBasename("classpath:i18n/messages");
         msgSource.setDefaultEncoding(StandardCharsets.UTF_8.name());
         msgSource.setCacheSeconds((int)TimeUnit.MINUTES.toSeconds(2));
-
-
         return msgSource;
     }
 
@@ -144,8 +140,8 @@ public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
 
 
     // * ----------------------- Para que no matchee los paths con / al final-------------------------------------------
-    @Override
-    public void configurePathMatch(PathMatchConfigurer configurer){
-        configurer.setUseTrailingSlashMatch(false);
-    }
+//    @Override
+//    public void configurePathMatch(PathMatchConfigurer configurer){
+//        configurer.setUseTrailingSlashMatch(false);
+//    }
 }

@@ -7,7 +7,7 @@ Si tiene:
 - El hash presentado no se corresponde con la versión presentada en la demo. De hecho, el código ni siquiera compila en el hash entregado. Esto es un error grave
 - (I) No usan cache no-condicional, pese a ser requerido y el motivo para implementar cache busting. Esto es un error grave
 - (I) Las imágenes estáticas no usan cache-busting. Esto es un error grave
-- (I) (L) Las imágenes en base de datos usan etag, pero cache-control: no-cache.
+- (L) Las imágenes en base de datos usan etag, pero cache-control: no-cache.
     - Creo que ya esta, habia que cambiar algo en los etags de UserController y ContentController
 - (C) El botón de iniciar sesión tiene el texto en 2 líneas.
 - (P) La api retorna strings vacíos en lugares donde debiera simplemente omitir el atributo (null).
@@ -18,11 +18,11 @@ Si tiene:
 - (P) La API expone en forma pública el mail y el rol de los usuarios. Estos son datos sensibles que debieran ser tratados como tales.
 - (P) La API expone junto a una review la cantidad de reportes y el nombre y la razón de 1 reporte (¿el último?), es decir que reportar una review no es privado.
 - (L) El módulo webapp no tiene una dependencia explícita sobre frontend, por lo que el orden de ejecución no está garantizado y se puede generar un war que no contiene los assets de la SPA.
-- (P) El repositorio incluye binarios completos de node.
+- (L) El repositorio incluye binarios completos de node.
 - (C) No hacen uso de interceptors, por lo que toda la lógica de seteo de headers y manejo de errores está esparcida y duplicada por toda la SPA.
 - (C) Tienen muy pocos tests de frontend, pese a tener mucha lógica allí y ser pedido por enunciado.
-- (P) (L) Siguen habilitando Spring WebMVC pese a que ya no se debiera estar usando. Esto es un error conceptual grave
-    - Creo que ya esta, era sacar lo de @EnableWebMvc del WebConfig y la dependencia del pam.xml del paw-webapp
+- (L) Siguen habilitando Spring WebMVC pese a que ya no se debiera estar usando. Esto es un error conceptual grave
+    - Era sacar lo de @EnableWebMvc del WebConfig y las dependencias del pom.xml y adaptar el WebConfig eliminando lo que no se usaba mas
 - La API no es REST / no implementa HATEOAS. Estos son errores conceptuales graves. A continuación se detallan algunos (lista no exhaustiva) de los problemas detectados:
     - (P) /api/content no denota entidades del dominio. Está diseñada en función de lo que la UI requiere en la home.
     - (P) No usan URNs. Paths como /users/loggedUser retornarán cosas distintas para distintos usuarios.
