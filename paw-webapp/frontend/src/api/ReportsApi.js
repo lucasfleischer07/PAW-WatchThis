@@ -41,24 +41,6 @@ export class ReportsApi {
         }
     }
 
-    async addCommentReport(commentId, commentReportReasons) {
-        try {
-            const res = await fetch(`${this.basePath}/comment/${commentId}`, {
-                method: 'POST',
-                headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}),
-                body: JSON.stringify(commentReportReasons)
-            })
-
-            if(res.status === 200) {
-                return {error: false, data: []}
-            } else {
-                return {error: true, errorCode: res.status}
-            }
-        } catch (e) {
-            return {error: true, errorCode: e.response.status || 500}
-        }
-    }
-
     async deleteReport(commentOrReviewId, type) {
         try {
             const res = await fetch(`${this.basePath}/deleteReport/${type}/${commentOrReviewId}`, {

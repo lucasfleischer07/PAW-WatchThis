@@ -26,6 +26,7 @@ export default function Comments(props) {
     const [loggedUserIsAdmin,setIsAdmin] = useState(props.loggedUserIsAdmin);
 
     const loggedUserName = props.loggedUserName
+    const loggedUserId = props.loggedUserId
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const handleShowDeleteModal = () => {
@@ -60,7 +61,7 @@ export default function Comments(props) {
     };
 
     const handleSubmitReport = () => {
-        reportsService.addCommentReport(commentId, reportFrom)
+        commentService.addCommentReport(parseInt(loggedUserId), commentId, reportFrom)
             .then(data => {
                 if(!data.error) {
                     setAlreadyReport(!alreadyReport)

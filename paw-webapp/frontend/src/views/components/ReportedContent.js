@@ -84,19 +84,35 @@ export default function ReportedContent(props) {
 
     const handleDismissReport = (e) => {
         e.preventDefault()
-        reportsService.deleteReport(typeId, reportType)
-            .then(data => {
-                if(!data.error) {
-                    toast.success(t('Report.Deleted'))
-                    handleCloseModalDismiss()
-                    setCommentOrReviewDismissedOrDeleted(true)
-                } else {
-                    navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
-                }
-            })
-            .catch(() => {
-                navigate("/error", { replace: true, state: {errorCode: 404} })
-            })
+        if(reportType === "comment") {
+            commentService.deleteCommentReports(typeId)
+                .then(data => {
+                    if(!data.error) {
+                        toast.success(t('Report.Deleted'))
+                        handleCloseModalDismiss()
+                        setCommentOrReviewDismissedOrDeleted(true)
+                    } else {
+                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                    }
+                })
+                .catch(() => {
+                    navigate("/error", { replace: true, state: {errorCode: 404} })
+                })
+        } else {
+            reportsService.deleteReport(typeId, reportType)
+                .then(data => {
+                    if(!data.error) {
+                        toast.success(t('Report.Deleted'))
+                        handleCloseModalDismiss()
+                        setCommentOrReviewDismissedOrDeleted(true)
+                    } else {
+                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                    }
+                })
+                .catch(() => {
+                    navigate("/error", { replace: true, state: {errorCode: 404} })
+                })
+        }
     }
 
 

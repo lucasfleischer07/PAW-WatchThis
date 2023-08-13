@@ -3,7 +3,7 @@ import ReportedContent from "./components/ReportedContent";
 import {useLocation, useNavigate } from "react-router-dom";
 import React, {useContext, useEffect, useState} from "react";
 import {AuthContext} from "../context/AuthContext";
-import {reportsService} from "../services";
+import {commentService, reportsService} from "../services";
 
 import { Tab, Tabs } from 'react-bootstrap';
 import Header from "./components/Header";
@@ -123,7 +123,7 @@ export default function ReportedPage() {
                         })
 
                 } else {
-                    reportsService.getReportsByType('comments', page, filterReason)
+                    commentService.getCommentsReports(user.id, filterReason)
                         .then(data => {
                             if (!data.error) {
                                 setReportedCommentsList(data.data)
