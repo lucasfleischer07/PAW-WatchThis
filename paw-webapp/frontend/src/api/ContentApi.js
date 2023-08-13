@@ -9,7 +9,7 @@ export class ContentApi {
     }
 
     async getLandingPage() {
-        const res = await fetch(this.basePath, {
+        const res = await fetch(`${this.basePath}/landing`, {
             method: 'GET',
             headers: authCheck({})
         })
@@ -18,7 +18,7 @@ export class ContentApi {
 
     async getSpecificContent(contentId) {
         try {
-            const res = await fetch(`${this.basePath}/specificContent/${contentId}`, {
+            const res = await fetch(`${this.basePath}/${contentId}`, {
                 method: 'GET',
                 headers: authCheck({})
             })
@@ -44,7 +44,7 @@ export class ContentApi {
                 delete contentDetails.contentPicture
             }
 
-            const res = await fetch(`${this.basePath}/editInfo/${contentId}`, {
+            const res = await fetch(`${this.basePath}/${contentId}`, {
                 method: 'PUT',
                 headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}),
                 body: JSON.stringify(contentDetails)
@@ -82,7 +82,7 @@ export class ContentApi {
 
     async deleteContent(contentId) {
         try {
-            const res = await fetch(`${this.basePath}/${contentId}/deleteContent`, {
+            const res = await fetch(`${this.basePath}/${contentId}`, {
                 method: 'DELETE',
                 headers: authCheck({})
             })
@@ -101,7 +101,7 @@ export class ContentApi {
             contentDetails.genre = contentDetails.genre.split(" ")
             const contentDetailsAux = contentDetails
             delete contentDetailsAux.contentPicture
-            const res = await fetch(`${this.basePath}/create`, {
+            const res = await fetch(`${this.basePath}`, {
                 method: 'POST',
                 headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}),
                 body: JSON.stringify(contentDetails)
@@ -119,7 +119,7 @@ export class ContentApi {
     }
 
     async getContentByType(contentType, pageNumber, genre, durationFrom, durationTo, sorting, query) {
-        const params = {pageNumber: pageNumber}
+        const params = {type: contentType, page: pageNumber}
         if(genre !== ''){
             params.genre = genre
         }
@@ -135,7 +135,7 @@ export class ContentApi {
         }
 
         try {
-            const apiUrl = `${this.basePath}/${contentType}/filters`
+            const apiUrl = `${this.basePath}`
             const options = {headers: authCheck({})}
             const res = await fetchWithQueryParamsApi(apiUrl, params, options)
             if(res.status === 200) {

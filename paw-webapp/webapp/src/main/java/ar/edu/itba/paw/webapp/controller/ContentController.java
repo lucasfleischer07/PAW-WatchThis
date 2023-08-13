@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.webapp.controller.queryParams.GetContentParams;
 import ar.edu.itba.paw.webapp.exceptions.ContentNotFoundException;
 import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
 import ar.edu.itba.paw.webapp.exceptions.UserNotFoundException;
@@ -55,6 +56,8 @@ public class ContentController {
     // * ----------------------------------- Home Page -----------------------------------------------------------------
     // Endpoint para getear el contenido de la home page
     @GET
+//    TODO: Le meti este landing solo poruqe todavia nose como unificarlo con el de abajo
+    @Path("/landing")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getContentByType() {
         LOGGER.info("GET /{}: Called", uriInfo.getPath());
@@ -76,7 +79,7 @@ public class ContentController {
     // * ----------------------------------- Get a particual content----------------------------------------------------
     // Endpoint para getear un contenido a partir de su id
     @GET
-    @Path("/specificContent/{contentId}")
+    @Path("/{contentId}")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getSpecificContent(@PathParam("contentId") final long contentId) {
         LOGGER.info("GET /{}: Called", uriInfo.getPath());
@@ -127,7 +130,6 @@ public class ContentController {
     public Response updateContentImage(@FormDataParam("image") byte[] imageBytes,
                                        @PathParam("contentId") final long contentId) {
         LOGGER.info("PUT /{}: Called", uriInfo.getPath());
-        LOGGER.info("PUT /{}: BYTESSSSSSS", imageBytes);
 
         if(imageBytes==null)
             throw new BadRequestException("Must include edit data");
@@ -143,7 +145,7 @@ public class ContentController {
     // * ----------------------------------------Content Editing--------------------------------------------------------
     //Endpoint para editar el contenido
     @PUT
-    @Path("/editInfo/{contentId}")
+    @Path("/{contentId}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(value = {MediaType.APPLICATION_JSON,})
     public Response updateContentInfo(@PathParam("contentId") final long contentId,
@@ -173,7 +175,7 @@ public class ContentController {
 
     // * ----------------------------------- Content Delete ------------------------------------------------------------
     @DELETE
-    @Path("/{contentId}/deleteContent")
+    @Path("/{contentId}")
     public Response deleteContent(@PathParam("contentId") final long contentId) {
         LOGGER.info("DELETE /{}: Called", uriInfo.getPath());
         Content oldContent = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
@@ -188,7 +190,6 @@ public class ContentController {
     // * ----------------------------------- Content Creation ----------------------------------------------------------
     // Endpoint para crear un contenido
     @POST
-    @Path("/create")
     @Produces(MediaType.APPLICATION_JSON)
     public Response createContent(@Valid NewContentDto contentDto) {
         LOGGER.info("POST /{}: Called", uriInfo.getPath());
@@ -210,32 +211,32 @@ public class ContentController {
 
     // * ----------------------------------- Movie and Series division -------------------------------------------------
     // Endpoint para getear las peliculas o series
-    @GET
-    @Path("/{contentType}")
-    @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response getContentByType(@PathParam("contentType") final String contentType,
-                                     @QueryParam("pageNumber") @DefaultValue("1") Integer pageNum) {
-        LOGGER.info("GET /{}: Called", uriInfo.getPath());
-        if(!contentType.equals("movie") && !contentType.equals("serie") && !contentType.equals("all")){
-            throw new PageNotFoundException();
-        }
-        int page= pageNum;
-        PageWrapper<Content> contentList = cs.getAllContent(contentType, null, page, CONTENT_AMOUNT);
-        Collection<ContentDto> contentListPaginatedDto = null;
-        if(contentList.getPageContent() == null) {
-            LOGGER.warn("GET /{}: Failed at requesting content", uriInfo.getPath());
-            throw new ContentNotFoundException();
-        } else {
-            contentListPaginatedDto = ContentDto.mapContentToContentDto(uriInfo, contentList.getPageContent() );
-        }
-
-        LOGGER.info("GET /{}: Success getting the content", uriInfo.getPath());
-
-        Response.ResponseBuilder response = Response.ok(new GenericEntity<Collection<ContentDto>>(contentListPaginatedDto){});
-        ResponseBuildingUtils.setPaginationLinks(response,contentList , uriInfo);
-        return response.build();
-
-    }
+//    @GET
+//    @Path("/{contentType}")
+//    @Produces(value = {MediaType.APPLICATION_JSON})
+//    public Response getContentByType(@PathParam("contentType") final String contentType,
+//                                     @QueryParam("pageNumber") @DefaultValue("1") Integer pageNum) {
+//        LOGGER.info("GET /{}: Called", uriInfo.getPath());
+//        if(!contentType.equals("movie") && !contentType.equals("serie") && !contentType.equals("all")){
+//            throw new PageNotFoundException();
+//        }
+//        int page= pageNum;
+//        PageWrapper<Content> contentList = cs.getAllContent(contentType, null, page, CONTENT_AMOUNT);
+//        Collection<ContentDto> contentListPaginatedDto = null;
+//        if(contentList.getPageContent() == null) {
+//            LOGGER.warn("GET /{}: Failed at requesting content", uriInfo.getPath());
+//            throw new ContentNotFoundException();
+//        } else {
+//            contentListPaginatedDto = ContentDto.mapContentToContentDto(uriInfo, contentList.getPageContent() );
+//        }
+//
+//        LOGGER.info("GET /{}: Success getting the content", uriInfo.getPath());
+//
+//        Response.ResponseBuilder response = Response.ok(new GenericEntity<Collection<ContentDto>>(contentListPaginatedDto){});
+//        ResponseBuildingUtils.setPaginationLinks(response,contentList , uriInfo);
+//        return response.build();
+//
+//    }
 
     // * ---------------------------------------------------------------------------------------------------------------
 
@@ -243,10 +244,9 @@ public class ContentController {
     // *  ----------------------------------- Movies and Serie Filters -------------------------------------------------
     // Endpoint para filtrar el las peliculas/series
     @GET
-    @Path("/{contentType}/filters")
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response filterContentByType(@PathParam("contentType") final String contentType,
-                                        @QueryParam("pageNumber") @DefaultValue("1") Integer pageNum,
+    public Response filterContentByType(@QueryParam("type") final String contentType,
+                                        @QueryParam("page") @DefaultValue("1") Integer pageNum,
                                         @QueryParam("durationFrom") @DefaultValue("ANY") final String durationFrom,
                                         @QueryParam("durationTo") @DefaultValue("ANY") final String durationTo,
                                         @QueryParam("sorting") final Sorting sorting,
@@ -254,19 +254,8 @@ public class ContentController {
                                         @QueryParam("genre") final String genre) {
 
         LOGGER.info("GET /{}: Called",uriInfo.getPath());
-        if(!contentType.equals("movie") && !contentType.equals("serie") && !contentType.equals("all")){
-            throw new PageNotFoundException();
-        }
-        List<String> genreList = Arrays.asList(genre);
-        if (genre == null || genre.equals("")){
-            genreList = new ArrayList<>();
-        } else {
-            genreList = Arrays.asList(genre.split(","));
-        }
-        int page= pageNum;
-        String auxType;
+        PageWrapper<Content> contentListFilter = GetContentParams.getContentByParams(contentType, pageNum, durationFrom, durationTo, sorting, query, genre, cs);
 
-        PageWrapper<Content> contentListFilter = cs.getMasterContent(contentType, genreList, durationFrom, durationTo, sorting, query,page,CONTENT_AMOUNT);
         List<Content> contentListFilterPaginated = contentListFilter.getPageContent();
         if(contentListFilterPaginated == null) {
             LOGGER.warn("GET /{}: Failed at requesting content", uriInfo.getPath());
