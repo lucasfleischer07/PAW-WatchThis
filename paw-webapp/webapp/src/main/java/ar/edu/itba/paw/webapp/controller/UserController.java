@@ -35,8 +35,6 @@ public class UserController {
     @Context
     private UriInfo uriInfo;
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
-    private static final int REVIEW_AMOUNT = 3;
-
 
     // * ----------------------------------------------- User POST -----------------------------------------------------
     // Endpoint para crear un usuario
@@ -73,9 +71,10 @@ public class UserController {
         return Response.ok(new UserDto(uriInfo, user)).build();
     }
 
+//    TODO: Este era loggedUser, le saco el path. Nose si esta bien, pero no tenemos tampoco el id como para pasarselo
     @GET
     @Produces(value = {MediaType.APPLICATION_JSON})
-    @Path("/loggedUser")
+//    @Path("/loggedUser")
     public Response getLoggedUserInfo() {
         LOGGER.info("GET /{}: Called",  uriInfo.getPath());
         final Optional<User> user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
@@ -85,23 +84,6 @@ public class UserController {
         }
         LOGGER.info("GET /{}: User returned with success", uriInfo.getPath());
         return Response.ok(new UserDto(uriInfo, user.get())).build();
-    }
-
-    // Endpoint para getear las reviews del usuario
-    @GET
-    @Produces(value = {MediaType.APPLICATION_JSON})
-    @Path("/{id}/reviews")
-    public Response getUserReviews(@PathParam("id") final long id,
-                                   @QueryParam("page")@DefaultValue("1")final int page) {
-        LOGGER.info("GET /{}: Called",  uriInfo.getPath());
-        final User user = us.findById(id).orElseThrow(UserNotFoundException::new);
-        PageWrapper<Review> reviewList = rs.getAllUserReviews(user,page,REVIEW_AMOUNT);
-        Collection<ReviewDto> reviewDtoList = ReviewDto.mapReviewToReviewDto(uriInfo, reviewList.getPageContent());
-        LOGGER.info("GET /{}: User {} reviews returned with success",  uriInfo.getPath(), id);
-        final Response.ResponseBuilder response = Response.ok(new GenericEntity<Collection<ReviewDto>>(reviewDtoList){});
-        response.header("Total-Reviews", user.getUserReviews().size());
-        ResponseBuildingUtils.setPaginationLinks(response, reviewList , uriInfo);
-        return response.build();
     }
 
     // * ---------------------------------------------------------------------------------------------------------------
@@ -168,7 +150,7 @@ public class UserController {
     // * ------------------------------------------------Profile Edition------------------------------------------------
     // Endpoint para editar la informacion del usuario
     @PUT
-    @Path("/{id}/editProfile")
+    @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(value = {MediaType.APPLICATION_JSON,})
     public Response updateUserProfileInfo(@Valid EditProfileDto editProfileDto,
@@ -207,7 +189,7 @@ public class UserController {
     // * ---------------------------------------------------------------------------------------------------------------
 
     // * ------------------------------------------------Promote User-------------------------------
-    @Path("/promoteUser/{userId}")
+    @Path("/{userId}/promote")
     @PUT
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response promoteUSer(@PathParam("userId") final long userId) {

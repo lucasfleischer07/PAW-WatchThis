@@ -30,3 +30,8 @@ Si tiene:
     - (C) Los verbos en los paths sobreescriben la semántica de los verbos HTTP, por ejemplo PUT /lists/watchList/add/3 agrega un elemento a un watchlist en lugar de sobreescribir el recurso.
     - (C) Se encuentran API calls llamativas, como /api/reviews/2?pageNumber=1&page=1. Parece ser que el párametro real para paginar es pageNumber, pero los headers Link indican que es page.
     - (P) Las entidades no están hipervinculadas, sino que se las embebe. Por ejemplo, reviews embebe el contenido y el user completos. Esto querría decir que al modificar / sobreescribir un contenido, debiera poder sobreescribir la review o el user en la misma operación, pero obviamente no es el caso.
+
+
+COSAS A ARREGLAR QUE SE ROMPIERON CON LOS NUEVOS CAMBIOS:
+- La paginacion de Reviews en UserInfoPage, anda rara cuando le haces click en el boton del numero y el next, como que a la segunda vez que haces click, si o si vuelve a la pagina 1
+- En UserInfoPage no aparece el la cantidad total de reviews del usuario

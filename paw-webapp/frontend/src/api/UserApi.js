@@ -61,7 +61,7 @@ export class UserApi {
 
     async updateUserProfileInfo(userId, userDetails) {
         try {
-            const res = await fetch(`${this.basePath}/${userId}/editProfile`, {
+            const res = await fetch(`${this.basePath}/${userId}`, {
                 method: 'PUT',
                 headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}),
                 body: JSON.stringify(userDetails)
@@ -97,7 +97,8 @@ export class UserApi {
         try {
             const loggedUserInfo = email + ":" + password;
             const hash = btoa(loggedUserInfo);
-            const res = await fetch(`${this.basePath}/loggedUser`, {
+            // TODO: Aca estaba el /loggedUser
+            const res = await fetch(`${this.basePath}`, {
                 method: 'GET',
                 headers: {
                     Authorization: "Basic " + hash
@@ -117,7 +118,7 @@ export class UserApi {
 
     async promoteUserToAdmin(userId) {
         try {
-            const res = await fetch(`${this.basePath}/promoteUser/${userId}`, {
+            const res = await fetch(`${this.basePath}/${userId}/promote`, {
                 method: 'PUT',
                 headers: authCheck({}),
                 body: {}
