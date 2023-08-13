@@ -10,8 +10,8 @@ export class ReviewApi {
 
     async reviews(contentId, pageNumber) {
         try {
-            const apiUrl = `${this.basePath}/${contentId}`
-            const params = {pageNumber: pageNumber}
+            const apiUrl = `${this.basePath}`
+            const params = {contentId: contentId, page: pageNumber}
             const options = {headers: authCheck({})}
             const res =  await fetchWithQueryParamsApi(apiUrl, params, options)
             if(res.status === 200) {
@@ -33,7 +33,7 @@ export class ReviewApi {
 
     async getSpecificReview(reviewId) {
         try {
-            const res = await fetch(`${this.basePath}/specificReview/${reviewId}`, {
+            const res = await fetch(`${this.basePath}/${reviewId}`, {
                 method: 'GET',
                 headers: authCheck({})
             })
@@ -50,7 +50,7 @@ export class ReviewApi {
 
     async reviewsCreation(reviewId, type, reviewDetails) {
         try {
-            const res = await fetch(`${this.basePath}/create/${type}/${reviewId}`, {
+            const res = await fetch(`${this.basePath}/${type}/${reviewId}`, {
                 method: 'POST',
                 headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}),
                 body: JSON.stringify(reviewDetails)
@@ -68,7 +68,7 @@ export class ReviewApi {
 
     async deleteReview(reviewId) {
         try {
-            const res = await fetch(`${this.basePath}/delete/${reviewId}`, {
+            const res = await fetch(`${this.basePath}/${reviewId}`, {
                 method: 'DELETE',
                 headers: authCheck({})
             })
@@ -85,7 +85,7 @@ export class ReviewApi {
 
     async reviewEdition(reviewId, reviewDetails) {
         try {
-            const res = await fetch(`${this.basePath}/editReview/${reviewId}`, {
+            const res = await fetch(`${this.basePath}/${reviewId}`, {
                 method: 'PUT',
                 headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}),
                 body: JSON.stringify(reviewDetails)
@@ -102,7 +102,7 @@ export class ReviewApi {
 
     async reviewThumbUp(reviewId) {
         try {
-            const res = await fetch(`${this.basePath}/reviewReputation/thumbUp/${reviewId}`, {
+            const res = await fetch(`${this.basePath}/${reviewId}/thumbUp`, {
                 method: 'PUT',
                 headers: authCheck({}),
                 body: {}
@@ -121,7 +121,7 @@ export class ReviewApi {
 
     async reviewThumbDown(reviewId) {
         try {
-            const res = await fetch(`${this.basePath}/reviewReputation/thumbDown/${reviewId}`, {
+            const res = await fetch(`${this.basePath}/${reviewId}/thumbDown`, {
                 method: 'PUT',
                 headers: authCheck({}),
                 body: {}

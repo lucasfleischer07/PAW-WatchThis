@@ -44,10 +44,9 @@ public class ReviewController {
     // * ----------------------------------- Movies and Series Review Gets ---------------------------------------------
 
     @GET
-    @Path("/{contentId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response reviews(@PathParam("contentId") final long contentId,
-                            @QueryParam("pageNumber") @DefaultValue("1") int pageNumber) {
+    public Response reviews(@QueryParam("contentId") final long contentId,
+                            @QueryParam("page") @DefaultValue("1") int pageNumber) {
         LOGGER.info("GET /{}: Called",uriInfo.getPath());
         Content content = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
         PageWrapper<Review> reviewList = rs.getAllReviews(content,pageNumber,REVIEW_AMOUNT);
@@ -65,7 +64,7 @@ public class ReviewController {
     }
 
     @GET
-    @Path("/specificReview/{reviewId}")
+    @Path("/{reviewId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response reviews(@PathParam("reviewId") final long reviewId) {
         LOGGER.info("GET /{}: Called",uriInfo.getPath());
@@ -81,7 +80,7 @@ public class ReviewController {
 //    Endpoint para crear una resenia
     @POST
     @Produces(value = {MediaType.APPLICATION_JSON})
-    @Path("/create/{type}/{contentId}")
+    @Path("/{type}/{contentId}")
     public Response reviews(@PathParam("type") final String type,
                             @PathParam("contentId") final long contentId,
                             @Valid NewReviewDto reviewDto) {
@@ -113,7 +112,7 @@ public class ReviewController {
     // * ---------------------------------------------Review delete-----------------------------------------------------
 //    Endpoint para eliminar una resenia
     @DELETE
-    @Path("/delete/{reviewId}")
+    @Path("/{reviewId}")
     @Produces(value = {MediaType.APPLICATION_JSON,})
     public Response deleteReview(@PathParam("reviewId") final Long reviewId) {
         LOGGER.info("DELETE /{}: Called", uriInfo.getPath());
@@ -142,7 +141,7 @@ public class ReviewController {
 //    Endpoint para editar una review
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/editReview/{reviewId}")
+    @Path("/{reviewId}")
     @Produces(value = {MediaType.APPLICATION_JSON,})
     public Response reviewEdition(@PathParam("reviewId") final Long reviewId,
                                   @Valid final NewReviewDto reviewDto) {
@@ -167,7 +166,7 @@ public class ReviewController {
 //    Endpoint para likear una review
     @PUT
     @Produces(value = {MediaType.APPLICATION_JSON})
-    @Path("/reviewReputation/thumbUp/{reviewId}")
+    @Path("/{reviewId}/thumbUp")
     public Response reviewThumbUp(@PathParam("reviewId") final long reviewId) {
         LOGGER.info("PUT /{}: Called", uriInfo.getPath());
         if(us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).isPresent()) {
@@ -187,7 +186,7 @@ public class ReviewController {
 //    Endpoint para likear una review
     @PUT
     @Produces(value = {MediaType.APPLICATION_JSON})
-    @Path("/reviewReputation/thumbDown/{reviewId}")
+    @Path("/{reviewId}/thumbDown")
     public Response reviewThumbDown(@PathParam("reviewId") final long reviewId) {
         LOGGER.info("PUT /{}: Called", uriInfo.getPath());
         if(us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).isPresent()) {
