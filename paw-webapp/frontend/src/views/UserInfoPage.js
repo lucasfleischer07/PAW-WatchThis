@@ -86,7 +86,7 @@ export default function UserInfoPage() {
 
 
     useEffect(() => {
-        userService.getUserReviews(parseInt(userProfileId), page)
+        reviewService.getReviews(parseInt(userProfileId), null, page)
             .then(reviews => {
                 if(!reviews.error) {
                     setReviews(reviews.data)

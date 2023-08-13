@@ -8,10 +8,15 @@ export class ReviewApi {
         this.basePath = `${paths.BASE_URL_API}${paths.REVIEWS}`
     }
 
-    async reviews(contentId, pageNumber) {
+    async getReviews(userId, contentId, pageNumber) {
         try {
             const apiUrl = `${this.basePath}`
-            const params = {contentId: contentId, page: pageNumber}
+            let params
+            if(userId == null) {
+                params = {contentId: contentId, page: pageNumber}
+            } else {
+                params = {userId: userId, page: pageNumber}
+            }
             const options = {headers: authCheck({})}
             const res =  await fetchWithQueryParamsApi(apiUrl, params, options)
             if(res.status === 200) {
@@ -48,14 +53,12 @@ export class ReviewApi {
 
     }
 
-    async reviewsCreation(reviewId, type, reviewDetails) {
+    async reviewsCreation(userId, contentId, type, reviewDetails) {
         try {
-            const res = await fetch(`${this.basePath}/${type}/${reviewId}`, {
-                method: 'POST',
-                headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}),
-                body: JSON.stringify(reviewDetails)
-            })
-
+            const apiUrl = `${this.basePath}`
+            const params = {userId: userId, contentId: contentId, type: type}
+            const options = {method: 'POST', body: JSON.stringify(reviewDetails), headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}),}
+            const res = await fetchWithQueryParamsApi(apiUrl, params, options)
             if(res.status === 201) {
                 return {error: false}
             } else {

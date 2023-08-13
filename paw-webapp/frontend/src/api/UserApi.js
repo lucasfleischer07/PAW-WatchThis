@@ -39,22 +39,6 @@ export class UserApi {
         }
     }
 
-    async getUserReviews(userId, pageNumber) {
-        try {
-            const apiUrl = `${this.basePath}/${userId}/reviews`
-            const params = {page: pageNumber}
-            const options = {headers: authCheck({})}
-            const res = await fetchWithQueryParamsApi(apiUrl, params, options)
-            if(res.status === 200) {
-                return {error: false, data: res.data, totalPages: res.totalPages, totalReviews: res.totalReviews}
-            } else {
-                return {error: true, errorCode: res.status}
-            }
-        } catch (e) {
-            return {error: true, errorCode: e.response.status || 500}
-        }
-    }
-
     async updateUserProfileImage(userId, image) {
         try {
             const formData = new FormData();

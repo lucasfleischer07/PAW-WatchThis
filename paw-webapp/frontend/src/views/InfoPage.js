@@ -278,7 +278,7 @@ export default function InfoPage() {
                 })
         }
 
-        reviewService.reviews(parseInt(contentId), actualPage)
+        reviewService.getReviews(null, parseInt(contentId), actualPage)
             .then(data => {
                 if(!data.error) {
                     setReviews(data.data)

@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.webapp.controller.queryParams.GetReviewsParams;
 import ar.edu.itba.paw.webapp.dto.response.LongDto;
 import ar.edu.itba.paw.webapp.exceptions.ContentNotFoundException;
 import ar.edu.itba.paw.webapp.exceptions.ReviewNotFoundException;
@@ -13,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
@@ -38,18 +40,16 @@ public class ReviewController {
     @Context
     private UriInfo uriInfo;
     private static final Logger LOGGER = LoggerFactory.getLogger(ReviewController.class);
-    private static final int REVIEW_AMOUNT = 3;
-
 
     // * ----------------------------------- Movies and Series Review Gets ---------------------------------------------
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response reviews(@QueryParam("contentId") final long contentId,
+    public Response reviews(@QueryParam("contentId") final Long contentId,
+                            @QueryParam("userId") final Long userId,
                             @QueryParam("page") @DefaultValue("1") int pageNumber) {
         LOGGER.info("GET /{}: Called",uriInfo.getPath());
-        Content content = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
-        PageWrapper<Review> reviewList = rs.getAllReviews(content,pageNumber,REVIEW_AMOUNT);
+        PageWrapper<Review> reviewList = GetReviewsParams.getReviewsByParams(userId, contentId, pageNumber, us, cs, rs);
         if(reviewList == null) {
             LOGGER.warn("GET /{}: Invalid page param",uriInfo.getPath());
             throw new ContentNotFoundException();
@@ -80,20 +80,19 @@ public class ReviewController {
 //    Endpoint para crear una resenia
     @POST
     @Produces(value = {MediaType.APPLICATION_JSON})
-    @Path("/{type}/{contentId}")
-    public Response reviews(@PathParam("type") final String type,
-                            @PathParam("contentId") final long contentId,
+//    TODO: Chequear como activar esto del PreAuthorize
+    @PreAuthorize("@securityChecks.canReview(#userId, #contentId)")
+    public Response reviews(@QueryParam("userId") final Long userId,
+                            @QueryParam("type") final String type,
+                            @QueryParam("contentId") final Long contentId,
                             @Valid NewReviewDto reviewDto) {
+
         LOGGER.info("POST /{}: Called", uriInfo.getPath());
-        if(reviewDto==null)
-            throw new BadRequestException("Must include review data");
         final Content content = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
-        final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(ForbiddenException::new);
-        final List<User> userList = cs.getContentReviewers(contentId);
-        for (User user2 : userList) {
-            if (user2.getId() == user.getId()) {
-                return Response.noContent().build();
-            }
+        final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
+
+        if(reviewDto == null){
+            throw new BadRequestException("Must include review data");
         }
         try {
             rs.addReview(reviewDto.getName(), reviewDto.getDescription(), reviewDto.getRating(), reviewDto.getType(), user, content);
@@ -126,7 +125,6 @@ public class ReviewController {
             rrs.delete(review, null);
             LOGGER.info("DELETE /{}: Review Deleted by admin", uriInfo.getPath());
             return Response.noContent().build();
-
         } else {
             LOGGER.warn("DELETE /{}: Not allowed to delete", uriInfo.getPath());
             throw new ForbiddenException();

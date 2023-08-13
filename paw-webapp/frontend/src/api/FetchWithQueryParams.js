@@ -22,8 +22,10 @@ export async function fetchWithQueryParamsApi(url, queryParams = {}, options = {
         if(res.headers.get('Total-Comment-Reports')) {
             totalCommentsReports = res.headers.get('Total-Comment-Reports')
         }
-        if(res.ok) {
+        if(res.ok && options.method !== "POST") {
             return res.json().then(data => ({error:false, data, totalPages, status: res.status, totalReviews: totalReviews,totalReviewsReports: totalReviewsReports, totalCommentsReports: totalCommentsReports}));
+        } else if(res.ok && options.method === "POST") {
+            return {error:false, totalPages, status: res.status, totalReviews: totalReviews,totalReviewsReports: totalReviewsReports, totalCommentsReports: totalCommentsReports}
         } else {
             return {error: true, status: res.status}
         }
