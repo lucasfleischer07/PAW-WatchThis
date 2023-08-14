@@ -104,7 +104,7 @@ export default function ReviewCard(props) {
     }
 
     const handleSubmitReport = () => {
-        reportsService.addReviewReport(reviewId, reportFrom)
+        reviewService.addReviewReport(reviewId, reportFrom)
             .then(data => {
                 if(!data.error) {
                     toast.success(t('Report.Success'))

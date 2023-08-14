@@ -1,7 +1,11 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.webapp.controller.queryParams.GetCommentsParams;
 import ar.edu.itba.paw.webapp.controller.queryParams.GetReviewsParams;
+import ar.edu.itba.paw.webapp.dto.request.NewReportCommentDto;
+import ar.edu.itba.paw.webapp.dto.response.CommentReportDto;
 import ar.edu.itba.paw.webapp.dto.response.LongDto;
+import ar.edu.itba.paw.webapp.dto.response.ReviewReportDto;
 import ar.edu.itba.paw.webapp.exceptions.ContentNotFoundException;
 import ar.edu.itba.paw.webapp.exceptions.ReviewNotFoundException;
 import ar.edu.itba.paw.models.*;
@@ -39,6 +43,7 @@ public class ReviewController {
     private ReportService rrs;
     @Context
     private UriInfo uriInfo;
+    private static final int REPORTS_AMOUNT = 10;
     private static final Logger LOGGER = LoggerFactory.getLogger(ReviewController.class);
 
     // * ----------------------------------- Movies and Series Review Gets ---------------------------------------------
@@ -200,6 +205,54 @@ public class ReviewController {
         return Response.noContent().build();
     }
 
+    // * ---------------------------------------------------------------------------------------------------------------
+
+    // * ---------------------------------------------Review reports-------------------------------------------------
+
+
+    @GET
+    @Path("/reports")
+    public Response getCommentReport(@QueryParam("userId") final Long userId,
+                                     @QueryParam("page")@DefaultValue("1")final int page,
+                                     @QueryParam(value = "reason") @DefaultValue("") ReportReason reason) {
+        boolean canGetReports = GetCommentsParams.isAdmin(userId, us);
+        if(!canGetReports) {
+            throw new ForbiddenException("User with id " +  userId + " is not an admin");
+        }
+        PageWrapper<ReviewReport> reviewsReported = rrs.getReportedReviews(reason,page,REPORTS_AMOUNT);
+        Collection<ReviewReportDto> reviewsReportedListDto = ReviewReportDto.mapReviewReportToReviewReportDto(uriInfo, reviewsReported.getPageContent());
+        LOGGER.info("GET /{}: Reported reviews list success for admin user", uriInfo.getPath());
+        Response.ResponseBuilder response = Response.ok(new GenericEntity<Collection<ReviewReportDto>>(reviewsReportedListDto){});
+        response.header("Total-Review-Reports",rrs.getReportedReviewsAmount(reason));
+        response.header("Total-Comment-Reports",rrs.getReportedCommentsAmount(reason));
+        ResponseBuildingUtils.setPaginationLinks(response,reviewsReported , uriInfo);
+        return response.build();
+    }
+
+    @POST
+    @Path("/{reviewId}/reports")
+    public Response addReviewReport(@PathParam("reviewId") long reviewId,
+                                    @Valid NewReportCommentDto commentReportDto) {
+        LOGGER.info("POST /{}: Called", uriInfo.getPath());
+        if(commentReportDto==null) {
+            throw new BadRequestException("Must include report data");
+        }
+        final Review review = rs.findById(reviewId).orElseThrow(ReviewNotFoundException::new);
+        final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(ForbiddenException::new);
+        rrs.addReport(review, user, commentReportDto.getReportType());
+
+        LOGGER.info("POST /{}: Review {} reported", uriInfo.getPath(), review.getId());
+        return Response.ok().build();
+    }
+
+    @DELETE
+    @Path("/{reviewId}/reports")
+    public Response deleteReport(@PathParam("reviewId") long reviewId) {
+        LOGGER.info("DELETE /{}: Called", uriInfo.getPath());
+        rrs.removeReports("review", reviewId);
+        LOGGER.info("DELETE /{}: {} on contentId {} report deleted", uriInfo.getPath(), "Review", reviewId);
+        return Response.noContent().build();
+    }
     // * ---------------------------------------------------------------------------------------------------------------
 
 

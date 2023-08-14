@@ -140,4 +140,54 @@ export class ReviewApi {
             return {error: true, errorCode: e.response.status || 500}
         }
     }
+
+    async addReviewReport(reviewId, reviewReportReasons) {
+        try {
+            const res = await fetch(`${this.basePath}/${reviewId}/reports`, {
+                method: 'POST',
+                headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}),
+                body: JSON.stringify(reviewReportReasons)
+            })
+
+            if(res.status === 200) {
+                return {error: false, data: []}
+            } else {
+                return {error: true, errorCode: res.status}
+            }
+        } catch (e) {
+            return {error: true, errorCode: e.response.status || 500}
+        }
+    }
+
+    async getReviewReports(userId, filter= '') {
+        try {
+            const apiUrl = `${this.basePath}/reports`
+            const params = {userId: userId, reason: filter}
+            const options = {headers: authCheck({})}
+            const res = await fetchWithQueryParamsApi(apiUrl, params, options)
+            if(res.status === 200) {
+                return {error: false, data: await res.data, totalPages: res.totalPages, totalReviewsReports: res.totalReviewsReports, totalCommentsReports: res.totalCommentsReports}
+            } else {
+                return {error: true, errorCode: res.status}
+            }
+        } catch (e) {
+            return {error: true, errorCode: e.response.status || 500}
+        }
+    }
+
+    async deleteReviewReport(reviewId) {
+        try {
+            const res = await fetch(`${this.basePath}/${reviewId}/reports`, {
+                method: 'DELETE',
+                headers: authCheck({})
+            })
+            if(res.status === 204) {
+                return {error: false, data: []}
+            } else {
+                return {error: true, errorCode: res.status}
+            }
+        } catch (e) {
+            return {error: true, errorCode: e.response.status || 500}
+        }
+    }
 }

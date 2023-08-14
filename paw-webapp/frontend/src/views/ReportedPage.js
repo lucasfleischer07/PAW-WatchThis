@@ -3,7 +3,7 @@ import ReportedContent from "./components/ReportedContent";
 import {useLocation, useNavigate } from "react-router-dom";
 import React, {useContext, useEffect, useState} from "react";
 import {AuthContext} from "../context/AuthContext";
-import {commentService, reportsService} from "../services";
+import {commentService, reportsService, reviewService} from "../services";
 
 import { Tab, Tabs } from 'react-bootstrap';
 import Header from "./components/Header";
@@ -103,7 +103,7 @@ export default function ReportedPage() {
                 setCurrentCommentsReportsPage(1)
                 setCurrentReviewsReportsPage(1)
                 if (reportType === "reviews") {
-                    reportsService.getReportsByType('reviews', page, filterReason)
+                    reviewService.getReviewReports(user.id, filterReason)
                         .then(data => {
                             if (!data.error) {
                                 setReportedReviewsList(data.data)

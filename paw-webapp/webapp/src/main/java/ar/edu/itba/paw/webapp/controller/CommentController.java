@@ -56,7 +56,7 @@ public class CommentController {
         LOGGER.info("GET /{}: Comments got from review with id {}", uriInfo.getPath(), reviewId);
         return Response.ok(new GenericEntity<Collection<CommentDto>>(commentListDto){}).build();
     }
-    
+
 
     // * ---------------------------------------------Comment GET ------------------------------------------------------
     //Endpoint para pedir los comentarios de una review

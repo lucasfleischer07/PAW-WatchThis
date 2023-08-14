@@ -99,7 +99,7 @@ export default function ReportedContent(props) {
                     navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
         } else {
-            reportsService.deleteReport(typeId, reportType)
+            reviewService.deleteReviewReport(typeId)
                 .then(data => {
                     if(!data.error) {
                         toast.success(t('Report.Deleted'))
