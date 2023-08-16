@@ -85,7 +85,6 @@ public class ReviewController {
 //    Endpoint para crear una resenia
     @POST
     @Produces(value = {MediaType.APPLICATION_JSON})
-//    TODO: Chequear como activar esto del PreAuthorize
     @PreAuthorize("@securityChecks.canReview(#userId, #contentId)")
     public Response reviews(@QueryParam("userId") final Long userId,
                             @QueryParam("type") final String type,
