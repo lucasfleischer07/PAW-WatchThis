@@ -1,11 +1,9 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.models.*;
-import ar.edu.itba.paw.webapp.controller.queryParams.GetCommentsParams;
 import ar.edu.itba.paw.webapp.dto.request.NewReportCommentDto;
 import ar.edu.itba.paw.webapp.dto.response.CommentReportDto;
 import ar.edu.itba.paw.webapp.exceptions.CommentNotFoundException;
-import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
 import ar.edu.itba.paw.webapp.exceptions.ReviewNotFoundException;
 import ar.edu.itba.paw.webapp.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.services.*;
@@ -26,7 +24,6 @@ import javax.ws.rs.core.*;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.regex.Pattern;
 
 @Path("comments")
 @Component
@@ -139,10 +136,6 @@ public class CommentController {
     public Response getCommentReport(@QueryParam("userId") final Long userId,
                                      @QueryParam("page")@DefaultValue("1")final int page,
                                      @QueryParam(value = "reason") @DefaultValue("") ReportReason reason) {
-        boolean canGetReports = GetCommentsParams.isAdmin(userId, us);
-        if(!canGetReports) {
-            throw new ForbiddenException("User with id " +  userId + " is not an admin");
-        }
         PageWrapper<CommentReport> commentsReported = rrs.getReportedComments(reason,page,REPORTS_AMOUNT);
         Collection<CommentReportDto> commentReportedListDto = CommentReportDto.mapCommentReportToCommentReportDto(uriInfo, commentsReported.getPageContent());
         LOGGER.info("GET /{}: Reported comments list success for admin user", uriInfo.getPath());
@@ -160,13 +153,11 @@ public class CommentController {
                                      @PathParam("commentId") long commentId,
                                      @Valid NewReportCommentDto commentReportDto) {
         LOGGER.info("POST /{}: Called", uriInfo.getPath());
-        boolean canPostReports = GetCommentsParams.checkUser(userId, us);
+
         if(commentReportDto==null) {
             throw new BadRequestException("Must include report data");
         }
-        if(!canPostReports) {
-            throw new ForbiddenException("User can not report the comment");
-        }
+
         final Comment comment = ccs.getComment(commentId).orElseThrow(CommentNotFoundException::new);
         final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(ForbiddenException::new);
         rrs.addReport(comment, user, commentReportDto.getReportType());
