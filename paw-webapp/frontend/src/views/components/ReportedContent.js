@@ -29,7 +29,7 @@ export default function ReportedContent(props) {
     const reviewCreatorUserId = props.reviewCreatorId
     const reviewNameOfReportedComment = props.reviewNameOfReportedComment
     const setCommentOrReviewDismissedOrDeleted = props.setCommentOrReviewDismissedOrDeleted
-
+    const loggedUserId = props.loggedUserId
 
     const handleShowModal = () => {
         setShowModal(true);
@@ -50,7 +50,7 @@ export default function ReportedContent(props) {
     const handleDeleteCommentOrReview = (e) => {
         e.preventDefault()
         if(reportType === 'comment') {
-            commentService.commentDelete(typeId)
+            commentService.commentDelete(typeId, loggedUserId)
                 .then(data => {
                     if(!data.error) {
                         toast.success(t('Comment.Deleted'))
@@ -85,7 +85,7 @@ export default function ReportedContent(props) {
     const handleDismissReport = (e) => {
         e.preventDefault()
         if(reportType === "comment") {
-            commentService.deleteCommentReports(typeId)
+            commentService.deleteCommentReports(typeId, loggedUserId)
                 .then(data => {
                     if(!data.error) {
                         toast.success(t('Report.Deleted'))

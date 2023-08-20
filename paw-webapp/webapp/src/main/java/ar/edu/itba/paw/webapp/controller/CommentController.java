@@ -15,6 +15,7 @@ import ar.edu.itba.paw.webapp.utilities.ResponseBuildingUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -46,8 +47,7 @@ public class CommentController {
 
     @GET
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response getComments(@QueryParam("reviewId") final Long reviewId,
-                                @QueryParam("page") @DefaultValue("1") final int page) {
+    public Response getComments(@QueryParam("reviewId") final Long reviewId) {
         LOGGER.info("GET /{}: Called", uriInfo.getPath());
 
         Review review = rs.findById(reviewId).orElseThrow(ReviewNotFoundException::new);
@@ -60,18 +60,18 @@ public class CommentController {
 
     // * ---------------------------------------------Comment GET ------------------------------------------------------
     //Endpoint para pedir los comentarios de una review
-    @GET
-    @Path("/{reviewId}")
-    @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response getReviewComments(@PathParam("reviewId") final long reviewId) {
-
-        LOGGER.info("GET /{}: Called", uriInfo.getPath());
-        Review review = rs.findById(reviewId).orElseThrow(ReviewNotFoundException::new);
-        List<Comment> comments = ccs.getReviewComments(review);
-        Collection<CommentDto> commentListDto = CommentDto.mapCommentToCommentDto(uriInfo, comments);
-        LOGGER.info("GET /{}: Comments got from review with id {}", uriInfo.getPath(), reviewId);
-        return Response.ok(new GenericEntity<Collection<CommentDto>>(commentListDto){}).build();
-    }
+//    @GET
+//    @Path("/{reviewId}")
+//    @Produces(value = {MediaType.APPLICATION_JSON})
+//    public Response getReviewComments(@PathParam("reviewId") final long reviewId) {
+//
+//        LOGGER.info("GET /{}: Called", uriInfo.getPath());
+//        Review review = rs.findById(reviewId).orElseThrow(ReviewNotFoundException::new);
+//        List<Comment> comments = ccs.getReviewComments(review);
+//        Collection<CommentDto> commentListDto = CommentDto.mapCommentToCommentDto(uriInfo, comments);
+//        LOGGER.info("GET /{}: Comments got from review with id {}", uriInfo.getPath(), reviewId);
+//        return Response.ok(new GenericEntity<Collection<CommentDto>>(commentListDto){}).build();
+//    }
     // * ---------------------------------------------------------------------------------------------------------------
 
 
@@ -79,7 +79,9 @@ public class CommentController {
     // Endpoint para crear un comentario
     @POST
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response commentReviewAdd(@QueryParam("reviewId") final Long reviewId,
+    @PreAuthorize("@securityChecks.checkUser(#userId)")
+    public Response commentReviewAdd(@QueryParam("userId") final Long userId,
+                                     @QueryParam("reviewId") final Long reviewId,
                                      @Valid NewCommentDto commentDto) {
         LOGGER.info("POST /{}: Called", uriInfo.getPath());
         if(commentDto == null || reviewId == null)
@@ -100,7 +102,9 @@ public class CommentController {
     // Endpoint para borrar un comment
     @DELETE
     @Path("/{commentId}")
-    public Response commentReviewDelete(@PathParam("commentId") final long commentId) {
+    @PreAuthorize("@securityChecks.canDeleteComment(#userId, #commentId)")
+    public Response commentReviewDelete(@QueryParam("userId") final Long userId,
+                                        @PathParam("commentId") final long commentId) {
         LOGGER.info("DELETE /{}: Called", uriInfo.getPath());
 
         Optional<User> user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
@@ -129,9 +133,9 @@ public class CommentController {
     // * ---------------------------------------------------------------------------------------------------------------
 
     // * ---------------------------------------------Comments Reports---------------------------------------------------
-
     @GET
     @Path("/reports")
+    @PreAuthorize("@securityChecks.isAdmin(#userId)")
     public Response getCommentReport(@QueryParam("userId") final Long userId,
                                      @QueryParam("page")@DefaultValue("1")final int page,
                                      @QueryParam(value = "reason") @DefaultValue("") ReportReason reason) {
@@ -151,6 +155,7 @@ public class CommentController {
 
     @POST
     @Path("/{commentId}/reports")
+    @PreAuthorize("@securityChecks.checkUser(#userId)")
     public Response addCommentReport(@QueryParam("userId") final Long userId,
                                      @PathParam("commentId") long commentId,
                                      @Valid NewReportCommentDto commentReportDto) {
@@ -172,7 +177,9 @@ public class CommentController {
 
     @DELETE
     @Path("/{commentId}/reports")
-    public Response deleteReport(@PathParam("commentId") long commentId) {
+    @PreAuthorize("@securityChecks.isAdmin(#userId)")
+    public Response deleteReport(@QueryParam("userId") final Long userId,
+                                 @PathParam("commentId") long commentId) {
         LOGGER.info("DELETE /{}: Called", uriInfo.getPath());
         rrs.removeReports("comment", commentId);
         LOGGER.info("DELETE /{}: {} on contentId {} report deleted", uriInfo.getPath(), "Comment", commentId);

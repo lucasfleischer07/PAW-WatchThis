@@ -13,6 +13,8 @@ export default function Reputation(props) {
     let navigate = useNavigate()
     let {isLogged} = useContext(AuthContext)
 
+    const loggedUserId = props.loggedUserId
+
     const reviewId = props.reviewId;
     const reviewDescription = props.reviewDescription;
     const [reviewReputation, setReviewReputation] = useState(props.reviewReputation)
@@ -63,7 +65,7 @@ export default function Reputation(props) {
         if(!validateComment()) {
             return
         }
-        commentService.createComment(reviewId, commentForm)
+        commentService.createComment(reviewId, loggedUserId, commentForm)
             .then(data => {
               if(!data.error){
                   setAdded(!added)

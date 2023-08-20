@@ -273,6 +273,7 @@ export default function ReportedPage() {
                                                 reviewNameOfReportedComment={content.review.name}
                                                 setCommentOrReviewDismissedOrDeleted={setCommentOrReviewDismissedOrDeleted}
                                                 reportType="review"
+                                                loggedUserId = {user.id}
                                             />
                                         )
                                     )}
@@ -311,6 +312,7 @@ export default function ReportedPage() {
                                             reviewNameOfReportedComment={content.review.name}
                                             setCommentOrReviewDismissedOrDeleted={setCommentOrReviewDismissedOrDeleted}
                                             reportType="comment"
+                                            loggedUserId = {user.id}
                                         />
                                     ))}
 
