@@ -77,7 +77,7 @@ export default function ReviewEditionPage() {
             return
         }
 
-        reviewService.reviewEdition(reviewId, reviewForm)
+        reviewService.reviewEdition(reviewId, user.id, reviewForm)
             .then(data => {
                 if(!data.error) {
                     navigate(-1)

@@ -21,6 +21,7 @@ export default function ReviewCard(props) {
     const reviewUserId = props.reviewUserId
     const setReviewsChange = props.setReviewsChange
     const loggedUserName = props.loggedUserName
+    const loggedUserId = props.loggedUserId
     const [isAdmin,setIsAdmin] = useState(props.isAdmin);
 
     const [isLikeReviews, setIsLikeReviews] = useState(props.isLikeReviews);
@@ -87,7 +88,7 @@ export default function ReviewCard(props) {
         );
     }
     const handleDelete = () => {
-        reviewService.deleteReview(reviewId)
+        reviewService.deleteReview(reviewId, loggedUserId)
             .then(data => {
                 if(!data.error) {
                     handleCloseDeleteReviewModal()
@@ -104,7 +105,7 @@ export default function ReviewCard(props) {
     }
 
     const handleSubmitReport = () => {
-        reviewService.addReviewReport(reviewId, reportFrom)
+        reviewService.addReviewReport(reviewId, loggedUserId, reportFrom)
             .then(data => {
                 if(!data.error) {
                     toast.success(t('Report.Success'))

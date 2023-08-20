@@ -64,7 +64,7 @@ export default function ReportedContent(props) {
                     navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
         } else if(reportType === 'review') {
-            reviewService.deleteReview(typeId)
+            reviewService.deleteReview(typeId, loggedUserId)
                 .then(data => {
                     if(!data.error) {
                         toast.success(t('Review.Deleted'))
@@ -99,7 +99,7 @@ export default function ReportedContent(props) {
                     navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
         } else {
-            reviewService.deleteReviewReport(typeId)
+            reviewService.deleteReviewReport(typeId, loggedUserId)
                 .then(data => {
                     if(!data.error) {
                         toast.success(t('Report.Deleted'))

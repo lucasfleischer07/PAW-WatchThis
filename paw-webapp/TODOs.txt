@@ -36,3 +36,4 @@ COSAS A ARREGLAR QUE SE ROMPIERON CON LOS NUEVOS CAMBIOS:
 - La paginacion de Reviews en UserInfoPage, anda rara cuando le haces click en el boton del numero y el next, como que a la segunda vez que haces click, si o si vuelve a la pagina 1
 - En UserInfoPage no aparece el la cantidad total de reviews del usuario
 - Un usuario puede reportar mas de una vez un comment (le aparece el boton en el front y no deberia). Creo que es porque esta mal el link del DTA de commentReportersUrl
+- El boton de Dismiss Report en ReportedContent anda medio chingado. Muestra el toast pero mal el mensaje y no refresca cada vez que se dissmisea una review

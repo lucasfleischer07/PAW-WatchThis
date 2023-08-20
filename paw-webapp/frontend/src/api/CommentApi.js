@@ -79,7 +79,7 @@ export class CommentApi {
     async addCommentReport(userId, commentId, commentReportReasons) {
         try {
             const apiUrl = `${this.basePath}/${commentId}/reports`
-            const options = { method: 'POST', headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}), body: JSON.stringify(commentReportReasons)}
+            const options = {method: 'POST', headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}), body: JSON.stringify(commentReportReasons)}
             const params = {userId: userId}
             const res = await fetchWithQueryParamsApi(apiUrl, params, options)
             if(res.status === 200) {

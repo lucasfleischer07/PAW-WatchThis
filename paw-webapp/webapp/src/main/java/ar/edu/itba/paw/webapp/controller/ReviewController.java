@@ -1,10 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.webapp.controller.queryParams.GetCommentsParams;
 import ar.edu.itba.paw.webapp.controller.queryParams.GetReviewsParams;
 import ar.edu.itba.paw.webapp.dto.request.NewReportCommentDto;
-import ar.edu.itba.paw.webapp.dto.response.CommentReportDto;
-import ar.edu.itba.paw.webapp.dto.response.LongDto;
 import ar.edu.itba.paw.webapp.dto.response.ReviewReportDto;
 import ar.edu.itba.paw.webapp.exceptions.ContentNotFoundException;
 import ar.edu.itba.paw.webapp.exceptions.ReviewNotFoundException;
@@ -26,9 +23,7 @@ import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @Path("reviews")
 @Component
@@ -85,19 +80,19 @@ public class ReviewController {
 //    Endpoint para crear una resenia
     @POST
     @Produces(value = {MediaType.APPLICATION_JSON})
-    @PreAuthorize("@securityChecks.canReview(#userId, #contentId)")
+    @PreAuthorize("@securityChecks.canReview(#userId, #contentId, #type)")
     public Response reviews(@QueryParam("userId") final Long userId,
                             @QueryParam("type") final String type,
                             @QueryParam("contentId") final Long contentId,
                             @Valid NewReviewDto reviewDto) {
-
         LOGGER.info("POST /{}: Called", uriInfo.getPath());
-        final Content content = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
-        final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
+        final Content content = cs.findById(contentId).get();
+        final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).get();
 
         if(reviewDto == null){
             throw new BadRequestException("Must include review data");
         }
+
         try {
             rs.addReview(reviewDto.getName(), reviewDto.getDescription(), reviewDto.getRating(), reviewDto.getType(), user, content);
             LOGGER.info("POST /{}: Review added", uriInfo.getPath());
@@ -117,8 +112,11 @@ public class ReviewController {
     @DELETE
     @Path("/{reviewId}")
     @Produces(value = {MediaType.APPLICATION_JSON,})
-    public Response deleteReview(@PathParam("reviewId") final Long reviewId) {
+    @PreAuthorize("@securityChecks.canDeleteReview(#userId, #reviewId)")
+    public Response deleteReview(@QueryParam("userId") final Long userId,
+                                 @PathParam("reviewId") final Long reviewId) {
         LOGGER.info("DELETE /{}: Called", uriInfo.getPath());
+
         final Review review = rs.findById(reviewId).orElseThrow(ReviewNotFoundException::new);
         User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(ForbiddenException::new);
         if(review.getUser().getUserName().equals(user.getUserName())) {
@@ -145,18 +143,22 @@ public class ReviewController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/{reviewId}")
     @Produces(value = {MediaType.APPLICATION_JSON,})
-    public Response reviewEdition(@PathParam("reviewId") final Long reviewId,
+    @PreAuthorize("@securityChecks.canEditReview(#userId, #reviewId)")
+    public Response reviewEdition(@QueryParam("userId") final Long userId,
+                                  @PathParam("reviewId") final Long reviewId,
                                   @Valid final NewReviewDto reviewDto) {
-
         LOGGER.info("PUT /{}: Called", uriInfo.getPath());
-        if(reviewDto==null)
+        if(reviewDto == null) {
             throw new BadRequestException("Must include edit data");
-        final Review oldReview = rs.findById(reviewId).orElseThrow(ReviewNotFoundException::new);
-        User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(() -> new ForbiddenException("User not found"));
+        }
+
+        final Review oldReview = rs.findById(reviewId).get();
+        User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).get();
         if(!oldReview.getUser().getUserName().equals(user.getUserName())){
             LOGGER.warn("PUT /{}: The editor is not owner of the review", uriInfo.getPath());
             throw new ForbiddenException();
         }
+
         rs.updateReview(reviewDto.getName(), reviewDto.getDescription(), reviewDto.getRating(), reviewId);
         return Response.noContent().build();
     }
@@ -169,16 +171,13 @@ public class ReviewController {
     @PUT
     @Produces(value = {MediaType.APPLICATION_JSON})
     @Path("/{reviewId}/thumbUp")
-    public Response reviewThumbUp(@PathParam("reviewId") final long reviewId) {
+    @PreAuthorize("@securityChecks.checkUser(#userId)")
+    public Response reviewThumbUp(@QueryParam("userId") final Long userId,
+                                  @PathParam("reviewId") final Long reviewId) {
         LOGGER.info("PUT /{}: Called", uriInfo.getPath());
-        if(us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).isPresent()) {
-            Review review = rs.getReview(reviewId).orElseThrow(ReviewNotFoundException::new);
-            User loggedUser = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).get();
-            rs.thumbUpReview(review,loggedUser);
-        } else {
-            LOGGER.warn("PUT /{}: Not allowed to thumb up the review", uriInfo.getPath());
-            throw new ForbiddenException();
-        }
+        Review review = rs.getReview(reviewId).orElseThrow(ReviewNotFoundException::new);
+        User loggedUser = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).get();
+        rs.thumbUpReview(review,loggedUser);
         LOGGER.info("PUT /{}: Thumb up successful", uriInfo.getPath());
 
         return Response.noContent().build();
@@ -189,16 +188,13 @@ public class ReviewController {
     @PUT
     @Produces(value = {MediaType.APPLICATION_JSON})
     @Path("/{reviewId}/thumbDown")
-    public Response reviewThumbDown(@PathParam("reviewId") final long reviewId) {
+    @PreAuthorize("@securityChecks.checkUser(#userId)")
+    public Response reviewThumbDown(@QueryParam("userId") final Long userId,
+                                    @PathParam("reviewId") final long reviewId) {
         LOGGER.info("PUT /{}: Called", uriInfo.getPath());
-        if(us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).isPresent()) {
-            Review review = rs.getReview(reviewId).orElseThrow(ReviewNotFoundException::new);
-            User loggedUser = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).get();
-            rs.thumbDownReview(review,loggedUser);
-        } else {
-            LOGGER.warn("PUT /{}: Not allowed to thumb down the review", uriInfo.getPath());
-            throw new ForbiddenException();
-        }
+        Review review = rs.getReview(reviewId).orElseThrow(ReviewNotFoundException::new);
+        User loggedUser = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).get();
+        rs.thumbDownReview(review,loggedUser);
         LOGGER.info("PUT /{}: Thumb down successful", uriInfo.getPath());
 
         return Response.noContent().build();
@@ -207,17 +203,12 @@ public class ReviewController {
     // * ---------------------------------------------------------------------------------------------------------------
 
     // * ---------------------------------------------Review reports-------------------------------------------------
-
-
     @GET
     @Path("/reports")
+    @PreAuthorize("@securityChecks.isAdmin(#userId)")
     public Response getCommentReport(@QueryParam("userId") final Long userId,
                                      @QueryParam("page")@DefaultValue("1")final int page,
                                      @QueryParam(value = "reason") @DefaultValue("") ReportReason reason) {
-        boolean canGetReports = GetCommentsParams.isAdmin(userId, us);
-        if(!canGetReports) {
-            throw new ForbiddenException("User with id " +  userId + " is not an admin");
-        }
         PageWrapper<ReviewReport> reviewsReported = rrs.getReportedReviews(reason,page,REPORTS_AMOUNT);
         Collection<ReviewReportDto> reviewsReportedListDto = ReviewReportDto.mapReviewReportToReviewReportDto(uriInfo, reviewsReported.getPageContent());
         LOGGER.info("GET /{}: Reported reviews list success for admin user", uriInfo.getPath());
@@ -230,7 +221,9 @@ public class ReviewController {
 
     @POST
     @Path("/{reviewId}/reports")
-    public Response addReviewReport(@PathParam("reviewId") long reviewId,
+    @PreAuthorize("@securityChecks.checkUser(#userId)")
+    public Response addReviewReport(@QueryParam("userId") final Long userId,
+                                    @PathParam("reviewId") long reviewId,
                                     @Valid NewReportCommentDto commentReportDto) {
         LOGGER.info("POST /{}: Called", uriInfo.getPath());
         if(commentReportDto==null) {
@@ -246,7 +239,9 @@ public class ReviewController {
 
     @DELETE
     @Path("/{reviewId}/reports")
-    public Response deleteReport(@PathParam("reviewId") long reviewId) {
+    @PreAuthorize("@securityChecks.isAdmin(#userId)")
+    public Response deleteReport(@QueryParam("userId") final Long userId,
+                                 @PathParam("reviewId") long reviewId) {
         LOGGER.info("DELETE /{}: Called", uriInfo.getPath());
         rrs.removeReports("review", reviewId);
         LOGGER.info("DELETE /{}: {} on contentId {} report deleted", uriInfo.getPath(), "Review", reviewId);
