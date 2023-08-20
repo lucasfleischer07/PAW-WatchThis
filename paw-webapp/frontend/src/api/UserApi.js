@@ -116,13 +116,13 @@ export class UserApi {
         }
     }
 
-    async promoteUserToAdmin(userId) {
+    async promoteUserToAdmin(promotedUserId, loggedUserId) {
         try {
-            const res = await fetch(`${this.basePath}/${userId}/promote`, {
-                method: 'PUT',
-                headers: authCheck({}),
-                body: {}
-            })
+            const apiUrl = `${this.basePath}/${promotedUserId}/promote`
+            const options = {method: 'PUT', headers: authCheck({})}
+            const params = {userId: loggedUserId}
+            const res = await fetchWithQueryParamsApi(apiUrl, params, options)
+
             if(res.status === 204) {
                 return {error: false, data: []}
             } else {
@@ -136,7 +136,7 @@ export class UserApi {
 
     async getReviewsLike(userId) {
         try {
-            const res = await fetch(`${this.basePath}/${userId}/reviewsLikedByUser`, {
+            const res = await fetch(`${this.basePath}/${userId}/reviewsLiked`, {
                 method: 'GET',
                 headers: authCheck({}),
             })
@@ -160,7 +160,7 @@ export class UserApi {
 
     async getReviewsDislike(userId) {
         try {
-            const res = await fetch(`${this.basePath}/${userId}/reviewsDislikedByUser`, {
+            const res = await fetch(`${this.basePath}/${userId}/reviewsDisliked`, {
                 method: 'GET',
                 headers: authCheck({}),
             })

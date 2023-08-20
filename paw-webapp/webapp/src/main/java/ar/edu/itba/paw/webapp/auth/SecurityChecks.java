@@ -42,7 +42,7 @@ public class SecurityChecks {
         if(userId == loggedUser.getId()) {
             return true;
         } else {
-            return false;
+            throw new ForbiddenException("Users don't match");
         }
     }
 

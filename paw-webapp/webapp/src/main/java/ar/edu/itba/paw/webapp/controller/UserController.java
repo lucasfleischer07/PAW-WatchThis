@@ -15,6 +15,7 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
@@ -88,10 +89,10 @@ public class UserController {
 
     // * ---------------------------------------------------------------------------------------------------------------
 
+
     // * ----------------------------------------------- User Image ----------------------------------------------------
 
     // Endpoint para getear la imagen del usuario
-
     @GET
     @Produces(value = {"image/*", MediaType.APPLICATION_JSON})
     @Path("/{id}/profileImage")
@@ -119,26 +120,23 @@ public class UserController {
             response = Response.ok(userImage).cacheControl(cacheControl).type(contentType).tag(eTag);
         }
         LOGGER.info("GET /{}: User {} Profile Image", uriInfo.getPath(), id);
+
         return response.build();
-
-
-
     }
 
 //    Endpoint para editar la imagen de perfil del usuario
     @PUT
     @Path("/{id}/profileImage")
     @Produces({"image/*", MediaType.APPLICATION_JSON,})
+    @PreAuthorize("@securityChecks.checkUser(#id)")
     public Response updateUserProfileImage(@FormDataParam("image") byte[] imageBytes,
                                            @PathParam("id") final long id) {
         LOGGER.info("PUT /{}: Called", uriInfo.getPath());
-        if(imageBytes==null)
+        if(imageBytes==null) {
             throw new BadRequestException("Must include image data");
-        final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
-        if(user.getId() != id) {
-            throw new ForbiddenException();
         }
 
+        final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
         us.setProfilePicture(imageBytes, user);
         LOGGER.info("PUT /{}: User {} Profile Image Updated", uriInfo.getPath(), id);
         return Response.noContent().contentLocation(UserDto.getUserUriBuilder(user, uriInfo).path("profileImage").build()).build();
@@ -153,17 +151,15 @@ public class UserController {
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(value = {MediaType.APPLICATION_JSON,})
+    @PreAuthorize("@securityChecks.checkUser(#id)")
     public Response updateUserProfileInfo(@Valid EditProfileDto editProfileDto,
-                                          @PathParam("id") final long id) {
+                                          @PathParam("id") final Long id) {
         LOGGER.info("PUT /{}: Called", uriInfo.getPath());
         if(editProfileDto == null) {
             throw new BadRequestException("Must include edit data");
         }
-        final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
-        if(user.getId() != id) {
-            throw new ForbiddenException();
-        }
 
+        final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
         if(us.checkPassword(editProfileDto.getCurrentPassword(), user)) {
             us.setPassword(editProfileDto.getNewPassword(), user, "restore");
         } else {
@@ -176,7 +172,9 @@ public class UserController {
 
     // * ---------------------------------------------------------------------------------------------------------------
 
+
     // * ------------------------------------------------Forgot Password (desde el login)-------------------------------
+//    TODO: Todavia nose que hacer con esto
     @Path("/login/{email}/forgotPassword")
     @POST
     @Consumes(value = {MediaType.APPLICATION_JSON})
@@ -188,17 +186,20 @@ public class UserController {
     }
     // * ---------------------------------------------------------------------------------------------------------------
 
-    // * ------------------------------------------------Promote User-------------------------------
-    @Path("/{userId}/promote")
+
+    // * ------------------------------------------------Promote User---------------------------------------------------
+    @Path("/{id}/promote")
     @PUT
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response promoteUSer(@PathParam("userId") final long userId) {
+    @PreAuthorize("@securityChecks.isAdmin(#loggedUserId)")
+    public Response promoteUSer(@QueryParam("userId") final Long loggedUserId,
+                                @PathParam("id") final Long id) {
         LOGGER.info("PUT /{}: Called", uriInfo.getPath());
         User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
         if(!Objects.equals(user.getRole(), "admin")) {
             throw new ForbiddenException();
         }
-        User user2 = us.findById(userId).orElseThrow(UserNotFoundException::new);
+        User user2 = us.findById(id).orElseThrow(UserNotFoundException::new);
         us.promoteUser(user2);
         LOGGER.info("PUT /{}: Returning user promoted", uriInfo.getPath());
         return Response.noContent().build();
@@ -207,7 +208,7 @@ public class UserController {
 
     // Endpoint para getear los ids de las reviews likeadas por un usuario
     @GET
-    @Path("/{userId}/reviewsLikedByUser")
+    @Path("/{userId}/reviewsLiked")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUserIdLikeReviews(@PathParam("userId") final long userId) {
         LOGGER.info("GET /{}: Called", uriInfo.getPath());
@@ -223,7 +224,7 @@ public class UserController {
 
     // Endpoint para getear los ids de las reviews dislikeadas por un usuario
     @GET
-    @Path("/{userId}/reviewsDislikedByUser")
+    @Path("/{userId}/reviewsDisliked")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUserIdDislikeReviews(@PathParam("userId") final long userId) {
         LOGGER.info("GET /{}: Called", uriInfo.getPath());

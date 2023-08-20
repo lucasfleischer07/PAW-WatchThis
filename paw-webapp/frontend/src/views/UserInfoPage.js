@@ -59,7 +59,7 @@ export default function UserInfoPage() {
 
     const handlePromoteUser = (e) => {
         e.preventDefault();
-        userService.promoteUserToAdmin(reviewOwnerUser.id)
+        userService.promoteUserToAdmin(reviewOwnerUser.id, user.id)
             .then(data => {
                 if(!data.error) {
                     setCanPromote(false)

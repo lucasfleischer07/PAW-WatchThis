@@ -22,9 +22,9 @@ export async function fetchWithQueryParamsApi(url, queryParams = {}, options = {
         if(res.headers.get('Total-Comment-Reports')) {
             totalCommentsReports = res.headers.get('Total-Comment-Reports')
         }
-        if(res.ok && options.method !== "POST" && options.method !== "DELETE") {
+        if(res.ok && options.method !== "POST" && options.method !== "DELETE" && options.method !== "PUT") {
             return res.json().then(data => ({error:false, data, totalPages, status: res.status, totalReviews: totalReviews,totalReviewsReports: totalReviewsReports, totalCommentsReports: totalCommentsReports}));
-        } else if(res.ok && (options.method === "POST" || options.method === "DELETE")) {
+        } else if(res.ok && (options.method === "POST" || options.method === "DELETE" || options.method !== "PUT")) {
             return {error:false, totalPages, status: res.status, totalReviews: totalReviews,totalReviewsReports: totalReviewsReports, totalCommentsReports: totalCommentsReports}
         } else {
             return {error: true, status: res.status}
