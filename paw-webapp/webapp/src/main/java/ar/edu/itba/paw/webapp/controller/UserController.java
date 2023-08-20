@@ -130,9 +130,9 @@ public class UserController {
     @Produces({"image/*", MediaType.APPLICATION_JSON,})
     @PreAuthorize("@securityChecks.checkUser(#id)")
     public Response updateUserProfileImage(@FormDataParam("image") byte[] imageBytes,
-                                           @PathParam("id") final long id) {
+                                           @PathParam("id") final Long id) {
         LOGGER.info("PUT /{}: Called", uriInfo.getPath());
-        if(imageBytes==null) {
+        if(imageBytes == null) {
             throw new BadRequestException("Must include image data");
         }
 

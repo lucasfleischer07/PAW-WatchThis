@@ -94,7 +94,7 @@ export default function InfoPage() {
     const handleSubmitDeleteContent = (e) => {
         e.preventDefault()
         if(user?.role === 'admin') {
-            contentService.deleteContent(parseInt(contentId))
+            contentService.deleteContent(parseInt(contentId), user.id)
                 .then(data => {
                     if(!data.error) {
                         handleCloseDeleteContentModal()

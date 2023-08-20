@@ -191,9 +191,9 @@ public class ContentServiceImpl implements ContentService {
     @Override
     public void updateContent(Long id,String name, String description, String releaseDate, String genre, String creator, Integer duration, String type,byte[] contentImage){
         String durationString = formatDuration(duration);
-        if(contentImage.length==0){
+        if(contentImage.length == 0) {
             ContentDao.updateContent(id,name,description,releaseDate,genre,creator,duration,durationString,type);
-        }else{
+        } else {
             ContentDao.updateWithImageContent(id,name,description,releaseDate,genre,creator,duration,durationString,type,contentImage);
         }
     }

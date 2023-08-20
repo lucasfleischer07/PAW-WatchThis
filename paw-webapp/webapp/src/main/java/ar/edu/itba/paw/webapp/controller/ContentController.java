@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -127,12 +128,15 @@ public class ContentController {
     @PUT
     @Path("/{contentId}/contentImage")
     @Produces(value = {MediaType.APPLICATION_JSON,})
-    public Response updateContentImage(@FormDataParam("image") byte[] imageBytes,
-                                       @PathParam("contentId") final long contentId) {
+    @PreAuthorize("@securityChecks.isAdmin(#userId)")
+    public Response updateContentImage(@QueryParam("userId") final Long userId,
+                                       @FormDataParam("image") byte[] imageBytes,
+                                       @PathParam("contentId") final Long contentId) {
         LOGGER.info("PUT /{}: Called", uriInfo.getPath());
 
-        if(imageBytes==null)
+        if(imageBytes == null) {
             throw new BadRequestException("Must include edit data");
+        }
         Content content = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
         cs.updateContent(content.getId(), content.getName(), content.getDescription(), content.getReleased(), content.getGenre(), content.getCreator(), content.getDurationNum(), content.getType(), imageBytes);
         LOGGER.info("PUT /{}: Content {} Image Updated", uriInfo.getPath(), contentId);
@@ -148,24 +152,24 @@ public class ContentController {
     @Path("/{contentId}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(value = {MediaType.APPLICATION_JSON,})
-    public Response updateContentInfo(@PathParam("contentId") final long contentId,
+    @PreAuthorize("@securityChecks.isAdmin(#userId)")
+    public Response updateContentInfo(@QueryParam("userId") final Long userId,
+                                      @PathParam("contentId") final Long contentId,
                                       @Valid NewContentDto contentDto,
-                                      @Context final HttpServletRequest request) throws IOException {
+                                      @Context final HttpServletRequest request) {
         LOGGER.info("PUT /{}: Called", uriInfo.getPath());
-        final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(ForbiddenException::new);
         final Content content = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
-        if(contentDto==null)
+        if(contentDto==null) {
             throw new BadRequestException("Must include edit data");
+        }
+
         String auxGenre = "";
         for(String genre : contentDto.getGenre()) {
             auxGenre = auxGenre + " " + genre;
         }
 
-        if(contentDto.getContentPicture() == null) {
-            cs.updateContent(contentId, contentDto.getName(), contentDto.getDescription(), contentDto.getReleaseDate(), auxGenre, contentDto.getCreator(), contentDto.getDuration(), contentDto.getType(), content.getImage());
-        } else {
-            cs.updateContent(contentId, contentDto.getName(), contentDto.getDescription(), contentDto.getReleaseDate(), auxGenre, contentDto.getCreator(), contentDto.getDuration(), contentDto.getType(), content.getImage());
-        }
+        cs.updateContent(contentId, contentDto.getName(), contentDto.getDescription(), contentDto.getReleaseDate(), auxGenre, contentDto.getCreator(), contentDto.getDuration(), contentDto.getType(), content.getImage());
+
         LOGGER.info("PUT /{}: Content {} Info Updated", uriInfo.getPath(), contentId);
         return Response.ok().build();
     }
@@ -176,7 +180,9 @@ public class ContentController {
     // * ----------------------------------- Content Delete ------------------------------------------------------------
     @DELETE
     @Path("/{contentId}")
-    public Response deleteContent(@PathParam("contentId") final long contentId) {
+    @PreAuthorize("@securityChecks.isAdmin(#userId)")
+    public Response deleteContent(@QueryParam("userId") final Long userId,
+                                  @PathParam("contentId") final Long contentId) {
         LOGGER.info("DELETE /{}: Called", uriInfo.getPath());
         Content oldContent = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
         cs.deleteContent(contentId);
@@ -191,11 +197,13 @@ public class ContentController {
     // Endpoint para crear un contenido
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createContent(@Valid NewContentDto contentDto) {
+    @PreAuthorize("@securityChecks.isAdmin(#userId)")
+    public Response createContent(@QueryParam("userId") final Long userId,
+                                  @Valid NewContentDto contentDto) {
         LOGGER.info("POST /{}: Called", uriInfo.getPath());
-        if(contentDto==null)
+        if(contentDto == null) {
             throw new BadRequestException("Must include content data");
-        User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
+        }
 
         String auxGenre = "";
         for(String genre : contentDto.getGenre()) {

@@ -1,5 +1,5 @@
 import {APPLICATION_JSON_TYPE, paths} from "../paths";
-import {fetchWithQueryParamsApi} from "./FetchWithQueryParams";
+import {fetchWithQueryParamsApi, fetchWithQueryParamsPostApi} from "./FetchWithQueryParams";
 import {authCheck} from "../scripts/authCheck";
 import {ListsApi} from "./ListsApi";
 
@@ -33,22 +33,21 @@ export class ContentApi {
 
     }
 
-    async updateContent(contentId, contentDetails) {
+    async updateContent(contentId, userId, contentDetails) {
         try {
             contentDetails.genre = contentDetails.genre.split(" ")
             if(typeof contentDetails.contentPicture == 'string' || contentDetails.contentPicture == null) {
                 delete contentDetails.contentPicture
             }
             else {
-                await this.updateContentImage(contentId, contentDetails.contentPicture)
+                await this.updateContentImage(contentId, userId, contentDetails.contentPicture)
                 delete contentDetails.contentPicture
             }
 
-            const res = await fetch(`${this.basePath}/${contentId}`, {
-                method: 'PUT',
-                headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}),
-                body: JSON.stringify(contentDetails)
-            })
+            const apiUrl = `${this.basePath}/${contentId}`
+            const options = {method: 'PUT', headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}), body: JSON.stringify(contentDetails)}
+            const params = {userId: userId}
+            const res = await fetchWithQueryParamsApi(apiUrl, params, options)
 
             if(res.status === 200) {
                 return {error: false, data: []}
@@ -60,15 +59,16 @@ export class ContentApi {
         }
     }
 
-    async updateContentImage(contentId, image) {
+    async updateContentImage(contentId, userId, image) {
         try {
             const formData = new FormData();
             formData.append("image", image, image.name)
-            const res = await fetch(`${this.basePath}/${contentId}/contentImage`, {
-                method: 'PUT',
-                headers: authCheck({}),
-                body: formData
-            })
+
+            const apiUrl = `${this.basePath}/${contentId}/contentImage`
+            const options = {method: 'PUT', headers: authCheck({}), body: formData}
+            const params = {userId: userId}
+            const res = await fetchWithQueryParamsApi(apiUrl, params, options)
+
             if(res.status !== 204) {
                 return {error: false, data: await res.json()}
             } else {
@@ -80,12 +80,13 @@ export class ContentApi {
         }
     }
 
-    async deleteContent(contentId) {
+    async deleteContent(contentId, userId) {
         try {
-            const res = await fetch(`${this.basePath}/${contentId}`, {
-                method: 'DELETE',
-                headers: authCheck({})
-            })
+            const apiUrl = `${this.basePath}/${contentId}`
+            const options = {method: 'DELETE', headers: authCheck({})}
+            const params = {userId: userId}
+            const res = await fetchWithQueryParamsApi(apiUrl, params, options)
+
             if(res.status === 204) {
                 return {error: false, data: []}
             } else {
@@ -96,19 +97,19 @@ export class ContentApi {
         }
     }
 
-    async createContent(contentDetails, image) {
+    async createContent(contentDetails, userId, image) {
         try {
             contentDetails.genre = contentDetails.genre.split(" ")
             const contentDetailsAux = contentDetails
             delete contentDetailsAux.contentPicture
-            const res = await fetch(`${this.basePath}`, {
-                method: 'POST',
-                headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}),
-                body: JSON.stringify(contentDetails)
-            })
+
+            const apiUrl = `${this.basePath}`
+            const options = {method: 'POST', headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}), body: JSON.stringify(contentDetails)}
+            const params = {userId: userId}
+            const res = await fetchWithQueryParamsPostApi(apiUrl, params, options)
             if(res.status === 201) {
-                const contentData = await res.json()
-                await this.updateContentImage(contentData.id, image)
+                const contentData = await res.data
+                await this.updateContentImage(contentData.id, userId, image)
                 return {error: false, data: contentData}
             } else {
                 return {error: true, errorCode: res.status}

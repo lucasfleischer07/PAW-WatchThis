@@ -130,7 +130,7 @@ export default function ContentCreatePage() {
             if(!validateForm()) {
                 return
             }
-            contentService.createContent(contentForm, contentForm.contentPicture)
+            contentService.createContent(contentForm, user.id, contentForm.contentPicture)
                 .then(data => {
                     if(!data.error) {
                         navigate(`/content/${data.data.type}/${data.data.id}`, {replace:true})
@@ -149,7 +149,7 @@ export default function ContentCreatePage() {
             if(!validateFormEdition()) {
                 return
             }
-            contentService.updateContent(contentId, contentForm)
+            contentService.updateContent(contentId, user.id, contentForm)
                 .then(data => {
                     if(!data.error) {
                         navigate(`/content/${contentForm.type}/${contentId}`, {replace:true})
