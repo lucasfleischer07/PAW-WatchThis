@@ -1,5 +1,8 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.services.CommentService;
+import ar.edu.itba.paw.services.ReviewService;
+import ar.edu.itba.paw.webapp.auth.SecurityChecks;
 import ar.edu.itba.paw.webapp.controller.queryParams.GetContentParams;
 import ar.edu.itba.paw.webapp.exceptions.ContentNotFoundException;
 import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
@@ -22,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -45,9 +49,12 @@ import java.util.*;
 public class ContentController {
     @Autowired
     private ContentService cs;
-
     @Autowired
     private UserService us;
+    @Autowired
+    private ReviewService rs;
+    @Autowired
+    private CommentService ccs;
 
     @Context
     UriInfo uriInfo;
@@ -259,10 +266,12 @@ public class ContentController {
                                         @QueryParam("durationTo") @DefaultValue("ANY") final String durationTo,
                                         @QueryParam("sorting") final Sorting sorting,
                                         @QueryParam("query") @DefaultValue("ANY") final String query,
-                                        @QueryParam("genre") final String genre) {
+                                        @QueryParam("genre") final String genre,
+                                        @QueryParam("watchListSavedBy") final Long watchListSavedBy,
+                                        @QueryParam("viewedListSavedBy") final Long viewedListSavedBy) {
 
         LOGGER.info("GET /{}: Called",uriInfo.getPath());
-        PageWrapper<Content> contentListFilter = GetContentParams.getContentByParams(contentType, pageNum, durationFrom, durationTo, sorting, query, genre, cs);
+        PageWrapper<Content> contentListFilter = GetContentParams.getContentByParams(contentType, pageNum, durationFrom, durationTo, sorting, query, genre, watchListSavedBy, viewedListSavedBy, cs, us, new SecurityChecks(us, cs, rs, ccs));
 
         List<Content> contentListFilterPaginated = contentListFilter.getPageContent();
         if(contentListFilterPaginated == null) {
@@ -304,6 +313,87 @@ public class ContentController {
     }
 
     // * ---------------------------------------------------------------------------------------------------------------
+
+
+    // * ----------------------------------- Watchlist and Viewedlist --------------------------------------------------
+    @POST
+    @Path("/{contentId}/watchList")
+    @PreAuthorize("@securityChecks.checkUser(#userId)")
+    public Response addUserWatchList(@QueryParam("userId") final Long userId,
+                                     @PathParam("contentId") final long contentId) {
+        LOGGER.info("POST /{}: Called", uriInfo.getPath());
+        final Content content = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
+        final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
+
+        try {
+            us.addToWatchList(user, content);
+            LOGGER.info("POST /{}: Content {} added successfully", uriInfo.getPath(), contentId);
+        } catch (DuplicateKeyException ignore){
+            LOGGER.warn("POST /{}: DuplicateKeyException, content {} already in watchlist", uriInfo.getPath(), contentId);
+        }
+        return Response.noContent().build();
+    }
+
+    @DELETE
+    @Path("/{contentId}/watchList")
+    @PreAuthorize("@securityChecks.checkUser(#userId)")
+    public Response deleteUserWatchList(@QueryParam("userId") final Long userId,
+                                        @PathParam("contentId") final long contentId) {
+        LOGGER.info("DELETE /{}: Called", uriInfo.getPath());
+
+        final Content content = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
+        final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
+
+        try {
+            us.deleteFromWatchList(user, content);
+            LOGGER.info("DELETE /{}: Content {} deleted successfully", uriInfo.getPath(), contentId);
+        } catch (DuplicateKeyException ignore){
+            LOGGER.warn("DELETE /{}: DuplicateKeyException, content {} already deleted from watchlist", uriInfo.getPath(), contentId);
+        }
+        return Response.noContent().build();
+    }
+
+    @POST
+    @Path("/{contentId}/viewedList")
+    @PreAuthorize("@securityChecks.checkUser(#userId)")
+    public Response addUserViewedList(@QueryParam("userId") final Long userId,
+                                      @PathParam("contentId") final long contentId) {
+        LOGGER.info("POST /{}: Called", uriInfo.getPath());
+
+        final Content content = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
+        final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
+
+        try {
+            us.addToViewedList(user, content);
+            LOGGER.info("POST /{}: Content {} added successfully", uriInfo.getPath(), contentId);
+        } catch (DuplicateKeyException ignore){
+            LOGGER.warn("POST /{}: DuplicateKeyException, content {} already in viewedlist", uriInfo.getPath(), contentId);
+        }
+        return Response.noContent().build();
+    }
+
+    @DELETE
+    @Path("/{contentId}/viewedList")
+    @PreAuthorize("@securityChecks.checkUser(#userId)")
+    public Response deleteUserViewedList(@QueryParam("userId") final Long userId,
+                                         @PathParam("contentId") final long contentId) {
+        LOGGER.info("DELETE /{}: Called", uriInfo.getPath());
+
+        final Content content = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
+        final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
+
+        try {
+            us.deleteFromViewedList(user, content);
+            LOGGER.info("DELETE /{}: Content {} deleted successfully", uriInfo.getPath(), contentId);
+        } catch (DuplicateKeyException ignore){
+            LOGGER.warn("DELETE /{}: DuplicateKeyException, content {} already deleted from viewedlist", uriInfo.getPath(), contentId);
+        }
+        return Response.noContent().build();
+    }
+
+
+    // * ---------------------------------------------------------------------------------------------------------------
+
 
 
 }

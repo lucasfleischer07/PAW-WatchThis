@@ -113,7 +113,7 @@ export default function InfoPage() {
 
     const handleAddToWatchList = (e) => {
         e.preventDefault();
-        listsService.addUserWatchList(parseInt(contentId))
+        contentService.addUserWatchList(parseInt(contentId), parseInt(user.id))
             .then(data => {
                 if(!data.error) {
                     setIsInWatchList(true);
@@ -132,7 +132,7 @@ export default function InfoPage() {
     }
     const handleDeleteFromWatchList = (e) => {
         e.preventDefault()
-        listsService.deleteUserWatchList(parseInt(contentId))
+        contentService.addUserWatchList(parseInt(contentId), parseInt(user.id))
             .then(data => {
                 if(!data.error) {
                     setIsInWatchList(false);
@@ -151,7 +151,7 @@ export default function InfoPage() {
     }
     const handleAddToViewedList = (e) => {
         e.preventDefault();
-        listsService.addUserViewedList(parseInt(contentId))
+        contentService.addUserViewedList(parseInt(contentId), parseInt(user.id))
             .then(data => {
                 if(!data.error) {
                     setIsInViewedList(true);
@@ -170,7 +170,7 @@ export default function InfoPage() {
     }
     const handleDeleteFromViewedList = (e) => {
         e.preventDefault();
-        listsService.deleteUserViewedList(parseInt(contentId))
+        contentService.deleteUserViewedList(parseInt(contentId), parseInt(user.id))
             .then(data => {
                 if(!data.error) {
                     setIsInViewedList(false);

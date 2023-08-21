@@ -5,7 +5,7 @@ import {AuthContext} from "../context/AuthContext";
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import Header from "./components/Header";
 import ExpiredCookieModal from "./components/ExpiredCookieModal";
-import {listsService} from "../services";
+import {contentService, listsService} from "../services";
 import {updateUrlVariable} from "../scripts/validateParam";
 import {checkIsNumber} from "../scripts/filtersValidations";
 
@@ -52,7 +52,7 @@ export default function WatchListPage(props) {
 
     const getUserWatchList = () => {
         if(isLogged()) {
-            listsService.getUserWatchList(user?.id, page)
+            contentService.getContentByType(null, page, null, null, null, null, null, user.id, true)
                 .then(watchList => {
                     if(!watchList.error) {
                         setWatchList(watchList.data)

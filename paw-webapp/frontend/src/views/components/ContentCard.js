@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import {useTranslation} from "react-i18next";
 import {Link, useNavigate} from "react-router-dom";
-import {listsService} from "../../services";
+import {contentService, listsService} from "../../services";
 import {toast} from "react-toastify";
 
 export default function ContentCard(props) {
@@ -23,7 +23,7 @@ export default function ContentCard(props) {
 
     const handleAddToWatchlist = (event) => {
         event.preventDefault();
-        listsService.addUserWatchList(contentId)
+        contentService.addUserWatchList(props.id, parseInt(user.id))
             .then(data => {
                 if(!data.error) {
                     setIsInWatchList(true);
@@ -39,7 +39,7 @@ export default function ContentCard(props) {
 
     const handleRemoveFromWatchlist = (event) => {
         event.preventDefault();
-        listsService.deleteUserWatchList(contentId)
+        contentService.deleteUserWatchList(contentId, parseInt(user.id))
             .then(data => {
                 if(!data.error) {
                     setIsInWatchList(false);

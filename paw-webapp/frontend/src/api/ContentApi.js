@@ -119,21 +119,31 @@ export class ContentApi {
         }
     }
 
-    async getContentByType(contentType, pageNumber, genre, durationFrom, durationTo, sorting, query) {
-        const params = {type: contentType, page: pageNumber}
-        if(genre !== ''){
-            params.genre = genre
+    async getContentByType(contentType, pageNumber, genre, durationFrom, durationTo, sorting, query, userId = null, isWatchList = false) {
+        const params = {}
+        if(isWatchList) {
+            params.watchListSavedBy = userId
+        } else if(!isWatchList && userId != null) {
+            params.viewedListSavedBy = userId
+        } else {
+            if(contentType !== null) {
+                params.type = contentType
+            }
+            if(genre !== ''){
+                params.genre = genre
+            }
+            if(durationFrom !== '' && durationTo !== ''){
+                params.durationFrom = durationFrom
+                params.durationTo = durationTo
+            }
+            if(sorting !== ''){
+                params.sorting = sorting
+            }
+            if(query !== ''){
+                params.query = query
+            }
         }
-        if(durationFrom !== '' && durationTo !== ''){
-            params.durationFrom = durationFrom
-            params.durationTo = durationTo
-        }
-        if(sorting !== ''){
-            params.sorting = sorting
-        }
-        if(query !== ''){
-            params.query = query
-        }
+        params.page = pageNumber
 
         try {
             const apiUrl = `${this.basePath}`
@@ -180,5 +190,73 @@ export class ContentApi {
             return {error: true}
         }
 
+    }
+
+    async addUserWatchList(contentId, userId) {
+        try {
+            const apiUrl = `${this.basePath}/${contentId}/watchList`
+            const options = {method: 'POST', headers: authCheck({}), body: {}}
+            const params = {userId: userId}
+            const res = await fetchWithQueryParamsApi(apiUrl, params, options)
+
+            if(res.status === 204) {
+                return {error: false, data: []}
+            } else {
+                return {error: true, errorCode: res.status}
+            }
+        } catch (e) {
+            return {error: true, errorCode: e.response.status || 500}
+        }
+    }
+
+    async deleteUserWatchList(contentId, userId) {
+        try {
+            const apiUrl = `${this.basePath}/${contentId}/watchList`
+            const options = {method: 'DELETE', headers: authCheck({}), body: {}}
+            const params = {userId: userId}
+            const res = await fetchWithQueryParamsApi(apiUrl, params, options)
+
+            if(res.status === 204) {
+                return {error: false, data: []}
+            } else {
+                return {error: true, errorCode: res.status}
+            }
+        } catch (e) {
+            return {error: true, errorCode: e.response.status || 500}
+        }
+    }
+
+    async addUserViewedList(contentId, userId) {
+        try {
+            const apiUrl = `${this.basePath}/${contentId}/viewedList`
+            const options = {method: 'POST', headers: authCheck({}), body: {}}
+            const params = {userId: userId}
+            const res = await fetchWithQueryParamsApi(apiUrl, params, options)
+
+            if(res.status === 204) {
+                return {error: false, data: []}
+            } else {
+                return {error: true, errorCode: res.status}
+            }
+        } catch (e) {
+            return {error: true, errorCode: e.response.status || 500}
+        }
+    }
+
+    async deleteUserViewedList(contentId, userId) {
+        try {
+            const apiUrl = `${this.basePath}/${contentId}/viewedList`
+            const options = {method: 'DELETE', headers: authCheck({}), body: {}}
+            const params = {userId: userId}
+            const res = await fetchWithQueryParamsApi(apiUrl, params, options)
+
+            if(res.status === 204) {
+                return {error: false, data: []}
+            } else {
+                return {error: true, errorCode: res.status}
+            }
+        } catch (e) {
+            return {error: true, errorCode: e.response.status || 500}
+        }
     }
 }

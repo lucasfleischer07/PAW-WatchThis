@@ -2,7 +2,7 @@ import {useContext, useState} from 'react';
 import {useTranslation} from "react-i18next";
 import {Link, useNavigate} from "react-router-dom";
 import {AuthContext} from "../../context/AuthContext";
-import {listsService} from "../../services";
+import {contentService, listsService} from "../../services";
 import {toast} from "react-toastify";
 
 export default function CarrouselContent(props) {
@@ -11,10 +11,11 @@ export default function CarrouselContent(props) {
     let {isLogged} = useContext(AuthContext)
 
     const [isInWatchList, setIsInWatchList] = useState(props.isInWatchList);
+    const loggedUserId = props.loggedUserId
 
     const handleAddToWatchlist = (event) => {
         event.preventDefault();
-        listsService.addUserWatchList(props.id)
+        contentService.addUserWatchList(props.id, loggedUserId)
             .then(data => {
                 if(!data.error) {
                     setIsInWatchList(true);
@@ -30,7 +31,7 @@ export default function CarrouselContent(props) {
 
     const handleRemoveFromWatchlist = (event) => {
         event.preventDefault();
-        listsService.deleteUserWatchList(props.id)
+        contentService.deleteUserWatchList(props.id, loggedUserId)
             .then(data => {
                 if(!data.error) {
                     setIsInWatchList(false);

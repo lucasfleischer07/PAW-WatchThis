@@ -35,31 +35,34 @@ public class WatchAndViewedListsController {
     private static final Logger LOGGER = LoggerFactory.getLogger(ContentController.class);
 
     // * ------------------------------------------------User Watch List------------------------------------------------
-    // Endpoint para getear la watchlist del ususario
-    @GET
-    @Path("/watchList/{userId}")
-    @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response getUserWatchList(@PathParam("userId") final long userId,
-                                     @QueryParam("pageNumber") @DefaultValue("1") int page) {
-        LOGGER.info("GET /{}: Called", uriInfo.getPath());
 
-        final User user = us.findById(userId).orElseThrow(UserNotFoundException::new);
-        final User user2 = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
+// Endpoint para getear la watchlist del ususario
+//    @GET
+//    @Path("/watchList/{userId}")
+//    @Produces(value = {MediaType.APPLICATION_JSON})
+//    public Response getUserWatchList(@PathParam("userId") final long userId,
+//                                     @QueryParam("pageNumber") @DefaultValue("1") int page) {
+//        LOGGER.info("GET /{}: Called", uriInfo.getPath());
+//
+//        final User user = us.findById(userId).orElseThrow(UserNotFoundException::new);
+//        final User user2 = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
+//
+//        if(user.getId() != user2.getId()) {
+//            LOGGER.warn("GET /{}: Login user {} is different from watchlist owner {}", uriInfo.getPath(), user2.getId(), userId);
+//            throw new ForbiddenException();
+//        }
+//        PageWrapper<Content> watchList = us.getWatchList(user,page,CONTENT_AMOUNT);
+//        Collection<ContentDto> watchListDto = ContentDto.mapContentToContentDto(uriInfo,watchList.getPageContent());
+//        LOGGER.info("GET /{}: Watchlist from user {}", uriInfo.getPath(),userId);
+//
+//        Response.ResponseBuilder response = Response.ok(new GenericEntity<Collection<ContentDto>>(watchListDto){});
+//        ResponseBuildingUtils.setPaginationLinks(response,watchList , uriInfo);
+//        return response.build();
+//
+//    }
 
-        if(user.getId() != user2.getId()) {
-            LOGGER.warn("GET /{}: Login user {} is different from watchlist owner {}", uriInfo.getPath(), user2.getId(), userId);
-            throw new ForbiddenException();
-        }
-        PageWrapper<Content> watchList = us.getWatchList(user,page,CONTENT_AMOUNT);
-        Collection<ContentDto> watchListDto = ContentDto.mapContentToContentDto(uriInfo,watchList.getPageContent());
-        LOGGER.info("GET /{}: Watchlist from user {}", uriInfo.getPath(),userId);
 
-        Response.ResponseBuilder response = Response.ok(new GenericEntity<Collection<ContentDto>>(watchListDto){});
-        ResponseBuildingUtils.setPaginationLinks(response,watchList , uriInfo);
-        return response.build();
-
-    }
-
+//    TODO: Ver que hacer con este endpoint, donde meterlo
     // Endpoint para getear la watchlist del ususario con los ids del contenido
     @GET
     @Path("/watchListContentIds/{userId}")
@@ -83,69 +86,72 @@ public class WatchAndViewedListsController {
 
 
     // Endpoint para agregar a la watchlist del ususario
-    @PUT
-    @Path("/watchList/add/{contentId}")
-    public Response addUserWatchList(@PathParam("contentId") final long contentId) {
-        LOGGER.info("POST /{}: Called", uriInfo.getPath());
-        final Content content = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
-        final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
+//    @PUT
+//    @Path("/watchList/add/{contentId}")
+//    public Response addUserWatchList(@PathParam("contentId") final long contentId) {
+//        LOGGER.info("POST /{}: Called", uriInfo.getPath());
+//        final Content content = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
+//        final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
+//
+//        try {
+//            us.addToWatchList(user, content);
+//            LOGGER.info("POST /{}: Content {} added successfully", uriInfo.getPath(), contentId);
+//        } catch (DuplicateKeyException ignore){
+//            LOGGER.warn("POST /{}: DuplicateKeyException, content {} already in watchlist", uriInfo.getPath(), contentId);
+//        }
+//        return Response.noContent().build();
+//    }
 
-        try {
-            us.addToWatchList(user, content);
-            LOGGER.info("POST /{}: Content {} added successfully", uriInfo.getPath(), contentId);
-        } catch (DuplicateKeyException ignore){
-            LOGGER.warn("POST /{}: DuplicateKeyException, content {} already in watchlist", uriInfo.getPath(), contentId);
-        }
-        return Response.noContent().build();
-    }
 
-
-    @DELETE
-    @Path("/watchList/delete/{contentId}")
-    public Response deleteUserWatchList(@PathParam("contentId") final long contentId) {
-        LOGGER.info("DELETE /{}: Called", uriInfo.getPath());
-
-        final Content content = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
-        final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
-
-        try {
-            us.deleteFromWatchList(user, content);
-            LOGGER.info("DELETE /{}: Content {} deleted successfully", uriInfo.getPath(), contentId);
-        } catch (DuplicateKeyException ignore){
-            LOGGER.warn("POST /{}: DuplicateKeyException, content {} already deleted from watchlist", uriInfo.getPath(), contentId);
-        }
-        return Response.noContent().build();
-    }
+//    @DELETE
+//    @Path("/watchList/delete/{contentId}")
+//    public Response deleteUserWatchList(@PathParam("contentId") final long contentId) {
+//        LOGGER.info("DELETE /{}: Called", uriInfo.getPath());
+//
+//        final Content content = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
+//        final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
+//
+//        try {
+//            us.deleteFromWatchList(user, content);
+//            LOGGER.info("DELETE /{}: Content {} deleted successfully", uriInfo.getPath(), contentId);
+//        } catch (DuplicateKeyException ignore){
+//            LOGGER.warn("POST /{}: DuplicateKeyException, content {} already deleted from watchlist", uriInfo.getPath(), contentId);
+//        }
+//        return Response.noContent().build();
+//    }
 
     // * ---------------------------------------------------------------------------------------------------------------
 
 
     // * ------------------------------------------------User Viewed List-----------------------------------------------
+
     // Endpoint para getear la viewedlist del ususario
-    @GET
-    @Path("/viewedList/{userId}")
-    @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response getUserViewedList(@PathParam("userId") final long userId,
-                                      @QueryParam("pageNumber") @DefaultValue("1") int page) {
-        LOGGER.info("GET /{}: Called", uriInfo.getPath());
+//    @GET
+//    @Path("/viewedList/{userId}")
+//    @Produces(value = {MediaType.APPLICATION_JSON})
+//    public Response getUserViewedList(@PathParam("userId") final long userId,
+//                                      @QueryParam("pageNumber") @DefaultValue("1") int page) {
+//        LOGGER.info("GET /{}: Called", uriInfo.getPath());
+//
+//        final User user = us.findById(userId).orElseThrow(UserNotFoundException::new);
+//        final User user2 = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
+//
+//        if(user.getId() != user2.getId()) {
+//            LOGGER.warn("GET /{}: Logged user {} is different from viewedlist owner {}", uriInfo.getPath(), user2.getId(), userId);
+//            throw new ForbiddenException();
+//        }
+//        PageWrapper<Content> viewedList = us.getUserViewedList(user,page,CONTENT_AMOUNT);
+//        Collection<ContentDto> viewedListDto = ContentDto.mapContentToContentDto(uriInfo,viewedList.getPageContent());
+//
+//        LOGGER.info("GET /{}: Viewedlist from user {}", uriInfo.getPath(),userId);
+//
+//        Response.ResponseBuilder response = Response.ok(new GenericEntity<Collection<ContentDto>>(viewedListDto){});
+//        ResponseBuildingUtils.setPaginationLinks(response,viewedList , uriInfo);
+//        return response.build();
+//    }
 
-        final User user = us.findById(userId).orElseThrow(UserNotFoundException::new);
-        final User user2 = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
 
-        if(user.getId() != user2.getId()) {
-            LOGGER.warn("GET /{}: Logged user {} is different from viewedlist owner {}", uriInfo.getPath(), user2.getId(), userId);
-            throw new ForbiddenException();
-        }
-        PageWrapper<Content> viewedList = us.getUserViewedList(user,page,CONTENT_AMOUNT);
-        Collection<ContentDto> viewedListDto = ContentDto.mapContentToContentDto(uriInfo,viewedList.getPageContent());
-
-        LOGGER.info("GET /{}: Viewedlist from user {}", uriInfo.getPath(),userId);
-
-        Response.ResponseBuilder response = Response.ok(new GenericEntity<Collection<ContentDto>>(viewedListDto){});
-        ResponseBuildingUtils.setPaginationLinks(response,viewedList , uriInfo);
-        return response.build();
-    }
-
+//    TODO: Ver que hacer con este endpoint, donde meterlo
     // Endpoint para getear la watchlist del ususario con los ids del contenido
     @GET
     @Path("/viewedListContentIds/{userId}")
@@ -169,40 +175,40 @@ public class WatchAndViewedListsController {
 
 
     // Endpoint para agregar a la viewedlist del ususario
-    @PUT
-    @Path("/viewedList/add/{contentId}")
-    public Response addUserViewedList(@PathParam("contentId") final long contentId) {
-        LOGGER.info("PUT /{}: Called", uriInfo.getPath());
+//    @PUT
+//    @Path("/viewedList/add/{contentId}")
+//    public Response addUserViewedList(@PathParam("contentId") final long contentId) {
+//        LOGGER.info("PUT /{}: Called", uriInfo.getPath());
+//
+//        final Content content = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
+//        final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
+//
+//        try {
+//            us.addToViewedList(user, content);
+//            LOGGER.info("PUT /{}: Content {} added successfully", uriInfo.getPath(), contentId);
+//        } catch (DuplicateKeyException ignore){
+//            LOGGER.warn("PUT /{}: DuplicateKeyException, content {} already in viewedlist", uriInfo.getPath(), contentId);
+//        }
+//        return Response.noContent().build();
+//    }
 
-        final Content content = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
-        final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
 
-        try {
-            us.addToViewedList(user, content);
-            LOGGER.info("PUT /{}: Content {} added successfully", uriInfo.getPath(), contentId);
-        } catch (DuplicateKeyException ignore){
-            LOGGER.warn("PUT /{}: DuplicateKeyException, content {} already in viewedlist", uriInfo.getPath(), contentId);
-        }
-        return Response.noContent().build();
-    }
-
-
-    @DELETE
-    @Path("/viewedList/delete/{contentId}")
-    public Response deleteUserViewedList(@PathParam("contentId") final long contentId) {
-        LOGGER.info("DELETE /{}: Called", uriInfo.getPath());
-
-        final Content content = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
-        final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
-
-        try {
-            us.deleteFromViewedList(user, content);
-            LOGGER.info("DELETE /{}: Content {} deleted successfully", uriInfo.getPath(), contentId);
-        } catch (DuplicateKeyException ignore){
-            LOGGER.warn("POST /{}: DuplicateKeyException, content {} already deleted from viewedlist", uriInfo.getPath(), contentId);
-        }
-        return Response.noContent().build();
-    }
+//    @DELETE
+//    @Path("/viewedList/delete/{contentId}")
+//    public Response deleteUserViewedList(@PathParam("contentId") final long contentId) {
+//        LOGGER.info("DELETE /{}: Called", uriInfo.getPath());
+//
+//        final Content content = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
+//        final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
+//
+//        try {
+//            us.deleteFromViewedList(user, content);
+//            LOGGER.info("DELETE /{}: Content {} deleted successfully", uriInfo.getPath(), contentId);
+//        } catch (DuplicateKeyException ignore){
+//            LOGGER.warn("POST /{}: DuplicateKeyException, content {} already deleted from viewedlist", uriInfo.getPath(), contentId);
+//        }
+//        return Response.noContent().build();
+//    }
 
     // * ---------------------------------------------------------------------------------------------------------------
 }

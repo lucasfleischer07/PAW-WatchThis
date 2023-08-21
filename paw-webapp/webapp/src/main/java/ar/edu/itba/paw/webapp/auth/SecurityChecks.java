@@ -48,7 +48,7 @@ public class SecurityChecks {
         if(userId == loggedUser.getId()) {
             return true;
         } else {
-            throw new ForbiddenException("Users must be logged in");
+            throw new ForbiddenException("Users dont match");
         }
     }
 
@@ -58,7 +58,7 @@ public class SecurityChecks {
         if(checkUser(userId) && Objects.equals(userById.getRole(), "admin")) {
             return true;
         } else {
-            throw new ForbiddenException("User muest be admin");
+            throw new ForbiddenException("User must be admin");
         }
     }
 

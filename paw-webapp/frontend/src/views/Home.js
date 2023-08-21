@@ -105,6 +105,7 @@ export default function Home() {
                                                                     user={user}
                                                                     isInWatchList={userWatchListIds.length > 0 ? userWatchListIds.some(item => item.id === recommendedUserList[internalIndex + externalIndex * 5].id) : false}
                                                                     key={internalIndex}
+                                                                    loggedUserId={user?.id}
                                                                 />
                                                             )
                                                         )}
@@ -147,7 +148,9 @@ export default function Home() {
                                                         image={content.contentPictureUrl}
                                                         user={user}
                                                         isInWatchList={userWatchListIds.length > 0 ? userWatchListIds.some(item => item.id === content.id) : false}
-                                                        key={index}/>
+                                                        key={index}
+                                                        loggedUserId={user?.id}
+                                                    />
                                                 ))}
                                         </div>
                                     </div>
@@ -187,6 +190,7 @@ export default function Home() {
                                                     image={content.contentPictureUrl}
                                                     isInWatchList={userWatchListIds.length > 0 ? userWatchListIds.some(item => item.id === content.id) : false}
                                                     user={user}
+                                                    loggedUserId={user?.id}
                                                 />
                                             ))}
                                     </div>
@@ -225,6 +229,7 @@ export default function Home() {
                                                 image={content.contentPictureUrl}
                                                 isInWatchList={userWatchListIds.length > 0 ? userWatchListIds.some(item => item.id === content.id) : false}
                                                 user={user}
+                                                loggedUserId={user?.id}
                                             />
                                         ))}
                                     </div>
