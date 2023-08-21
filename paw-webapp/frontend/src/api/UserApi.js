@@ -86,7 +86,7 @@ export class UserApi {
             if(res.status === 204) {
                 return {error: false, data: []}
             } else {
-                return {error: false, errorCode: res.status}
+                return {error: true, errorCode: res.status}
             }
         } catch (e) {
             return {error: true, errorCode: e.response.status || 500}

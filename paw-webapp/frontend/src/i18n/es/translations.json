@@ -67,6 +67,7 @@
   "Login.PageInfo": "Inicia sesión en Watch This",
   "Login.WelcomeMessage": "¡Bienvenido devuelta!",
   "Login.WrongEmail": "Email o contraseña son incorrectos",
+  "Login.WrongEmail2": "El email es incorrecto o no existe",
   "Login.Email": "Email",
   "Login.Password": "Contraseña",
   "Login.ForgotPassword": "¿Olvido la contraseña?",

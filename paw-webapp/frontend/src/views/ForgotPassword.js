@@ -67,8 +67,10 @@ export default function ForgotPassword() {
                     </h5>
                     <div className="mb-3 W-input-label-login-info">
                         {error && (
-                            <div className="W-register-errorMsg">
-                                {t('Login.WrongEmail')}
+                            <div className="alert alert-danger d-flex align-items-center" role="alert">
+                                <div className="W-register-errorMsg">
+                                    {t('Login.WrongEmail2')}
+                                </div>
                             </div>
                         )}
                         <label htmlFor="email" className="form-label">

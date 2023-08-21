@@ -11,7 +11,7 @@ Si tiene:
     - Creo que ya esta, habia que cambiar algo en los etags de UserController y ContentController
 - (C) El botón de iniciar sesión tiene el texto en 2 líneas.
 - (P) La api retorna strings vacíos en lugares donde debiera simplemente omitir el atributo (null).
-- (C) El recuperar un usuario inexistente retorna un 404, pero la UI dice que se nos mandó un mail en forma correcta.
+- (L) El recuperar un usuario inexistente retorna un 404, pero la UI dice que se nos mandó un mail en forma correcta.
 - (C) Al buscar el search box pierde su contenido.
     - Lo agregamos nosootros este comentario: Es en la home, por algun motivo se borra lo que el usuario busco de la searchbox
 - (C) No cambian el title de la app al navegar, toda la historia dice “Watch This”

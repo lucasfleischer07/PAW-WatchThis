@@ -68,6 +68,7 @@
   "Login.PageInfo": "Login to Watch This",
   "Login.WelcomeMessage": "Welcome back!!",
   "Login.WrongEmail": "Email or Password are incorrect",
+  "Login.WrongEmail2": "The email is incorrect or does not exist",
   "Login.Email": "Email",
   "Login.Password": "Password",
   "Login.ForgotPassword": "Forgot Password?",
