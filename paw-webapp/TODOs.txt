@@ -14,7 +14,7 @@ Si tiene:
 - (L) El recuperar un usuario inexistente retorna un 404, pero la UI dice que se nos mandó un mail en forma correcta.
 - (C) Al buscar el search box pierde su contenido.
     - Lo agregamos nosootros este comentario: Es en la home, por algun motivo se borra lo que el usuario busco de la searchbox
-- (C) No cambian el title de la app al navegar, toda la historia dice “Watch This”
+- (L) No cambian el title de la app al navegar, toda la historia dice “Watch This”
 - (P) La API expone en forma pública el mail y el rol de los usuarios. Estos son datos sensibles que debieran ser tratados como tales.
 - (P) La API expone junto a una review la cantidad de reportes y el nombre y la razón de 1 reporte (¿el último?), es decir que reportar una review no es privado.
 - (L) El módulo webapp no tiene una dependencia explícita sobre frontend, por lo que el orden de ejecución no está garantizado y se puede generar un war que no contiene los assets de la SPA.
