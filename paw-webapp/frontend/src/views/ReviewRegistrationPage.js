@@ -112,6 +112,10 @@ export default function ReviewRegistrationPage() {
         }
     }, [])
 
+    useEffect(() => {
+        document.title = t('Review.Registration')
+    })
+
 
     return (
         <>

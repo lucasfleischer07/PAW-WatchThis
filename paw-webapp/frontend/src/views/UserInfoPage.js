@@ -167,6 +167,10 @@ export default function UserInfoPage() {
         }
     }, [page])
 
+    useEffect(() => {
+        document.title = t('Profile')
+    })
+
 
     return(
         <>

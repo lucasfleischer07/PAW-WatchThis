@@ -227,7 +227,11 @@ export default function ContentCreatePage() {
     }, [])
 
     useEffect(() => {
-        document.title = t('CreateContent.Message')
+        if(formType === "create") {
+            document.title = t('CreateContent.Message')
+        } else {
+            document.title = t('EditContent.Title')
+        }
     })
 
     const dropdownHandle = (event) => {

@@ -117,7 +117,7 @@ export default function ProfileEditionPage() {
     }, [])
 
     useEffect(() => {
-        document.title = t('Profile')
+        document.title = t('Profile.EditProfile')
     })
 
 

@@ -198,6 +198,7 @@ export default function InfoPage() {
             .then(data => {
                 if(!data.error) {
                     setContent(data.data)
+                    document.title = t('WatchThisMessage') + " - " + data.data.name
                 } else {
                     navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                 }
@@ -299,6 +300,7 @@ export default function InfoPage() {
 
 
     }, [actualPage, reviewsChange])
+
 
     return(
         <>

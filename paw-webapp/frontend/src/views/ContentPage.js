@@ -109,6 +109,16 @@ export default function ContentPage(props) {
         navigate(currentPath + '?' + searchParams.toString());
     }
 
+    useEffect(() => {
+        if(contentType === "movie") {
+            document.title = t('MovieMessage')
+        } else if(contentType === "serie"){
+            document.title = t('SerieMessage')
+        } else {
+            document.title = t('WatchThisMessage')
+        }
+    })
+
     return (
         <div>
             {showExpiredCookiesModal && (

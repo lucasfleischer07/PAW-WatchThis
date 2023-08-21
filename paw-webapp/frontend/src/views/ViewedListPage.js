@@ -103,6 +103,10 @@ export default function ViewedListPage(props) {
         getUserWatchList()
     }, [added, page])
 
+    useEffect(() => {
+        document.title = t('ViewedList.Title')
+    })
+
     return (
         <>
             {showExpiredCookiesModal && (

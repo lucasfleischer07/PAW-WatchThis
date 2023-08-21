@@ -129,6 +129,10 @@ export default function ReviewEditionPage() {
         }
     }, [])
 
+    useEffect(() => {
+        document.title = t('Edit.Review')
+    })
+
 
     return(
         <>

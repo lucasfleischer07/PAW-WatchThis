@@ -149,6 +149,10 @@ export default function ReportedPage() {
 
     }, [filterReason, commentOrReviewDismissedOrDeleted,reportType,paramsSetted,page])
 
+    useEffect(() => {
+        document.title = t('Report.ReportedContent')
+    })
+
 
     return(
         <>
