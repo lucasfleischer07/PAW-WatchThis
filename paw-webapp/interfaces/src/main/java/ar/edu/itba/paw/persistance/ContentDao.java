@@ -21,10 +21,10 @@ public interface ContentDao {
     PageWrapper<Content> getSearchedContentByDuration(String type, int durationFrom, int durationTo, Sorting sort, String queryUser, int page, int pageSize);
     PageWrapper<Content> getSearchedContentByDurationAndGenre(String type, String genre, int durationFrom, int durationTo, Sorting sort, String queryUser, int page, int pageSize);
     PageWrapper<Content> findByType(String type, int page, int pageSize);
-    List<Content> getBestRated();
-    List<Content> getUserRecommended(User user);
-    List<Content> getMostUserSaved();
-    List<Content> getLastAdded();
+    PageWrapper<Content> getBestRated(int page, int pageSize);
+    PageWrapper<Content> getUserRecommended(User user, int page, int pageSize);
+    PageWrapper<Content> getMostUserSaved(int page, int pageSize);
+    PageWrapper<Content> getLastAdded(int page, int pageSize);
     Content contentCreate(String name, String description, String releaseDate, String genre, String creator, Integer duration,String durationString, String type, byte[] contentImage);
     Optional<String> getContentQuote(String language);
     void updateContent(Long id,String name, String description, String releaseDate, String genre, String creator, Integer duration,String durationString, String type);

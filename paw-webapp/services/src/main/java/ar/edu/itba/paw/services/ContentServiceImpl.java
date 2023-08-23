@@ -157,23 +157,23 @@ public class ContentServiceImpl implements ContentService {
     }
 
     @Override
-    public List<Content> getBestRated() {
+    public PageWrapper<Content> getBestRated(int page, int pageSize) {
         return ContentDao.getBestRated();
     }
 
     @Override
-    public List<Content> getUserRecommended(User user) {
+    public PageWrapper<Content> getUserRecommended(User user, int page, int pageSize) {
         return  ContentDao.getUserRecommended(user);
     }
 
     @Override
-    public List<Content> getMostUserSaved() {
+    public PageWrapper<Content> getMostUserSaved(int page, int pageSize) {
         return  ContentDao.getMostUserSaved();
     }
 
 
     @Override
-    public List<Content> getLastAdded() {
+    public PageWrapper<Content> getLastAdded(int page, int pageSize) {
         return ContentDao.getLastAdded();
     }
 

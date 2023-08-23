@@ -136,7 +136,7 @@ public class ContentDaoTest {
 
     @Test
     public void testGetBestRated(){
-        List<Content> contentList=dao.getBestRated();
+        List<Content> contentList=dao.getBestRated(1,CONTENT_AMOUNT).getPageContent();
         assertEquals(1, contentList.size());
         assertEquals(501, contentList.get(0).getId());
     }
@@ -144,7 +144,7 @@ public class ContentDaoTest {
     @Test
     public void testGetUserRecommended(){
         User user= new User(1L,"brandyhuevo","mateoperezrivera@gmail.com","secret",0L,null ,"user");
-        List<Content> contentList=dao.getUserRecommended(user);
+        List<Content> contentList=dao.getUserRecommended(user,1,CONTENT_AMOUNT).getPageContent();
         assertEquals(1,contentList.size());
         assertEquals(2,contentList.get(0).getId());
     }
@@ -152,14 +152,14 @@ public class ContentDaoTest {
 
     @Test
     public void testGetLastAdded(){
-        List<Content> contentList=dao.getLastAdded();
+        List<Content> contentList=dao.getLastAdded(1,CONTENT_AMOUNT).getPageContent();
         assertEquals(6, contentList.size());
         assertEquals(501, contentList.get(0).getId());
     }
 
     @Test
     public void testGetMostUserSaved(){
-        List<Content> contentList=dao.getMostUserSaved();
+        List<Content> contentList=dao.getMostUserSaved(1,CONTENT_AMOUNT).getPageContent();
         assertEquals(3,contentList.size());
     }
 

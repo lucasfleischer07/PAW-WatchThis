@@ -301,7 +301,7 @@ public class ContentJpaDao implements ContentDao{
     }
 
     @Override
-    public List<Content> getBestRated() {
+    public PageWrapper<Content> getBestRated(int page, int pageSize) {
         Query inQuery=em.createNativeQuery("SELECT content.id FROM content LEFT JOIN (SELECT * FROM review AS r2 WHERE r2.rating<>0) AS review ON content.id = review.contentid GROUP BY content.id,content.name,content.description,content.released,content.genre,content.creator,content.duration,content.type,content.durationNum HAVING sum(review.rating)/count(*) >= 3 ORDER BY sum(review.rating)/count(*) DESC,count(*) DESC LIMIT 20 ");
         List<Integer> resulList=inQuery.getResultList();
         List<Long> longList=new ArrayList<>();
@@ -309,12 +309,19 @@ public class ContentJpaDao implements ContentDao{
             longList.add(big.longValue());
         }
         TypedQuery<Content> query= em.createQuery(" FROM Content WHERE id IN ( :resultList ) ORDER BY rating DESC",Content.class);
+        TypedQuery<Content> countQuery = em.createQuery(" FROM Content WHERE id IN ( :resultList ) ORDER BY rating DESC",Content.class);
         query.setParameter("resultList",longList);
-        return query.getResultList();
+        countQuery.setParameter("resultList",longList);
+
+        query.setFirstResult((page - 1) * pageSize);
+        query.setMaxResults(pageSize);
+        long totalContent = PageWrapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
+
+        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList(),countQuery.getResultList().size()) ;
     }
 
     @Override
-    public List<Content> getUserRecommended(User user) {
+    public PageWrapper<Content> getUserRecommended(User user, int page, int pageSize) {
         Query inQuery=em.createNativeQuery("SELECT content.id FROM content LEFT JOIN (SELECT * FROM review AS r2 WHERE r2.rating<>0) AS review ON content.id = review.contentid WHERE content.id IN (SELECT DISTINCT t2.contentid FROM userwatchlist t1 INNER JOIN userwatchlist t2 ON t1.userid = :userid AND t2.userid IN (SELECT userdata.userid FROM userwatchlist t1  INNER JOIN userwatchlist t2 ON (t2.contentid = t1.contentid) INNER JOIN userdata ON userdata.userid = t2.userid INNER JOIN content ON content.id = t1.contentid WHERE t1.userid = :userid AND t2.userid <> :userid GROUP BY userdata.userid) AND t2.contentid NOT IN (SELECT contentid FROM userwatchlist WHERE userid = :userid)) GROUP BY content.id,content.name,content.description,content.released,content.genre,content.creator,content.duration,content.type,content.durationNum LIMIT 20");
         inQuery.setParameter("userid",user.getId());
         List<Integer> resulList=inQuery.getResultList();
@@ -324,15 +331,22 @@ public class ContentJpaDao implements ContentDao{
         }
         if(longList.size()>0){
             TypedQuery<Content> query= em.createQuery(" FROM Content WHERE id IN ( :resultList ) ",Content.class);
+            TypedQuery<Content> countQuery = em.createQuery(" FROM Content WHERE id IN ( :resultList ) ",Content.class);
             query.setParameter("resultList",longList);
-            return query.getResultList();
+            countQuery.setParameter("resultList",longList);
+
+            query.setFirstResult((page - 1) * pageSize);
+            query.setMaxResults(pageSize);
+            long totalContent = PageWrapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
+
+            return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList(),countQuery.getResultList().size()) ;
         }
-        return new ArrayList<Content>();
+        return new PageWrapper<Content>(0,0,0,Collections.emptyList(),0) ;
 
     }
 
     @Override
-    public List<Content> getMostUserSaved() {
+    public PageWrapper<Content> getMostUserSaved(int page, int pageSize) {
         Query inQuery=em.createNativeQuery("SELECT content.id FROM (content JOIN userwatchlist ON content.id = userwatchlist.contentId) GROUP BY content.id, content.image ORDER BY COUNT(*) DESC LIMIT 20");
         List<Integer> resulList=inQuery.getResultList();
         List<Long> longList=new ArrayList<>();
@@ -341,19 +355,29 @@ public class ContentJpaDao implements ContentDao{
         }
         if(longList.size()>0) {
             TypedQuery<Content> query = em.createQuery(" FROM Content WHERE id IN ( :resultList ) ", Content.class);
+            TypedQuery<Content> countQuery = em.createQuery(" FROM Content WHERE id IN ( :resultList ) ", Content.class);
             query.setParameter("resultList", longList);
-            return query.getResultList();
-        }
-        return new ArrayList<Content>();
+            countQuery.setParameter("resultList", longList);
 
+            query.setFirstResult((page - 1) * pageSize);
+            query.setMaxResults(pageSize);
+            long totalContent = PageWrapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
+
+            return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList(),countQuery.getResultList().size()) ;
+        }
+        return new PageWrapper<Content>(0,0,0,Collections.emptyList(),0);
     }
 
     @Override
-    public List<Content> getLastAdded() {
+    public PageWrapper<Content> getLastAdded(int page, int pageSize) {
         TypedQuery<Content> query= em.createQuery(" FROM Content ORDER BY id DESC ",Content.class);
-        query.setMaxResults(20);
-        return query.getResultList();
+        TypedQuery<Content> countQuery = em.createQuery(" FROM Content ORDER BY id DESC ",Content.class);
 
+        query.setFirstResult((page - 1) * pageSize);
+        query.setMaxResults(pageSize);
+        long totalContent = PageWrapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
+
+        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList(),countQuery.getResultList().size()) ;
     }
 
     @Override
