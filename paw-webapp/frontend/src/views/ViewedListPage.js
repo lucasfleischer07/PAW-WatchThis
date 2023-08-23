@@ -54,7 +54,7 @@ export default function ViewedListPage(props) {
 
     const getUserWatchList = () => {
         if(isLogged()) {
-            contentService.getContentByType(null, page, null, null, null, null, null, user.id, true)
+            contentService.getContentByType(null, page, '', '', '', '', '', user.id, true)
                 .then(watchList => {
                     if(!watchList.error) {
                         setWatchList(watchList.data)
@@ -77,7 +77,7 @@ export default function ViewedListPage(props) {
 
     const getUserViewedList = () => {
         if(isLogged()) {
-            contentService.getContentByType(null, page, null, null, null, null, null, user.id, false)
+            contentService.getContentByType(null, page, '', '', '', '', '', user.id, false)
                 .then(watchList => {
                     if(!watchList.error) {
                         setViewedList(watchList.data)

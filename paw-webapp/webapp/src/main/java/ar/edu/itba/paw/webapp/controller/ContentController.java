@@ -63,24 +63,24 @@ public class ContentController {
 
     // * ----------------------------------- Home Page -----------------------------------------------------------------
     // Endpoint para getear el contenido de la home page
-    @GET
-//    TODO: Le meti este landing solo poruqe todavia nose como unificarlo con el de abajo
-    @Path("/landing")
-    @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response getContentByType() {
-        LOGGER.info("GET /{}: Called", uriInfo.getPath());
-        Optional<User> user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
-        List<List<Content>> landingPageContentList;
-        if(!user.isPresent()) {
-            landingPageContentList = cs.getLandingPageContent(null);
-            LOGGER.info("GET /{}: Returning Landing Page Content for user NULL", uriInfo.getPath());
-            return Response.ok(new GenericEntity<AnonymousLandingPageDto>(new AnonymousLandingPageDto(uriInfo, landingPageContentList)){}).build();
-        } else {
-            landingPageContentList = cs.getLandingPageContent(user.get());
-            LOGGER.info("GET /{}: Returning Landing Page Content for userId {}", uriInfo.getPath(), user.get().getId());
-            return Response.ok(new GenericEntity<UserLandingPageDto>(new UserLandingPageDto(uriInfo, landingPageContentList)){}).build();
-        }
-    }
+//    @GET
+////    TODO: Le meti este landing solo poruqe todavia nose como unificarlo con el de abajo
+//    @Path("/landing")
+//    @Produces(value = {MediaType.APPLICATION_JSON})
+//    public Response getContentByType() {
+//        LOGGER.info("GET /{}: Called", uriInfo.getPath());
+//        Optional<User> user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+//        List<List<Content>> landingPageContentList;
+//        if(!user.isPresent()) {
+//            landingPageContentList = cs.getLandingPageContent(null);
+//            LOGGER.info("GET /{}: Returning Landing Page Content for user NULL", uriInfo.getPath());
+//            return Response.ok(new GenericEntity<AnonymousLandingPageDto>(new AnonymousLandingPageDto(uriInfo, landingPageContentList)){}).build();
+//        } else {
+//            landingPageContentList = cs.getLandingPageContent(user.get());
+//            LOGGER.info("GET /{}: Returning Landing Page Content for userId {}", uriInfo.getPath(), user.get().getId());
+//            return Response.ok(new GenericEntity<UserLandingPageDto>(new UserLandingPageDto(uriInfo, landingPageContentList)){}).build();
+//        }
+//    }
 
     // * ---------------------------------------------------------------------------------------------------------------
 

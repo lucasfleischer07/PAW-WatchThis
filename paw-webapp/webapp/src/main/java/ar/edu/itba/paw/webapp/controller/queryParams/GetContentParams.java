@@ -9,6 +9,7 @@ import ar.edu.itba.paw.services.UserService;
 import ar.edu.itba.paw.webapp.auth.SecurityChecks;
 import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
 import ar.edu.itba.paw.webapp.exceptions.UserNotFoundException;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ public class GetContentParams {
                                                           ContentService cs,
                                                           UserService us,
                                                           SecurityChecks securityChecks) {
-//        TODO: Terminar de chequear estos casos de cuando un query param tiene que ser null y otros no
+//        TODO: Terminar de chequear estos casos de cuando un query param tiene que ser null y otros no. Ver si hay que verificar los del contentType de bestRated y eso
         if(watchListSavedBy != null && (contentType != null || !Objects.equals(durationFrom, "ANY") || !Objects.equals(durationTo, "ANY") || sorting != null || !Objects.equals(query, "ANY") || genre != null || viewedListSavedBy != null)) {
             throw new InvalidParameterException("Invalid parameters");
         } else if (viewedListSavedBy != null && (contentType != null || !Objects.equals(durationFrom, "ANY") || !Objects.equals(durationTo, "ANY") || sorting != null || !Objects.equals(query, "ANY") || genre != null || watchListSavedBy != null)) {
@@ -54,8 +55,28 @@ public class GetContentParams {
             return contentListFilter;
         }
 
-        if(!contentType.equals("movie") && !contentType.equals("serie") && !contentType.equals("all")){
+        if(!contentType.equals("movie") && !contentType.equals("serie") && !contentType.equals("all") && !contentType.equals("bestRated") && !contentType.equals("lastAdded") && !contentType.equals("mostSavedContentByUsers") && !contentType.equals("recommendedUser")){
             throw new PageNotFoundException();
+        }
+
+        if((contentType.equals("bestRated") || contentType.equals("lastAdded") || contentType.equals("mostSavedContentByUsers") || contentType.equals("recommendedUser")) && (pageNum > 1)){
+            throw new PageNotFoundException();
+        }
+
+        switch (contentType) {
+            case "bestRated":
+                contentListFilter = cs.getBestRated(pageNum, CONTENT_AMOUNT);
+                return contentListFilter;
+            case "lastAdded":
+                contentListFilter = cs.getLastAdded(pageNum, CONTENT_AMOUNT);
+                return contentListFilter;
+            case "mostSavedContentByUsers":
+                contentListFilter = cs.getMostUserSaved(pageNum, CONTENT_AMOUNT);
+                return contentListFilter;
+            case "recommendedUser":
+//        TODO: HAcer este chequeo de que si es recommended, el usuario debe estar logueado. Creo que asi no esta del todo bien, pero nose si es 100% necesario pasarle el userId para esto
+                contentListFilter = cs.getUserRecommended(us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new), pageNum, CONTENT_AMOUNT);
+                return contentListFilter;
         }
 
         List<String> genreList = Arrays.asList(genre);

@@ -47,36 +47,36 @@ public class ContentServiceImpl implements ContentService {
         return genreFilterDao;
     }
 
-    @Override
-    public List<List<Content>> getLandingPageContent(User user) {
-        List<List<Content>> mainList = new ArrayList<>();
-        List<Content> bestRatedList = getBestRated();
-        List<Content> lastAddedList = getLastAdded();
-        mainList.add(bestRatedList);
-        mainList.add(lastAddedList);
-        if(user == null) {
-            List<Content> mostSavedContentByUsersList = getMostUserSaved();
-            mainList.add(mostSavedContentByUsersList);
-        } else {
-            List<Long> userWatchListContentId = us.getUserWatchListContent(user);
-            if(userWatchListContentId.size() != 0) {
-                List<Content> recommendedUserList = getUserRecommended(user);
-                if (recommendedUserList.size() == 0) {
-                    mainList.add(Collections.emptyList());   // Esta seria la de recommended que esta vacia
-                    List<Content> mostSavedContentByUsersList = getMostUserSaved();
-                    mainList.add(mostSavedContentByUsersList);
-                } else {
-                    mainList.add(recommendedUserList);
-                    mainList.add(Collections.emptyList());   // Esta seria la de most que esta vacia
-                }
-            } else {
-                mainList.add(Collections.emptyList());   // Esta seria la de recommended que esta vacia
-                List<Content> mostSavedContentByUsersList = getMostUserSaved();
-                mainList.add(mostSavedContentByUsersList);
-            }
-        }
-        return mainList;
-    }
+//    @Override
+//    public List<List<Content>> getLandingPageContent(User user) {
+//        List<List<Content>> mainList = new ArrayList<>();
+//        List<Content> bestRatedList = getBestRated();
+//        List<Content> lastAddedList = getLastAdded();
+//        mainList.add(bestRatedList);
+//        mainList.add(lastAddedList);
+//        if(user == null) {
+//            List<Content> mostSavedContentByUsersList = getMostUserSaved();
+//            mainList.add(mostSavedContentByUsersList);
+//        } else {
+//            List<Long> userWatchListContentId = us.getUserWatchListContent(user);
+//            if(userWatchListContentId.size() != 0) {
+//                List<Content> recommendedUserList = getUserRecommended(user);
+//                if (recommendedUserList.size() == 0) {
+//                    mainList.add(Collections.emptyList());   // Esta seria la de recommended que esta vacia
+//                    List<Content> mostSavedContentByUsersList = getMostUserSaved();
+//                    mainList.add(mostSavedContentByUsersList);
+//                } else {
+//                    mainList.add(recommendedUserList);
+//                    mainList.add(Collections.emptyList());   // Esta seria la de most que esta vacia
+//                }
+//            } else {
+//                mainList.add(Collections.emptyList());   // Esta seria la de recommended que esta vacia
+//                List<Content> mostSavedContentByUsersList = getMostUserSaved();
+//                mainList.add(mostSavedContentByUsersList);
+//            }
+//        }
+//        return mainList;
+//    }
 
     @Override
     public PageWrapper<Content> getMasterContent(String type, List<String> genres, String durationFrom, String durationTo, Sorting sort, String queryUser, int page, int pageSize){
@@ -153,28 +153,28 @@ public class ContentServiceImpl implements ContentService {
 
     @Override
     public PageWrapper<Content> getSearchedContentRandom(String query, int page, int pageSize) {
-        return ContentDao.getSearchedContentRandom(query,page,pageSize);
+        return ContentDao.getSearchedContentRandom(query, page, pageSize);
     }
 
     @Override
     public PageWrapper<Content> getBestRated(int page, int pageSize) {
-        return ContentDao.getBestRated();
+        return ContentDao.getBestRated(page, pageSize);
     }
 
     @Override
     public PageWrapper<Content> getUserRecommended(User user, int page, int pageSize) {
-        return  ContentDao.getUserRecommended(user);
+        return  ContentDao.getUserRecommended(user, page, pageSize);
     }
 
     @Override
     public PageWrapper<Content> getMostUserSaved(int page, int pageSize) {
-        return  ContentDao.getMostUserSaved();
+        return  ContentDao.getMostUserSaved(page, pageSize);
     }
 
 
     @Override
     public PageWrapper<Content> getLastAdded(int page, int pageSize) {
-        return ContentDao.getLastAdded();
+        return ContentDao.getLastAdded(page, pageSize);
     }
 
     @Override

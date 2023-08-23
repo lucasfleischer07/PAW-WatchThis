@@ -119,11 +119,11 @@ export class ContentApi {
         }
     }
 
-    async getContentByType(contentType, pageNumber, genre, durationFrom, durationTo, sorting, query, userId = null, isWatchList = false) {
+    async getContentByType(contentType, pageNumber, genre, durationFrom, durationTo, sorting, query, userId = null, isWatchList = false, isHomePage = false) {
         const params = {}
         if(isWatchList) {
             params.watchListSavedBy = userId
-        } else if(!isWatchList && userId != null) {
+        } else if(!isWatchList && userId != null && !isHomePage) {
             params.viewedListSavedBy = userId
         } else {
             if(contentType !== null) {

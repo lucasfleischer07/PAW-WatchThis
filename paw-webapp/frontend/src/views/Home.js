@@ -23,16 +23,20 @@ export default function Home() {
 
 
     useEffect(() => {
-        contentService.getLandingPage()
-            .then(list => {
-                if(!list.error) {
-                    setBestRatedList(list.data.bestRatedList)
-                    setLastAddedList(list.data.lastAddedList)
-                    if(list.data.hasOwnProperty("recommendedUserList") && (list.data.recommendedUserList.length > 0)) {
-                        setRecommendedUserList(list.data.recommendedUserList)
-                    } else {
-                        setMostSavedContentByUsersList(list.data.mostSavedContentByUsersList)
-                    }
+        contentService.getContentByType("bestRated", 1, '', '', '', '', '', user?.id, false, true)
+            .then(data => {
+                if(!data.error) {
+                    setBestRatedList(data.data)
+                }
+            })
+            .catch(() => {
+                navigate("/error", { replace: true, state: {errorCode: 404} })
+            })
+
+        contentService.getContentByType("lastAdded", 1, '', '', '', '', '', user?.id, false, true)
+            .then(data => {
+                if(!data.error) {
+                    setLastAddedList(data.data)
                 }
             })
             .catch(() => {
@@ -40,6 +44,16 @@ export default function Home() {
             })
 
         if(isLogged()) {
+            contentService.getContentByType("recommendedUser", 1, '', '', '', '', '', user.id, false, true)
+                .then(data => {
+                    if(!data.error) {
+                        setRecommendedUserList(data.data)
+                    }
+                })
+                .catch(() => {
+                    navigate("/error", { replace: true, state: {errorCode: 404} })
+                })
+
             listApi.getUserWatchListContentIds(user?.id)
                 .then(watchList => {
                     if(!watchList.error) {
@@ -57,6 +71,16 @@ export default function Home() {
                     navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
         } else {
+            contentService.getContentByType("mostSavedContentByUsers", 1, '', '', '', '', '', null, false, true)
+                .then(data => {
+                    if(!data.error) {
+                        setMostSavedContentByUsersList(data.data)
+                    }
+                })
+                .catch(() => {
+                    navigate("/error", { replace: true, state: {errorCode: 404} })
+                })
+
             setUser(null)
         }
     }, [logOut])
