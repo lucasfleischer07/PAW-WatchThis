@@ -33,6 +33,7 @@ public class GetContentParams {
                                                           UserService us,
                                                           SecurityChecks securityChecks) {
 //        TODO: Terminar de chequear estos casos de cuando un query param tiene que ser null y otros no. Ver si hay que verificar los del contentType de bestRated y eso
+//        TODO: Ver de crear una exception nuestra
         if(watchListSavedBy != null && (contentType != null || !Objects.equals(durationFrom, "ANY") || !Objects.equals(durationTo, "ANY") || sorting != null || !Objects.equals(query, "ANY") || genre != null || viewedListSavedBy != null)) {
             throw new InvalidParameterException("Invalid parameters");
         } else if (viewedListSavedBy != null && (contentType != null || !Objects.equals(durationFrom, "ANY") || !Objects.equals(durationTo, "ANY") || sorting != null || !Objects.equals(query, "ANY") || genre != null || watchListSavedBy != null)) {
@@ -56,11 +57,11 @@ public class GetContentParams {
         }
 
         if(!contentType.equals("movie") && !contentType.equals("serie") && !contentType.equals("all") && !contentType.equals("bestRated") && !contentType.equals("lastAdded") && !contentType.equals("mostSavedContentByUsers") && !contentType.equals("recommendedUser")){
-            throw new PageNotFoundException();
+            throw new InvalidParameterException("Invalid parameters");
         }
 
         if((contentType.equals("bestRated") || contentType.equals("lastAdded") || contentType.equals("mostSavedContentByUsers") || contentType.equals("recommendedUser")) && (pageNum > 1)){
-            throw new PageNotFoundException();
+            throw new InvalidParameterException("Invalid parameters");
         }
 
         switch (contentType) {

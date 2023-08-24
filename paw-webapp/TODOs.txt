@@ -30,6 +30,8 @@ Si tiene:
     - (C) Los verbos en los paths sobreescriben la semántica de los verbos HTTP, por ejemplo PUT /lists/watchList/add/3 agrega un elemento a un watchlist en lugar de sobreescribir el recurso.
     - (C) Se encuentran API calls llamativas, como /api/reviews/2?pageNumber=1&page=1. Parece ser que el párametro real para paginar es pageNumber, pero los headers Link indican que es page.
     - (P) Las entidades no están hipervinculadas, sino que se las embebe. Por ejemplo, reviews embebe el contenido y el user completos. Esto querría decir que al modificar / sobreescribir un contenido, debiera poder sobreescribir la review o el user en la misma operación, pero obviamente no es el caso.
+- (C) Cambiar el endpoint de getUserViewedListContentIds() y el de watchlist para que me lo haga en base de la listas y no de los ids en si
+- (C) Ver las exceptions de de GetContentParams y GetReviewParams
 
 
 COSAS A ARREGLAR QUE SE ROMPIERON CON LOS NUEVOS CAMBIOS:
@@ -37,3 +39,11 @@ COSAS A ARREGLAR QUE SE ROMPIERON CON LOS NUEVOS CAMBIOS:
 - En UserInfoPage no aparece el la cantidad total de reviews del usuario
 - Un usuario puede reportar mas de una vez un comment (le aparece el boton en el front y no deberia). Creo que es porque esta mal el link del DTA de commentReportersUrl
 - El boton de Dismiss Report en ReportedContent anda medio chingado. Muestra el toast pero mal el mensaje y no refresca cada vez que se dissmisea una review
+
+
+PARA PREGUNTAR:
+1. Cual seria el path adecuado para el forgotpassword: /user/password y mandar por queyparam el email
+2. Estaria mal hacer esto: contentListFilter = cs.getUserRecommended(us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new), pageNum, CONTENT_AMOUNT); para getear el recommended o si o si deberia pasarle el id?
+3. Si hacemos funciones para sacar logica del controller, van a un service o pueden ir a un archivo java a parte?
+4. Hacer un endpoint sea /api/user/userEmail o /api/user?userEmail=... que ademas de loguearme, me devuelva el usuario en base al mail que me pasan al loguearse
+5. Para que recursos usar el no-condicional cache, como funciona bien el cahce busting

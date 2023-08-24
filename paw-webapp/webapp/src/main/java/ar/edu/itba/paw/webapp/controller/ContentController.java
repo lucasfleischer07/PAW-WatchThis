@@ -271,6 +271,7 @@ public class ContentController {
                                         @QueryParam("viewedListSavedBy") final Long viewedListSavedBy) {
 
         LOGGER.info("GET /{}: Called",uriInfo.getPath());
+//        TODO: Ver de pasarla a un service
         PageWrapper<Content> contentListFilter = GetContentParams.getContentByParams(contentType, pageNum, durationFrom, durationTo, sorting, query, genre, watchListSavedBy, viewedListSavedBy, cs, us, new SecurityChecks(us, cs, rs, ccs));
 
         List<Content> contentListFilterPaginated = contentListFilter.getPageContent();
