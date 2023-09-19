@@ -61,6 +61,8 @@ public class JwtTokenUtil {
 
         claims.setSubject(user.getEmail());
         claims.put("authorization", user.getRole());
+        claims.put("name",user.getUserName());
+        claims.put("id",user.getId());
         return "Bearer " + Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(new Date(System.currentTimeMillis()))

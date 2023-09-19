@@ -11,9 +11,14 @@ export function AuthProvider ({children}) {
     const navigate = useNavigate()
 
     const signIn = (user, authToken) => {
-        localStorage.setItem("user", JSON.stringify(user))
+        let json={
+            username:user.name,
+            id:user.id,
+            role:user.authorization
+        }
+        localStorage.setItem("user",JSON.stringify(json))
         localStorage.setItem("userAuthToken", authToken)
-        localStorage.setItem("isAdmin", user.role === 'admin' ? "true" : "false")
+        localStorage.setItem("isAdmin", user.authorization === 'admin' ? "true" : "false")
     }
 
     const signOut = () => {

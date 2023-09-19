@@ -1,6 +1,7 @@
 import {APPLICATION_JSON_TYPE, paths} from "../paths";
 import {fetchWithQueryParamsApi} from "./FetchWithQueryParams";
 import {authCheck} from "../scripts/authCheck";
+import jwt from 'jwt-decode';
 export class UserApi {
     constructor() {
         this.basePath = `${paths.BASE_URL_API}${paths.USERS}`
@@ -98,14 +99,14 @@ export class UserApi {
             const loggedUserInfo = email + ":" + password;
             const hash = btoa(loggedUserInfo);
             // TODO: Aca estaba el /loggedUser
-            const res = await fetch(`${this.basePath}`, {
+            const res = await fetch(`${this.basePath}/content?type=all`, {
                 method: 'GET',
                 headers: {
                     Authorization: "Basic " + hash
                 }
             })
             if(res.status !== 204 && res.status !== 401) {
-                return {error: false, data: await res.json(), header: res.headers.get("Authorization")?.toString().split(" ")[1]}
+                return {error: false, data: jwt(res.headers.get("Authorization")?.toString().split(" ")[1]), header: res.headers.get("Authorization")?.toString().split(" ")[1]}
             } else if(res.status === 401) {
                 return {error: true, data: [], errorCode: res.status}
             } else {

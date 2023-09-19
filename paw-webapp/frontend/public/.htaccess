@@ -6,3 +6,10 @@
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule . /index.html [L]
  </IfModule>
+
+ # Set cache max age for static images
+ <IfModule mod_headers.c>
+     <FilesMatch "\.(jpg|jpeg|png|gif|ico|svg)$">
+         Header set Cache-Control "max-age=31536000, public,inmutable"
+     </FilesMatch>
+ </IfModule>
