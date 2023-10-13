@@ -35,17 +35,14 @@ export default function UserInfoPage() {
 
 
     const prevPage = () => {
-        setPage(page - 1)
         changeUrlPage(page - 1)
     }
 
     const nextPage = () => {
-        setPage(page + 1)
         changeUrlPage(page + 1)
     }
 
     const changePage = ( newPage) => {
-        setPage(newPage)
         changeUrlPage(newPage)
     }
 
@@ -81,7 +78,7 @@ export default function UserInfoPage() {
 
     useEffect(() => {
         const queryParams = new URLSearchParams(search);
-        updateUrlVariable(page, (typeof queryParams.get('page') === 'string' ?  checkIsNumber(queryParams.get('page')) : queryParams.get('page')), (x) =>setPage(x))
+        updateUrlVariable(page, checkIsNumber(queryParams.get('page')), (x) =>setPage(x))
     }, [search]);
 
 

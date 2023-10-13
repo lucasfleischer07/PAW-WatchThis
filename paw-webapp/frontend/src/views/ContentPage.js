@@ -82,23 +82,20 @@ export default function ContentPage(props) {
         updateUrlVariable(durationFrom, checkIsFrom(queryParams.get('durationFrom')),(x) => setDurationFrom(x))
         updateUrlVariable(durationTo, checkIsTo(queryParams.get('durationTo')),(x) => setDurationTo(x))
         updateUrlVariable(sorting, checkIsSort(queryParams.get('sorting')),(x) => setSorting(x))
-        updateUrlVariable(actualPage, (typeof queryParams.get('page') === 'string' ?  checkIsNumber(queryParams.get('page')) : queryParams.get('page')), (x) =>setActualPage(x))
+        updateUrlVariable(actualPage, checkIsNumber(queryParams.get('page')), (x) =>setActualPage(x))
         updateUrlVariable(query, queryParams.get('query'), (x) =>setQuery(x))
         isSettedParams(true)
     }, [search]);
 
     const prevPage = () => {
-        setActualPage(actualPage - 1)
         changeUrlPage(actualPage - 1)
     }
 
     const nextPage = () => {
-        setActualPage(actualPage + 1)
         changeUrlPage(actualPage + 1)
     }
 
     const changePage = ( newPage) => {
-        setActualPage(newPage)
         changeUrlPage(newPage)
     }
 

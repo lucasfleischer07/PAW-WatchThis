@@ -26,7 +26,7 @@ function checkIsSort(sortVal){
 }
 
 function checkIsNumber(pageVal){
-    return isNaN(pageVal) ? parseInt(pageVal) : 1
+    return !pageVal ? 1 : (!isNaN(pageVal) ? parseInt(pageVal) : 1)
 }
 
 function checkIsReason(reasonVal){

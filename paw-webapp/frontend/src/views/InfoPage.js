@@ -70,17 +70,14 @@ export default function InfoPage() {
     }
 
     const prevPage = () => {
-        setActualPage(actualPage - 1)
         changeUrlPage(actualPage - 1)
     }
 
     const nextPage = () => {
-        setActualPage(actualPage + 1)
         changeUrlPage(actualPage + 1)
     }
 
     const changePage = ( newPage) => {
-        setActualPage(newPage)
         changeUrlPage(newPage)
     }
 
@@ -210,7 +207,7 @@ export default function InfoPage() {
 
     useEffect(() => {
         const queryParams = new URLSearchParams(search);
-        updateUrlVariable(actualPage,(typeof queryParams.get('page') === 'string' ?  checkIsNumber(queryParams.get('page')) : queryParams.get('page')), (x) =>setActualPage(x))
+        updateUrlVariable(actualPage,checkIsNumber(queryParams.get('page')), (x) =>setActualPage(x))
     }, [search]);
 
 
