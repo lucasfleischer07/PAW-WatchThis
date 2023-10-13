@@ -161,7 +161,9 @@ export default function ReportedContent(props) {
         reviewService.getSpecificReview(reviewUrl)
             .then(reviewData => {
                 if(!reviewData.error) {
-                    setTypeId(reviewData.data.id)
+                    if(reportType !== 'comment') {
+                        setTypeId(reviewData.data.id)
+                    }
                     setReportDescription(reviewData.data.description)
                     setReportsAmount(reviewData.data.reportAmount)
                     userService.getUserInfo(reviewData.data.user)

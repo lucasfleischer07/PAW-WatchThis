@@ -2,7 +2,7 @@ import {APPLICATION_JSON_TYPE, paths} from "../paths";
 import {fetchWithQueryParamsApi} from "./FetchWithQueryParams";
 import {authCheck} from "../scripts/authCheck";
 import {ListsApi} from "./ListsApi";
-import {genericRequest} from "./GenericRequest";
+import {genericFetchWithQueryParams, genericRequest} from "./GenericRequest";
 
 export class ReviewApi {
     constructor() {
@@ -10,32 +10,15 @@ export class ReviewApi {
     }
 
     async getReviews(userId, contentId, pageNumber) {
-        try {
-            const apiUrl = `${this.basePath}`
-            let params
-            if(userId == null) {
-                params = {contentId: contentId, page: pageNumber}
-            } else {
-                params = {userId: userId, page: pageNumber}
-            }
-            const options = {headers: authCheck({})}
-            const res =  await fetchWithQueryParamsApi(apiUrl, params, options)
-
-            if(res.status === 200) {
-                const jsonData = await res.data;
-                const jsonString = JSON.stringify(jsonData);
-                if (jsonString === '{}') {
-                    return {error: false, data: [], totalPages: res.totalPages}
-                } else {
-                    return {error: false, data: await res.data, totalPages: res.totalPages}
-                }
-            } else {
-                return {error: true, errorCode: res.status}
-            }
-        } catch (e) {
-            return {error: true, errorCode: e.response.status || 500}
+        const apiUrl = `${this.basePath}`
+        let params
+        if(userId == null) {
+            params = {contentId: contentId, page: pageNumber}
+        } else {
+            params = {userId: userId, page: pageNumber}
         }
-
+        const options = {method: 'GET', headers: authCheck({})}
+        return genericFetchWithQueryParams(apiUrl, options, params)
     }
 
     async getSpecificReview(review) {
@@ -44,138 +27,58 @@ export class ReviewApi {
     }
 
     async reviewsCreation(userId, contentId, type, reviewDetails) {
-        try {
-            const apiUrl = `${this.basePath}`
-            const params = {userId: userId, contentId: contentId, type: type}
-            const options = {method: 'POST', body: JSON.stringify(reviewDetails), headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}),}
-            const res = await fetchWithQueryParamsApi(apiUrl, params, options)
-            if(res.status === 201) {
-                return {error: false}
-            } else {
-                return {error: true, errorCode: res.status }
-            }
-        } catch (e) {
-            return {error: true, errorCode: e.response.status || 500}
-        }
+        const apiUrl = `${this.basePath}`
+        const params = {userId: userId, contentId: contentId, type: type}
+        const options = {method: 'POST', body: JSON.stringify(reviewDetails), headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}),}
+        return genericFetchWithQueryParams(apiUrl, options, params)
     }
 
     async deleteReview(reviewId, userId) {
-        try {
-            const apiUrl = `${this.basePath}/${reviewId}`
-            const options = {method: 'DELETE', headers: authCheck({})}
-            const params = {userId: userId}
-            const res = await fetchWithQueryParamsApi(apiUrl, params, options)
-
-            if(res.status === 204) {
-                return {error: false, data: []}
-            } else {
-                return {error: true, errorCode: res.status}
-            }
-        } catch (e) {
-            return {error: true, errorCode: e.response.status || 500}
-        }
+        const apiUrl = `${this.basePath}/${reviewId}`
+        const options = {method: 'DELETE', headers: authCheck({})}
+        const params = {userId: userId}
+        return genericFetchWithQueryParams(apiUrl, options, params)
     }
 
     async reviewEdition(reviewId, userId, reviewDetails) {
-        try {
-            const apiUrl = `${this.basePath}/${reviewId}`
-            const options = {method: 'PUT', headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}), body: JSON.stringify(reviewDetails)}
-            const params = {userId: userId}
-            const res = await fetchWithQueryParamsApi(apiUrl, params, options)
-
-            if(res.status === 204) {
-                return {error: false, data: []}
-            } else {
-                return {error: true, data: [], errorCode: res.status}
-            }
-        } catch (e) {
-            return {error: true, errorCode: e.response.status || 500}
-        }
+        const apiUrl = `${this.basePath}/${reviewId}`
+        const options = {method: 'PUT', headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}), body: JSON.stringify(reviewDetails)}
+        const params = {userId: userId}
+        return genericFetchWithQueryParams(apiUrl, options, params)
     }
 
     async reviewThumbUp(reviewId, userId) {
-        try {
-            const apiUrl = `${this.basePath}/${reviewId}/thumbUp`
-            const options = {method: 'PUT', headers: authCheck({}), body: {}}
-            const params = {userId: userId}
-            const res = await fetchWithQueryParamsApi(apiUrl, params, options)
-
-            if(res.status === 204) {
-                return {error: false, data: []}
-            } else {
-                return {error: true, errorCode: res.status}
-            }
-
-        } catch (e) {
-            return {error: true, errorCode: e.response.status || 500}
-        }
+        const apiUrl = `${this.basePath}/${reviewId}/thumbUp`
+        const options = {method: 'PUT', headers: authCheck({}), body: {}}
+        const params = {userId: userId}
+        return genericFetchWithQueryParams(apiUrl, options, params)
     }
 
     async reviewThumbDown(reviewId, userId) {
-        try {
-            const apiUrl = `${this.basePath}/${reviewId}/thumbDown`
-            const options = {method: 'PUT', headers: authCheck({}), body: {}}
-            const params = {userId: userId}
-            const res = await fetchWithQueryParamsApi(apiUrl, params, options)
-
-            if(res.status === 204) {
-                return {error: false, data: []}
-            } else {
-                return {error: true, errorCode: res.status}
-            }
-
-        } catch (e) {
-            return {error: true, errorCode: e.response.status || 500}
-        }
+        const apiUrl = `${this.basePath}/${reviewId}/thumbDown`
+        const options = {method: 'PUT', headers: authCheck({}), body: {}}
+        const params = {userId: userId}
+        return genericFetchWithQueryParams(apiUrl, options, params)
     }
 
     async getReviewReports(userId, filter= '') {
-        try {
-            const apiUrl = `${this.basePath}/reports`
-            const params = {userId: userId, reason: filter}
-            const options = {headers: authCheck({})}
-            const res = await fetchWithQueryParamsApi(apiUrl, params, options)
-            if(res.status === 200) {
-                return {error: false, data: await res.data, totalPages: res.totalPages, totalReviewsReports: res.totalReviewsReports, totalCommentsReports: res.totalCommentsReports}
-            } else {
-                return {error: true, errorCode: res.status}
-            }
-        } catch (e) {
-            return {error: true, errorCode: e.response.status || 500}
-        }
+        const apiUrl = `${this.basePath}/reports`
+        const params = {userId: userId, reason: filter}
+        const options = {method: 'GET', headers: authCheck({})}
+        return genericFetchWithQueryParams(apiUrl, options, params)
     }
 
     async addReviewReport(reviewId, userId, reviewReportReasons) {
-        try {
-            const apiUrl = `${this.basePath}/${reviewId}/reports`
-            const options = {method: 'POST', headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}), body: JSON.stringify(reviewReportReasons)}
-            const params = {userId: userId}
-            const res = await fetchWithQueryParamsApi(apiUrl, params, options)
-
-            if(res.status === 200) {
-                return {error: false, data: []}
-            } else {
-                return {error: true, errorCode: res.status}
-            }
-        } catch (e) {
-            return {error: true, errorCode: e.response.status || 500}
-        }
+        const apiUrl = `${this.basePath}/${reviewId}/reports`
+        const options = {method: 'POST', headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}), body: JSON.stringify(reviewReportReasons)}
+        const params = {userId: userId}
+        return genericFetchWithQueryParams(apiUrl, options, params)
     }
 
     async deleteReviewReport(reviewId, userId) {
-        try {
-            const apiUrl = `${this.basePath}/${reviewId}/reports`
-            const options = {method: 'DELETE', headers: authCheck({})}
-            const params = {userId: userId}
-            const res = await fetchWithQueryParamsApi(apiUrl, params, options)
-
-            if(res.status === 204) {
-                return {error: false, data: []}
-            } else {
-                return {error: true, errorCode: res.status}
-            }
-        } catch (e) {
-            return {error: true, errorCode: e.response.status || 500}
-        }
+        const apiUrl = `${this.basePath}/${reviewId}/reports`
+        const options = {method: 'DELETE', headers: authCheck({})}
+        const params = {userId: userId}
+        return genericFetchWithQueryParams(apiUrl, options, params)
     }
 }

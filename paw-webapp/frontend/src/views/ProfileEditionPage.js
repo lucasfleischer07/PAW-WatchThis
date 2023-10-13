@@ -114,6 +114,12 @@ export default function ProfileEditionPage() {
         if(!isLogged()) {
             navigate("/login", {replace: true})
         }
+        userService.getUserInfo(user.id)
+            .then(data => {
+                if(!data.error) {
+                    setUser(data.data)
+                }
+            })
     }, [])
 
     useEffect(() => {

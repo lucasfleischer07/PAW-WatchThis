@@ -23,8 +23,7 @@ export default function Home() {
 
 
     useEffect(() => {
-        console.log(user)
-        contentService.getContentByType("bestRated", 1, '', '', '', '', '', user?.id, false, true)
+            contentService.getContentByType("bestRated", 1, '', '', '', '', '', user?.id, false, true)
             .then(data => {
                 if(!data.error) {
                     setBestRatedList(data.data)

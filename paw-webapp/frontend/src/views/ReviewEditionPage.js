@@ -77,7 +77,7 @@ export default function ReviewEditionPage() {
             return
         }
 
-        reviewService.reviewEdition(reviewId, user.id, reviewForm)
+        reviewService.reviewEdition(parseInt(reviewId), parseInt(user.id), reviewForm)
             .then(data => {
                 if(!data.error) {
                     navigate(-1)
@@ -96,7 +96,7 @@ export default function ReviewEditionPage() {
 
     useEffect(() => {
         if(isLogged()) {
-            reviewService.getSpecificReview(reviewId)
+            reviewService.getSpecificReview(parseInt(reviewId))
                 .then(data => {
                     if(!data.error) {
                         userService.getUserInfo(data.data.user)

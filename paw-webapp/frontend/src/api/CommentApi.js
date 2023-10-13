@@ -1,7 +1,7 @@
 import {APPLICATION_JSON_TYPE, paths} from "../paths";
 import {fetchWithQueryParamsApi} from "./FetchWithQueryParams";
 import {authCheck} from "../scripts/authCheck";
-import {genericRequest} from "./GenericRequest";
+import {genericFetchWithQueryParams, genericRequest} from "./GenericRequest";
 
 export class CommentApi {
     constructor() {
@@ -9,113 +9,49 @@ export class CommentApi {
     }
 
     async getReviewComments(reviewId) {
-        try {
-            const apiUrl = `${this.basePath}`
-            const options = {headers: authCheck({})}
-            const params = {reviewId: reviewId}
-            const res = await fetchWithQueryParamsApi(apiUrl, params, options)
-
-            // return checkResponse()
-
-            if(res.status === 200) {
-                return {error: false, data: await res.data, totalPages: res.totalPages}
-            } else {
-                return {error: true, errorCode: res.status}
-            }
-        } catch (e) {
-            return {error: true, errorCode: e.response.status || 500}
-        }
-
+        const apiUrl = `${this.basePath}`
+        const options = {method: 'GET', headers: authCheck({})}
+        const params = {reviewId: reviewId}
+        return genericFetchWithQueryParams(apiUrl, options, params)
     }
 
     async getSpecificComment(comment) {
         const options = {method: 'GET', headers: authCheck({})}
         return await genericRequest(this.basePath, comment, options)
-
     }
 
     async createComment(reviewId, userId, commentDetails) {
-        try {
-
-            const apiUrl = `${this.basePath}`
-            const options = {method: 'POST', headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}), body: JSON.stringify(commentDetails)}
-            const params = {userId: userId, reviewId: reviewId}
-            const res = await fetchWithQueryParamsApi(apiUrl, params, options)
-
-            if(res.status === 201) {
-                return {error: false, data: []}
-            } else {
-                return {error: true, errorCode: res.status}
-            }
-        } catch (e) {
-            return {error: true, errorCode: e.response.status || 500}
-        }
-
+        const apiUrl = `${this.basePath}`
+        const options = {method: 'POST', headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}), body: JSON.stringify(commentDetails)}
+        const params = {userId: userId, reviewId: reviewId}
+        return genericFetchWithQueryParams(apiUrl, options, params)
     }
 
     async commentDelete(commentId, userId) {
-        try {
-            const apiUrl = `${this.basePath}/${commentId}`
-            const options = {method: 'DELETE', headers: authCheck({})}
-            const params = {userId: userId}
-            const res = await fetchWithQueryParamsApi(apiUrl, params, options)
-
-            if(res.status === 204) {
-                return {error: false, data: []}
-            } else {
-                return {error: true, errorCode: res.status}
-            }
-        } catch (e) {
-            return {error: true, errorCode: e.response.status || 500}
-        }
+        const apiUrl = `${this.basePath}/${commentId}`
+        const options = {method: 'DELETE', headers: authCheck({})}
+        const params = {userId: userId}
+        return genericFetchWithQueryParams(apiUrl, options, params)
     }
 
     async getCommentsReports(userId, filter= '') {
-        try {
-            const apiUrl = `${this.basePath}/reports`
-            const params = {userId: userId, reason: filter}
-            const options = {headers: authCheck({})}
-            const res = await fetchWithQueryParamsApi(apiUrl, params, options)
-            if(res.status === 200) {
-                return {error: false, data: await res.data, totalPages: res.totalPages, totalReviewsReports: res.totalReviewsReports, totalCommentsReports: res.totalCommentsReports}
-            } else {
-                return {error: true, errorCode: res.status}
-            }
-        } catch (e) {
-            return {error: true, errorCode: e.response.status || 500}
-        }
+        const apiUrl = `${this.basePath}/reports`
+        const params = {userId: userId, reason: filter}
+        const options = {method: 'GET', headers: authCheck({})}
+        return genericFetchWithQueryParams(apiUrl, options, params)
     }
 
     async addCommentReport(userId, commentId, commentReportReasons) {
-        try {
-            const apiUrl = `${this.basePath}/${commentId}/reports`
-            const options = {method: 'POST', headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}), body: JSON.stringify(commentReportReasons)}
-            const params = {userId: userId}
-            const res = await fetchWithQueryParamsApi(apiUrl, params, options)
-            if(res.status === 200) {
-                return {error: false, data: await res.data, totalPages: res.totalPages}
-            } else {
-                return {error: true, errorCode: res.status}
-            }
-        } catch (e) {
-            return {error: true, errorCode: e.response.status || 500}
-        }
+        const apiUrl = `${this.basePath}/${commentId}/reports`
+        const options = {method: 'POST', headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}), body: JSON.stringify(commentReportReasons)}
+        const params = {userId: userId}
+        return genericFetchWithQueryParams(apiUrl, options, params)
     }
 
     async deleteCommentReports(commentId, userId) {
-        try {
-            const apiUrl = `${this.basePath}/${commentId}/reports`
-            const options = {method: 'DELETE', headers: authCheck({})}
-            const params = {userId: userId}
-            const res = await fetchWithQueryParamsApi(apiUrl, params, options)
-
-            if(res.status === 204) {
-                return {error: false, data: []}
-            } else {
-                return {error: true, errorCode: res.status}
-            }
-        } catch (e) {
-            return {error: true, errorCode: e.response.status || 500}
-        }
+        const apiUrl = `${this.basePath}/${commentId}/reports`
+        const options = {method: 'DELETE', headers: authCheck({})}
+        const params = {userId: userId}
+        return genericFetchWithQueryParams(apiUrl, options, params)
     }
 }

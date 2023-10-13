@@ -197,7 +197,7 @@ export default function ContentCreatePage() {
     useEffect(() => {
         if(isLogged() && user.role === 'admin') {
             if(formType === 'edition') {
-                contentService.getSpecificContent(contentId)
+                contentService.getSpecificContent(parseInt(contentId))
                     .then((data) => {
                         if(!data.error) {
                             setContentForm({
