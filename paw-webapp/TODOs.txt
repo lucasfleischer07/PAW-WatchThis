@@ -4,7 +4,7 @@ Si tiene:
     - (P) Se pregunto y estamos esperando la rta
     - (C) Todavia hay que hacerlo
 
-- El hash presentado no se corresponde con la versión presentada en la demo. De hecho, el código ni siquiera compila en el hash entregado. Esto es un error grave
+- (L) El hash presentado no se corresponde con la versión presentada en la demo. De hecho, el código ni siquiera compila en el hash entregado. Esto es un error grave
 - (I) No usan cache no-condicional, pese a ser requerido y el motivo para implementar cache busting. Esto es un error grave
 - (I) Las imágenes estáticas no usan cache-busting. Esto es un error grave
 - (L) Las imágenes en base de datos usan etag, pero cache-control: no-cache.
