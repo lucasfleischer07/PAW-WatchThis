@@ -23,6 +23,7 @@ export default function Home() {
 
 
     useEffect(() => {
+        console.log(user)
         contentService.getContentByType("bestRated", 1, '', '', '', '', '', user?.id, false, true)
             .then(data => {
                 if(!data.error) {
@@ -47,7 +48,19 @@ export default function Home() {
             contentService.getContentByType("recommendedUser", 1, '', '', '', '', '', user.id, false, true)
                 .then(data => {
                     if(!data.error) {
-                        setRecommendedUserList(data.data)
+                        if(data.data.length > 0) {
+                            setRecommendedUserList(data.data)
+                        } else {
+                            contentService.getContentByType("mostSavedContentByUsers", 1, '', '', '', '', '', null, false, true)
+                                .then(data => {
+                                    if(!data.error) {
+                                        setMostSavedContentByUsersList(data.data)
+                                    }
+                                })
+                                .catch(() => {
+                                    navigate("/error", { replace: true, state: {errorCode: 404} })
+                                })
+                        }
                     }
                 })
                 .catch(() => {
@@ -103,7 +116,7 @@ export default function Home() {
             />
 
             <div className="W-carousels-div">
-                {isLogged() && userWatchListIds.length !== 0 && recommendedUserList.length !== 0 ? (
+                {isLogged() && recommendedUserList.length !== 0 ? (
                     <>
                         <h3 className="W-carousel-title">{t('Content.Carousel.RecommendedForYou')}</h3>
                         <div id="carouselRecommended" className="carousel slide" data-ride="carousel">
