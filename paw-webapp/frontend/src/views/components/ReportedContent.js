@@ -162,6 +162,7 @@ export default function ReportedContent(props) {
             .then(reviewData => {
                 if(!reviewData.error) {
                     setTypeId(reviewData.data.id)
+                    setReportDescription(reviewData.data.description)
                     setReportsAmount(reviewData.data.reportAmount)
                     userService.getUserInfo(reviewData.data.user)
                         .then(userData => {
@@ -188,6 +189,7 @@ export default function ReportedContent(props) {
                 .then(commentData => {
                     if(!commentData.error) {
                         setTypeId(commentData.data.commentId)
+                        setReportDescription(commentData.data.text)
                         setReportsAmount(commentData.data.reportAmount)
                         userService.getUserInfo(commentData.data.user)
                             .then(userData => {
@@ -208,7 +210,7 @@ export default function ReportedContent(props) {
                 })
         }
 
-    }, [userUrl])
+    }, [userUrl ,reviewUrl, commentUrl, contentUrl])
 
 
     return(

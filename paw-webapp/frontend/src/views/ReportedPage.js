@@ -147,7 +147,7 @@ export default function ReportedPage() {
             }
         }
 
-    }, [filterReason, commentOrReviewDismissedOrDeleted,reportType,paramsSetted,page])
+    }, [filterReason, commentOrReviewDismissedOrDeleted, reportType, paramsSetted, page])
 
     useEffect(() => {
         document.title = t('Report.ReportedContent')
