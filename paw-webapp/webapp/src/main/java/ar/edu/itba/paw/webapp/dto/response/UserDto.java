@@ -3,7 +3,6 @@ package ar.edu.itba.paw.webapp.dto.response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
-import ar.edu.itba.paw.models.ReviewReport;
 import ar.edu.itba.paw.models.User;
 
 import java.util.Collection;
@@ -18,7 +17,7 @@ public class UserDto {
     private String role;
     private String userWatchListURL;
     private String userViewedListURL;
-    private String userReviews;
+    private String userReviewsUrl;
     private String isLikeReviewsUrl;
     private String isDislikeReviewsUrl;
 
@@ -36,17 +35,17 @@ public class UserDto {
 
 
     public UserDto(UriInfo url, User user) {
-        this.userWatchListURL = url.getBaseUriBuilder().path("lists").path("watchList").path(String.valueOf(user.getId())).build().toString();
-        this.userViewedListURL = url.getBaseUriBuilder().path("lists").path("viewedList").path(String.valueOf(user.getId())).build().toString();
-        this.userReviews = url.getBaseUriBuilder().path("users").path(String.valueOf(user.getId())).path("reviews").build().toString();
         this.email = user.getEmail();
         this.username = user.getUserName();
         this.id = user.getId();
         this.reputation = user.getReputation();
         this.image = user.getImage()!= null ? url.getBaseUriBuilder().path("users").path(String.valueOf(user.getId())).path("profileImage").build().toString():null;
         this.role = user.getRole();
-        this.isLikeReviewsUrl = url.getBaseUriBuilder().path("users").path(String.valueOf(user.getId())).path("reviewsLikedByUser").build().toString();
-        this.isDislikeReviewsUrl = url.getBaseUriBuilder().path("users").path(String.valueOf(user.getId())).path("reviewsDislikedByUser").build().toString();
+        this.userWatchListURL = url.getBaseUriBuilder().path("content").queryParam("watchListSavedBy", user.getId()).build().toString();
+        this.userViewedListURL = url.getBaseUriBuilder().path("content").queryParam("viewedListSavedBy", user.getId()).build().toString();
+        this.userReviewsUrl = url.getBaseUriBuilder().path("reviews").queryParam("userId", user.getId()).build().toString();
+        this.isLikeReviewsUrl = url.getBaseUriBuilder().path("users").path(String.valueOf(user.getId())).path("reviewsLiked").build().toString();
+        this.isDislikeReviewsUrl = url.getBaseUriBuilder().path("users").path(String.valueOf(user.getId())).path("reviewsDisliked").build().toString();
     }
 
     public String getUsername() {
@@ -113,12 +112,12 @@ public class UserDto {
         this.userViewedListURL = userViewedListURL;
     }
 
-    public String getUserReviews() {
-        return userReviews;
+    public String getUserReviewsUrl() {
+        return userReviewsUrl;
     }
 
-    public void setUserReviews(String userReviews) {
-        this.userReviews = userReviews;
+    public void setUserReviewsUrl(String userReviewsUrl) {
+        this.userReviewsUrl = userReviewsUrl;
     }
 
     public String getIsLikeReviewsUrl() {

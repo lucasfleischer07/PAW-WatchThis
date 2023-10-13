@@ -3,7 +3,7 @@ import {useTranslation} from "react-i18next";
 import React, {useEffect, useState} from "react";
 import { Modal, Button } from 'react-bootstrap';
 import Markdown from 'marked-react';
-import {commentService, reportsService, reviewService} from "../../services";
+import {commentService, contentService, reportsService, reviewService, userService} from "../../services";
 import {toast} from "react-toastify";
 import TooltipComponent from "./Tooltip";
 
@@ -14,20 +14,29 @@ export default function ReportedContent(props) {
     const [showModal, setShowModal] = useState(false);
     const [showModalDismiss, setShowModalDismiss] = useState(false);
 
-    const commentUserName = props.commentUserName
-    const commentUserId = props.commentUserId
-    const contentId = props.contentId
-    const contentName = props.contentName
-    const contentType = props.contentType
-    const reportTitle = props.reportTitle
-    const reportDescription = props.reportDescription
-    const reportReasons = props.reportReasons
-    const reportsAmount = props.reportsAmount
-    const typeId = props.typeId
+    const userUrl = props.userUrl
+    const contentUrl = props.contentUrl
+    const reviewUrl = props.reviewUrl
+    const commentUrl = props.commentUrl
+
+    const [commentUserName, setCommentUserName] = useState("");
+    const [commentUserId, setCommentUserId] = useState(-1);
+
+    const [contentId, setContentId] = useState(-1);
+    const [contentName, setContentName] = useState("");
+    const [contentType, setContentType] = useState("");
+
+    const [reportTitle, setReportTitle] = useState("");
+    const [reportDescription, setReportDescription] = useState("");
+    const [reportReasons, setReportReasons] = useState("");
+    const [reportsAmount, setReportsAmount] = useState(-1);
+
+    const [typeId, setTypeId] = useState(-1);
+    const [reviewCreatorUserName, setReviewCreatorUserName] = useState("");
+    const [reviewCreatorUserId, setReviewCreatorUserId] = useState(-1);
+    const [reviewNameOfReportedComment, setReviewNameOfReportedComment] = useState("");
+
     const reportType = props.reportType
-    const reviewCreatorUserName = props.reviewCreatorUserName
-    const reviewCreatorUserId = props.reviewCreatorId
-    const reviewNameOfReportedComment = props.reviewNameOfReportedComment
     const setCommentOrReviewDismissedOrDeleted = props.setCommentOrReviewDismissedOrDeleted
     const loggedUserId = props.loggedUserId
 
@@ -114,6 +123,92 @@ export default function ReportedContent(props) {
                 })
         }
     }
+
+
+    useEffect(() => {
+        userService.getUserInfo(userUrl)
+            .then(userData => {
+                if(!userData.error) {
+                    if(reportType === "comment") {
+                        setCommentUserId(userData.data.id)
+                        setCommentUserName(userData.data.username)
+                    } else {
+                        setReviewCreatorUserId(userData.data.id)
+                        setReviewCreatorUserName(userData.data.username)
+                    }
+                } else {
+                    navigate("/error", { replace: true, state: {errorCode: userData.errorCode} })
+                }
+            })
+            .catch(() => {
+                navigate("/error", { replace: true, state: {errorCode: 404} })
+            })
+
+        contentService.getSpecificContent(contentUrl)
+            .then(contentData => {
+                if(!contentData.error) {
+                    setContentId(contentData.data.id)
+                    setContentName(contentData.data.name)
+                    setContentType(contentData.data.type)
+                } else {
+                    navigate("/error", { replace: true, state: {errorCode: contentData.errorCode} })
+                }
+            })
+            .catch(() => {
+                navigate("/error", { replace: true, state: {errorCode: 404} })
+            })
+
+        reviewService.getSpecificReview(reviewUrl)
+            .then(reviewData => {
+                if(!reviewData.error) {
+                    setTypeId(reviewData.data.id)
+                    setReportsAmount(reviewData.data.reportAmount)
+                    userService.getUserInfo(reviewData.data.user)
+                        .then(userData => {
+                            if(!userData.error) {
+                                setReviewCreatorUserName(userData.data.username)
+                                setReviewCreatorUserId(userData.data.id)
+                            } else {
+                                navigate("/error", { replace: true, state: {errorCode: userData.errorCode} })
+                            }
+                        })
+                    setReportTitle(reviewData.data.name)
+                    setReportReasons(reviewData.data.reportReason)
+                    setReviewNameOfReportedComment(reviewData.data.name)
+                } else {
+                    navigate("/error", { replace: true, state: {errorCode: reviewData.errorCode} })
+                }
+            })
+            .catch(() => {
+                navigate("/error", { replace: true, state: {errorCode: 404} })
+            })
+
+        if(reportType === "comment") {
+            commentService.getSpecificComment(commentUrl)
+                .then(commentData => {
+                    if(!commentData.error) {
+                        setTypeId(commentData.data.commentId)
+                        setReportsAmount(commentData.data.reportAmount)
+                        userService.getUserInfo(commentData.data.user)
+                            .then(userData => {
+                                if(!userData.error) {
+                                    setCommentUserName(userData.data.username)
+                                    setCommentUserId(userData.data.id)
+                                } else {
+                                    navigate("/error", { replace: true, state: {errorCode: userData.errorCode} })
+                                }
+                            })
+
+                    } else {
+                        navigate("/error", { replace: true, state: {errorCode: commentData.errorCode} })
+                    }
+                })
+                .catch(() => {
+                    navigate("/error", { replace: true, state: {errorCode: 404} })
+                })
+        }
+
+    }, [userUrl])
 
 
     return(

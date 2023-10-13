@@ -91,46 +91,44 @@ export default function UserInfoPage() {
                 if(!reviews.error) {
                     setReviews(reviews.data)
                     setTotalReviews(reviews.totalReviews)
-                    if(reviews.data.length === 0) {
-                        userService.getUserInfo(parseInt(userProfileId))
-                             .then((data) => {
-                                 if(!data.error) {
-                                    setReviewOwnerUser(data.data)
-                                     if(user?.role === 'admin' && data.data.role !== 'admin') {
-                                         setCanPromote(true)
-                                     } else {
-                                         setCanPromote(false)
-                                     }
-                                 } else {
-                                     navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
-                                 }
-                             })
-                            .catch(() => {
-                                navigate("/error", { replace: true, state: {errorCode: 404} })
-                            })
-                        setReputation(0)
-                    } else {
-                        setReviewOwnerUser(reviews.data[0].user)
-                        let reputation = 0
-                        for(let i = 0; i < reviews.data.length; i++) {
-                            reputation += reviews.data[i].reputation
-                        }
-                        setReputation(reputation)
 
-                        if(user?.role === 'admin' && reviews.data[0].user.role !== 'admin') {
-                            setCanPromote(true)
-                        } else {
-                            setCanPromote(false)
-                        }
-                    }
-                    setAmountReviews(reviews.totalReviews)
-                    setAmountPages(reviews.totalPages)
+                    userService.getUserInfo(parseInt(userProfileId))
+                        .then((data) => {
+                            if(!data.error) {
+                                setReviewOwnerUser(data.data)
+                                if(reviews.data.length === 0) {
+                                    setReputation(0)
+                                } else {
+                                    let reputation = 0
+                                    for(let i = 0; i < reviews.data.length; i++) {
+                                        reputation += reviews.data[i].reputation
+                                    }
+                                    setReputation(reputation)
+                                }
 
-                    if(user?.id === parseInt(userProfileId)) {
-                        setIsSameUser(true)
-                    } else {
-                        setIsSameUser(false)
-                    }
+                                if(user?.role === 'admin' && data.data.role !== 'admin') {
+                                    setCanPromote(true)
+                                } else {
+                                    setCanPromote(false)
+                                }
+
+                                setAmountReviews(reviews.totalReviews)
+                                setAmountPages(reviews.totalPages)
+
+                                if(user?.id === parseInt(userProfileId)) {
+                                    setIsSameUser(true)
+                                } else {
+                                    setIsSameUser(false)
+                                }
+
+                            } else {
+                                navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                            }
+
+                        })
+                        .catch(() => {
+                            navigate("/error", { replace: true, state: {errorCode: 404} })
+                        })
 
                 } else {
                     navigate("/error", { replace: true, state: {errorCode: reviews.errorCode} })
@@ -265,9 +263,8 @@ export default function UserInfoPage() {
                                                     reviewRating={review.rating}
                                                     reviewId={review.id}
                                                     reviewReputation={review.reputation}
-                                                    reviewUser={review.user.username}
-                                                    reviewUserId={review.user.id}
-                                                    contentId={review.content.id}
+                                                    reviewUserUrl={review.user}
+                                                    contentUrl={review.content}
                                                     contentType={review.type}
                                                     loggedUserName={user?.username}
                                                     loggedUserId={user?.id}

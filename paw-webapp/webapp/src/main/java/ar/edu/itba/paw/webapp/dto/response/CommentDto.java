@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 public class CommentDto {
     private long commentId;
-    private UserDto user;
+    private String user;
     private String text;
     private int reportAmount;
     private String reportReason;
@@ -23,21 +23,18 @@ public class CommentDto {
         return uriInfo.getBaseUriBuilder().path("comments").path(String.valueOf(comment.getReview().getId()));
     }
 
-    public static UriBuilder getCommentReportedUriBuilder(Comment comment, UriInfo uriInfo) {
-        return uriInfo.getBaseUriBuilder().path("reports").path("comment").path(String.valueOf(comment.getCommentId()));
-    }
-
     public CommentDto() {
         // For Jersey
     }
 
     public CommentDto(UriInfo uriInfo, Comment comment) {
-        this.commentReportersUrl = getCommentReportedUriBuilder(comment, uriInfo).toString();
         this.text = comment.getText();
         this.commentId = comment.getCommentId();
-        this.user = new UserDto(uriInfo, comment.getUser());
         this.reportAmount = comment.getReportAmount();
         this.reportReason = comment.getReportReasons();
+        this.commentReportersUrl = uriInfo.getBaseUriBuilder().path("comments").path("reports").build().toString();
+        this.user =  uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(comment.getUser().getId())).build().toString();
+
     }
 
 
@@ -49,11 +46,11 @@ public class CommentDto {
         this.commentId = commentId;
     }
 
-    public UserDto getUser() {
+    public String getUser() {
         return user;
     }
 
-    public void setUser(UserDto user) {
+    public void setUser(String user) {
         this.user = user;
     }
 

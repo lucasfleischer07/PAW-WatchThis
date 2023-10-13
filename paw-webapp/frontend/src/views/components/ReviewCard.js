@@ -4,7 +4,7 @@ import {useTranslation} from "react-i18next";
 import {Button, Modal} from "react-bootstrap";
 import {AuthContext} from "../../context/AuthContext";
 import {Link, useNavigate} from "react-router-dom";
-import {reportsService, reviewService} from "../../services";
+import {contentService, reportsService, reviewService, userService} from "../../services";
 import {toast} from "react-toastify";
 export default function ReviewCard(props) {
     const {t} = useTranslation()
@@ -12,13 +12,14 @@ export default function ReviewCard(props) {
     let {isLogged} = useContext(AuthContext)
 
     const reviewId = props.reviewId
-    const reviewUser = props.reviewUser
     const reviewRating = props.reviewRating
     const reviewTitle = props.reviewTitle
     const ratingStars = [];
     const reviewDescription = props.reviewDescription
     const reviewReputation = props.reviewReputation
-    const reviewUserId = props.reviewUserId
+    const [reviewUser, setReviewUser] = useState("")
+    const [reviewUserId, setReviewUserId] = useState(-1)
+    const reviewUserUrl = props.reviewUserUrl
     const setReviewsChange = props.setReviewsChange
     const loggedUserName = props.loggedUserName
     const loggedUserId = props.loggedUserId
@@ -35,7 +36,8 @@ export default function ReviewCard(props) {
     const seeComments = props.seeComments
 
     const contentType = props.contentType
-    const contentId = props.contentId
+    const contentUrl = props.contentUrl
+    const [contentId, setContentId] = useState(props.contentId)
 
     const [showReportModal, setShowReportModal] = useState(false);
     const [showDeleteReviewModal, setShowDeleteReviewModal] = useState(false);
@@ -120,6 +122,36 @@ export default function ReviewCard(props) {
             })
 
     };
+
+    useEffect(() => {
+        userService.getUserInfo(reviewUserUrl)
+            .then(reviewUserData => {
+                if(!reviewUserData.error) {
+                    setReviewUserId(reviewUserData.data.id)
+                    setReviewUser(reviewUserData.data.username)
+                } else {
+                    navigate("/error", { replace: true, state: {errorCode: reviewUserData.errorCode} })
+                }
+            })
+            .catch(() => {
+                navigate("/error", { replace: true, state: {errorCode: 404} })
+            })
+
+        if(contentId === undefined) {
+            contentService.getSpecificContent(contentUrl)
+                .then(data => {
+                    if(!data.error) {
+                        setContentId(data.data.id)
+                    } else {
+                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                    }
+                })
+                .catch(() => {
+                    navigate("/error", { replace: true, state: {errorCode: 404} })
+                })
+        }
+
+    }, [reviewUserUrl])
 
     return(
         <div className="accordion W-accordion-margin" id={`accordion${reviewId}`}>

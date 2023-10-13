@@ -10,14 +10,14 @@ import java.util.stream.Collectors;
 public class CommentReportDto {
 
     private long id;
-    private UserDto user;
-    private CommentDto comment;
+    private String user;
+    private String comment;
+    private String review;
+    private String content;
     private final String type = "comment";
     private ReportReason reportReason;
-
     private String eliminateComment;
     private String dismissReport;
-    private ReviewDto review;
 
     public static Collection<CommentReportDto> mapCommentReportToCommentReportDto(UriInfo uriInfo, Collection<CommentReport> commentsReported) {
         return commentsReported.stream().map(cr -> new CommentReportDto(uriInfo, cr)).collect(Collectors.toList());
@@ -31,14 +31,19 @@ public class CommentReportDto {
         // For Jersey
     }
 
-    public CommentReportDto(UriInfo url, CommentReport commentReport){
-        this.eliminateComment = url.getBaseUriBuilder().path("comments").path("delete").path(String.valueOf(commentReport.getComment().getCommentId())).build().toString();
-        this.dismissReport = url.getBaseUriBuilder().path("reports").path("deleteReport").path("comment").path(String.valueOf(commentReport.getComment().getReview().getContent().getId())).build().toString();
+    public CommentReportDto(UriInfo uriInfo, CommentReport commentReport){
         this.id = commentReport.getId();
-        this.user = new UserDto(url, commentReport.getUser());
-        this.comment = new CommentDto(url, commentReport.getComment());
         this.reportReason = commentReport.getReportReason();
-        this.review = new ReviewDto(url, commentReport.getComment().getReview());
+        this.user = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(commentReport.getUser().getId())).build().toString();
+        this.review =  uriInfo.getBaseUriBuilder().path("reviews").path(String.valueOf(commentReport.getComment().getReview().getId())).build().toString();
+        this.content =  uriInfo.getBaseUriBuilder().path("content").path(String.valueOf(commentReport.getComment().getReview().getContent().getId())).build().toString();
+
+        // TODO: Testear bien este, puede que este mal
+        this.comment = uriInfo.getBaseUriBuilder().path("comments").path(String.valueOf(commentReport.getComment().getCommentId())).build().toString();
+
+//        TODO: Siento que estas 3 estan al re pedo, para eliminar es el mismo pathe pero cambia el delete y eso
+//        this.eliminateComment = url.getBaseUriBuilder().path("comments").path("delete").path(String.valueOf(commentReport.getComment().getCommentId())).build().toString();
+//        this.dismissReport = url.getBaseUriBuilder().path("reports").path("deleteReport").path("comment").path(String.valueOf(commentReport.getComment().getReview().getContent().getId())).build().toString();
     }
 
     public long getId() {
@@ -49,19 +54,19 @@ public class CommentReportDto {
         this.id = id;
     }
 
-    public UserDto getUser() {
+    public String getUser() {
         return user;
     }
 
-    public void setUser(UserDto user) {
+    public void setUser(String user) {
         this.user = user;
     }
 
-    public CommentDto getComment() {
+    public String getComment() {
         return comment;
     }
 
-    public void setComment(CommentDto comment) {
+    public void setComment(String comment) {
         this.comment = comment;
     }
 
@@ -93,11 +98,19 @@ public class CommentReportDto {
         this.dismissReport = dismissReport;
     }
 
-    public ReviewDto getReview() {
+    public String getReview() {
         return review;
     }
 
-    public void setReview(ReviewDto review) {
+    public void setReview(String review) {
         this.review = review;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }

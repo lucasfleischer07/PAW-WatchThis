@@ -43,10 +43,7 @@ public class ContentDto {
     }
 
     public ContentDto(UriInfo url, Content content) {
-        this.myUrl = url.getBaseUriBuilder().path("content").path("specificContent").path(String.valueOf(content.getId())).build().toString();
-        this.reviewsUrl = url.getBaseUriBuilder().path("reviews").path(String.valueOf(content.getId())).build().toString();
-        this.contentReviewers = url.getBaseUriBuilder().path("content").path(String.valueOf(content.getId())).path("reviewers").build().toString();
-
+        this.myUrl = url.getBaseUriBuilder().path("content").path(String.valueOf(content.getId())).build().toString();
         this.id = content.getId();
         this.name = content.getName();
         this.description = content.getDescription();
@@ -59,6 +56,9 @@ public class ContentDto {
         this.rating = content.getRating();
         this.durationNum = content.getDurationNum();
         this.contentPictureUrl = url.getBaseUriBuilder().path("content").path(String.valueOf(content.getId())).path("contentImage").build().toString();
+        this.reviewsUrl = url.getBaseUriBuilder().path("reviews").queryParam("contentId", content.getId()).build().toString();
+//        TODO: Creo que esta de mas, yo las sacaria
+//        this.contentReviewers = url.getBaseUriBuilder().path("content").path(String.valueOf(content.getId())).path("reviewers").build().toString();
     }
 
     public Long getId() {

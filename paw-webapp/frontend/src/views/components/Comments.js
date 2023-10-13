@@ -1,9 +1,9 @@
 import {Link, useNavigate} from "react-router-dom";
 import {useTranslation} from "react-i18next";
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Button, Modal} from "react-bootstrap";
 import {AuthContext} from "../../context/AuthContext";
-import {commentService, reportsService} from "../../services";
+import {commentService, reportsService, userService} from "../../services";
 import {toast} from "react-toastify";
 import TooltipComponent from './Tooltip';
 
@@ -19,9 +19,13 @@ export default function Comments(props) {
 
     const commentId = props.commentId
     const commentText = props.commentText
-    const userCreatorId = props.userCreatorId
-    const userCreatorImage = props.userCreatorImage
-    const userCreatorUsername = props.userCreatorUsername
+
+    const userCreatorUrl = props.userCreatorUrl
+    const [userCreatorId, setUserCreatorId] = useState(-1)
+    const [userCreatorImage, setUserCreatorImage] = useState("")
+    const [userCreatorUsername, setUserCreatorUsername] = useState("")
+
+
     const [alreadyReport, setAlreadyReport] = useState(props.alreadyReport)
     const [loggedUserIsAdmin,setIsAdmin] = useState(props.loggedUserIsAdmin);
 
@@ -94,6 +98,24 @@ export default function Comments(props) {
             return {...prev, [name]: value}
         })
     }
+
+
+    useEffect(() => {
+        userService.getUserInfo(userCreatorUrl)
+            .then(userCreatorData => {
+                if(!userCreatorData.error) {
+                    setUserCreatorId(userCreatorData.data.id)
+                    setUserCreatorUsername(userCreatorData.data.username)
+                    setUserCreatorImage(userCreatorData.data.image)
+                } else {
+                    navigate("/error", { replace: true, state: {errorCode: userCreatorData.errorCode} })
+                }
+            })
+            .catch(() => {
+                navigate("/error", { replace: true, state: {errorCode: 404} })
+            })
+    }, [userCreatorUrl])
+
 
     return(
             <div className="card W-comment-general-card">

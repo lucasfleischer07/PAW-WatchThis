@@ -261,20 +261,12 @@ export default function ReportedPage() {
                         <Tab eventKey="one" title={t('Content.Review')} >
                             {reportedReviewsList.length > 0 ? (
                                 <>
-                                    {reportedReviewsList.map((content) => (
+                                    {reportedReviewsList.map((reportReview) => (
                                             <ReportedContent
-                                                key={`reportedContent${content.id}`}
-                                                reviewCreatorUserName={content.review.user.username}
-                                                reviewCreatorId={content.review.user.id}
-                                                contentId={content.review.content.id}
-                                                contentName={content.review.content.name}
-                                                contentType={content.review.content.type}
-                                                reportTitle={content.review.name}
-                                                reportDescription={content.review.description}
-                                                reportReasons={content.review.reportReason}
-                                                reportsAmount={content.review.reportAmount}
-                                                typeId={content.review.id}
-                                                reviewNameOfReportedComment={content.review.name}
+                                                key={`reportedContent${reportReview.id}`}
+                                                userUrl={reportReview.user}
+                                                contentUrl={reportReview.content}
+                                                reviewUrl={reportReview.review}
                                                 setCommentOrReviewDismissedOrDeleted={setCommentOrReviewDismissedOrDeleted}
                                                 reportType="review"
                                                 loggedUserId = {user.id}
@@ -299,21 +291,12 @@ export default function ReportedPage() {
                         <Tab eventKey="two" title={t('Comments.Title')}>
                             {reportedCommentsList.length > 0 ? (
                                 <>
-                                    {reportedCommentsList.map((content) => (
+                                    {reportedCommentsList.map((reportComment) => (
                                         <ReportedContent
-                                            commentUserName={content.comment.user.username}
-                                            commentUserId={content.comment.user.id}
-                                            contentId={content.review.content?.id}
-                                            contentName={content.review.content.name}
-                                            contentType={content.review.content.type}
-                                            reportTitle={content.review.name}
-                                            reportDescription={content.comment.text}
-                                            reportReasons={content.comment.reportReason}
-                                            reportsAmount={content.comment.reportAmount}
-                                            typeId={content.comment.commentId}
-                                            reviewCreatorUserName={content.review.user.username}
-                                            reviewCreatorId={content.review.user.id}
-                                            reviewNameOfReportedComment={content.review.name}
+                                            userUrl={reportComment.user}
+                                            commentUrl={reportComment.comment}
+                                            contentUrl={reportComment.content}
+                                            reviewUrl={reportComment.review}
                                             setCommentOrReviewDismissedOrDeleted={setCommentOrReviewDismissedOrDeleted}
                                             reportType="comment"
                                             loggedUserId = {user.id}

@@ -24,12 +24,20 @@ export class UserApi {
         }
     }
 
-    async getUserInfo(userId) {
+    async getUserInfo(user) {
         try {
-            const res = await fetch(`${this.basePath}/${userId}`, {
+            let url
+            if(typeof user === 'number') {
+                url = `${this.basePath}/${user}`
+            } else {
+                url = user
+            }
+
+            const res = await fetch(`${url}`, {
                 method: 'GET',
                 headers: authCheck({})
             })
+
             if(res.status === 200) {
                 return {error: false, data: await res.json()}
             } else {

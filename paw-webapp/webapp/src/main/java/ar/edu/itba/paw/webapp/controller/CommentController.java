@@ -54,6 +54,17 @@ public class CommentController {
         return Response.ok(new GenericEntity<Collection<CommentDto>>(commentListDto){}).build();
     }
 
+    @GET
+    @Path("/{commentId}")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response getComment(@PathParam("commentId") final Long commentId) {
+        LOGGER.info("GET /{}: Called", uriInfo.getPath());
+        Comment comment = ccs.getComment(commentId).orElseThrow(CommentNotFoundException::new);
+        CommentDto commentDto = new CommentDto(uriInfo, comment);
+        LOGGER.info("GET /{}: Comments got with id {}", uriInfo.getPath(), commentId);
+        return Response.ok(commentDto).build();
+    }
+
 
     // * ---------------------------------------------Comment GET ------------------------------------------------------
     //Endpoint para pedir los comentarios de una review

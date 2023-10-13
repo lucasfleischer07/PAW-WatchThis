@@ -16,9 +16,16 @@ export class ContentApi {
         return {error: false, data: await res.json()}
     }
 
-    async getSpecificContent(contentId) {
+    async getSpecificContent(content) {
         try {
-            const res = await fetch(`${this.basePath}/${contentId}`, {
+            let url
+            if(typeof content === 'number') {
+                url = `${this.basePath}/${content}`
+            } else {
+                url = content
+            }
+
+            const res = await fetch(`${url}`, {
                 method: 'GET',
                 headers: authCheck({})
             })

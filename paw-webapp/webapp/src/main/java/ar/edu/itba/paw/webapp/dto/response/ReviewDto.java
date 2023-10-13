@@ -16,8 +16,8 @@ public class ReviewDto {
     private Integer rating;
     private Integer reputation;
     private String type;
-    private UserDto user;
-    private ContentDto content;
+    private String user;
+    private String content;
     private String commentUrl;
     private String reviewReporters;
     private String reportReason;
@@ -37,18 +37,22 @@ public class ReviewDto {
     }
 
     public ReviewDto(UriInfo uriInfo, Review review) {
-        this.commentUrl = uriInfo.getBaseUriBuilder().path("comments").path(String.valueOf(review.getId())).build().toString();
-        this.reviewReporters = review.getReporterUsernames();
         this.id = review.getId();
         this.name = review.getName();
         this.description = review.getDescription();
         this.rating = review.getRating();
         this.reputation = review.getReputation();
         this.type = review.getType();
-        this.user = new UserDto(uriInfo, review.getUser());
-        this.content = new ContentDto(uriInfo, review.getContent());
         this.reportAmount = review.getReportAmount();
         this.reportReason = review.getReportReasons();
+        this.reviewReporters = review.getReporterUsernames();
+
+        this.user =  uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(review.getUser().getId())).build().toString();
+        this.content = uriInfo.getBaseUriBuilder().path("content").path(String.valueOf(review.getContent().getId())).build().toString();
+        this.commentUrl = uriInfo.getBaseUriBuilder().path("comments").queryParam("reviewId", review.getId()).build().toString();
+//        Lo que estaha antes
+//        this.user = new UserDto(uriInfo, review.getUser());
+//        this.content = new ContentDto(uriInfo, review.getContent());
 
     }
 
@@ -100,11 +104,11 @@ public class ReviewDto {
         this.type = type;
     }
 
-    public UserDto getUser() {
+    public String getUser() {
         return user;
     }
 
-    public void setUser(UserDto user) {
+    public void setUser(String user) {
         this.user = user;
     }
 
@@ -124,11 +128,11 @@ public class ReviewDto {
         this.reviewReporters = reviewReporters;
     }
 
-    public ContentDto getContent() {
+    public String getContent() {
         return content;
     }
 
-    public void setContent(ContentDto content) {
+    public void setContent(String content) {
         this.content = content;
     }
 

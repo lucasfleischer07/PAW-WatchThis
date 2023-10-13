@@ -25,6 +25,31 @@ export class CommentApi {
 
     }
 
+    async getSpecificComment(comment) {
+        try {
+            let url
+            console.log(comment)
+            if(typeof comment === 'number') {
+                url = `${this.basePath}/${comment}`
+            } else {
+                url = comment
+            }
+
+            const res = await fetch(`${url}`, {
+                method: 'GET',
+                headers: authCheck({})
+            })
+            if(res.status === 200) {
+                return {error: false, data: await res.json()}
+            } else {
+                return {error: true, errorCode: res.status}
+            }
+        } catch (e) {
+            return {error: true, errorCode: e.response.status || 500}
+        }
+
+    }
+
     async createComment(reviewId, userId, commentDetails) {
         try {
 

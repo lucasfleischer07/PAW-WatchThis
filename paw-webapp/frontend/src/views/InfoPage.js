@@ -558,8 +558,7 @@ export default function InfoPage() {
                                                 reviewRating={review.rating}
                                                 reviewId={review.id}
                                                 reviewReputation={review.reputation}
-                                                reviewUser={review.user.username}
-                                                reviewUserId={review.user.id}
+                                                reviewUserUrl={review.user}
                                                 contentId={content.id}
                                                 contentType={review.type}
                                                 loggedUserName={user?.username}

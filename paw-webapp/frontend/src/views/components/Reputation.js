@@ -305,10 +305,7 @@ export default function Reputation(props) {
                             key ={`comment ${comment.id}`}
                             commentId={comment.commentId}
                             commentText={comment.text}
-                            userCreatorId={comment.user.id}
-                            userCreatorImage={comment.user.image}
-                            userCreatorRole={comment.user.role}
-                            userCreatorUsername={comment.user.username}
+                            userCreatorUrl={comment.user}
                             loggedUserIsAdmin={props.loggedUserIsAdmin}
                             loggedUserId={props.loggedUserId}
                             loggedUserName={props.loggedUserName}

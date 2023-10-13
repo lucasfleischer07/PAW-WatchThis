@@ -12,8 +12,9 @@ import java.util.stream.Collectors;
 public class ReviewReportDto {
 
     private long id;
-    private UserDto user;
-    private ReviewDto review;
+    private String user;
+    private String review;
+    private String content;
     private final String type="comment";
     private ReportReason reportReason;
 
@@ -29,13 +30,12 @@ public class ReviewReportDto {
         // For Jersey
     }
 
-    public ReviewReportDto(UriInfo url, ReviewReport reviewReport){
-        this.eliminateReview = url.getBaseUriBuilder().path("reviews").path("delete").path(String.valueOf(reviewReport.getReview().getId())).build().toString();
-        this.dismissReport = url.getBaseUriBuilder().path("reports").path("deleteReport").path("review").path(String.valueOf(reviewReport.getReview().getContent().getId())).build().toString();
+    public ReviewReportDto(UriInfo uriInfo, ReviewReport reviewReport){
         this.id = reviewReport.getId();
-        this.user = new UserDto(url,reviewReport.getUser());
-        this.review = new ReviewDto(url,reviewReport.getReview());
         this.reportReason = reviewReport.getReportReason();
+        this.user = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(reviewReport.getUser().getId())).build().toString();
+        this.review =  uriInfo.getBaseUriBuilder().path("reviews").path(String.valueOf(reviewReport.getReview().getId())).build().toString();
+        this.content =  uriInfo.getBaseUriBuilder().path("content").path(String.valueOf(reviewReport.getReview().getContent().getId())).build().toString();
     }
 
     public long getId() {
@@ -46,19 +46,19 @@ public class ReviewReportDto {
         this.id = id;
     }
 
-    public UserDto getUser() {
+    public String getUser() {
         return user;
     }
 
-    public void setUser(UserDto user) {
+    public void setUser(String user) {
         this.user = user;
     }
 
-    public ReviewDto getReview() {
+    public String getReview() {
         return review;
     }
 
-    public void setReview(ReviewDto review) {
+    public void setReview(String review) {
         this.review = review;
     }
 
@@ -88,5 +88,13 @@ public class ReviewReportDto {
 
     public void setDismissReport(String dismissReport) {
         this.dismissReport = dismissReport;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }

@@ -36,9 +36,16 @@ export class ReviewApi {
 
     }
 
-    async getSpecificReview(reviewId) {
+    async getSpecificReview(review) {
         try {
-            const res = await fetch(`${this.basePath}/${reviewId}`, {
+            let url
+            if(typeof review === 'number') {
+                url = `${this.basePath}/${review}`
+            } else {
+                url = review
+            }
+
+            const res = await fetch(`${url}`, {
                 method: 'GET',
                 headers: authCheck({})
             })
@@ -48,6 +55,7 @@ export class ReviewApi {
                 return {error: true, errorCode: res.status}
             }
         } catch (e) {
+            console.log("Entre aca 2")
             return {error: true, errorCode: e.response.status || 500}
         }
 

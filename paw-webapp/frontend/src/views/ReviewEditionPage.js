@@ -2,7 +2,7 @@ import {useTranslation} from "react-i18next";
 import {Link, useLocation, useNavigate, useParams} from "react-router-dom";
 import React, {useContext, useEffect, useState} from "react";
 import {AuthContext} from "../context/AuthContext";
-import {contentService, reviewService} from "../services";
+import {contentService, reviewService, userService} from "../services";
 import Header from "./components/Header";
 import ExpiredCookieModal from "./components/ExpiredCookieModal";
 
@@ -98,13 +98,23 @@ export default function ReviewEditionPage() {
         if(isLogged()) {
             reviewService.getSpecificReview(reviewId)
                 .then(data => {
-                    if(!data.error && (user.id === data.data.user.id)) {
-                        setReviewForm({
-                            name: data.data.name,
-                            description: data.data.description,
-                            rating: data.data.rating,
-                            type: data.data.type
-                        })
+                    if(!data.error) {
+                        userService.getUserInfo(data.data.user)
+                            .then(userData => {
+                                if(!userData.error && (userData.data.id === user.id)) {
+                                    setReviewForm({
+                                        name: data.data.name,
+                                        description: data.data.description,
+                                        rating: data.data.rating,
+                                        type: data.data.type
+                                    })
+                                } else {
+                                    navigate("/error", { replace: true, state: {errorCode: userData.errorCode} })
+                                }
+                            })
+                            .catch(() => {
+                                navigate("/error", { replace: true, state: {errorCode: 404} })
+                            })
                     } else {
                         navigate("/error", { replace: true, state: {errorCode: data.errorCode || 500} })
                     }
