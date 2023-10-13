@@ -2,6 +2,7 @@ import {APPLICATION_JSON_TYPE, paths} from "../paths";
 import {fetchWithQueryParamsApi} from "./FetchWithQueryParams";
 import {authCheck} from "../scripts/authCheck";
 import {ListsApi} from "./ListsApi";
+import {genericRequest} from "./GenericRequest";
 
 export class ReviewApi {
     constructor() {
@@ -19,6 +20,7 @@ export class ReviewApi {
             }
             const options = {headers: authCheck({})}
             const res =  await fetchWithQueryParamsApi(apiUrl, params, options)
+
             if(res.status === 200) {
                 const jsonData = await res.data;
                 const jsonString = JSON.stringify(jsonData);
@@ -37,27 +39,8 @@ export class ReviewApi {
     }
 
     async getSpecificReview(review) {
-        try {
-            let url
-            if(typeof review === 'number') {
-                url = `${this.basePath}/${review}`
-            } else {
-                url = review
-            }
-
-            const res = await fetch(`${url}`, {
-                method: 'GET',
-                headers: authCheck({})
-            })
-            if(res.status === 200) {
-                return {error: false, data: await res.json()}
-            } else {
-                return {error: true, errorCode: res.status}
-            }
-        } catch (e) {
-            return {error: true, errorCode: e.response.status || 500}
-        }
-
+        const options = {method: 'GET', headers: authCheck({})}
+        return await genericRequest(this.basePath, review, options)
     }
 
     async reviewsCreation(userId, contentId, type, reviewDetails) {

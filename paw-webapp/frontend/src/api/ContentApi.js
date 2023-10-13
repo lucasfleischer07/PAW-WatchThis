@@ -2,6 +2,7 @@ import {APPLICATION_JSON_TYPE, paths} from "../paths";
 import {fetchWithQueryParamsApi, fetchWithQueryParamsPostApi} from "./FetchWithQueryParams";
 import {authCheck} from "../scripts/authCheck";
 import {ListsApi} from "./ListsApi";
+import {genericRequest} from "./GenericRequest";
 
 export class ContentApi {
     constructor() {
@@ -9,35 +10,14 @@ export class ContentApi {
     }
 
     async getLandingPage() {
-        const res = await fetch(`${this.basePath}/landing`, {
-            method: 'GET',
-            headers: authCheck({})
-        })
-        return {error: false, data: await res.json()}
+        const url = `${this.basePath}/landing`
+        const options = {method: 'GET', headers: authCheck({})}
+        return await genericRequest(this.basePath, url, options)
     }
 
     async getSpecificContent(content) {
-        try {
-            let url
-            if(typeof content === 'number') {
-                url = `${this.basePath}/${content}`
-            } else {
-                url = content
-            }
-
-            const res = await fetch(`${url}`, {
-                method: 'GET',
-                headers: authCheck({})
-            })
-            if(res.status === 200) {
-                return {error: false, data: await res.json()}
-            } else {
-                return {error: true, errorCode: res.status}
-            }
-        } catch (e) {
-            return {error: true, errorCode: e.response.status || 500}
-        }
-
+        const options = {method: 'GET', headers: authCheck({})}
+        return await genericRequest(this.basePath, content, options)
     }
 
     async updateContent(contentId, userId, contentDetails) {
@@ -183,20 +163,8 @@ export class ContentApi {
     }
 
     async getContentReviewers(contentId) {
-        try {
-            const res = await fetch(`${this.basePath}/${contentId}/reviewers`, {
-                method: 'GET',
-                headers: authCheck({})
-            })
-            if(res.status !== 204) {
-                return {error: false, data: await res.json()}
-            } else {
-                return {error: false, data: []}
-            }
-        } catch (e) {
-            return {error: true}
-        }
-
+        const options = {method: 'GET', headers: authCheck({})}
+        return await genericRequest(this.basePath, contentId, options)
     }
 
     async addUserWatchList(contentId, userId) {

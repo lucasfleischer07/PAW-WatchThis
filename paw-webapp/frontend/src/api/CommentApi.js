@@ -1,6 +1,7 @@
 import {APPLICATION_JSON_TYPE, paths} from "../paths";
 import {fetchWithQueryParamsApi} from "./FetchWithQueryParams";
 import {authCheck} from "../scripts/authCheck";
+import {genericRequest} from "./GenericRequest";
 
 export class CommentApi {
     constructor() {
@@ -14,6 +15,8 @@ export class CommentApi {
             const params = {reviewId: reviewId}
             const res = await fetchWithQueryParamsApi(apiUrl, params, options)
 
+            // return checkResponse()
+
             if(res.status === 200) {
                 return {error: false, data: await res.data, totalPages: res.totalPages}
             } else {
@@ -26,26 +29,8 @@ export class CommentApi {
     }
 
     async getSpecificComment(comment) {
-        try {
-            let url
-            if(typeof comment === 'number') {
-                url = `${this.basePath}/${comment}`
-            } else {
-                url = comment
-            }
-
-            const res = await fetch(`${url}`, {
-                method: 'GET',
-                headers: authCheck({})
-            })
-            if(res.status === 200) {
-                return {error: false, data: await res.json()}
-            } else {
-                return {error: true, errorCode: res.status}
-            }
-        } catch (e) {
-            return {error: true, errorCode: e.response.status || 500}
-        }
+        const options = {method: 'GET', headers: authCheck({})}
+        return await genericRequest(this.basePath, comment, options)
 
     }
 
@@ -74,6 +59,7 @@ export class CommentApi {
             const options = {method: 'DELETE', headers: authCheck({})}
             const params = {userId: userId}
             const res = await fetchWithQueryParamsApi(apiUrl, params, options)
+
             if(res.status === 204) {
                 return {error: false, data: []}
             } else {

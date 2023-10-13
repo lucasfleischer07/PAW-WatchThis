@@ -2,6 +2,7 @@ import {APPLICATION_JSON_TYPE, paths} from "../paths";
 import {fetchWithQueryParamsApi} from "./FetchWithQueryParams";
 import {authCheck} from "../scripts/authCheck";
 import jwt from 'jwt-decode';
+import {genericRequest} from "./GenericRequest";
 export class UserApi {
     constructor() {
         this.basePath = `${paths.BASE_URL_API}${paths.USERS}`
@@ -25,27 +26,8 @@ export class UserApi {
     }
 
     async getUserInfo(user) {
-        try {
-            let url
-            if(typeof user === 'number') {
-                url = `${this.basePath}/${user}`
-            } else {
-                url = user
-            }
-
-            const res = await fetch(`${url}`, {
-                method: 'GET',
-                headers: authCheck({})
-            })
-
-            if(res.status === 200) {
-                return {error: false, data: await res.json()}
-            } else {
-                return {error: true, errorCode: res.status}
-            }
-        } catch (e) {
-            return {error: true, errorCode: e.response.status || 500 }
-        }
+        const options = {method: 'GET', headers: authCheck({})}
+        return await genericRequest(this.basePath, user, options)
     }
 
     async updateUserProfileImage(userId, image) {
@@ -102,6 +84,7 @@ export class UserApi {
         }
     }
 
+    // TODO: Este lo podriamos dejar asi, y no hacerlo generico
     async login(email, password) {
         try {
             const loggedUserInfo = email + ":" + password;
@@ -143,6 +126,7 @@ export class UserApi {
         }
     }
 
+    // TODO: Este lo podriamos dejar asi, y no hacerlo generico
     async getReviewsLike(userId) {
         try {
             const res = await fetch(`${this.basePath}/${userId}/reviewsLiked`, {
@@ -167,6 +151,7 @@ export class UserApi {
         }
     }
 
+    // TODO: Este lo podriamos dejar asi, y no hacerlo generico
     async getReviewsDislike(userId) {
         try {
             const res = await fetch(`${this.basePath}/${userId}/reviewsDisliked`, {

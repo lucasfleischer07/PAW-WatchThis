@@ -1,6 +1,7 @@
 import {paths} from "../paths";
 import {fetchWithQueryParamsApi} from "./FetchWithQueryParams";
 import {authCheck} from "../scripts/authCheck";
+import {genericRequest} from "./GenericRequest";
 
 export const useListApi = (signOut, navigate) => {
     return new ListsApi(navigate, signOut)
@@ -12,38 +13,15 @@ export class ListsApi {
         this.signOut = signOut
     }
 
-
     async getUserWatchListContentIds(userId) {
-        try {
-            const res = await fetch(`${this.basePath}/watchListContentIds/${userId}`, {
-                method: 'GET',
-                headers: authCheck({}),
-            })
-
-            if(res.status === 200) {
-                return {error: false, data: await res.json()}
-            } else {
-                return {error: true, errorCode: res.status}
-            }
-        } catch (e) {
-            return {error: true, errorCode: e.response.status || 500}
-        }
+        const url = `${this.basePath}/watchListContentIds`
+        const options = {method: 'GET', headers: authCheck({})}
+        return await genericRequest(url, userId, options)
     }
 
     async getUserViewedListContentIds(userId) {
-        try {
-            const res = await fetch(`${this.basePath}/viewedListContentIds/${userId}`, {
-                method: 'GET',
-                headers: authCheck({}),
-            })
-
-            if(res.status === 200) {
-                return {error: false, data: await res.json()}
-            } else {
-                return {error: true, errorCode: res.status}
-            }
-        } catch (e) {
-            return {error: true, errorCode: e.response.status || 500}
-        }
+        const url = `${this.basePath}/viewedListContentIds`
+        const options = {method: 'GET', headers: authCheck({})}
+        return await genericRequest(url, userId, options)
     }
 }
