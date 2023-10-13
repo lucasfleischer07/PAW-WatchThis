@@ -55,7 +55,6 @@ export class ReviewApi {
                 return {error: true, errorCode: res.status}
             }
         } catch (e) {
-            console.log("Entre aca 2")
             return {error: true, errorCode: e.response.status || 500}
         }
 

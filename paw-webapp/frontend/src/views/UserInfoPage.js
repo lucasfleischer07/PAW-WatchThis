@@ -87,7 +87,7 @@ export default function UserInfoPage() {
             .then(reviews => {
                 if(!reviews.error) {
                     setReviews(reviews.data)
-                    setTotalReviews(reviews.totalReviews)
+                    setTotalReviews(reviews.data.length)
 
                     userService.getUserInfo(parseInt(userProfileId))
                         .then((data) => {
@@ -161,6 +161,7 @@ export default function UserInfoPage() {
                 })
         }
     }, [page])
+
 
     useEffect(() => {
         document.title = t('Profile')

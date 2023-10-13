@@ -86,11 +86,10 @@ export default function Home() {
     }, [logOut])
 
 
-
-
     useEffect(() => {
         document.title = t('WatchThisMessage')
     })
+
 
     return(
         <div>

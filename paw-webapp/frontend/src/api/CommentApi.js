@@ -28,7 +28,6 @@ export class CommentApi {
     async getSpecificComment(comment) {
         try {
             let url
-            console.log(comment)
             if(typeof comment === 'number') {
                 url = `${this.basePath}/${comment}`
             } else {

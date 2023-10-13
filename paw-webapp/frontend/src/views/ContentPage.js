@@ -52,7 +52,7 @@ export default function ContentPage(props) {
                         navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                     }
                 })
-                .catch((e) => {
+                .catch(() => {
                     navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
         }
