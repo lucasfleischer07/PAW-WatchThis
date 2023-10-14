@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 
 public class UserDto {
     private String username;
-    private String email;
     private Long id;
     private Long reputation;
     private String image;
@@ -35,7 +34,6 @@ public class UserDto {
 
 
     public UserDto(UriInfo url, User user) {
-//        this.email = user.getEmail();
         this.username = user.getUserName();
         this.id = user.getId();
         this.reputation = user.getReputation();
@@ -54,14 +52,6 @@ public class UserDto {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getImage() {
