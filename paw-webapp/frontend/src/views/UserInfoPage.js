@@ -87,7 +87,7 @@ export default function UserInfoPage() {
             .then(reviews => {
                 if(!reviews.error) {
                     setReviews(reviews.data)
-                    setTotalReviews(reviews.data.length)
+                    setTotalReviews(reviews.totalUserReviews)
 
                     userService.getUserInfo(parseInt(userProfileId))
                         .then((data) => {

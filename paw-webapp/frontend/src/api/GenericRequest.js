@@ -41,7 +41,7 @@ export async function genericFetchWithQueryParams(apiUrl, options, params) {
 
         if(options.method === 'GET') {
             if(res.status === 200) {
-                return {error: false, data: await res.data, totalPages: res.totalPages, totalReviewsReports: res.totalReviewsReports, totalCommentsReports: res.totalCommentsReports}
+                return {error: false, data: await res.data, totalPages: res.totalPages, totalReviewsReports: res.totalReviewsReports, totalCommentsReports: res.totalCommentsReports, totalUserReviews: res.totalUserReviews}
             }
         } else if(options.method === 'POST') {
             if(res.status === 201 || res.status === 204) {

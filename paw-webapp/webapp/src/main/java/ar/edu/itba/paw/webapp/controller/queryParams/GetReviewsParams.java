@@ -35,4 +35,16 @@ public class GetReviewsParams {
         return reviewList;
 
     }
+
+    public static int getTotalReviews(final Long userId,
+                                      UserService us,
+                                      ReviewService rs) {
+        if(userId == null) {
+            throw new InvalidParameterException();
+        }
+        final User user = us.findById(userId).orElseThrow(UserNotFoundException::new);
+        PageWrapper<Review> aux = rs.getAllUserReviews(user, 1, 1000000000);
+        return aux.getPageContent().size();
+
+    }
 }

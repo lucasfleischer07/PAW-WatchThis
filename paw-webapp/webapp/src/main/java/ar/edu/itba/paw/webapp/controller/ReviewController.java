@@ -50,6 +50,7 @@ public class ReviewController {
                             @QueryParam("page") @DefaultValue("1") int pageNumber) {
         LOGGER.info("GET /{}: Called",uriInfo.getPath());
         PageWrapper<Review> reviewList = GetReviewsParams.getReviewsByParams(userId, contentId, pageNumber, us, cs, rs);
+        int totalReviews = GetReviewsParams.getTotalReviews(userId, us, rs);
         if(reviewList == null) {
             LOGGER.warn("GET /{}: Invalid page param",uriInfo.getPath());
             throw new ContentNotFoundException();
@@ -60,6 +61,7 @@ public class ReviewController {
 
         final Response.ResponseBuilder response = Response.ok(new GenericEntity<Collection<ReviewDto>>(reviewDtoList){});
         ResponseBuildingUtils.setPaginationLinks(response,reviewList , uriInfo);
+        response.header("Total-User-Review", totalReviews);
         return response.build();
     }
 
