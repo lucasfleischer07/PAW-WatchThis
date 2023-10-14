@@ -34,7 +34,6 @@ public class CommentDto {
         this.reportReason = comment.getReportReasons();
         this.commentReportersUrl = uriInfo.getBaseUriBuilder().path("comments").path("reports").build().toString();
         this.user =  uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(comment.getUser().getId())).build().toString();
-
     }
 
 

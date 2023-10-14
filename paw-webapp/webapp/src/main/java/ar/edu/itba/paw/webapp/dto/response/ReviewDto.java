@@ -50,10 +50,6 @@ public class ReviewDto {
         this.user =  uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(review.getUser().getId())).build().toString();
         this.content = uriInfo.getBaseUriBuilder().path("content").path(String.valueOf(review.getContent().getId())).build().toString();
         this.commentUrl = uriInfo.getBaseUriBuilder().path("comments").queryParam("reviewId", review.getId()).build().toString();
-//        Lo que estaha antes
-//        this.user = new UserDto(uriInfo, review.getUser());
-//        this.content = new ContentDto(uriInfo, review.getContent());
-
     }
 
     public long getId() {

@@ -57,8 +57,6 @@ public class ContentDto {
         this.durationNum = content.getDurationNum();
         this.contentPictureUrl = url.getBaseUriBuilder().path("content").path(String.valueOf(content.getId())).path("contentImage").build().toString();
         this.reviewsUrl = url.getBaseUriBuilder().path("reviews").queryParam("contentId", content.getId()).build().toString();
-//        TODO: Creo que esta de mas, yo las sacaria
-//        this.contentReviewers = url.getBaseUriBuilder().path("content").path(String.valueOf(content.getId())).path("reviewers").build().toString();
     }
 
     public Long getId() {
