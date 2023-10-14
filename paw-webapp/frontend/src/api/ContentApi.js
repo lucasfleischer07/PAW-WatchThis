@@ -85,6 +85,9 @@ export class ContentApi {
         } else {
             if(contentType !== null) {
                 params.type = contentType
+                if(contentType === 'recommendedUser') {
+                    params.userId = userId
+                }
             }
             if(genre !== ''){
                 params.genre = genre
