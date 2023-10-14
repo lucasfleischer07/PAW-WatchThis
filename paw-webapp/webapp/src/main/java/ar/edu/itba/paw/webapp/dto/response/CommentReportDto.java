@@ -33,17 +33,10 @@ public class CommentReportDto {
 
     public CommentReportDto(UriInfo uriInfo, CommentReport commentReport){
         this.id = commentReport.getId();
-        this.reportReason = commentReport.getReportReason();
         this.user = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(commentReport.getUser().getId())).build().toString();
         this.review =  uriInfo.getBaseUriBuilder().path("reviews").path(String.valueOf(commentReport.getComment().getReview().getId())).build().toString();
         this.content =  uriInfo.getBaseUriBuilder().path("content").path(String.valueOf(commentReport.getComment().getReview().getContent().getId())).build().toString();
-
-        // TODO: Testear bien este, puede que este mal
         this.comment = uriInfo.getBaseUriBuilder().path("comments").path(String.valueOf(commentReport.getComment().getCommentId())).build().toString();
-
-//        TODO: Siento que estas 3 estan al re pedo, para eliminar es el mismo pathe pero cambia el delete y eso
-//        this.eliminateComment = url.getBaseUriBuilder().path("comments").path("delete").path(String.valueOf(commentReport.getComment().getCommentId())).build().toString();
-//        this.dismissReport = url.getBaseUriBuilder().path("reports").path("deleteReport").path("comment").path(String.valueOf(commentReport.getComment().getReview().getContent().getId())).build().toString();
     }
 
     public long getId() {

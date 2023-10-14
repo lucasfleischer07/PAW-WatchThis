@@ -32,7 +32,6 @@ public class ReviewReportDto {
 
     public ReviewReportDto(UriInfo uriInfo, ReviewReport reviewReport){
         this.id = reviewReport.getId();
-        this.reportReason = reviewReport.getReportReason();
         this.user = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(reviewReport.getUser().getId())).build().toString();
         this.review =  uriInfo.getBaseUriBuilder().path("reviews").path(String.valueOf(reviewReport.getReview().getId())).build().toString();
         this.content =  uriInfo.getBaseUriBuilder().path("content").path(String.valueOf(reviewReport.getReview().getContent().getId())).build().toString();

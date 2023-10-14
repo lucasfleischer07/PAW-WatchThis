@@ -12,7 +12,7 @@ Si tiene:
 - (C) El botón de iniciar sesión tiene el texto en 2 líneas.
 - (P) La api retorna strings vacíos en lugares donde debiera simplemente omitir el atributo (null).
 - (L) El recuperar un usuario inexistente retorna un 404, pero la UI dice que se nos mandó un mail en forma correcta.
-- (C) Al buscar el search box pierde su contenido.
+- (L) Al buscar el search box pierde su contenido.
     - Lo agregamos nosootros este comentario: Es en la home, por algun motivo se borra lo que el usuario busco de la searchbox
 - (L) No cambian el title de la app al navegar, toda la historia dice “Watch This”
 - (P) La API expone en forma pública el mail y el rol de los usuarios. Estos son datos sensibles que debieran ser tratados como tales.
