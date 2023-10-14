@@ -44,16 +44,6 @@ public class WebConfig {
     private static final Logger LOGGER = LoggerFactory.getLogger(WebConfig.class);
 
 
-//    @Bean
-//    public ViewResolver viewResolver() {
-//        final InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
-//        viewResolver.setViewClass(JstlView.class);
-//        viewResolver.setPrefix("/WEB-INF/views/");
-//        viewResolver.setSuffix(".jsp");
-//        return viewResolver;
-//    }
-
-
     @Bean
     public DataSource dataSource(){
         LOGGER.info("Data base set up");
@@ -82,35 +72,28 @@ public class WebConfig {
 
     }
 
-@Bean
-public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
-    final LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
-    factoryBean.setPackagesToScan("ar.edu.itba.paw.models");
-    factoryBean.setDataSource(dataSource());
-    final JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-    factoryBean.setJpaVendorAdapter(vendorAdapter);
-    final Properties properties = new Properties();
-    properties.setProperty("hibernate.hbm2ddl.auto", "update");
-    properties.setProperty("hibernate.dialect","org.hibernate.dialect.PostgreSQL92Dialect");
+    @Bean
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+        final LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
+        factoryBean.setPackagesToScan("ar.edu.itba.paw.models");
+        factoryBean.setDataSource(dataSource());
+        final JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+        factoryBean.setJpaVendorAdapter(vendorAdapter);
+        final Properties properties = new Properties();
+        properties.setProperty("hibernate.hbm2ddl.auto", "update");
+        properties.setProperty("hibernate.dialect","org.hibernate.dialect.PostgreSQL92Dialect");
 
-// Si ponen esto en prod, hay tabla!!!
-    //properties.setProperty("hibernate.show_sql", "true");
-    //properties.setProperty("format_sql", "true");
-    factoryBean.setJpaProperties(properties);
-    return factoryBean;
-}
+        // Si ponen esto en prod, hay tabla!!!
+        //properties.setProperty("hibernate.show_sql", "true");
+        //properties.setProperty("format_sql", "true");
+        factoryBean.setJpaProperties(properties);
+        return factoryBean;
+    }
 
     @Bean
     public PlatformTransactionManager transactionManager(final EntityManagerFactory emf) {
-    return new JpaTransactionManager(emf);
-}
-//    @Override
-//    public void addResourceHandlers(final ResourceHandlerRegistry registry) {
-//        super.addResourceHandlers(registry);
-//        registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
-//    }
-
-
+        return new JpaTransactionManager(emf);
+    }
 
     // * ----------------------- Internacionalizacion ------------------------------------------------------------------
     @Bean
@@ -138,10 +121,4 @@ public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
     }
     // * ---------------------------------------------------------------------------------------------------------------
 
-
-    // * ----------------------- Para que no matchee los paths con / al final-------------------------------------------
-//    @Override
-//    public void configurePathMatch(PathMatchConfigurer configurer){
-//        configurer.setUseTrailingSlashMatch(false);
-//    }
 }

@@ -10,7 +10,7 @@ Si tiene:
 - (L) Las imágenes en base de datos usan etag, pero cache-control: no-cache.
     - Creo que ya esta, habia que cambiar algo en los etags de UserController y ContentController
 - (C) El botón de iniciar sesión tiene el texto en 2 líneas.
-- (P) La api retorna strings vacíos en lugares donde debiera simplemente omitir el atributo (null).
+- (C) La api retorna strings vacíos en lugares donde debiera simplemente omitir el atributo (null).
 - (L) El recuperar un usuario inexistente retorna un 404, pero la UI dice que se nos mandó un mail en forma correcta.
 - (L) Al buscar el search box pierde su contenido.
     - Lo agregamos nosootros este comentario: Es en la home, por algun motivo se borra lo que el usuario busco de la searchbox
@@ -32,7 +32,6 @@ Si tiene:
     - (L) Las entidades no están hipervinculadas, sino que se las embebe. Por ejemplo, reviews embebe el contenido y el user completos. Esto querría decir que al modificar / sobreescribir un contenido, debiera poder sobreescribir la review o el user en la misma operación, pero obviamente no es el caso.
 - (C) Cambiar el endpoint de getUserViewedListContentIds() y el de watchlist para que me lo haga en base de la listas y no de los ids en si
 - (C) Ver las exceptions de de GetContentParams y GetReviewParams
-
 
 
 PARA PREGUNTAR:
