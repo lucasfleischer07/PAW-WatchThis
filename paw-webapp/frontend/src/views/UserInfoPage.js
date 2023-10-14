@@ -7,7 +7,7 @@ import Header from "./components/Header";
 import ReviewCard from "./components/ReviewCard";
 import {AuthContext} from "../context/AuthContext";
 import ExpiredCookieModal from "./components/ExpiredCookieModal";
-import {reviewService, userService} from "../services";
+import {contentService, reviewService, userService} from "../services";
 import {updateUrlVariable} from "../scripts/validateParam";
 import {checkIsNumber} from "../scripts/filtersValidations";
 
@@ -32,6 +32,7 @@ export default function UserInfoPage() {
 
     const [isLikeReviewsList, setIsLikeReviewsList] = useState([]);
     const [isDislikeReviewsList, setIsDislikeReviewsList] = useState([]);
+    const [contentArray, setContentArray] = useState([])
 
 
     const prevPage = () => {
@@ -126,6 +127,20 @@ export default function UserInfoPage() {
                         .catch(() => {
                             navigate("/error", { replace: true, state: {errorCode: 404} })
                         })
+
+                    for (let i = 0; i < reviews.data.length; i++) {
+                        contentService.getSpecificContent(reviews.data[i].content)
+                            .then(contentData => {
+                                if (!contentData.error) {
+                                    setContentArray(prevArray => [...prevArray, contentData.data]);
+                                } else {
+                                    navigate("/error", { replace: true, state: {errorCode: contentData.errorCode} })
+                                }
+                            })
+                            .catch(error => {
+                                navigate("/error", { replace: true, state: {errorCode: 404} })
+                            });
+                    }
 
                 } else {
                     navigate("/error", { replace: true, state: {errorCode: reviews.errorCode} })
@@ -248,10 +263,10 @@ export default function UserInfoPage() {
                                             )}
                                         </div>
                                     ) : (
-                                        reviews.map((review) => (
+                                        reviews.map((review, index) => (
                                             <div key={review.id}>
-                                                <Link className="W-movie-title" to={`/content/${review.content.type}/${review.content.id}`}>
-                                                    <h5>{review.content.name}</h5>
+                                                <Link className="W-movie-title" to={`/content/${contentArray[index]?.type}/${contentArray[index]?.id}`}>
+                                                    <h5>{contentArray[index]?.name}</h5>
                                                 </Link>
                                                 <ReviewCard
                                                     id={`reviewCardUser${review.id}`}
@@ -263,6 +278,7 @@ export default function UserInfoPage() {
                                                     reviewReputation={review.reputation}
                                                     reviewUserUrl={review.user}
                                                     contentUrl={review.content}
+                                                    contentId={contentArray[index]?.id}
                                                     contentType={review.type}
                                                     loggedUserName={user?.username}
                                                     loggedUserId={user?.id}

@@ -143,17 +143,19 @@ export default function Reputation(props) {
     }
 
     useEffect(() => {
-        commentService.getReviewComments(parseInt(reviewId))
-            .then(data => {
-                if(!data.error){
-                    setComments(data.data)
-                } else {
-                    navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
-                }
-            })
-            .catch(() => {
-                navigate("/error", { replace: true, state: {errorCode: 404} })
-            })
+        if(seeComments) {
+            commentService.getReviewComments(parseInt(reviewId))
+                .then(data => {
+                    if(!data.error){
+                        setComments(data.data)
+                    } else {
+                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                    }
+                })
+                .catch(() => {
+                    navigate("/error", { replace: true, state: {errorCode: 404} })
+                })
+        }
     },[added])
 
     return (
