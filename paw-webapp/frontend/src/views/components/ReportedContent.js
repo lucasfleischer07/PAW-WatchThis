@@ -14,7 +14,6 @@ export default function ReportedContent(props) {
     const [showModal, setShowModal] = useState(false);
     const [showModalDismiss, setShowModalDismiss] = useState(false);
 
-    const userUrl = props.userUrl
     const contentUrl = props.contentUrl
     const reviewUrl = props.reviewUrl
     const commentUrl = props.commentUrl
@@ -39,6 +38,7 @@ export default function ReportedContent(props) {
     const reportType = props.reportType
     const setCommentOrReviewDismissedOrDeleted = props.setCommentOrReviewDismissedOrDeleted
     const loggedUserId = props.loggedUserId
+    const loggedUserName = props.loggedUserName
 
     const handleShowModal = () => {
         setShowModal(true);
@@ -126,24 +126,6 @@ export default function ReportedContent(props) {
 
 
     useEffect(() => {
-        userService.getUserInfo(userUrl)
-            .then(userData => {
-                if(!userData.error) {
-                    if(reportType === "comment") {
-                        setCommentUserId(userData.data.id)
-                        setCommentUserName(userData.data.username)
-                    } else {
-                        setReviewCreatorUserId(userData.data.id)
-                        setReviewCreatorUserName(userData.data.username)
-                    }
-                } else {
-                    navigate("/error", { replace: true, state: {errorCode: userData.errorCode} })
-                }
-            })
-            .catch(() => {
-                navigate("/error", { replace: true, state: {errorCode: 404} })
-            })
-
         contentService.getSpecificContent(contentUrl)
             .then(contentData => {
                 if(!contentData.error) {
@@ -166,15 +148,28 @@ export default function ReportedContent(props) {
                     }
                     setReportDescription(reviewData.data.description)
                     setReportsAmount(reviewData.data.reportAmount)
-                    userService.getUserInfo(reviewData.data.user)
-                        .then(userData => {
-                            if(!userData.error) {
-                                setReviewCreatorUserName(userData.data.username)
-                                setReviewCreatorUserId(userData.data.id)
-                            } else {
-                                navigate("/error", { replace: true, state: {errorCode: userData.errorCode} })
-                            }
-                        })
+
+                    const auxUserUrl = reviewData.data.user.split('/')
+                    const auxUserId = parseInt(auxUserUrl[auxUserUrl.length-1], 10)
+                    if(auxUserId !== loggedUserId) {
+                        userService.getUserInfo(reviewData.data.user)
+                            .then(userData => {
+                                console.log("Segundo getUserInfo dentro de getSpecificReview ")
+                                console.log(userData.data)
+                                if(!userData.error) {
+                                    setReviewCreatorUserName(userData.data.username)
+                                    setReviewCreatorUserId(userData.data.id)
+                                } else {
+                                    navigate("/error", { replace: true, state: {errorCode: userData.errorCode} })
+                                }
+                            })
+                            .catch(() => {
+                                navigate("/error", { replace: true, state: {errorCode: 404} })
+                            })
+                    } else {
+                        setReviewCreatorUserName(loggedUserName)
+                        setReviewCreatorUserId(loggedUserId)
+                    }
                     setReportTitle(reviewData.data.name)
                     setReportReasons(reviewData.data.reportReason)
                     setReviewNameOfReportedComment(reviewData.data.name)
@@ -193,16 +188,28 @@ export default function ReportedContent(props) {
                         setTypeId(commentData.data.commentId)
                         setReportDescription(commentData.data.text)
                         setReportsAmount(commentData.data.reportAmount)
-                        userService.getUserInfo(commentData.data.user)
-                            .then(userData => {
-                                if(!userData.error) {
-                                    setCommentUserName(userData.data.username)
-                                    setCommentUserId(userData.data.id)
-                                } else {
-                                    navigate("/error", { replace: true, state: {errorCode: userData.errorCode} })
-                                }
-                            })
 
+                        const auxUserUrl = commentData.data.user.split('/')
+                        const auxUserId = parseInt(auxUserUrl[auxUserUrl.length-1], 10)
+                        if(auxUserId !== loggedUserId) {
+                            userService.getUserInfo(commentData.data.user)
+                                .then(userData => {
+                                    console.log("Tercer getUserInfo dentro de getSpecificComment ")
+                                    console.log(userData.data)
+                                    if(!userData.error) {
+                                        setCommentUserName(userData.data.username)
+                                        setCommentUserId(userData.data.id)
+                                    } else {
+                                        navigate("/error", { replace: true, state: {errorCode: userData.errorCode} })
+                                    }
+                                })
+                                .catch(() => {
+                                    navigate("/error", { replace: true, state: {errorCode: 404} })
+                                })
+                        } else {
+                            setCommentUserName(loggedUserName)
+                            setCommentUserId(loggedUserId)
+                        }
                     } else {
                         navigate("/error", { replace: true, state: {errorCode: commentData.errorCode} })
                     }
@@ -212,7 +219,7 @@ export default function ReportedContent(props) {
                 })
         }
 
-    }, [userUrl ,reviewUrl, commentUrl, contentUrl])
+    }, [reviewUrl, commentUrl, contentUrl])
 
 
     return(

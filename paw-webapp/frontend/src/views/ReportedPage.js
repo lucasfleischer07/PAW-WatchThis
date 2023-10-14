@@ -261,12 +261,12 @@ export default function ReportedPage() {
                                     {reportedReviewsList.map((reportReview) => (
                                             <ReportedContent
                                                 key={`reportedContent${reportReview.id}`}
-                                                userUrl={reportReview.user}
                                                 contentUrl={reportReview.content}
                                                 reviewUrl={reportReview.review}
+                                                loggedUserId = {user.id}
+                                                loggedUserName = {user.username}
                                                 setCommentOrReviewDismissedOrDeleted={setCommentOrReviewDismissedOrDeleted}
                                                 reportType="review"
-                                                loggedUserId = {user.id}
                                             />
                                         )
                                     )}
@@ -290,13 +290,13 @@ export default function ReportedPage() {
                                 <>
                                     {reportedCommentsList.map((reportComment) => (
                                         <ReportedContent
-                                            userUrl={reportComment.user}
                                             commentUrl={reportComment.comment}
                                             contentUrl={reportComment.content}
                                             reviewUrl={reportComment.review}
+                                            loggedUserId = {user.id}
+                                            loggedUserName = {user.username}
                                             setCommentOrReviewDismissedOrDeleted={setCommentOrReviewDismissedOrDeleted}
                                             reportType="comment"
-                                            loggedUserId = {user.id}
                                         />
                                     ))}
 
