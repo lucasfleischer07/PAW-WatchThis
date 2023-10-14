@@ -142,7 +142,6 @@ export default function ReviewCard(props) {
             setReviewUser(loggedUserName)
         }
 
-
         if(contentId === undefined) {
             contentService.getSpecificContent(contentUrl)
                 .then(data => {

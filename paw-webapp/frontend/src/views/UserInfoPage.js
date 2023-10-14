@@ -85,26 +85,41 @@ export default function UserInfoPage() {
 
     useEffect(() => {
         reviewService.getReviews(parseInt(userProfileId), null, page)
-            .then(reviews => {
-                if(!reviews.error) {
+            .then(async reviews => {
+                if (!reviews.error) {
+                    for (let i = 0; i < reviews.data.length; i++) {
+                        await contentService.getSpecificContent(reviews.data[i].content)
+                            .then(contentData => {
+                                if (!contentData.error) {
+                                    setContentArray(prevArray => [...prevArray, contentData.data]);
+                                } else {
+                                    navigate("/error", {replace: true, state: {errorCode: contentData.errorCode}})
+                                }
+                            })
+                            .catch(error => {
+                                navigate("/error", {replace: true, state: {errorCode: 404}})
+                            });
+                    }
+
+
                     setReviews(reviews.data)
                     setTotalReviews(reviews.totalUserReviews)
 
                     userService.getUserInfo(parseInt(userProfileId))
                         .then((data) => {
-                            if(!data.error) {
+                            if (!data.error) {
                                 setReviewOwnerUser(data.data)
-                                if(reviews.data.length === 0) {
+                                if (reviews.data.length === 0) {
                                     setReputation(0)
                                 } else {
                                     let reputation = 0
-                                    for(let i = 0; i < reviews.data.length; i++) {
+                                    for (let i = 0; i < reviews.data.length; i++) {
                                         reputation += reviews.data[i].reputation
                                     }
                                     setReputation(reputation)
                                 }
 
-                                if(user?.role === 'admin' && data.data.role !== 'admin') {
+                                if (user?.role === 'admin' && data.data.role !== 'admin') {
                                     setCanPromote(true)
                                 } else {
                                     setCanPromote(false)
@@ -113,37 +128,23 @@ export default function UserInfoPage() {
                                 setAmountReviews(reviews.totalReviews)
                                 setAmountPages(reviews.totalPages)
 
-                                if(user?.id === parseInt(userProfileId)) {
+                                if (user?.id === parseInt(userProfileId)) {
                                     setIsSameUser(true)
                                 } else {
                                     setIsSameUser(false)
                                 }
 
                             } else {
-                                navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                                navigate("/error", {replace: true, state: {errorCode: data.errorCode}})
                             }
 
                         })
                         .catch(() => {
-                            navigate("/error", { replace: true, state: {errorCode: 404} })
+                            navigate("/error", {replace: true, state: {errorCode: 404}})
                         })
 
-                    for (let i = 0; i < reviews.data.length; i++) {
-                        contentService.getSpecificContent(reviews.data[i].content)
-                            .then(contentData => {
-                                if (!contentData.error) {
-                                    setContentArray(prevArray => [...prevArray, contentData.data]);
-                                } else {
-                                    navigate("/error", { replace: true, state: {errorCode: contentData.errorCode} })
-                                }
-                            })
-                            .catch(error => {
-                                navigate("/error", { replace: true, state: {errorCode: 404} })
-                            });
-                    }
-
                 } else {
-                    navigate("/error", { replace: true, state: {errorCode: reviews.errorCode} })
+                    navigate("/error", {replace: true, state: {errorCode: reviews.errorCode}})
                 }
             })
             .catch(() => {
@@ -175,6 +176,7 @@ export default function UserInfoPage() {
                     navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
         }
+
     }, [page])
 
 

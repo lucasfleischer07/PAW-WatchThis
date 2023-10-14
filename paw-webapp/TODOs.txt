@@ -34,9 +34,6 @@ Si tiene:
 - (C) Ver las exceptions de de GetContentParams y GetReviewParams
 
 
-REQUEST QUE SE HACEN MAS DE UNA VEZ:
-- En userInfoPage se pide el content para el id y el nombre pero despues cuando va a ReviewCard se vuelve a hacer el request del content. Intente arreglarlo con esto: contentId={contentArray[index]?.id} pero por algun motivo me tira undefined aunque arriba ande bien
-
 PARA PREGUNTAR:
 1. Cual seria el path adecuado para el forgotpassword: /user/password y mandar por queyparam el email
 2. Estaria mal hacer esto: contentListFilter = cs.getUserRecommended(us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new), pageNum, CONTENT_AMOUNT); para getear el recommended o si o si deberia pasarle el id?
