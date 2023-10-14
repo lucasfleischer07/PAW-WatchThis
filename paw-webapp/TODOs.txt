@@ -9,7 +9,7 @@ Si tiene:
 - (I) Las imágenes estáticas no usan cache-busting. Esto es un error grave
 - (L) Las imágenes en base de datos usan etag, pero cache-control: no-cache.
     - Creo que ya esta, habia que cambiar algo en los etags de UserController y ContentController
-- (C) El botón de iniciar sesión tiene el texto en 2 líneas.
+- (L) El botón de iniciar sesión tiene el texto en 2 líneas.
 - (C) La api retorna strings vacíos en lugares donde debiera simplemente omitir el atributo (null).
 - (L) El recuperar un usuario inexistente retorna un 404, pero la UI dice que se nos mandó un mail en forma correcta.
 - (L) Al buscar el search box pierde su contenido.
