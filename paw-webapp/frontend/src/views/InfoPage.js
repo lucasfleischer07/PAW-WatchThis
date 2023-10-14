@@ -283,19 +283,26 @@ export default function InfoPage() {
                     const aux = data.totalPages
                     setAmountPages(aux)
                     for(let i = 0; i < data.data.length; i++) {
-                        userService.getUserInfo(data.data[i].user)
-                            .then(userData => {
-                                if(!userData.error) {
-                                    if(userData.data.username === user?.username) {
-                                        setAlreadyReviewed(true)
+                        const auxUserUrl = data.data[i].user.split('/')
+                        const auxUserId = parseInt(auxUserUrl[auxUserUrl.length-1], 10)
+                        if(auxUserId !== user?.id) {
+                            userService.getUserInfo(data.data[i].user)
+                                .then(userData => {
+                                    if(!userData.error) {
+                                        if(userData.data.username === user?.username) {
+                                            setAlreadyReviewed(true)
+                                        }
+                                    } else {
+                                        navigate("/error", { replace: true, state: {errorCode: userData.errorCode} })
                                     }
-                                } else {
-                                    navigate("/error", { replace: true, state: {errorCode: userData.errorCode} })
-                                }
-                            })
-                            .catch(() => {
-                                navigate("/error", { replace: true, state: {errorCode: 404} })
-                            })
+                                })
+                                .catch(() => {
+                                    navigate("/error", { replace: true, state: {errorCode: 404} })
+                                })
+                        } else {
+                            setAlreadyReviewed(true)
+                        }
+
                     }
                 } else {
                     navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
