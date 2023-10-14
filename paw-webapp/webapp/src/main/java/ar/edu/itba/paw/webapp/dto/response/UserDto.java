@@ -35,7 +35,7 @@ public class UserDto {
 
 
     public UserDto(UriInfo url, User user) {
-        this.email = user.getEmail();
+//        this.email = user.getEmail();
         this.username = user.getUserName();
         this.id = user.getId();
         this.reputation = user.getReputation();

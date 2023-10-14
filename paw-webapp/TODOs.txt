@@ -5,8 +5,8 @@ Si tiene:
     - (C) Todavia hay que hacerlo
 
 - (L) El hash presentado no se corresponde con la versión presentada en la demo. De hecho, el código ni siquiera compila en el hash entregado. Esto es un error grave
-- (I) No usan cache no-condicional, pese a ser requerido y el motivo para implementar cache busting. Esto es un error grave
-- (I) Las imágenes estáticas no usan cache-busting. Esto es un error grave
+- (C) No usan cache no-condicional, pese a ser requerido y el motivo para implementar cache busting. Esto es un error grave
+- (C) Las imágenes estáticas no usan cache-busting. Esto es un error grave
 - (L) Las imágenes en base de datos usan etag, pero cache-control: no-cache.
     - Creo que ya esta, habia que cambiar algo en los etags de UserController y ContentController
 - (L) El botón de iniciar sesión tiene el texto en 2 líneas.

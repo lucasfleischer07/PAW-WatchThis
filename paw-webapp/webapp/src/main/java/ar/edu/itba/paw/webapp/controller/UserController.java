@@ -72,10 +72,8 @@ public class UserController {
         return Response.ok(new UserDto(uriInfo, user)).build();
     }
 
-//    TODO: Este era loggedUser, le saco el path. Nose si esta bien, pero no tenemos tampoco el id como para pasarselo
     @GET
     @Produces(value = {MediaType.APPLICATION_JSON})
-//    @Path("/loggedUser")
     public Response getLoggedUserInfo() {
         LOGGER.info("GET /{}: Called",  uriInfo.getPath());
         final Optional<User> user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
