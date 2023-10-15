@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.models.*;
+import ar.edu.itba.paw.webapp.controller.queryParams.GetCommentsParams;
 import ar.edu.itba.paw.webapp.dto.request.NewReportCommentDto;
 import ar.edu.itba.paw.webapp.dto.response.CommentReportDto;
 import ar.edu.itba.paw.webapp.exceptions.CommentNotFoundException;
@@ -44,11 +45,15 @@ public class CommentController {
 
     @GET
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response getComments(@QueryParam("reviewId") final Long reviewId) {
+    public Response getComments(@QueryParam("reviewId") final Long reviewId,
+                                @QueryParam("reportedById") final Long reportedById) {
         LOGGER.info("GET /{}: Called", uriInfo.getPath());
 
-        Review review = rs.findById(reviewId).orElseThrow(ReviewNotFoundException::new);
-        List<Comment> comments = ccs.getReviewComments(review);
+        List<Comment> comments = GetCommentsParams.getCommentsByParams(reportedById, reviewId, us, ccs, rs);
+        if(comments == null) {
+            throw new ReviewNotFoundException();
+        }
+
         Collection<CommentDto> commentListDto = CommentDto.mapCommentToCommentDto(uriInfo, comments);
         LOGGER.info("GET /{}: Comments got from review with id {}", uriInfo.getPath(), reviewId);
         return Response.ok(new GenericEntity<Collection<CommentDto>>(commentListDto){}).build();
