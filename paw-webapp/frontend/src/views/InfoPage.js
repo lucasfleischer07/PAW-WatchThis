@@ -24,6 +24,7 @@ export default function InfoPage() {
     const [showExpiredCookiesModal, setShowExpiredCookiesModal] = useState(false)
 
     const [user, setUser]= useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
+    const [loggedUserReviewsReported, setLoggedUserReviewsReported] = useState([])
 
     const [content, setContent] = useState({})
     const [reviews, setReviews] = useState({})
@@ -269,6 +270,18 @@ export default function InfoPage() {
                         } else {
                             navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                         }
+                    }
+                })
+                .catch(() => {
+                    navigate("/error", { replace: true, state: {errorCode: 404} })
+                })
+
+            reviewService.getReviews(user?.id, parseInt(contentId), actualPage, true)
+                .then(data => {
+                    if(!data.error) {
+                        setLoggedUserReviewsReported(data.data)
+                    } else {
+                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                     }
                 })
                 .catch(() => {
@@ -580,7 +593,7 @@ export default function InfoPage() {
                                                 isAdmin={user?.role === 'admin'}
                                                 isLikeReviews={isLikeReviewsList.length > 0 ? isLikeReviewsList.some(item => item.id === parseInt(review.id)) : false}
                                                 isDislikeReviews={isDislikeReviewsList.length > 0 ? isDislikeReviewsList.some(item => item.id === parseInt(review.id)) : false}
-                                                alreadyReport={review.reviewReporters.includes(user?.username)}
+                                                alreadyReport={loggedUserReviewsReported.length > 0 ? loggedUserReviewsReported.some(item => item.id === parseInt(review.id)) : false}
                                                 canComment={true}
                                                 seeComments={true}
                                                 reviewsChange={reviewsChange}

@@ -8,16 +8,15 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 public class CommentReportDto {
-
     private long id;
     private String user;
     private String comment;
     private String review;
     private String content;
     private final String type = "comment";
-    private ReportReason reportReason;
-    private String eliminateComment;
-    private String dismissReport;
+    private String commentReportersUrl;
+    private String reportReason;
+    private int reportAmount;
 
     public static Collection<CommentReportDto> mapCommentReportToCommentReportDto(UriInfo uriInfo, Collection<CommentReport> commentsReported) {
         return commentsReported.stream().map(cr -> new CommentReportDto(uriInfo, cr)).collect(Collectors.toList());
@@ -37,6 +36,9 @@ public class CommentReportDto {
         this.review =  uriInfo.getBaseUriBuilder().path("reviews").path(String.valueOf(commentReport.getComment().getReview().getId())).build().toString();
         this.content =  uriInfo.getBaseUriBuilder().path("content").path(String.valueOf(commentReport.getComment().getReview().getContent().getId())).build().toString();
         this.comment = uriInfo.getBaseUriBuilder().path("comments").path(String.valueOf(commentReport.getComment().getCommentId())).build().toString();
+        this.reportAmount = commentReport.getComment().getReportAmount();
+        this.reportReason = commentReport.getComment().getReportReasons();
+        this.commentReportersUrl = uriInfo.getBaseUriBuilder().path("comments").path("reports").build().toString();
     }
 
     public long getId() {
@@ -67,30 +69,6 @@ public class CommentReportDto {
         return type;
     }
 
-    public ReportReason getReportReason() {
-        return reportReason;
-    }
-
-    public void setReportReason(ReportReason reportReason) {
-        this.reportReason = reportReason;
-    }
-
-    public String getEliminateComment() {
-        return eliminateComment;
-    }
-
-    public void setEliminateComment(String eliminateComment) {
-        this.eliminateComment = eliminateComment;
-    }
-
-    public String getDismissReport() {
-        return dismissReport;
-    }
-
-    public void setDismissReport(String dismissReport) {
-        this.dismissReport = dismissReport;
-    }
-
     public String getReview() {
         return review;
     }
@@ -105,5 +83,29 @@ public class CommentReportDto {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getCommentReportersUrl() {
+        return commentReportersUrl;
+    }
+
+    public void setCommentReportersUrl(String commentReportersUrl) {
+        this.commentReportersUrl = commentReportersUrl;
+    }
+
+    public String getReportReason() {
+        return reportReason;
+    }
+
+    public void setReportReason(String reportReason) {
+        this.reportReason = reportReason;
+    }
+
+    public int getReportAmount() {
+        return reportAmount;
+    }
+
+    public void setReportAmount(int reportAmount) {
+        this.reportAmount = reportAmount;
     }
 }

@@ -47,9 +47,10 @@ public class ReviewController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response reviews(@QueryParam("contentId") final Long contentId,
                             @QueryParam("userId") final Long userId,
+                            @QueryParam("reportedById") final Long reportedById,
                             @QueryParam("page") @DefaultValue("1") int pageNumber) {
         LOGGER.info("GET /{}: Called",uriInfo.getPath());
-        PageWrapper<Review> reviewList = GetReviewsParams.getReviewsByParams(userId, contentId, pageNumber, us, cs, rs);
+        PageWrapper<Review> reviewList = GetReviewsParams.getReviewsByParams(userId, contentId, reportedById, pageNumber, us, cs, rs);
         if(reviewList == null) {
             LOGGER.warn("GET /{}: Invalid page param",uriInfo.getPath());
             throw new ContentNotFoundException();
@@ -87,6 +88,7 @@ public class ReviewController {
                             @QueryParam("contentId") final Long contentId,
                             @Valid NewReviewDto reviewDto) {
         LOGGER.info("POST /{}: Called", uriInfo.getPath());
+
         final Content content = cs.findById(contentId).get();
         final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).get();
 
@@ -233,7 +235,6 @@ public class ReviewController {
         final Review review = rs.findById(reviewId).orElseThrow(ReviewNotFoundException::new);
         final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(ForbiddenException::new);
         rrs.addReport(review, user, commentReportDto.getReportType());
-
         LOGGER.info("POST /{}: Review {} reported", uriInfo.getPath(), review.getId());
         return Response.ok().build();
     }

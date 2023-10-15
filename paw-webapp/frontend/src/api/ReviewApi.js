@@ -9,11 +9,13 @@ export class ReviewApi {
         this.basePath = `${paths.BASE_URL_API}${paths.REVIEWS}`
     }
 
-    async getReviews(userId, contentId, pageNumber) {
+    async getReviews(userId, contentId, pageNumber, reported = false) {
         const apiUrl = `${this.basePath}`
         let params
         if(userId == null) {
             params = {contentId: contentId, page: pageNumber}
+        } else if(reported) {
+            params = {reportedById: userId, page: pageNumber}
         } else {
             params = {userId: userId, page: pageNumber}
         }

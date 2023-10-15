@@ -19,9 +19,6 @@ public class ReviewDto {
     private String user;
     private String content;
     private String commentUrl;
-    private String reviewReporters;
-    private String reportReason;
-    private int reportAmount;
 
 
     public static Collection<ReviewDto> mapReviewToReviewDto(UriInfo uriInfo, Collection<Review> reviews) {
@@ -43,9 +40,6 @@ public class ReviewDto {
         this.rating = review.getRating();
         this.reputation = review.getReputation();
         this.type = review.getType();
-        this.reportAmount = review.getReportAmount();
-        this.reportReason = review.getReportReasons();
-        this.reviewReporters = review.getReporterUsernames();
 
         this.user =  uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(review.getUser().getId())).build().toString();
         this.content = uriInfo.getBaseUriBuilder().path("content").path(String.valueOf(review.getContent().getId())).build().toString();
@@ -116,14 +110,6 @@ public class ReviewDto {
         this.commentUrl = commentUrl;
     }
 
-    public String getReviewReporters() {
-        return reviewReporters;
-    }
-
-    public void setReviewReporters(String reviewReporters) {
-        this.reviewReporters = reviewReporters;
-    }
-
     public String getContent() {
         return content;
     }
@@ -132,19 +118,4 @@ public class ReviewDto {
         this.content = content;
     }
 
-    public int getReportAmount() {
-        return reportAmount;
-    }
-
-    public void setReportAmount(int reportAmount) {
-        this.reportAmount = reportAmount;
-    }
-
-    public String getReportReason() {
-        return reportReason;
-    }
-
-    public void setReportReason(String reportReason) {
-        this.reportReason = reportReason;
-    }
 }

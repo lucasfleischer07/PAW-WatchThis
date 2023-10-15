@@ -27,13 +27,14 @@ export default function ReportedContent(props) {
 
     const [reportTitle, setReportTitle] = useState("");
     const [reportDescription, setReportDescription] = useState("");
-    const [reportReasons, setReportReasons] = useState("");
-    const [reportsAmount, setReportsAmount] = useState(-1);
 
     const [typeId, setTypeId] = useState(-1);
     const [reviewCreatorUserName, setReviewCreatorUserName] = useState("");
     const [reviewCreatorUserId, setReviewCreatorUserId] = useState(-1);
     const [reviewNameOfReportedComment, setReviewNameOfReportedComment] = useState("");
+
+    const reportReasons = props.reportReasons;
+    const reportsAmount = props.reportsAmount;
 
     const reportType = props.reportType
     const setCommentOrReviewDismissedOrDeleted = props.setCommentOrReviewDismissedOrDeleted
@@ -147,15 +148,12 @@ export default function ReportedContent(props) {
                         setTypeId(reviewData.data.id)
                     }
                     setReportDescription(reviewData.data.description)
-                    setReportsAmount(reviewData.data.reportAmount)
 
                     const auxUserUrl = reviewData.data.user.split('/')
                     const auxUserId = parseInt(auxUserUrl[auxUserUrl.length-1], 10)
                     if(auxUserId !== loggedUserId) {
                         userService.getUserInfo(reviewData.data.user)
                             .then(userData => {
-                                console.log("Segundo getUserInfo dentro de getSpecificReview ")
-                                console.log(userData.data)
                                 if(!userData.error) {
                                     setReviewCreatorUserName(userData.data.username)
                                     setReviewCreatorUserId(userData.data.id)
@@ -171,7 +169,6 @@ export default function ReportedContent(props) {
                         setReviewCreatorUserId(loggedUserId)
                     }
                     setReportTitle(reviewData.data.name)
-                    setReportReasons(reviewData.data.reportReason)
                     setReviewNameOfReportedComment(reviewData.data.name)
                 } else {
                     navigate("/error", { replace: true, state: {errorCode: reviewData.errorCode} })
@@ -187,15 +184,12 @@ export default function ReportedContent(props) {
                     if(!commentData.error) {
                         setTypeId(commentData.data.commentId)
                         setReportDescription(commentData.data.text)
-                        setReportsAmount(commentData.data.reportAmount)
 
                         const auxUserUrl = commentData.data.user.split('/')
                         const auxUserId = parseInt(auxUserUrl[auxUserUrl.length-1], 10)
                         if(auxUserId !== loggedUserId) {
                             userService.getUserInfo(commentData.data.user)
                                 .then(userData => {
-                                    console.log("Tercer getUserInfo dentro de getSpecificComment ")
-                                    console.log(userData.data)
                                     if(!userData.error) {
                                         setCommentUserName(userData.data.username)
                                         setCommentUserId(userData.data.id)

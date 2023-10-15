@@ -261,6 +261,8 @@ export default function ReportedPage() {
                                     {reportedReviewsList.map((reportReview) => (
                                             <ReportedContent
                                                 key={`reportedContent${reportReview.id}`}
+                                                reportReasons={reportReview.reportReason}
+                                                reportsAmount={reportReview.reportAmount}
                                                 contentUrl={reportReview.content}
                                                 reviewUrl={reportReview.review}
                                                 loggedUserId = {user.id}
@@ -290,6 +292,8 @@ export default function ReportedPage() {
                                 <>
                                     {reportedCommentsList.map((reportComment) => (
                                         <ReportedContent
+                                            reportReasons={reportComment.reportReason}
+                                            reportsAmount={reportComment.reportAmount}
                                             commentUrl={reportComment.comment}
                                             contentUrl={reportComment.content}
                                             reviewUrl={reportComment.review}

@@ -16,10 +16,11 @@ public class ReviewReportDto {
     private String review;
     private String content;
     private final String type="comment";
-    private ReportReason reportReason;
-
     private String eliminateReview;
     private String dismissReport;
+    private String reviewReporters;
+    private String reportReason;
+    private int reportAmount;
 
 
     public static Collection<ReviewReportDto> mapReviewReportToReviewReportDto(UriInfo uriInfo, Collection<ReviewReport> reviewReports) {
@@ -35,6 +36,9 @@ public class ReviewReportDto {
         this.user = uriInfo.getBaseUriBuilder().path("users").path(String.valueOf(reviewReport.getUser().getId())).build().toString();
         this.review =  uriInfo.getBaseUriBuilder().path("reviews").path(String.valueOf(reviewReport.getReview().getId())).build().toString();
         this.content =  uriInfo.getBaseUriBuilder().path("content").path(String.valueOf(reviewReport.getReview().getContent().getId())).build().toString();
+        this.reportAmount = reviewReport.getReview().getReportAmount();
+        this.reportReason = reviewReport.getReview().getReportReasons();
+        this.reviewReporters = reviewReport.getReview().getReporterUsernames();
     }
 
     public long getId() {
@@ -65,14 +69,6 @@ public class ReviewReportDto {
         return type;
     }
 
-    public ReportReason getReportReason() {
-        return reportReason;
-    }
-
-    public void setReportReason(ReportReason reportReason) {
-        this.reportReason = reportReason;
-    }
-
     public String getEliminateReview() {
         return eliminateReview;
     }
@@ -95,5 +91,29 @@ public class ReviewReportDto {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getReviewReporters() {
+        return reviewReporters;
+    }
+
+    public void setReviewReporters(String reviewReporters) {
+        this.reviewReporters = reviewReporters;
+    }
+
+    public String getReportReason() {
+        return reportReason;
+    }
+
+    public void setReportReason(String reportReason) {
+        this.reportReason = reportReason;
+    }
+
+    public int getReportAmount() {
+        return reportAmount;
+    }
+
+    public void setReportAmount(int reportAmount) {
+        this.reportAmount = reportAmount;
     }
 }
