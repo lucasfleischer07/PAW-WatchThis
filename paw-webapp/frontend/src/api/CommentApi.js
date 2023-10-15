@@ -8,10 +8,15 @@ export class CommentApi {
         this.basePath = `${paths.BASE_URL_API}${paths.COMMENT}`
     }
 
-    async getReviewComments(reviewId) {
+    async getReviewComments(reviewId, userId = null, reports = false) {
         const apiUrl = `${this.basePath}`
         const options = {method: 'GET', headers: authCheck({})}
-        const params = {reviewId: reviewId}
+        let params
+        if(reports) {
+            params = {reportedById: userId}
+        } else {
+            params = {reviewId: reviewId}
+        }
         return genericFetchWithQueryParams(apiUrl, options, params)
     }
 

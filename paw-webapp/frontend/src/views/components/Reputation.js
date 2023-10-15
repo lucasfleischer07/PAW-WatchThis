@@ -14,6 +14,8 @@ export default function Reputation(props) {
     let {isLogged} = useContext(AuthContext)
 
     const loggedUserId = props.loggedUserId
+    const [commentsReportedByLoggedUser, setCommentsReportedByLoggedUser] = useState([])
+
 
     const reviewId = props.reviewId;
     const reviewDescription = props.reviewDescription;
@@ -155,6 +157,20 @@ export default function Reputation(props) {
                 .catch(() => {
                     navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
+
+            if(isLogged()) {
+                commentService.getReviewComments(parseInt(reviewId), loggedUserId, true)
+                    .then(data => {
+                        if(!data.error){
+                            setCommentsReportedByLoggedUser(data.data)
+                        } else {
+                            navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                        }
+                    })
+                    .catch(() => {
+                        navigate("/error", { replace: true, state: {errorCode: 404} })
+                    })
+            }
         }
     },[added])
 
@@ -313,7 +329,8 @@ export default function Reputation(props) {
                             loggedUserName={props.loggedUserName}
                             added={added}
                             setAdded={setAdded}
-                            alreadyReport={comment.commentReportersUrl.includes(props.loggedUserName)}
+                            alreadyReport={commentsReportedByLoggedUser.length > 0 ? commentsReportedByLoggedUser.some(item => item.id === parseInt(comment.id)) : false}
+                            // alreadyReport={comment.commentReportersUrl.includes(props.loggedUserName)}
                         />
                     ))}
                 </div>
