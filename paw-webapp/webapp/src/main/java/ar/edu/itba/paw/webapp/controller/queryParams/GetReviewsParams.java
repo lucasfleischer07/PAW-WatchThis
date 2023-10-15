@@ -35,7 +35,7 @@ public class GetReviewsParams {
         } else if(reportedById != null) {
             final User loggedUser = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
             if(loggedUser.getId() == reportedById) {
-//                TODO: Setear aca lo de la lista de reviews reportadas
+//                TODO: Setear aca lo de la lista de reviews reportadas (borrar la  lineas de abajo, esta puesta solo para que no tire error al correrlo)
                 reviewList = rs.getAllUserReviews(loggedUser, pageNumber, REVIEW_AMOUNT);
             } else {
                 throw new ForbiddenException();

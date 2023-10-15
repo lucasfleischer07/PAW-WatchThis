@@ -33,8 +33,9 @@ public class GetCommentsParams {
         } else {
             final User loggedUser = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
             if(loggedUser.getId() == reportedById) {
-//                TODO: Setear aca lo de la lista de comments reportados
-//                commentList;
+//                TODO: Setear aca lo de la lista de comments reportados (borrar las 2 lineas de abajo, estan puestas solo para que no tire error al correrlo)
+                Review review = rs.findById(reviewId).orElseThrow(ReviewNotFoundException::new);
+                commentList = ccs.getReviewComments(review);
             } else {
                 throw new ForbiddenException();
             }
