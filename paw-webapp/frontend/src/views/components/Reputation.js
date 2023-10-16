@@ -15,7 +15,7 @@ export default function Reputation(props) {
 
     const loggedUserId = props.loggedUserId
     const [commentsReportedByLoggedUser, setCommentsReportedByLoggedUser] = useState([])
-
+    const [loaded, setLoaded] = useState(false);
 
     const reviewId = props.reviewId;
     const reviewDescription = props.reviewDescription;
@@ -145,24 +145,12 @@ export default function Reputation(props) {
     }
 
     useEffect(() => {
-        if(seeComments) {
-            commentService.getReviewComments(parseInt(reviewId))
-                .then(data => {
-                    if(!data.error){
-                        setComments(data.data)
-                    } else {
-                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
-                    }
-                })
-                .catch(() => {
-                    navigate("/error", { replace: true, state: {errorCode: 404} })
-                })
-
-            if(isLogged()) {
-                commentService.getReviewComments(parseInt(reviewId), loggedUserId, true)
+        async function fetchData2()  {
+            if(seeComments) {
+                commentService.getReviewComments(parseInt(reviewId))
                     .then(data => {
                         if(!data.error){
-                            setCommentsReportedByLoggedUser(data.data)
+                            setComments(data.data)
                         } else {
                             navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                         }
@@ -170,8 +158,22 @@ export default function Reputation(props) {
                     .catch(() => {
                         navigate("/error", { replace: true, state: {errorCode: 404} })
                     })
+
+                if(isLogged()) {
+                    const commentsReportedByUser = await commentService.getReviewComments(parseInt(reviewId), loggedUserId, true);
+                    if (!commentsReportedByUser.error) {
+                        setCommentsReportedByLoggedUser(commentsReportedByUser.data);
+                    } else {
+                        navigate("/error", { replace: true, state: { errorCode: commentsReportedByUser.errorCode } });
+                    }
+
+                    setLoaded(true);
+                }
             }
         }
+
+        fetchData2()
+
     },[added])
 
     return (
@@ -318,8 +320,9 @@ export default function Reputation(props) {
 
             {seeComments ? (
                 <div className="W-comment-section-general-div">
-                    {comments.map((comment) => (
+                    {loaded && comments.map((comment) => (
                         <Comments
+                            data={commentsReportedByLoggedUser}
                             key ={`comment ${comment.id}`}
                             commentId={comment.commentId}
                             commentText={comment.text}
@@ -329,7 +332,7 @@ export default function Reputation(props) {
                             loggedUserName={props.loggedUserName}
                             added={added}
                             setAdded={setAdded}
-                            alreadyReport={commentsReportedByLoggedUser.length > 0 ? commentsReportedByLoggedUser.some(item => item.id === parseInt(comment.id)) : false}
+                            alreadyReport={commentsReportedByLoggedUser.length > 0 ? commentsReportedByLoggedUser.some(item => item.commentId === parseInt(comment.commentId)) : false}
                             // alreadyReport={comment.commentReportersUrl.includes(props.loggedUserName)}
                         />
                     ))}

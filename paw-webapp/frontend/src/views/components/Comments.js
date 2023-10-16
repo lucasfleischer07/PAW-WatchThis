@@ -101,6 +101,7 @@ export default function Comments(props) {
 
 
     useEffect(() => {
+        console.log(props.data)
         userService.getUserInfo(userCreatorUrl)
             .then(userCreatorData => {
                 if(!userCreatorData.error) {
