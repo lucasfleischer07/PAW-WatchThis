@@ -25,6 +25,8 @@ export default function ReviewCard(props) {
     const loggedUserId = props.loggedUserId
     const [isAdmin,setIsAdmin] = useState(props.isAdmin);
 
+    const completeReviewUser = props.reviewUser
+
     const [isLikeReviews, setIsLikeReviews] = useState(props.isLikeReviews);
     const [isDislikeReviews, setIsDislikeReviews] = useState(props.isDislikeReviews);
 
@@ -124,19 +126,22 @@ export default function ReviewCard(props) {
     };
 
     useEffect(() => {
+        console.log(completeReviewUser)
         if(canComment) {
-            userService.getUserInfo(reviewUserUrl)
-                .then(reviewUserData => {
-                    if(!reviewUserData.error) {
-                        setReviewUserId(reviewUserData.data.id)
-                        setReviewUser(reviewUserData.data.username)
-                    } else {
-                        navigate("/error", { replace: true, state: {errorCode: reviewUserData.errorCode} })
-                    }
-                })
-                .catch(() => {
-                    navigate("/error", { replace: true, state: {errorCode: 404} })
-                })
+            setReviewUserId(completeReviewUser.id)
+            setReviewUser(completeReviewUser.username)
+            // userService.getUserInfo(reviewUserUrl)
+            //     .then(reviewUserData => {
+            //         if(!reviewUserData.error) {
+            //             setReviewUserId(reviewUserData.data.id)
+            //             setReviewUser(reviewUserData.data.username)
+            //         } else {
+            //             navigate("/error", { replace: true, state: {errorCode: reviewUserData.errorCode} })
+            //         }
+            //     })
+            //     .catch(() => {
+            //         navigate("/error", { replace: true, state: {errorCode: 404} })
+            //     })
         } else {
             setReviewUserId(loggedUserId)
             setReviewUser(loggedUserName)

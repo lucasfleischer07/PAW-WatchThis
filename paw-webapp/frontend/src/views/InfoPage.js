@@ -25,6 +25,7 @@ export default function InfoPage() {
 
     const [user, setUser]= useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
     const [loggedUserReviewsReported, setLoggedUserReviewsReported] = useState([])
+    const [reviewUsers, setReviewsUsers] = useState([])
 
     const [content, setContent] = useState({})
     const [reviews, setReviews] = useState({})
@@ -42,6 +43,10 @@ export default function InfoPage() {
     const [isInViewedList, setIsInViewedList] = useState(false)
     const [alreadyReviewed, setAlreadyReviewed] = useState(false)
     const [reviewsChange,setReviewsChange]=useState(false)
+
+    const [loaded, setLoaded] = useState(false)
+
+
     const handleShowDeleteContentModal = () => {
         setShowDeleteContentModal(true)
     }
@@ -213,118 +218,120 @@ export default function InfoPage() {
 
 
     useEffect(() => {
-        if(isLogged()) {
-            listsService.getUserWatchListContentIds(user.id)
-                .then(watchList => {
-                    if(!watchList.error) {
-                        setIsInWatchList(watchList.data.some(item => item.id === parseInt(contentId)))
-                    } else if(watchList.errorCode === 404) {
-                        setShowExpiredCookiesModal(true)
-                    } else {
-                        navigate("/error", { replace: true, state: {errorCode: watchList.errorCode} })
-                    }
-                })
-                .catch(() => {
-                    navigate("/error", { replace: true, state: {errorCode: 404} })
-                })
-
-            listsService.getUserViewedListContentIds(user.id)
-                .then(viewedList => {
-                    if(!viewedList.error) {
-                        setIsInViewedList(viewedList.data.some(item => item.id === parseInt(contentId)))
-                    } else {
-                        if(viewedList.errorCode === 404 && !showExpiredCookiesModal) {
+        async function fetchData() {
+            if(isLogged()) {
+                listsService.getUserWatchListContentIds(user.id)
+                    .then(watchList => {
+                        if(!watchList.error) {
+                            setIsInWatchList(watchList.data.some(item => item.id === parseInt(contentId)))
+                        } else if(watchList.errorCode === 404) {
                             setShowExpiredCookiesModal(true)
                         } else {
-                            navigate("/error", { replace: true, state: {errorCode: viewedList.errorCode} })
+                            navigate("/error", { replace: true, state: {errorCode: watchList.errorCode} })
                         }
-                    }
-                })
-                .catch(() => {
-                    navigate("/error", { replace: true, state: {errorCode: 404} })
-                })
+                    })
+                    .catch(() => {
+                        navigate("/error", { replace: true, state: {errorCode: 404} })
+                    })
 
-            userService.getReviewsLike(user?.id)
-                .then(data => {
-                    if(!data.error) {
-                        setIsLikeReviewsList(data.data)
-                    } else {
-                        if(data.errorCode === 404 && !showExpiredCookiesModal) {
-                            setShowExpiredCookiesModal(true)
+                listsService.getUserViewedListContentIds(user.id)
+                    .then(viewedList => {
+                        if(!viewedList.error) {
+                            setIsInViewedList(viewedList.data.some(item => item.id === parseInt(contentId)))
+                        } else {
+                            if(viewedList.errorCode === 404 && !showExpiredCookiesModal) {
+                                setShowExpiredCookiesModal(true)
+                            } else {
+                                navigate("/error", { replace: true, state: {errorCode: viewedList.errorCode} })
+                            }
+                        }
+                    })
+                    .catch(() => {
+                        navigate("/error", { replace: true, state: {errorCode: 404} })
+                    })
+
+                userService.getReviewsLike(user?.id)
+                    .then(data => {
+                        if(!data.error) {
+                            setIsLikeReviewsList(data.data)
+                        } else {
+                            if(data.errorCode === 404 && !showExpiredCookiesModal) {
+                                setShowExpiredCookiesModal(true)
+                            } else {
+                                navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                            }
+                        }
+                    })
+                    .catch(() => {
+                        navigate("/error", { replace: true, state: {errorCode: 404} })
+                    })
+
+                userService.getReviewsDislike(user?.id)
+                    .then(data => {
+                        if(!data.error) {
+                            setIsDislikeReviewsList(data.data)
+                        } else {
+                            if(data.errorCode === 404 && !showExpiredCookiesModal) {
+                                setShowExpiredCookiesModal(true)
+                            } else {
+                                navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                            }
+                        }
+                    })
+                    .catch(() => {
+                        navigate("/error", { replace: true, state: {errorCode: 404} })
+                    })
+
+                reviewService.getReviews(user?.id, parseInt(contentId), actualPage, true)
+                    .then(data => {
+                        if(!data.error) {
+                            setLoggedUserReviewsReported(data.data)
                         } else {
                             navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                         }
-                    }
-                })
-                .catch(() => {
-                    navigate("/error", { replace: true, state: {errorCode: 404} })
-                })
+                    })
+                    .catch(() => {
+                        navigate("/error", { replace: true, state: {errorCode: 404} })
+                    })
+            }
 
-            userService.getReviewsDislike(user?.id)
-                .then(data => {
-                    if(!data.error) {
-                        setIsDislikeReviewsList(data.data)
-                    } else {
-                        if(data.errorCode === 404 && !showExpiredCookiesModal) {
-                            setShowExpiredCookiesModal(true)
-                        } else {
-                            navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+            const reviewsData = await reviewService.getReviews(null, parseInt(contentId), actualPage);
+            if (!reviewsData.error) {
+                setReviews(reviewsData.data);
+                const aux = reviewsData.totalPages;
+                setAmountPages(aux);
+
+                const userInfoPromises = reviewsData.data.map(async (review) => {
+                    const auxUserUrl = review.user.split('/');
+                    const auxUserId = parseInt(auxUserUrl[auxUserUrl.length - 1], 10);
+                    if (auxUserId !== user?.id) {
+                        try {
+                            const userData = await userService.getUserInfo(review.user);
+                            if (!userData.error) {
+                                setReviewsUsers((prevArray) => [...prevArray, userData.data]);
+                                if (userData.data.username === user?.username) {
+                                    setAlreadyReviewed(true);
+                                }
+                            } else {
+                                navigate("/error", { replace: true, state: { errorCode: userData.errorCode } });
+                            }
+                        } catch (error) {
+                            navigate("/error", { replace: true, state: { errorCode: 404 } });
                         }
-                    }
-                })
-                .catch(() => {
-                    navigate("/error", { replace: true, state: {errorCode: 404} })
-                })
-
-            reviewService.getReviews(user?.id, parseInt(contentId), actualPage, true)
-                .then(data => {
-                    if(!data.error) {
-                        setLoggedUserReviewsReported(data.data)
                     } else {
-                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                        setReviewsUsers((prevArray) => [...prevArray, { id: user.id, username: user.username }]);
+                        setAlreadyReviewed(true);
                     }
-                })
-                .catch(() => {
-                    navigate("/error", { replace: true, state: {errorCode: 404} })
-                })
+                });
+
+                await Promise.all(userInfoPromises);
+                setLoaded(true);
+            } else {
+                navigate("/error", { replace: true, state: { errorCode: reviewsData.errorCode } });
+            }
         }
 
-        reviewService.getReviews(null, parseInt(contentId), actualPage)
-            .then(data => {
-                if(!data.error) {
-                    setReviews(data.data)
-                    const aux = data.totalPages
-                    setAmountPages(aux)
-                    for(let i = 0; i < data.data.length; i++) {
-                        const auxUserUrl = data.data[i].user.split('/')
-                        const auxUserId = parseInt(auxUserUrl[auxUserUrl.length-1], 10)
-                        if(auxUserId !== user?.id) {
-                            userService.getUserInfo(data.data[i].user)
-                                .then(userData => {
-                                    if(!userData.error) {
-                                        if(userData.data.username === user?.username) {
-                                            setAlreadyReviewed(true)
-                                        }
-                                    } else {
-                                        navigate("/error", { replace: true, state: {errorCode: userData.errorCode} })
-                                    }
-                                })
-                                .catch(() => {
-                                    navigate("/error", { replace: true, state: {errorCode: 404} })
-                                })
-                        } else {
-                            setAlreadyReviewed(true)
-                        }
-
-                    }
-                } else {
-                    navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
-                }
-            })
-            .catch(() => {
-                navigate("/error", { replace: true, state: {errorCode: 404} })
-            })
-
+        fetchData()
 
     }, [actualPage, reviewsChange])
 
@@ -574,7 +581,7 @@ export default function InfoPage() {
                     <div className="card-body">
                         {reviews.length > 0 ? (
                             <>
-                                {reviews.map((review) => {
+                                {loaded && reviews.map((review, index) => {
                                     return (
                                         <div key={review.id}>
                                             <ReviewCard
@@ -586,6 +593,7 @@ export default function InfoPage() {
                                                 reviewId={review.id}
                                                 reviewReputation={review.reputation}
                                                 reviewUserUrl={review.user}
+                                                reviewUser={reviewUsers[index]}
                                                 contentId={content.id}
                                                 contentType={review.type}
                                                 loggedUserName={user?.username}

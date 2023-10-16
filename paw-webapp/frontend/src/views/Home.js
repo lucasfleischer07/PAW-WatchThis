@@ -44,44 +44,49 @@ export default function Home() {
             })
 
         if(isLogged()) {
-            contentService.getContentByType("recommendedUser", 1, '', '', '', '', '', user.id, false, true)
-                .then(data => {
-                    if(!data.error) {
-                        if(data.data.length > 0) {
-                            setRecommendedUserList(data.data)
-                        } else {
-                            contentService.getContentByType("mostSavedContentByUsers", 1, '', '', '', '', '', null, false, true)
-                                .then(data => {
-                                    if(!data.error) {
-                                        setMostSavedContentByUsersList(data.data)
-                                    }
-                                })
-                                .catch(() => {
-                                    navigate("/error", { replace: true, state: {errorCode: 404} })
-                                })
+            if(user.id === undefined) {
+                signOut()
+                navigate("/", { replace: true})
+            } else {
+                contentService.getContentByType("recommendedUser", 1, '', '', '', '', '', user.id, false, true)
+                    .then(data => {
+                        if(!data.error) {
+                            if(data.data.length > 0) {
+                                setRecommendedUserList(data.data)
+                            } else {
+                                contentService.getContentByType("mostSavedContentByUsers", 1, '', '', '', '', '', null, false, true)
+                                    .then(data => {
+                                        if(!data.error) {
+                                            setMostSavedContentByUsersList(data.data)
+                                        }
+                                    })
+                                    .catch(() => {
+                                        navigate("/error", { replace: true, state: {errorCode: 404} })
+                                    })
+                            }
                         }
-                    }
-                })
-                .catch(() => {
-                    navigate("/error", { replace: true, state: {errorCode: 404} })
-                })
+                    })
+                    .catch(() => {
+                        navigate("/error", { replace: true, state: {errorCode: 404} })
+                    })
 
-            listApi.getUserWatchListContentIds(user?.id)
-                .then(watchList => {
-                    if(!watchList.error) {
-                        setUserWatchListIds(watchList.data)
-                    } else {
-                        if(watchList.errorCode === 404) {
-                            signOut()
-                            navigate("/", { replace: true })
+                listApi.getUserWatchListContentIds(user?.id)
+                    .then(watchList => {
+                        if(!watchList.error) {
+                            setUserWatchListIds(watchList.data)
                         } else {
-                            navigate("/error", { replace: true, state: {errorCode: watchList.errorCode} })
+                            if(watchList.errorCode === 404) {
+                                signOut()
+                                navigate("/", { replace: true })
+                            } else {
+                                navigate("/error", { replace: true, state: {errorCode: watchList.errorCode} })
+                            }
                         }
-                    }
-                })
-                .catch(() => {
-                    navigate("/error", { replace: true, state: {errorCode: 404} })
-                })
+                    })
+                    .catch(() => {
+                        navigate("/error", { replace: true, state: {errorCode: 404} })
+                    })
+            }
         } else {
             contentService.getContentByType("mostSavedContentByUsers", 1, '', '', '', '', '', null, false, true)
                 .then(data => {
