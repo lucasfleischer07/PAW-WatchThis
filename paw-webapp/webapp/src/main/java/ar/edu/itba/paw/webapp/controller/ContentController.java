@@ -51,26 +51,37 @@ public class ContentController {
     private static final int CONTENT_AMOUNT = 20;
     private static final Logger LOGGER = LoggerFactory.getLogger(ContentController.class);
 
-    // * ----------------------------------- Home Page -----------------------------------------------------------------
-    // Endpoint para getear el contenido de la home page
-//    @GET
-////    TODO: Le meti este landing solo poruqe todavia nose como unificarlo con el de abajo
-//    @Path("/landing")
-//    @Produces(value = {MediaType.APPLICATION_JSON})
-//    public Response getContentByType() {
-//        LOGGER.info("GET /{}: Called", uriInfo.getPath());
-//        Optional<User> user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
-//        List<List<Content>> landingPageContentList;
-//        if(!user.isPresent()) {
-//            landingPageContentList = cs.getLandingPageContent(null);
-//            LOGGER.info("GET /{}: Returning Landing Page Content for user NULL", uriInfo.getPath());
-//            return Response.ok(new GenericEntity<AnonymousLandingPageDto>(new AnonymousLandingPageDto(uriInfo, landingPageContentList)){}).build();
-//        } else {
-//            landingPageContentList = cs.getLandingPageContent(user.get());
-//            LOGGER.info("GET /{}: Returning Landing Page Content for userId {}", uriInfo.getPath(), user.get().getId());
-//            return Response.ok(new GenericEntity<UserLandingPageDto>(new UserLandingPageDto(uriInfo, landingPageContentList)){}).build();
-//        }
-//    }
+    // *  ----------------------------------- Movies and Serie Filters -------------------------------------------------
+    // Endpoint para filtrar el las peliculas/series
+    @GET
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response filterContentByType(@QueryParam("type") final String contentType,
+                                        @QueryParam("page") @DefaultValue("1") Integer pageNum,
+                                        @QueryParam("durationFrom") @DefaultValue("ANY") final String durationFrom,
+                                        @QueryParam("durationTo") @DefaultValue("ANY") final String durationTo,
+                                        @QueryParam("sorting") final Sorting sorting,
+                                        @QueryParam("query") @DefaultValue("ANY") final String query,
+                                        @QueryParam("genre") final String genre,
+                                        @QueryParam("watchListSavedBy") final Long watchListSavedBy,
+                                        @QueryParam("viewedListSavedBy") final Long viewedListSavedBy) {
+
+        LOGGER.info("GET /{}: Called",uriInfo.getPath());
+//        TODO: Ver de pasarla a un service
+        PageWrapper<Content> contentListFilter = GetContentParams.getContentByParams(contentType, pageNum, durationFrom, durationTo, sorting, query, genre, watchListSavedBy, viewedListSavedBy, cs, us, new SecurityChecks(us, cs, rs, ccs));
+
+        List<Content> contentListFilterPaginated = contentListFilter.getPageContent();
+        if(contentListFilterPaginated == null) {
+            LOGGER.warn("GET /{}: Failed at requesting content", uriInfo.getPath());
+            throw new ContentNotFoundException();
+        }
+
+        Collection<ContentDto> contentListFilterPaginatedDto = ContentDto.mapContentToContentDto(uriInfo, contentListFilterPaginated);
+        LOGGER.info("GET /{}: Success filtering the content", uriInfo.getPath());
+        final Response.ResponseBuilder response = Response.ok(new GenericEntity<Collection<ContentDto>>(contentListFilterPaginatedDto){});
+        ResponseBuildingUtils.setPaginationLinks(response,contentListFilter , uriInfo);
+        return response.build();
+
+    }
 
     // * ---------------------------------------------------------------------------------------------------------------
 
@@ -214,72 +225,6 @@ public class ContentController {
 
     // * ---------------------------------------------------------------------------------------------------------------
 
-    // * ----------------------------------- Movie and Series division -------------------------------------------------
-    // Endpoint para getear las peliculas o series
-//    @GET
-//    @Path("/{contentType}")
-//    @Produces(value = {MediaType.APPLICATION_JSON})
-//    public Response getContentByType(@PathParam("contentType") final String contentType,
-//                                     @QueryParam("pageNumber") @DefaultValue("1") Integer pageNum) {
-//        LOGGER.info("GET /{}: Called", uriInfo.getPath());
-//        if(!contentType.equals("movie") && !contentType.equals("serie") && !contentType.equals("all")){
-//            throw new PageNotFoundException();
-//        }
-//        int page= pageNum;
-//        PageWrapper<Content> contentList = cs.getAllContent(contentType, null, page, CONTENT_AMOUNT);
-//        Collection<ContentDto> contentListPaginatedDto = null;
-//        if(contentList.getPageContent() == null) {
-//            LOGGER.warn("GET /{}: Failed at requesting content", uriInfo.getPath());
-//            throw new ContentNotFoundException();
-//        } else {
-//            contentListPaginatedDto = ContentDto.mapContentToContentDto(uriInfo, contentList.getPageContent() );
-//        }
-//
-//        LOGGER.info("GET /{}: Success getting the content", uriInfo.getPath());
-//
-//        Response.ResponseBuilder response = Response.ok(new GenericEntity<Collection<ContentDto>>(contentListPaginatedDto){});
-//        ResponseBuildingUtils.setPaginationLinks(response,contentList , uriInfo);
-//        return response.build();
-//
-//    }
-
-    // * ---------------------------------------------------------------------------------------------------------------
-
-
-    // *  ----------------------------------- Movies and Serie Filters -------------------------------------------------
-    // Endpoint para filtrar el las peliculas/series
-    @GET
-    @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response filterContentByType(@QueryParam("type") final String contentType,
-                                        @QueryParam("page") @DefaultValue("1") Integer pageNum,
-                                        @QueryParam("durationFrom") @DefaultValue("ANY") final String durationFrom,
-                                        @QueryParam("durationTo") @DefaultValue("ANY") final String durationTo,
-                                        @QueryParam("sorting") final Sorting sorting,
-                                        @QueryParam("query") @DefaultValue("ANY") final String query,
-                                        @QueryParam("genre") final String genre,
-                                        @QueryParam("watchListSavedBy") final Long watchListSavedBy,
-                                        @QueryParam("viewedListSavedBy") final Long viewedListSavedBy) {
-
-        LOGGER.info("GET /{}: Called",uriInfo.getPath());
-//        TODO: Ver de pasarla a un service
-        PageWrapper<Content> contentListFilter = GetContentParams.getContentByParams(contentType, pageNum, durationFrom, durationTo, sorting, query, genre, watchListSavedBy, viewedListSavedBy, cs, us, new SecurityChecks(us, cs, rs, ccs));
-
-        List<Content> contentListFilterPaginated = contentListFilter.getPageContent();
-        if(contentListFilterPaginated == null) {
-            LOGGER.warn("GET /{}: Failed at requesting content", uriInfo.getPath());
-            throw new ContentNotFoundException();
-        }
-
-        Collection<ContentDto> contentListFilterPaginatedDto = ContentDto.mapContentToContentDto(uriInfo, contentListFilterPaginated);
-        LOGGER.info("GET /{}: Success filtering the content", uriInfo.getPath());
-        final Response.ResponseBuilder response = Response.ok(new GenericEntity<Collection<ContentDto>>(contentListFilterPaginatedDto){});
-        ResponseBuildingUtils.setPaginationLinks(response,contentListFilter , uriInfo);
-        return response.build();
-
-    }
-
-    // * ---------------------------------------------------------------------------------------------------------------
-
 
     // * ----------------------------------- Content Reviewers ---------------------------------------------------------
     // Endpoint para getear los reviewers de peliculas o series
@@ -381,7 +326,6 @@ public class ContentController {
         }
         return Response.noContent().build();
     }
-
 
     // * ---------------------------------------------------------------------------------------------------------------
 

@@ -71,24 +71,6 @@ public class CommentController {
         return Response.ok(commentDto).build();
     }
 
-
-    // * ---------------------------------------------Comment GET ------------------------------------------------------
-    //Endpoint para pedir los comentarios de una review
-//    @GET
-//    @Path("/{reviewId}")
-//    @Produces(value = {MediaType.APPLICATION_JSON})
-//    public Response getReviewComments(@PathParam("reviewId") final long reviewId) {
-//
-//        LOGGER.info("GET /{}: Called", uriInfo.getPath());
-//        Review review = rs.findById(reviewId).orElseThrow(ReviewNotFoundException::new);
-//        List<Comment> comments = ccs.getReviewComments(review);
-//        Collection<CommentDto> commentListDto = CommentDto.mapCommentToCommentDto(uriInfo, comments);
-//        LOGGER.info("GET /{}: Comments got from review with id {}", uriInfo.getPath(), reviewId);
-//        return Response.ok(new GenericEntity<Collection<CommentDto>>(commentListDto){}).build();
-//    }
-    // * ---------------------------------------------------------------------------------------------------------------
-
-
     // * ---------------------------------------------Comment POST------------------------------------------------------
     // Endpoint para crear un comentario
     @POST
