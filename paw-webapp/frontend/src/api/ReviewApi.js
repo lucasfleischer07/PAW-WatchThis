@@ -9,15 +9,15 @@ export class ReviewApi {
         this.basePath = `${paths.BASE_URL_API}${paths.REVIEWS}`
     }
 
-    async getReviews(userId, contentId, pageNumber, reported = false) {
+    async getReviews(userId, contentId, page, reported = false) {
         const apiUrl = `${this.basePath}`
         let params
         if(userId == null) {
-            params = {contentId: contentId, page: pageNumber}
+            params = {contentId: contentId, page: page}
         } else if(reported) {
-            params = {reportedById: userId, page: pageNumber}
+            params = {reportedById: userId, page: page}
         } else {
-            params = {userId: userId, page: pageNumber}
+            params = {userId: userId, page: page}
         }
         const options = {method: 'GET', headers: authCheck({})}
         return genericFetchWithQueryParams(apiUrl, options, params)

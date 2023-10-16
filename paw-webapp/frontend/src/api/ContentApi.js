@@ -76,7 +76,7 @@ export class ContentApi {
         }
     }
 
-    async getContentByType(contentType, pageNumber, genre, durationFrom, durationTo, sorting, query, userId = null, isWatchList = false, isHomePage = false) {
+    async getContentByType(contentType, page, genre, durationFrom, durationTo, sorting, query, userId = null, isWatchList = false, isHomePage = false) {
         const params = {}
         if(isWatchList) {
             params.watchListSavedBy = userId
@@ -103,16 +103,16 @@ export class ContentApi {
                 params.query = query
             }
         }
-        params.page = pageNumber
+        params.page = page
 
         const apiUrl = `${this.basePath}`
         const options = {method: 'GET', headers: authCheck({})}
         return genericFetchWithQueryParams(apiUrl, options, params)
     }
 
-    async filterContentByType(contentType, pageNumber, filters) {
+    async filterContentByType(contentType, page, filters) {
         const apiUrl = `${this.basePath}/${contentType}/filters`
-        const params = {pageNumber: pageNumber, ...filters}
+        const params = {page: page, ...filters}
         const options = {method: 'GET', headers: authCheck({})}
         return genericFetchWithQueryParams(apiUrl, options, params)
     }

@@ -23,7 +23,7 @@ public class GetReviewsParams {
     public static PageWrapper<Review> getReviewsByParams(final Long userId,
                                                          final Long contentId,
                                                          final Long reportedById,
-                                                         final int pageNumber,
+                                                         final int page,
                                                          UserService us,
                                                          ContentService cs,
                                                          ReviewService rs) {
@@ -33,13 +33,13 @@ public class GetReviewsParams {
         PageWrapper<Review> reviewList = null;
         if(contentId != null) {
             Content content = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
-            reviewList = rs.getAllReviews(content, pageNumber, REVIEW_AMOUNT);
+            reviewList = rs.getAllReviews(content, page, REVIEW_AMOUNT);
         } else if(reportedById != null) {
                 List<Review> reportedReviews=us.findById(reportedById).orElseThrow(UserNotFoundException::new).getReportedReviewsList();
                 return new PageWrapper<Review>(1,1,reportedReviews.size(),reportedReviews,reportedReviews.size());
         } else {
             final User user = us.findById(userId).orElseThrow(UserNotFoundException::new);
-            reviewList = rs.getAllUserReviews(user, pageNumber, REVIEW_AMOUNT);
+            reviewList = rs.getAllUserReviews(user, page, REVIEW_AMOUNT);
         }
         return reviewList;
 

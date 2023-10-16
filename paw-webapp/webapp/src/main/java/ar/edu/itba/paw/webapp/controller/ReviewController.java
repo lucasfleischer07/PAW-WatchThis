@@ -49,9 +49,9 @@ public class ReviewController {
     public Response reviews(@QueryParam("contentId") final Long contentId,
                             @QueryParam("userId") final Long userId,
                             @QueryParam("reportedById") final Long reportedById,
-                            @QueryParam("page") @DefaultValue("1") int pageNumber) {
+                            @QueryParam("page") @DefaultValue("1") int page) {
         LOGGER.info("GET /{}: Called",uriInfo.getPath());
-        PageWrapper<Review> reviewList = GetReviewsParams.getReviewsByParams(userId, contentId, reportedById, pageNumber, us, cs, rs);
+        PageWrapper<Review> reviewList = GetReviewsParams.getReviewsByParams(userId, contentId, reportedById, page, us, cs, rs);
         if(reviewList == null) {
             LOGGER.warn("GET /{}: Invalid page param",uriInfo.getPath());
             throw new ContentNotFoundException();
