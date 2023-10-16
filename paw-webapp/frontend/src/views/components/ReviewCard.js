@@ -126,7 +126,6 @@ export default function ReviewCard(props) {
     };
 
     useEffect(() => {
-        console.log(completeReviewUser)
         if(canComment) {
             setReviewUserId(completeReviewUser.id)
             setReviewUser(completeReviewUser.username)
