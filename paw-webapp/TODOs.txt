@@ -15,8 +15,9 @@ Si tiene:
 - (L) Al buscar el search box pierde su contenido.
     - Lo agregamos nosootros este comentario: Es en la home, por algun motivo se borra lo que el usuario busco de la searchbox
 - (L) No cambian el title de la app al navegar, toda la historia dice “Watch This”
-- (P) La API expone en forma pública el mail y el rol de los usuarios. Estos son datos sensibles que debieran ser tratados como tales.
-- (P) La API expone junto a una review la cantidad de reportes y el nombre y la razón de 1 reporte (¿el último?), es decir que reportar una review no es privado.
+- (L) La API expone en forma pública el mail y el rol de los usuarios. Estos son datos sensibles que debieran ser tratados como tales.
+    - Comentario: Esto esta hecho pero el rol se dejo por un tema de que comparamos ese rol para ver si se puede hacer admin o no a otro usuario. Por eso no se puede sacar el admin. El mail lo saque ya
+- (L) La API expone junto a una review la cantidad de reportes y el nombre y la razón de 1 reporte (¿el último?), es decir que reportar una review no es privado.
 - (L) El módulo webapp no tiene una dependencia explícita sobre frontend, por lo que el orden de ejecución no está garantizado y se puede generar un war que no contiene los assets de la SPA.
 - (L) El repositorio incluye binarios completos de node.
 - (C) No hacen uso de interceptors, por lo que toda la lógica de seteo de headers y manejo de errores está esparcida y duplicada por toda la SPA.
@@ -25,12 +26,12 @@ Si tiene:
     - Era sacar lo de @EnableWebMvc del WebConfig y las dependencias del pom.xml y adaptar el WebConfig eliminando lo que no se usaba mas
 - La API no es REST / no implementa HATEOAS. Estos son errores conceptuales graves. A continuación se detallan algunos (lista no exhaustiva) de los problemas detectados:
     - (L) /api/content no denota entidades del dominio. Está diseñada en función de lo que la UI requiere en la home.
-    - (P) No usan URNs. Paths como /users/loggedUser retornarán cosas distintas para distintos usuarios.
+    - (C) No usan URNs. Paths como /users/loggedUser retornarán cosas distintas para distintos usuarios.
     - (L) Los paths no denotan recursos, usando los verbos HTTP para definir la acción sobre los mismos; sino que los paths incluyen verbos, y a veces más de uno, como ser /users/login/jsotuyod@itba.edu.ar/forgotPassword.
     - (L) Los verbos en los paths sobreescriben la semántica de los verbos HTTP, por ejemplo PUT /lists/watchList/add/3 agrega un elemento a un watchlist en lugar de sobreescribir el recurso.
     - (C) Se encuentran API calls llamativas, como /api/reviews/2?pageNumber=1&page=1. Parece ser que el párametro real para paginar es pageNumber, pero los headers Link indican que es page.
     - (L) Las entidades no están hipervinculadas, sino que se las embebe. Por ejemplo, reviews embebe el contenido y el user completos. Esto querría decir que al modificar / sobreescribir un contenido, debiera poder sobreescribir la review o el user en la misma operación, pero obviamente no es el caso.
-- (C) Cambiar el endpoint de getUserViewedListContentIds() y el de watchlist para que me lo haga en base de la listas y no de los ids en si
+- (L) Cambiar el endpoint de getUserViewedListContentIds() y el de watchlist para que me lo haga en base de la listas y no de los ids en si
 - (C) Ver las exceptions de de GetContentParams y GetReviewParams
 
 
