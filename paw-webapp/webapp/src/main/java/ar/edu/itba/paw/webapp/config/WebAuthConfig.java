@@ -158,7 +158,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 //content
                 .antMatchers(HttpMethod.PUT,"/api/content/**").hasRole("ADMIN")
                 .antMatchers(HttpMethod.DELETE,"/api/content/**").hasRole("ADMIN")
-                .antMatchers(HttpMethod.POST,"/api/content/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST,"/api/content").hasRole("ADMIN")
                 //reviews
                 .antMatchers(HttpMethod.POST,"/api/reviews/**").authenticated()
                 .antMatchers(HttpMethod.DELETE,"/api/reviews/delete/{id}").access(ACCESS_CONTROL_CHECK_REVIEW_OWNER_OR_ADMIN)

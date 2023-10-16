@@ -45,6 +45,7 @@ public class ReviewController {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @PreAuthorize("@securityChecks.checkReported(#reportedById)")
     public Response reviews(@QueryParam("contentId") final Long contentId,
                             @QueryParam("userId") final Long userId,
                             @QueryParam("reportedById") final Long reportedById,

@@ -30,7 +30,7 @@ describe('Comments', () => {
     });
 
 
-    test('should delete a review', () => {
+    test('should delete a comment', () => {
         mockAuthContextValue.isLogged.mockReturnValue(true);
         commentService.commentDelete.mockResolvedValue({ error: false })
         const { getByTestId, getByText } = render(

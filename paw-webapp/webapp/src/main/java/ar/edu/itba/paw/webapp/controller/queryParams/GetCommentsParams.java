@@ -30,15 +30,8 @@ public class GetCommentsParams {
         if(reviewId != null) {
             Review review = rs.findById(reviewId).orElseThrow(ReviewNotFoundException::new);
             commentList = ccs.getReviewComments(review);
-        } else {
-            final User loggedUser = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
-            if(loggedUser.getId() == reportedById) {
-//                TODO: Setear aca lo de la lista de comments reportados (borrar las 2 lineas de abajo, estan puestas solo para que no tire error al correrlo)
-                Review review = rs.findById(reviewId).orElseThrow(ReviewNotFoundException::new);
-                commentList = ccs.getReviewComments(review);
-            } else {
-                throw new ForbiddenException();
-            }
+        } else if(reportedById!=null){
+            commentList=us.findById(reportedById).orElseThrow(UserNotFoundException::new).getReportedCommentsList();
         }
 
         return commentList;

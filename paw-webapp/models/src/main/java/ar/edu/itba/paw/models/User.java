@@ -58,6 +58,22 @@ public class User {
     private Set<CommentReport> userCommentReports;
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,orphanRemoval = true)
     private Set<ReviewReport> userReviewReports;
+
+    @ManyToMany
+    @JoinTable(
+            name = "reviewreport",
+            joinColumns = @JoinColumn(name = "userid"),
+            inverseJoinColumns = @JoinColumn(name = "reviewid")
+    )
+    private List<Review> reportedReviewsList;
+
+    @ManyToMany
+    @JoinTable(
+            name = "commentreport",
+            joinColumns = @JoinColumn(name = "userid"),
+            inverseJoinColumns = @JoinColumn(name = "commentid")
+    )
+    private List<Comment> reportedCommentsList;
     public User(Long id, String email, String userName, String password, Long reputation, byte[] image, String role) {
         this.id = id;
         this.email = email;
@@ -134,5 +150,25 @@ public class User {
 
     public void setUserReviews(List<Review> userReviews) {
         this.userReviews = userReviews;
+    }
+
+    public List<Content> getViewedlist() {
+        return viewedlist;
+    }
+
+    public Set<CommentReport> getUserCommentReports() {
+        return userCommentReports;
+    }
+
+    public Set<ReviewReport> getUserReviewReports() {
+        return userReviewReports;
+    }
+
+    public List<Comment> getReportedCommentsList() {
+        return reportedCommentsList;
+    }
+
+    public List<Review> getReportedReviewsList() {
+        return reportedReviewsList;
     }
 }

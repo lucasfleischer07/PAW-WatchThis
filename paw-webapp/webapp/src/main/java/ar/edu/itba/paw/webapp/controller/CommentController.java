@@ -45,6 +45,7 @@ public class CommentController {
 
     @GET
     @Produces(value = {MediaType.APPLICATION_JSON})
+    @PreAuthorize("@securityChecks.checkReported(#reportedById)")
     public Response getComments(@QueryParam("reviewId") final Long reviewId,
                                 @QueryParam("reportedById") final Long reportedById) {
         LOGGER.info("GET /{}: Called", uriInfo.getPath());

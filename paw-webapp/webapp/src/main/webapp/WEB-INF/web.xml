@@ -123,7 +123,26 @@
     <filter-name>openEntityManagerInViewFilter</filter-name>
     <url-pattern>/api/*</url-pattern>
   </filter-mapping>
-
+  <filter>
+    <filter-name>CacheControlFilter</filter-name>
+    <filter-class>ar.edu.itba.paw.webapp.utilities.CacheControlFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>CacheControlFilter</filter-name>
+    <url-pattern>/static/*</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>CacheControlFilter</filter-name>
+    <url-pattern>/images/*</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>CacheControlFilter</filter-name>
+    <url-pattern>*.png</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>CacheControlFilter</filter-name>
+    <url-pattern>*.ico</url-pattern>
+  </filter-mapping>
 
 
 <!--  Esto es lo de la pagina de errores-->

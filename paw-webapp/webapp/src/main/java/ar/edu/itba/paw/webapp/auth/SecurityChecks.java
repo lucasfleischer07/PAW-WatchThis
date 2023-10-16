@@ -98,5 +98,14 @@ public class SecurityChecks {
         final Comment comment = ccs.getComment(commentId).orElseThrow(CommentNotFoundException::new);
         return isAdmin(userId) || (checkUser(userId) && comment.getUser().getId() == userId);
     }
-
+    public boolean checkReported(Long reportedById){
+        if(reportedById==null)
+            return true;
+        final User loggedUser = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
+        if(reportedById == loggedUser.getId()) {
+            return true;
+        } else {
+            throw new ForbiddenException("Users dont match");
+        }
+    }
 }
