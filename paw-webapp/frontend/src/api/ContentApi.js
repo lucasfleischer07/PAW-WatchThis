@@ -1,7 +1,6 @@
 import {APPLICATION_JSON_TYPE, paths} from "../paths";
 import {fetchWithQueryParamsApi, fetchWithQueryParamsPostApi} from "./FetchWithQueryParams";
 import {authCheck} from "../scripts/authCheck";
-import {ListsApi} from "./ListsApi";
 import {genericFetchWithQueryParams, genericRequest} from "./GenericRequest";
 
 export class ContentApi {
@@ -76,11 +75,17 @@ export class ContentApi {
         }
     }
 
-    async getContentByType(contentType, page, genre, durationFrom, durationTo, sorting, query, userId = null, isWatchList = false, isHomePage = false) {
+    async getContentByType(contentType, page, genre, durationFrom, durationTo, sorting, query, userId = null, isWatchList = false, isHomePage = false, paginated = true) {
         const params = {}
         if(isWatchList) {
+            if(!paginated) {
+                params.paginated = paginated
+            }
             params.watchListSavedBy = userId
         } else if(!isWatchList && userId != null && !isHomePage) {
+            if(!paginated) {
+                params.paginated = paginated
+            }
             params.viewedListSavedBy = userId
         } else {
             if(contentType !== null) {

@@ -44,7 +44,7 @@ export default function Home() {
             })
 
         if(isLogged()) {
-            if(user.id === undefined) {
+            if(user?.id === undefined) {
                 signOut()
                 navigate("/", { replace: true})
             } else {
@@ -70,7 +70,8 @@ export default function Home() {
                         navigate("/error", { replace: true, state: {errorCode: 404} })
                     })
 
-                listApi.getUserWatchListContentIds(user?.id)
+
+                contentService.getContentByType(null, 1, '', '', '', '', '', user.id, true, false, false)
                     .then(watchList => {
                         if(!watchList.error) {
                             setUserWatchListIds(watchList.data)

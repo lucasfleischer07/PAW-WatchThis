@@ -220,33 +220,36 @@ export default function InfoPage() {
     useEffect(() => {
         async function fetchData() {
             if(isLogged()) {
-                listsService.getUserWatchListContentIds(user.id)
+                contentService.getContentByType(null, 1, '', '', '', '', '', user.id, true, false, false)
                     .then(watchList => {
                         if(!watchList.error) {
                             setIsInWatchList(watchList.data.some(item => item.id === parseInt(contentId)))
-                        } else if(watchList.errorCode === 404) {
-                            setShowExpiredCookiesModal(true)
                         } else {
-                            navigate("/error", { replace: true, state: {errorCode: watchList.errorCode} })
+                            if(watchList.errorCode === 404) {
+                                setShowExpiredCookiesModal(true)
+                            } else {
+                                navigate("/error", { replace: true, state: {errorCode: watchList.errorCode} })
+                            }
                         }
                     })
                     .catch(() => {
                         navigate("/error", { replace: true, state: {errorCode: 404} })
                     })
 
-                listsService.getUserViewedListContentIds(user.id)
+
+                contentService.getContentByType(null, 1, '', '', '', '', '', user.id, false, false, false)
                     .then(viewedList => {
                         if(!viewedList.error) {
                             setIsInViewedList(viewedList.data.some(item => item.id === parseInt(contentId)))
                         } else {
-                            if(viewedList.errorCode === 404 && !showExpiredCookiesModal) {
+                            if(viewedList.errorCode === 404) {
                                 setShowExpiredCookiesModal(true)
                             } else {
                                 navigate("/error", { replace: true, state: {errorCode: viewedList.errorCode} })
                             }
                         }
                     })
-                    .catch(() => {
+                    .catch((e) => {
                         navigate("/error", { replace: true, state: {errorCode: 404} })
                     })
 
@@ -300,7 +303,6 @@ export default function InfoPage() {
                 setReviews(reviewsData.data);
                 const aux = reviewsData.totalPages;
                 setAmountPages(aux);
-
                 const userInfoPromises = reviewsData.data.map(async (review) => {
                     const auxUserUrl = review.user.split('/');
                     const auxUserId = parseInt(auxUserUrl[auxUserUrl.length - 1], 10);

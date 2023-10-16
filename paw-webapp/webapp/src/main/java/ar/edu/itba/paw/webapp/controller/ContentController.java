@@ -63,11 +63,12 @@ public class ContentController {
                                         @QueryParam("query") @DefaultValue("ANY") final String query,
                                         @QueryParam("genre") final String genre,
                                         @QueryParam("watchListSavedBy") final Long watchListSavedBy,
-                                        @QueryParam("viewedListSavedBy") final Long viewedListSavedBy) {
+                                        @QueryParam("viewedListSavedBy") final Long viewedListSavedBy,
+                                        @QueryParam("paginated") @DefaultValue("true") final Boolean paginated) {
 
         LOGGER.info("GET /{}: Called",uriInfo.getPath());
 //        TODO: Ver de pasarla a un service
-        PageWrapper<Content> contentListFilter = GetContentParams.getContentByParams(contentType, pageNum, durationFrom, durationTo, sorting, query, genre, watchListSavedBy, viewedListSavedBy, cs, us, new SecurityChecks(us, cs, rs, ccs));
+        PageWrapper<Content> contentListFilter = GetContentParams.getContentByParams(contentType, pageNum, durationFrom, durationTo, sorting, query, genre, watchListSavedBy, viewedListSavedBy, paginated, cs, us, new SecurityChecks(us, cs, rs, ccs));
 
         List<Content> contentListFilterPaginated = contentListFilter.getPageContent();
         if(contentListFilterPaginated == null) {

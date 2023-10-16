@@ -29,11 +29,11 @@ public class GetContentParams {
                                                           final String genre,
                                                           final Long watchListSavedBy,
                                                           final Long viewedListSavedBy,
+                                                          final Boolean paginated,
                                                           ContentService cs,
                                                           UserService us,
                                                           SecurityChecks securityChecks) {
 //        TODO: Terminar de chequear estos casos de cuando un query param tiene que ser null y otros no. Ver si hay que verificar los del contentType de bestRated y eso
-//        TODO: Ver de crear una exception nuestra
         if(watchListSavedBy != null && (contentType != null || !Objects.equals(durationFrom, "ANY") || !Objects.equals(durationTo, "ANY") || sorting != null || !Objects.equals(query, "ANY") || genre != null || viewedListSavedBy != null)) {
             throw new InvalidParameterException("Invalid parameters");
         } else if (viewedListSavedBy != null && (contentType != null || !Objects.equals(durationFrom, "ANY") || !Objects.equals(durationTo, "ANY") || sorting != null || !Objects.equals(query, "ANY") || genre != null || watchListSavedBy != null)) {
@@ -45,14 +45,23 @@ public class GetContentParams {
         if(watchListSavedBy != null) {
             securityChecks.checkUser(watchListSavedBy);
             final User user = us.findById(watchListSavedBy).orElseThrow(UserNotFoundException::new);
-            contentListFilter = us.getWatchList(user, pageNum, CONTENT_AMOUNT);
+            if(paginated) {
+                contentListFilter = us.getWatchList(user, pageNum, CONTENT_AMOUNT);
+            } else {
+                contentListFilter = us.getWatchList(user, pageNum, Integer.MAX_VALUE);
+            }
             return contentListFilter;
+
         }
 
         if(viewedListSavedBy != null) {
             securityChecks.checkUser(viewedListSavedBy);
             final User user = us.findById(viewedListSavedBy).orElseThrow(UserNotFoundException::new);
-            contentListFilter = us.getUserViewedList(user, pageNum, CONTENT_AMOUNT);
+            if(paginated) {
+                contentListFilter = us.getUserViewedList(user, pageNum, CONTENT_AMOUNT);
+            } else {
+                contentListFilter = us.getUserViewedList(user, pageNum, Integer.MAX_VALUE);
+            }
             return contentListFilter;
         }
 

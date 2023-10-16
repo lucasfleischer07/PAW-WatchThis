@@ -1,7 +1,5 @@
 import {APPLICATION_JSON_TYPE, paths} from "../paths";
-import {fetchWithQueryParamsApi} from "./FetchWithQueryParams";
 import {authCheck} from "../scripts/authCheck";
-import {ListsApi} from "./ListsApi";
 import {genericFetchWithQueryParams, genericRequest} from "./GenericRequest";
 
 export class ReviewApi {

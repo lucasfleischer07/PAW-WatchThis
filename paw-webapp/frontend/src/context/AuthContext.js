@@ -1,14 +1,8 @@
 import { createContext } from "react";
-import {useListApi} from "../api/ListsApi";
-import {useNavigate} from "react-router-dom";
-import {useUserApi} from "../api/UserApi";
-import {useReviewApi} from "../api/ReviewApi";
-import {useContentApi} from "../api/ContentApi";
 
 export const AuthContext = createContext(null);
 
 export function AuthProvider ({children}) {
-    const navigate = useNavigate()
 
     const signIn = (user, authToken) => {
         let json={
@@ -36,7 +30,6 @@ export function AuthProvider ({children}) {
         signIn,
         signOut,
         isLogged,
-        listApi: useListApi(signOut, navigate),
     };
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

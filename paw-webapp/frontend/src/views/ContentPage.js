@@ -61,7 +61,7 @@ export default function ContentPage(props) {
 
     useEffect(() => {
         user !== null || undefined?
-            listsService.getUserWatchListContentIds(user.id)
+            contentService.getContentByType(null, 1, '', '', '', '', '', user.id, true, false, false)
                 .then(watchList => {
                     if(!watchList.error) {
                         setUserWatchListIds(watchList.data)
@@ -73,6 +73,10 @@ export default function ContentPage(props) {
                         }
                     }
                 })
+                .catch(() => {
+                    navigate("/error", { replace: true, state: {errorCode: 404} })
+                })
+
             : setUserWatchListIds(null)
     }, [user])
 
