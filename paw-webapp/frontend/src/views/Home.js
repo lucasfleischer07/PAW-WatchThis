@@ -44,7 +44,7 @@ export default function Home() {
             })
 
         if(isLogged()) {
-            if(user?.id === undefined) {
+            if(user?.id === undefined || user?.username === undefined || user?.role === undefined) {
                 signOut()
                 navigate("/", { replace: true})
             } else {
