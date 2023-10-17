@@ -13,7 +13,7 @@ export class ReviewApi {
         if(userId == null) {
             params = {contentId: contentId, page: page}
         } else if(reported) {
-            params = {reportedById: userId, page: page}
+            params = {reportedById: userId}
         } else {
             params = {userId: userId, page: page}
         }

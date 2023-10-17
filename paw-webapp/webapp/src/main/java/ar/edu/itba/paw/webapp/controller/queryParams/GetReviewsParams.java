@@ -36,7 +36,7 @@ public class GetReviewsParams {
             reviewList = rs.getAllReviews(content, page, REVIEW_AMOUNT);
         } else if(reportedById != null) {
                 List<Review> reportedReviews=us.findById(reportedById).orElseThrow(UserNotFoundException::new).getReportedReviewsList();
-                return new PageWrapper<Review>(1,1,reportedReviews.size(),reportedReviews,reportedReviews.size());
+                return new PageWrapper<Review>(page,1,reportedReviews.size(),reportedReviews,reportedReviews.size());
         } else {
             final User user = us.findById(userId).orElseThrow(UserNotFoundException::new);
             reviewList = rs.getAllUserReviews(user, page, REVIEW_AMOUNT);

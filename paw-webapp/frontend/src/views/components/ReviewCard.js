@@ -126,13 +126,8 @@ export default function ReviewCard(props) {
     };
 
     useEffect(() => {
-        if(canComment) {
-            setReviewUserId(completeReviewUser.id)
-            setReviewUser(completeReviewUser.username)
-        } else {
-            setReviewUserId(loggedUserId)
-            setReviewUser(loggedUserName)
-        }
+        setReviewUserId(completeReviewUser.id)
+        setReviewUser(completeReviewUser.username)
 
         if(contentId === undefined) {
             contentService.getSpecificContent(contentUrl)
@@ -148,7 +143,7 @@ export default function ReviewCard(props) {
                 })
         }
 
-    }, [reviewUserUrl])
+    }, [completeReviewUser.id])
 
     return(
         <div className="accordion W-accordion-margin" id={`accordion${reviewId}`}>

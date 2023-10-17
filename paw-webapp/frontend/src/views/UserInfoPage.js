@@ -20,6 +20,8 @@ export default function UserInfoPage() {
     const [showExpiredCookiesModal, setShowExpiredCookiesModal] = useState(false)
 
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
+    const [loggedUserReviewsReported, setLoggedUserReviewsReported] = useState([])
+
     const [reviewOwnerUser, setReviewOwnerUser] = useState({})
     const [isSameUser, setIsSameUser] = useState(undefined)
     const [canPromote, setCanPromote] = useState(undefined)
@@ -33,7 +35,7 @@ export default function UserInfoPage() {
     const [isLikeReviewsList, setIsLikeReviewsList] = useState([]);
     const [isDislikeReviewsList, setIsDislikeReviewsList] = useState([]);
     const [contentArray, setContentArray] = useState([])
-
+    const [loaded, setLoaded] = useState(false)
 
     const prevPage = () => {
         changeUrlPage(page - 1)
@@ -84,100 +86,117 @@ export default function UserInfoPage() {
 
 
     useEffect(() => {
-        reviewService.getReviews(parseInt(userProfileId), null, page)
-            .then(async reviews => {
-                if (!reviews.error) {
-                    for (let i = 0; i < reviews.data.length; i++) {
-                        await contentService.getSpecificContent(reviews.data[i].content)
-                            .then(contentData => {
-                                if (!contentData.error) {
-                                    setContentArray(prevArray => [...prevArray, contentData.data]);
-                                } else {
-                                    navigate("/error", {replace: true, state: {errorCode: contentData.errorCode}})
-                                }
-                            })
-                            .catch(error => {
-                                navigate("/error", {replace: true, state: {errorCode: 404}})
-                            });
-                    }
-
-
-                    setReviews(reviews.data)
-                    setTotalReviews(reviews.totalUserReviews)
-
-                    userService.getUserInfo(parseInt(userProfileId))
-                        .then((data) => {
-                            if (!data.error) {
-                                setReviewOwnerUser(data.data)
-                                if (reviews.data.length === 0) {
-                                    setReputation(0)
-                                } else {
-                                    let reputation = 0
-                                    for (let i = 0; i < reviews.data.length; i++) {
-                                        reputation += reviews.data[i].reputation
+        async function fetchData() {
+            reviewService.getReviews(parseInt(userProfileId), null, page)
+                .then(async reviews => {
+                    if (!reviews.error) {
+                        for (let i = 0; i < reviews.data.length; i++) {
+                            await contentService.getSpecificContent(reviews.data[i].content)
+                                .then(contentData => {
+                                    if (!contentData.error) {
+                                        setContentArray(prevArray => [...prevArray, contentData.data]);
+                                    } else {
+                                        navigate("/error", {replace: true, state: {errorCode: contentData.errorCode}})
                                     }
-                                    setReputation(reputation)
-                                }
+                                })
+                                .catch(error => {
+                                    navigate("/error", {replace: true, state: {errorCode: 404}})
+                                });
+                        }
 
-                                if (user?.role === 'admin' && data.data.role !== 'admin') {
-                                    setCanPromote(true)
+                        setReviews(reviews.data)
+                        setTotalReviews(reviews.totalUserReviews)
+
+                        userService.getUserInfo(parseInt(userProfileId))
+                            .then((data) => {
+                                if (!data.error) {
+                                    setReviewOwnerUser(data.data)
+                                    if (reviews.data.length === 0) {
+                                        setReputation(0)
+                                    } else {
+                                        let reputation = 0
+                                        for (let i = 0; i < reviews.data.length; i++) {
+                                            reputation += reviews.data[i].reputation
+                                        }
+                                        setReputation(reputation)
+                                    }
+
+                                    if (user?.role === 'admin' && data.data.role !== 'admin') {
+                                        setCanPromote(true)
+                                    } else {
+                                        setCanPromote(false)
+                                    }
+
+                                    setAmountReviews(reviews.totalReviews)
+                                    setAmountPages(reviews.totalPages)
+
+                                    if (user?.id === parseInt(userProfileId)) {
+                                        setIsSameUser(true)
+                                    } else {
+                                        setIsSameUser(false)
+                                    }
+
+                                    setLoaded(true)
+
                                 } else {
-                                    setCanPromote(false)
+                                    navigate("/error", {replace: true, state: {errorCode: data.errorCode}})
                                 }
 
-                                setAmountReviews(reviews.totalReviews)
-                                setAmountPages(reviews.totalPages)
+                            })
+                            .catch(() => {
+                                navigate("/error", {replace: true, state: {errorCode: 404}})
+                            })
 
-                                if (user?.id === parseInt(userProfileId)) {
-                                    setIsSameUser(true)
-                                } else {
-                                    setIsSameUser(false)
-                                }
-
-                            } else {
-                                navigate("/error", {replace: true, state: {errorCode: data.errorCode}})
-                            }
-
-                        })
-                        .catch(() => {
-                            navigate("/error", {replace: true, state: {errorCode: 404}})
-                        })
-
-                } else {
-                    navigate("/error", {replace: true, state: {errorCode: reviews.errorCode}})
-                }
-            })
-            .catch(() => {
-                navigate("/error", { replace: true, state: {errorCode: 404} })
-            })
-
-        if(isLogged()) {
-            userService.getReviewsLike(user?.id)
-                .then(data => {
-                    if(!data.error) {
-                        setIsLikeReviewsList(data.data)
                     } else {
-                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                        navigate("/error", {replace: true, state: {errorCode: reviews.errorCode}})
                     }
                 })
                 .catch(() => {
                     navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
 
-            userService.getReviewsDislike(user?.id)
-                .then(data => {
-                    if(!data.error) {
-                        setIsDislikeReviewsList(data.data)
-                    } else {
-                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
-                    }
-                })
-                .catch(() => {
-                    navigate("/error", { replace: true, state: {errorCode: 404} })
-                })
+            if(isLogged()) {
+                userService.getReviewsLike(user?.id)
+                    .then(data => {
+                        if(!data.error) {
+                            setIsLikeReviewsList(data.data)
+                        } else {
+                            navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                        }
+                    })
+                    .catch(() => {
+                        navigate("/error", { replace: true, state: {errorCode: 404} })
+                    })
+
+                userService.getReviewsDislike(user?.id)
+                    .then(data => {
+                        if(!data.error) {
+                            setIsDislikeReviewsList(data.data)
+                        } else {
+                            navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                        }
+                    })
+                    .catch(() => {
+                        navigate("/error", { replace: true, state: {errorCode: 404} })
+                    })
+
+                reviewService.getReviews(user?.id, null, 1, true)
+                    .then(data => {
+                        if(!data.error) {
+                            setLoggedUserReviewsReported(data.data)
+                        } else {
+                            navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                        }
+                    })
+                    .catch(() => {
+                        navigate("/error", { replace: true, state: {errorCode: 404} })
+                    })
+            }
         }
 
-    }, [page])
+        fetchData()
+
+    }, [page, userProfileId])
 
 
     useEffect(() => {
@@ -255,16 +274,7 @@ export default function UserInfoPage() {
                             </div>
                             <div className="card">
                                 <div className="card-body">
-                                    {reviews.length === 0 ? (
-                                        <div className="W-no-reviews-icon">
-                                            <img className="W-no-reviews-image" src={"/paw-2022b-3/images/noReviews.png"} alt="No_Review_Img"/>
-                                            {isSameUser ? (
-                                                <h4 className="W-no-reviews-text">{t('Profile.NoReviews.Owner')}</h4>
-                                            ) : (
-                                                <h4 className="W-no-reviews-text">{t('Profile.NoReviews.NotOwner', {user: reviewOwnerUser.username})}</h4>
-                                            )}
-                                        </div>
-                                    ) : (
+                                    {loaded && reviews.length > 0 ? (
                                         reviews.map((review, index) => (
                                             <div key={review.id}>
                                                 <Link className="W-movie-title" to={`/content/${contentArray[index]?.type}/${contentArray[index]?.id}`}>
@@ -279,6 +289,7 @@ export default function UserInfoPage() {
                                                     reviewId={review.id}
                                                     reviewReputation={review.reputation}
                                                     reviewUserUrl={review.user}
+                                                    reviewUser={{id: reviewOwnerUser.id, username: reviewOwnerUser.username}}
                                                     contentUrl={review.content}
                                                     contentId={contentArray[index]?.id}
                                                     contentType={review.type}
@@ -287,12 +298,21 @@ export default function UserInfoPage() {
                                                     isAdmin={user?.role === 'admin'}
                                                     isLikeReviews={isLikeReviewsList.length > 0 ? isLikeReviewsList.some(item => parseInt(item.id) === parseInt(review.id)) : false}
                                                     isDislikeReviews={isDislikeReviewsList.length > 0 ? isDislikeReviewsList.some(item => parseInt(item.id) === parseInt(review.id)) : false}
-                                                    alreadyReport={review.reviewReporters.includes(user?.username)}
+                                                    alreadyReport={loggedUserReviewsReported.length > 0 ? loggedUserReviewsReported.some(item => item.id === parseInt(review.id)) : false}
                                                     canComment={false}
                                                     seeComments={false}
                                                 />
                                             </div>
                                         ))
+                                    ) : (
+                                        <div className="W-no-reviews-icon">
+                                            <img className="W-no-reviews-image" src={"/paw-2022b-3/images/noReviews.png"} alt="No_Review_Img"/>
+                                            {isSameUser ? (
+                                                <h4 className="W-no-reviews-text">{t('Profile.NoReviews.Owner')}</h4>
+                                            ) : (
+                                                <h4 className="W-no-reviews-text">{t('Profile.NoReviews.NotOwner', {user: reviewOwnerUser.username})}</h4>
+                                            )}
+                                        </div>
                                     )}
                                 </div>
                             </div>
