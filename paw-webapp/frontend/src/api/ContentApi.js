@@ -115,6 +115,26 @@ export class ContentApi {
         return genericFetchWithQueryParams(apiUrl, options, params)
     }
 
+
+    async getLists(listUrl, paginated = true) {
+        let params = {}
+        if(!paginated) {
+            params.paginated = paginated
+        }
+        const apiUrl = listUrl
+        const options = {method: 'GET', headers: authCheck({})}
+        return genericFetchWithQueryParams(apiUrl, options, params)
+    }
+
+
+
+
+
+
+
+
+
+
     async filterContentByType(contentType, page, filters) {
         const apiUrl = `${this.basePath}/${contentType}/filters`
         const params = {page: page, ...filters}

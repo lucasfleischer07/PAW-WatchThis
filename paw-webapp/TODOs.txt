@@ -27,9 +27,10 @@ Si tiene:
 - La API no es REST / no implementa HATEOAS. Estos son errores conceptuales graves. A continuación se detallan algunos (lista no exhaustiva) de los problemas detectados:
     - (L) /api/content no denota entidades del dominio. Está diseñada en función de lo que la UI requiere en la home.
     - (C) No usan URNs. Paths como /users/loggedUser retornarán cosas distintas para distintos usuarios.
-    - (L) Los paths no denotan recursos, usando los verbos HTTP para definir la acción sobre los mismos; sino que los paths incluyen verbos, y a veces más de uno, como ser /users/login/jsotuyod@itba.edu.ar/forgotPassword.
+    - (L) Los paths no denotan recursos, usando los verbos HTTP para definir la acción sobre los mismos; sino que los paths incluyen verbos
+    - (C) Cambiar esto /users/jsotuyod@itba.edu.ar/forgotPassword.
     - (L) Los verbos en los paths sobreescriben la semántica de los verbos HTTP, por ejemplo PUT /lists/watchList/add/3 agrega un elemento a un watchlist en lugar de sobreescribir el recurso.
-    - (C) Se encuentran API calls llamativas, como /api/reviews/2?pageNumber=1&page=1. Parece ser que el párametro real para paginar es pageNumber, pero los headers Link indican que es page.
+    - (L) Se encuentran API calls llamativas, como /api/reviews/2?pageNumber=1&page=1. Parece ser que el párametro real para paginar es pageNumber, pero los headers Link indican que es page.
     - (L) Las entidades no están hipervinculadas, sino que se las embebe. Por ejemplo, reviews embebe el contenido y el user completos. Esto querría decir que al modificar / sobreescribir un contenido, debiera poder sobreescribir la review o el user en la misma operación, pero obviamente no es el caso.
 - (L) Cambiar el endpoint de getUserViewedListContentIds() y el de watchlist para que me lo haga en base de la listas y no de los ids en si
 - (C) Ver las exceptions de de GetContentParams y GetReviewParams

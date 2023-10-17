@@ -5,7 +5,7 @@ import {AuthContext} from "../context/AuthContext";
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import Header from "./components/Header";
 import ExpiredCookieModal from "./components/ExpiredCookieModal";
-import {contentService, listsService} from "../services";
+import {contentService, listsService, userService} from "../services";
 import {updateUrlVariable} from "../scripts/validateParam";
 import {checkIsNumber} from "../scripts/filtersValidations";
 
@@ -51,38 +51,38 @@ export default function ViewedListPage(props) {
         navigate(currentPath + '?' + searchParams.toString());
     }
 
-    const getUserWatchList = async () => {
-        if(isLogged()) {
-            const watchListData = await contentService.getContentByType(null, page, '', '', '', '', '', user.id, true, false, false);
-            if (!watchListData.error) {
-                setWatchList(watchListData.data);
-                console.log(watchListData.data)
-            } else {
-                if (watchListData.errorCode === 404) {
-                    setShowExpiredCookiesModal(true);
-                } else {
-                    navigate("/error", { replace: true, state: { errorCode: watchListData.errorCode } });
-                }
-            }
-        } else {
-            navigate("/error", { replace: true, state: {errorCode: 401} })
-        }
-    }
-
     const getUserViewedList = async () => {
         if(isLogged()) {
-            const viewedListData = await contentService.getContentByType(null, page, '', '', '', '', '', user.id, false);
-            if (!viewedListData.error) {
-                setViewedList(viewedListData.data);
-                setAmountPages(viewedListData.totalPages);
-                setTotalContent(viewedListData.totalContent);
-            } else {
-                if (viewedListData.errorCode === 404) {
-                    setShowExpiredCookiesModal(true);
+            const userData = await userService.getUserInfo(user.id)
+            if(!userData.error) {
+                const viewedListData = await contentService.getLists(userData.data.userViewedListURL);
+                if (!viewedListData.error) {
+                    setViewedList(viewedListData.data);
+                    setAmountPages(viewedListData.totalPages);
+                    setTotalContent(viewedListData.totalContent);
                 } else {
-                    navigate("/error", { replace: true, state: { errorCode: viewedListData.errorCode } });
+                    if (viewedListData.errorCode === 404) {
+                        setShowExpiredCookiesModal(true);
+                    } else {
+                        navigate("/error", { replace: true, state: { errorCode: viewedListData.errorCode } });
+                    }
                 }
+
+                const watchListData = await contentService.getLists(userData.data.userWatchListURL);
+                if (!watchListData.error) {
+                    setWatchList(watchListData.data);
+                } else {
+                    if (watchListData.errorCode === 404) {
+                        setShowExpiredCookiesModal(true);
+                    } else {
+                        navigate("/error", { replace: true, state: { errorCode: watchListData.errorCode } });
+                    }
+                }
+
+            } else {
+                navigate("/error", { replace: true, state: { errorCode: userData.errorCode } });
             }
+
         } else {
             navigate("/error", { replace: true, state: {errorCode: 401} })
         }
@@ -90,7 +90,6 @@ export default function ViewedListPage(props) {
 
     useEffect(() => {
         const fetchData = async () => {
-            await getUserWatchList()
             await getUserViewedList()
             setLoaded(true);
         };
