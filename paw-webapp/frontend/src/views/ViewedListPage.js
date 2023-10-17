@@ -18,11 +18,13 @@ export default function ViewedListPage(props) {
 
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
 
+    const [totalContent, setTotalContent] = useState(-1)
     const [page, setPage] = useState(1)
     const [amountPages, setAmountPages] = useState(1)
     const [viewedList, setViewedList] = useState([])
     const [watchList, setWatchList] = useState([])
     const [added, setAdded] = useState(false)
+    const [loaded, setLoaded] = useState(false);
 
 
     useEffect(() => {
@@ -49,55 +51,51 @@ export default function ViewedListPage(props) {
         navigate(currentPath + '?' + searchParams.toString());
     }
 
-    const getUserWatchList = () => {
+    const getUserWatchList = async () => {
         if(isLogged()) {
-            contentService.getContentByType(null, page, '', '', '', '', '', user.id, true)
-                .then(watchList => {
-                    if(!watchList.error) {
-                        setWatchList(watchList.data)
-                        setAmountPages(watchList.totalPages)
-                    } else {
-                        if(watchList.errorCode === 404) {
-                            setShowExpiredCookiesModal(true)
-                        } else {
-                            navigate("/error", { replace: true, state: {errorCode: watchList.errorCode} })
-                        }
-                    }
-                })
-                .catch(() => {
-                    navigate("/error", { replace: true, state: {errorCode: 404} })
-                })
+            const watchListData = await contentService.getContentByType(null, page, '', '', '', '', '', user.id, true, false, false);
+            if (!watchListData.error) {
+                setWatchList(watchListData.data);
+                console.log(watchListData.data)
+            } else {
+                if (watchListData.errorCode === 404) {
+                    setShowExpiredCookiesModal(true);
+                } else {
+                    navigate("/error", { replace: true, state: { errorCode: watchListData.errorCode } });
+                }
+            }
         } else {
             navigate("/error", { replace: true, state: {errorCode: 401} })
         }
     }
 
-    const getUserViewedList = () => {
+    const getUserViewedList = async () => {
         if(isLogged()) {
-            contentService.getContentByType(null, page, '', '', '', '', '', user.id, false)
-                .then(watchList => {
-                    if(!watchList.error) {
-                        setViewedList(watchList.data)
-                        setAmountPages(watchList.totalPages)
-                    } else {
-                        if(watchList.errorCode === 404) {
-                            setShowExpiredCookiesModal(true)
-                        } else {
-                            navigate("/error", { replace: true, state: {errorCode: watchList.errorCode} })
-                        }
-                    }
-                })
-                .catch((e) => {
-                    navigate("/error", { replace: true, state: {errorCode: 404} })
-                })
+            const viewedListData = await contentService.getContentByType(null, page, '', '', '', '', '', user.id, false);
+            if (!viewedListData.error) {
+                setViewedList(viewedListData.data);
+                setAmountPages(viewedListData.totalPages);
+                setTotalContent(viewedListData.totalContent);
+            } else {
+                if (viewedListData.errorCode === 404) {
+                    setShowExpiredCookiesModal(true);
+                } else {
+                    navigate("/error", { replace: true, state: { errorCode: viewedListData.errorCode } });
+                }
+            }
         } else {
             navigate("/error", { replace: true, state: {errorCode: 401} })
         }
     }
 
     useEffect(() => {
-        getUserViewedList()
-        getUserWatchList()
+        const fetchData = async () => {
+            await getUserWatchList()
+            await getUserViewedList()
+            setLoaded(true);
+        };
+
+        fetchData();
     }, [added, page])
 
     useEffect(() => {
@@ -121,7 +119,7 @@ export default function ViewedListPage(props) {
                             </div>
                         </div>
                         <div className="bg-light p-4 d-flex text-center">
-                            <h4>{t('WatchList.Titles', {titlesAmount: viewedList.length})}</h4>
+                            <h4>{t('WatchList.Titles', {titlesAmount: totalContent})}</h4>
                         </div>
                         {viewedList.length === 0 ? (
                             <div className="W-watchlist-div-info-empty">
@@ -142,7 +140,7 @@ export default function ViewedListPage(props) {
                         ) : (
                             <div className="W-films-div">
                                 <div className="row row-cols-1 row-cols-md-2 g-2 W-content-alignment">
-                                    {viewedList.map((content) => (
+                                    {loaded && viewedList.map((content) => (
                                         <ContentCard
                                             key={`viewedListContentCard${content.id}`}
                                             contentName={content.name}
@@ -156,7 +154,8 @@ export default function ViewedListPage(props) {
                                             reviewsAmount={content.reviewsAmount}
                                             added={added}
                                             setAdded={setAdded}
-                                            isInWatchList={watchList.length > 0 ? watchList.some(item => item.id === content.id) : false}
+                                            watchList={watchList}
+                                            isInWatchList={watchList.length > 0 ? watchList.some(item => item.id === parseInt(content.id)) : false}
                                         />
                                     ))}
                                 </div>

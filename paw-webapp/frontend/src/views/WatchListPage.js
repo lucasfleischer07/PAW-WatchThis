@@ -22,6 +22,7 @@ export default function WatchListPage(props) {
     const [amountPages, setAmountPages] = useState(1)
     const [watchList, setWatchList] = useState([])
     const [added, setAdded] = useState(false)
+    const [totalContent, setTotalContent] = useState(-1)
 
     useEffect(() => {
         const queryParams = new URLSearchParams(search);
@@ -54,6 +55,7 @@ export default function WatchListPage(props) {
                     if(!watchList.error) {
                         setWatchList(watchList.data)
                         setAmountPages(watchList.totalPages)
+                        setTotalContent(watchList.totalContent)
                     } else {
                         if(watchList.errorCode === 404) {
                             setShowExpiredCookiesModal(true)
@@ -95,7 +97,7 @@ export default function WatchListPage(props) {
                             </div>
                         </div>
                         <div className="bg-light p-4 d-flex text-center">
-                            <h4>{t('WatchList.Titles', {titlesAmount: watchList.length})}</h4>
+                            <h4>{t('WatchList.Titles', {titlesAmount: totalContent})}</h4>
                         </div>
 
                         {watchList.length === 0 ? (
