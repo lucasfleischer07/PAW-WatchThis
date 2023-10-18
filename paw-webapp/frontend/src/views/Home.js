@@ -2,7 +2,7 @@ import CarrouselContent from "./components/CarrouselContent";
 import {useTranslation} from "react-i18next";
 import {useContext, useEffect, useState} from "react";
 import {AuthContext} from "../context/AuthContext";
-import {contentService} from "../services";
+import {contentService, userService} from "../services";
 import Header from "./components/Header";
 import {useNavigate} from "react-router-dom";
 
@@ -20,28 +20,29 @@ export default function Home() {
     const [userWatchListIds, setUserWatchListIds] = useState(new Array(0))
 
     const [logOut, setLogOut] = useState(false)
+    const [loaded, setLoaded] = useState(false)
 
 
     useEffect(() => {
-            contentService.getContentByType("bestRated", 1, '', '', '', '', '', user?.id, false, true)
-            .then(data => {
-                if(!data.error) {
-                    setBestRatedList(data.data)
-                }
-            })
-            .catch(() => {
-                navigate("/error", { replace: true, state: {errorCode: 404} })
-            })
+        contentService.getContentByType("bestRated", 1, '', '', '', '', '', user?.id, false, true)
+        .then(data => {
+            if(!data.error) {
+                setBestRatedList(data.data)
+            }
+        })
+        .catch(() => {
+            navigate("/error", { replace: true, state: {errorCode: 404} })
+        })
 
-        contentService.getContentByType("lastAdded", 1, '', '', '', '', '', user?.id, false, true)
-            .then(data => {
-                if(!data.error) {
-                    setLastAddedList(data.data)
-                }
-            })
-            .catch(() => {
-                navigate("/error", { replace: true, state: {errorCode: 404} })
-            })
+    contentService.getContentByType("lastAdded", 1, '', '', '', '', '', user?.id, false, true)
+        .then(data => {
+            if(!data.error) {
+                setLastAddedList(data.data)
+            }
+        })
+        .catch(() => {
+            navigate("/error", { replace: true, state: {errorCode: 404} })
+        })
 
         if(isLogged()) {
             if(user?.id === undefined || user?.username === undefined || user?.role === undefined) {
@@ -70,23 +71,6 @@ export default function Home() {
                         navigate("/error", { replace: true, state: {errorCode: 404} })
                     })
 
-
-                contentService.getContentByType(null, 1, '', '', '', '', '', user.id, true, false, false)
-                    .then(watchList => {
-                        if(!watchList.error) {
-                            setUserWatchListIds(watchList.data)
-                        } else {
-                            if(watchList.errorCode === 404) {
-                                signOut()
-                                navigate("/", { replace: true })
-                            } else {
-                                navigate("/error", { replace: true, state: {errorCode: watchList.errorCode} })
-                            }
-                        }
-                    })
-                    .catch(() => {
-                        navigate("/error", { replace: true, state: {errorCode: 404} })
-                    })
             }
         } else {
             contentService.getContentByType("mostSavedContentByUsers", 1, '', '', '', '', '', null, false, true)
@@ -101,6 +85,32 @@ export default function Home() {
 
             setUser(null)
         }
+    }, [logOut])
+
+    useEffect(() => {
+        async function fetchData() {
+            if(isLogged()) {
+                const userData = await userService.getUserInfo(user.id)
+                if(!userData.error) {
+                    const watchList = await contentService.getLists(userData.data.userWatchListURL);
+                    if (!watchList.error) {
+                        setUserWatchListIds(watchList.data)
+                        setLoaded(true)
+                    } else {
+                        if(watchList.errorCode === 404) {
+                            signOut()
+                            navigate("/", { replace: true })
+                        } else {
+                            navigate("/error", {replace: true, state: {errorCode: watchList.errorCode}});
+                        }
+                    }
+                } else {
+                    navigate("/error", { replace: true, state: { errorCode: userData.errorCode } });
+                }
+            }
+        }
+
+        fetchData()
     }, [logOut])
 
 
@@ -121,7 +131,7 @@ export default function Home() {
             />
 
             <div className="W-carousels-div">
-                {isLogged() && recommendedUserList.length !== 0 ? (
+                {loaded && isLogged() && recommendedUserList.length !== 0 ? (
                     <>
                         <h3 className="W-carousel-title">{t('Content.Carousel.RecommendedForYou')}</h3>
                         <div id="carouselRecommended" className="carousel slide" data-ride="carousel">
@@ -166,7 +176,7 @@ export default function Home() {
                             </button>
                         </div>
                     </>
-                ) : (
+                ) : loaded && (
                     <div>
                         <h3 className="W-carousel-title">{t('Content.Carousel.MostSaved')}</h3>
                         <div id="mostSavedContentByUsersList" className="carousel slide" data-ride="carousel">
@@ -216,7 +226,7 @@ export default function Home() {
                             {[...Array(Math.ceil(bestRatedList.length / 5)).keys()].map((index) => (
                                 <div key={index} className={`carousel-item${index === 0 ? " active" : ""}`}>
                                     <div className="cards-wrapper">
-                                        {bestRatedList.slice(index * 5, index * 5 + 5)
+                                        {loaded && bestRatedList.slice(index * 5, index * 5 + 5)
                                             .map((content, j) => (
                                                 <CarrouselContent
                                                     key={index * 5 + j}
@@ -256,7 +266,7 @@ export default function Home() {
                             {[...Array(Math.ceil(lastAddedList.length / 5)).keys()].map((index) => (
                                 <div key={index} className={`carousel-item${index === 0 ? " active" : ""}`}>
                                     <div className="cards-wrapper">
-                                        {lastAddedList.slice(index * 5, index * 5 + 5).map((content, j) => (
+                                        {loaded && lastAddedList.slice(index * 5, index * 5 + 5).map((content, j) => (
                                             <CarrouselContent
                                                 key={index * 5 + j}
                                                 name={content.name}

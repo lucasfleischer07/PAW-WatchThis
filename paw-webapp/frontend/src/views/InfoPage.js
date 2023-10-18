@@ -220,38 +220,32 @@ export default function InfoPage() {
     useEffect(() => {
         async function fetchData() {
             if(isLogged()) {
-                contentService.getContentByType(null, 1, '', '', '', '', '', user.id, true, false, false)
-                    .then(watchList => {
-                        if(!watchList.error) {
-                            setIsInWatchList(watchList.data.some(item => item.id === parseInt(contentId)))
+                const userData = await userService.getUserInfo(user.id)
+                if(!userData.error) {
+                    const viewedList = await contentService.getLists(userData.data.userViewedListURL);
+                    if (!viewedList.error) {
+                        setIsInViewedList(viewedList.data.some(item => item.id === parseInt(contentId)))
+                    } else {
+                        if (viewedList.errorCode === 404) {
+                            setShowExpiredCookiesModal(true);
                         } else {
-                            if(watchList.errorCode === 404) {
-                                setShowExpiredCookiesModal(true)
-                            } else {
-                                navigate("/error", { replace: true, state: {errorCode: watchList.errorCode} })
-                            }
+                            navigate("/error", {replace: true, state: {errorCode: viewedList.errorCode}});
                         }
-                    })
-                    .catch(() => {
-                        navigate("/error", { replace: true, state: {errorCode: 404} })
-                    })
+                    }
 
-
-                contentService.getContentByType(null, 1, '', '', '', '', '', user.id, false, false, false)
-                    .then(viewedList => {
-                        if(!viewedList.error) {
-                            setIsInViewedList(viewedList.data.some(item => item.id === parseInt(contentId)))
+                    const watchList = await contentService.getLists(userData.data.userWatchListURL);
+                    if (!watchList.error) {
+                        setIsInWatchList(watchList.data.some(item => item.id === parseInt(contentId)))
+                    } else {
+                        if (watchList.errorCode === 404) {
+                            setShowExpiredCookiesModal(true);
                         } else {
-                            if(viewedList.errorCode === 404) {
-                                setShowExpiredCookiesModal(true)
-                            } else {
-                                navigate("/error", { replace: true, state: {errorCode: viewedList.errorCode} })
-                            }
+                            navigate("/error", {replace: true, state: {errorCode: watchList.errorCode}});
                         }
-                    })
-                    .catch((e) => {
-                        navigate("/error", { replace: true, state: {errorCode: 404} })
-                    })
+                    }
+                } else {
+                    navigate("/error", { replace: true, state: { errorCode: userData.errorCode } });
+                }
 
                 userService.getReviewsLike(user?.id)
                     .then(data => {

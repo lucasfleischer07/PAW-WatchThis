@@ -188,7 +188,7 @@ public class ReviewController {
     }
 
 
-//    Endpoint para likear una review
+//    Endpoint para deslikear una review
     @PUT
     @Produces(value = {MediaType.APPLICATION_JSON})
     @Path("/{reviewId}/thumbDown")

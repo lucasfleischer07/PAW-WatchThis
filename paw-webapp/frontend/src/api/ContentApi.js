@@ -125,15 +125,7 @@ export class ContentApi {
         const options = {method: 'GET', headers: authCheck({})}
         return genericFetchWithQueryParams(apiUrl, options, params)
     }
-
-
-
-
-
-
-
-
-
+    
 
     async filterContentByType(contentType, page, filters) {
         const apiUrl = `${this.basePath}/${contentType}/filters`
