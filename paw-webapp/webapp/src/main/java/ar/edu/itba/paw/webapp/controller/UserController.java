@@ -59,12 +59,24 @@ public class UserController {
 
     // * ---------------------------------------------------------------------------------------------------------------
 
+    // * ------------------------------------------------Forgot Password (desde el login)-------------------------------
+    @POST
+    @Produces(value = {MediaType.TEXT_PLAIN})
+    @Consumes(value = {MediaType.TEXT_PLAIN})
+    public Response loginForgotPassword(String email) {
+        User user = us.findByEmail(email).orElseThrow(UserNotFoundException::new);
+        us.setPassword(null, user, "forgotten");
+        return Response.noContent().build();
+    }
+
+    // * ---------------------------------------------------------------------------------------------------------------
+
 
     // * ----------------------------------------------- User GET ------------------------------------------------------
     // Endpoint para getear la informacion del usuario
     @GET
-    @Produces(value = {MediaType.APPLICATION_JSON})
     @Path("/{id}")
+    @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getUserInfo(@PathParam("id") final long id) {
         LOGGER.info("GET /{}: Called",  uriInfo.getPath());
         final User user = us.findById(id).orElseThrow(UserNotFoundException::new);
@@ -171,23 +183,9 @@ public class UserController {
     // * ---------------------------------------------------------------------------------------------------------------
 
 
-    // * ------------------------------------------------Forgot Password (desde el login)-------------------------------
-//    TODO: Todavia nose que hacer con esto
-    @Path("/login/{email}/forgotPassword")
-    @POST
-    @Consumes(value = {MediaType.APPLICATION_JSON})
-    @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response loginForgotPassword(@PathParam("email") final String email) {
-        User user = us.findByEmail(email).orElseThrow(UserNotFoundException::new);
-        us.setPassword(null, user, "forgotten");
-        return Response.noContent().build();
-    }
-    // * ---------------------------------------------------------------------------------------------------------------
-
-
     // * ------------------------------------------------Promote User---------------------------------------------------
-    @Path("/{id}/promote")
     @PUT
+    @Path("/{id}/admin")
     @Produces(value = {MediaType.APPLICATION_JSON})
     @PreAuthorize("@securityChecks.isAdmin(#loggedUserId)")
     public Response promoteUSer(@QueryParam("userId") final Long loggedUserId,

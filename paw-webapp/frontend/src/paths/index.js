@@ -1,4 +1,5 @@
 export const APPLICATION_JSON_TYPE = 'application/json';
+export const TEXT_PLAIN = 'text/plain';
 
 export const paths = {
      BASE_URL_LOCAL: '/paw-2022b-3',

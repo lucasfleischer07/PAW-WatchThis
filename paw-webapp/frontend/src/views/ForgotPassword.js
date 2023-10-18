@@ -33,7 +33,7 @@ export default function ForgotPassword() {
             return
         }
 
-        userService.loginForgotPassword(userForm.email)
+        userService.loginForgotPassword(userForm)
             .then(data => {
                 if(!data.error) {
                     toast.success(t('Login.ForgotPass.Snackbar'))

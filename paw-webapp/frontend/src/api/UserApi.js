@@ -1,4 +1,4 @@
-import {APPLICATION_JSON_TYPE, paths} from "../paths";
+import {APPLICATION_JSON_TYPE, paths, TEXT_PLAIN} from "../paths";
 import {fetchWithQueryParamsApi} from "./FetchWithQueryParams";
 import {authCheck} from "../scripts/authCheck";
 import jwt from 'jwt-decode';
@@ -34,8 +34,8 @@ export class UserApi {
     }
 
     async loginForgotPassword(userEmail) {
-        const options = {method: 'POST', headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE}), body: {}}
-        return await genericRequest(this.basePath, `${this.basePath}/login/${userEmail}/forgotPassword`, options)
+        const options = {method: 'POST', headers: authCheck({'Content-Type': TEXT_PLAIN}), body: userEmail.email}
+        return await genericRequest(this.basePath, `${this.basePath}`, options)
     }
 
     // TODO: Este lo podriamos dejar asi, y no hacerlo generico
@@ -62,7 +62,7 @@ export class UserApi {
     }
 
     async promoteUserToAdmin(promotedUserId, loggedUserId) {
-        const apiUrl = `${this.basePath}/${promotedUserId}/promote`
+        const apiUrl = `${this.basePath}/${promotedUserId}/admin`
         const options = {method: 'PUT', headers: authCheck({})}
         const params = {userId: loggedUserId}
         return genericFetchWithQueryParams(apiUrl, options, params)
