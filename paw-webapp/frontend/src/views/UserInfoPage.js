@@ -10,6 +10,8 @@ import ExpiredCookieModal from "./components/ExpiredCookieModal";
 import {contentService, reviewService, userService} from "../services";
 import {updateUrlVariable} from "../scripts/validateParam";
 import {checkIsNumber} from "../scripts/filtersValidations";
+import defaultUserImg from "../images/defaultUserImg.png"
+import noReviews from "../images/noReviews.png"
 
 export default function UserInfoPage() {
     const {t} = useTranslation()
@@ -221,7 +223,7 @@ export default function UserInfoPage() {
                                     <div className="W-img-and-quote-div">
                                         <div>
                                             {reviewOwnerUser.image == null ? (
-                                                <img src={"/paw-2022b-3/images/defaultUserImg.png"} alt="User_img" className="W-edit-profile-picture" />
+                                                <img src={defaultUserImg} alt="User_img" className="W-edit-profile-picture" />
                                             ) : (
                                                 <img src={reviewOwnerUser.image} alt="User_img" className="W-edit-profile-picture" />
                                             )}
@@ -306,7 +308,7 @@ export default function UserInfoPage() {
                                         ))
                                     ) : (
                                         <div className="W-no-reviews-icon">
-                                            <img className="W-no-reviews-image" src={"/paw-2022b-3/images/noReviews.png"} alt="No_Review_Img"/>
+                                            <img className="W-no-reviews-image" src={noReviews} alt="No_Review_Img"/>
                                             {isSameUser ? (
                                                 <h4 className="W-no-reviews-text">{t('Profile.NoReviews.Owner')}</h4>
                                             ) : (

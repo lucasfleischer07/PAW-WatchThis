@@ -13,6 +13,7 @@ import ExpiredCookieModal from "./components/ExpiredCookieModal";
 import {type} from "@testing-library/user-event/dist/type";
 import {updateUrlVariable, validateParam} from "../scripts/validateParam";
 import {checkIsNumber} from "../scripts/filtersValidations";
+import noReviews from "../images/noReviews.png"
 
 
 export default function InfoPage() {
@@ -680,7 +681,7 @@ export default function InfoPage() {
                         ) : (
                             <div>
                                 <div className="W-no-reviews-icon">
-                                    <img className={"W-img-not-review"} src={"/paw-2022b-3/images/noReviews.png"} alt="No_Review_Img"/>
+                                    <img className={"W-img-not-review"} src={noReviews} alt="No_Review_Img"/>
                                 </div>
                                 {contentType === 'movie' ? (
                                     <h3 className="W-no-reviews-text">{t('Content.NoReviewMessage.Movie')}</h3>

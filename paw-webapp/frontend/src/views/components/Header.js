@@ -3,6 +3,7 @@ import {useTranslation} from "react-i18next";
 import {useState, useEffect, useContext} from 'react';
 import {toast} from "react-toastify";
 import {AuthContext} from "../../context/AuthContext";
+import logo from "../../images/WatchThisLogo.png"
 
 export default function Header(props) {
     const {t} = useTranslation()
@@ -91,7 +92,7 @@ export default function Header(props) {
             <div className="W-container-fluid">
                 <Link className="navbar-brand" to="/">
                     <div className="W-logo-div">
-                        <img src={"/paw-2022b-3/images/WatchThisLogo.png"} alt="WatchThisLogo" className="W-img-size2"/>
+                        <img src={logo} alt="WatchThisLogo" className="W-img-size2"/>
                     </div>
                 </Link>
                 <div>

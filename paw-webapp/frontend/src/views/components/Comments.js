@@ -6,6 +6,7 @@ import {AuthContext} from "../../context/AuthContext";
 import {commentService, reportsService, userService} from "../../services";
 import {toast} from "react-toastify";
 import TooltipComponent from './Tooltip';
+import defaultUserImg from "../../images/defaultUserImg.png"
 
 
 export default function Comments(props) {
@@ -122,7 +123,7 @@ export default function Comments(props) {
                 <div className="card-body W-general-div-comment">
                     <div className="W-img-comment-div-margin-right">
                         {userCreatorImage == null ? (
-                            <img src="/paw-2022b-3/images/defaultUserImg.png" alt="User_img" className="W-comment-profile-picture" />
+                            <img src={defaultUserImg} alt="User_img" className="W-comment-profile-picture" />
                         ) : (
                             <img src={userCreatorImage} alt="User_img" className="W-comment-profile-picture" />
                         )}

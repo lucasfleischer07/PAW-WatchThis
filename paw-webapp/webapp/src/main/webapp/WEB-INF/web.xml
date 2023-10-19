@@ -129,19 +129,19 @@
   </filter>
   <filter-mapping>
     <filter-name>CacheControlFilter</filter-name>
-    <url-pattern>/static/*</url-pattern>
-  </filter-mapping>
-  <filter-mapping>
-    <filter-name>CacheControlFilter</filter-name>
-    <url-pattern>/images/*</url-pattern>
-  </filter-mapping>
-  <filter-mapping>
-    <filter-name>CacheControlFilter</filter-name>
     <url-pattern>*.png</url-pattern>
   </filter-mapping>
   <filter-mapping>
     <filter-name>CacheControlFilter</filter-name>
     <url-pattern>*.ico</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>CacheControlFilter</filter-name>
+    <url-pattern>*.js</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>CacheControlFilter</filter-name>
+    <url-pattern>*.css</url-pattern>
   </filter-mapping>
 
 

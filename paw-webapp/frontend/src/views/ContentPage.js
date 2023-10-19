@@ -8,6 +8,7 @@ import Filters from "./components/Filters";
 import ExpiredCookieModal from "./components/ExpiredCookieModal";
 import {updateUrlVariable} from "../scripts/validateParam";
 import {checkIsFrom, checkIsGenre, checkIsNumber, checkIsSort, checkIsTo} from "../scripts/filtersValidations";
+import noResults from "../images/noResults.png"
 
 export default function ContentPage(props) {
     const {t} = useTranslation()
@@ -233,7 +234,7 @@ export default function ContentPage(props) {
                 <div className="card W-not-found-card">
                     <div className="card-body W-row-display">
                         <div className="W-search-notFound-image">
-                            <img className="W-not-found" src={"/paw-2022b-3/images/noResults.png"} alt="Not_Found_Img"/>
+                            <img className="W-not-found" src={noResults} alt="Not_Found_Img"/>
                         </div>
                         <div className="W-search-notFound-text">
                             {((query == null || query === '' || query === 'ANY') && (genre != null || durationFrom !== 'ANY')) ? (

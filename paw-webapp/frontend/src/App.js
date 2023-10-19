@@ -22,6 +22,15 @@ import ReportedPage from "./views/ReportedPage";
 import ErrorPage from "./views/ErrorPage";
 import InfoPage from "./views/InfoPage";
 import SignUp from "./views/SignUp";
+import "./styles/carrouselStyles.css"
+import "./styles/homeStyles.css"
+import "./styles/loginStyles.css"
+import "./styles/navBarStyles.css"
+import "./styles/profileStyles.css"
+import "./styles/reportedStyles.css"
+import "./styles/reviewsStyles.css"
+import "./styles/reviewRegistrationStyles.css"
+import "./styles/snackbarStyles.css"
 
 function App() {
   return (

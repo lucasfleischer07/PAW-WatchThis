@@ -7,6 +7,7 @@ import {toast} from "react-toastify";
 import {useLocation, useNavigate} from "react-router-dom";
 import Header from "./components/Header";
 import ExpiredCookieModal from "./components/ExpiredCookieModal";
+import defaultUserImg from "../images/defaultUserImg.png"
 
 
 export default function ProfileEditionPage() {
@@ -143,7 +144,7 @@ export default function ProfileEditionPage() {
                                     <div className="W-img-and-quote-div">
                                         <div className="W-div-img-quote">
                                             {user.image == null ? (
-                                                <img src={"/paw-2022b-3/images/defaultUserImg.png"} alt="User_img" className="W-edit-profile-picture"/>
+                                                <img src={defaultUserImg} alt="User_img" className="W-edit-profile-picture"/>
                                             ) : (
                                                 <img src={user.image} alt="User_img" className="W-edit-profile-picture"/>
                                             )}

@@ -156,6 +156,10 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .accessDeniedHandler(new ForbiddenRequestHandler())
                 .and().authorizeRequests()
                 //content
+                .antMatchers(HttpMethod.POST,"/api/content/watchList").authenticated()
+                .antMatchers(HttpMethod.DELETE,"/api/content/watchList").authenticated()
+                .antMatchers(HttpMethod.POST,"/api/content/viewedList").authenticated()
+                .antMatchers(HttpMethod.DELETE,"/api/content/viewedList").authenticated()
                 .antMatchers(HttpMethod.PUT,"/api/content/**").hasRole("ADMIN")
                 .antMatchers(HttpMethod.DELETE,"/api/content/**").hasRole("ADMIN")
                 .antMatchers(HttpMethod.POST,"/api/content").hasRole("ADMIN")
