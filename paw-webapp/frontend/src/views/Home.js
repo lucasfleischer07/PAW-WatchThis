@@ -107,6 +107,8 @@ export default function Home() {
                 } else {
                     navigate("/error", { replace: true, state: { errorCode: userData.errorCode } });
                 }
+            } else {
+                setLoaded(true)
             }
         }
 
