@@ -139,10 +139,6 @@
     <filter-name>CacheControlFilter</filter-name>
     <url-pattern>*.js</url-pattern>
   </filter-mapping>
-  <filter-mapping>
-    <filter-name>CacheControlFilter</filter-name>
-    <url-pattern>*.css</url-pattern>
-  </filter-mapping>
 
 
 <!--  Esto es lo de la pagina de errores-->
