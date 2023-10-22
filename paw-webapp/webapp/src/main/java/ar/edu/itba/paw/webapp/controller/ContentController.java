@@ -126,6 +126,7 @@ public class ContentController {
             contentType = URLConnection.guessContentTypeFromStream(new ByteArrayInputStream(content.getImage()));
         } catch (Exception e) {
             contentType = "image/png";
+            contentType = "image/png";
         }
         if (response == null) {
             final byte[] contentImage = content.getImage();
@@ -139,9 +140,7 @@ public class ContentController {
     @PUT
     @Path("/{contentId}/contentImage")
     @Produces(value = {MediaType.APPLICATION_JSON,})
-    @PreAuthorize("@securityChecks.isAdmin(#userId)")
-    public Response updateContentImage(@QueryParam("userId") final Long userId,
-                                       @FormDataParam("image") byte[] imageBytes,
+    public Response updateContentImage(@FormDataParam("image") byte[] imageBytes,
                                        @PathParam("contentId") final Long contentId) {
         LOGGER.info("PUT /{}: Called", uriInfo.getPath());
 
@@ -163,9 +162,7 @@ public class ContentController {
     @Path("/{contentId}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(value = {MediaType.APPLICATION_JSON,})
-    @PreAuthorize("@securityChecks.isAdmin(#userId)")
-    public Response updateContentInfo(@QueryParam("userId") final Long userId,
-                                      @PathParam("contentId") final Long contentId,
+    public Response updateContentInfo(@PathParam("contentId") final Long contentId,
                                       @Valid NewContentDto contentDto,
                                       @Context final HttpServletRequest request) {
         LOGGER.info("PUT /{}: Called", uriInfo.getPath());
@@ -208,9 +205,7 @@ public class ContentController {
     // Endpoint para crear un contenido
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    @PreAuthorize("@securityChecks.isAdmin(#userId)")
-    public Response createContent(@QueryParam("userId") final Long userId,
-                                  @Valid NewContentDto contentDto) {
+    public Response createContent(@Valid NewContentDto contentDto) {
         LOGGER.info("POST /{}: Called", uriInfo.getPath());
         if(contentDto == null) {
             throw new BadRequestException("Must include content data");

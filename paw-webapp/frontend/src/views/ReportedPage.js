@@ -100,7 +100,7 @@ export default function ReportedPage() {
                 setCurrentCommentsReportsPage(1)
                 setCurrentReviewsReportsPage(1)
                 if (reportType === "reviews") {
-                    reviewService.getReviewReports(user.id, filterReason)
+                    reviewService.getReviewReports(filterReason)
                         .then(data => {
                             if (!data.error) {
                                 setReportedReviewsList(data.data)
@@ -120,7 +120,7 @@ export default function ReportedPage() {
                         })
 
                 } else {
-                    commentService.getCommentsReports(user.id, filterReason)
+                    commentService.getCommentsReports(filterReason)
                         .then(data => {
                             if (!data.error) {
                                 setReportedCommentsList(data.data)

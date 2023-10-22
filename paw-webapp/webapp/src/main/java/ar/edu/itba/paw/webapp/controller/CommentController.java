@@ -131,9 +131,7 @@ public class CommentController {
     // * ---------------------------------------------Comments Reports---------------------------------------------------
     @GET
     @Path("/reports")
-    @PreAuthorize("@securityChecks.isAdmin(#userId)")
-    public Response getCommentReport(@QueryParam("userId") final Long userId,
-                                     @QueryParam("page")@DefaultValue("1")final int page,
+    public Response getCommentReport(@QueryParam("page")@DefaultValue("1")final int page,
                                      @QueryParam(value = "reason") @DefaultValue("") ReportReason reason) {
         PageWrapper<CommentReport> commentsReported = rrs.getReportedComments(reason,page,REPORTS_AMOUNT);
         Collection<CommentReportDto> commentReportedListDto = CommentReportDto.mapCommentReportToCommentReportDto(uriInfo, commentsReported.getPageContent());
@@ -167,9 +165,7 @@ public class CommentController {
 
     @DELETE
     @Path("/{commentId}/reports")
-    @PreAuthorize("@securityChecks.isAdmin(#userId)")
-    public Response deleteReport(@QueryParam("userId") final Long userId,
-                                 @PathParam("commentId") long commentId) {
+    public Response deleteReport(@PathParam("commentId") long commentId) {
         LOGGER.info("DELETE /{}: Called", uriInfo.getPath());
         rrs.removeReports("comment", commentId);
         LOGGER.info("DELETE /{}: {} on contentId {} report deleted", uriInfo.getPath(), "Comment", commentId);

@@ -19,29 +19,29 @@ export class ContentApi {
         return await genericRequest(this.basePath, content, options)
     }
 
-    async updateContent(contentId, userId, contentDetails) {
+    async updateContent(contentId, contentDetails) {
         contentDetails.genre = contentDetails.genre.split(" ")
         if(typeof contentDetails.contentPicture == 'string' || contentDetails.contentPicture == null) {
             delete contentDetails.contentPicture
         }
         else {
-            await this.updateContentImage(contentId, userId, contentDetails.contentPicture)
+            await this.updateContentImage(contentId, contentDetails.contentPicture)
             delete contentDetails.contentPicture
         }
 
         const apiUrl = `${this.basePath}/${contentId}`
         const options = {method: 'PUT', headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}), body: JSON.stringify(contentDetails)}
-        const params = {userId: userId}
+        const params = {}
         return genericFetchWithQueryParams(apiUrl, options, params)
     }
 
-    async updateContentImage(contentId, userId, image) {
+    async updateContentImage(contentId, image) {
         const formData = new FormData();
         formData.append("image", image, image.name)
 
         const apiUrl = `${this.basePath}/${contentId}/contentImage`
         const options = {method: 'PUT', headers: authCheck({}), body: formData}
-        const params = {userId: userId}
+        const params = {}
         return genericFetchWithQueryParams(apiUrl, options, params)
     }
 
@@ -53,7 +53,7 @@ export class ContentApi {
     }
 
     // TODO: Ver de cambiar este pero medio dificil poruqe llama a otras funciones y si devuelve algo
-    async createContent(contentDetails, userId, image) {
+    async createContent(contentDetails, image) {
         try {
             contentDetails.genre = contentDetails.genre.split(" ")
             const contentDetailsAux = contentDetails
@@ -61,11 +61,11 @@ export class ContentApi {
 
             const apiUrl = `${this.basePath}`
             const options = {method: 'POST', headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}), body: JSON.stringify(contentDetails)}
-            const params = {userId: userId}
+            const params = {}
             const res = await fetchWithQueryParamsPostApi(apiUrl, params, options)
             if(res.status === 201) {
                 const contentData = await res.data
-                await this.updateContentImage(parseInt(contentData.id), parseInt(userId), image)
+                await this.updateContentImage(parseInt(contentData.id), image)
                 return {error: false, data: contentData}
             } else {
                 return {error: true, errorCode: res.status}

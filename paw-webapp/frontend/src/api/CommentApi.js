@@ -39,9 +39,9 @@ export class CommentApi {
         return genericFetchWithQueryParams(apiUrl, options, params)
     }
 
-    async getCommentsReports(userId, filter= '') {
+    async getCommentsReports(filter= '') {
         const apiUrl = `${this.basePath}/reports`
-        const params = {userId: userId, reason: filter}
+        const params = {reason: filter}
         const options = {method: 'GET', headers: authCheck({})}
         return genericFetchWithQueryParams(apiUrl, options, params)
     }
@@ -53,10 +53,10 @@ export class CommentApi {
         return genericFetchWithQueryParams(apiUrl, options, params)
     }
 
-    async deleteCommentReports(commentId, userId) {
+    async deleteCommentReports(commentId) {
         const apiUrl = `${this.basePath}/${commentId}/reports`
         const options = {method: 'DELETE', headers: authCheck({})}
-        const params = {userId: userId}
+        const params = {}
         return genericFetchWithQueryParams(apiUrl, options, params)
     }
 }

@@ -61,10 +61,10 @@ export class UserApi {
         }
     }
 
-    async promoteUserToAdmin(promotedUserId, loggedUserId) {
+    async promoteUserToAdmin(promotedUserId) {
         const apiUrl = `${this.basePath}/${promotedUserId}/admin`
         const options = {method: 'PUT', headers: authCheck({})}
-        const params = {userId: loggedUserId}
+        const params = {}
         return genericFetchWithQueryParams(apiUrl, options, params)
     }
 

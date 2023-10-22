@@ -187,9 +187,7 @@ public class UserController {
     @PUT
     @Path("/{id}/admin")
     @Produces(value = {MediaType.APPLICATION_JSON})
-    @PreAuthorize("@securityChecks.isAdmin(#loggedUserId)")
-    public Response promoteUSer(@QueryParam("userId") final Long loggedUserId,
-                                @PathParam("id") final Long id) {
+    public Response promoteUSer(@PathParam("id") final Long id) {
         LOGGER.info("PUT /{}: Called", uriInfo.getPath());
         User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
         if(!Objects.equals(user.getRole(), "admin")) {
