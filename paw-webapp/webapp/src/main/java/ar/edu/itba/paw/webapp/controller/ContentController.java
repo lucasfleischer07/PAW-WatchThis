@@ -67,7 +67,6 @@ public class ContentController {
                                         @QueryParam("paginated") @DefaultValue("true") final Boolean paginated) {
 
         LOGGER.info("GET /{}: Called",uriInfo.getPath());
-//        TODO: Ver de pasarla a un service
         PageWrapper<Content> contentListFilter = GetContentParams.getContentByParams(contentType, pageNum, durationFrom, durationTo, sorting, query, genre, watchListSavedBy, viewedListSavedBy, paginated, cs, us, new SecurityChecks(us, cs, rs, ccs));
 
         List<Content> contentListFilterPaginated = contentListFilter.getPageContent();
@@ -188,7 +187,6 @@ public class ContentController {
     // * ----------------------------------- Content Delete ------------------------------------------------------------
     @DELETE
     @Path("/{contentId}")
-    @PreAuthorize("@securityChecks.isAdmin(#userId)")
     public Response deleteContent(@QueryParam("userId") final Long userId,
                                   @PathParam("contentId") final Long contentId) {
         LOGGER.info("DELETE /{}: Called", uriInfo.getPath());

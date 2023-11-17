@@ -52,7 +52,6 @@ export class ContentApi {
         return genericFetchWithQueryParams(apiUrl, options, params)
     }
 
-    // TODO: Ver de cambiar este pero medio dificil poruqe llama a otras funciones y si devuelve algo
     async createContent(contentDetails, image) {
         try {
             contentDetails.genre = contentDetails.genre.split(" ")

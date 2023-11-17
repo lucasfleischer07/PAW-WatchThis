@@ -84,18 +84,18 @@ public class UserController {
         return Response.ok(new UserDto(uriInfo, user)).build();
     }
 
-    @GET
-    @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response getLoggedUserInfo() {
-        LOGGER.info("GET /{}: Called",  uriInfo.getPath());
-        final Optional<User> user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
-        if(!user.isPresent()) {
-            LOGGER.warn("GET /{}: User not logged", uriInfo.getPath());
-            return Response.noContent().build();
-        }
-        LOGGER.info("GET /{}: User returned with success", uriInfo.getPath());
-        return Response.ok(new UserDto(uriInfo, user.get())).build();
-    }
+//    @GET
+//    @Produces(value = {MediaType.APPLICATION_JSON})
+//    public Response getLoggedUserInfo() {
+//        LOGGER.info("GET /{}: Called",  uriInfo.getPath());
+//        final Optional<User> user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+//        if(!user.isPresent()) {
+//            LOGGER.warn("GET /{}: User not logged", uriInfo.getPath());
+//            return Response.noContent().build();
+//        }
+//        LOGGER.info("GET /{}: User returned with success", uriInfo.getPath());
+//        return Response.ok(new UserDto(uriInfo, user.get())).build();
+//    }
 
     // * ---------------------------------------------------------------------------------------------------------------
 
@@ -185,14 +185,10 @@ public class UserController {
 
     // * ------------------------------------------------Promote User---------------------------------------------------
     @PUT
-    @Path("/{id}/admin")
+    @Path("/{id}/role")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response promoteUSer(@PathParam("id") final Long id) {
         LOGGER.info("PUT /{}: Called", uriInfo.getPath());
-        User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
-        if(!Objects.equals(user.getRole(), "admin")) {
-            throw new ForbiddenException();
-        }
         User user2 = us.findById(id).orElseThrow(UserNotFoundException::new);
         us.promoteUser(user2);
         LOGGER.info("PUT /{}: Returning user promoted", uriInfo.getPath());

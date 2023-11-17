@@ -38,7 +38,6 @@ export class UserApi {
         return await genericRequest(this.basePath, `${this.basePath}`, options)
     }
 
-    // TODO: Este lo podriamos dejar asi, y no hacerlo generico
     async login(email, password) {
         try {
             const loggedUserInfo = email + ":" + password;
@@ -62,7 +61,7 @@ export class UserApi {
     }
 
     async promoteUserToAdmin(promotedUserId) {
-        const apiUrl = `${this.basePath}/${promotedUserId}/admin`
+        const apiUrl = `${this.basePath}/${promotedUserId}/role`
         const options = {method: 'PUT', headers: authCheck({})}
         const params = {}
         return genericFetchWithQueryParams(apiUrl, options, params)

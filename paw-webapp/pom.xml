@@ -346,12 +346,12 @@
     </repositories>
 
     <modules>
+        <module>frontend</module>
         <module>webapp</module>
         <module>services</module>
         <module>models</module>
         <module>interfaces</module>
         <module>persistance</module>
-        <module>frontend</module>
     </modules>
 
 

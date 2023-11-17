@@ -169,6 +169,10 @@ export default function ContentCreatePage() {
         }
     }
 
+    const handleCancelForm = (e) => {
+        navigate(`/content/${contentForm.type}/${contentId}`, {replace:true})
+    }
+
 
     const handleChange = (e) => {
         const {name, value, type, checked} = e.target
@@ -445,7 +449,7 @@ export default function ContentCreatePage() {
                         </div>
                     </div>
                     <div className="W-submit-cancel-buttons">
-                        <Link to="/"><button type="button" className="btn btn-danger">{t('Form.Cancel')}</button></Link>
+                        <button type="button" className="btn btn-danger" onClick={handleCancelForm}>{t('Form.Cancel')}</button>
                         <button type="submit" className="btn btn-success" onClick={handleSubmitForm}>{t('Form.Submit')}</button>
                     </div>
                 </form>

@@ -240,7 +240,6 @@ public class ReviewController {
 
     @DELETE
     @Path("/{reviewId}/reports")
-    @PreAuthorize("@securityChecks.isAdmin(#userId)")
     public Response deleteReport(@QueryParam("userId") final Long userId,
                                  @PathParam("reviewId") long reviewId) {
         LOGGER.info("DELETE /{}: Called", uriInfo.getPath());

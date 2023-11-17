@@ -11,7 +11,6 @@ export async function genericRequest(basePath, parameter, options){
 
         const res = await fetch(url, options)
 
-        // TODO: Verificar si anda bien con un || or && (lo del 204 es de ContentApi->getContentReviewers
         if(options.method === 'GET') {
             if(res.status === 200 || res.status !== 204) {
                 return {error: false, data: await res.json()}
@@ -22,7 +21,7 @@ export async function genericRequest(basePath, parameter, options){
             }
         } else if(options.method === 'POST') {
             const status = res.status;
-            return {error: status !== 201 && status !== 204, errorCode: status, data: status === 204 ? [] : await res.json()};
+            return {error: status !== 201 && status !== 204, errorCode: status, data: (status === 204 || status === 404) ? [] : await res.json()};
         } else if(options.method === 'PUT') {
             if(res.status === 200 || res.status === 204) {
                 return {error: false, data: []}

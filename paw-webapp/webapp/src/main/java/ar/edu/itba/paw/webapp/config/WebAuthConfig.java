@@ -156,36 +156,21 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .accessDeniedHandler(new ForbiddenRequestHandler())
                 .and().authorizeRequests()
                 //content
-                .antMatchers(HttpMethod.POST,"/api/content/watchList").authenticated()
-                .antMatchers(HttpMethod.DELETE,"/api/content/watchList").authenticated()
-                .antMatchers(HttpMethod.POST,"/api/content/viewedList").authenticated()
-                .antMatchers(HttpMethod.DELETE,"/api/content/viewedList").authenticated()
                 .antMatchers(HttpMethod.PUT,"/api/content/**").hasRole("ADMIN")
                 .antMatchers(HttpMethod.DELETE,"/api/content/**").hasRole("ADMIN")
                 .antMatchers(HttpMethod.POST,"/api/content").hasRole("ADMIN")
                 //reviews
                 .antMatchers(HttpMethod.POST,"/api/reviews/**").authenticated()
-                .antMatchers(HttpMethod.DELETE,"/api/reviews/delete/{id}").access(ACCESS_CONTROL_CHECK_REVIEW_OWNER_OR_ADMIN)
-                .antMatchers(HttpMethod.PUT,"/api/reviews/editReview/{id}").access(ACCESS_CONTROL_CHECK_REVIEW_OWNER_OR_ADMIN)
-                .antMatchers(HttpMethod.PUT,"/api/reviews/reviewReputation/**").authenticated()
+                .antMatchers(HttpMethod.GET,"/api/reviews/reports").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE,"/api/reviews/{reviewId}/reports").hasRole("ADMIN")
                 //comments
                 .antMatchers(HttpMethod.POST,"/api/comments/**").authenticated()
-                .antMatchers(HttpMethod.DELETE,"/api/comments/delete/{id]").access(ACCESS_CONTROL_CHECK_COMMENT_OWNER_OR_ADMIN)
+                .antMatchers(HttpMethod.GET,"/api/comments/reports").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE,"/api/comments/{reviewId}/reports").hasRole("ADMIN")
                 //users
-                .antMatchers(HttpMethod.PUT,"/api/users/{id}/profileImage").access(ACCESS_CONTROL_CHECK_USER)
-                .antMatchers(HttpMethod.PUT,"/api/users/{id}/editProfile").access(ACCESS_CONTROL_CHECK_USER)
-
-                //reports
-                .antMatchers(HttpMethod.DELETE,"/api/reports/**").hasRole("ADMIN")
-                .antMatchers(HttpMethod.POST,"/api/reports/review/{id}").access(ACCESS_CONTROL_CHECK_REVIEW_NOT_OWNER)
-                .antMatchers(HttpMethod.POST,"/api/reports/comment/{id}").access(ACCESS_CONTROL_CHECK_COMMENT_NOT_OWNER)
+                .antMatchers(HttpMethod.PUT,"/api/user/{id}/profileImage").authenticated()
+                .antMatchers(HttpMethod.PUT,"/api/user/{id}/role").hasRole("ADMIN")
                 //lists
-                .antMatchers(HttpMethod.DELETE,"api/lists/watchList/delete/{id}").authenticated()
-                .antMatchers(HttpMethod.DELETE,"api/lists/viewedList/delete/{id}").authenticated()
-                .antMatchers(HttpMethod.PUT,"api/lists/watchList/add/{id}").authenticated()
-                .antMatchers(HttpMethod.PUT,"api/lists/viewedList/add/{id}").authenticated()
-                .antMatchers(HttpMethod.GET,"api/lists/viewedList/{id}").access(ACCESS_CONTROL_CHECK_USER)
-                .antMatchers(HttpMethod.GET,"api/lists/watchList/{id}").access(ACCESS_CONTROL_CHECK_USER)
                 .antMatchers("/api/**").permitAll()
                 // Add JWT Token Filter
                 .and().csrf().disable()
