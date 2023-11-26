@@ -327,7 +327,7 @@ export default function InfoPage() {
                                 navigate("/error", { replace: true, state: { errorCode: 404 } });
                             }
                         } else {
-                            setReviewsUsers((prevArray) => [{ id: user.id, username: user.username }, ...prevArray]);
+                            setReviewsUsers((prevArray) => [{ id: user.id, username: user.username, role: user.role}, ...prevArray]);
                             setAlreadyReviewed(true);
                         }
                     });
