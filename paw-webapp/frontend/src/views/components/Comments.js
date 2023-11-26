@@ -155,7 +155,7 @@ export default function Comments(props) {
                                                         </Modal.Title>
                                                     </Modal.Header>
                                                     <Modal.Body>
-                                                        {t('Delete.Confirmation')}
+                                                        {t('DeleteComment')}
                                                     </Modal.Body>
                                                     <Modal.Footer>
                                                         <Button variant="secondary" onClick={handleCloseDeleteModal}>

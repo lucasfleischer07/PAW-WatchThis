@@ -124,7 +124,6 @@
 }
 
 .W-username-profilepage {
-    margin-top: 1vw;
     color: white;
     display: flex;
 }
@@ -160,6 +159,12 @@
     align-items: center;
     justify-content: space-between;
     flex-direction: row;
+}
+
+.W-admin-icon {
+    display: flex;
+    align-items: flex-start;
+    margin-top: 1vw;
 }
 
 .W-div-img-quote {
