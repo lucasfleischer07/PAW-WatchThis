@@ -140,8 +140,9 @@ export class ContentApi {
 
     async addUserWatchList(contentId, userId) {
         const apiUrl = `${this.basePath}/${contentId}/watchList`
-        const options = {method: 'POST', headers: authCheck({}), body: {}}
-        const params = {userId: userId}
+        const bodyRequest = {userId: userId}
+        const options = {method: 'POST', headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}), body: JSON.stringify(bodyRequest)}
+        const params = {}
         return genericFetchWithQueryParams(apiUrl, options, params)
     }
 
@@ -154,8 +155,9 @@ export class ContentApi {
 
     async addUserViewedList(contentId, userId) {
         const apiUrl = `${this.basePath}/${contentId}/viewedList`
-        const options = {method: 'POST', headers: authCheck({}), body: {}}
-        const params = {userId: userId}
+        const bodyRequest = {userId: userId}
+        const options = {method: 'POST', headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}), body: JSON.stringify(bodyRequest)}
+        const params = {}
         return genericFetchWithQueryParams(apiUrl, options, params)
     }
 

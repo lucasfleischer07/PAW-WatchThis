@@ -71,7 +71,7 @@ export default function SignUp() {
         userService.userCreate(userForm)
             .then(data => {
                 if(!data.error) {
-                    userService.login(data.data.email, userForm.password)
+                    userService.login(userForm.email, userForm.password)
                         .then(user2 => {
                             if(!user2.error) {
                                 if(user != null) {

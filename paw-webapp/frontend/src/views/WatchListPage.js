@@ -49,27 +49,35 @@ export default function WatchListPage(props) {
     }
 
     const getUserWatchList = async () => {
-        if(isLogged()) {
-            const userData = await userService.getUserInfo(user.id)
-            if(!userData.error) {
-                const watchListData = await contentService.getLists(userData.data.userWatchListURL);
-                if (!watchListData.error) {
-                    setWatchList(watchListData.data);
-                    setTotalContent(watchListData.totalContent)
-                } else {
-                    if (watchListData.errorCode === 404) {
-                        setShowExpiredCookiesModal(true);
-                    } else {
-                        navigate("/error", { replace: true, state: { errorCode: watchListData.errorCode } });
-                    }
-                }
-            } else {
-                navigate("/error", { replace: true, state: { errorCode: userData.errorCode } });
-            }
+        const queryParams = new URLSearchParams(search);
+        const currentPage = checkIsNumber(queryParams.get('page'));
 
+        if(currentPage !== page) {
+            setPage(currentPage)
         } else {
-            navigate("/error", { replace: true, state: {errorCode: 401} })
+            if(isLogged()) {
+                const userData = await userService.getUserInfo(user.id)
+                if(!userData.error) {
+                    const watchListData = await contentService.getLists(userData.data.userWatchListURL);
+                    if (!watchListData.error) {
+                        setWatchList(watchListData.data);
+                        setTotalContent(watchListData.totalContent)
+                    } else {
+                        if (watchListData.errorCode === 404) {
+                            setShowExpiredCookiesModal(true);
+                        } else {
+                            navigate("/error", { replace: true, state: { errorCode: watchListData.errorCode } });
+                        }
+                    }
+                } else {
+                    navigate("/error", { replace: true, state: { errorCode: userData.errorCode } });
+                }
+
+            } else {
+                navigate("/error", { replace: true, state: {errorCode: 401} })
+            }
         }
+
     }
 
     useEffect(() => {

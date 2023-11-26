@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.webapp.dto.request;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -12,10 +14,34 @@ public class NewReviewDto {
     @Pattern(regexp	= "([a-zA-Z0-9ñáéíóú!,.:;=+\n\\-_()?<>$%&#@{}\\[\\]|*\"'~/`^\\s]+)?", message = "...")
     private String description;
 
+    @NotNull(message = "...")
+    @Min(0)
+    private long userId;
+
+    @NotNull(message = "...")
+    @Min(0)
+    private long contentId;
+
     private long id;
     private Integer rating;
+    @NotNull
     private String type;
 
+    public long getUserId(){
+        return userId;
+    }
+
+    public void setUserId(long userId){
+        this.userId = userId;
+    }
+
+    public long getContentId(){
+        return contentId;
+    }
+
+    public void setContentId(long contentId){
+        this.contentId = contentId;
+    }
 
     public String getName() {
         return name;

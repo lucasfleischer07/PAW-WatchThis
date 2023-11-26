@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.webapp.controller.queryParams.GetReviewsParams;
+import ar.edu.itba.paw.webapp.dto.request.BasicRequestDto;
 import ar.edu.itba.paw.webapp.dto.request.NewReportCommentDto;
 import ar.edu.itba.paw.webapp.dto.response.ReviewReportDto;
 import ar.edu.itba.paw.webapp.exceptions.ContentNotFoundException;
@@ -18,6 +19,7 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
 import javax.ws.rs.*;
@@ -83,14 +85,11 @@ public class ReviewController {
 //    Endpoint para crear una resenia
     @POST
     @Produces(value = {MediaType.APPLICATION_JSON})
-    @PreAuthorize("@securityChecks.canReview(#userId, #contentId, #type)")
-    public Response reviews(@QueryParam("userId") final Long userId,
-                            @QueryParam("type") final String type,
-                            @QueryParam("contentId") final Long contentId,
-                            @Valid NewReviewDto reviewDto) {
+    @PreAuthorize("@securityChecks.canReview(#reviewDto.userId, #reviewDto.contentId, #reviewDto.type)")
+    public Response reviews(@Valid NewReviewDto reviewDto) {
         LOGGER.info("POST /{}: Called", uriInfo.getPath());
 
-        final Content content = cs.findById(contentId).get();
+        final Content content = cs.findById(reviewDto.getContentId()).get();
         final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).get();
 
         if(reviewDto == null){
@@ -147,9 +146,8 @@ public class ReviewController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/{reviewId}")
     @Produces(value = {MediaType.APPLICATION_JSON,})
-    @PreAuthorize("@securityChecks.canEditReview(#userId, #reviewId)")
-    public Response reviewEdition(@QueryParam("userId") final Long userId,
-                                  @PathParam("reviewId") final Long reviewId,
+    @PreAuthorize("@securityChecks.canEditReview(#reviewDto.userId, #reviewId)")
+    public Response reviewEdition(@PathParam("reviewId") final Long reviewId,
                                   @Valid final NewReviewDto reviewDto) {
         LOGGER.info("PUT /{}: Called", uriInfo.getPath());
         if(reviewDto == null) {
@@ -175,8 +173,8 @@ public class ReviewController {
     @PUT
     @Produces(value = {MediaType.APPLICATION_JSON})
     @Path("/{reviewId}/thumbUp")
-    @PreAuthorize("@securityChecks.checkUser(#userId)")
-    public Response reviewThumbUp(@QueryParam("userId") final Long userId,
+    @PreAuthorize("@securityChecks.checkUser(#basicRequestDto.userId)")
+    public Response reviewThumbUp(@Valid BasicRequestDto basicRequestDto,
                                   @PathParam("reviewId") final Long reviewId) {
         LOGGER.info("PUT /{}: Called", uriInfo.getPath());
         Review review = rs.getReview(reviewId).orElseThrow(ReviewNotFoundException::new);
@@ -192,8 +190,8 @@ public class ReviewController {
     @PUT
     @Produces(value = {MediaType.APPLICATION_JSON})
     @Path("/{reviewId}/thumbDown")
-    @PreAuthorize("@securityChecks.checkUser(#userId)")
-    public Response reviewThumbDown(@QueryParam("userId") final Long userId,
+    @PreAuthorize("@securityChecks.checkUser(#basicRequestDto.userId)")
+    public Response reviewThumbDown(@Valid BasicRequestDto basicRequestDto,
                                     @PathParam("reviewId") final long reviewId) {
         LOGGER.info("PUT /{}: Called", uriInfo.getPath());
         Review review = rs.getReview(reviewId).orElseThrow(ReviewNotFoundException::new);
@@ -223,9 +221,8 @@ public class ReviewController {
 
     @POST
     @Path("/{reviewId}/reports")
-    @PreAuthorize("@securityChecks.checkUser(#userId)")
-    public Response addReviewReport(@QueryParam("userId") final Long userId,
-                                    @PathParam("reviewId") long reviewId,
+    @PreAuthorize("@securityChecks.checkUser(#commentReportDto.userId)")
+    public Response addReviewReport(@PathParam("reviewId") long reviewId,
                                     @Valid NewReportCommentDto commentReportDto) {
         LOGGER.info("POST /{}: Called", uriInfo.getPath());
         if(commentReportDto==null) {

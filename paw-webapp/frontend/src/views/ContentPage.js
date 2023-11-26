@@ -42,43 +42,59 @@ export default function ContentPage(props) {
 
 
     useEffect(() => {
-        if(settedParams === true) {
-            contentService.getContentByType(contentType, actualPage, genre, durationFrom, durationTo, sorting, query)
-                .then(data => {
-                    if(!data.error) {
-                        setAllContent(data.data)
-                        const aux = data.totalPages
-                        setAmountPages(aux);
-                    } else {
-                        navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
-                    }
-                })
-                .catch(() => {
-                    navigate("/error", { replace: true, state: {errorCode: 404} })
-                })
+        const queryParams = new URLSearchParams(search);
+        const currentPage = checkIsNumber(queryParams.get('page'));
+
+        if(currentPage !== actualPage) {
+            setActualPage(currentPage)
+        } else {
+            if(settedParams === true) {
+                contentService.getContentByType(contentType, actualPage, genre, durationFrom, durationTo, sorting, query)
+                    .then(data => {
+                        if(!data.error) {
+                            setAllContent(data.data)
+                            const aux = data.totalPages
+                            setAmountPages(aux);
+                        } else {
+                            navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                        }
+                    })
+                    .catch(() => {
+                        navigate("/error", { replace: true, state: {errorCode: 404} })
+                    })
+            }
         }
-    }, [actualPage, contentType,genre,durationFrom,durationTo,sorting,query,settedParams])
+
+    }, [actualPage, contentType, genre, durationFrom, durationTo, sorting, query, settedParams])
 
 
     useEffect(() => {
-        user !== null || undefined?
-            contentService.getContentByType(null, 1, '', '', '', '', '', user.id, true, false, false)
-                .then(watchList => {
-                    if(!watchList.error) {
-                        setUserWatchListIds(watchList.data)
-                    } else {
-                        if(watchList.errorCode === 404) {
-                            setShowExpiredCookiesModal(true)
-                        } else {
-                            navigate("/error", { replace: true, state: {errorCode: watchList.errorCode} })
-                        }
-                    }
-                })
-                .catch(() => {
-                    navigate("/error", { replace: true, state: {errorCode: 404} })
-                })
+        const queryParams = new URLSearchParams(search);
+        const currentPage = checkIsNumber(queryParams.get('page'));
 
-            : setUserWatchListIds(null)
+        if(currentPage !== actualPage) {
+            setActualPage(currentPage)
+        } else {
+            user !== null || undefined?
+                contentService.getContentByType(null, 1, '', '', '', '', '', user.id, true, false, false)
+                    .then(watchList => {
+                        if(!watchList.error) {
+                            setUserWatchListIds(watchList.data)
+                        } else {
+                            if(watchList.errorCode === 404) {
+                                setShowExpiredCookiesModal(true)
+                            } else {
+                                navigate("/error", { replace: true, state: {errorCode: watchList.errorCode} })
+                            }
+                        }
+                    })
+                    .catch(() => {
+                        navigate("/error", { replace: true, state: {errorCode: 404} })
+                    })
+
+                : setUserWatchListIds(null)
+        }
+
     }, [user])
 
     useEffect(() => {

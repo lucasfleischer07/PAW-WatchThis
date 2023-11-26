@@ -28,8 +28,11 @@ export class ReviewApi {
 
     async reviewsCreation(userId, contentId, type, reviewDetails) {
         const apiUrl = `${this.basePath}`
-        const params = {userId: userId, contentId: contentId, type: type}
-        const options = {method: 'POST', body: JSON.stringify(reviewDetails), headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}),}
+        reviewDetails.userId = userId
+        reviewDetails.contentId = contentId
+        reviewDetails.type = type
+        const options = {method: 'POST', headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}), body: JSON.stringify(reviewDetails)}
+        const params = {}
         return genericFetchWithQueryParams(apiUrl, options, params)
     }
 
@@ -40,24 +43,28 @@ export class ReviewApi {
         return genericFetchWithQueryParams(apiUrl, options, params)
     }
 
-    async reviewEdition(reviewId, userId, reviewDetails) {
+    async reviewEdition(reviewId, userId, contentId, reviewDetails) {
         const apiUrl = `${this.basePath}/${reviewId}`
+        reviewDetails.userId = userId
+        reviewDetails.contentId = contentId
         const options = {method: 'PUT', headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}), body: JSON.stringify(reviewDetails)}
-        const params = {userId: userId}
+        const params = {}
         return genericFetchWithQueryParams(apiUrl, options, params)
     }
 
     async reviewThumbUp(reviewId, userId) {
         const apiUrl = `${this.basePath}/${reviewId}/thumbUp`
-        const options = {method: 'PUT', headers: authCheck({}), body: {}}
-        const params = {userId: userId}
+        let bodyRequest = {userId: userId}
+        const options = {method: 'PUT', headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}), body: JSON.stringify(bodyRequest)}
+        const params = {}
         return genericFetchWithQueryParams(apiUrl, options, params)
     }
 
     async reviewThumbDown(reviewId, userId) {
         const apiUrl = `${this.basePath}/${reviewId}/thumbDown`
-        const options = {method: 'PUT', headers: authCheck({}), body: {}}
-        const params = {userId: userId}
+        let bodyRequest = {userId: userId}
+        const options = {method: 'PUT', headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}), body: JSON.stringify(bodyRequest)}
+        const params = {}
         return genericFetchWithQueryParams(apiUrl, options, params)
     }
 
@@ -70,8 +77,9 @@ export class ReviewApi {
 
     async addReviewReport(reviewId, userId, reviewReportReasons) {
         const apiUrl = `${this.basePath}/${reviewId}/reports`
+        reviewReportReasons.userId = userId
         const options = {method: 'POST', headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}), body: JSON.stringify(reviewReportReasons)}
-        const params = {userId: userId}
+        const params = {}
         return genericFetchWithQueryParams(apiUrl, options, params)
     }
 

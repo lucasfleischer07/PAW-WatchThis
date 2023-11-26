@@ -157,7 +157,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .and().authorizeRequests()
                 //content
                 .antMatchers(HttpMethod.PUT,"/api/content/**").hasRole("ADMIN")
-                .antMatchers(HttpMethod.DELETE,"/api/content/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE,"/api/content/{contentId}").hasRole("ADMIN")
                 .antMatchers(HttpMethod.POST,"/api/content").hasRole("ADMIN")
                 //reviews
                 .antMatchers(HttpMethod.POST,"/api/reviews/**").authenticated()
@@ -166,7 +166,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 //comments
                 .antMatchers(HttpMethod.POST,"/api/comments/**").authenticated()
                 .antMatchers(HttpMethod.GET,"/api/comments/reports").hasRole("ADMIN")
-                .antMatchers(HttpMethod.DELETE,"/api/comments/{reviewId}/reports").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE,"/api/comments/{commentId}/reports").hasRole("ADMIN")
                 //users
                 .antMatchers(HttpMethod.PUT,"/api/user/{id}/profileImage").authenticated()
                 .antMatchers(HttpMethod.PUT,"/api/user/{id}/role").hasRole("ADMIN")

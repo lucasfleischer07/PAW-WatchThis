@@ -4,6 +4,8 @@ import ar.edu.itba.paw.services.CommentService;
 import ar.edu.itba.paw.services.ReviewService;
 import ar.edu.itba.paw.webapp.auth.SecurityChecks;
 import ar.edu.itba.paw.webapp.controller.queryParams.GetContentParams;
+import ar.edu.itba.paw.webapp.dto.request.BasicRequestDto;
+import ar.edu.itba.paw.webapp.dto.request.NewCommentDto;
 import ar.edu.itba.paw.webapp.exceptions.ContentNotFoundException;
 import ar.edu.itba.paw.webapp.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.models.Content;
@@ -250,8 +252,8 @@ public class ContentController {
     // * ----------------------------------- Watchlist and Viewedlist --------------------------------------------------
     @POST
     @Path("/{contentId}/watchList")
-    @PreAuthorize("@securityChecks.checkUser(#userId)")
-    public Response addUserWatchList(@QueryParam("userId") final Long userId,
+    @PreAuthorize("@securityChecks.checkUser(#basicRequestDto.userId)")
+    public Response addUserWatchList(@Valid BasicRequestDto basicRequestDto,
                                      @PathParam("contentId") final long contentId) {
         LOGGER.info("POST /{}: Called", uriInfo.getPath());
         final Content content = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
@@ -287,8 +289,8 @@ public class ContentController {
 
     @POST
     @Path("/{contentId}/viewedList")
-    @PreAuthorize("@securityChecks.checkUser(#userId)")
-    public Response addUserViewedList(@QueryParam("userId") final Long userId,
+    @PreAuthorize("@securityChecks.checkUser(#basicRequestDto.userId)")
+    public Response addUserViewedList(@Valid BasicRequestDto basicRequestDto,
                                       @PathParam("contentId") final long contentId) {
         LOGGER.info("POST /{}: Called", uriInfo.getPath());
 

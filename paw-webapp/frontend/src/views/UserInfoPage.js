@@ -80,7 +80,6 @@ export default function UserInfoPage() {
             })
     }
 
-
     useEffect(() => {
         const queryParams = new URLSearchParams(search);
         updateUrlVariable(page, checkIsNumber(queryParams.get('page')), (x) =>setPage(x))
@@ -88,116 +87,122 @@ export default function UserInfoPage() {
 
 
     useEffect(() => {
-        async function fetchData() {
-            reviewService.getReviews(parseInt(userProfileId), null, page)
-                .then(async reviews => {
-                    if (!reviews.error) {
-                        for (let i = 0; i < reviews.data.length; i++) {
-                            await contentService.getSpecificContent(reviews.data[i].content)
-                                .then(contentData => {
-                                    if (!contentData.error) {
-                                        setContentArray(prevArray => [...prevArray, contentData.data]);
-                                    } else {
-                                        navigate("/error", {replace: true, state: {errorCode: contentData.errorCode}})
-                                    }
-                                })
-                                .catch(error => {
-                                    navigate("/error", {replace: true, state: {errorCode: 404}})
-                                });
-                        }
+        const queryParams = new URLSearchParams(search);
+        const currentPage = checkIsNumber(queryParams.get('page'));
 
-                        setReviews(reviews.data)
-                        setTotalReviews(reviews.totalUserReviews)
-
-                        userService.getUserInfo(parseInt(userProfileId))
-                            .then((data) => {
-                                if (!data.error) {
-                                    setReviewOwnerUser(data.data)
-                                    if (reviews.data.length === 0) {
-                                        setReputation(0)
-                                    } else {
-                                        let reputation = 0
-                                        for (let i = 0; i < reviews.data.length; i++) {
-                                            reputation += reviews.data[i].reputation
+        if(currentPage !== page) {
+            setPage(currentPage)
+        } else {
+            async function fetchData() {
+                reviewService.getReviews(parseInt(userProfileId), null, page)
+                    .then(async reviewsData => {
+                        if (!reviewsData.error) {
+                            setReviews([])
+                            setContentArray([])
+                            setReviews(reviewsData.data)
+                            setTotalReviews(reviewsData.totalUserReviews)
+                            for (let i = 0; i < reviewsData.data.length; i++) {
+                                await contentService.getSpecificContent(reviewsData.data[i].content)
+                                    .then(contentData => {
+                                        if (!contentData.error) {
+                                            setContentArray(prevArray => [...prevArray, contentData.data]);
+                                        } else {
+                                            navigate("/error", {replace: true, state: {errorCode: contentData.errorCode}})
                                         }
-                                        setReputation(reputation)
-                                    }
+                                    })
+                                    .catch(error => {
+                                        navigate("/error", {replace: true, state: {errorCode: 404}})
+                                    });
+                            }
 
-                                    if (user?.role === 'admin' && data.data.role !== 'admin') {
-                                        setCanPromote(true)
+                            userService.getUserInfo(parseInt(userProfileId))
+                                .then((data) => {
+                                    if (!data.error) {
+                                        setReviewOwnerUser(data.data)
+                                        if (reviewsData.data.length === 0) {
+                                            setReputation(0)
+                                        } else {
+                                            let reputation = 0
+                                            for (let i = 0; i < reviewsData.data.length; i++) {
+                                                reputation += reviewsData.data[i].reputation
+                                            }
+                                            setReputation(reputation)
+                                        }
+
+                                        if (user?.role === 'admin' && data.data.role !== 'admin') {
+                                            setCanPromote(true)
+                                        } else {
+                                            setCanPromote(false)
+                                        }
+
+                                        setAmountReviews(reviewsData.totalReviews)
+                                        setAmountPages(reviewsData.totalPages)
+
+                                        if (user?.id === parseInt(userProfileId)) {
+                                            setIsSameUser(true)
+                                        } else {
+                                            setIsSameUser(false)
+                                        }
+
+                                        setLoaded(true)
+
                                     } else {
-                                        setCanPromote(false)
+                                        navigate("/error", {replace: true, state: {errorCode: data.errorCode}})
                                     }
 
-                                    setAmountReviews(reviews.totalReviews)
-                                    setAmountPages(reviews.totalPages)
+                                })
+                                .catch(() => {
+                                    navigate("/error", {replace: true, state: {errorCode: 404}})
+                                })
 
-                                    if (user?.id === parseInt(userProfileId)) {
-                                        setIsSameUser(true)
-                                    } else {
-                                        setIsSameUser(false)
-                                    }
-
-                                    setLoaded(true)
-
-                                } else {
-                                    navigate("/error", {replace: true, state: {errorCode: data.errorCode}})
-                                }
-
-                            })
-                            .catch(() => {
-                                navigate("/error", {replace: true, state: {errorCode: 404}})
-                            })
-
-                    } else {
-                        navigate("/error", {replace: true, state: {errorCode: reviews.errorCode}})
-                    }
-                })
-                .catch(() => {
-                    navigate("/error", { replace: true, state: {errorCode: 404} })
-                })
-
-            if(isLogged()) {
-                userService.getReviewsLike(user?.id)
-                    .then(data => {
-                        if(!data.error) {
-                            setIsLikeReviewsList(data.data)
                         } else {
-                            navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                            navigate("/error", {replace: true, state: {errorCode: reviewsData.errorCode}})
                         }
                     })
                     .catch(() => {
                         navigate("/error", { replace: true, state: {errorCode: 404} })
                     })
 
-                userService.getReviewsDislike(user?.id)
-                    .then(data => {
-                        if(!data.error) {
-                            setIsDislikeReviewsList(data.data)
-                        } else {
-                            navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
-                        }
-                    })
-                    .catch(() => {
-                        navigate("/error", { replace: true, state: {errorCode: 404} })
-                    })
+                if(isLogged()) {
+                    userService.getReviewsLike(user?.id)
+                        .then(data => {
+                            if(!data.error) {
+                                setIsLikeReviewsList(data.data)
+                            } else {
+                                navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                            }
+                        })
+                        .catch(() => {
+                            navigate("/error", { replace: true, state: {errorCode: 404} })
+                        })
 
-                reviewService.getReviews(user?.id, null, 1, true)
-                    .then(data => {
-                        if(!data.error) {
-                            setLoggedUserReviewsReported(data.data)
-                        } else {
-                            navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
-                        }
-                    })
-                    .catch(() => {
-                        navigate("/error", { replace: true, state: {errorCode: 404} })
-                    })
+                    userService.getReviewsDislike(user?.id)
+                        .then(data => {
+                            if(!data.error) {
+                                setIsDislikeReviewsList(data.data)
+                            } else {
+                                navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                            }
+                        })
+                        .catch(() => {
+                            navigate("/error", { replace: true, state: {errorCode: 404} })
+                        })
+
+                    reviewService.getReviews(user?.id, null, 1, true)
+                        .then(data => {
+                            if(!data.error) {
+                                setLoggedUserReviewsReported(data.data)
+                            } else {
+                                navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                            }
+                        })
+                        .catch(() => {
+                            navigate("/error", { replace: true, state: {errorCode: 404} })
+                        })
+                }
             }
+            fetchData()
         }
-
-        fetchData()
-
     }, [page, userProfileId])
 
 

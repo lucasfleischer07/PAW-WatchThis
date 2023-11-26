@@ -53,35 +53,45 @@ export default function ViewedListPage(props) {
 
     const getUserViewedList = async () => {
         if(isLogged()) {
-            const userData = await userService.getUserInfo(user.id)
-            if(!userData.error) {
-                const viewedListData = await contentService.getLists(userData.data.userViewedListURL);
-                if (!viewedListData.error) {
-                    setViewedList(viewedListData.data);
-                    setAmountPages(viewedListData.totalPages);
-                    setTotalContent(viewedListData.totalContent);
-                } else {
-                    if (viewedListData.errorCode === 404) {
-                        setShowExpiredCookiesModal(true);
-                    } else {
-                        navigate("/error", { replace: true, state: { errorCode: viewedListData.errorCode } });
-                    }
-                }
+            const queryParams = new URLSearchParams(search);
+            const currentPage = checkIsNumber(queryParams.get('page'));
 
-                const watchListData = await contentService.getLists(userData.data.userWatchListURL);
-                if (!watchListData.error) {
-                    setWatchList(watchListData.data);
-                } else {
-                    if (watchListData.errorCode === 404) {
-                        setShowExpiredCookiesModal(true);
-                    } else {
-                        navigate("/error", { replace: true, state: { errorCode: watchListData.errorCode } });
-                    }
-                }
-
+            if(currentPage !== page) {
+                setPage(currentPage)
             } else {
-                navigate("/error", { replace: true, state: { errorCode: userData.errorCode } });
+                const userData = await userService.getUserInfo(user.id)
+                if(!userData.error) {
+                    const viewedListData = await contentService.getLists(userData.data.userViewedListURL);
+                    if (!viewedListData.error) {
+                        setViewedList(viewedListData.data);
+                        setAmountPages(viewedListData.totalPages);
+                        setTotalContent(viewedListData.totalContent);
+                    } else {
+                        if (viewedListData.errorCode === 404) {
+                            setShowExpiredCookiesModal(true);
+                        } else {
+                            navigate("/error", { replace: true, state: { errorCode: viewedListData.errorCode } });
+                        }
+                    }
+
+                    const watchListData = await contentService.getLists(userData.data.userWatchListURL);
+                    if (!watchListData.error) {
+                        setWatchList(watchListData.data);
+                    } else {
+                        if (watchListData.errorCode === 404) {
+                            setShowExpiredCookiesModal(true);
+                        } else {
+                            navigate("/error", { replace: true, state: { errorCode: watchListData.errorCode } });
+                        }
+                    }
+
+                } else {
+                    navigate("/error", { replace: true, state: { errorCode: userData.errorCode } });
+                }
             }
+
+
+
 
         } else {
             navigate("/error", { replace: true, state: {errorCode: 401} })

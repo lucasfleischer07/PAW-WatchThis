@@ -40,16 +40,13 @@ export default function ForgotPassword() {
                     navigate("/login", {replace: true})
                 } else {
                     if(data.errorCode === 404) {
-                        console.log("Hola")
                         setError(true)
                     } else {
-                        console.log("Hola2")
                         navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                     }
                 }
             })
             .catch(() => {
-                console.log("Hola3")
                 navigate("/error", { replace: true, state: {errorCode: 404} })
             })
     }

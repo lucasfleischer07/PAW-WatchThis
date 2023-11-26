@@ -24,6 +24,7 @@ export default function ReviewCard(props) {
     const loggedUserName = props.loggedUserName
     const loggedUserId = props.loggedUserId
     const [isAdmin,setIsAdmin] = useState(props.isAdmin);
+    const commentsReportedByLoggedUser = props.commentsReportedByLoggedUser
 
     const completeReviewUser = props.reviewUser
 
@@ -103,7 +104,7 @@ export default function ReviewCard(props) {
                     navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
                 }
             })
-            .catch((e) => {
+            .catch(() => {
                 navigate("/error", { replace: true, state: {errorCode: 404} })
             })
     }
@@ -155,7 +156,7 @@ export default function ReviewCard(props) {
                                 {reviewUser}
                             </Link>
                             <div className="W-delete-edit-report-review-buttons">
-                                {isLogged() && (reviewUser === loggedUserName) && (
+                                {isLogged() && (reviewUserId === loggedUserId) && (
                                     <div>
                                         <div className="W-delete-edit-buttons">
                                             <button className="btn btn-danger text-nowrap" id={`deleteReviewButton${reviewId}`} onClick={handleShowDeleteReviewModal} data-testid={'delete'}>
@@ -248,6 +249,7 @@ export default function ReviewCard(props) {
                             loggedUserName={loggedUserName}
                             canComment={canComment}
                             seeComments={seeComments}
+                            commentsReportedByLoggedUser={commentsReportedByLoggedUser}
                         />
                     </div>
                 </div>

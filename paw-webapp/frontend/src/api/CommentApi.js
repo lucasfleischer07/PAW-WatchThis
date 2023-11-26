@@ -27,8 +27,10 @@ export class CommentApi {
 
     async createComment(reviewId, userId, commentDetails) {
         const apiUrl = `${this.basePath}`
+        commentDetails.userId = userId
+        commentDetails.reviewId = reviewId
         const options = {method: 'POST', headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}), body: JSON.stringify(commentDetails)}
-        const params = {userId: userId, reviewId: reviewId}
+        const params = {}
         return genericFetchWithQueryParams(apiUrl, options, params)
     }
 
@@ -48,8 +50,9 @@ export class CommentApi {
 
     async addCommentReport(userId, commentId, commentReportReasons) {
         const apiUrl = `${this.basePath}/${commentId}/reports`
+        commentReportReasons.userId = userId
         const options = {method: 'POST', headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}), body: JSON.stringify(commentReportReasons)}
-        const params = {userId: userId}
+        const params = {}
         return genericFetchWithQueryParams(apiUrl, options, params)
     }
 

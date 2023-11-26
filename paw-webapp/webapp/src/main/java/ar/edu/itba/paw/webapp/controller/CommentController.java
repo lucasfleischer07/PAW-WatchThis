@@ -75,15 +75,13 @@ public class CommentController {
     // Endpoint para crear un comentario
     @POST
     @Produces(value = {MediaType.APPLICATION_JSON})
-    @PreAuthorize("@securityChecks.checkUser(#userId)")
-    public Response commentReviewAdd(@QueryParam("userId") final Long userId,
-                                     @QueryParam("reviewId") final Long reviewId,
-                                     @Valid NewCommentDto commentDto) {
+    @PreAuthorize("@securityChecks.checkUser(#commentDto.userId)")
+    public Response commentReviewAdd(@Valid NewCommentDto commentDto) {
         LOGGER.info("POST /{}: Called", uriInfo.getPath());
-        if(commentDto == null || reviewId == null)
+        if(commentDto == null) {
             throw new BadRequestException();
-
-        final Review review = rs.getReview(reviewId).orElseThrow(ReviewNotFoundException::new);
+        }
+        final Review review = rs.getReview(commentDto.getReviewId()).orElseThrow(ReviewNotFoundException::new);
         final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
 
         Comment newComment = ccs.addComment(review, user, commentDto.getComment());
@@ -145,13 +143,12 @@ public class CommentController {
 
     @POST
     @Path("/{commentId}/reports")
-    @PreAuthorize("@securityChecks.checkUser(#userId)")
-    public Response addCommentReport(@QueryParam("userId") final Long userId,
-                                     @PathParam("commentId") long commentId,
+    @PreAuthorize("@securityChecks.checkUser(#commentReportDto.userId)")
+    public Response addCommentReport(@PathParam("commentId") long commentId,
                                      @Valid NewReportCommentDto commentReportDto) {
         LOGGER.info("POST /{}: Called", uriInfo.getPath());
 
-        if(commentReportDto==null) {
+        if(commentReportDto == null) {
             throw new BadRequestException("Must include report data");
         }
 

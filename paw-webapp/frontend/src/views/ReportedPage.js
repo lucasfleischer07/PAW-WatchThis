@@ -95,54 +95,63 @@ export default function ReportedPage() {
     }
 
     useEffect(() => {
-        if(paramsSetted) {
-            if (isLogged() && user.role === 'admin') {
-                setCurrentCommentsReportsPage(1)
-                setCurrentReviewsReportsPage(1)
-                if (reportType === "reviews") {
-                    reviewService.getReviewReports(filterReason)
-                        .then(data => {
-                            if (!data.error) {
-                                setReportedReviewsList(data.data)
-                                setAmountPages(data.totalPages)
-                                setAmountReportedComments(data.totalCommentsReports)
-                                setAmountReportedReviews(data.totalReviewsReports)
-                            } else {
-                                if (data.errorCode === 404) {
-                                    setShowExpiredCookiesModal(true)
-                                } else {
-                                    navigate("/error", {replace: true, state: {errorCode: data.errorCode}})
-                                }
-                            }
-                        })
-                        .catch(() => {
-                            navigate("/error", {replace: true, state: {errorCode: 404}})
-                        })
+        const queryParams = new URLSearchParams(search);
+        const currentPage = checkIsNumber(queryParams.get('page'));
 
-                } else {
-                    commentService.getCommentsReports(filterReason)
-                        .then(data => {
-                            if (!data.error) {
-                                setReportedCommentsList(data.data)
-                                setAmountPages(data.totalPages)
-                                setAmountReportedComments(data.totalCommentsReports)
-                                setAmountReportedReviews(data.totalReviewsReports)
-                            } else {
-                                if (data.errorCode === 404) {
-                                    setShowExpiredCookiesModal(true)
+        if(currentPage !== page) {
+            setPage(currentPage)
+        } else {
+            if(paramsSetted) {
+                if (isLogged() && user.role === 'admin') {
+                    setCurrentCommentsReportsPage(1)
+                    setCurrentReviewsReportsPage(1)
+                    if (reportType === "reviews") {
+                        reviewService.getReviewReports(filterReason)
+                            .then(data => {
+                                if (!data.error) {
+                                    setReportedReviewsList(data.data)
+                                    setAmountPages(data.totalPages)
+                                    setAmountReportedComments(data.totalCommentsReports)
+                                    setAmountReportedReviews(data.totalReviewsReports)
                                 } else {
-                                    navigate("/error", {replace: true, state: {errorCode: data.errorCode}})
+                                    if (data.errorCode === 404) {
+                                        setShowExpiredCookiesModal(true)
+                                    } else {
+                                        navigate("/error", {replace: true, state: {errorCode: data.errorCode}})
+                                    }
                                 }
-                            }
-                        })
-                        .catch(() => {
-                            navigate("/error", {replace: true, state: {errorCode: 404}})
-                        })
+                            })
+                            .catch(() => {
+                                navigate("/error", {replace: true, state: {errorCode: 404}})
+                            })
+
+                    } else {
+                        commentService.getCommentsReports(filterReason)
+                            .then(data => {
+                                if (!data.error) {
+                                    setReportedCommentsList(data.data)
+                                    setAmountPages(data.totalPages)
+                                    setAmountReportedComments(data.totalCommentsReports)
+                                    setAmountReportedReviews(data.totalReviewsReports)
+                                } else {
+                                    if (data.errorCode === 404) {
+                                        setShowExpiredCookiesModal(true)
+                                    } else {
+                                        navigate("/error", {replace: true, state: {errorCode: data.errorCode}})
+                                    }
+                                }
+                            })
+                            .catch(() => {
+                                navigate("/error", {replace: true, state: {errorCode: 404}})
+                            })
+                    }
+                } else {
+                    navigate("/error", {replace: true, state: {errorCode: 401}})
                 }
-            } else {
-                navigate("/error", {replace: true, state: {errorCode: 401}})
             }
         }
+
+
 
     }, [filterReason, commentOrReviewDismissedOrDeleted, reportType, paramsSetted, page])
 
