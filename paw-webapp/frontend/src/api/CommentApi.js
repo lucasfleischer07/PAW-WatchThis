@@ -34,10 +34,10 @@ export class CommentApi {
         return genericFetchWithQueryParams(apiUrl, options, params)
     }
 
-    async commentDelete(commentId, userId) {
+    async commentDelete(commentId) {
         const apiUrl = `${this.basePath}/${commentId}`
         const options = {method: 'DELETE', headers: authCheck({})}
-        const params = {userId: userId}
+        const params = {}
         return genericFetchWithQueryParams(apiUrl, options, params)
     }
 

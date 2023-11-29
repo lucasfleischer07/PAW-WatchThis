@@ -96,9 +96,8 @@ public class CommentController {
     // Endpoint para borrar un comment
     @DELETE
     @Path("/{commentId}")
-    @PreAuthorize("@securityChecks.canDeleteComment(#userId, #commentId)")
-    public Response commentReviewDelete(@QueryParam("userId") final Long userId,
-                                        @PathParam("commentId") final long commentId) {
+    @PreAuthorize("@securityChecks.canDeleteComment(#commentId)")
+    public Response commentReviewDelete(@PathParam("commentId") final long commentId) {
         LOGGER.info("DELETE /{}: Called", uriInfo.getPath());
 
         Optional<User> user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());

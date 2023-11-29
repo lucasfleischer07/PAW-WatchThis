@@ -45,10 +45,10 @@ export class ContentApi {
         return genericFetchWithQueryParams(apiUrl, options, params)
     }
 
-    async deleteContent(contentId, userId) {
+    async deleteContent(contentId) {
         const apiUrl = `${this.basePath}/${contentId}`
         const options = {method: 'DELETE', headers: authCheck({})}
-        const params = {userId: userId}
+        const params = {}
         return genericFetchWithQueryParams(apiUrl, options, params)
     }
 

@@ -93,7 +93,7 @@ export default function ReviewCard(props) {
         );
     }
     const handleDelete = () => {
-        reviewService.deleteReview(reviewId, loggedUserId)
+        reviewService.deleteReview(reviewId)
             .then(data => {
                 if(!data.error) {
                     handleCloseDeleteReviewModal()

@@ -60,7 +60,7 @@ export default function ReportedContent(props) {
     const handleDeleteCommentOrReview = (e) => {
         e.preventDefault()
         if(reportType === 'comment') {
-            commentService.commentDelete(typeId, loggedUserId)
+            commentService.commentDelete(typeId)
                 .then(data => {
                     if(!data.error) {
                         toast.success(t('Comment.Deleted'))
@@ -74,7 +74,7 @@ export default function ReportedContent(props) {
                     navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
         } else if(reportType === 'review') {
-            reviewService.deleteReview(typeId, loggedUserId)
+            reviewService.deleteReview(typeId)
                 .then(data => {
                     if(!data.error) {
                         toast.success(t('Review.Deleted'))
@@ -109,7 +109,7 @@ export default function ReportedContent(props) {
                     navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
         } else {
-            reviewService.deleteReviewReport(typeId, loggedUserId)
+            reviewService.deleteReviewReport(typeId)
                 .then(data => {
                     if(!data.error) {
                         toast.success(t('Report.Deleted'))

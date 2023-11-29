@@ -42,7 +42,7 @@ export default function Comments(props) {
     };
 
     const handleSubmitDeleteComment = () => {
-        commentService.commentDelete(commentId, loggedUserId)
+        commentService.commentDelete(commentId)
             .then(data => {
                 if(!data.error) {
                     toast.success(t('Mail.CommentDeleted'))

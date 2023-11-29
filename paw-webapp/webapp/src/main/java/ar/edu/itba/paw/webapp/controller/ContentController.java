@@ -189,8 +189,7 @@ public class ContentController {
     // * ----------------------------------- Content Delete ------------------------------------------------------------
     @DELETE
     @Path("/{contentId}")
-    public Response deleteContent(@QueryParam("userId") final Long userId,
-                                  @PathParam("contentId") final Long contentId) {
+    public Response deleteContent(@PathParam("contentId") final Long contentId) {
         LOGGER.info("DELETE /{}: Called", uriInfo.getPath());
         Content oldContent = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
         cs.deleteContent(contentId);

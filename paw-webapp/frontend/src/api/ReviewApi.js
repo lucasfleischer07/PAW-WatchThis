@@ -36,10 +36,10 @@ export class ReviewApi {
         return genericFetchWithQueryParams(apiUrl, options, params)
     }
 
-    async deleteReview(reviewId, userId) {
+    async deleteReview(reviewId) {
         const apiUrl = `${this.basePath}/${reviewId}`
         const options = {method: 'DELETE', headers: authCheck({})}
-        const params = {userId: userId}
+        const params = {}
         return genericFetchWithQueryParams(apiUrl, options, params)
     }
 
@@ -83,10 +83,10 @@ export class ReviewApi {
         return genericFetchWithQueryParams(apiUrl, options, params)
     }
 
-    async deleteReviewReport(reviewId, userId) {
+    async deleteReviewReport(reviewId) {
         const apiUrl = `${this.basePath}/${reviewId}/reports`
         const options = {method: 'DELETE', headers: authCheck({})}
-        const params = {userId: userId}
+        const params = {}
         return genericFetchWithQueryParams(apiUrl, options, params)
     }
 }

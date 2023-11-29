@@ -52,6 +52,12 @@ public class SecurityChecks {
         }
     }
 
+    public boolean checkUserLists() {
+        final User loggedUser = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
+        LOGGER.info("checkUser userId = {}: Called", loggedUser);
+        return true;
+    }
+
     public boolean isAdmin(Long userId) {
         LOGGER.info("isAdmin userId = {}: Called", userId);
         final User userById = us.findById(userId).orElseThrow(UserNotFoundException::new);
@@ -81,10 +87,11 @@ public class SecurityChecks {
         return true;
     }
 
-    public boolean canDeleteReview(Long userId, Long reviewId) {
-        LOGGER.info("canDeleteReview userId = {}: Called", userId);
+    public boolean canDeleteReview(Long reviewId) {
+        LOGGER.info("canDeleteReview: Called");
+        final User loggedUser = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
         final Review review = rs.getReview(reviewId).orElseThrow(ReviewNotFoundException::new);
-        return isAdmin(userId) || (checkUser(userId) && review.getUser().getId() == userId);
+        return isAdmin(loggedUser.getId()) || (checkUser(loggedUser.getId()) && review.getUser().getId() == loggedUser.getId());
     }
 
     public boolean canEditReview(Long userId, Long reviewId) {
@@ -93,10 +100,11 @@ public class SecurityChecks {
         return checkUser(userId) && review.getUser().getId() == userId;
     }
 
-    public boolean canDeleteComment(Long userId, Long commentId) {
-        LOGGER.info("canDeleteComment userId = {}: Called", userId);
+    public boolean canDeleteComment(Long commentId) {
+        final User loggedUser = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
+        LOGGER.info("canDeleteComment userId = {}: Called", loggedUser.getId());
         final Comment comment = ccs.getComment(commentId).orElseThrow(CommentNotFoundException::new);
-        return isAdmin(userId) || (checkUser(userId) && comment.getUser().getId() == userId);
+        return isAdmin(loggedUser.getId()) || (checkUser(loggedUser.getId()) && comment.getUser().getId() == loggedUser.getId());
     }
     public boolean checkReported(Long reportedById){
         if(reportedById==null)

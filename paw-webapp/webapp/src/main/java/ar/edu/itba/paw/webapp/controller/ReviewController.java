@@ -115,9 +115,8 @@ public class ReviewController {
     @DELETE
     @Path("/{reviewId}")
     @Produces(value = {MediaType.APPLICATION_JSON,})
-    @PreAuthorize("@securityChecks.canDeleteReview(#userId, #reviewId)")
-    public Response deleteReview(@QueryParam("userId") final Long userId,
-                                 @PathParam("reviewId") final Long reviewId) {
+    @PreAuthorize("@securityChecks.canDeleteReview(#reviewId)")
+    public Response deleteReview(@PathParam("reviewId") final Long reviewId) {
         LOGGER.info("DELETE /{}: Called", uriInfo.getPath());
 
         final Review review = rs.findById(reviewId).orElseThrow(ReviewNotFoundException::new);
@@ -237,8 +236,7 @@ public class ReviewController {
 
     @DELETE
     @Path("/{reviewId}/reports")
-    public Response deleteReport(@QueryParam("userId") final Long userId,
-                                 @PathParam("reviewId") long reviewId) {
+    public Response deleteReport(@PathParam("reviewId") long reviewId) {
         LOGGER.info("DELETE /{}: Called", uriInfo.getPath());
         rrs.removeReports("review", reviewId);
         LOGGER.info("DELETE /{}: {} on contentId {} report deleted", uriInfo.getPath(), "Review", reviewId);
