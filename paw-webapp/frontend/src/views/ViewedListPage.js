@@ -61,7 +61,7 @@ export default function ViewedListPage(props) {
             } else {
                 const userData = await userService.getUserInfo(user.id)
                 if(!userData.error) {
-                    const viewedListData = await contentService.getLists(userData.data.userViewedListURL);
+                    const viewedListData = await contentService.getLists(userData.data.userViewedListURL, true, page);
                     if (!viewedListData.error) {
                         setViewedList(viewedListData.data);
                         setAmountPages(viewedListData.totalPages);
@@ -74,7 +74,7 @@ export default function ViewedListPage(props) {
                         }
                     }
 
-                    const watchListData = await contentService.getLists(userData.data.userWatchListURL);
+                    const watchListData = await contentService.getLists(userData.data.userWatchListURL, false);
                     if (!watchListData.error) {
                         setWatchList(watchListData.data);
                     } else {
@@ -89,10 +89,7 @@ export default function ViewedListPage(props) {
                     navigate("/error", { replace: true, state: { errorCode: userData.errorCode } });
                 }
             }
-
-
-
-
+            
         } else {
             navigate("/error", { replace: true, state: {errorCode: 401} })
         }

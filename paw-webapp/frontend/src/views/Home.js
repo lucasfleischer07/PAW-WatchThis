@@ -92,7 +92,7 @@ export default function Home() {
             if(isLogged()) {
                 const userData = await userService.getUserInfo(user.id)
                 if(!userData.error) {
-                    const watchList = await contentService.getLists(userData.data.userWatchListURL);
+                    const watchList = await contentService.getLists(userData.data.userWatchListURL, false);
                     if (!watchList.error) {
                         setUserWatchListIds(watchList.data)
                         setLoaded(true)

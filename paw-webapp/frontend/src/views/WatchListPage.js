@@ -49,35 +49,35 @@ export default function WatchListPage(props) {
     }
 
     const getUserWatchList = async () => {
-        const queryParams = new URLSearchParams(search);
-        const currentPage = checkIsNumber(queryParams.get('page'));
-
-        if(currentPage !== page) {
-            setPage(currentPage)
-        } else {
             if(isLogged()) {
-                const userData = await userService.getUserInfo(user.id)
-                if(!userData.error) {
-                    const watchListData = await contentService.getLists(userData.data.userWatchListURL);
-                    if (!watchListData.error) {
-                        setWatchList(watchListData.data);
-                        setTotalContent(watchListData.totalContent)
-                    } else {
-                        if (watchListData.errorCode === 404) {
-                            setShowExpiredCookiesModal(true);
-                        } else {
-                            navigate("/error", { replace: true, state: { errorCode: watchListData.errorCode } });
-                        }
-                    }
+                const queryParams = new URLSearchParams(search);
+                const currentPage = checkIsNumber(queryParams.get('page'));
+
+                if(currentPage !== page) {
+                    setPage(currentPage)
                 } else {
-                    navigate("/error", { replace: true, state: { errorCode: userData.errorCode } });
+                    const userData = await userService.getUserInfo(user.id)
+                    if (!userData.error) {
+                        const watchListData = await contentService.getLists(userData.data.userWatchListURL, true, page);
+                        if (!watchListData.error) {
+                            setWatchList(watchListData.data);
+                            setTotalContent(watchListData.totalContent)
+                            setAmountPages(watchListData.totalPages)
+                        } else {
+                            if (watchListData.errorCode === 404) {
+                                setShowExpiredCookiesModal(true);
+                            } else {
+                                navigate("/error", {replace: true, state: {errorCode: watchListData.errorCode}});
+                            }
+                        }
+                    } else {
+                        navigate("/error", {replace: true, state: {errorCode: userData.errorCode}});
+                    }
                 }
 
             } else {
                 navigate("/error", { replace: true, state: {errorCode: 401} })
             }
-        }
-
     }
 
     useEffect(() => {

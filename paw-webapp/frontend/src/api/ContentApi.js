@@ -115,10 +115,12 @@ export class ContentApi {
     }
 
 
-    async getLists(listUrl, paginated = true) {
+    async getLists(listUrl, paginate, page = 1) {
         let params = {}
-        if(!paginated) {
-            params.paginated = paginated
+        if(!paginate) {
+            params.paginated = paginate
+        } else {
+            params.page = page
         }
         const apiUrl = listUrl
         const options = {method: 'GET', headers: authCheck({})}
