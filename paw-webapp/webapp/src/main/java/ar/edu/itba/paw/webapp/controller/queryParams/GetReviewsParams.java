@@ -31,7 +31,7 @@ public class GetReviewsParams {
             throw new InvalidParameterException();
         }
         PageWrapper<Review> reviewList = null;
-        if(contentId != null && userId == null ) {
+        if(contentId != null && userId == null) {
             Content content = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
             reviewList = rs.getAllReviews(content, page, REVIEW_AMOUNT);
         } else if(contentId != null && userId != null) {
