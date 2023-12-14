@@ -13,6 +13,8 @@ export default function ReviewEditionPage() {
     let location = useLocation()
     let {isLogged} = useContext(AuthContext)
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
+    const [logOut, setLogOut] = useState(false)
+
     const [showExpiredCookiesModal, setShowExpiredCookiesModal] = useState(false)
 
     const { contentType, contentId, reviewId } = useParams();
@@ -150,7 +152,13 @@ export default function ReviewEditionPage() {
                 <ExpiredCookieModal/>
             )}
 
-            <Header type="all" admin={user?.role === 'admin'} userName={user?.username} userId={user?.id}/>
+            <Header type="all"
+                    admin={user?.role === 'admin'}
+                    userName={user?.username}
+                    userId={user?.id}
+                    setUser={setUser}
+                    setLogOut={setLogOut}
+            />
 
             <form method="post" onSubmit={handleSubmit}>
                 <div className="W-general-div-review-info">

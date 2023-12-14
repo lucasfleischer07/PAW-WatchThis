@@ -23,6 +23,7 @@ export default function UserInfoPage() {
 
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
     const [loggedUserReviewsReported, setLoggedUserReviewsReported] = useState([])
+    const [logOut, setLogOut] = useState(false)
 
     const [reviewOwnerUser, setReviewOwnerUser] = useState({})
     const [isSameUser, setIsSameUser] = useState(undefined)
@@ -217,7 +218,13 @@ export default function UserInfoPage() {
                 <ExpiredCookieModal/>
             )}
 
-            <Header type="all" admin={user?.role === 'admin'} userName={user?.username} userId={user?.id}/>
+            <Header type="all"
+                    admin={user?.role === 'admin'}
+                    userName={user?.username}
+                    userId={user?.id}
+                    setUser={setUser}
+                    setLogOut={setLogOut}
+            />
 
             <div className="row py-5 px-4 W-set-margins">
                 <div className="col-md-5 mx-auto W-profile-general-div-display">

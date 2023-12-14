@@ -15,6 +15,7 @@ export default function ContentCreatePage() {
     let {isLogged} = useContext(AuthContext)
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
     const [showExpiredCookiesModal, setShowExpiredCookiesModal] = useState(false)
+    const [logOut, setLogOut] = useState(false)
 
     const [nameError, setNameError] = useState(false)
     const [descriptionError, setDescriptionError] = useState(false)
@@ -248,7 +249,13 @@ export default function ContentCreatePage() {
                 <ExpiredCookieModal/>
             )}
 
-            <Header type="all" admin={user?.role === 'admin'} userName={user?.username} userId={user?.id}/>
+            <Header type="all"
+                    admin={user?.role === 'admin'}
+                    userName={user?.username}
+                    userId={user?.id}
+                    setUser={setUser}
+                    setLogOut={setLogOut}
+            />
 
             <div>
                 {formType === 'create' ? (

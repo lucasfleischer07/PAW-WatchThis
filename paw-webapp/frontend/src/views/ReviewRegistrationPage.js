@@ -16,6 +16,8 @@ export default function ReviewRegistrationPage() {
 
     const { contentType, contentId } = useParams();
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
+    const [logOut, setLogOut] = useState(false)
+
     const [content, setContent] = useState({})
     const [nameError, setNameError] = useState(false)
     const [descriptionError, setDescriptionError] = useState(false)
@@ -123,7 +125,13 @@ export default function ReviewRegistrationPage() {
                 <ExpiredCookieModal/>
             )}
 
-            <Header type="all" admin={user?.role === 'admin'} userName={user?.username} userId={user?.id}/>
+            <Header type="all"
+                    admin={user?.role === 'admin'}
+                    userName={user?.username}
+                    userId={user?.id}
+                    setUser={setUser}
+                    setLogOut={setLogOut}
+            />
 
             <form method="post" onSubmit={handleSubmit}>
                 <div className="W-general-div-review-info">

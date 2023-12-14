@@ -22,6 +22,8 @@ export default function ContentPage(props) {
     const [amountPages, setAmountPages] = useState(1)
     const [userWatchListIds, setUserWatchListIds] = useState([])
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
+    const [logOut, setLogOut] = useState(false)
+
     const [genre, setGenre] = useState('');
     const [durationFrom, setDurationFrom] = useState('');
     const [durationTo, setDurationTo] = useState('');
@@ -143,7 +145,14 @@ export default function ContentPage(props) {
                 <ExpiredCookieModal/>
             )}
 
-            <Header type={contentType} admin={user?.role === 'admin'} userName={user?.username} userId={user?.id}/>
+            <Header type={contentType}
+                    admin={user?.role === 'admin'}
+                    userName={user?.username}
+                    userId={user?.id}
+                    setUser={setUser}
+                    setLogOut={setLogOut}
+            />
+
             <Filters type={contentType}/>
 
 

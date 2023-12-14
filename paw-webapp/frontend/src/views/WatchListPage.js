@@ -23,6 +23,7 @@ export default function WatchListPage(props) {
     const [watchList, setWatchList] = useState([])
     const [added, setAdded] = useState(false)
     const [totalContent, setTotalContent] = useState(-1)
+    const [logOut, setLogOut] = useState(false)
 
     useEffect(() => {
         const queryParams = new URLSearchParams(search);
@@ -98,7 +99,13 @@ export default function WatchListPage(props) {
                 <ExpiredCookieModal/>
             )}
 
-            <Header type="all" admin={user?.role === 'admin'} userName={user?.username} userId={user?.id}/>
+            <Header type="all"
+                    admin={user?.role === 'admin'}
+                    userName={user?.username}
+                    userId={user?.id}
+                    setUser={setUser}
+                    setLogOut={setLogOut}
+            />
 
             <div className="row px-4">
                 <div className="W-profile-general-div-display">

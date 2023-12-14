@@ -17,6 +17,7 @@ export default function ViewedListPage(props) {
     const [showExpiredCookiesModal, setShowExpiredCookiesModal] = useState(false)
 
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
+    const [logOut, setLogOut] = useState(false)
 
     const [totalContent, setTotalContent] = useState(-1)
     const [page, setPage] = useState(1)
@@ -114,7 +115,13 @@ export default function ViewedListPage(props) {
                 <ExpiredCookieModal/>
             )}
 
-            <Header type="all" admin={user?.role === 'admin'} userName={user?.username} userId={user?.id}/>
+            <Header type="all"
+                    admin={user?.role === 'admin'}
+                    userName={user?.username}
+                    userId={user?.id}
+                    setUser={setUser}
+                    setLogOut={setLogOut}
+            />
 
             <div className="row px-4">
                 <div className="W-profile-general-div-display">

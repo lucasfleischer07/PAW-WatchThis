@@ -14,8 +14,10 @@ export class ReviewApi {
             params = {contentId: contentId, page: page}
         } else if(reported) {
             params = {reportedById: userId}
-        } else {
+        } else if(contentId == null) {
             params = {userId: userId, page: page}
+        } else {
+            params = {contentId: contentId, userId: userId, page: page}
         }
         const options = {method: 'GET', headers: authCheck({})}
         return genericFetchWithQueryParams(apiUrl, options, params)

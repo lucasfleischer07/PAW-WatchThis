@@ -22,6 +22,7 @@ export default function ReportedPage() {
     const [reportedCommentsList, setReportedCommentsList] = useState([])
     const [currentReviewsReportsPage, setCurrentReviewsReportsPage] = useState(1)
     const [currentCommentsReportsPage, setCurrentCommentsReportsPage] = useState(1)
+    const [logOut, setLogOut] = useState(false)
 
     const [commentOrReviewDismissedOrDeleted, setCommentOrReviewDismissedOrDeleted] = useState(false)
 
@@ -166,7 +167,13 @@ export default function ReportedPage() {
                 <ExpiredCookieModal/>
             )}
 
-            <Header type="all" admin={user?.role === 'admin'} userName={user?.username} userId={user?.id}/>
+            <Header type="all"
+                    admin={user?.role === 'admin'}
+                    userName={user?.username}
+                    userId={user?.id}
+                    setUser={setUser}
+                    setLogOut={setLogOut}
+            />
 
             <div className="row px-4">
                 <div className="W-report-general-div-display">

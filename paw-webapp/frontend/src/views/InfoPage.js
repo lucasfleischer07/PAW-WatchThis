@@ -28,6 +28,7 @@ export default function InfoPage() {
     const [loggedUserReviewsReported, setLoggedUserReviewsReported] = useState([])
     const [reviewUsers, setReviewsUsers] = useState([])
     const [commentsReportedByLoggedUser, setCommentsReportedByLoggedUser] = useState([])
+    const [logOut, setLogOut] = useState(false)
 
     const [content, setContent] = useState({})
     const [reviews, setReviews] = useState({})
@@ -273,7 +274,7 @@ export default function InfoPage() {
                 }
             }
 
-            const reviewsData = await reviewService.getReviews(null, parseInt(contentId), actualPage);
+            const reviewsData = await reviewService.getReviews(user?.id, parseInt(contentId), actualPage);
 
             if (!reviewsData.error) {
                 setReviews(reviewsData.data);
@@ -396,7 +397,7 @@ export default function InfoPage() {
                 }
             }
 
-            const reviewsData = await reviewService.getReviews(null, parseInt(contentId), actualPage);
+            const reviewsData = await reviewService.getReviews(user?.id, parseInt(contentId), actualPage);
 
             if (!reviewsData.error) {
                 setReviews(reviewsData.data);
@@ -443,7 +444,13 @@ export default function InfoPage() {
                 <ExpiredCookieModal/>
             )}
 
-            <Header type={"all"} admin={user?.role === 'admin'} userName={user?.username} userId={user?.id}/>
+            <Header type={"all"}
+                    admin={user?.role === 'admin'}
+                    userName={user?.username}
+                    userId={user?.id}
+                    setUser={setUser}
+                    setLogOut={setLogOut}
+            />
 
             {user?.role === 'admin' ? (
                 <div className="W-delete-edit-buttons-content">
@@ -683,9 +690,6 @@ export default function InfoPage() {
                         {reviews.length > 0 ? (
                             <>
                                 {loaded && reviews.map((review, index) => {
-                                    console.log('reviewUsers:', reviewUsers);
-                                    console.log('reviewUser for index', index, ':', reviewUsers[index]);
-
                                     const reviewUser = reviewUsers[index];
                                     if (reviewUser) {
                                         return (

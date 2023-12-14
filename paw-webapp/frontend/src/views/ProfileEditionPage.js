@@ -19,6 +19,8 @@ export default function ProfileEditionPage() {
     const [showExpiredCookiesModal, setShowExpiredCookiesModal] = useState(false)
 
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
+    const [logOut, setLogOut] = useState(false)
+
     const [error, setError] = useState(false)
     const [errorPassword, setErrorPassword] = useState(false)
     const [image, setImage] = useState(undefined)
@@ -133,7 +135,13 @@ export default function ProfileEditionPage() {
             {showExpiredCookiesModal && (
                 <ExpiredCookieModal/>
             )}
-            <Header type="all" admin={user?.role === 'admin'} userName={user?.username} userId={user?.id}/>
+            <Header type="all"
+                    admin={user?.role === 'admin'}
+                    userName={user?.username}
+                    userId={user?.id}
+                    setUser={setUser}
+                    setLogOut={setLogOut}
+            />
             
             <div className="row py-5 px-4 W-set-margins">
                 <div className="col-md-5 mx-auto W-edit-profile-display">
