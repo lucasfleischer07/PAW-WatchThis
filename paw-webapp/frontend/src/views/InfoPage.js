@@ -274,18 +274,21 @@ export default function InfoPage() {
             }
 
             const reviewsData = await reviewService.getReviews(null, parseInt(contentId), actualPage);
+
             if (!reviewsData.error) {
                 setReviews(reviewsData.data);
                 const aux = reviewsData.totalPages;
                 setAmountPages(aux);
+
                 const userInfoPromises = reviewsData.data.map(async (review) => {
                     const auxUserUrl = review.user.split('/');
                     const auxUserId = parseInt(auxUserUrl[auxUserUrl.length - 1], 10);
+
                     if (auxUserId !== user?.id) {
                         try {
                             const userData = await userService.getUserInfo(review.user);
                             if (!userData.error) {
-                                setReviewsUsers((prevArray) => [userData.data, ...prevArray]);
+                                return userData.data;
                             } else {
                                 navigate("/error", { replace: true, state: { errorCode: userData.errorCode } });
                             }
@@ -293,12 +296,13 @@ export default function InfoPage() {
                             navigate("/error", { replace: true, state: { errorCode: 404 } });
                         }
                     } else {
-                        setReviewsUsers((prevArray) => [{ id: user.id, username: user.username, role: user.role}, ...prevArray]);
-                        setAlreadyReviewed(true);
+                        setAlreadyReviewed(true)
+                        return { id: user.id, username: user.username, role: user.role };
                     }
                 });
 
-                await Promise.all(userInfoPromises);
+                const usersData = await Promise.all(userInfoPromises);
+                setReviewsUsers(usersData);
                 setLoaded(true);
             } else {
                 navigate("/error", { replace: true, state: { errorCode: reviewsData.errorCode } });
@@ -393,31 +397,35 @@ export default function InfoPage() {
             }
 
             const reviewsData = await reviewService.getReviews(null, parseInt(contentId), actualPage);
+
             if (!reviewsData.error) {
                 setReviews(reviewsData.data);
                 const aux = reviewsData.totalPages;
                 setAmountPages(aux);
+
                 const userInfoPromises = reviewsData.data.map(async (review) => {
                     const auxUserUrl = review.user.split('/');
                     const auxUserId = parseInt(auxUserUrl[auxUserUrl.length - 1], 10);
+
                     if (auxUserId !== user?.id) {
                         try {
                             const userData = await userService.getUserInfo(review.user);
                             if (!userData.error) {
-                                setReviewsUsers((prevArray) => [userData.data, ...prevArray]);
+                                return userData.data;
                             } else {
-                                navigate("/error", { replace: true, state: { errorCode: userData.errorCode } });
+                                navigate("/error", { replace: true, state: { errorCode: reviewsData.errorCode } });
                             }
                         } catch (error) {
                             navigate("/error", { replace: true, state: { errorCode: 404 } });
                         }
                     } else {
-                        setReviewsUsers((prevArray) => [{ id: user.id, username: user.username, role: user.role}, ...prevArray]);
-                        setAlreadyReviewed(true);
+                        setAlreadyReviewed(true)
+                        return { id: user.id, username: user.username, role: user.role };
                     }
                 });
 
-                await Promise.all(userInfoPromises);
+                const usersData = await Promise.all(userInfoPromises);
+                setReviewsUsers(usersData);
                 setLoaded(true);
             } else {
                 navigate("/error", { replace: true, state: { errorCode: reviewsData.errorCode } });
@@ -675,36 +683,43 @@ export default function InfoPage() {
                         {reviews.length > 0 ? (
                             <>
                                 {loaded && reviews.map((review, index) => {
-                                    return (
-                                        <div key={review.id}>
-                                            <ReviewCard
-                                                id={`reviewCardUser${review.id}`}
-                                                key ={isLikeReviewsList && isDislikeReviewsList}
-                                                reviewTitle={review.name}
-                                                reviewDescription={review.description}
-                                                reviewRating={review.rating}
-                                                reviewId={review.id}
-                                                reviewReputation={review.reputation}
-                                                reviewUserUrl={review.user}
-                                                reviewUser={reviewUsers[index]}
-                                                contentId={content.id}
-                                                contentType={review.type}
-                                                loggedUserName={user?.username}
-                                                loggedUserId={user?.id}
-                                                isAdmin={user?.role === 'admin'}
-                                                isLikeReviews={isLikeReviewsList.length > 0 ? isLikeReviewsList.some(item => item.id === parseInt(review.id)) : false}
-                                                isDislikeReviews={isDislikeReviewsList.length > 0 ? isDislikeReviewsList.some(item => item.id === parseInt(review.id)) : false}
-                                                alreadyReport={loggedUserReviewsReported.length > 0 ? loggedUserReviewsReported.some(item => item.id === parseInt(review.id)) : false}
-                                                canComment={true}
-                                                seeComments={true}
-                                                reviewsChange={reviewsChange}
-                                                setReviewsChange={setReviewsChange}
-                                                setAlreadyReviewed={setAlreadyReviewed}
-                                                alreadyReviewed={alreadyReviewed}
-                                                commentsReportedByLoggedUser={commentsReportedByLoggedUser}
-                                            />
-                                        </div>
-                                    );
+                                    console.log('reviewUsers:', reviewUsers);
+                                    console.log('reviewUser for index', index, ':', reviewUsers[index]);
+
+                                    const reviewUser = reviewUsers[index];
+                                    if (reviewUser) {
+                                        return (
+                                            <div key={review.id}>
+                                                <ReviewCard
+                                                    id={`reviewCardUser${index}`}
+                                                    key ={isLikeReviewsList && isDislikeReviewsList}
+                                                    reviewTitle={review.name}
+                                                    reviewDescription={review.description}
+                                                    reviewRating={review.rating}
+                                                    reviewId={review.id}
+                                                    reviewReputation={review.reputation}
+                                                    reviewUserUrl={review.user}
+                                                    reviewUser={reviewUser}
+                                                    contentId={content.id}
+                                                    contentType={review.type}
+                                                    loggedUserName={user?.username}
+                                                    loggedUserId={user?.id}
+                                                    isAdmin={user?.role === 'admin'}
+                                                    isLikeReviews={isLikeReviewsList.length > 0 ? isLikeReviewsList.some(item => item.id === parseInt(review.id)) : false}
+                                                    isDislikeReviews={isDislikeReviewsList.length > 0 ? isDislikeReviewsList.some(item => item.id === parseInt(review.id)) : false}
+                                                    alreadyReport={loggedUserReviewsReported.length > 0 ? loggedUserReviewsReported.some(item => item.id === parseInt(review.id)) : false}
+                                                    canComment={true}
+                                                    seeComments={true}
+                                                    reviewsChange={reviewsChange}
+                                                    setReviewsChange={setReviewsChange}
+                                                    setAlreadyReviewed={setAlreadyReviewed}
+                                                    alreadyReviewed={alreadyReviewed}
+                                                    commentsReportedByLoggedUser={commentsReportedByLoggedUser}
+                                                />
+                                            </div>
+                                        );
+                                    }
+
                                 })}
 
                                 {amountPages > 1 && (
