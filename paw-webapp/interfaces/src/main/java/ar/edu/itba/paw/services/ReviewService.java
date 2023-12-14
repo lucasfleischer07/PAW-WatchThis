@@ -10,6 +10,7 @@ public interface ReviewService {
 
     void addReview(String name,String description,int rating,String type,User creator,Content content);          //No se si retornar bool
     PageWrapper<Review> getAllReviews(Content content, int page, int pageSize);
+    PageWrapper<Review> getAllReviewsSorted(Content content, int page, int pageSize,long userId);
     void deleteReview(Long reviewId);
     Optional<Review> findById(Long reviewId);
     void updateReview(String name, String description, Integer rating, Long id);

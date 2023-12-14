@@ -8,6 +8,7 @@ public interface ReviewDao {
 
     Optional<Review> addReview(String name,String description,int rating,String type,User creator,Content content);
     PageWrapper<Review> getAllReviews(Content content, int page, int pageSize);
+    PageWrapper<Review> getAllUserReviewsSorted(Content content, int page, int pageSize, long userId);
     void deleteReview(Long reviewId);
     Optional<Review> findById(Long reviewId);
     void updateReview(String name, String description, int rating,Long id);

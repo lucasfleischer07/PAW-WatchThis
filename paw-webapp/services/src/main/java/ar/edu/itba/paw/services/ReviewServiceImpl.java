@@ -42,7 +42,13 @@ public class ReviewServiceImpl implements ReviewService{
 
     @Override
     public PageWrapper<Review> getAllUserReviews(User user, int page, int pageSize){return reviewDao.getAllUserReviews(user,page,pageSize);}
-    
+
+    @Override
+    public PageWrapper<Review> getAllReviewsSorted(Content content, int page, int pageSize,long userId){
+        return reviewDao.getAllUserReviewsSorted(content, page, pageSize, userId);
+    }
+
+
     @Override
     public void updateReview(String name, String description, Integer rating, Long id) {
         reviewDao.updateReview(name, description, rating, id);

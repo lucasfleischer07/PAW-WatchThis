@@ -27,18 +27,16 @@ public class GetReviewsParams {
                                                          UserService us,
                                                          ContentService cs,
                                                          ReviewService rs) {
-        if((contentId == null && userId == null && reportedById == null) || (contentId != null && userId != null && reportedById != null) || (contentId != null && userId == null && reportedById != null) || (contentId == null && userId != null && reportedById != null)) {
+        if((contentId == null && userId == null && reportedById == null) || (contentId != null && userId != null && reportedById != null) || (contentId != null && userId == null && reportedById != null) || (contentId == null && userId != null && reportedById != null) || ( userId != null && userId < 0) || ( reportedById != null && reportedById < 0)) {
             throw new InvalidParameterException();
         }
         PageWrapper<Review> reviewList = null;
-        if(contentId != null && userId == null) {
+        if(contentId != null && userId == null ) {
             Content content = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
             reviewList = rs.getAllReviews(content, page, REVIEW_AMOUNT);
         } else if(contentId != null && userId != null) {
-// TODO: IAN METE LO QUE TENGAS QUE HACER ACA (LO QUE ESTA COMMENTADO ABAJO ERA ALGO QUE ESTABA PROBANDO, BORRALOS DESPUES)
-//            final User user = us.findById(userId).orElseThrow(UserNotFoundException::new);
-//            reviewList = rs.getAllUserReviews(user, page, REVIEW_AMOUNT);
-
+            Content content = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
+            reviewList = rs.getAllReviewsSorted(content, page, REVIEW_AMOUNT,userId);
         } else if(reportedById != null) {
                 List<Review> reportedReviews=us.findById(reportedById).orElseThrow(UserNotFoundException::new).getReportedReviewsList();
                 return new PageWrapper<Review>(page,1,reportedReviews.size(),reportedReviews,reportedReviews.size());
