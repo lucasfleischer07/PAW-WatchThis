@@ -91,7 +91,11 @@ public class SecurityChecks {
         LOGGER.info("canDeleteReview: Called");
         final User loggedUser = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
         final Review review = rs.getReview(reviewId).orElseThrow(ReviewNotFoundException::new);
-        return isAdmin(loggedUser.getId()) || (checkUser(loggedUser.getId()) && review.getUser().getId() == loggedUser.getId());
+        if ((checkUser(loggedUser.getId()) && Objects.equals(loggedUser.getRole(), "admin")) || (checkUser(loggedUser.getId()) && review.getUser().getId() == loggedUser.getId())) {
+            return true;
+        } else {
+            throw new ForbiddenException("User must be admin or owner from the comment");
+        }
     }
 
     public boolean canEditReview(Long userId, Long reviewId) {
@@ -104,11 +108,16 @@ public class SecurityChecks {
         final User loggedUser = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
         LOGGER.info("canDeleteComment userId = {}: Called", loggedUser.getId());
         final Comment comment = ccs.getComment(commentId).orElseThrow(CommentNotFoundException::new);
-        return isAdmin(loggedUser.getId()) || (checkUser(loggedUser.getId()) && comment.getUser().getId() == loggedUser.getId());
+        if ((checkUser(loggedUser.getId()) && Objects.equals(loggedUser.getRole(), "admin")) || (checkUser(loggedUser.getId()) && comment.getUser().getId() == loggedUser.getId())) {
+            return true;
+        } else {
+            throw new ForbiddenException("User must be admin or owner from the review");
+        }
     }
     public boolean checkReported(Long reportedById){
-        if(reportedById==null)
+        if(reportedById == null) {
             return true;
+        }
         final User loggedUser = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
         if(reportedById == loggedUser.getId()) {
             return true;

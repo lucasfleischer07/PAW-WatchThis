@@ -160,6 +160,7 @@ export default function ViewedListPage(props) {
                                             reviewsAmount={content.reviewsAmount}
                                             added={added}
                                             setAdded={setAdded}
+                                            user={user}
                                             watchList={watchList}
                                             isInWatchList={watchList.length > 0 ? watchList.some(item => item.id === parseInt(content.id)) : false}
                                         />

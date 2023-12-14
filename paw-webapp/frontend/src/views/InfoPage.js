@@ -137,7 +137,7 @@ export default function InfoPage() {
     }
     const handleDeleteFromWatchList = (e) => {
         e.preventDefault()
-        contentService.addUserWatchList(parseInt(contentId), parseInt(user.id))
+        contentService.deleteUserWatchList(parseInt(contentId), parseInt(user.id))
             .then(data => {
                 if(!data.error) {
                     setIsInWatchList(false);
@@ -528,10 +528,10 @@ export default function InfoPage() {
                                                 </Modal.Body>
                                                 <Modal.Footer>
                                                     <Button variant="secondary" onClick={handleCloseWatchListModal}>
-                                                        {t('No')}
+                                                        {t('Close')}
                                                     </Button>
                                                     <Button variant="success" onClick={handleGoToLogin}>
-                                                        {t('Yes')}
+                                                        {t('LoginMessage')}
                                                     </Button>
                                                 </Modal.Footer>
                                             </Modal>
@@ -585,10 +585,10 @@ export default function InfoPage() {
                                                 </Modal.Body>
                                                 <Modal.Footer>
                                                     <Button variant="secondary" onClick={handleCloseViewedListModal}>
-                                                        {t('No')}
+                                                        {t('Close')}
                                                     </Button>
                                                     <Button variant="success" onClick={handleGoToLogin}>
-                                                        {t('Yes')}
+                                                        {t('LoginMessage')}
                                                     </Button>
                                                 </Modal.Footer>
                                             </Modal>
@@ -652,10 +652,10 @@ export default function InfoPage() {
                                         </Modal.Body>
                                         <Modal.Footer>
                                             <Button variant="secondary" onClick={handleCloseAddReviewLoginModal}>
-                                                {t('No')}
+                                                {t('Close')}
                                             </Button>
                                             <Button variant="success" onClick={handleGoToLogin}>
-                                                {t('Yes')}
+                                                {t('LoginMessage')}
                                             </Button>
                                         </Modal.Footer>
                                     </Modal>

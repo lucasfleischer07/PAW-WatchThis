@@ -144,6 +144,7 @@ export default function WatchListPage(props) {
                                             reviewsAmount={content.reviewsAmount}
                                             added={added}
                                             setAdded={setAdded}
+                                            user={user}
                                             isInWatchList={watchList.length > 0 ? watchList.some(item => item.id === content.id) : false}
                                         />
                                     ))}
