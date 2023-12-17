@@ -47,23 +47,21 @@ public class ReviewJpaDao implements ReviewDao{
     }
 
     @Override
-    public PageWrapper<Review> getAllUserReviewsSorted(Content content, int page, int pageSize, long userId){
+    public PageWrapper<Review> getAllUserReviewsSorted(Content content, int page, int pageSize, long userId) {
         List<Review> reviews = content.getContentReviews();
+
         Review userReview = reviews.stream()
-                .filter(review -> review.getUser().getId() == userId) // Reemplaza con tu condición
+                .filter(review -> review.getUser().getId() == userId)
                 .findFirst()
                 .orElse(null);
-        if(userReview == null){
-            return genericGetAllReviews(reviews,page,pageSize);
+
+        // Esto lo hago para mover la del usuario al principio
+        if (userReview != null) {
+            reviews.remove(userReview);
+            reviews.add(0, userReview);
         }
-        PageWrapper<Review> reviewPageWrapper = genericGetAllReviews(reviews,page,pageSize);
-        if(reviewPageWrapper.getPageContent().contains(userReview)){
-            reviewPageWrapper.getPageContent().remove(userReview);
-        }else{
-            reviewPageWrapper.getPageContent().remove((int)reviewPageWrapper.getPageAmount() - 1);
-        }
-        reviewPageWrapper.getPageContent().add(0,userReview);
-        return reviewPageWrapper;
+
+        return genericGetAllReviews(reviews, page, pageSize);
     }
 
 
