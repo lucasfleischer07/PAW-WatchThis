@@ -86,7 +86,7 @@ public class ContentServiceImpl implements ContentService {
         } else if (Objects.equals(genre, "ANY") && !Objects.equals(durationFrom, "ANY") && Objects.equals(queryUser, "ANY")) {
             return findByDuration(type, Integer.parseInt(durationFrom), Integer.parseInt(durationTo), sort,page,pageSize);
         } else if(Objects.equals(genre, "ANY") && Objects.equals(durationFrom, "ANY") && !Objects.equals(queryUser, "ANY")){
-            return getSearchedContent(type, queryUser,page,pageSize);
+            return getSearchedContent(type, queryUser,sort,page,pageSize);
         } else if (!Objects.equals(durationFrom, "ANY") && !Objects.equals(genre, "ANY") && Objects.equals(queryUser, "ANY")) {    // Caso de que si los filtros estan vacios
             return findByDurationAndGenre(type, genre, Integer.parseInt(durationFrom), Integer.parseInt(durationTo), sort,page,pageSize);
         } else if (!Objects.equals(genre, "ANY") && Objects.equals(durationFrom, "ANY") && !Objects.equals(queryUser, "ANY")) {
@@ -131,8 +131,8 @@ public class ContentServiceImpl implements ContentService {
     }
 
     @Override
-    public PageWrapper<Content> getSearchedContent(String type, String query, int page, int pageSize) {
-        return ContentDao.getSearchedContent(type,query,page,pageSize);
+    public PageWrapper<Content> getSearchedContent(String type, String query, Sorting sort,int page, int pageSize) {
+        return ContentDao.getSearchedContent(type,query,sort,page,pageSize);
     }
 
     @Override

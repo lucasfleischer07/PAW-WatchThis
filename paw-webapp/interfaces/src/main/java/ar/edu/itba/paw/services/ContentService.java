@@ -17,7 +17,7 @@ public interface ContentService {
     PageWrapper<Content> findByDuration(String type, int durationFrom, int durationTo, Sorting sort, int page, int pageSize);
     PageWrapper<Content> findByDurationAndGenre(String type, String genre, int durationFrom, int durationTo, Sorting sort, int page, int pageSize);
     Optional<Content> findById(long id);
-    PageWrapper<Content> getSearchedContent(String type, String query, int page, int pageSize);
+    PageWrapper<Content> getSearchedContent(String type, String query, Sorting sort, int page, int pageSize);
     PageWrapper<Content> getSearchedContentByGenre(String type, String genre, Sorting sort, String queryUser, int page, int pageSize);
     PageWrapper<Content> getSearchedContentByDuration(String type, int durationFrom, int durationTo, Sorting sort, String queryUser, int page, int pageSize);
     PageWrapper<Content> getSearchedContentByDurationAndGenre(String type, String genre, int durationFrom, int durationTo, Sorting sort, String queryUser, int page, int pageSize);

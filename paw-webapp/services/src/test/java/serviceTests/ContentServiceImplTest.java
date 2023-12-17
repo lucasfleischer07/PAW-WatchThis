@@ -81,7 +81,7 @@ public class ContentServiceImplTest {
     public void getMasterContentSearchedContentTest(){
         List<Content> responseContent=new ArrayList<>();
         responseContent.add(new Content(1L,"The Lord of The Rings",null,"Gandalf and Aragorn lead the World of Men against Sauron's army to draw his gaze from Frodo and Sam as they approach Mount Doom with the One Ring.","2003","Action","Peter Jackson","3 hours",180,"movie"));
-        Mockito.when(mockDao.getSearchedContent(Mockito.eq(TYPE),Mockito.eq(QUERY),Mockito.eq(1),Mockito.eq(CONTENT_AMOUNT))).thenReturn(new PageWrapper<>(1,1,CONTENT_AMOUNT,responseContent,1));
+        Mockito.when(mockDao.getSearchedContent(Mockito.eq(TYPE),Mockito.eq(QUERY),Mockito.eq(null),Mockito.eq(1),Mockito.eq(CONTENT_AMOUNT))).thenReturn(new PageWrapper<>(1,1,CONTENT_AMOUNT,responseContent,1));
 
         List<Content> contentList = cs.getMasterContent(TYPE,null,"ANY","ANY",null,QUERY,1,CONTENT_AMOUNT).getPageContent();
 

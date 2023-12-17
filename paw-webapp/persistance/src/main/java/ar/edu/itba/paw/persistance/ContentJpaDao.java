@@ -154,17 +154,18 @@ public class ContentJpaDao implements ContentDao{
     }
 
     @Override
-    public PageWrapper<Content> getSearchedContent(String type, String queryUser, int page, int pageSize) {
+    public PageWrapper<Content> getSearchedContent(String type, String queryUser, Sorting sort, int page, int pageSize) {
         TypedQuery<Content> query;
         TypedQuery<Content> countQuery;
+        String sortString = sort == null ? "" : sort.getQueryString();
         if(Objects.equals(type, "movie") || Objects.equals(type, "serie")){
-            query= em.createQuery("From Content WHERE type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)",Content.class);
-            countQuery = em.createQuery("FROM Content WHERE type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)",Content.class);
+            query= em.createQuery("From Content WHERE type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)" + sortString,Content.class);
+            countQuery = em.createQuery("FROM Content WHERE type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)" + sortString,Content.class);
             countQuery.setParameter("type",type);
             query.setParameter("type",type);
         } else{
-            query= em.createQuery("From Content WHERE (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)",Content.class);
-            countQuery = em.createQuery("FROM Content WHERE (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)",Content.class);
+            query= em.createQuery("From Content WHERE (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)" + sortString,Content.class);
+            countQuery = em.createQuery("FROM Content WHERE (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)" + sortString,Content.class);
         }
         countQuery.setParameter("query","%" + queryUser.toLowerCase() + "%");
 
