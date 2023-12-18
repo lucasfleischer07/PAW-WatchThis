@@ -200,7 +200,7 @@ export default function ReviewEditionPage() {
                                 {t('CreateReview.CharacterLimits', {min: 20, max: 2000})}
                             </p>
 
-                            <textarea className="form-control" name="description" id="description" cols="30" rows="10" onChange={handleChange} value={reviewForm.description}/>
+                            <textarea className="form-control" name="description" data-testid="description" id="description" cols="30" rows="10" onChange={handleChange} value={reviewForm.description}/>
 
                         </div>
                         <div className="mb-3 W-input-label-review-info">
@@ -232,7 +232,7 @@ export default function ReviewEditionPage() {
                     <Link to={`/content/${content.type}/${content.id}`}>
                         <button type="button" className="btn btn-danger" id="cancelButton">{t('Form.Cancel')}</button>
                     </Link>
-                    <button id="submitButton" type="submit" className="btn btn-success" onClick={handleSubmit}>{t('Form.Submit')}</button>
+                    <button id="submitButton" data-testid="submitButton"  type="submit" className="btn btn-success" onClick={handleSubmit}>{t('Form.Submit')}</button>
                 </div>
             </form>
         </>

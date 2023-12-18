@@ -142,7 +142,7 @@ export default function ReviewRegistrationPage() {
                     <div className="card W-review-card">
                         <div className="mb-3 W-input-label-review-info">
                             {nameError &&
-                                <p style={{color: '#b21e26'}}>{t('Pattern.contentCreate.name')}</p>
+                                <p data-testid="error" style={{color: '#b21e26'}}>{t('Pattern.contentCreate.name')}</p>
                             }
                             <label className="form-label">
                                 {t('CreateReview.ReviewName')}<span className="W-red-asterisco">{t('Asterisk')}</span>
@@ -169,7 +169,7 @@ export default function ReviewRegistrationPage() {
                             <p className="W-review-registration-text">
                                 {t('CreateReview.CharacterLimits', {min: 20, max: 2000})}
                             </p>
-                            <textarea className="form-control" name="description" id="description" cols="30" rows="10" onChange={handleChange} value={reviewForm.description}/>
+                            <textarea className="form-control" name="description" id="description" data-testid="description" cols="30" rows="10" onChange={handleChange} value={reviewForm.description}/>
                         </div>
                         <div className="mb-3 W-input-label-review-info">
                             {ratingError &&
@@ -208,7 +208,7 @@ export default function ReviewRegistrationPage() {
                     <Link to={`/content/${content.type}/${content.id}`}>
                         <button type="button" className="btn btn-danger" id="cancelButton">{t('Form.Cancel')}</button>
                     </Link>
-                    <button id="submitButton" type="submit" className="btn btn-success" onClick={handleSubmit}>{t('Form.Submit')}</button>
+                    <button id="submitButton" data-testid="submitButton" type="submit" className="btn btn-success" onClick={handleSubmit}>{t('Form.Submit')}</button>
                 </div>
             </form>
         </>
