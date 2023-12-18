@@ -26,7 +26,7 @@ export default function SignUp() {
     });
 
     const validateUsername = () => {
-        const usernameRegex = /([a-zA-Z0-9ñ\s]+)?/
+        const usernameRegex = /([a-zA-Z0-9ñÑ\s]+)?/
         if(userForm.username.length < 4 || userForm.username.length > 30 || !usernameRegex.test(userForm.username)) {
             setUsernameError2(true)
             return false
@@ -46,7 +46,7 @@ export default function SignUp() {
     }
 
     const validatePassword = () => {
-        const passwordRegex = /([a-zA-Z0-9ñáéíóú!,.:;=+\-_()?<>$%&#@{}\[\]|*"'~/`^\s]+)?/
+        const passwordRegex = /([a-zA-Z0-9!,.:;=+\-_()?<>$%&#@{}\[\]|*"'~/`^\s]+)?/
         if(userForm.password.length < 6 || userForm.password.length > 50 || !passwordRegex.test(userForm.password)) {
             setPasswordError(true)
             return false

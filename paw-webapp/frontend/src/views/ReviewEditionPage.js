@@ -33,7 +33,7 @@ export default function ReviewEditionPage() {
 
 
     const validName = () => {
-        const regex = /([a-zA-Z0-9ñáéíóú!,.:;=+\-_()?<>$%&#@{}[\]|*"'~/`^\s]+)?/
+        const regex = /([a-zA-Z0-9ñÑáéíóú!,.:;=+\-_()?<>$%&#@{}[\]|*"'~/`^\s]+)?/
         if(reviewForm.name.length < 6 || reviewForm.name.length > 200 || !regex.test(reviewForm.name)) {
             setNameError(true)
             return false
@@ -43,7 +43,7 @@ export default function ReviewEditionPage() {
     }
 
     const validDescription = () => {
-        const regex = /([a-zA-Z0-9ñáéíóú!,.:;=+\- _()?<>$%&#@{}[\]|*"'~/`^\s]+)?/
+        const regex = /([a-zA-Z0-9ñÑáéíóú!,.:;=+\- _()?<>$%&#@{}[\]|*"'~/`^\s]+)?/
         if(reviewForm.description.length < 20 || reviewForm.description.length > 2000 || !regex.test(reviewForm.description)) {
             setDescriptionError(true)
             return false
