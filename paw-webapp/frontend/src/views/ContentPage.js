@@ -51,19 +51,23 @@ export default function ContentPage(props) {
             setActualPage(currentPage)
         } else {
             if(settedParams === true) {
-                contentService.getContentByType(contentType, actualPage, genre, durationFrom, durationTo, sorting, query)
-                    .then(data => {
-                        if(!data.error) {
-                            setAllContent(data.data)
-                            const aux = data.totalPages
-                            setAmountPages(aux);
-                        } else {
-                            navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
-                        }
-                    })
-                    .catch(() => {
-                        navigate("/error", { replace: true, state: {errorCode: 404} })
-                    })
+                if(actualPage < 1 || actualPage > amountPages) {
+                    navigate("/error", { replace: true, state: {errorCode: 404} })
+                } else {
+                    contentService.getContentByType(contentType, actualPage, genre, durationFrom, durationTo, sorting, query)
+                        .then(data => {
+                            if(!data.error) {
+                                setAllContent(data.data)
+                                const aux = data.totalPages
+                                setAmountPages(aux);
+                            } else {
+                                navigate("/error", { replace: true, state: {errorCode: data.errorCode} })
+                            }
+                        })
+                        .catch(() => {
+                            navigate("/error", { replace: true, state: {errorCode: 404} })
+                        })
+                }
             }
         }
 

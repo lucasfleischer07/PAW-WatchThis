@@ -206,7 +206,7 @@ public class ReviewController {
     // * ---------------------------------------------Review reports-------------------------------------------------
     @GET
     @Path("/reports")
-    public Response getCommentReport(@QueryParam("page")@DefaultValue("1")final int page,
+    public Response getCommentReport(@QueryParam("page") @DefaultValue("1") final int page,
                                      @QueryParam(value = "reason") @DefaultValue("") ReportReason reason) {
         PageWrapper<ReviewReport> reviewsReported = rrs.getReportedReviews(reason,page,REPORTS_AMOUNT);
         Collection<ReviewReportDto> reviewsReportedListDto = ReviewReportDto.mapReviewReportToReviewReportDto(uriInfo, reviewsReported.getPageContent());

@@ -310,7 +310,11 @@ export default function InfoPage() {
             }
         }
 
-        fetchData()
+        if(actualPage < 1 || actualPage > amountPages) {
+            navigate("/error", { replace: true, state: {errorCode: 404} })
+        } else {
+            fetchData()
+        }
 
     }, [actualPage])
 
@@ -433,7 +437,11 @@ export default function InfoPage() {
             }
         }
 
-        fetchData()
+        if(actualPage < 1 || actualPage > amountPages) {
+            navigate("/error", { replace: true, state: {errorCode: 404} })
+        } else {
+            fetchData()
+        }
 
     }, [reviewsChange])
 

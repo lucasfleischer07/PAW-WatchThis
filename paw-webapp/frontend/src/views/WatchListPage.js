@@ -82,11 +82,16 @@ export default function WatchListPage(props) {
     }
 
     useEffect(() => {
-        const fetchData = async () => {
-            await getUserWatchList()
-        };
+        if(page < 1 || page > amountPages) {
+            navigate("/error", { replace: true, state: {errorCode: 404} })
+        } else {
+            const fetchData = async () => {
+                await getUserWatchList()
+            };
 
-        fetchData();
+            fetchData();
+        }
+
     }, [added, page])
 
     useEffect(() => {

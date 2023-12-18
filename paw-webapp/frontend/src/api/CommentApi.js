@@ -41,9 +41,9 @@ export class CommentApi {
         return genericFetchWithQueryParams(apiUrl, options, params)
     }
 
-    async getCommentsReports(filter= '') {
+    async getCommentsReports(filter= '', page) {
         const apiUrl = `${this.basePath}/reports`
-        const params = {reason: filter}
+        const params = {reason: filter, page: page}
         const options = {method: 'GET', headers: authCheck({})}
         return genericFetchWithQueryParams(apiUrl, options, params)
     }

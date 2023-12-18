@@ -70,9 +70,9 @@ export class ReviewApi {
         return genericFetchWithQueryParams(apiUrl, options, params)
     }
 
-    async getReviewReports(filter= '') {
+    async getReviewReports(filter= '', page) {
         const apiUrl = `${this.basePath}/reports`
-        const params = {reason: filter}
+        const params = {reason: filter, page: page}
         const options = {method: 'GET', headers: authCheck({})}
         return genericFetchWithQueryParams(apiUrl, options, params)
     }

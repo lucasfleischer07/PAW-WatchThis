@@ -59,7 +59,6 @@ export default function UserInfoPage() {
         navigate(currentPath + '?' + searchParams.toString());
     }
 
-
     const handlePromoteUser = (e) => {
         e.preventDefault();
         userService.promoteUserToAdmin(reviewOwnerUser.id)
@@ -202,7 +201,12 @@ export default function UserInfoPage() {
                         })
                 }
             }
-            fetchData()
+
+            if(page < 1 || page > amountPages) {
+                navigate("/error", { replace: true, state: {errorCode: 404} })
+            } else {
+                fetchData()
+            }
         }
     }, [page, userProfileId])
 
