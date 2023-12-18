@@ -171,7 +171,7 @@ export default function ContentCreatePage() {
     }
 
     const handleCancelForm = (e) => {
-        navigate(`/content/${contentForm.type}/${contentId}`, {replace:true})
+        navigate(-1)
     }
 
 
