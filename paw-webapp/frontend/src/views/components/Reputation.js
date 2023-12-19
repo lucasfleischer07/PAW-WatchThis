@@ -160,13 +160,6 @@ export default function Reputation(props) {
                     })
 
                 if(isLogged()) {
-                //     const commentsReportedByUser = await commentService.getReviewComments(parseInt(reviewId), loggedUserId, true);
-                //     if (!commentsReportedByUser.error) {
-                //         setCommentsReportedByLoggedUser(commentsReportedByUser.data);
-                //     } else {
-                //         navigate("/error", { replace: true, state: { errorCode: commentsReportedByUser.errorCode } });
-                //     }
-                //
                     setLoaded(true);
                 }
             }
@@ -333,7 +326,6 @@ export default function Reputation(props) {
                             added={added}
                             setAdded={setAdded}
                             alreadyReport={commentsReportedByLoggedUser.length > 0 ? commentsReportedByLoggedUser.some(item => item.commentId === parseInt(comment.commentId)) : false}
-                            // alreadyReport={comment.commentReportersUrl.includes(props.loggedUserName)}
                         />
                     ))}
                 </div>

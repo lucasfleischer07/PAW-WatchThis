@@ -75,6 +75,13 @@ export default function ReportedPage() {
         navigate(currentPath + '?' + searchParams.toString());
     }
 
+    const clearUrlPage = () => {
+        const searchParams = new URLSearchParams(window.location.search);
+        searchParams.delete('page');
+        const currentPath = window.location.pathname.substring('/paw-2022b-3'.length);
+        navigate(currentPath + '?' + searchParams.toString());
+    }
+
     const changeUrlReason = (reason) => {
         const searchParams = new URLSearchParams(window.location.search);
         searchParams.set('reason', reason);
@@ -117,6 +124,9 @@ export default function ReportedPage() {
                                         setAmountPages(data.totalPages)
                                         setAmountReportedComments(data.totalCommentsReports)
                                         setAmountReportedReviews(data.totalReviewsReports)
+                                        if(data.totalPages === "1") {
+                                            clearUrlPage()
+                                        }
                                     } else {
                                         if (data.errorCode === 404) {
                                             setShowExpiredCookiesModal(true)
@@ -137,6 +147,9 @@ export default function ReportedPage() {
                                         setAmountPages(data.totalPages)
                                         setAmountReportedComments(data.totalCommentsReports)
                                         setAmountReportedReviews(data.totalReviewsReports)
+                                        if(data.totalPages === "1") {
+                                            clearUrlPage()
+                                        }
                                     } else {
                                         if (data.errorCode === 404) {
                                             setShowExpiredCookiesModal(true)
@@ -162,6 +175,7 @@ export default function ReportedPage() {
         if(reportType === "reviews" || reportType === "comments") {
             changeUrlPage(1)
         }
+
     }, [reportType])
 
 
