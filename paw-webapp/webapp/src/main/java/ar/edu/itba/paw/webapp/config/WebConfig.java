@@ -48,27 +48,27 @@ public class WebConfig {
     public DataSource dataSource(){
         LOGGER.info("Data base set up");
 //      * Conexion a localhost
-        String dbUrl="jdbc:postgresql://localhost:5432/postgres";
-        String username = "postgres";
-        String password = "postgres";
-        final SimpleDriverDataSource basicDataSource = new SimpleDriverDataSource();
-        basicDataSource.setDriverClass(org.postgresql.Driver.class);
-        basicDataSource.setUrl(dbUrl);
-        basicDataSource.setUsername(username);
-        basicDataSource.setPassword(password);
-        return basicDataSource;
-
-
-//        * Conexion a la db de  la catedra
-//        String dbUrl="jdbc:postgresql://10.16.1.110:5432/paw-2022b-3";
-//        String username = "paw-2022b-3";
-//        String password = "h79KBcheb";
+//        String dbUrl="jdbc:postgresql://localhost:5432/postgres";
+//        String username = "postgres";
+//        String password = "postgres";
 //        final SimpleDriverDataSource basicDataSource = new SimpleDriverDataSource();
 //        basicDataSource.setDriverClass(org.postgresql.Driver.class);
 //        basicDataSource.setUrl(dbUrl);
 //        basicDataSource.setUsername(username);
 //        basicDataSource.setPassword(password);
 //        return basicDataSource;
+
+
+//        * Conexion a la db de  la catedra
+        String dbUrl="jdbc:postgresql://10.16.1.110:5432/paw-2022b-3";
+        String username = "paw-2022b-3";
+        String password = "h79KBcheb";
+        final SimpleDriverDataSource basicDataSource = new SimpleDriverDataSource();
+        basicDataSource.setDriverClass(org.postgresql.Driver.class);
+        basicDataSource.setUrl(dbUrl);
+        basicDataSource.setUsername(username);
+        basicDataSource.setPassword(password);
+        return basicDataSource;
 
     }
 
