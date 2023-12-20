@@ -3,7 +3,7 @@ import {render, fireEvent, screen, getByTestId, waitFor} from '@testing-library/
 import { BrowserRouter as Router } from 'react-router-dom';
 import Reputation from '../views/components/Reputation';
 import { AuthContext } from '../context/AuthContext';
-
+import '@testing-library/jest-dom';
 // Import the service mocks
 import {
     commentService,
@@ -49,37 +49,15 @@ describe('Reputation', () => {
 
     const mockReviewId = 1;
     const mockCommentForm = { comment: 'Test comment' };
-
+    const initialReputation=1
+    const userId=undefined
     test('should add a comment', async () => {
         // Mock the response of commentService.createComment
-        commentService.getReviewComments=jest.fn().mockReturnValueOnce(reviewComments)
-        commentService.createComment.mockResolvedValueOnce({ error: false });
+        commentService.getReviewComments = jest.fn().mockReturnValueOnce(reviewComments);
+        commentService.createComment.mockResolvedValueOnce({ error: false, data: { } }); // Include new comment data in the response
+
         mockAuthContextValue.isLogged.mockReturnValue(true);
-        render(
-            <Router>
-            <AuthContext.Provider value={mockAuthContextValue}>
-                <Reputation reviewId={mockReviewId} canComment={true} />
-            </AuthContext.Provider>
-            </Router>
-        );
-        await waitFor(()=>{
-            fireEvent.click(screen.getByText('Comment.Here'))
-            fireEvent.change(screen.getByPlaceholderText('Comment.Placeholder'), { target: { value: mockCommentForm.comment } });
-            fireEvent.click(screen.getByText('Comment.Title'));
-        })
 
-
-        // Verify that the comment was added
-        expect(commentService.createComment).toHaveBeenCalledWith(mockReviewId, mockCommentForm);
-
-    });
-
-
-    test('should handle like', async () => {
-        commentService.getReviewComments=jest.fn().mockReturnValueOnce(reviewComments)
-        // Mock the response of reviewService.reviewThumbUp
-        reviewService.reviewThumbUp.mockResolvedValueOnce({ error: false });
-        mockAuthContextValue.isLogged.mockReturnValue(true);
         render(
             <Router>
                 <AuthContext.Provider value={mockAuthContextValue}>
@@ -87,34 +65,77 @@ describe('Reputation', () => {
                 </AuthContext.Provider>
             </Router>
         );
-        await waitFor(()=>{
-            fireEvent.click(document.getElementById("likeButton1"))
-            expect(reviewService.reviewThumbUp).toHaveBeenCalled();
-        })
 
+        await waitFor(() => {
+            fireEvent.click(screen.getByText('Comment.Here'));
+            fireEvent.change(screen.getByPlaceholderText('Comment.Placeholder'), { target: { value: mockCommentForm.comment } });
+            fireEvent.click(screen.getByText('Comment.Title'));
+        });
+
+        // Verify that the comment was added
+        expect(commentService.createComment).toHaveBeenCalledWith(mockReviewId,userId, mockCommentForm);
+
+        // Check if the new comment is visible
+        await waitFor(() => {
+            expect(screen.getByText(mockCommentForm.comment)).toBeInTheDocument();
+        });
     });
 
-    test('should handle dislike', async () => {
-        // Mock the response of reviewService.reviewThumbDown
-        reviewService.reviewThumbDown.mockResolvedValueOnce({ error: false });
-        commentService.getReviewComments=jest.fn().mockReturnValueOnce(reviewComments)
-        // Mock the response of reviewService.reviewThumbUp
+
+    test('should handle like', async () => {
+        commentService.getReviewComments = jest.fn().mockReturnValueOnce(reviewComments);
+        reviewService.reviewThumbUp.mockResolvedValueOnce({ error: false });
         mockAuthContextValue.isLogged.mockReturnValue(true);
 
-        const { container }=render(
+        render(
             <Router>
                 <AuthContext.Provider value={mockAuthContextValue}>
-                    <Reputation reviewId={mockReviewId} reviewReputation={1} isLike={true} isDislike={false} canComment={true} />
+                    <Reputation reviewId={mockReviewId} reviewReputation={initialReputation} canComment={true} />
                 </AuthContext.Provider>
             </Router>
         );
 
+        // Check initial state of reviewReputation
+        expect(screen.getByTestId(`rating${mockReviewId}`).textContent).toBe(String(initialReputation));
 
-        await waitFor(()=>{
-            fireEvent.click(document.getElementById("dislikeButton1"))
+        // Fire the like event
+        fireEvent.click(document.getElementById("likeButton1"));
+
+        // Wait for state to update
+        await waitFor(() => {
+            // Check if the reviewReputation counter has been updated
+            expect(reviewService.reviewThumbUp).toHaveBeenCalled();
+            const expectedNewReputation = initialReputation + 1; // or the expected change
+            expect(screen.getByTestId(`rating${mockReviewId}`).textContent).toBe(String(expectedNewReputation));
+        });
+    });
+
+    test('should handle dislike', async () => {
+        reviewService.reviewThumbDown.mockResolvedValueOnce({ error: false });
+        commentService.getReviewComments = jest.fn().mockReturnValueOnce(reviewComments);
+        mockAuthContextValue.isLogged.mockReturnValue(true);
+
+        render(
+            <Router>
+                <AuthContext.Provider value={mockAuthContextValue}>
+                    <Reputation reviewId={mockReviewId} reviewReputation={initialReputation} canComment={true} />
+                </AuthContext.Provider>
+            </Router>
+        );
+
+        // Check initial state of reviewReputation
+        expect(screen.getByTestId(`rating${mockReviewId}`).textContent).toBe(String(initialReputation));
+
+        // Fire the dislike event
+        fireEvent.click(document.getElementById("dislikeButton1"));
+
+        // Wait for state to update
+        await waitFor(() => {
+            // Check if the reviewReputation counter has been updated
             expect(reviewService.reviewThumbDown).toHaveBeenCalled();
-        })
-
-
-
-});})
+            const expectedNewReputation = initialReputation - 1; // or the expected change
+            expect(screen.getByTestId(`rating${mockReviewId}`).textContent).toBe(String(expectedNewReputation));
+        });
+    });
+    ;
+})
