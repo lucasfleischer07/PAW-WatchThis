@@ -65,7 +65,7 @@ public class UserController {
     @Consumes(value = {MediaType.TEXT_PLAIN})
     public Response loginForgotPassword(String email) {
         User user = us.findByEmail(email).orElseThrow(UserNotFoundException::new);
-        us.setPassword(null, user, "forgotten");
+        us.setPassword(null, user);
         return Response.noContent().build();
     }
 
@@ -158,7 +158,7 @@ public class UserController {
 
         final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
         if(us.checkPassword(editProfileDto.getCurrentPassword(), user)) {
-            us.setPassword(editProfileDto.getNewPassword(), user, "restore");
+            us.setPassword(editProfileDto.getNewPassword(), user);
         } else {
             throw new BadRequestException();
         }

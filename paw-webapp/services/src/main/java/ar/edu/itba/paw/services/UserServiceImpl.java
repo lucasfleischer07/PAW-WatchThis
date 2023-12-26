@@ -87,13 +87,13 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void setPassword(String password, User user, String type){
+    public void setPassword(String password, User user){
         try {
             Map<String, Object> mailVariables = new HashMap<>();
             mailVariables.put("to", user.getEmail());
             mailVariables.put("userName", user.getUserName());
             mailVariables.put("loginURL", "http://pawserver.it.itba.edu.ar/paw-2022b-3/login");
-            if(Objects.equals(type, "forgotten")) {
+            if(password == null) {
                 String newPassword = generateRandomWord();
                 mailVariables.put("newPassword", newPassword);
                 userDao.setPassword(passwordEncoder.encode(newPassword), user);

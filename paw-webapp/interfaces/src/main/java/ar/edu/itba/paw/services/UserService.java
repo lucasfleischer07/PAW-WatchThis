@@ -15,7 +15,7 @@ public interface UserService {
     Optional<User> findByEmail(String email);
     Optional<User> findById(long userId);
     Optional<User> findByUserName(String userName);
-    void setPassword(String password, User user, String type);
+    void setPassword(String password, User user);
     void setProfilePicture(byte[] profilePicture, User user);
     void addToWatchList(User user, Content toAdd);
     void deleteFromWatchList(User user, Content toDelete);
