@@ -107,7 +107,9 @@ export class ContentApi {
                 params.query = query
             }
         }
-        params.page = page
+        if(paginated) {
+            params.page = page
+        }
 
         const apiUrl = `${this.basePath}`
         const options = {method: 'GET', headers: authCheck({})}

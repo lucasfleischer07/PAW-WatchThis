@@ -80,7 +80,9 @@ public class ContentController {
         Collection<ContentDto> contentListFilterPaginatedDto = ContentDto.mapContentToContentDto(uriInfo, contentListFilterPaginated);
         LOGGER.info("GET /{}: Success filtering the content", uriInfo.getPath());
         final Response.ResponseBuilder response = Response.ok(new GenericEntity<Collection<ContentDto>>(contentListFilterPaginatedDto){});
-        ResponseBuildingUtils.setPaginationLinks(response,contentListFilter , uriInfo);
+        if(paginated) {
+            ResponseBuildingUtils.setPaginationLinks(response,contentListFilter , uriInfo);
+        }
         response.header("Total-Content", contentListFilter.getElemsAmount());
 
         return response.build();
