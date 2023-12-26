@@ -42,7 +42,7 @@ export class UserApi {
         try {
             const loggedUserInfo = email + ":" + password;
             const hash = btoa(loggedUserInfo);
-            const res = await fetch(`${this.basePath}/content?type=all`, {
+            const res = await fetch(`${paths.BASE_URL_API}/content?type=all`, {
                 method: 'GET',
                 headers: {
                     Authorization: "Basic " + hash

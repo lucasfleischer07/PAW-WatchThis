@@ -8,7 +8,8 @@ Poner una L si ya esta Listo
 - (L) Errores de tipeo. Por ejemplo, “devuelta” no es una sola palabra, es “de vuelta”
     Solucion: En todos los translate, cambie devuelta por de vuelta
 
-- El login se hace contra /api/users/content?type=all que retorna el token, pero con un 404.
+- (L) El login se hace contra /api/users/content?type=all que retorna el token, pero con un 404.
+    Solucion: En el front (api/UserApi/login), antes se hacia el fetcha a fetch(`${this.BASE_PATH}/content?type=all`) pero esto incluia un /user => quedaba /user/content?type=all y eso no existe. Lo cambie para que sea fetch(`${paths.BASE_URL_API}/content?type=all` y ahora queda http://localhost:8080/webapp_war/api/content?type=all y anda
 
 - El token lo devuelven en un header Authorization. Este es un request header (no response), le están dando una semántica nueva. Es mejor definir un header nuevo.
 
