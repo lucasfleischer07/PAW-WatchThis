@@ -66,17 +66,5 @@ export class UserApi {
         const params = {}
         return genericFetchWithQueryParams(apiUrl, options, params)
     }
-
-    async getReviewsLike(userId) {
-        const options = {method: 'GET', headers: authCheck({})}
-        const url = `${this.basePath}/${userId}/reviewsLiked`
-        return await genericRequest(this.basePath, url, options)
-    }
-
-    async getReviewsDislike(userId) {
-        const options = {method: 'GET', headers: authCheck({})}
-        const url = `${this.basePath}/${userId}/reviewsDisliked`
-        return await genericRequest(this.basePath, url, options)
-    }
     
 }

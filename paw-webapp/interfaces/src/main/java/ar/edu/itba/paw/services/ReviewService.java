@@ -20,8 +20,10 @@ public interface ReviewService {
     void thumbDownReview(Review review,User user);
     Optional<Review> getReview(Long reviewId);
     void userLikeAndDislikeReviewsId(Set<Reputation> reputationList);
-    Set<Long> getUserLikeReviews();
-    Set<Long> getUserDislikeReviews();
+    Set<Review> userLikeReviews(Set<Reputation> reputationList);
+    Set<Review> userDislikeReviews(Set<Reputation> reputationList);
+    Set<Review> getUserLikeReviews();
+    Set<Review> getUserDislikeReviews();
 
 
 

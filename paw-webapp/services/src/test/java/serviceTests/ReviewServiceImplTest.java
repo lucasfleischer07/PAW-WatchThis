@@ -73,6 +73,7 @@ public class ReviewServiceImplTest {
     }
 
 
+    // TODO: Adaptar este test para que no sea mas sobre ids sino que sea para reviews enteras
     @Test
     public void userLikeAndDislikeTest(){
         Set<Reputation> reputations = new HashSet<>();
@@ -83,17 +84,17 @@ public class ReviewServiceImplTest {
         reputations.add(new Reputation(USER,new Review(3L,"movie","Nailed it!","To my surprise they absolutely nailed it. Cumberbatch is a fantastic choice for Sherlock Holmes-he is physically right (he fits the traditional reading of the character) and he is a damn good actor. Martin Freeman, about whom I wasn't sure at first, is an excellent foil for Holmes without being the dumb sidekick that Dr Watson has often been. I thought that this series would not work, particularly after Robert Downey's interesting take on Conan Doyle's characterisation. I have been proved so wrong-it moved along at a good pace and held the attention brilliantly. My wife started by saying she didn't like it but by the end of the episode she was as enthralled as I. We are both looking forward to the rest of the series, if it is as entertaining as the first story. I was disappointed to read some reviews here that did not love it. Methinks they are too jaded to enjoy anything.",4,REVIEW_CREATOR,REVIEW_CONTENT),false));
 
         rs.userLikeAndDislikeReviewsId(reputations);
-        List<Long> checkUpvoteList = new ArrayList<>();
-        checkUpvoteList.add(1L);
-        checkUpvoteList.add(14L);
-        checkUpvoteList.add(18L);
+        List<Review> checkUpvoteList = new ArrayList<>();
+        checkUpvoteList.add(new Review(1L,"movie","Incredible movie","This isn't just a beautifully crafted gangster film. Or an outstanding family portrait, for that matter. An amazing period piece. A character study. A lesson in filmmaking and an inspiration to generations of actors, directors, screenwriters and producers. For me, this is more: this is the definitive film. 10 stars out of 10.",4,REVIEW_CREATOR,REVIEW_CONTENT));
+        checkUpvoteList.add(new Review(14L,"movie","Worst time spent in my life","Unmarketable upon box office release, Darabount's masterpiece tanked and seemed destined to obscurity. Only after the video release, did 'Shawshawk' reap the praise it so richly deserved. Is it one of the greatest films ever made? Without a doubt, yes.",4,REVIEW_CREATOR,REVIEW_CONTENT));
+        checkUpvoteList.add(new Review(18L,"movie","Estoy fascinado","Maravillosa cinematografia y nivel de produccion",4,REVIEW_CREATOR,REVIEW_CONTENT));
 
-        List<Long> checkDownvoteList = new ArrayList<>();
-        checkDownvoteList.add(3L);
-        checkDownvoteList.add(12L);
+        List<Review> checkDownvoteList = new ArrayList<>();
+        checkDownvoteList.add(new Review(3L,"movie","Nailed it!","To my surprise they absolutely nailed it. Cumberbatch is a fantastic choice for Sherlock Holmes-he is physically right (he fits the traditional reading of the character) and he is a damn good actor. Martin Freeman, about whom I wasn't sure at first, is an excellent foil for Holmes without being the dumb sidekick that Dr Watson has often been. I thought that this series would not work, particularly after Robert Downey's interesting take on Conan Doyle's characterisation. I have been proved so wrong-it moved along at a good pace and held the attention brilliantly. My wife started by saying she didn't like it but by the end of the episode she was as enthralled as I. We are both looking forward to the rest of the series, if it is as entertaining as the first story. I was disappointed to read some reviews here that did not love it. Methinks they are too jaded to enjoy anything.",4,REVIEW_CREATOR,REVIEW_CONTENT));
+        checkDownvoteList.add(new Review(12L,"movie","Perfect, down to the last minute detail","Exceleten pelicula, muy buenos actores",4,REVIEW_CREATOR,REVIEW_CONTENT));
 
-        Set<Long> upVotes = rs.getUserLikeReviews();
-        Set<Long> downVotes = rs.getUserDislikeReviews();
+        Set<Review> upVotes = rs.getUserLikeReviews();
+        Set<Review> downVotes = rs.getUserDislikeReviews();
 
         Assert.assertNotNull(upVotes);
         Assert.assertNotNull(downVotes);

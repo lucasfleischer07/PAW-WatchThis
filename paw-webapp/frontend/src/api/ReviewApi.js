@@ -105,4 +105,18 @@ export class ReviewApi {
         const params = {}
         return genericFetchWithQueryParams(apiUrl, options, params)
     }
+
+    async getReviewsLike(userId) {
+        const options = {method: 'GET', headers: authCheck({})}
+        const apiUrl = `${this.basePath}`
+        const params = {likedById: userId}
+        return genericFetchWithQueryParams(apiUrl, options, params)
+    }
+
+    async getReviewsDislike(userId) {
+        const options = {method: 'GET', headers: authCheck({})}
+        const apiUrl = `${this.basePath}`
+        const params = {dislikedById: userId}
+        return genericFetchWithQueryParams(apiUrl, options, params)
+    }
 }

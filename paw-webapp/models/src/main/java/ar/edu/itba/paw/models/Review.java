@@ -4,6 +4,7 @@ import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -166,6 +167,23 @@ public class Review {
     @Transient
     public String getReporterUsernames() {
         return reporterUsernames;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Review other = (Review) obj;
+        return id == other.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
 }

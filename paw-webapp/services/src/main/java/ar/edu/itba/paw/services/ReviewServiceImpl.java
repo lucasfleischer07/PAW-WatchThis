@@ -13,8 +13,8 @@ import java.util.*;
 public class ReviewServiceImpl implements ReviewService{
 
     private final ReviewDao reviewDao;
-    private Set<Long> userLikeReviews = new HashSet<>();
-    private Set<Long> userDislikeReviews = new HashSet<>();
+    private Set<Review> userLikeReviews = new HashSet<>();
+    private Set<Review> userDislikeReviews = new HashSet<>();
 
     @Autowired
     public ReviewServiceImpl(final ReviewDao reviewDao) {
@@ -92,19 +92,42 @@ public class ReviewServiceImpl implements ReviewService{
         userDislikeReviews.clear();
         for(Reputation reputation : reputationList) {
             if(reputation.isUpvote()) {
-                userLikeReviews.add(reputation.getReview().getId());
+                userLikeReviews.add(reputation.getReview());
             } else if(reputation.isDownvote()) {
-                userDislikeReviews.add(reputation.getReview().getId());
+                userDislikeReviews.add(reputation.getReview());
             }
         }
     }
 
     @Override
-    public Set<Long> getUserLikeReviews() {
+    public Set<Review> userLikeReviews(Set<Reputation> reputationList) {
+        Set<Review> userLikeReview = new HashSet<>();
+        for(Reputation reputation : reputationList) {
+            if(reputation.isUpvote()) {
+                userLikeReview.add(reputation.getReview());
+            }
+        }
+        return userLikeReview;
+    }
+
+    @Override
+    public Set<Review> userDislikeReviews(Set<Reputation> reputationList) {
+        Set<Review> userDislikeReview = new HashSet<>();
+        for(Reputation reputation : reputationList) {
+            if(reputation.isDownvote()) {
+                userDislikeReview.add(reputation.getReview());
+            }
+        }
+        return userDislikeReview;
+
+    }
+
+    @Override
+    public Set<Review> getUserLikeReviews() {
         return userLikeReviews;
     }
     @Override
-    public Set<Long> getUserDislikeReviews() {
+    public Set<Review> getUserDislikeReviews() {
         return userDislikeReviews;
     }
 

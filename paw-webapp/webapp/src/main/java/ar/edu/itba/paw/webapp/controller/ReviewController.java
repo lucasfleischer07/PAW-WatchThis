@@ -26,6 +26,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.util.Collection;
 import java.util.Objects;
+import java.util.Set;
 
 @Path("reviews")
 @Component
@@ -51,9 +52,11 @@ public class ReviewController {
     public Response reviews(@QueryParam("contentId") final Long contentId,
                             @QueryParam("userId") final Long userId,
                             @QueryParam("reportedById") final Long reportedById,
-                            @QueryParam("page") @DefaultValue("1") int page) {
+                            @QueryParam("page") @DefaultValue("1") int page,
+                            @QueryParam("likedById") final Long likeById,
+                            @QueryParam("dislikedById") final Long dislikeById) {
         LOGGER.info("GET /{}: Called",uriInfo.getPath());
-        PageWrapper<Review> reviewList = GetReviewsParams.getReviewsByParams(userId, contentId, reportedById, page, us, cs, rs);
+        PageWrapper<Review> reviewList = GetReviewsParams.getReviewsByParams(userId, contentId, reportedById, page, likeById, dislikeById, us, cs, rs);
         if(reviewList == null) {
             LOGGER.warn("GET /{}: Invalid page param",uriInfo.getPath());
             throw new ContentNotFoundException();
@@ -276,7 +279,7 @@ public class ReviewController {
         LOGGER.info("DELETE /{}: {} on contentId {} report deleted", uriInfo.getPath(), "Review", reviewId);
         return Response.noContent().build();
     }
+
     // * ---------------------------------------------------------------------------------------------------------------
-
-
+    
 }

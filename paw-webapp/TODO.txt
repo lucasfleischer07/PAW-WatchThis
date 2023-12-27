@@ -23,9 +23,14 @@ Poner una L si ya esta Listo
 - No paginan con el modelo 1+1. Esto es un error conceptual grave.
 
 - La API no es realmente RESTful. Estos son errores graves. Se citan algunos ejemplos (lista no exhaustiva):
-    - Endpoints como /users/{userId}/reviewsLiked devuelven listas de ids, no entidades hipervinculadas. El cliente debe saber construir las URLs correspondientes.
+    - (L) Endpoints como /users/{userId}/reviewsLiked devuelven listas de ids, no entidades hipervinculadas. El cliente debe saber construir las URLs correspondientes.
+        FALTA VER: Si hacemos chequeo de seguridad en sentido de que cada ususario solamente puede getear sus propios likes/dislikes o si otro usaurio puede verlos (antes estaba pueso para que cualquiera pueda ver el de cualqueira)
+        Solucion: Antes estaba en user, lo pase a ReviewController y ahora se getean como cualquier review usando un queryPAram especifico likedById o dislikedById. Luego hacen la logica de siempre.
+
     - POST /content/10/watchList agrega la película a la watchlist de un usuario, pero retorna un 204 No Content y no un 201 Created.
+
     - El DELETE se hace contra /content/10/watchList?userId=61. El cliente tiene que saber construir esta URL a mano, no define un recurso individual.
+
     - (L) PUT /api/reviews/121/thumbUp para crear un like (y thumbDown para dislike) hacen toggle, no son idempotentes pese a que el verbo PUT sí debiera serlo.
         FALTA VER: El tema del status code que devolvemos en el POST de thumbUp y thumbDown (si es 201 CREATED o 200 OK)
         Solucion: Se transformo en POST y DELETE para cada uno
@@ -35,4 +40,5 @@ Poner una L si ya esta Listo
 
 
 Correcciones a hacer por cambios:
+- Chequear todos los test de los controllers y front
 - Corregir los tests de Reputation ya que cambiaron los enpodins. Antes eran reviewThumbUp, ahora se dividieron en 2: reviewThumbUpPost y reviewThumbUpDelete (mismo para reviewThumbDown)

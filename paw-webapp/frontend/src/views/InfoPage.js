@@ -222,7 +222,7 @@ export default function InfoPage() {
     useEffect(() => {
         async function fetchData() {
             if(isLogged()) {
-                userService.getReviewsLike(user?.id)
+                reviewService.getReviewsLike(user?.id)
                     .then(data => {
                         if(!data.error) {
                             setIsLikeReviewsList(data.data)
@@ -238,7 +238,7 @@ export default function InfoPage() {
                         navigate("/error", { replace: true, state: {errorCode: 404} })
                     })
 
-                userService.getReviewsDislike(user?.id)
+                reviewService.getReviewsDislike(user?.id)
                     .then(data => {
                         if(!data.error) {
                             setIsDislikeReviewsList(data.data)
@@ -349,7 +349,7 @@ export default function InfoPage() {
                     navigate("/error", { replace: true, state: { errorCode: userData.errorCode } });
                 }
 
-                userService.getReviewsLike(user?.id)
+                reviewService.getReviewsLike(user?.id)
                     .then(data => {
                         if(!data.error) {
                             setIsLikeReviewsList(data.data)
@@ -365,7 +365,7 @@ export default function InfoPage() {
                         navigate("/error", { replace: true, state: {errorCode: 404} })
                     })
 
-                userService.getReviewsDislike(user?.id)
+                reviewService.getReviewsDislike(user?.id)
                     .then(data => {
                         if(!data.error) {
                             setIsDislikeReviewsList(data.data)
