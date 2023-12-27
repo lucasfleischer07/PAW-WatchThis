@@ -58,7 +58,7 @@ public class ContentController {
     @GET
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response filterContentByType(@QueryParam("type") final String contentType,
-                                        @QueryParam("page") @DefaultValue("1") Integer pageNum,
+                                        @QueryParam("page") Integer pageNum,
                                         @QueryParam("durationFrom") @DefaultValue("ANY") final String durationFrom,
                                         @QueryParam("durationTo") @DefaultValue("ANY") final String durationTo,
                                         @QueryParam("sorting") final Sorting sorting,

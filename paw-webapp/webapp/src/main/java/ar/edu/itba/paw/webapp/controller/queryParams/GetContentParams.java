@@ -19,6 +19,7 @@ import java.util.Objects;
 
 public class GetContentParams {
     private static final int CONTENT_AMOUNT = 20;
+    private static final int DEFAULT_PAGE = 1;
 
     public static PageWrapper<Content> getContentByParams(final String contentType,
                                                           Integer pageNum,
@@ -39,7 +40,7 @@ public class GetContentParams {
             throw new InvalidParameterException("Invalid parameters");
         }
 
-        if(!paginated && pageNum != null) {
+        if((!paginated && pageNum != null) || (paginated && pageNum == null)) {
             throw new InvalidParameterException("Invalid parameters");
         }
 
@@ -51,7 +52,7 @@ public class GetContentParams {
             if(paginated) {
                 contentListFilter = us.getWatchList(user, pageNum, CONTENT_AMOUNT);
             } else {
-                contentListFilter = us.getWatchList(user, pageNum, Integer.MAX_VALUE);
+                contentListFilter = us.getWatchList(user, DEFAULT_PAGE, Integer.MAX_VALUE);
             }
             return contentListFilter;
 
@@ -63,7 +64,7 @@ public class GetContentParams {
             if(paginated) {
                 contentListFilter = us.getUserViewedList(user, pageNum, CONTENT_AMOUNT);
             } else {
-                contentListFilter = us.getUserViewedList(user, pageNum, Integer.MAX_VALUE);
+                contentListFilter = us.getUserViewedList(user, DEFAULT_PAGE, Integer.MAX_VALUE);
             }
             return contentListFilter;
         }
