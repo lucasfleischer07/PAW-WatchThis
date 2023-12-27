@@ -17,7 +17,7 @@ Poner una L si ya esta Listo
 
 - Toda respuesta del server me repite mi header Authorization, no sólo la primera al loguearme con user + pass.
 
-- Se encuentran llamadas con semántica llamativa, por ejemplo: ?paginated=false&watchListSavedBy=61&page=1 paginated en false, pero piden pagina 1 y la respuesta trae headers link de paginación.
+- (L) Se encuentran llamadas con semántica llamativa, por ejemplo: ?paginated=false&watchListSavedBy=61&page=1 paginated en false, pero piden pagina 1 y la respuesta trae headers link de paginación.
     Solucion: En ContentController linea 83 agregue un if de si es paginado, me setee los headers de paginacion, sino que no los genere y listo
 
 - No paginan con el modelo 1+1. Esto es un error conceptual grave.

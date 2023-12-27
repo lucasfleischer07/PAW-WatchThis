@@ -39,6 +39,10 @@ public class GetContentParams {
             throw new InvalidParameterException("Invalid parameters");
         }
 
+        if(!paginated && pageNum != null) {
+            throw new InvalidParameterException("Invalid parameters");
+        }
+
         PageWrapper<Content> contentListFilter;
 
         if(watchListSavedBy != null) {
