@@ -54,18 +54,32 @@ export class ReviewApi {
         return genericFetchWithQueryParams(apiUrl, options, params)
     }
 
-    async reviewThumbUp(reviewId, userId) {
+    async reviewThumbUpPost(reviewId, userId) {
         const apiUrl = `${this.basePath}/${reviewId}/thumbUp`
         let bodyRequest = {userId: userId}
-        const options = {method: 'PUT', headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}), body: JSON.stringify(bodyRequest)}
+        const options = {method: 'POST', headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}), body: JSON.stringify(bodyRequest)}
         const params = {}
         return genericFetchWithQueryParams(apiUrl, options, params)
     }
 
-    async reviewThumbDown(reviewId, userId) {
+    async reviewThumbUpDelete(reviewId, userId) {
+        const apiUrl = `${this.basePath}/${reviewId}/thumbUp`
+        const options = {method: 'DELETE', headers: authCheck({})}
+        const params = {}
+        return genericFetchWithQueryParams(apiUrl, options, params)
+    }
+
+    async reviewThumbDownPost(reviewId, userId) {
         const apiUrl = `${this.basePath}/${reviewId}/thumbDown`
         let bodyRequest = {userId: userId}
-        const options = {method: 'PUT', headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}), body: JSON.stringify(bodyRequest)}
+        const options = {method: 'POST', headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}), body: JSON.stringify(bodyRequest)}
+        const params = {}
+        return genericFetchWithQueryParams(apiUrl, options, params)
+    }
+
+    async reviewThumbDownDelete(reviewId, userId) {
+        const apiUrl = `${this.basePath}/${reviewId}/thumbDown`
+        const options = {method: 'DELETE', headers: authCheck({})}
         const params = {}
         return genericFetchWithQueryParams(apiUrl, options, params)
     }

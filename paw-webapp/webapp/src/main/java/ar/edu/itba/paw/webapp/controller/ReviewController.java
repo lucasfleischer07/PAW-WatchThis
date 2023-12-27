@@ -169,34 +169,68 @@ public class ReviewController {
 
     // * ---------------------------------------------Review reputation-------------------------------------------------
 //    Endpoint para likear una review
-    @PUT
+    @POST
     @Produces(value = {MediaType.APPLICATION_JSON})
     @Path("/{reviewId}/thumbUp")
     @PreAuthorize("@securityChecks.checkUser(#basicRequestDto.userId)")
-    public Response reviewThumbUp(@Valid BasicRequestDto basicRequestDto,
-                                  @PathParam("reviewId") final Long reviewId) {
-        LOGGER.info("PUT /{}: Called", uriInfo.getPath());
+    public Response reviewThumbUpPost(@Valid BasicRequestDto basicRequestDto,
+                                      @PathParam("reviewId") final Long reviewId) {
+        LOGGER.info("POST /{}: Called", uriInfo.getPath());
         Review review = rs.getReview(reviewId).orElseThrow(ReviewNotFoundException::new);
         User loggedUser = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).get();
         rs.thumbUpReview(review,loggedUser);
-        LOGGER.info("PUT /{}: Thumb up successful", uriInfo.getPath());
+        LOGGER.info("POST /{}: Thumb up successful", uriInfo.getPath());
+
+        // TODO: Deberia devolver un 201 CREATED o 200 OK, nose bien
+        return Response.ok().build();
+    }
+
+    @DELETE
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    @Path("/{reviewId}/thumbUp")
+    // TODO: Ver como seria el tema de chequeo de usuarios. Mismo problema que con las watchlist del delete
+//    @PreAuthorize("@securityChecks.checkUser(#basicRequestDto.userId)")
+    public Response reviewThumbUpDelete(@PathParam("reviewId") final Long reviewId) {
+        LOGGER.info("DELETE /{}: Called", uriInfo.getPath());
+        Review review = rs.getReview(reviewId).orElseThrow(ReviewNotFoundException::new);
+        User loggedUser = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).get();
+        // TODO: Ahora tenemos un metodo que hace todo. Ahora habria que dividirlo en 2 disitntos o dejarlo asi, VER
+        rs.thumbUpReview(review,loggedUser);
+        LOGGER.info("DELETE /{}: Thumb up successful", uriInfo.getPath());
 
         return Response.noContent().build();
     }
 
 
 //    Endpoint para deslikear una review
-    @PUT
+    @POST
     @Produces(value = {MediaType.APPLICATION_JSON})
     @Path("/{reviewId}/thumbDown")
     @PreAuthorize("@securityChecks.checkUser(#basicRequestDto.userId)")
-    public Response reviewThumbDown(@Valid BasicRequestDto basicRequestDto,
+    public Response reviewThumbDownPost(@Valid BasicRequestDto basicRequestDto,
                                     @PathParam("reviewId") final long reviewId) {
-        LOGGER.info("PUT /{}: Called", uriInfo.getPath());
+        LOGGER.info("POST /{}: Called", uriInfo.getPath());
         Review review = rs.getReview(reviewId).orElseThrow(ReviewNotFoundException::new);
         User loggedUser = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).get();
         rs.thumbDownReview(review,loggedUser);
-        LOGGER.info("PUT /{}: Thumb down successful", uriInfo.getPath());
+        LOGGER.info("POST /{}: Thumb down successful", uriInfo.getPath());
+
+        // TODO: Deberia devolver un 201 CREATED o 200 OK, nose bien
+        return Response.ok().build();
+    }
+
+    @DELETE
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    @Path("/{reviewId}/thumbDown")
+    // TODO: Ver como seria el tema de chequeo de usuarios. Mismo problema que con las watchlist del delete
+//    @PreAuthorize("@securityChecks.checkUser(#basicRequestDto.userId)")
+    public Response reviewThumbDownDelete(@PathParam("reviewId") final long reviewId) {
+        LOGGER.info("DELETE /{}: Called", uriInfo.getPath());
+        Review review = rs.getReview(reviewId).orElseThrow(ReviewNotFoundException::new);
+        User loggedUser = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).get();
+        // TODO: Ahora tenemos un metodo que hace todo. Ahora habria que dividirlo en 2 disitntos o dejarlo asi, VER
+        rs.thumbDownReview(review,loggedUser);
+        LOGGER.info("DELETE /{}: Thumb down successful", uriInfo.getPath());
 
         return Response.noContent().build();
     }

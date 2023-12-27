@@ -26,4 +26,13 @@ Poner una L si ya esta Listo
     - Endpoints como /users/{userId}/reviewsLiked devuelven listas de ids, no entidades hipervinculadas. El cliente debe saber construir las URLs correspondientes.
     - POST /content/10/watchList agrega la película a la watchlist de un usuario, pero retorna un 204 No Content y no un 201 Created.
     - El DELETE se hace contra /content/10/watchList?userId=61. El cliente tiene que saber construir esta URL a mano, no define un recurso individual.
-    - PUT /api/reviews/121/thumbUp para crear un like (y thumbDownpara dislike) hacen toggle, no son idempotentes pese a que el verbo PUT sí debiera serlo.
+    - (L) PUT /api/reviews/121/thumbUp para crear un like (y thumbDown para dislike) hacen toggle, no son idempotentes pese a que el verbo PUT sí debiera serlo.
+        FALTA VER: El tema del status code que devolvemos en el POST de thumbUp y thumbDown (si es 201 CREATED o 200 OK)
+        Solucion: Se transformo en POST y DELETE para cada uno
+
+
+
+
+
+Correcciones a hacer por cambios:
+- Corregir los tests de Reputation ya que cambiaron los enpodins. Antes eran reviewThumbUp, ahora se dividieron en 2: reviewThumbUpPost y reviewThumbUpDelete (mismo para reviewThumbDown)
