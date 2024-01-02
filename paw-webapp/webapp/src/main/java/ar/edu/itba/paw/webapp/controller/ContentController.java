@@ -33,6 +33,7 @@ import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.io.ByteArrayInputStream;
+import java.net.URI;
 import java.net.URLConnection;
 import java.util.*;
 
@@ -266,7 +267,9 @@ public class ContentController {
         } catch (DuplicateKeyException ignore){
             LOGGER.warn("POST /{}: DuplicateKeyException, content {} already in watchlist", uriInfo.getPath(), contentId);
         }
-        return Response.noContent().build();
+
+        final URI location = uriInfo.getBaseUriBuilder().path("/content").path(String.valueOf(contentId)).build();
+        return Response.created(location).build();
     }
 
     @DELETE
@@ -304,7 +307,9 @@ public class ContentController {
         } catch (DuplicateKeyException ignore){
             LOGGER.warn("POST /{}: DuplicateKeyException, content {} already in viewedlist", uriInfo.getPath(), contentId);
         }
-        return Response.noContent().build();
+
+        final URI location = uriInfo.getBaseUriBuilder().path("/content").path(String.valueOf(contentId)).build();
+        return Response.created(location).build();
     }
 
     @DELETE

@@ -27,7 +27,9 @@ Poner una L si ya esta Listo
         FALTA VER: Si hacemos chequeo de seguridad en sentido de que cada ususario solamente puede getear sus propios likes/dislikes o si otro usaurio puede verlos (antes estaba pueso para que cualquiera pueda ver el de cualqueira)
         Solucion: Antes estaba en user, lo pase a ReviewController y ahora se getean como cualquier review usando un queryPAram especifico likedById o dislikedById. Luego hacen la logica de siempre.
 
-    - POST /content/10/watchList agrega la película a la watchlist de un usuario, pero retorna un 204 No Content y no un 201 Created.
+    - (L) POST /content/10/watchList agrega la película a la watchlist de un usuario, pero retorna un 204 No Content y no un 201 Created.
+        FALTA VER: Hacer esto o no en todos los POST que hagamos
+        Solucion: Agregar un final URI location = uriInfo.getBaseUriBuilder().path("/content").path(String.valueOf(contentId)).build(); y hacer return Response.created(location).build(); Creo que eso es lo que pide
 
     - El DELETE se hace contra /content/10/watchList?userId=61. El cliente tiene que saber construir esta URL a mano, no define un recurso individual.
 

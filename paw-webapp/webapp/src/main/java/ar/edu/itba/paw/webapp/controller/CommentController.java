@@ -140,6 +140,7 @@ public class CommentController {
         return response.build();
     }
 
+    //TODO Revisar este POST, deberia retornar ok o created y la uri o un mensaje
     @POST
     @Path("/{commentId}/reports")
     @PreAuthorize("@securityChecks.checkUser(#commentReportDto.userId)")

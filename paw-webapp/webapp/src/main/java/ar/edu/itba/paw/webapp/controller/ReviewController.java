@@ -172,6 +172,7 @@ public class ReviewController {
 
     // * ---------------------------------------------Review reputation-------------------------------------------------
 //    Endpoint para likear una review
+    //TODO Revisar este POST, deberia retornar ok o created y la uri o un mensaje
     @POST
     @Produces(value = {MediaType.APPLICATION_JSON})
     @Path("/{reviewId}/thumbUp")
@@ -206,6 +207,7 @@ public class ReviewController {
 
 
 //    Endpoint para deslikear una review
+    //TODO Revisar este POST, deberia retornar ok o created y la uri o un mensaje
     @POST
     @Produces(value = {MediaType.APPLICATION_JSON})
     @Path("/{reviewId}/thumbDown")
@@ -255,6 +257,7 @@ public class ReviewController {
         return response.build();
     }
 
+    //TODO Revisar este POST, deberia retornar ok o created y la uri o un mensaje
     @POST
     @Path("/{reviewId}/reports")
     @PreAuthorize("@securityChecks.checkUser(#commentReportDto.userId)")
