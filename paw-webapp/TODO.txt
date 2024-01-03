@@ -31,7 +31,8 @@ Poner una L si ya esta Listo
         FALTA VER: Hacer esto o no en todos los POST que hagamos
         Solucion: Agregar un final URI location = uriInfo.getBaseUriBuilder().path("/content").path(String.valueOf(contentId)).build(); y hacer return Response.created(location).build(); Creo que eso es lo que pide
 
-    - El DELETE se hace contra /content/10/watchList?userId=61. El cliente tiene que saber construir esta URL a mano, no define un recurso individual.
+    - (L) El DELETE se hace contra /content/10/watchList?userId=61. El cliente tiene que saber construir esta URL a mano, no define un recurso individual.
+        Solucion: Sacar el queryParam y agarramos ya la info del auth del back y asumimos que el front y back van a ser siemrpe el mismo. Nose si esta del todoo bien pero otra cosa no se me ocurre
 
     - (L) PUT /api/reviews/121/thumbUp para crear un like (y thumbDown para dislike) hacen toggle, no son idempotentes pese a que el verbo PUT sí debiera serlo.
         FALTA VER: El tema del status code que devolvemos en el POST de thumbUp y thumbDown (si es 201 CREATED o 200 OK)
@@ -39,6 +40,8 @@ Poner una L si ya esta Listo
 
 
 
+VER:
+- Adaptar los status code a los que da Juan Martin en la clase teorica (Ver foto). Si cambiamos el delete de 204 No Content a 200 Ok deberiamos cambiar en el front el GenericRequest para que el DELETE no vaya mas con 204 sino con 200
 
 
 Correcciones a hacer por cambios:

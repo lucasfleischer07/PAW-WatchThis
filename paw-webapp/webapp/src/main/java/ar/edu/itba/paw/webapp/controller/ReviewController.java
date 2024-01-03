@@ -186,7 +186,7 @@ public class ReviewController {
         LOGGER.info("POST /{}: Thumb up successful", uriInfo.getPath());
 
         // TODO: Deberia devolver un 201 CREATED o 200 OK, nose bien
-        return Response.ok().build();
+        return Response.ok(String.format("The user of id %d, thumbUp the review of id %d", loggedUser.getId(), reviewId)).build();
     }
 
     @DELETE
@@ -213,7 +213,7 @@ public class ReviewController {
     @Path("/{reviewId}/thumbDown")
     @PreAuthorize("@securityChecks.checkUser(#basicRequestDto.userId)")
     public Response reviewThumbDownPost(@Valid BasicRequestDto basicRequestDto,
-                                    @PathParam("reviewId") final long reviewId) {
+                                        @PathParam("reviewId") final long reviewId) {
         LOGGER.info("POST /{}: Called", uriInfo.getPath());
         Review review = rs.getReview(reviewId).orElseThrow(ReviewNotFoundException::new);
         User loggedUser = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).get();
@@ -221,13 +221,13 @@ public class ReviewController {
         LOGGER.info("POST /{}: Thumb down successful", uriInfo.getPath());
 
         // TODO: Deberia devolver un 201 CREATED o 200 OK, nose bien
-        return Response.ok().build();
+        return Response.ok(String.format("The user of id %d, thumbDown the review of id %d", loggedUser.getId(), reviewId)).build();
     }
 
     @DELETE
     @Produces(value = {MediaType.APPLICATION_JSON})
     @Path("/{reviewId}/thumbDown")
-    // TODO: Ver como seria el tema de chequeo de usuarios. Mismo problema que con las watchlist del delete
+// TODO: Ver como seria el tema de chequeo de usuarios. Mismo problema que con las watchlist del delete
 //    @PreAuthorize("@securityChecks.checkUser(#basicRequestDto.userId)")
     public Response reviewThumbDownDelete(@PathParam("reviewId") final long reviewId) {
         LOGGER.info("DELETE /{}: Called", uriInfo.getPath());
@@ -257,7 +257,7 @@ public class ReviewController {
         return response.build();
     }
 
-    //TODO Revisar este POST, deberia retornar ok o created y la uri o un mensaje
+    //TODO Revisar este POST, deberia retornar ok o created y la uri o un mensaje. Se podria hacer 201 CREATEd y devolver el link de la review
     @POST
     @Path("/{reviewId}/reports")
     @PreAuthorize("@securityChecks.checkUser(#commentReportDto.userId)")

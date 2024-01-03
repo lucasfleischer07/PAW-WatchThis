@@ -274,9 +274,9 @@ public class ContentController {
 
     @DELETE
     @Path("/{contentId}/watchList")
-    @PreAuthorize("@securityChecks.checkUser(#userId)")
-    public Response deleteUserWatchList(@QueryParam("userId") final Long userId,
-                                        @PathParam("contentId") final long contentId) {
+//    TODO: Como solo estaba el checkUser que solo chequea que el user del front sea el mismo del back, lo saco y listo
+//    @PreAuthorize("@securityChecks.checkUser(#userId)")
+    public Response deleteUserWatchList(@PathParam("contentId") final long contentId) {
         LOGGER.info("DELETE /{}: Called", uriInfo.getPath());
 
         final Content content = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
@@ -314,9 +314,9 @@ public class ContentController {
 
     @DELETE
     @Path("/{contentId}/viewedList")
-    @PreAuthorize("@securityChecks.checkUser(#userId)")
-    public Response deleteUserViewedList(@QueryParam("userId") final Long userId,
-                                         @PathParam("contentId") final long contentId) {
+//    TODO: Como solo estaba el checkUser que solo chequea que el user del front sea el mismo del back, lo saco y listo
+//    @PreAuthorize("@securityChecks.checkUser(#userId)")
+    public Response deleteUserViewedList(@PathParam("contentId") final long contentId) {
         LOGGER.info("DELETE /{}: Called", uriInfo.getPath());
 
         final Content content = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
