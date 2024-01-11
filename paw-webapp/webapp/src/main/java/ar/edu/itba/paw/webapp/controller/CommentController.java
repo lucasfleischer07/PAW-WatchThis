@@ -40,8 +40,6 @@ public class CommentController {
     @Context
     UriInfo uriInfo;
     private static final Logger LOGGER = LoggerFactory.getLogger(CommentController.class);
-    private static final int CONTENT_AMOUNT = 3;
-    private static final int REPORTS_AMOUNT = 10;
 
     @GET
     @Produces(value = {MediaType.APPLICATION_JSON})
@@ -128,19 +126,23 @@ public class CommentController {
     // * ---------------------------------------------Comments Reports---------------------------------------------------
     @GET
     @Path("/reports")
-    public Response getCommentReport(@QueryParam("page")@DefaultValue("1")final int page,
-                                     @QueryParam(value = "reason") @DefaultValue("") ReportReason reason) {
-        PageWrapper<CommentReport> commentsReported = rrs.getReportedComments(reason,page,REPORTS_AMOUNT);
+    public Response getCommentReport(@QueryParam("page") Integer page,
+                                     @QueryParam(value = "reason") ReportReason reason,
+                                     @QueryParam(value = "reportId") final Long reportId) {
+        PageWrapper<CommentReport> commentsReported = GetCommentsParams.getCommentReports(reportId, reason, page, rrs);
         Collection<CommentReportDto> commentReportedListDto = CommentReportDto.mapCommentReportToCommentReportDto(uriInfo, commentsReported.getPageContent());
         LOGGER.info("GET /{}: Reported comments list success for admin user", uriInfo.getPath());
         Response.ResponseBuilder response = Response.ok(new GenericEntity<Collection<CommentReportDto>>(commentReportedListDto){});
-        response.header("Total-Review-Reports",rrs.getReportedReviewsAmount(reason));
-        response.header("Total-Comment-Reports",rrs.getReportedCommentsAmount(reason));
-        ResponseBuildingUtils.setPaginationLinks(response,commentsReported , uriInfo);
+        if(reportId == null) {
+            response.header("Total-Review-Reports",rrs.getReportedReviewsAmount(reason));
+            response.header("Total-Comment-Reports",rrs.getReportedCommentsAmount(reason));
+            ResponseBuildingUtils.setPaginationLinks(response,commentsReported , uriInfo);
+        }
+
         return response.build();
     }
 
-    //TODO Revisar este POST, deberia retornar ok o created y la uri o un mensaje
+    //TODO Revisar este POST, deberia retornar ok o created y la uri o un mensaje (Ya esta hecho)
     @POST
     @Path("/{commentId}/reports")
     @PreAuthorize("@securityChecks.checkUser(#commentReportDto.userId)")

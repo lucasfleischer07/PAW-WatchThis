@@ -1,10 +1,7 @@
 package ar.edu.itba.paw.webapp.controller.queryParams;
 
 import ar.edu.itba.paw.models.*;
-import ar.edu.itba.paw.services.CommentService;
-import ar.edu.itba.paw.services.ContentService;
-import ar.edu.itba.paw.services.ReviewService;
-import ar.edu.itba.paw.services.UserService;
+import ar.edu.itba.paw.services.*;
 import ar.edu.itba.paw.webapp.exceptions.ContentNotFoundException;
 import ar.edu.itba.paw.webapp.exceptions.ReviewNotFoundException;
 import ar.edu.itba.paw.webapp.exceptions.UserNotFoundException;
@@ -15,7 +12,7 @@ import java.security.InvalidParameterException;
 import java.util.List;
 
 public class GetCommentsParams {
-    private static final int REVIEW_AMOUNT = 3;
+    private static final int REPORTS_AMOUNT = 10;
 
     public static List<Comment> getCommentsByParams(final Long reportedById,
                                                     final Long reviewId,
@@ -35,6 +32,25 @@ public class GetCommentsParams {
         }
 
         return commentList;
+    }
+
+    public static PageWrapper<CommentReport> getCommentReports(final Long reportId,
+                                                               final ReportReason reason,
+                                                               final Integer page,
+                                                               ReportService rrs) {
+        if((reportId != null && reason != null && page != null) || (reportId == null && reason == null && page == null) || (reportId != null && (reason != null || page != null)) || (reason != null && page == null)) {
+            throw new InvalidParameterException("Invalid parameters");
+        }
+
+        if(reportId != null) {
+            // TODO: Hacer en rrs una funcion para getear la review reportada por el id
+//            return new PageWrapper<ReviewReport>(1,1,userDislikeReviewsList.size(),userDislikeReviewsList,userDislikeReviewsList.size());
+
+        } else {
+            return rrs.getReportedComments(reason, page, REPORTS_AMOUNT);
+        }
+        // TODO: Sacar este retun null cuando se haga la query de arriba, solo lo deje para que no tire error
+        return null;
 
     }
 }

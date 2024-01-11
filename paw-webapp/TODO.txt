@@ -42,6 +42,8 @@ Poner una L si ya esta Listo
 TODO:
 - En GetReviewsParams hacer la query para getear el ReviewReport por ID (la logica ya esta hecha, solo falta la funcion en los service y la query)
 - En ReviewController en la funcion addReviewReport (linea 266 aprox), en el metodo rrs.addReport(review, user, commentReportDto.getReportType()); habria que hacer que eso retorne el id del report creado como un Long.
+- En GetCommentsParams hacer la query para getear el CommentReport por ID (la logica ya esta hecha, solo falta la funcion en los service y la query)
+- En CommentController en la funcion addCommentReport (linea 150 aprox), en el metodo rrs.addReport(comment, user, commentReportDto.getReportType()); habria que hacer que eso retorne el id del report creado como un Long.
 - Chequear lo que devuelve cada POST
 
 
