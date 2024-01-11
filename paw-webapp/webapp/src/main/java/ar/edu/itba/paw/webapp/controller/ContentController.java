@@ -183,7 +183,7 @@ public class ContentController {
         cs.updateContent(contentId, contentDto.getName(), contentDto.getDescription(), contentDto.getReleaseDate(), auxGenre, contentDto.getCreator(), contentDto.getDuration(), contentDto.getType(), content.getImage());
 
         LOGGER.info("PUT /{}: Content {} Info Updated", uriInfo.getPath(), contentId);
-        return Response.ok().build();
+        return Response.noContent().build();
     }
 
     // * ---------------------------------------------------------------------------------------------------------------

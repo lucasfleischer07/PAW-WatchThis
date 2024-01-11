@@ -41,7 +41,6 @@ public class ReviewController {
     private ReportService rrs;
     @Context
     private UriInfo uriInfo;
-    private static final int REPORTS_AMOUNT = 10;
     private static final Logger LOGGER = LoggerFactory.getLogger(ReviewController.class);
 
     // * ----------------------------------- Movies and Series Review Gets ---------------------------------------------
@@ -245,19 +244,22 @@ public class ReviewController {
     // * ---------------------------------------------Review reports-------------------------------------------------
     @GET
     @Path("/reports")
-    public Response getCommentReport(@QueryParam("page") @DefaultValue("1") final int page,
-                                     @QueryParam(value = "reason") @DefaultValue("") ReportReason reason) {
-        PageWrapper<ReviewReport> reviewsReported = rrs.getReportedReviews(reason,page,REPORTS_AMOUNT);
+    public Response getCommentReport(@QueryParam("page") Integer page,
+                                     @QueryParam(value = "reason") ReportReason reason,
+                                     @QueryParam(value = "reportId") final Long reportId) {
+        PageWrapper<ReviewReport> reviewsReported = GetReviewsParams.getReviewReports(reportId, reason, page, rrs);
         Collection<ReviewReportDto> reviewsReportedListDto = ReviewReportDto.mapReviewReportToReviewReportDto(uriInfo, reviewsReported.getPageContent());
         LOGGER.info("GET /{}: Reported reviews list success for admin user", uriInfo.getPath());
         Response.ResponseBuilder response = Response.ok(new GenericEntity<Collection<ReviewReportDto>>(reviewsReportedListDto){});
-        response.header("Total-Review-Reports",rrs.getReportedReviewsAmount(reason));
-        response.header("Total-Comment-Reports",rrs.getReportedCommentsAmount(reason));
-        ResponseBuildingUtils.setPaginationLinks(response,reviewsReported , uriInfo);
+        if(reportId != null) {
+            response.header("Total-Review-Reports",rrs.getReportedReviewsAmount(reason));
+            response.header("Total-Comment-Reports",rrs.getReportedCommentsAmount(reason));
+            ResponseBuildingUtils.setPaginationLinks(response,reviewsReported , uriInfo);
+        }
         return response.build();
     }
 
-    //TODO Revisar este POST, deberia retornar ok o created y la uri o un mensaje. Se podria hacer 201 CREATEd y devolver el link de la review
+    //TODO Revisar este POST, deberia retornar ok o created y la uri o un mensaje. Se podria hacer 201 CREATEd y devolver el link de la review (ya esta)
     @POST
     @Path("/{reviewId}/reports")
     @PreAuthorize("@securityChecks.checkUser(#commentReportDto.userId)")
@@ -269,9 +271,13 @@ public class ReviewController {
         }
         final Review review = rs.findById(reviewId).orElseThrow(ReviewNotFoundException::new);
         final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(ForbiddenException::new);
+
+        // TODO: Habria que hacer que este metodo devuelva el id del Report creado asi lo podesmos meter en la url de location para retornar
         rrs.addReport(review, user, commentReportDto.getReportType());
         LOGGER.info("POST /{}: Review {} reported", uriInfo.getPath(), review.getId());
-        return Response.ok().build();
+        // TODO: cambiar el reviewId por el reportId cuando se haga (el del queryParam)
+        final URI location = uriInfo.getBaseUriBuilder().path("/reviews").path("/reports").queryParam("reportId", reviewId).build();
+        return Response.created(location).build();
     }
 
     @DELETE
