@@ -52,3 +52,7 @@ VER:
 Correcciones a hacer por cambios:
 - Chequear todos los test de los controllers y front
 - Corregir los tests de Reputation ya que cambiaron los enpodins. Antes eran reviewThumbUp, ahora se dividieron en 2: reviewThumbUpPost y reviewThumbUpDelete (mismo para reviewThumbDown)
+
+
+Preguntas:
+- En el caso del POST del thumbUp y thumbDown, hay que devolver 201 CREATED pero nose que tan bien esta devolver el el location de la review. Si mandamos mail podriamos preguntarle si devolvemos 201 CREATED y el location de la review o hacemos 200 OK con un mensajito o algo asi. Este es el unico que no me convence por completo
