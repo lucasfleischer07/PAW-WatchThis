@@ -22,6 +22,7 @@ import org.springframework.stereotype.Component;
 import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+import java.net.URI;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -156,10 +157,14 @@ public class CommentController {
 
         final Comment comment = ccs.getComment(commentId).orElseThrow(CommentNotFoundException::new);
         final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(ForbiddenException::new);
+
+        // TODO: Habria que hacer que este metodo devuelva el id del Report creado asi lo podesmos meter en la url de location para retornar
         rrs.addReport(comment, user, commentReportDto.getReportType());
 
         LOGGER.info("POST /{}: Comment {} reported", uriInfo.getPath(), comment.getCommentId());
-        return Response.ok().build();
+        // TODO: Cambiar el commentId por el reportId en el queryParam
+        final URI location = uriInfo.getBaseUriBuilder().path("/comments").path("/reports").queryParam("reportId", commentId).build();
+        return Response.created(location).build();
     }
 
     @DELETE
