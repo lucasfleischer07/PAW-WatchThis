@@ -4,6 +4,7 @@ import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.webapp.controller.queryParams.GetCommentsParams;
 import ar.edu.itba.paw.webapp.dto.request.NewReportCommentDto;
 import ar.edu.itba.paw.webapp.dto.response.CommentReportDto;
+import ar.edu.itba.paw.webapp.dto.response.ReviewReportDto;
 import ar.edu.itba.paw.webapp.exceptions.CommentNotFoundException;
 import ar.edu.itba.paw.webapp.exceptions.ReviewNotFoundException;
 import ar.edu.itba.paw.webapp.exceptions.UserNotFoundException;
@@ -144,8 +145,10 @@ public class CommentController {
     @GET
     @Path("/reports/{reportId}")
     public Response getCommentReport(@PathParam("reportId") Long reportId) {
-        PageWrapper<CommentReport> commentsReported = ;
-//        TODO: IAncito
+        CommentReport commentReport = rrs.getReportedComment(reportId);
+        CommentReportDto commentReportDto = new CommentReportDto(uriInfo, commentReport);
+        LOGGER.info("GET /{}: Return review report {} with success", uriInfo.getPath(), reportId);
+        return Response.ok(commentReportDto).build();
     }
 
     //TODO Revisar este POST, deberia retornar ok o created y la uri o un mensaje (Ya esta hecho)
@@ -164,11 +167,11 @@ public class CommentController {
         final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(ForbiddenException::new);
 
         // TODO: Habria que hacer que este metodo devuelva el id del Report creado asi lo podesmos meter en la url de location para retornar
-        rrs.addReport(comment, user, commentReportDto.getReportType());
+        Long reportId = rrs.addReport(comment, user, commentReportDto.getReportType());
 
         LOGGER.info("POST /{}: Comment {} reported", uriInfo.getPath(), comment.getCommentId());
         // TODO: Cambiar el commentId por el reportId en el queryParam
-        final URI location = uriInfo.getBaseUriBuilder().path("/comments").path("/reports").path(String.valueOf(commentId)).build();
+        final URI location = uriInfo.getBaseUriBuilder().path("/comments").path("/reports").path(String.valueOf(reportId)).build();
         return Response.created(location).build();
     }
 

@@ -8,9 +8,11 @@ import java.util.Set;
 public interface ReportService {
     void delete(Object reviewOrComment, Set<CommentReport> reasonsOfDelete);
     void removeReports(String type, Long contentId);
-    void addReport(Object reviewOrComment, User user, String reason);
+    Long addReport(Object reviewOrComment, User user, String reason);
+    ReviewReport getReportedReview(Long reviewId);
     PageWrapper<ReviewReport> getReportedReviews(ReportReason reason,int page,int pageSize);
     int getReportedReviewsAmount(ReportReason reason);
+    CommentReport getReportedComment(Long commentId);
     PageWrapper<CommentReport> getReportedComments(ReportReason reason,int page,int pageSize);
     int getReportedCommentsAmount(ReportReason reason);
 

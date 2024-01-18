@@ -118,7 +118,7 @@ public class ReportServiceImpl implements ReportService{
     }
 
     @Override
-    public void addReport(Object reviewOrComment,User reporterUser, String reason) {
+    public Long addReport(Object reviewOrComment,User reporterUser, String reason) {
         switch (reason) {
             case "Spam":
                 if (reviewOrComment instanceof Review)
@@ -166,8 +166,9 @@ public class ReportServiceImpl implements ReportService{
                 }
                 break;
             default:
-                return;
+                throw new IllegalArgumentException();
         }
+        return reportDao.getReportedContentId(reviewOrComment);
     }
 
 
@@ -185,8 +186,24 @@ public class ReportServiceImpl implements ReportService{
     }
 
     @Override
+    public ReviewReport getReportedReview(Long reviewId){
+        if(reviewId < 1){
+            throw new IllegalArgumentException();
+        }
+        return reportDao.getReportedReview(reviewId);
+    }
+
+    @Override
     public int getReportedReviewsAmount(ReportReason reason){
         return reason==null ? reportDao.getReportedReviewsAmount() : reportDao.getReportedReviewsAmountByReason(reason);
+    }
+
+    @Override
+    public CommentReport getReportedComment(Long commentId) {
+        if(commentId < 1){
+            throw new IllegalArgumentException();
+        }
+        return reportDao.getReportedComment(commentId);
     }
 
     @Override

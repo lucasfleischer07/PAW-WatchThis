@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.webapp.controller.queryParams.GetReviewsParams;
 import ar.edu.itba.paw.webapp.dto.request.BasicRequestDto;
 import ar.edu.itba.paw.webapp.dto.request.NewReportCommentDto;
+import ar.edu.itba.paw.webapp.dto.response.ContentDto;
 import ar.edu.itba.paw.webapp.dto.response.ReviewReportDto;
 import ar.edu.itba.paw.webapp.exceptions.ContentNotFoundException;
 import ar.edu.itba.paw.webapp.exceptions.ReviewNotFoundException;
@@ -261,8 +262,11 @@ public class ReviewController {
     @GET
     @Path("/reports/{reportId}")
     public Response getReviewReport(@PathParam(value = "reportId") final Long reportId) {
-//        PageWrapper<ReviewReport> reviewsReported =
-                // TODO IANCITO
+        ReviewReport reviewsReported = rrs.getReportedReview(reportId);
+        ReviewReportDto reviewReportDto = new ReviewReportDto(uriInfo, reviewsReported);
+        LOGGER.info("GET /{}: Return review report {} with success", uriInfo.getPath(), reportId);
+        return Response.ok(reviewReportDto).build();
+
     }
 
     //TODO Revisar este POST, deberia retornar ok o created y la uri o un mensaje. Se podria hacer 201 CREATEd y devolver el link de la review (ya esta)
@@ -279,10 +283,10 @@ public class ReviewController {
         final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(ForbiddenException::new);
 
         // TODO: Habria que hacer que este metodo devuelva el id del Report creado asi lo podesmos meter en la url de location para retornar
-//        final Long reportId = rrs.addReport(review, user, commentReportDto.getReportType());
+        final Long reportId = rrs.addReport(review, user, commentReportDto.getReportType());
         LOGGER.info("POST /{}: Review {} reported", uriInfo.getPath(), review.getId());
         // TODO: cambiar el reviewId por el reportId cuando se haga (el del queryParam)
-        final URI location = uriInfo.getBaseUriBuilder().path("/reviews").path("/reports").path(String.valueOf(reviewId)).build();
+        final URI location = uriInfo.getBaseUriBuilder().path("/reviews").path("/reports").path(String.valueOf(reportId)).build();
         return Response.created(location).build();
     }
 

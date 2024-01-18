@@ -10,11 +10,14 @@ public interface ReportDao {
     void delete(Object reviewOrComment);
     void removeReports(Object reviewOrComment);
     void addReport(Object reviewOrComment, User user, ReportReason reason);
+    Long getReportedContentId(Object reviewOrComment);
     PageWrapper<ReviewReport> getReportedReviews(int page,int pageSize);
+    ReviewReport getReportedReview(Long reportId);
     PageWrapper<ReviewReport> getReportedReviewsByReason(ReportReason reason,int page,int pageSize);
     int getReportedReviewsAmount();
     int getReportedReviewsAmountByReason(ReportReason reason);
     PageWrapper<CommentReport> getReportedComments(int page,int pageSize);
+    CommentReport getReportedComment(Long reportId);
     PageWrapper<CommentReport> getReportedCommentsByReason(ReportReason reason, int page, int pageSize);
     int getReportedCommentsAmount();
     int getReportedCommentsAmountByReason(ReportReason reason);
