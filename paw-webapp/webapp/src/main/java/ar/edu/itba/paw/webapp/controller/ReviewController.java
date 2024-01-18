@@ -24,6 +24,7 @@ import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+import java.net.URI;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Set;
@@ -41,6 +42,8 @@ public class ReviewController {
     private ReportService rrs;
     @Context
     private UriInfo uriInfo;
+    private static final int REPORTS_AMOUNT = 10;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(ReviewController.class);
 
     // * ----------------------------------- Movies and Series Review Gets ---------------------------------------------
@@ -184,7 +187,6 @@ public class ReviewController {
         rs.thumbUpReview(review,loggedUser);
         LOGGER.info("POST /{}: Thumb up successful", uriInfo.getPath());
 
-        // TODO: Deberia devolver un 201 CREATED o 200 OK, nose bien
         return Response.ok(String.format("The user of id %d, thumbUp the review of id %d", loggedUser.getId(), reviewId)).build();
     }
 
@@ -244,19 +246,23 @@ public class ReviewController {
     // * ---------------------------------------------Review reports-------------------------------------------------
     @GET
     @Path("/reports")
-    public Response getCommentReport(@QueryParam("page") Integer page,
-                                     @QueryParam(value = "reason") ReportReason reason,
-                                     @QueryParam(value = "reportId") final Long reportId) {
-        PageWrapper<ReviewReport> reviewsReported = GetReviewsParams.getReviewReports(reportId, reason, page, rrs);
+    public Response getCommentReport(@QueryParam("page") @DefaultValue("1") Integer page,
+                                     @QueryParam(value = "reason") ReportReason reason) {
+        PageWrapper<ReviewReport> reviewsReported = rrs.getReportedReviews(reason, page, REPORTS_AMOUNT);
         Collection<ReviewReportDto> reviewsReportedListDto = ReviewReportDto.mapReviewReportToReviewReportDto(uriInfo, reviewsReported.getPageContent());
         LOGGER.info("GET /{}: Reported reviews list success for admin user", uriInfo.getPath());
         Response.ResponseBuilder response = Response.ok(new GenericEntity<Collection<ReviewReportDto>>(reviewsReportedListDto){});
-        if(reportId == null) {
-            response.header("Total-Review-Reports",rrs.getReportedReviewsAmount(reason));
-            response.header("Total-Comment-Reports",rrs.getReportedCommentsAmount(reason));
-            ResponseBuildingUtils.setPaginationLinks(response,reviewsReported , uriInfo);
-        }
+        response.header("Total-Review-Reports",rrs.getReportedReviewsAmount(reason));
+        response.header("Total-Comment-Reports",rrs.getReportedCommentsAmount(reason));
+        ResponseBuildingUtils.setPaginationLinks(response,reviewsReported , uriInfo);
         return response.build();
+    }
+
+    @GET
+    @Path("/reports/{reportId}")
+    public Response getReviewReport(@PathParam(value = "reportId") final Long reportId) {
+//        PageWrapper<ReviewReport> reviewsReported =
+                // TODO IANCITO
     }
 
     //TODO Revisar este POST, deberia retornar ok o created y la uri o un mensaje. Se podria hacer 201 CREATEd y devolver el link de la review (ya esta)
@@ -273,10 +279,10 @@ public class ReviewController {
         final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(ForbiddenException::new);
 
         // TODO: Habria que hacer que este metodo devuelva el id del Report creado asi lo podesmos meter en la url de location para retornar
-        rrs.addReport(review, user, commentReportDto.getReportType());
+//        final Long reportId = rrs.addReport(review, user, commentReportDto.getReportType());
         LOGGER.info("POST /{}: Review {} reported", uriInfo.getPath(), review.getId());
         // TODO: cambiar el reviewId por el reportId cuando se haga (el del queryParam)
-        final URI location = uriInfo.getBaseUriBuilder().path("/reviews").path("/reports").queryParam("reportId", reviewId).build();
+        final URI location = uriInfo.getBaseUriBuilder().path("/reviews").path("/reports").path(String.valueOf(reviewId)).build();
         return Response.created(location).build();
     }
 

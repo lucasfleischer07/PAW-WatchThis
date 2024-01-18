@@ -24,7 +24,6 @@ import java.util.Set;
 
 public class GetReviewsParams {
     private static final int REVIEW_AMOUNT = 3;
-    private static final int REPORTS_AMOUNT = 10;
 
     public static PageWrapper<Review> getReviewsByParams(final Long userId,
                                                          final Long contentId,
@@ -82,7 +81,6 @@ public class GetReviewsParams {
                                                        UserService us,
                                                        ReviewService rs) {
 
-        // TODO: Ver si esto es necesatio o no (que otra persona pueda ver likes ajenos. Antes no estaba)
         User loggedUser = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
         if(userId != loggedUser.getId()) {
             throw new ForbiddenException("Users dont match");
@@ -98,7 +96,6 @@ public class GetReviewsParams {
                                                           UserService us,
                                                           ReviewService rs) {
 
-        // TODO: Ver si esto es necesatio o no (que otra persona pueda ver likes ajenos. Antes no estaba)
         User loggedUser = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
         if(userId != loggedUser.getId()) {
             throw new ForbiddenException("Users dont match");
@@ -108,26 +105,6 @@ public class GetReviewsParams {
         Set<Review> userDislikeReviews = rs.userDislikeReviews(user.getUserVotes());
         List<Review> userDislikeReviewsList = new ArrayList<>(userDislikeReviews);
         return new PageWrapper<Review>(1,1,userDislikeReviewsList.size(),userDislikeReviewsList,userDislikeReviewsList.size());
-    }
-
-    public static PageWrapper<ReviewReport> getReviewReports(final Long reportId,
-                                                             final ReportReason reason,
-                                                             final Integer page,
-                                                             ReportService rrs) {
-        if((reportId != null && reason != null && page != null) || (reportId == null && reason == null && page == null) || (reportId != null && (reason != null || page != null)) || (reason != null && page == null)) {
-            throw new InvalidParameterException("Invalid parameters");
-        }
-
-        if(reportId != null) {
-            // TODO: Hacer en rrs una funcion para getear la review reportada por el id
-//            return new PageWrapper<ReviewReport>(1,1,userDislikeReviewsList.size(),userDislikeReviewsList,userDislikeReviewsList.size());
-
-        } else {
-            return rrs.getReportedReviews(reason, page, REPORTS_AMOUNT);
-        }
-        // TODO: Sacar este retun null cuando se haga la query de arriba, solo lo deje para que no tire error
-        return null;
-
     }
 
 }

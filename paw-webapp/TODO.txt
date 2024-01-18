@@ -18,24 +18,27 @@ Poner una L si ya esta Listo
 - Toda respuesta del server me repite mi header Authorization, no sólo la primera al loguearme con user + pass.
 
 - (L) Se encuentran llamadas con semántica llamativa, por ejemplo: ?paginated=false&watchListSavedBy=61&page=1 paginated en false, pero piden pagina 1 y la respuesta trae headers link de paginación.
+    TODO: VER Cuando ahhcemos los carrouseles de bestRated, lastAdded, recommended y el otro, pasamos como queryParam el page pero nunca pagimanos esos carrouseles. Hay que ver si sacamos el page o si realmente los paginamos
     Solucion: En ContentController linea 83 agregue un if de si es paginado, me setee los headers de paginacion, sino que no los genere y listo
 
 - No paginan con el modelo 1+1. Esto es un error conceptual grave.
 
 - La API no es realmente RESTful. Estos son errores graves. Se citan algunos ejemplos (lista no exhaustiva):
     - (L) Endpoints como /users/{userId}/reviewsLiked devuelven listas de ids, no entidades hipervinculadas. El cliente debe saber construir las URLs correspondientes.
-        FALTA VER: Si hacemos chequeo de seguridad en sentido de que cada ususario solamente puede getear sus propios likes/dislikes o si otro usaurio puede verlos (antes estaba pueso para que cualquiera pueda ver el de cualqueira)
         Solucion: Antes estaba en user, lo pase a ReviewController y ahora se getean como cualquier review usando un queryPAram especifico likedById o dislikedById. Luego hacen la logica de siempre.
 
     - (L) POST /content/10/watchList agrega la película a la watchlist de un usuario, pero retorna un 204 No Content y no un 201 Created.
         FALTA VER: Hacer esto o no en todos los POST que hagamos
+        TODO: Leer el TODO de abajo
         Solucion: Agregar un final URI location = uriInfo.getBaseUriBuilder().path("/content").path(String.valueOf(contentId)).build(); y hacer return Response.created(location).build(); Creo que eso es lo que pide
 
     - (L) El DELETE se hace contra /content/10/watchList?userId=61. El cliente tiene que saber construir esta URL a mano, no define un recurso individual.
+        TODO: Cambairlo y pasar como PAthParam el userId y que quede como /content/contentId/watchListId/userId y a la goma (descartar solucion anterior) (Se podria preguntar en el mail) y que esto en vez de delete y post sea un PUT y listo
         Solucion: Sacar el queryParam y agarramos ya la info del auth del back y asumimos que el front y back van a ser siemrpe el mismo. Nose si esta del todoo bien pero otra cosa no se me ocurre
 
     - (L) PUT /api/reviews/121/thumbUp para crear un like (y thumbDown para dislike) hacen toggle, no son idempotentes pese a que el verbo PUT sí debiera serlo.
         FALTA VER: El tema del status code que devolvemos en el POST de thumbUp y thumbDown (si es 201 CREATED o 200 OK)
+        TODO: mandar en el mial que se nos ocurrio hacer esto del post y delete ya que tenemos 3 estados en vez de dos (thumbUp, thumbDown y no thumb)
         Solucion: Se transformo en POST y DELETE para cada uno
 
 

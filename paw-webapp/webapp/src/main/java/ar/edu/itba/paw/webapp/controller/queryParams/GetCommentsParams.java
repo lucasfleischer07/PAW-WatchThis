@@ -12,7 +12,6 @@ import java.security.InvalidParameterException;
 import java.util.List;
 
 public class GetCommentsParams {
-    private static final int REPORTS_AMOUNT = 10;
 
     public static List<Comment> getCommentsByParams(final Long reportedById,
                                                     final Long reviewId,
@@ -32,25 +31,5 @@ public class GetCommentsParams {
         }
 
         return commentList;
-    }
-
-    public static PageWrapper<CommentReport> getCommentReports(final Long reportId,
-                                                               final ReportReason reason,
-                                                               final Integer page,
-                                                               ReportService rrs) {
-        if((reportId != null && reason != null && page != null) || (reportId == null && reason == null && page == null) || (reportId != null && (reason != null || page != null)) || (reason != null && page == null)) {
-            throw new InvalidParameterException("Invalid parameters");
-        }
-
-        if(reportId != null) {
-            // TODO: Hacer en rrs una funcion para getear la review reportada por el id
-//            return new PageWrapper<ReviewReport>(1,1,userDislikeReviewsList.size(),userDislikeReviewsList,userDislikeReviewsList.size());
-
-        } else {
-            return rrs.getReportedComments(reason, page, REPORTS_AMOUNT);
-        }
-        // TODO: Sacar este retun null cuando se haga la query de arriba, solo lo deje para que no tire error
-        return null;
-
     }
 }
