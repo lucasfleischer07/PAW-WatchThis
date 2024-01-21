@@ -175,7 +175,23 @@ public class ReviewController {
 
     // * ---------------------------------------------Review reputation-------------------------------------------------
 //    Endpoint para likear una review
-    //TODO Revisar este POST, deberia retornar ok o created y la uri o un mensaje
+    @GET
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    @Path("/{reviewId}/thumbUpById/{userId}")
+    @PreAuthorize("@securityChecks.checkUser(#userId)")
+    public Response reviewThumbUpGet(@PathParam("reviewId") final long reviewId,
+                                     @PathParam("userId") final Long userId) {
+        LOGGER.info("GET /{}: Called", uriInfo.getPath());
+        Review review = rs.getReview(reviewId).orElseThrow(ReviewNotFoundException::new);
+        User loggedUser = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).get();
+
+        // TODO: Hacer el metodo para que me devuelva true o false para ver si es thumbDown o no
+//        rs.thumbDownReview(review,loggedUser);
+        LOGGER.info("GET /{}: Thumb up got successful", uriInfo.getPath());
+
+        // TODO: Meter el booleano
+        return Response.ok().build();
+    }
     @POST
     @Produces(value = {MediaType.APPLICATION_JSON})
     @Path("/{reviewId}/thumbUp")
@@ -211,7 +227,24 @@ public class ReviewController {
 
 
 //    Endpoint para deslikear una review
-    //TODO Revisar este POST, deberia retornar ok o created y la uri o un mensaje
+    @GET
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    @Path("/{reviewId}/thumbDownById/{userId}")
+    @PreAuthorize("@securityChecks.checkUser(#userId)")
+    public Response reviewThumbDownGet(@PathParam("reviewId") final long reviewId,
+                                       @PathParam("userId") final Long userId) {
+        LOGGER.info("GET /{}: Called", uriInfo.getPath());
+        Review review = rs.getReview(reviewId).orElseThrow(ReviewNotFoundException::new);
+        User loggedUser = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).get();
+
+        // TODO: Hacer el metodo para que me devuelva true o false para ver si es thumbDown o no
+//        rs.thumbDownReview(review,loggedUser);
+        LOGGER.info("GET /{}: Thumb down got successful", uriInfo.getPath());
+
+        // TODO: Meter el booleano
+        return Response.ok().build();
+    }
+
     @POST
     @Produces(value = {MediaType.APPLICATION_JSON})
     @Path("/{reviewId}/thumbDown")
