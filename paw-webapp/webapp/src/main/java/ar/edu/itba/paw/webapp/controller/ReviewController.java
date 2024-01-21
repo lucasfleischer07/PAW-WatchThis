@@ -269,7 +269,6 @@ public class ReviewController {
 
     }
 
-    //TODO Revisar este POST, deberia retornar ok o created y la uri o un mensaje. Se podria hacer 201 CREATEd y devolver el link de la review (ya esta)
     @POST
     @Path("/{reviewId}/reports")
     @PreAuthorize("@securityChecks.checkUser(#commentReportDto.userId)")
@@ -282,10 +281,8 @@ public class ReviewController {
         final Review review = rs.findById(reviewId).orElseThrow(ReviewNotFoundException::new);
         final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(ForbiddenException::new);
 
-        // TODO: Habria que hacer que este metodo devuelva el id del Report creado asi lo podesmos meter en la url de location para retornar
         final Long reportId = rrs.addReport(review, user, commentReportDto.getReportType());
         LOGGER.info("POST /{}: Review {} reported", uriInfo.getPath(), review.getId());
-        // TODO: cambiar el reviewId por el reportId cuando se haga (el del queryParam)
         final URI location = uriInfo.getBaseUriBuilder().path("/reviews").path("/reports").path(String.valueOf(reportId)).build();
         return Response.created(location).build();
     }
