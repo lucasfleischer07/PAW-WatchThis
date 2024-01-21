@@ -9,7 +9,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import java.util.List;
 import java.util.Optional;
 
 @Primary
@@ -83,7 +82,7 @@ public class ReportJpaDao implements ReportDao{
         }
         else throw new IllegalArgumentException();
 
-        return (Long) query.getSingleResult();
+        return Long.parseLong(query.getSingleResult().toString());
     }
 
     @Override
