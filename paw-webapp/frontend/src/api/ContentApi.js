@@ -151,9 +151,9 @@ export class ContentApi {
     }
 
     async deleteUserWatchList(contentId, userId) {
-        const apiUrl = `${this.basePath}/${contentId}/watchList`
+        const apiUrl = `${this.basePath}/${contentId}/watchListId/${userId}`
         const options = {method: 'DELETE', headers: authCheck({}), body: {}}
-        const params = {userId: userId}
+        const params = {}
         return genericFetchWithQueryParams(apiUrl, options, params)
     }
 
@@ -166,9 +166,9 @@ export class ContentApi {
     }
 
     async deleteUserViewedList(contentId, userId) {
-        const apiUrl = `${this.basePath}/${contentId}/viewedList`
+        const apiUrl = `${this.basePath}/${contentId}/viewedListId/${userId}`
         const options = {method: 'DELETE', headers: authCheck({}), body: {}}
-        const params = {userId: userId}
+        const params = {}
         return genericFetchWithQueryParams(apiUrl, options, params)
     }
 }

@@ -268,15 +268,15 @@ public class ContentController {
             LOGGER.warn("POST /{}: DuplicateKeyException, content {} already in watchlist", uriInfo.getPath(), contentId);
         }
 
-        final URI location = uriInfo.getBaseUriBuilder().path("/content").path(String.valueOf(contentId)).build();
+        final URI location = uriInfo.getBaseUriBuilder().path("/content").path(String.valueOf(contentId)).path("/watchListId").path(String.valueOf(basicRequestDto.getUserId())).build();
         return Response.created(location).build();
     }
 
     @DELETE
-    @Path("/{contentId}/watchList")
-//    TODO: Como solo estaba el checkUser que solo chequea que el user del front sea el mismo del back, lo saco y listo
-//    @PreAuthorize("@securityChecks.checkUser(#userId)")
-    public Response deleteUserWatchList(@PathParam("contentId") final long contentId) {
+    @Path("/{contentId}/watchListId/{userId}")
+    @PreAuthorize("@securityChecks.checkUser(#userId)")
+    public Response deleteUserWatchList(@PathParam("contentId") final long contentId,
+                                        @PathParam("userId") final long userId) {
         LOGGER.info("DELETE /{}: Called", uriInfo.getPath());
 
         final Content content = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
@@ -308,15 +308,15 @@ public class ContentController {
             LOGGER.warn("POST /{}: DuplicateKeyException, content {} already in viewedlist", uriInfo.getPath(), contentId);
         }
 
-        final URI location = uriInfo.getBaseUriBuilder().path("/content").path(String.valueOf(contentId)).build();
+        final URI location = uriInfo.getBaseUriBuilder().path("/content").path(String.valueOf(contentId)).path("/viewedListId").path(String.valueOf(basicRequestDto.getUserId())).build();
         return Response.created(location).build();
     }
 
     @DELETE
-    @Path("/{contentId}/viewedList")
-//    TODO: Como solo estaba el checkUser que solo chequea que el user del front sea el mismo del back, lo saco y listo
-//    @PreAuthorize("@securityChecks.checkUser(#userId)")
-    public Response deleteUserViewedList(@PathParam("contentId") final long contentId) {
+    @Path("/{contentId}/viewedListId/{userId}")
+    @PreAuthorize("@securityChecks.checkUser(#userId)")
+    public Response deleteUserViewedList(@PathParam("contentId") final long contentId,
+                                         @PathParam("userId") final long userId) {
         LOGGER.info("DELETE /{}: Called", uriInfo.getPath());
 
         final Content content = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);

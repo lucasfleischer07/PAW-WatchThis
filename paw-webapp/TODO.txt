@@ -28,13 +28,10 @@ Poner una L si ya esta Listo
         Solucion: Antes estaba en user, lo pase a ReviewController y ahora se getean como cualquier review usando un queryPAram especifico likedById o dislikedById. Luego hacen la logica de siempre.
 
     - (L) POST /content/10/watchList agrega la película a la watchlist de un usuario, pero retorna un 204 No Content y no un 201 Created.
-        FALTA VER: Hacer esto o no en todos los POST que hagamos
-        TODO: Leer el TODO de abajo
-        Solucion: Agregar un final URI location = uriInfo.getBaseUriBuilder().path("/content").path(String.valueOf(contentId)).build(); y hacer return Response.created(location).build(); Creo que eso es lo que pide
+        Solucion: Agregar un final URI location = uriInfo.getBaseUriBuilder().path("/content").path(String.valueOf(contentId)).path("/watchListId").path(String.valueOf(userId)).build(); y hacer return Response.created(location).build();
 
     - (L) El DELETE se hace contra /content/10/watchList?userId=61. El cliente tiene que saber construir esta URL a mano, no define un recurso individual.
-        TODO: Cambairlo y pasar como PAthParam el userId y que quede como /content/contentId/watchListId/userId y a la goma (descartar solucion anterior) (Se podria preguntar en el mail) y que esto en vez de delete y post sea un PUT y listo
-        Solucion: Sacar el queryParam y agarramos ya la info del auth del back y asumimos que el front y back van a ser siemrpe el mismo. Nose si esta del todoo bien pero otra cosa no se me ocurre
+        Solucion: El delete se ahce contra /content/{contentId}/watchListId/{userId}
 
     - (L) PUT /api/reviews/121/thumbUp para crear un like (y thumbDown para dislike) hacen toggle, no son idempotentes pese a que el verbo PUT sí debiera serlo.
         FALTA VER: El tema del status code que devolvemos en el POST de thumbUp y thumbDown (si es 201 CREATED o 200 OK)
@@ -43,10 +40,6 @@ Poner una L si ya esta Listo
 
 
 TODO:
-- En GetReviewsParams hacer la query para getear el ReviewReport por ID (la logica ya esta hecha, solo falta la funcion en los service y la query)
-- En ReviewController en la funcion addReviewReport (linea 266 aprox), en el metodo rrs.addReport(review, user, commentReportDto.getReportType()); habria que hacer que eso retorne el id del report creado como un Long.
-- En GetCommentsParams hacer la query para getear el CommentReport por ID (la logica ya esta hecha, solo falta la funcion en los service y la query)
-- En CommentController en la funcion addCommentReport (linea 150 aprox), en el metodo rrs.addReport(comment, user, commentReportDto.getReportType()); habria que hacer que eso retorne el id del report creado como un Long.
 - Chequear lo que devuelve cada POST
 
 
