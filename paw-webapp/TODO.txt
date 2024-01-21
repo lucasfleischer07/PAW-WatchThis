@@ -5,17 +5,17 @@ Poner una L si ya esta Listo
 
 - El JS tiene cache no condicional, pero el CSS no. Esto era pedido por enunciado.
 
-- (L) Errores de tipeo. Por ejemplo, “devuelta” no es una sola palabra, es “de vuelta”
-    Solucion: En todos los translate, cambie devuelta por de vuelta
-
-- (L) El login se hace contra /api/users/content?type=all que retorna el token, pero con un 404.
-    Solucion: En el front (api/UserApi/login), antes se hacia el fetcha a fetch(`${this.BASE_PATH}/content?type=all`) pero esto incluia un /user => quedaba /user/content?type=all y eso no existe. Lo cambie para que sea fetch(`${paths.BASE_URL_API}/content?type=all` y ahora queda http://localhost:8080/webapp_war/api/content?type=all y anda
-
 - El token lo devuelven en un header Authorization. Este es un request header (no response), le están dando una semántica nueva. Es mejor definir un header nuevo.
 
 - No implementaron refresh tokens
 
 - Toda respuesta del server me repite mi header Authorization, no sólo la primera al loguearme con user + pass.
+
+- (L) Errores de tipeo. Por ejemplo, “devuelta” no es una sola palabra, es “de vuelta”
+    Solucion: En todos los translate, cambie devuelta por de vuelta
+
+- (L) El login se hace contra /api/users/content?type=all que retorna el token, pero con un 404.
+    Solucion: En el front (api/UserApi/login), antes se hacia el fetcha a fetch(`${this.BASE_PATH}/content?type=all`) pero esto incluia un /user => quedaba /user/content?type=all y eso no existe. Lo cambie para que sea fetch(`${paths.BASE_URL_API}/content?type=all` y ahora queda http://localhost:8080/webapp_war/api/content?type=all y anda
 
 - (L) Se encuentran llamadas con semántica llamativa, por ejemplo: ?paginated=false&watchListSavedBy=61&page=1 paginated en false, pero piden pagina 1 y la respuesta trae headers link de paginación.
     TODO: VER Cuando ahhcemos los carrouseles de bestRated, lastAdded, recommended y el otro, pasamos como queryParam el page pero nunca pagimanos esos carrouseles. Hay que ver si sacamos el page o si realmente los paginamos
@@ -34,9 +34,7 @@ Poner una L si ya esta Listo
         Solucion: El delete se ahce contra /content/{contentId}/watchListId/{userId}
 
     - (L) PUT /api/reviews/121/thumbUp para crear un like (y thumbDown para dislike) hacen toggle, no son idempotentes pese a que el verbo PUT sí debiera serlo.
-        FALTA VER: El tema del status code que devolvemos en el POST de thumbUp y thumbDown (si es 201 CREATED o 200 OK)
-        TODO: mandar en el mial que se nos ocurrio hacer esto del post y delete ya que tenemos 3 estados en vez de dos (thumbUp, thumbDown y no thumb)
-        Solucion: Se transformo en POST y DELETE para cada uno
+        Solucion: Se transformo en POST y DELETE para cada uno y el POST devuelve el location de /reviews/{reviewId}/thumbUpById/{userId} y esa url es la que se usa contra el DELETE (mismo caso para thumbDown)
 
 
 TODO:
@@ -50,7 +48,3 @@ VER:
 Correcciones a hacer por cambios:
 - Chequear todos los test de los controllers y front
 - Corregir los tests de Reputation ya que cambiaron los enpodins. Antes eran reviewThumbUp, ahora se dividieron en 2: reviewThumbUpPost y reviewThumbUpDelete (mismo para reviewThumbDown)
-
-
-Preguntas:
-- En el caso del POST del thumbUp y thumbDown, hay que devolver 201 CREATED pero nose que tan bien esta devolver el el location de la review. Si mandamos mail podriamos preguntarle si devolvemos 201 CREATED y el location de la review o hacemos 200 OK con un mensajito o algo asi. Este es el unico que no me convence por completo

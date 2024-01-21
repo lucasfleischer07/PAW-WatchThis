@@ -63,7 +63,7 @@ export class ReviewApi {
     }
 
     async reviewThumbUpDelete(reviewId, userId) {
-        const apiUrl = `${this.basePath}/${reviewId}/thumbUp`
+        const apiUrl = `${this.basePath}/${reviewId}/thumbUpById/${userId}`
         const options = {method: 'DELETE', headers: authCheck({})}
         const params = {}
         return genericFetchWithQueryParams(apiUrl, options, params)
@@ -78,7 +78,7 @@ export class ReviewApi {
     }
 
     async reviewThumbDownDelete(reviewId, userId) {
-        const apiUrl = `${this.basePath}/${reviewId}/thumbDown`
+        const apiUrl = `${this.basePath}/${reviewId}/thumbDownById/${userId}`
         const options = {method: 'DELETE', headers: authCheck({})}
         const params = {}
         return genericFetchWithQueryParams(apiUrl, options, params)

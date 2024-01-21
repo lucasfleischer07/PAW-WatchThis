@@ -185,23 +185,25 @@ public class ReviewController {
         LOGGER.info("POST /{}: Called", uriInfo.getPath());
         Review review = rs.getReview(reviewId).orElseThrow(ReviewNotFoundException::new);
         User loggedUser = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).get();
-        rs.thumbUpReview(review,loggedUser);
+        rs.thumbUpReview(review, loggedUser);
         LOGGER.info("POST /{}: Thumb up successful", uriInfo.getPath());
 
-        return Response.ok(String.format("The user of id %d, thumbUp the review of id %d", loggedUser.getId(), reviewId)).build();
+        final URI location = uriInfo.getBaseUriBuilder().path("/reviews").path(String.valueOf(reviewId)).path("/thumbUpById").path(String.valueOf(basicRequestDto.getUserId())).build();
+        return Response.created(location).build();
     }
 
     @DELETE
     @Produces(value = {MediaType.APPLICATION_JSON})
-    @Path("/{reviewId}/thumbUp")
-    // TODO: Ver como seria el tema de chequeo de usuarios. Mismo problema que con las watchlist del delete
-//    @PreAuthorize("@securityChecks.checkUser(#basicRequestDto.userId)")
-    public Response reviewThumbUpDelete(@PathParam("reviewId") final Long reviewId) {
+    @Path("/{reviewId}/thumbUpById/{userId}")
+    @PreAuthorize("@securityChecks.checkUser(#userId)")
+    public Response reviewThumbUpDelete(@PathParam("reviewId") final Long reviewId,
+                                        @PathParam("userId") final Long userId) {
         LOGGER.info("DELETE /{}: Called", uriInfo.getPath());
         Review review = rs.getReview(reviewId).orElseThrow(ReviewNotFoundException::new);
         User loggedUser = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).get();
+
         // TODO: Ahora tenemos un metodo que hace todo. Ahora habria que dividirlo en 2 disitntos o dejarlo asi, VER
-        rs.thumbUpReview(review,loggedUser);
+        rs.thumbUpReview(review, loggedUser);
         LOGGER.info("DELETE /{}: Thumb up successful", uriInfo.getPath());
 
         return Response.noContent().build();
@@ -222,19 +224,20 @@ public class ReviewController {
         rs.thumbDownReview(review,loggedUser);
         LOGGER.info("POST /{}: Thumb down successful", uriInfo.getPath());
 
-        // TODO: Deberia devolver un 201 CREATED o 200 OK, nose bien
-        return Response.ok(String.format("The user of id %d, thumbDown the review of id %d", loggedUser.getId(), reviewId)).build();
+        final URI location = uriInfo.getBaseUriBuilder().path("/reviews").path(String.valueOf(reviewId)).path("/thumbDownById").path(String.valueOf(basicRequestDto.getUserId())).build();
+        return Response.created(location).build();
     }
 
     @DELETE
     @Produces(value = {MediaType.APPLICATION_JSON})
-    @Path("/{reviewId}/thumbDown")
-// TODO: Ver como seria el tema de chequeo de usuarios. Mismo problema que con las watchlist del delete
-//    @PreAuthorize("@securityChecks.checkUser(#basicRequestDto.userId)")
-    public Response reviewThumbDownDelete(@PathParam("reviewId") final long reviewId) {
+    @Path("/{reviewId}/thumbDownById/{userId}")
+    @PreAuthorize("@securityChecks.checkUser(#userId)")
+    public Response reviewThumbDownDelete(@PathParam("reviewId") final long reviewId,
+                                          @PathParam("userId") final Long userId) {
         LOGGER.info("DELETE /{}: Called", uriInfo.getPath());
         Review review = rs.getReview(reviewId).orElseThrow(ReviewNotFoundException::new);
         User loggedUser = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).get();
+
         // TODO: Ahora tenemos un metodo que hace todo. Ahora habria que dividirlo en 2 disitntos o dejarlo asi, VER
         rs.thumbDownReview(review,loggedUser);
         LOGGER.info("DELETE /{}: Thumb down successful", uriInfo.getPath());
