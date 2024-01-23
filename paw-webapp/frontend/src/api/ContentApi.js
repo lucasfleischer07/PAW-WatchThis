@@ -110,6 +110,9 @@ export class ContentApi {
         if(paginated) {
             params.page = page
         }
+        if(isHomePage && !paginated) {
+            params.paginated = paginated
+        }
 
         const apiUrl = `${this.basePath}`
         const options = {method: 'GET', headers: authCheck({})}

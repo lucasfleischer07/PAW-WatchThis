@@ -24,7 +24,7 @@ export default function Home() {
 
 
     useEffect(() => {
-        contentService.getContentByType("bestRated", 1, '', '', '', '', '', user?.id, false, true)
+        contentService.getContentByType("bestRated", 1, '', '', '', '', '', user?.id, false, true, false)
         .then(data => {
             if(!data.error) {
                 setBestRatedList(data.data)
@@ -34,7 +34,7 @@ export default function Home() {
             navigate("/error", { replace: true, state: {errorCode: 404} })
         })
 
-    contentService.getContentByType("lastAdded", 1, '', '', '', '', '', user?.id, false, true)
+    contentService.getContentByType("lastAdded", 1, '', '', '', '', '', user?.id, false, true, false)
         .then(data => {
             if(!data.error) {
                 setLastAddedList(data.data)
@@ -49,13 +49,13 @@ export default function Home() {
                 signOut()
                 navigate("/", { replace: true})
             } else {
-                contentService.getContentByType("recommendedUser", 1, '', '', '', '', '', user.id, false, true)
+                contentService.getContentByType("recommendedUser", 1, '', '', '', '', '', user.id, false, true, false)
                     .then(data => {
                         if(!data.error) {
                             if(data.data.length > 0) {
                                 setRecommendedUserList(data.data)
                             } else {
-                                contentService.getContentByType("mostSavedContentByUsers", 1, '', '', '', '', '', null, false, true)
+                                contentService.getContentByType("mostSavedContentByUsers", 1, '', '', '', '', '', null, false, true, false)
                                     .then(data => {
                                         if(!data.error) {
                                             setMostSavedContentByUsersList(data.data)

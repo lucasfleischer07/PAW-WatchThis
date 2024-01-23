@@ -73,22 +73,22 @@ public class GetContentParams {
             throw new InvalidParameterException("Invalid parameters");
         }
 
-        if((contentType.equals("bestRated") || contentType.equals("lastAdded") || contentType.equals("mostSavedContentByUsers") || contentType.equals("recommendedUser")) && (pageNum > 1)){
+        if((contentType.equals("bestRated") || contentType.equals("lastAdded") || contentType.equals("mostSavedContentByUsers") || contentType.equals("recommendedUser")) && (pageNum != null || paginated)){
             throw new InvalidParameterException("Invalid parameters");
         }
 
         switch (contentType) {
             case "bestRated":
-                contentListFilter = cs.getBestRated(pageNum, CONTENT_AMOUNT);
+                contentListFilter = cs.getBestRated(DEFAULT_PAGE, CONTENT_AMOUNT);
                 return contentListFilter;
             case "lastAdded":
-                contentListFilter = cs.getLastAdded(pageNum, CONTENT_AMOUNT);
+                contentListFilter = cs.getLastAdded(DEFAULT_PAGE, CONTENT_AMOUNT);
                 return contentListFilter;
             case "mostSavedContentByUsers":
-                contentListFilter = cs.getMostUserSaved(pageNum, CONTENT_AMOUNT);
+                contentListFilter = cs.getMostUserSaved(DEFAULT_PAGE, CONTENT_AMOUNT);
                 return contentListFilter;
             case "recommendedUser":
-                contentListFilter = cs.getUserRecommended(us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new), pageNum, CONTENT_AMOUNT);
+                contentListFilter = cs.getUserRecommended(us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new), DEFAULT_PAGE, CONTENT_AMOUNT);
                 return contentListFilter;
         }
 
