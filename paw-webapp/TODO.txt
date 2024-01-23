@@ -18,7 +18,6 @@ Poner una L si ya esta Listo
     Solucion: En el front (api/UserApi/login), antes se hacia el fetcha a fetch(`${this.BASE_PATH}/content?type=all`) pero esto incluia un /user => quedaba /user/content?type=all y eso no existe. Lo cambie para que sea fetch(`${paths.BASE_URL_API}/content?type=all` y ahora queda http://localhost:8080/webapp_war/api/content?type=all y anda
 
 - (L) Se encuentran llamadas con semántica llamativa, por ejemplo: ?paginated=false&watchListSavedBy=61&page=1 paginated en false, pero piden pagina 1 y la respuesta trae headers link de paginación.
-    TODO: VER Cuando ahhcemos los carrouseles de bestRated, lastAdded, recommended y el otro, pasamos como queryParam el page pero nunca pagimanos esos carrouseles. Hay que ver si sacamos el page o si realmente los paginamos
     Solucion: En ContentController linea 83 agregue un if de si es paginado, me setee los headers de paginacion, sino que no los genere y listo
 
 - No paginan con el modelo 1+1. Esto es un error conceptual grave.
@@ -39,10 +38,6 @@ Poner una L si ya esta Listo
 
 TODO:
 - Chequear lo que devuelve cada POST
-
-
-VER:
-- Adaptar los status code a los que da Juan Martin en la clase teorica (Ver foto). Si cambiamos el delete de 204 No Content a 200 Ok deberiamos cambiar en el front el GenericRequest para que el DELETE no vaya mas con 204 sino con 200
 
 
 Correcciones a hacer por cambios:

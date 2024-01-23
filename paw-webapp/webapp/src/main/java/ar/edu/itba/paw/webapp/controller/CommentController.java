@@ -151,7 +151,6 @@ public class CommentController {
         return Response.ok(commentReportDto).build();
     }
 
-    //TODO Revisar este POST, deberia retornar ok o created y la uri o un mensaje (Ya esta hecho)
     @POST
     @Path("/{commentId}/reports")
     @PreAuthorize("@securityChecks.checkUser(#commentReportDto.userId)")
@@ -166,11 +165,9 @@ public class CommentController {
         final Comment comment = ccs.getComment(commentId).orElseThrow(CommentNotFoundException::new);
         final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(ForbiddenException::new);
 
-        // TODO: Habria que hacer que este metodo devuelva el id del Report creado asi lo podesmos meter en la url de location para retornar
         Long reportId = rrs.addReport(comment, user, commentReportDto.getReportType());
 
         LOGGER.info("POST /{}: Comment {} reported", uriInfo.getPath(), comment.getCommentId());
-        // TODO: Cambiar el commentId por el reportId en el queryParam
         final URI location = uriInfo.getBaseUriBuilder().path("/comments").path("/reports").path(String.valueOf(reportId)).build();
         return Response.created(location).build();
     }
