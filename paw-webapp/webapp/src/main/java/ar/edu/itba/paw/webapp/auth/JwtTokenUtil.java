@@ -26,7 +26,10 @@ public class JwtTokenUtil {
     @Autowired
     PawUserDetailsService userDetailsService;
 
-    private static final int EXPIRY_TIME = 7 * 24 * 60 * 60 * 1000; //1 week (in millis)
+    private static final int ACCESS_EXPIRY_TIME = 24 * 60 * 60 * 1000; //1 day (in millis)
+    private static final int REFRESH_EXPIRY_TIME = 7 * 24 * 60 * 60 * 1000; //1 week (in millis)
+    private static final String ACCESS_TOKEN_TYPE = "access-token";
+    private static final String REFRESH_TOKEN_TYPE = "refresh-token";
 
     private final Key jwtKey;
 
@@ -63,10 +66,27 @@ public class JwtTokenUtil {
         claims.put("authorization", user.getRole());
         claims.put("name",user.getUserName());
         claims.put("id",user.getId());
+        claims.put("type", ACCESS_TOKEN_TYPE);
         return "Bearer " + Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRY_TIME))
+                .setExpiration(new Date(System.currentTimeMillis() + ACCESS_EXPIRY_TIME))
+                .signWith(jwtKey)
+                .compact();
+    }
+
+    public String createRefreshToken(User user) {
+        Claims claims = Jwts.claims();
+
+        claims.setSubject(user.getEmail());
+        claims.put("authorization", user.getRole());
+        claims.put("name",user.getUserName());
+        claims.put("id",user.getId());
+        claims.put("type", REFRESH_TOKEN_TYPE);
+        return "Bearer " + Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + REFRESH_EXPIRY_TIME))
                 .signWith(jwtKey)
                 .compact();
     }

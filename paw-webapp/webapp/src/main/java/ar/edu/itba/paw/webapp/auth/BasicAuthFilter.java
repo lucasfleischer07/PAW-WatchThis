@@ -26,6 +26,7 @@ public class BasicAuthFilter extends OncePerRequestFilter {
 
     private static final int USR_IDX = 0;
     private static final int PWD_IDX = 1;
+    private static final String REFRESH_TOKEN = "X-Refresh-Token";
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -51,7 +52,10 @@ public class BasicAuthFilter extends OncePerRequestFilter {
                     new UsernamePasswordAuthenticationToken(credentials[USR_IDX], credentials[PWD_IDX])
             );
 
-            userService.findByEmail(credentials[USR_IDX]).ifPresent(user -> response.setHeader(HttpHeaders.AUTHORIZATION, jwtTokenUtil.createToken(user)));
+            userService.findByEmail(credentials[USR_IDX]).ifPresent(user -> {
+                response.setHeader(HttpHeaders.AUTHORIZATION, jwtTokenUtil.createToken(user));
+                response.setHeader(REFRESH_TOKEN, jwtTokenUtil.createRefreshToken(user));
+            });
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (AuthenticationException failed) {
             SecurityContextHolder.clearContext();
