@@ -4,7 +4,7 @@ export const AuthContext = createContext(null);
 
 export function AuthProvider ({children}) {
 
-    const signIn = (user, authToken) => {
+    const signIn = (user, authToken, refreshToken) => {
         let json={
             username:user.name,
             id:user.id,
@@ -12,12 +12,14 @@ export function AuthProvider ({children}) {
         }
         localStorage.setItem("user",JSON.stringify(json))
         localStorage.setItem("userAuthToken", authToken)
+        localStorage.setItem("userRefreshToken", refreshToken)
         localStorage.setItem("isAdmin", user.authorization === 'admin' ? "true" : "false")
     }
 
     const signOut = () => {
         localStorage.removeItem("user");
         localStorage.removeItem("userAuthToken");
+        localStorage.removeItem("userRefreshToken");
         localStorage.removeItem("isAdmin");
         localStorage.removeItem("rememberMe");
     }
@@ -26,10 +28,19 @@ export function AuthProvider ({children}) {
         return localStorage.getItem("user") !== null
     }
 
+    const resetTokens = (authToken, refreshToken) => {
+        alert("Entra")
+        localStorage.removeItem("userAuthToken");
+        localStorage.removeItem("userRefreshToken");
+        localStorage.setItem("userAuthToken", authToken);
+        localStorage.setItem("userRefreshToken", refreshToken);
+    }
+
     const value = {
         signIn,
         signOut,
         isLogged,
+        resetTokens
     };
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

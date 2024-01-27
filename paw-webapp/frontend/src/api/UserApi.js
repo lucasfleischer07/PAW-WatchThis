@@ -39,17 +39,21 @@ export class UserApi {
     }
 
     async login(email, password) {
+        const params = {}
         try {
             const loggedUserInfo = email + ":" + password;
+            params.page = 1
             const hash = btoa(loggedUserInfo);
-            const res = await fetch(`${paths.BASE_URL_API}/content?type=all`, {
+            const urlObj = new URL(`${paths.BASE_URL_API}/content?type=all`);
+            Object.keys(params).forEach(key => urlObj.searchParams.append(key, params[key]));
+            const res = await fetch(urlObj, {
                 method: 'GET',
                 headers: {
                     Authorization: "Basic " + hash
                 }
             })
             if(res.status !== 204 && res.status !== 401) {
-                return {error: false, data: jwt(res.headers.get("Authorization")?.toString().split(" ")[1]), header: res.headers.get("Authorization")?.toString().split(" ")[1]}
+                return {error: false, data: jwt(res.headers.get("Authorization")?.toString().split(" ")[1]), header: res.headers.get("Authorization")?.toString().split(" ")[1], refresh_token: res.headers.get("X-Refresh-Token")?.toString().split(" ")[1]}
             } else if(res.status === 401) {
                 return {error: true, data: [], errorCode: res.status}
             } else {

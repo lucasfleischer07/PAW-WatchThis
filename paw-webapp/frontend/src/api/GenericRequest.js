@@ -1,6 +1,7 @@
 import {fetchWithQueryParamsApi} from "./FetchWithQueryParams";
 
-export async function genericRequest(basePath, parameter, options){
+
+export async function genericRequest(basePath, parameter, options,resetTokens){
     try {
         let url
         if(typeof parameter === 'number') {
@@ -8,8 +9,11 @@ export async function genericRequest(basePath, parameter, options){
         } else {
             url = parameter
         }
-
         const res = await fetch(url, options)
+
+        /*if(res.headers.get('X-Refresh-Token')){
+            resetTokens(res.headers.get('Authorization'), res.headers.get('X-Refresh-Token'));
+        }*/
 
         if(options.method === 'GET') {
             if(res.status === 200 || res.status !== 204) {
@@ -35,9 +39,12 @@ export async function genericRequest(basePath, parameter, options){
 
 
 export async function genericFetchWithQueryParams(apiUrl, options, params) {
+
     try {
         const res = await fetchWithQueryParamsApi(apiUrl, params, options)
-
+        /*if(res.headers.get('X-Refresh-Token')){
+            resetTokens(res.headers.get('Authorization'), res.headers.get('X-Refresh-Token'));
+        }*/
         if(options.method === 'GET') {
             if(res.status === 200) {
                 return {error: false, data: await res.data, totalPages: res.totalPages, totalReviewsReports: res.totalReviewsReports, totalCommentsReports: res.totalCommentsReports, totalUserReviews: res.totalUserReviews, totalContent: res.totalContent}

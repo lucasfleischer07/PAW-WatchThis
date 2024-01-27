@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.auth;
 
+import ar.edu.itba.paw.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,6 +25,13 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
+    @Autowired
+    private UserService userService;
+
+    private static final String ACCESS_TOKEN_TYPE = "access-token";
+    private static final String REFRESH_TOKEN_TYPE = "refresh-token";
+    private static final String REFRESH_TOKEN = "X-Refresh-Token";
+
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
@@ -52,6 +60,16 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         );
         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
+        String tokenType = jwtTokenUtil.getTokenType(token);
+        if(tokenType.equals(REFRESH_TOKEN_TYPE)){
+            userService.findByEmail(userDetails.getUsername()).ifPresent(user -> {
+                response.setHeader(HttpHeaders.AUTHORIZATION, jwtTokenUtil.createToken(user));
+                response.setHeader(REFRESH_TOKEN, jwtTokenUtil.createRefreshToken(user));
+            });
+        }else if(!tokenType.equals(ACCESS_TOKEN_TYPE)){
+            chain.doFilter(request, response);
+            return;
+        }
         SecurityContextHolder.getContext().setAuthentication(authentication);
         chain.doFilter(request, response);
     }

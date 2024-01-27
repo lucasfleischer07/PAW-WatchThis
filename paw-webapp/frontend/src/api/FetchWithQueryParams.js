@@ -31,9 +31,9 @@ export async function fetchWithQueryParamsApi(url, queryParams = {}, options = {
             totalContent = res.headers.get('Total-Content')
         }
         if(res.ok && options.method !== "POST" && options.method !== "DELETE" && options.method !== "PUT") {
-            return res.json().then(data => ({error:false, data, totalPages, status: res.status, totalReviews: totalReviews,totalReviewsReports: totalReviewsReports, totalCommentsReports: totalCommentsReports, totalUserReviews: totalUserReviews, totalContent: totalContent}));
+            return res.json().then(data => ({error:false, data, totalPages, status: res.status, totalReviews: totalReviews,totalReviewsReports: totalReviewsReports, totalCommentsReports: totalCommentsReports, totalUserReviews: totalUserReviews, totalContent: totalContent, headers: res.headers}));
         } else if(res.ok && (options.method === "POST" || options.method === "DELETE" || options.method !== "PUT")) {
-            return {error:false, totalPages, status: res.status, totalReviews: totalReviews,totalReviewsReports: totalReviewsReports, totalCommentsReports: totalCommentsReports, totalUserReviews: totalUserReviews, totalContent: totalContent}
+            return {error:false, totalPages, status: res.status, totalReviews: totalReviews,totalReviewsReports: totalReviewsReports, totalCommentsReports: totalCommentsReports, totalUserReviews: totalUserReviews, totalContent: totalContent, headers: res.headers}
         } else {
             return {error: true, status: res.status}
         }

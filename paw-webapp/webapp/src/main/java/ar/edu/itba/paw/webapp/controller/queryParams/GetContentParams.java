@@ -98,7 +98,7 @@ public class GetContentParams {
         } else {
             genreList = Arrays.asList(genre.split(","));
         }
-        int page= pageNum;
+        int page= pageNum != null ? pageNum : 1;
         String auxType;
 
         contentListFilter = cs.getMasterContent(contentType, genreList, durationFrom, durationTo, sorting, query, page, CONTENT_AMOUNT);

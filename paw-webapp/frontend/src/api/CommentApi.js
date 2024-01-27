@@ -8,6 +8,8 @@ export class CommentApi {
         this.basePath = `${paths.BASE_URL_API}${paths.COMMENT}`
     }
 
+
+
     async getReviewComments(reviewId, userId = null, reports = false) {
         const apiUrl = `${this.basePath}`
         const options = {method: 'GET', headers: authCheck({})}

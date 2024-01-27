@@ -47,14 +47,15 @@ export default function Login() {
         userService.login(userForm.email, userForm.password)
             .then((user) => {
                 if(!user.error) {
-                    signIn(user.data, user.header)
+                    signIn(user.data, user.header, user.refresh_token)
                     navigate("/", {replace: true})
                     toast.success(t('Login.Success'))
                 } else {
                     setError(true)
                 }
             })
-            .catch(() => {
+            .catch((ex) => {
+                alert(ex)
                 setError(true)
                 toast.error(t('Login.Error'))
                 navigate("/error", { replace: true, state: {errorCode: 404} })

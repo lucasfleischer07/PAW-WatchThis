@@ -52,8 +52,17 @@ public class JwtTokenUtil {
             }
 
             final String username = claims.getSubject();
-
             return userDetailsService.loadUserByUsername(username);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public String getTokenType(String jws){
+        try {
+            final Claims claims = Jwts.parserBuilder().setSigningKey(jwtKey).build().parseClaimsJws(jws).getBody();
+            Object type = claims.get("type");
+            return (String)type;
         } catch (Exception e) {
             return null;
         }
