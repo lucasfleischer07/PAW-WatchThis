@@ -79,10 +79,12 @@ public class ReportJpaDao implements ReportDao{
             Comment comment=(Comment) reviewOrComment;
             query=em.createNativeQuery("select c.id from CommentReport c where :commentId = c.commentid ");
             query.setParameter("commentId",comment.getCommentId());
+        } else {
+            throw new IllegalArgumentException();
         }
-        else throw new IllegalArgumentException();
 
-        return Long.parseLong(query.getSingleResult().toString());
+        query.setMaxResults(1);
+        return Long.parseLong(query.getResultList().get(0).toString());
     }
 
     @Override
