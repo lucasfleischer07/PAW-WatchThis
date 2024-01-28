@@ -253,9 +253,11 @@ public class ReviewController {
         Collection<ReviewReportDto> reviewsReportedListDto = ReviewReportDto.mapReviewReportToReviewReportDto(uriInfo, reviewsReported.getPageContent());
         LOGGER.info("GET /{}: Reported reviews list success for admin user", uriInfo.getPath());
         Response.ResponseBuilder response = Response.ok(new GenericEntity<Collection<ReviewReportDto>>(reviewsReportedListDto){});
-        response.header("Total-Review-Reports",rrs.getReportedReviewsAmount(reason));
-        response.header("Total-Comment-Reports",rrs.getReportedCommentsAmount(reason));
-        ResponseBuildingUtils.setPaginationLinks(response,reviewsReported , uriInfo);
+        if(reportId != null) {
+            response.header("Total-Review-Reports",rrs.getReportedReviewsAmount(reason));
+            response.header("Total-Comment-Reports",rrs.getReportedCommentsAmount(reason));
+            ResponseBuildingUtils.setPaginationLinks(response,reviewsReported , uriInfo);
+        }
         return response.build();
     }
 

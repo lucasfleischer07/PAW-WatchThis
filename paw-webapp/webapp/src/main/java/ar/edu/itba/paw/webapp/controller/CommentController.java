@@ -129,26 +129,20 @@ public class CommentController {
     // * ---------------------------------------------Comments Reports---------------------------------------------------
     @GET
     @Path("/reports")
-    public Response getCommentReport(@QueryParam("page") @DefaultValue("1") Integer page,
-                                     @QueryParam(value = "reason") ReportReason reason) {
-        PageWrapper<CommentReport> commentsReported = rrs.getReportedComments(reason, page, REPORTS_AMOUNT);
+    public Response getCommentReport(@QueryParam("page") Integer page,
+                                     @QueryParam(value = "reason") ReportReason reason,
+                                     @QueryParam("reportId") Long reportId) {
+        PageWrapper<CommentReport> commentsReported = GetCommentsParams.getReportsByParams(page, reason, reportId, rrs);
         Collection<CommentReportDto> commentReportedListDto = CommentReportDto.mapCommentReportToCommentReportDto(uriInfo, commentsReported.getPageContent());
         LOGGER.info("GET /{}: Reported comments list success for admin user", uriInfo.getPath());
         Response.ResponseBuilder response = Response.ok(new GenericEntity<Collection<CommentReportDto>>(commentReportedListDto){});
-        response.header("Total-Review-Reports",rrs.getReportedReviewsAmount(reason));
-        response.header("Total-Comment-Reports",rrs.getReportedCommentsAmount(reason));
-        ResponseBuildingUtils.setPaginationLinks(response,commentsReported , uriInfo);
+        if(reportId != null) {
+            response.header("Total-Review-Reports",rrs.getReportedReviewsAmount(reason));
+            response.header("Total-Comment-Reports",rrs.getReportedCommentsAmount(reason));
+            ResponseBuildingUtils.setPaginationLinks(response,commentsReported , uriInfo);
+        }
 
         return response.build();
-    }
-
-    @GET
-    @Path("/reports/{reportId}")
-    public Response getCommentReport(@PathParam("reportId") Long reportId) {
-        CommentReport commentReport = rrs.getReportedComment(reportId);
-        CommentReportDto commentReportDto = new CommentReportDto(uriInfo, commentReport);
-        LOGGER.info("GET /{}: Return review report {} with success", uriInfo.getPath(), reportId);
-        return Response.ok(commentReportDto).build();
     }
 
     @POST
@@ -168,7 +162,7 @@ public class CommentController {
         Long reportId = rrs.addReport(comment, user, commentReportDto.getReportType());
 
         LOGGER.info("POST /{}: Comment {} reported", uriInfo.getPath(), comment.getCommentId());
-        final URI location = uriInfo.getBaseUriBuilder().path("/comments").path("/reports").path(String.valueOf(reportId)).build();
+        final URI location = uriInfo.getBaseUriBuilder().path("/comments").path("/reports").queryParam("reportId", String.valueOf(reportId)).build();
         return Response.created(location).build();
     }
 
