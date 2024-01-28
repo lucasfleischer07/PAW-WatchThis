@@ -73,7 +73,7 @@ export default function Home() {
 
             }
         } else {
-            contentService.getContentByType("mostSavedContentByUsers", 1, '', '', '', '', '', null, false, true)
+            contentService.getContentByType("mostSavedContentByUsers", 1, '', '', '', '', '', null, false, true, false)
                 .then(data => {
                     if(!data.error) {
                         setMostSavedContentByUsersList(data.data)
