@@ -7,6 +7,7 @@ import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.services.ContentService;
 import ar.edu.itba.paw.services.UserService;
 import ar.edu.itba.paw.webapp.auth.SecurityChecks;
+import ar.edu.itba.paw.webapp.exceptions.InvalidParameterNotFoundException;
 import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
 import ar.edu.itba.paw.webapp.exceptions.UserNotFoundException;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -41,7 +42,7 @@ public class GetContentParams {
         }
 
         if((!paginated && pageNum != null) || (paginated && pageNum == null)) {
-            throw new InvalidParameterException("Invalid parameters");
+            throw new InvalidParameterNotFoundException();
         }
 
         PageWrapper<Content> contentListFilter;
