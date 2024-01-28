@@ -43,8 +43,6 @@ public class ReviewController {
     private ReportService rrs;
     @Context
     private UriInfo uriInfo;
-    private static final int REPORTS_AMOUNT = 10;
-
     private static final Logger LOGGER = LoggerFactory.getLogger(ReviewController.class);
 
     // * ----------------------------------- Movies and Series Review Gets ---------------------------------------------
@@ -175,23 +173,6 @@ public class ReviewController {
 
     // * ---------------------------------------------Review reputation-------------------------------------------------
 //    Endpoint para likear una review
-    @GET
-    @Produces(value = {MediaType.APPLICATION_JSON})
-    @Path("/{reviewId}/thumbUpById/{userId}")
-    @PreAuthorize("@securityChecks.checkUser(#userId)")
-    public Response reviewThumbUpGet(@PathParam("reviewId") final long reviewId,
-                                     @PathParam("userId") final Long userId) {
-        LOGGER.info("GET /{}: Called", uriInfo.getPath());
-        Review review = rs.getReview(reviewId).orElseThrow(ReviewNotFoundException::new);
-        User loggedUser = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).get();
-
-        // TODO: Hacer el metodo para que me devuelva true o false para ver si es thumbDown o no
-//        rs.thumbDownReview(review,loggedUser);
-        LOGGER.info("GET /{}: Thumb up got successful", uriInfo.getPath());
-
-        // TODO: Meter el booleano
-        return Response.ok().build();
-    }
     @POST
     @Produces(value = {MediaType.APPLICATION_JSON})
     @Path("/{reviewId}/thumbUp")
@@ -227,24 +208,6 @@ public class ReviewController {
 
 
 //    Endpoint para deslikear una review
-    @GET
-    @Produces(value = {MediaType.APPLICATION_JSON})
-    @Path("/{reviewId}/thumbDownById/{userId}")
-    @PreAuthorize("@securityChecks.checkUser(#userId)")
-    public Response reviewThumbDownGet(@PathParam("reviewId") final long reviewId,
-                                       @PathParam("userId") final Long userId) {
-        LOGGER.info("GET /{}: Called", uriInfo.getPath());
-        Review review = rs.getReview(reviewId).orElseThrow(ReviewNotFoundException::new);
-        User loggedUser = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).get();
-
-        // TODO: Hacer el metodo para que me devuelva true o false para ver si es thumbDown o no
-//        rs.thumbDownReview(review,loggedUser);
-        LOGGER.info("GET /{}: Thumb down got successful", uriInfo.getPath());
-
-        // TODO: Meter el booleano
-        return Response.ok().build();
-    }
-
     @POST
     @Produces(value = {MediaType.APPLICATION_JSON})
     @Path("/{reviewId}/thumbDown")
@@ -283,9 +246,10 @@ public class ReviewController {
     // * ---------------------------------------------Review reports-------------------------------------------------
     @GET
     @Path("/reports")
-    public Response getCommentReport(@QueryParam("page") @DefaultValue("1") Integer page,
-                                     @QueryParam(value = "reason") ReportReason reason) {
-        PageWrapper<ReviewReport> reviewsReported = rrs.getReportedReviews(reason, page, REPORTS_AMOUNT);
+    public Response getCommentReport(@QueryParam("page") Integer page,
+                                     @QueryParam(value = "reason") ReportReason reason,
+                                     @QueryParam(value = "reportId") Long reportId) {
+        PageWrapper<ReviewReport> reviewsReported = GetReviewsParams.getReportsByParams(page, reason, reportId, rrs);
         Collection<ReviewReportDto> reviewsReportedListDto = ReviewReportDto.mapReviewReportToReviewReportDto(uriInfo, reviewsReported.getPageContent());
         LOGGER.info("GET /{}: Reported reviews list success for admin user", uriInfo.getPath());
         Response.ResponseBuilder response = Response.ok(new GenericEntity<Collection<ReviewReportDto>>(reviewsReportedListDto){});
@@ -293,16 +257,6 @@ public class ReviewController {
         response.header("Total-Comment-Reports",rrs.getReportedCommentsAmount(reason));
         ResponseBuildingUtils.setPaginationLinks(response,reviewsReported , uriInfo);
         return response.build();
-    }
-
-    @GET
-    @Path("/reports/{reportId}")
-    public Response getReviewReport(@PathParam(value = "reportId") final Long reportId) {
-        ReviewReport reviewsReported = rrs.getReportedReview(reportId);
-        ReviewReportDto reviewReportDto = new ReviewReportDto(uriInfo, reviewsReported);
-        LOGGER.info("GET /{}: Return review report {} with success", uriInfo.getPath(), reportId);
-        return Response.ok(reviewReportDto).build();
-
     }
 
     @POST
@@ -319,7 +273,7 @@ public class ReviewController {
 
         final Long reportId = rrs.addReport(review, user, commentReportDto.getReportType());
         LOGGER.info("POST /{}: Review {} reported", uriInfo.getPath(), review.getId());
-        final URI location = uriInfo.getBaseUriBuilder().path("/reviews").path("/reports").path(String.valueOf(reportId)).build();
+        final URI location = uriInfo.getBaseUriBuilder().path("/reviews").path("/reports").queryParam("reportId", String.valueOf(reportId)).build();
         return Response.created(location).build();
     }
 

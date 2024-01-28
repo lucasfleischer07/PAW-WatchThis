@@ -278,7 +278,7 @@
   "Report.Filter": "Filter by",
   "Report.Dismiss": "Dismiss report",
   "Report.Success": "Your report has been successfully submitted",
-  "Report.Deletes": "Report deleted successfully",
+  "Report.Deleted": "Report deleted successfully",
 
   "Report.CommentTitle": "Report comment",
   "Report.Add": "Report comment",

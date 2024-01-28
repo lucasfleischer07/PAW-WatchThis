@@ -252,27 +252,6 @@ public class ContentController {
 
 
     // * ----------------------------------- Watchlist and Viewedlist --------------------------------------------------
-    @GET
-    @Path("/{contentId}/watchListId/{userId}")
-    @PreAuthorize("@securityChecks.checkUser(#userId)")
-    public Response getUserWatchList(@PathParam("contentId") final long contentId,
-                                     @PathParam("userId") final long userId) {
-        LOGGER.info("GET /{}: Called", uriInfo.getPath());
-
-        final Content content = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
-        final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
-
-        try {
-//            TODO: Habria que hacer un metodo que me devuelva un booleano para ver si el contenido ese esta o no en la watchlist
-//            us.deleteFromWatchList(user, content);
-            LOGGER.info("GET /{}: Content {} is in watchlist", uriInfo.getPath(), contentId);
-        } catch (DuplicateKeyException ignore){
-            LOGGER.warn("GET /{}: DuplicateKeyException, content {} already got from watchlist", uriInfo.getPath(), contentId);
-        }
-        // TODO: Deberia ser response.ok y el booleano diciendo si esta o no en la list
-        return Response.ok().build();
-    }
-
     @POST
     @Path("/{contentId}/watchList")
     @PreAuthorize("@securityChecks.checkUser(#basicRequestDto.userId)")
@@ -310,27 +289,6 @@ public class ContentController {
             LOGGER.warn("DELETE /{}: DuplicateKeyException, content {} already deleted from watchlist", uriInfo.getPath(), contentId);
         }
         return Response.noContent().build();
-    }
-
-    @GET
-    @Path("/{contentId}/viewedListId/{userId}")
-    @PreAuthorize("@securityChecks.checkUser(#userId)")
-    public Response getUserViewedList(@PathParam("contentId") final long contentId,
-                                      @PathParam("userId") final long userId) {
-        LOGGER.info("GET /{}: Called", uriInfo.getPath());
-
-        final Content content = cs.findById(contentId).orElseThrow(ContentNotFoundException::new);
-        final User user = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(UserNotFoundException::new);
-
-        try {
-//            TODO: Habria que hacer un metodo que me devuelva un booleano para ver si el contenido ese esta o no en la viewedlist
-//            us.deleteFromWatchList(user, content);
-            LOGGER.info("GET /{}: Content {} is in viewedlist", uriInfo.getPath(), contentId);
-        } catch (DuplicateKeyException ignore){
-            LOGGER.warn("GET /{}: DuplicateKeyException, content {} already got from viewedlist", uriInfo.getPath(), contentId);
-        }
-        // TODO: Deberia ser response.ok y el booleano diciendo si esta o no en la list
-        return Response.ok().build();
     }
 
     @POST

@@ -8,6 +8,7 @@ import ar.edu.itba.paw.services.UserService;
 import ar.edu.itba.paw.webapp.auth.SecurityChecks;
 import ar.edu.itba.paw.webapp.dto.response.ReviewDto;
 import ar.edu.itba.paw.webapp.exceptions.ContentNotFoundException;
+import ar.edu.itba.paw.webapp.exceptions.InvalidParameterNotFoundException;
 import ar.edu.itba.paw.webapp.exceptions.UserNotFoundException;
 import org.springframework.security.access.method.P;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,6 +25,8 @@ import java.util.Set;
 
 public class GetReviewsParams {
     private static final int REVIEW_AMOUNT = 3;
+    private static final int REPORTS_AMOUNT = 10;
+    private static final int DEFAULT_PAGE = 1;
 
     public static PageWrapper<Review> getReviewsByParams(final Long userId,
                                                          final Long contentId,
@@ -105,6 +108,31 @@ public class GetReviewsParams {
         Set<Review> userDislikeReviews = rs.userDislikeReviews(user.getUserVotes());
         List<Review> userDislikeReviewsList = new ArrayList<>(userDislikeReviews);
         return new PageWrapper<Review>(1,1,userDislikeReviewsList.size(),userDislikeReviewsList,userDislikeReviewsList.size());
+    }
+
+    public static PageWrapper<ReviewReport> getReportsByParams(Integer page,
+                                                               ReportReason reason,
+                                                               final Long reportId,
+                                                               ReportService rrs) {
+        if((reportId != null && reason != null) || (reportId != null && page != null) || (reportId == null && reason == null && page == null)) {
+            throw new InvalidParameterNotFoundException();
+        }
+
+        if(page == null && reportId == null) {
+            page = DEFAULT_PAGE;
+        }
+
+        PageWrapper<ReviewReport> reviewsReported;
+        if(reportId == null) {
+            reviewsReported = rrs.getReportedReviews(reason, page, REPORTS_AMOUNT);
+        } else {
+            ReviewReport reviewReported = rrs.getReportedReview(reportId);
+            List<ReviewReport> reviewReportList = new ArrayList<>();
+            reviewReportList.add(reviewReported);
+            return new PageWrapper<>(DEFAULT_PAGE, 1, reviewReportList.size(), reviewReportList, reviewReportList.size());
+        }
+
+        return reviewsReported;
     }
 
 }
