@@ -27,18 +27,18 @@
   "Min.contentCreate.duration": "La duración minima es 20 minutos",
 
   "Max": "La duración maxima es {0}",
-  "Min": "La duración minima es {0}",
+  "Min": "La duración mínima es {0}",
   "Yes": "Si",
   "No": "No",
   "Close": "Cerrar",
   "Send": "Enviar",
   "Asterisk": "*",
   "Delete.Confirmation": "Confirmación de borrado",
-  "Dismiss.Confirmation": "Confrimar descarte de reporte",
+  "Dismiss.Confirmation": "Confirmar descarte de reporte",
   "Delete": "Eliminar",
   "Apply": "Aplicar",
 
-  "Review.Deleted": "Reseña eliminada con exito",
+  "Review.Deleted": "Reseña eliminada con éxito",
 
   "WatchThisMessage": "Watch This",
   "SearchMessage": "Busque películas o series",
@@ -118,7 +118,7 @@
   "EditProfile.Upload.Password.Success": "Contraseña actualizada correctamente",
   "EditProfile.Upload.Password.Error": "Error al actualizar la contraseña",
 
-  "Cookies.Title": "Sesión expiradaa",
+  "Cookies.Title": "Sesión expirada",
   "Cookies.Body": "Tu sesión ha expirado. Por favor inicie sesión de vuelta.",
 
   "Comment.Owner": "Creador del comentario: {{username}}",
@@ -245,7 +245,7 @@
   "Placeholder.EmailExample": "ejemplo@email",
   "Placeholder.UserExample": "Ejemplo123",
   "Placeholder.RecoveryEmail": "emailRecuperacion@email",
-  "Placeholder.Asterisk": "*****",
+  "Placeholder.Asterisk": "***",
   "Placeholder.FilmEx": "Lord of The Rings",
   "Placeholder.YearEx": "2002",
   "Placeholder.CreatorEx": "Tarantino",
