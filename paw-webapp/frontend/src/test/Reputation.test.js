@@ -3,6 +3,8 @@ import {render, fireEvent, screen, getByTestId, waitFor} from '@testing-library/
 import { BrowserRouter as Router } from 'react-router-dom';
 import Reputation from '../views/components/Reputation';
 import { AuthContext } from '../context/AuthContext';
+import {useContext} from "react";
+
 import '@testing-library/jest-dom';
 // Import the service mocks
 import {
@@ -73,7 +75,7 @@ describe('Reputation', () => {
         });
 
         // Verify that the comment was added
-        expect(commentService.createComment).toHaveBeenCalledWith(mockReviewId,userId, mockCommentForm);
+        expect(commentService.createComment).toHaveBeenCalledWith(useContext(AuthContext),mockReviewId,userId, mockCommentForm);
 
         // Check if the new comment is visible
         await waitFor(() => {

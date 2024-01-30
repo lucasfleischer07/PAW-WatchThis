@@ -3,8 +3,8 @@ import {render, screen, fireEvent, act} from '@testing-library/react';
 import ContentPage from '../views/ContentPage';
 import * as assert from "assert";
 import {MemoryRouter, Route, Router, Routes} from "react-router-dom";
+import {useContext} from "react";
 import { AuthContext } from '../context/AuthContext';
-
 
 // Import the service mocks
 import {
@@ -44,7 +44,7 @@ describe('ContentPage.js',()=>{
         fireEvent.click(mysteryButton);
         const applyButton=screen.getByText('Apply')
         fireEvent.click(applyButton)
-        expect(contentService.getContentByType).toHaveBeenCalledWith(undefined,1,'Action,Mystery',"","","","")
+        expect(contentService.getContentByType).toHaveBeenCalledWith(useContext(AuthContext), undefined,1,'Action,Mystery',"","","","")
     })
     it('should filter content by duration', () => {
         mockAuthContextValue.isLogged.mockReturnValue(true);
@@ -61,7 +61,7 @@ describe('ContentPage.js',()=>{
         fireEvent.click(durationFilter);
         const durationButton=screen.getByText('Duration.0_90');
         fireEvent.click(durationButton)
-        expect(contentService.getContentByType).toHaveBeenCalledWith(undefined,1,"","0","90","","")
+        expect(contentService.getContentByType).toHaveBeenCalledWith(useContext(AuthContext), undefined,1,"","0","90","","")
 
     })
     it('should sort content', () => {
@@ -79,7 +79,7 @@ describe('ContentPage.js',()=>{
         fireEvent.click(sortFilter);
         const sortButton=screen.getByText('Sort.OlderReleased');
         fireEvent.click(sortButton)
-        expect(contentService.getContentByType).toHaveBeenCalledWith(undefined,1,"","","","OlderReleased","")
+        expect(contentService.getContentByType).toHaveBeenCalledWith(useContext(AuthContext), undefined,1,"","","","OlderReleased","")
 
     })
     it('should filter and sort content', () => {
@@ -109,7 +109,7 @@ describe('ContentPage.js',()=>{
         fireEvent.click(mysteryButton);
         const applyButton=screen.getByText('Apply')
         fireEvent.click(applyButton)
-        expect(contentService.getContentByType).toHaveBeenCalledWith(undefined,1,'Action,Mystery',"0","90","OlderReleased","")
+        expect(contentService.getContentByType).toHaveBeenCalledWith(useContext(AuthContext), undefined,1,'Action,Mystery',"0","90","OlderReleased","")
 
     })
 })

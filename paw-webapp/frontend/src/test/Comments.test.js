@@ -2,6 +2,7 @@ import * as React from 'react';
 import {render, fireEvent, waitFor, getByRole, getByTestId, queryByTestId} from '@testing-library/react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import Comments from "../views/components/Comments";
+import {useContext} from "react";
 import { AuthContext } from '../context/AuthContext';
 
 // Import the service mocks
@@ -66,7 +67,7 @@ describe('Comments', () => {
         fireEvent.click(spam);
         const confirm = getByText('Yes');
         fireEvent.click(confirm);
-        expect(reportsService.addCommentReport).toHaveBeenCalledWith(1,{"reportType": "Spam"})
+        expect(reportsService.addCommentReport).toHaveBeenCalledWith(useContext(AuthContext), 1,{"reportType": "Spam"})
 
     });
 })

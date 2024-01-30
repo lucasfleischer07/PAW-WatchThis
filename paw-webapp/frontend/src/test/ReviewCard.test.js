@@ -3,12 +3,15 @@ import {render, fireEvent, waitFor, getByRole, getByTestId, queryByTestId} from 
 import { BrowserRouter as Router } from 'react-router-dom';
 import ReviewCard from "../views/components/ReviewCard";
 import Reputation from "../views/components/Reputation";
+import {AuthContext} from "../context/AuthContext";
+import {useContext} from "react";
+
 // Import the service mocks
 import {
     reviewService,
     reportsService
 } from '../services';
-import {AuthContext} from "../context/AuthContext";
+
 
 jest.mock('../views/components/Reputation', () => {
     return jest.fn().mockImplementation(() => <div data-testid="mock-reputation" />);
@@ -66,7 +69,7 @@ describe('ReviewCard', () => {
         fireEvent.click(spam);
         const confirm = getByText('Yes');
         fireEvent.click(confirm);
-        expect(reportsService.addReviewReport).toHaveBeenCalledWith(1,{"reportType": "Spam"})
+        expect(reportsService.addReviewReport).toHaveBeenCalledWith(useContext(AuthContext), 1,{"reportType": "Spam"})
 
     });
 })
