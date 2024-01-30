@@ -9,6 +9,8 @@ export default function Header(props) {
     const {t} = useTranslation()
     const navigate = useNavigate();
     let {signOut} = useContext(AuthContext)
+    const authFunctions = useContext(AuthContext)
+
 
     const [queryProp, setQuery] = useState("")
     const type = props.type

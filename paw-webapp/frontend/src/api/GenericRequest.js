@@ -1,7 +1,7 @@
 import {fetchWithQueryParamsApi} from "./FetchWithQueryParams";
 
 
-export async function genericRequest(basePath, parameter, options,resetTokens){
+export async function genericRequest(basePath, parameter, options, authFunctions){
     try {
         let url
         if(typeof parameter === 'number') {
@@ -11,9 +11,9 @@ export async function genericRequest(basePath, parameter, options,resetTokens){
         }
         const res = await fetch(url, options)
 
-        /*if(res.headers.get('X-Refresh-Token')){
-            resetTokens(res.headers.get('Authorization'), res.headers.get('X-Refresh-Token'));
-        }*/
+        if(res.headers != null && res.headers.get('X-Refresh-Token')){
+            authFunctions.resetTokens(res.headers.get('Authorization'), res.headers.get('X-Refresh-Token'));
+        }
 
         if(options.method === 'GET') {
             if(res.status === 200 || res.status !== 204) {
@@ -33,18 +33,18 @@ export async function genericRequest(basePath, parameter, options,resetTokens){
         }
 
     } catch (e) {
-        return {error: true, errorCode: e.response.status || 500}
+        return {error: true, errorCode: e.response? e.response.status : 500}
     }
 }
 
 
-export async function genericFetchWithQueryParams(apiUrl, options, params) {
+export async function genericFetchWithQueryParams(apiUrl, options, params, authFunctions) {
 
     try {
         const res = await fetchWithQueryParamsApi(apiUrl, params, options)
-        /*if(res.headers.get('X-Refresh-Token')){
-            resetTokens(res.headers.get('Authorization'), res.headers.get('X-Refresh-Token'));
-        }*/
+        if(res.headers != null && res.headers.get('X-Refresh-Token')){
+            authFunctions.resetTokens(res.headers.get('Authorization'), res.headers.get('X-Refresh-Token'));
+        }
         if(options.method === 'GET') {
             if(res.status === 200) {
                 return {error: false, data: await res.data, totalPages: res.totalPages, totalReviewsReports: res.totalReviewsReports, totalCommentsReports: res.totalCommentsReports, totalUserReviews: res.totalUserReviews, totalContent: res.totalContent}
@@ -71,6 +71,7 @@ export async function genericFetchWithQueryParams(apiUrl, options, params) {
         }
 
     } catch (e) {
-        return {error: true, errorCode: e.response.status || 500}
+        console.log("Exc: " + e)
+        return {error: true, errorCode: e.response? e.response.status : 500}
     }
 }

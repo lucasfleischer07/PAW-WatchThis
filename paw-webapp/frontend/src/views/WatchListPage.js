@@ -15,6 +15,8 @@ export default function WatchListPage(props) {
 
     let navigate = useNavigate()
     let {isLogged} = useContext(AuthContext)
+    const authFunctions = useContext(AuthContext)
+
     const [showExpiredCookiesModal, setShowExpiredCookiesModal] = useState(false)
 
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
@@ -57,9 +59,9 @@ export default function WatchListPage(props) {
                 if(currentPage !== page) {
                     setPage(currentPage)
                 } else {
-                    const userData = await userService.getUserInfo(user.id)
+                    const userData = await userService.getUserInfo(authFunctions, user.id)
                     if (!userData.error) {
-                        const watchListData = await contentService.getLists(userData.data.userWatchListURL, true, page);
+                        const watchListData = await contentService.getLists(authFunctions, userData.data.userWatchListURL, true, page);
                         if (!watchListData.error) {
                             setWatchList(watchListData.data);
                             setTotalContent(watchListData.totalContent)

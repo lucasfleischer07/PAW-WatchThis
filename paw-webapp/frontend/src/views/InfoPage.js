@@ -21,6 +21,7 @@ export default function InfoPage() {
     const { search } = useLocation();
     let navigate = useNavigate()
     let {isLogged, signOut} = useContext(AuthContext)
+    const authFunctions = useContext(AuthContext)
     const { contentType, contentId} = useParams();
     const [showExpiredCookiesModal, setShowExpiredCookiesModal] = useState(false)
 
@@ -100,7 +101,7 @@ export default function InfoPage() {
     const handleSubmitDeleteContent = (e) => {
         e.preventDefault()
         if(user?.role === 'admin') {
-            contentService.deleteContent(parseInt(contentId))
+            contentService.deleteContent(authFunctions, parseInt(contentId))
                 .then(data => {
                     if(!data.error) {
                         handleCloseDeleteContentModal()
@@ -119,7 +120,7 @@ export default function InfoPage() {
 
     const handleAddToWatchList = (e) => {
         e.preventDefault();
-        contentService.addUserWatchList(parseInt(contentId), parseInt(user.id))
+        contentService.addUserWatchList(authFunctions, parseInt(contentId), parseInt(user.id))
             .then(data => {
                 if(!data.error) {
                     setIsInWatchList(true);
@@ -138,7 +139,7 @@ export default function InfoPage() {
     }
     const handleDeleteFromWatchList = (e) => {
         e.preventDefault()
-        contentService.deleteUserWatchList(parseInt(contentId), parseInt(user.id))
+        contentService.deleteUserWatchList(authFunctions, parseInt(contentId), parseInt(user.id))
             .then(data => {
                 if(!data.error) {
                     setIsInWatchList(false);
@@ -157,7 +158,7 @@ export default function InfoPage() {
     }
     const handleAddToViewedList = (e) => {
         e.preventDefault();
-        contentService.addUserViewedList(parseInt(contentId), parseInt(user.id))
+        contentService.addUserViewedList(authFunctions, parseInt(contentId), parseInt(user.id))
             .then(data => {
                 if(!data.error) {
                     setIsInViewedList(true);
@@ -176,7 +177,7 @@ export default function InfoPage() {
     }
     const handleDeleteFromViewedList = (e) => {
         e.preventDefault();
-        contentService.deleteUserViewedList(parseInt(contentId), parseInt(user.id))
+        contentService.deleteUserViewedList(authFunctions, parseInt(contentId), parseInt(user.id))
             .then(data => {
                 if(!data.error) {
                     setIsInViewedList(false);
@@ -200,7 +201,7 @@ export default function InfoPage() {
 
 
     useEffect(() => {
-        contentService.getSpecificContent(parseInt(contentId))
+        contentService.getSpecificContent(authFunctions, parseInt(contentId))
             .then(data => {
                 if(!data.error) {
                     setContent(data.data)
@@ -222,7 +223,7 @@ export default function InfoPage() {
     useEffect(() => {
         async function fetchData() {
             if(isLogged()) {
-                reviewService.getReviewsLike(user?.id)
+                reviewService.getReviewsLike(authFunctions, user?.id)
                     .then(data => {
                         if(!data.error) {
                             setIsLikeReviewsList(data.data)
@@ -238,7 +239,7 @@ export default function InfoPage() {
                         navigate("/error", { replace: true, state: {errorCode: 404} })
                     })
 
-                reviewService.getReviewsDislike(user?.id)
+                reviewService.getReviewsDislike(authFunctions, user?.id)
                     .then(data => {
                         if(!data.error) {
                             setIsDislikeReviewsList(data.data)
@@ -254,7 +255,7 @@ export default function InfoPage() {
                         navigate("/error", { replace: true, state: {errorCode: 404} })
                     })
 
-                reviewService.getReviews(user?.id, parseInt(contentId), actualPage, true)
+                reviewService.getReviews(authFunctions, user?.id, parseInt(contentId), actualPage, true)
                     .then(data => {
                         if(!data.error) {
                             setLoggedUserReviewsReported(data.data)
@@ -266,7 +267,7 @@ export default function InfoPage() {
                         navigate("/error", { replace: true, state: {errorCode: 404} })
                     })
 
-                const commentsReportedByUser = await commentService.getReviewComments(null, user?.id, true);
+                const commentsReportedByUser = await commentService.getReviewComments(authFunctions, null, user?.id, true);
                 if (!commentsReportedByUser.error) {
                     setCommentsReportedByLoggedUser(commentsReportedByUser.data);
                 } else {
@@ -274,7 +275,7 @@ export default function InfoPage() {
                 }
             }
 
-            const reviewsData = await reviewService.getReviews(user?.id, parseInt(contentId), actualPage);
+            const reviewsData = await reviewService.getReviews(authFunctions, user?.id, parseInt(contentId), actualPage);
 
             if (!reviewsData.error) {
                 setReviews(reviewsData.data);
@@ -322,9 +323,9 @@ export default function InfoPage() {
     useEffect(() => {
         async function fetchData() {
             if(isLogged()) {
-                const userData = await userService.getUserInfo(user.id)
+                const userData = await userService.getUserInfo(authFunctions, user.id)
                 if(!userData.error) {
-                    const viewedList = await contentService.getLists(userData.data.userViewedListURL, false);
+                    const viewedList = await contentService.getLists(authFunctions, userData.data.userViewedListURL, false);
                     if (!viewedList.error) {
                         setIsInViewedList(viewedList.data.some(item => item.id === parseInt(contentId)))
                     } else {
@@ -335,7 +336,7 @@ export default function InfoPage() {
                         }
                     }
 
-                    const watchList = await contentService.getLists(userData.data.userWatchListURL, false);
+                    const watchList = await contentService.getLists(authFunctions, userData.data.userWatchListURL, false);
                     if (!watchList.error) {
                         setIsInWatchList(watchList.data.some(item => item.id === parseInt(contentId)))
                     } else {
@@ -349,7 +350,7 @@ export default function InfoPage() {
                     navigate("/error", { replace: true, state: { errorCode: userData.errorCode } });
                 }
 
-                reviewService.getReviewsLike(user?.id)
+                reviewService.getReviewsLike(authFunctions, user?.id)
                     .then(data => {
                         if(!data.error) {
                             setIsLikeReviewsList(data.data)
@@ -365,7 +366,7 @@ export default function InfoPage() {
                         navigate("/error", { replace: true, state: {errorCode: 404} })
                     })
 
-                reviewService.getReviewsDislike(user?.id)
+                reviewService.getReviewsDislike(authFunctions, user?.id)
                     .then(data => {
                         if(!data.error) {
                             setIsDislikeReviewsList(data.data)
@@ -381,7 +382,7 @@ export default function InfoPage() {
                         navigate("/error", { replace: true, state: {errorCode: 404} })
                     })
 
-                reviewService.getReviews(user?.id, parseInt(contentId), actualPage, true)
+                reviewService.getReviews(authFunctions, user?.id, parseInt(contentId), actualPage, true)
                     .then(data => {
                         if(!data.error) {
                             setLoggedUserReviewsReported(data.data)
@@ -393,7 +394,7 @@ export default function InfoPage() {
                         navigate("/error", { replace: true, state: {errorCode: 404} })
                     })
 
-                const commentsReportedByUser = await commentService.getReviewComments(null, user?.id, true);
+                const commentsReportedByUser = await commentService.getReviewComments(authFunctions, null, user?.id, true);
                 if (!commentsReportedByUser.error) {
                     setCommentsReportedByLoggedUser(commentsReportedByUser.data);
                 } else {
@@ -401,7 +402,7 @@ export default function InfoPage() {
                 }
             }
 
-            const reviewsData = await reviewService.getReviews(user?.id, parseInt(contentId), actualPage);
+            const reviewsData = await reviewService.getReviews(authFunctions, user?.id, parseInt(contentId), actualPage);
 
             if (!reviewsData.error) {
                 setReviews(reviewsData.data);
@@ -414,7 +415,7 @@ export default function InfoPage() {
 
                     if (auxUserId !== user?.id) {
                         try {
-                            const userData = await userService.getUserInfo(review.user);
+                            const userData = await userService.getUserInfo(authFunctions, review.user);
                             if (!userData.error) {
                                 return userData.data;
                             } else {

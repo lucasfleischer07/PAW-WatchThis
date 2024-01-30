@@ -1,8 +1,9 @@
 import {useTranslation} from "react-i18next";
-import {useEffect, useState} from "react";
+import {useEffect, useState, useContext} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
 import {updateUrlVariable} from "../../scripts/validateParam";
 import {checkIsGenre, checkIsFrom, checkIsTo, checkIsSort} from "../../scripts/filtersValidations"
+import {AuthContext} from "../../context/AuthContext";
 
 
 export default function Filters(props) {
@@ -10,6 +11,8 @@ export default function Filters(props) {
     const {t} = useTranslation()
     const navigate = useNavigate();
     const { search } = useLocation();
+    const authFunctions = useContext(AuthContext)
+
 
     const type = props.type
     const [genre, setGenre] = useState('');

@@ -8,34 +8,34 @@ export class UserApi {
         this.basePath = `${paths.BASE_URL_API}${paths.USERS}`
     }
 
-    async userCreate(userDetails) {
+    async userCreate(authFunctions, userDetails) {
         const options = {method: 'POST', headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}), body: JSON.stringify(userDetails)}
-        return await genericRequest(this.basePath, `${this.basePath}`, options)
+        return await genericRequest(this.basePath, `${this.basePath}`, options, authFunctions)
     }
 
-    async getUserInfo(user) {
+    async getUserInfo(authFunctions, user) {
         const options = {method: 'GET', headers: authCheck({})}
-        return await genericRequest(this.basePath, user, options)
+        return await genericRequest(this.basePath, user, options, authFunctions)
     }
 
-    async updateUserProfileImage(userId, image) {
+    async updateUserProfileImage(authFunctions, userId, image) {
         const formData = new FormData();
         formData.set("image", image)
 
         const apiUrl = `${this.basePath}/${userId}/profileImage`
         const options = {method: 'PUT', headers: authCheck({}), body: formData}
-        return genericRequest(this.basePath, apiUrl, options)
+        return genericRequest(this.basePath, apiUrl, options, authFunctions)
 
     }
 
-    async updateUserProfileInfo(userId, userDetails) {
+    async updateUserProfileInfo(authFunctions, userId, userDetails) {
         const options = {method: 'PUT', headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}), body: JSON.stringify(userDetails)}
-        return genericRequest(this.basePath, userId, options)
+        return genericRequest(this.basePath, userId, options, authFunctions)
     }
 
-    async loginForgotPassword(userEmail) {
+    async loginForgotPassword(authFunctions, userEmail) {
         const options = {method: 'POST', headers: authCheck({'Content-Type': TEXT_PLAIN}), body: userEmail.email}
-        return await genericRequest(this.basePath, `${this.basePath}`, options)
+        return await genericRequest(this.basePath, `${this.basePath}`, options, authFunctions)
     }
 
     async login(email, password) {
@@ -64,11 +64,11 @@ export class UserApi {
         }
     }
 
-    async promoteUserToAdmin(promotedUserId) {
+    async promoteUserToAdmin(authFunctions, promotedUserId) {
         const apiUrl = `${this.basePath}/${promotedUserId}/role`
         const options = {method: 'PUT', headers: authCheck({})}
         const params = {}
-        return genericFetchWithQueryParams(apiUrl, options, params)
+        return genericFetchWithQueryParams(apiUrl, options, params, authFunctions)
     }
     
 }

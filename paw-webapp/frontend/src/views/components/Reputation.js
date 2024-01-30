@@ -12,6 +12,8 @@ export default function Reputation(props) {
     const {t} = useTranslation()
     let navigate = useNavigate()
     let {isLogged} = useContext(AuthContext)
+    const authFunctions = useContext(AuthContext)
+
 
     const loggedUserId = props.loggedUserId
     const commentsReportedByLoggedUser = props.commentsReportedByLoggedUser
@@ -67,7 +69,7 @@ export default function Reputation(props) {
         if(!validateComment()) {
             return
         }
-        commentService.createComment(reviewId, loggedUserId, commentForm)
+        commentService.createComment(authFunctions, reviewId, loggedUserId, commentForm)
             .then(data => {
               if(!data.error){
                   setAdded(!added)
@@ -81,7 +83,7 @@ export default function Reputation(props) {
             })
     }
     const handleLike = () => {
-        reviewService.reviewThumbUpPost(reviewId, loggedUserId)
+        reviewService.reviewThumbUpPost(authFunctions, reviewId, loggedUserId)
             .then(data => {
                 if(!data.error){
                     if(isDislikeReviews) {
@@ -104,7 +106,7 @@ export default function Reputation(props) {
     }
 
     const handleLikeDelete = () => {
-        reviewService.reviewThumbUpDelete(reviewId, loggedUserId)
+        reviewService.reviewThumbUpDelete(authFunctions, reviewId, loggedUserId)
             .then(data => {
                 if(!data.error){
                     if(isDislikeReviews) {
@@ -127,7 +129,7 @@ export default function Reputation(props) {
     }
 
     const handleDislike = () => {
-        reviewService.reviewThumbDownPost(reviewId, loggedUserId)
+        reviewService.reviewThumbDownPost(authFunctions, reviewId, loggedUserId)
             .then(data => {
                 if(!data.error){
                     if(isDislikeReviews) {
@@ -150,7 +152,7 @@ export default function Reputation(props) {
     }
 
     const handleDislikeDelete = () => {
-        reviewService.reviewThumbDownDelete(reviewId, loggedUserId)
+        reviewService.reviewThumbDownDelete(authFunctions, reviewId, loggedUserId)
             .then(data => {
                 if(!data.error){
                     if(isDislikeReviews) {
@@ -195,7 +197,7 @@ export default function Reputation(props) {
     useEffect(() => {
         async function fetchData2()  {
             if(seeComments) {
-                commentService.getReviewComments(parseInt(reviewId))
+                commentService.getReviewComments(authFunctions, parseInt(reviewId))
                     .then(data => {
                         if(!data.error){
                             setComments(data.data)

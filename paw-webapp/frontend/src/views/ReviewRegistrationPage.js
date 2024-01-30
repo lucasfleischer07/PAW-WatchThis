@@ -12,6 +12,8 @@ export default function ReviewRegistrationPage() {
     const {t} = useTranslation()
     let navigate = useNavigate()
     let {isLogged} = useContext(AuthContext)
+    const authFunctions = useContext(AuthContext)
+
     const [showExpiredCookiesModal, setShowExpiredCookiesModal] = useState(false)
 
     const { contentType, contentId } = useParams();
@@ -78,7 +80,7 @@ export default function ReviewRegistrationPage() {
             return
         }
 
-        reviewService.reviewsCreation(user.id, parseInt(contentId), contentType, reviewForm)
+        reviewService.reviewsCreation(authFunctions, user.id, parseInt(contentId), contentType, reviewForm)
             .then(data => {
                 if(!data.error) {
                     navigate(-1)
@@ -98,7 +100,7 @@ export default function ReviewRegistrationPage() {
 
     useEffect(() => {
         if(isLogged()) {
-            contentService.getSpecificContent(parseInt(contentId))
+            contentService.getSpecificContent(authFunctions, parseInt(contentId))
                 .then(data => {
                     if(!data.error) {
                         setContent(data.data)

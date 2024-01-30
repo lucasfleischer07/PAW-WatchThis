@@ -12,6 +12,8 @@ export default function ReviewEditionPage() {
     let navigate = useNavigate()
     let location = useLocation()
     let {isLogged} = useContext(AuthContext)
+    const authFunctions = useContext(AuthContext)
+
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
     const [logOut, setLogOut] = useState(false)
 
@@ -79,7 +81,7 @@ export default function ReviewEditionPage() {
             return
         }
 
-        reviewService.reviewEdition(parseInt(reviewId), parseInt(user.id), parseInt(contentId), reviewForm)
+        reviewService.reviewEdition(authFunctions, parseInt(reviewId), parseInt(user.id), parseInt(contentId), reviewForm)
             .then(data => {
                 if(!data.error) {
                     navigate(-1)
@@ -98,10 +100,10 @@ export default function ReviewEditionPage() {
 
     useEffect(() => {
         if(isLogged()) {
-            reviewService.getSpecificReview(parseInt(reviewId))
+            reviewService.getSpecificReview(authFunctions, parseInt(reviewId))
                 .then(data => {
                     if(!data.error) {
-                        userService.getUserInfo(data.data.user)
+                        userService.getUserInfo(authFunctions, data.data.user)
                             .then(userData => {
                                 if(!userData.error && (userData.data.id === user.id)) {
                                     setReviewForm({
@@ -125,7 +127,7 @@ export default function ReviewEditionPage() {
                     navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
 
-            contentService.getSpecificContent(parseInt(contentId))
+            contentService.getSpecificContent(authFunctions, parseInt(contentId))
                 .then(data => {
                     if(!data.error) {
                         setContent(data.data)

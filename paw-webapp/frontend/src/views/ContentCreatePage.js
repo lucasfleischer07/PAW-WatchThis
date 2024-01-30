@@ -13,6 +13,8 @@ export default function ContentCreatePage() {
     const { formType, contentId } = useParams();
     let navigate = useNavigate()
     let {isLogged} = useContext(AuthContext)
+    const authFunctions = useContext(AuthContext)
+
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
     const [showExpiredCookiesModal, setShowExpiredCookiesModal] = useState(false)
     const [logOut, setLogOut] = useState(false)
@@ -131,7 +133,7 @@ export default function ContentCreatePage() {
             if(!validateForm()) {
                 return
             }
-            contentService.createContent(contentForm, contentForm.contentPicture)
+            contentService.createContent(authFunctions, contentForm, contentForm.contentPicture)
                 .then(data => {
                     if(!data.error) {
                         navigate(`/content/${data.data.type}/${data.data.id}`, {replace:true})
@@ -150,7 +152,7 @@ export default function ContentCreatePage() {
             if(!validateFormEdition()) {
                 return
             }
-            contentService.updateContent(contentId, contentForm)
+            contentService.updateContent(authFunctions, contentId, contentForm)
                 .then(data => {
                     if(!data.error) {
                         navigate(`/content/${contentForm.type}/${contentId}`, {replace:true})
@@ -202,7 +204,7 @@ export default function ContentCreatePage() {
     useEffect(() => {
         if(isLogged() && user.role === 'admin') {
             if(formType === 'edition') {
-                contentService.getSpecificContent(parseInt(contentId))
+                contentService.getSpecificContent(authFunctions, parseInt(contentId))
                     .then((data) => {
                         if(!data.error) {
                             setContentForm({

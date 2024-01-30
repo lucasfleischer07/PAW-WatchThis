@@ -1,12 +1,15 @@
-import {useState} from 'react';
+import {useState, useContext} from 'react';
 import {useTranslation} from "react-i18next";
 import {Link, useNavigate} from "react-router-dom";
 import {contentService, listsService} from "../../services";
 import {toast} from "react-toastify";
+import {AuthContext} from "../../context/AuthContext";
 
 export default function ContentCard(props) {
     const {t} = useTranslation()
     let navigate = useNavigate()
+    const authFunctions = useContext(AuthContext)
+
 
     const user = props.user;
     const [isInWatchList, setIsInWatchList] = useState(props.isInWatchList)
@@ -23,7 +26,7 @@ export default function ContentCard(props) {
 
     const handleAddToWatchlist = (event) => {
         event.preventDefault();
-        contentService.addUserWatchList(parseInt(contentId), parseInt(user.id))
+        contentService.addUserWatchList(authFunctions, parseInt(contentId), parseInt(user.id))
             .then(data => {
                 if(!data.error) {
                     setIsInWatchList(true);
@@ -39,7 +42,7 @@ export default function ContentCard(props) {
 
     const handleRemoveFromWatchlist = (event) => {
         event.preventDefault();
-        contentService.deleteUserWatchList(parseInt(contentId), parseInt(user.id))
+        contentService.deleteUserWatchList(authFunctions, parseInt(contentId), parseInt(user.id))
             .then(data => {
                 if(!data.error) {
                     setIsInWatchList(false);

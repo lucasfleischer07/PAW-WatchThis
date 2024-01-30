@@ -16,6 +16,8 @@ export default function ProfileEditionPage() {
     let location = useLocation()
     const {reset} = useForm()
     let {isLogged} = useContext(AuthContext)
+    const authFunctions = useContext(AuthContext)
+
     const [showExpiredCookiesModal, setShowExpiredCookiesModal] = useState(false)
 
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
@@ -48,7 +50,7 @@ export default function ProfileEditionPage() {
                 return
             }
             if(userForm.currentPassword.length !== 0 && userForm.newPassword.length !== 0 && userForm.confirmPassword.length !== 0) {
-                userService.updateUserProfileInfo(user.id, userForm)
+                userService.updateUserProfileInfo(authFunctions, user.id, userForm)
                     .then(data => {
                         if (!data.error) {
                             setErrorPassword(false)
@@ -78,7 +80,7 @@ export default function ProfileEditionPage() {
     const onSubmitImage = (e) => {
         e.preventDefault();
         if(isLogged() && image !== undefined) {
-            userService.updateUserProfileImage(user.id, image)
+            userService.updateUserProfileImage(authFunctions, user.id, image)
                 .then(data => {
                     if (!data.error) {
                         setError(false)
@@ -117,7 +119,7 @@ export default function ProfileEditionPage() {
         if(!isLogged()) {
             navigate("/login", {replace: true})
         }
-        userService.getUserInfo(user.id)
+        userService.getUserInfo(authFunctions, user.id)
             .then(data => {
                 if(!data.error) {
                     setUser(data.data)

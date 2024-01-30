@@ -13,6 +13,7 @@ export default function Comments(props) {
     const {t} = useTranslation()
     let navigate = useNavigate()
     let {isLogged} = useContext(AuthContext)
+    const authFunctions = useContext(AuthContext)
 
     const [reportFrom, setReportForm] = useState({
         reportType: ""
@@ -66,7 +67,7 @@ export default function Comments(props) {
     };
 
     const handleSubmitReport = () => {
-        commentService.addCommentReport(parseInt(loggedUserId), commentId, reportFrom)
+        commentService.addCommentReport(authFunctions, parseInt(loggedUserId), commentId, reportFrom)
             .then(data => {
                 if(!data.error) {
                     setAlreadyReport(!alreadyReport)
@@ -102,7 +103,7 @@ export default function Comments(props) {
 
 
     useEffect(() => {
-        userService.getUserInfo(userCreatorUrl)
+        userService.getUserInfo(authFunctions, userCreatorUrl)
             .then(userCreatorData => {
                 if(!userCreatorData.error) {
                     setUserCreatorId(userCreatorData.data.id)

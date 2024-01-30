@@ -14,12 +14,12 @@ export class ContentApi {
         return await genericRequest(this.basePath, url, options)
     }
 
-    async getSpecificContent(content) {
+    async getSpecificContent(authFunctions, content) {
         const options = {method: 'GET', headers: authCheck({})}
-        return await genericRequest(this.basePath, content, options)
+        return await genericRequest(this.basePath, content, options, authFunctions)
     }
 
-    async updateContent(contentId, contentDetails) {
+    async updateContent(authFunctions, contentId, contentDetails) {
         contentDetails.genre = contentDetails.genre.split(" ")
         if(typeof contentDetails.contentPicture == 'string' || contentDetails.contentPicture == null) {
             delete contentDetails.contentPicture
@@ -32,7 +32,7 @@ export class ContentApi {
         const apiUrl = `${this.basePath}/${contentId}`
         const options = {method: 'PUT', headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}), body: JSON.stringify(contentDetails)}
         const params = {}
-        return genericFetchWithQueryParams(apiUrl, options, params)
+        return genericFetchWithQueryParams(apiUrl, options, params, authFunctions)
     }
 
     async updateContentImage(contentId, image) {
@@ -45,14 +45,14 @@ export class ContentApi {
         return genericFetchWithQueryParams(apiUrl, options, params)
     }
 
-    async deleteContent(contentId) {
+    async deleteContent(authFunctions, contentId) {
         const apiUrl = `${this.basePath}/${contentId}`
         const options = {method: 'DELETE', headers: authCheck({})}
         const params = {}
-        return genericFetchWithQueryParams(apiUrl, options, params)
+        return genericFetchWithQueryParams(apiUrl, options, params, authFunctions)
     }
 
-    async createContent(contentDetails, image) {
+    async createContent(authFunctions, contentDetails, image) {
         try {
             contentDetails.genre = contentDetails.genre.split(" ")
             const contentDetailsAux = contentDetails
@@ -61,7 +61,7 @@ export class ContentApi {
             const apiUrl = `${this.basePath}`
             const options = {method: 'POST', headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}), body: JSON.stringify(contentDetails)}
             const params = {}
-            const res = await fetchWithQueryParamsPostApi(apiUrl, params, options)
+            const res = await fetchWithQueryParamsPostApi(apiUrl, params, options, authFunctions)
             if(res.status === 201) {
                 const contentData = await res.data
                 await this.updateContentImage(parseInt(contentData.id), image)
@@ -74,7 +74,7 @@ export class ContentApi {
         }
     }
 
-    async getContentByType(contentType, page, genre, durationFrom, durationTo, sorting, query, userId = null, isWatchList = false, isHomePage = false, paginated = true) {
+    async getContentByType(authFunctions,contentType, page, genre, durationFrom, durationTo, sorting, query, userId = null, isWatchList = false, isHomePage = false, paginated = true) {
         const params = {}
         if(isWatchList) {
             if(!paginated) {
@@ -116,11 +116,11 @@ export class ContentApi {
 
         const apiUrl = `${this.basePath}`
         const options = {method: 'GET', headers: authCheck({})}
-        return genericFetchWithQueryParams(apiUrl, options, params)
+        return genericFetchWithQueryParams(apiUrl, options, params, authFunctions)
     }
 
 
-    async getLists(listUrl, paginate, page = 1) {
+    async getLists(authFunctions, listUrl, paginate, page = 1) {
         let params = {}
         if(!paginate) {
             params.paginated = paginate
@@ -129,7 +129,7 @@ export class ContentApi {
         }
         const apiUrl = listUrl
         const options = {method: 'GET', headers: authCheck({})}
-        return genericFetchWithQueryParams(apiUrl, options, params)
+        return genericFetchWithQueryParams(apiUrl, options, params, authFunctions)
     }
 
 
@@ -145,33 +145,33 @@ export class ContentApi {
         return await genericRequest(this.basePath, contentId, options)
     }
 
-    async addUserWatchList(contentId, userId) {
+    async addUserWatchList(authFunctions, contentId, userId) {
         const apiUrl = `${this.basePath}/${contentId}/watchList`
         const bodyRequest = {userId: userId}
         const options = {method: 'POST', headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}), body: JSON.stringify(bodyRequest)}
         const params = {}
-        return genericFetchWithQueryParams(apiUrl, options, params)
+        return genericFetchWithQueryParams(apiUrl, options, params, authFunctions)
     }
 
-    async deleteUserWatchList(contentId, userId) {
+    async deleteUserWatchList(authFunctions, contentId, userId) {
         const apiUrl = `${this.basePath}/${contentId}/watchListId/${userId}`
         const options = {method: 'DELETE', headers: authCheck({}), body: {}}
         const params = {}
-        return genericFetchWithQueryParams(apiUrl, options, params)
+        return genericFetchWithQueryParams(apiUrl, options, params, authFunctions)
     }
 
-    async addUserViewedList(contentId, userId) {
+    async addUserViewedList(authFunctions, contentId, userId) {
         const apiUrl = `${this.basePath}/${contentId}/viewedList`
         const bodyRequest = {userId: userId}
         const options = {method: 'POST', headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}), body: JSON.stringify(bodyRequest)}
         const params = {}
-        return genericFetchWithQueryParams(apiUrl, options, params)
+        return genericFetchWithQueryParams(apiUrl, options, params, authFunctions)
     }
 
-    async deleteUserViewedList(contentId, userId) {
+    async deleteUserViewedList(authFunctions, contentId, userId) {
         const apiUrl = `${this.basePath}/${contentId}/viewedListId/${userId}`
         const options = {method: 'DELETE', headers: authCheck({}), body: {}}
         const params = {}
-        return genericFetchWithQueryParams(apiUrl, options, params)
+        return genericFetchWithQueryParams(apiUrl, options, params, authFunctions)
     }
 }

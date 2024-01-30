@@ -15,6 +15,8 @@ export default function ReportedPage() {
     const {t} = useTranslation()
     let navigate = useNavigate()
     let {isLogged} = useContext(AuthContext)
+    const authFunctions = useContext(AuthContext)
+
     const [showExpiredCookiesModal, setShowExpiredCookiesModal] = useState(false)
 
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
@@ -117,7 +119,7 @@ export default function ReportedPage() {
                         setCurrentCommentsReportsPage(1)
                         setCurrentReviewsReportsPage(1)
                         if (reportType === "reviews") {
-                            reviewService.getReviewReports(filterReason, page)
+                            reviewService.getReviewReports(authFunctions, filterReason, page)
                                 .then(data => {
                                     if (!data.error) {
                                         setReportedReviewsList(data.data)
@@ -140,7 +142,7 @@ export default function ReportedPage() {
                                 })
 
                         } else {
-                            commentService.getCommentsReports(filterReason, page)
+                            commentService.getCommentsReports(authFunctions, filterReason, page)
                                 .then(data => {
                                     if (!data.error) {
                                         setReportedCommentsList(data.data)

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {contentService, listsService} from "../services";
 import ContentCard from "./components/ContentCard";
@@ -9,12 +9,14 @@ import ExpiredCookieModal from "./components/ExpiredCookieModal";
 import {updateUrlVariable} from "../scripts/validateParam";
 import {checkIsFrom, checkIsGenre, checkIsNumber, checkIsSort, checkIsTo} from "../scripts/filtersValidations";
 import noResults from "../images/noResults.png"
+import {AuthContext} from "../context/AuthContext";
 
 export default function ContentPage(props) {
     const {t} = useTranslation()
     let navigate = useNavigate()
     const { contentType } = useParams();
     const { search } = useLocation();
+    const authFunctions = useContext(AuthContext)
     const [showExpiredCookiesModal, setShowExpiredCookiesModal] = useState(false)
 
     const [allContent, setAllContent] = useState([])
@@ -54,7 +56,7 @@ export default function ContentPage(props) {
                 if(actualPage < 1 || actualPage > amountPages) {
                     navigate("/error", { replace: true, state: {errorCode: 404} })
                 } else {
-                    contentService.getContentByType(contentType, actualPage, genre, durationFrom, durationTo, sorting, query)
+                    contentService.getContentByType(authFunctions,contentType, actualPage, genre, durationFrom, durationTo, sorting, query)
                         .then(data => {
                             if(!data.error) {
                                 setAllContent(data.data)
@@ -82,7 +84,7 @@ export default function ContentPage(props) {
             setActualPage(currentPage)
         } else {
             user !== null || undefined?
-                contentService.getContentByType(null, 1, '', '', '', '', '', user.id, true, false, false)
+                contentService.getContentByType(authFunctions, null, 1, '', '', '', '', '', user.id, true, false, false)
                     .then(watchList => {
                         if(!watchList.error) {
                             setUserWatchListIds(watchList.data)

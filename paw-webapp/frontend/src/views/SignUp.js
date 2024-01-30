@@ -9,6 +9,7 @@ export default function SignUp() {
     const {t} = useTranslation()
     let navigate = useNavigate()
     let {signIn, signOut} = useContext(AuthContext)
+    const authFunctions = useContext(AuthContext)
 
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
     const [usernameError, setUsernameError] = useState(false)
@@ -68,7 +69,7 @@ export default function SignUp() {
         if(!validateForm()) {
             return
         }
-        userService.userCreate(userForm)
+        userService.userCreate(authFunctions, userForm)
             .then(data => {
                 if(!data.error) {
                     userService.login(userForm.email, userForm.password)

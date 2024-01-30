@@ -10,6 +10,8 @@ export default function ReviewCard(props) {
     const {t} = useTranslation()
     let navigate = useNavigate()
     let {isLogged} = useContext(AuthContext)
+    const authFunctions = useContext(AuthContext)
+
 
     const reviewId = props.reviewId
     const reviewRating = props.reviewRating
@@ -93,7 +95,7 @@ export default function ReviewCard(props) {
         );
     }
     const handleDelete = () => {
-        reviewService.deleteReview(reviewId)
+        reviewService.deleteReview(authFunctions, reviewId)
             .then(data => {
                 if(!data.error) {
                     handleCloseDeleteReviewModal()
@@ -110,7 +112,7 @@ export default function ReviewCard(props) {
     }
 
     const handleSubmitReport = () => {
-        reviewService.addReviewReport(reviewId, loggedUserId, reportFrom)
+        reviewService.addReviewReport(authFunctions, reviewId, loggedUserId, reportFrom)
             .then(data => {
                 if(!data.error) {
                     toast.success(t('Report.Success'))
@@ -131,7 +133,7 @@ export default function ReviewCard(props) {
         setReviewUser(completeReviewUser.username)
 
         if(contentId === undefined) {
-            contentService.getSpecificContent(contentUrl)
+            contentService.getSpecificContent(authFunctions, contentUrl)
                 .then(data => {
                     if(!data.error) {
                         setContentId(data.data.id)

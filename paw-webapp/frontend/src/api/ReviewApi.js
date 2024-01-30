@@ -7,7 +7,7 @@ export class ReviewApi {
         this.basePath = `${paths.BASE_URL_API}${paths.REVIEWS}`
     }
 
-    async getReviews(userId, contentId, page, reported = false) {
+    async getReviews(authFunctions, userId, contentId, page, reported = false) {
         const apiUrl = `${this.basePath}`
         let params
         if(userId == null) {
@@ -20,106 +20,106 @@ export class ReviewApi {
             params = {contentId: contentId, userId: userId, page: page}
         }
         const options = {method: 'GET', headers: authCheck({})}
-        return genericFetchWithQueryParams(apiUrl, options, params)
+        return genericFetchWithQueryParams(apiUrl, options, params, authFunctions)
     }
 
-    async getSpecificReview(review) {
+    async getSpecificReview(authFunctions, review) {
         const options = {method: 'GET', headers: authCheck({})}
-        return await genericRequest(this.basePath, review, options)
+        return await genericRequest(this.basePath, review, options, authFunctions)
     }
 
-    async reviewsCreation(userId, contentId, type, reviewDetails) {
+    async reviewsCreation(authFunctions, userId, contentId, type, reviewDetails) {
         const apiUrl = `${this.basePath}`
         reviewDetails.userId = userId
         reviewDetails.contentId = contentId
         reviewDetails.type = type
         const options = {method: 'POST', headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}), body: JSON.stringify(reviewDetails)}
         const params = {}
-        return genericFetchWithQueryParams(apiUrl, options, params)
+        return genericFetchWithQueryParams(apiUrl, options, params, authFunctions)
     }
 
-    async deleteReview(reviewId) {
+    async deleteReview(authFunctions, reviewId) {
         const apiUrl = `${this.basePath}/${reviewId}`
         const options = {method: 'DELETE', headers: authCheck({})}
         const params = {}
         return genericFetchWithQueryParams(apiUrl, options, params)
     }
 
-    async reviewEdition(reviewId, userId, contentId, reviewDetails) {
+    async reviewEdition(authFunctions, reviewId, userId, contentId, reviewDetails) {
         const apiUrl = `${this.basePath}/${reviewId}`
         reviewDetails.userId = userId
         reviewDetails.contentId = contentId
         const options = {method: 'PUT', headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}), body: JSON.stringify(reviewDetails)}
         const params = {}
-        return genericFetchWithQueryParams(apiUrl, options, params)
+        return genericFetchWithQueryParams(apiUrl, options, params, authFunctions)
     }
 
-    async reviewThumbUpPost(reviewId, userId) {
+    async reviewThumbUpPost(authFunctions, reviewId, userId) {
         const apiUrl = `${this.basePath}/${reviewId}/thumbUp`
         let bodyRequest = {userId: userId}
         const options = {method: 'POST', headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}), body: JSON.stringify(bodyRequest)}
         const params = {}
-        return genericFetchWithQueryParams(apiUrl, options, params)
+        return genericFetchWithQueryParams(apiUrl, options, params, authFunctions)
     }
 
-    async reviewThumbUpDelete(reviewId, userId) {
+    async reviewThumbUpDelete(authFunctions, reviewId, userId) {
         const apiUrl = `${this.basePath}/${reviewId}/thumbUpById/${userId}`
         const options = {method: 'DELETE', headers: authCheck({})}
         const params = {}
-        return genericFetchWithQueryParams(apiUrl, options, params)
+        return genericFetchWithQueryParams(apiUrl, options, params, authFunctions)
     }
 
-    async reviewThumbDownPost(reviewId, userId) {
+    async reviewThumbDownPost(authFunctions, reviewId, userId) {
         const apiUrl = `${this.basePath}/${reviewId}/thumbDown`
         let bodyRequest = {userId: userId}
         const options = {method: 'POST', headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}), body: JSON.stringify(bodyRequest)}
         const params = {}
-        return genericFetchWithQueryParams(apiUrl, options, params)
+        return genericFetchWithQueryParams(apiUrl, options, params, authFunctions)
     }
 
-    async reviewThumbDownDelete(reviewId, userId) {
+    async reviewThumbDownDelete(authFunctions, reviewId, userId) {
         const apiUrl = `${this.basePath}/${reviewId}/thumbDownById/${userId}`
         const options = {method: 'DELETE', headers: authCheck({})}
         const params = {}
-        return genericFetchWithQueryParams(apiUrl, options, params)
+        return genericFetchWithQueryParams(apiUrl, options, params, authFunctions)
     }
 
-    async getReviewReports(reason= '', page) {
+    async getReviewReports(authFunctions, reason= '', page) {
         const apiUrl = `${this.basePath}/reports`
         let params = {page: page}
         if(reason !== '') {
             params.reason = reason
         }
         const options = {method: 'GET', headers: authCheck({})}
-        return genericFetchWithQueryParams(apiUrl, options, params)
+        return genericFetchWithQueryParams(apiUrl, options, params, authFunctions)
     }
 
-    async addReviewReport(reviewId, userId, reviewReportReasons) {
+    async addReviewReport(authFunctions, reviewId, userId, reviewReportReasons) {
         const apiUrl = `${this.basePath}/${reviewId}/reports`
         reviewReportReasons.userId = userId
         const options = {method: 'POST', headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}), body: JSON.stringify(reviewReportReasons)}
         const params = {}
-        return genericFetchWithQueryParams(apiUrl, options, params)
+        return genericFetchWithQueryParams(apiUrl, options, params, authFunctions)
     }
 
-    async deleteReviewReport(reviewId) {
+    async deleteReviewReport(authFunctions, reviewId) {
         const apiUrl = `${this.basePath}/${reviewId}/reports`
         const options = {method: 'DELETE', headers: authCheck({})}
         const params = {}
-        return genericFetchWithQueryParams(apiUrl, options, params)
+        return genericFetchWithQueryParams(apiUrl, options, params, authFunctions)
     }
 
-    async getReviewsLike(userId) {
+    async getReviewsLike(authFunctions, userId) {
         const options = {method: 'GET', headers: authCheck({})}
         const apiUrl = `${this.basePath}`
         const params = {likedById: userId}
-        return genericFetchWithQueryParams(apiUrl, options, params)
+        return genericFetchWithQueryParams(apiUrl, options, params, authFunctions)
     }
 
-    async getReviewsDislike(userId) {
+    async getReviewsDislike(authFunctions, userId) {
         const options = {method: 'GET', headers: authCheck({})}
         const apiUrl = `${this.basePath}`
         const params = {dislikedById: userId}
-        return genericFetchWithQueryParams(apiUrl, options, params)
+        return genericFetchWithQueryParams(apiUrl, options, params, authFunctions)
     }
 }

@@ -1,15 +1,18 @@
 import {Link, useNavigate} from "react-router-dom";
 import {useTranslation} from "react-i18next";
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useContext} from "react";
 import { Modal, Button } from 'react-bootstrap';
 import Markdown from 'marked-react';
 import {commentService, contentService, reportsService, reviewService, userService} from "../../services";
 import {toast} from "react-toastify";
 import TooltipComponent from "./Tooltip";
+import {AuthContext} from "../../context/AuthContext";
 
 export default function ReportedContent(props) {
     const {t} = useTranslation()
     let navigate = useNavigate()
+    const authFunctions = useContext(AuthContext)
+
 
     const [showModal, setShowModal] = useState(false);
     const [showModalDismiss, setShowModalDismiss] = useState(false);
@@ -60,7 +63,7 @@ export default function ReportedContent(props) {
     const handleDeleteCommentOrReview = (e) => {
         e.preventDefault()
         if(reportType === 'comment') {
-            commentService.commentDelete(typeId)
+            commentService.commentDelete(authFunctions, typeId)
                 .then(data => {
                     if(!data.error) {
                         toast.success(t('Comment.Deleted'))
@@ -74,7 +77,7 @@ export default function ReportedContent(props) {
                     navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
         } else if(reportType === 'review') {
-            reviewService.deleteReview(typeId)
+            reviewService.deleteReview(authFunctions, typeId)
                 .then(data => {
                     if(!data.error) {
                         toast.success(t('Review.Deleted'))
@@ -95,7 +98,7 @@ export default function ReportedContent(props) {
     const handleDismissReport = (e) => {
         e.preventDefault()
         if(reportType === "comment") {
-            commentService.deleteCommentReports(typeId, loggedUserId)
+            commentService.deleteCommentReports(authFunctions, typeId, loggedUserId)
                 .then(data => {
                     if(!data.error) {
                         toast.success(t('Report.Deleted'))
@@ -109,7 +112,7 @@ export default function ReportedContent(props) {
                     navigate("/error", { replace: true, state: {errorCode: 404} })
                 })
         } else {
-            reviewService.deleteReviewReport(typeId)
+            reviewService.deleteReviewReport(authFunctions, typeId)
                 .then(data => {
                     if(!data.error) {
                         toast.success(t('Report.Deleted'))
@@ -127,7 +130,7 @@ export default function ReportedContent(props) {
 
 
     useEffect(() => {
-        contentService.getSpecificContent(contentUrl)
+        contentService.getSpecificContent(authFunctions, contentUrl)
             .then(contentData => {
                 if(!contentData.error) {
                     setContentId(contentData.data.id)
@@ -141,7 +144,7 @@ export default function ReportedContent(props) {
                 navigate("/error", { replace: true, state: {errorCode: 404} })
             })
 
-        reviewService.getSpecificReview(reviewUrl)
+        reviewService.getSpecificReview(authFunctions, reviewUrl)
             .then(reviewData => {
                 if(!reviewData.error) {
                     if(reportType !== 'comment') {
@@ -152,7 +155,7 @@ export default function ReportedContent(props) {
                     const auxUserUrl = reviewData.data.user.split('/')
                     const auxUserId = parseInt(auxUserUrl[auxUserUrl.length-1], 10)
                     if(auxUserId !== loggedUserId) {
-                        userService.getUserInfo(reviewData.data.user)
+                        userService.getUserInfo(authFunctions, reviewData.data.user)
                             .then(userData => {
                                 if(!userData.error) {
                                     setReviewCreatorUserName(userData.data.username)
@@ -179,7 +182,7 @@ export default function ReportedContent(props) {
             })
 
         if(reportType === "comment") {
-            commentService.getSpecificComment(commentUrl)
+            commentService.getSpecificComment(authFunctions, commentUrl)
                 .then(commentData => {
                     if(!commentData.error) {
                         setTypeId(commentData.data.commentId)
@@ -188,7 +191,7 @@ export default function ReportedContent(props) {
                         const auxUserUrl = commentData.data.user.split('/')
                         const auxUserId = parseInt(auxUserUrl[auxUserUrl.length-1], 10)
                         if(auxUserId !== loggedUserId) {
-                            userService.getUserInfo(commentData.data.user)
+                            userService.getUserInfo(authFunctions, commentData.data.user)
                                 .then(userData => {
                                     if(!userData.error) {
                                         setCommentUserName(userData.data.username)

@@ -9,13 +9,13 @@ export default function CarrouselContent(props) {
     const {t} = useTranslation()
     let navigate = useNavigate()
     let {isLogged} = useContext(AuthContext)
-
+    const authFunctions = useContext(AuthContext)
     const [isInWatchList, setIsInWatchList] = useState(props.isInWatchList);
     const loggedUserId = props.loggedUserId
 
     const handleAddToWatchlist = (event) => {
         event.preventDefault();
-        contentService.addUserWatchList(props.id, loggedUserId)
+        contentService.addUserWatchList(authFunctions, props.id, loggedUserId)
             .then(data => {
                 if(!data.error) {
                     setIsInWatchList(true);
@@ -31,7 +31,7 @@ export default function CarrouselContent(props) {
 
     const handleRemoveFromWatchlist = (event) => {
         event.preventDefault();
-        contentService.deleteUserWatchList(props.id, loggedUserId)
+        contentService.deleteUserWatchList(authFunctions, props.id, loggedUserId)
             .then(data => {
                 if(!data.error) {
                     setIsInWatchList(false);

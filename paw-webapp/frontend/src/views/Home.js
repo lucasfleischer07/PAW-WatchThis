@@ -10,6 +10,8 @@ export default function Home() {
     const {t} = useTranslation()
     let navigate = useNavigate()
     let {isLogged, signOut, listApi} = useContext(AuthContext)
+    const authFunctions = useContext(AuthContext)
+
 
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
     const [bestRatedList, setBestRatedList] = useState([])
@@ -24,7 +26,7 @@ export default function Home() {
 
 
     useEffect(() => {
-        contentService.getContentByType("bestRated", 1, '', '', '', '', '', user?.id, false, true, false)
+        contentService.getContentByType(authFunctions, "bestRated", 1, '', '', '', '', '', user?.id, false, true, false)
         .then(data => {
             if(!data.error) {
                 setBestRatedList(data.data)
@@ -34,7 +36,7 @@ export default function Home() {
             navigate("/error", { replace: true, state: {errorCode: 404} })
         })
 
-    contentService.getContentByType("lastAdded", 1, '', '', '', '', '', user?.id, false, true, false)
+    contentService.getContentByType(authFunctions, "lastAdded", 1, '', '', '', '', '', user?.id, false, true, false)
         .then(data => {
             if(!data.error) {
                 setLastAddedList(data.data)
@@ -49,13 +51,13 @@ export default function Home() {
                 signOut()
                 navigate("/", { replace: true})
             } else {
-                contentService.getContentByType("recommendedUser", 1, '', '', '', '', '', user.id, false, true, false)
+                contentService.getContentByType(authFunctions, "recommendedUser", 1, '', '', '', '', '', user.id, false, true, false)
                     .then(data => {
                         if(!data.error) {
                             if(data.data.length > 0) {
                                 setRecommendedUserList(data.data)
                             } else {
-                                contentService.getContentByType("mostSavedContentByUsers", 1, '', '', '', '', '', null, false, true, false)
+                                contentService.getContentByType(authFunctions, "mostSavedContentByUsers", 1, '', '', '', '', '', null, false, true, false)
                                     .then(data => {
                                         if(!data.error) {
                                             setMostSavedContentByUsersList(data.data)
@@ -73,7 +75,7 @@ export default function Home() {
 
             }
         } else {
-            contentService.getContentByType("mostSavedContentByUsers", 1, '', '', '', '', '', null, false, true, false)
+            contentService.getContentByType(authFunctions ,"mostSavedContentByUsers", 1, '', '', '', '', '', null, false, true, false)
                 .then(data => {
                     if(!data.error) {
                         setMostSavedContentByUsersList(data.data)
@@ -90,9 +92,9 @@ export default function Home() {
     useEffect(() => {
         async function fetchData() {
             if(isLogged()) {
-                const userData = await userService.getUserInfo(user.id)
+                const userData = await userService.getUserInfo(authFunctions, user.id)
                 if(!userData.error) {
-                    const watchList = await contentService.getLists(userData.data.userWatchListURL, false);
+                    const watchList = await contentService.getLists(authFunctions, userData.data.userWatchListURL, false);
                     if (!watchList.error) {
                         setUserWatchListIds(watchList.data)
                         setLoaded(true)

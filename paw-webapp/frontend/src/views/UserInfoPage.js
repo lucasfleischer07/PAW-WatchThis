@@ -18,6 +18,8 @@ export default function UserInfoPage() {
     let navigate = useNavigate()
     const { search } = useLocation();
     let {isLogged} = useContext(AuthContext)
+    const authFunctions = useContext(AuthContext)
+
     const { userProfileId } = useParams();
     const [showExpiredCookiesModal, setShowExpiredCookiesModal] = useState(false)
 
@@ -61,7 +63,7 @@ export default function UserInfoPage() {
 
     const handlePromoteUser = (e) => {
         e.preventDefault();
-        userService.promoteUserToAdmin(reviewOwnerUser.id)
+        userService.promoteUserToAdmin(authFunctions, reviewOwnerUser.id)
             .then(data => {
                 if(!data.error) {
                     setCanPromote(false)
@@ -94,7 +96,7 @@ export default function UserInfoPage() {
             setPage(currentPage)
         } else {
             async function fetchData() {
-                reviewService.getReviews(parseInt(userProfileId), null, page)
+                reviewService.getReviews(authFunctions, parseInt(userProfileId), null, page)
                     .then(async reviewsData => {
                         if (!reviewsData.error) {
                             setReviews([])
@@ -102,7 +104,7 @@ export default function UserInfoPage() {
                             setReviews(reviewsData.data)
                             setTotalReviews(reviewsData.totalUserReviews)
                             for (let i = 0; i < reviewsData.data.length; i++) {
-                                await contentService.getSpecificContent(reviewsData.data[i].content)
+                                await contentService.getSpecificContent(authFunctions, reviewsData.data[i].content)
                                     .then(contentData => {
                                         if (!contentData.error) {
                                             setContentArray(prevArray => [...prevArray, contentData.data]);
@@ -115,7 +117,7 @@ export default function UserInfoPage() {
                                     });
                             }
 
-                            userService.getUserInfo(parseInt(userProfileId))
+                            userService.getUserInfo(authFunctions, parseInt(userProfileId))
                                 .then((data) => {
                                     if (!data.error) {
                                         setReviewOwnerUser(data.data)
@@ -164,7 +166,7 @@ export default function UserInfoPage() {
                     })
 
                 if(isLogged()) {
-                    reviewService.getReviewsLike(user?.id)
+                    reviewService.getReviewsLike(authFunctions, user?.id)
                         .then(data => {
                             if(!data.error) {
                                 setIsLikeReviewsList(data.data)
@@ -176,7 +178,7 @@ export default function UserInfoPage() {
                             navigate("/error", { replace: true, state: {errorCode: 404} })
                         })
 
-                    reviewService.getReviewsDislike(user?.id)
+                    reviewService.getReviewsDislike(authFunctions, user?.id)
                         .then(data => {
                             if(!data.error) {
                                 setIsDislikeReviewsList(data.data)
@@ -188,7 +190,7 @@ export default function UserInfoPage() {
                             navigate("/error", { replace: true, state: {errorCode: 404} })
                         })
 
-                    reviewService.getReviews(user?.id, null, 1, true)
+                    reviewService.getReviews(authFunctions, user?.id, null, 1, true)
                         .then(data => {
                             if(!data.error) {
                                 setLoggedUserReviewsReported(data.data)

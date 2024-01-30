@@ -1,12 +1,14 @@
-import {useEffect, useState} from "react";
+import {useEffect, useState, useContext} from "react";
 import {useTranslation} from "react-i18next";
 import {useNavigate} from "react-router-dom";
 import {userService} from "../services";
 import {toast} from "react-toastify";
+import {AuthContext} from "../context/AuthContext";
 
 export default function ForgotPassword() {
     const {t} = useTranslation()
     let navigate = useNavigate()
+    const authFunctions = useContext(AuthContext)
 
     const [error, setError] = useState(false)
     const [userForm, setUserForm] = useState({
@@ -33,7 +35,7 @@ export default function ForgotPassword() {
             return
         }
 
-        userService.loginForgotPassword(userForm)
+        userService.loginForgotPassword(authFunctions, userForm)
             .then(data => {
                 if(!data.error) {
                     toast.success(t('Login.ForgotPass.Snackbar'))

@@ -8,6 +8,8 @@ export default function ExpiredCookieModal() {
     const {t} = useTranslation()
     let navigate = useNavigate()
     let {signOut} = useContext(AuthContext)
+    const authFunctions = useContext(AuthContext)
+
 
     const handleSubmitModal = () => {
         signOut()
