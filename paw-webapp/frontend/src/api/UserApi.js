@@ -53,7 +53,7 @@ export class UserApi {
                 }
             })
             if(res.status !== 204 && res.status !== 401) {
-                return {error: false, data: jwt(res.headers.get("Authorization")?.toString().split(" ")[1]), header: res.headers.get("Authorization")?.toString().split(" ")[1], refresh_token: res.headers.get("X-Refresh-Token")?.toString().split(" ")[1]}
+                return {error: false, data: jwt(res.headers.get("Access-Token")?.toString().split(" ")[1]), header: res.headers.get("Access-Token")?.toString().split(" ")[1], refresh_token: res.headers.get("X-Refresh-Token")?.toString().split(" ")[1]}
             } else if(res.status === 401) {
                 return {error: true, data: [], errorCode: res.status}
             } else {

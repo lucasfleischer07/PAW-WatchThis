@@ -63,7 +63,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         String tokenType = jwtTokenUtil.getTokenType(token);
         if(tokenType.equals(REFRESH_TOKEN_TYPE)){
             userService.findByEmail(userDetails.getUsername()).ifPresent(user -> {
-                response.setHeader(HttpHeaders.AUTHORIZATION, jwtTokenUtil.createToken(user));
+                response.setHeader("Access-Token", jwtTokenUtil.createToken(user));
                 response.setHeader(REFRESH_TOKEN, jwtTokenUtil.createRefreshToken(user));
             });
         }else if(!tokenType.equals(ACCESS_TOKEN_TYPE)){

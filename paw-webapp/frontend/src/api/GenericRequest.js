@@ -12,7 +12,7 @@ export async function genericRequest(basePath, parameter, options, authFunctions
         const res = await fetch(url, options)
 
         if(res.headers != null && res.headers.get('X-Refresh-Token')){
-            authFunctions.resetTokens(res.headers.get('Authorization'), res.headers.get('X-Refresh-Token'));
+            authFunctions.resetTokens(res.headers.get('Access-Token'), res.headers.get('X-Refresh-Token'));
         }
 
         if(options.method === 'GET') {
@@ -43,7 +43,7 @@ export async function genericFetchWithQueryParams(apiUrl, options, params, authF
     try {
         const res = await fetchWithQueryParamsApi(apiUrl, params, options)
         if(res.headers != null && res.headers.get('X-Refresh-Token')){
-            authFunctions.resetTokens(res.headers.get('Authorization'), res.headers.get('X-Refresh-Token'));
+            authFunctions.resetTokens(res.headers.get('Access-Token'), res.headers.get('X-Refresh-Token'));
         }
         if(options.method === 'GET') {
             if(res.status === 200) {
