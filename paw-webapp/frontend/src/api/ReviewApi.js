@@ -55,7 +55,7 @@ export class ReviewApi {
     }
 
     async reviewThumbUpPost(authFunctions, reviewId, userId) {
-        const apiUrl = `${this.basePath}/${reviewId}/thumbUp`
+        const apiUrl = `${this.basePath}/${reviewId}/upVote`
         let bodyRequest = {userId: userId}
         const options = {method: 'POST', headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}), body: JSON.stringify(bodyRequest)}
         const params = {}
@@ -63,14 +63,14 @@ export class ReviewApi {
     }
 
     async reviewThumbUpDelete(authFunctions, reviewId, userId) {
-        const apiUrl = `${this.basePath}/${reviewId}/thumbUpById/${userId}`
+        const apiUrl = `${this.basePath}/${reviewId}/upVoteUserId/${userId}`
         const options = {method: 'DELETE', headers: authCheck({})}
         const params = {}
         return genericFetchWithQueryParams(apiUrl, options, params, authFunctions)
     }
 
     async reviewThumbDownPost(authFunctions, reviewId, userId) {
-        const apiUrl = `${this.basePath}/${reviewId}/thumbDown`
+        const apiUrl = `${this.basePath}/${reviewId}/downVote`
         let bodyRequest = {userId: userId}
         const options = {method: 'POST', headers: authCheck({'Content-Type': APPLICATION_JSON_TYPE,}), body: JSON.stringify(bodyRequest)}
         const params = {}
@@ -78,7 +78,7 @@ export class ReviewApi {
     }
 
     async reviewThumbDownDelete(authFunctions, reviewId, userId) {
-        const apiUrl = `${this.basePath}/${reviewId}/thumbDownById/${userId}`
+        const apiUrl = `${this.basePath}/${reviewId}/downVoteUserId/${userId}`
         const options = {method: 'DELETE', headers: authCheck({})}
         const params = {}
         return genericFetchWithQueryParams(apiUrl, options, params, authFunctions)

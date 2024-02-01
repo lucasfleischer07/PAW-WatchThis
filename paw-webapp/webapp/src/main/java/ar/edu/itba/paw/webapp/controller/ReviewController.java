@@ -5,13 +5,11 @@ import ar.edu.itba.paw.webapp.dto.request.BasicRequestDto;
 import ar.edu.itba.paw.webapp.dto.request.NewReportCommentDto;
 import ar.edu.itba.paw.webapp.dto.response.ContentDto;
 import ar.edu.itba.paw.webapp.dto.response.ReviewReportDto;
-import ar.edu.itba.paw.webapp.exceptions.ContentNotFoundException;
-import ar.edu.itba.paw.webapp.exceptions.ReviewNotFoundException;
+import ar.edu.itba.paw.webapp.exceptions.*;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.services.*;
 import ar.edu.itba.paw.webapp.dto.request.NewReviewDto;
 import ar.edu.itba.paw.webapp.dto.response.ReviewDto;
-import ar.edu.itba.paw.webapp.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.webapp.utilities.ResponseBuildingUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -175,7 +173,7 @@ public class ReviewController {
 //    Endpoint para likear una review
     @POST
     @Produces(value = {MediaType.APPLICATION_JSON})
-    @Path("/{reviewId}/thumbUp")
+    @Path("/{reviewId}/upVote")
     @PreAuthorize("@securityChecks.checkUser(#basicRequestDto.userId)")
     public Response reviewThumbUpPost(@Valid BasicRequestDto basicRequestDto,
                                       @PathParam("reviewId") final Long reviewId) {
@@ -185,13 +183,13 @@ public class ReviewController {
         rs.thumbUpReview(review, loggedUser);
         LOGGER.info("POST /{}: Thumb up successful", uriInfo.getPath());
 
-        final URI location = uriInfo.getBaseUriBuilder().path("/reviews").path(String.valueOf(reviewId)).path("/thumbUpById").path(String.valueOf(basicRequestDto.getUserId())).build();
+        final URI location = uriInfo.getBaseUriBuilder().path("/reviews").path(String.valueOf(reviewId)).path("/upVoteUserId").path(String.valueOf(basicRequestDto.getUserId())).build();
         return Response.created(location).build();
     }
 
     @DELETE
     @Produces(value = {MediaType.APPLICATION_JSON})
-    @Path("/{reviewId}/thumbUpById/{userId}")
+    @Path("/{reviewId}/upVoteUserId/{userId}")
     @PreAuthorize("@securityChecks.checkUser(#userId)")
     public Response reviewThumbUpDelete(@PathParam("reviewId") final Long reviewId,
                                         @PathParam("userId") final Long userId) {
@@ -200,9 +198,13 @@ public class ReviewController {
         User loggedUser = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).get();
 
         // TODO: Ahora tenemos un metodo que hace todo. Ahora habria que dividirlo en 2 disitntos o dejarlo asi, VER
-        rs.thumbUpReview(review, loggedUser);
-        LOGGER.info("DELETE /{}: Thumb up successful", uriInfo.getPath());
+        boolean deleted = rs.deleteThumbUpReview(review, loggedUser);
+        if(!deleted) {
+            LOGGER.warn("DELETE /{}: Thumb up error", uriInfo.getPath());
+            throw new VoteNotFoundException();
+        }
 
+        LOGGER.info("DELETE /{}: Thumb up successful", uriInfo.getPath());
         return Response.noContent().build();
     }
 
@@ -210,7 +212,7 @@ public class ReviewController {
 //    Endpoint para deslikear una review
     @POST
     @Produces(value = {MediaType.APPLICATION_JSON})
-    @Path("/{reviewId}/thumbDown")
+    @Path("/{reviewId}/downVote")
     @PreAuthorize("@securityChecks.checkUser(#basicRequestDto.userId)")
     public Response reviewThumbDownPost(@Valid BasicRequestDto basicRequestDto,
                                         @PathParam("reviewId") final long reviewId) {
@@ -220,13 +222,13 @@ public class ReviewController {
         rs.thumbDownReview(review,loggedUser);
         LOGGER.info("POST /{}: Thumb down successful", uriInfo.getPath());
 
-        final URI location = uriInfo.getBaseUriBuilder().path("/reviews").path(String.valueOf(reviewId)).path("/thumbDownById").path(String.valueOf(basicRequestDto.getUserId())).build();
+        final URI location = uriInfo.getBaseUriBuilder().path("/reviews").path(String.valueOf(reviewId)).path("/downVoteUserId").path(String.valueOf(basicRequestDto.getUserId())).build();
         return Response.created(location).build();
     }
 
     @DELETE
     @Produces(value = {MediaType.APPLICATION_JSON})
-    @Path("/{reviewId}/thumbDownById/{userId}")
+    @Path("/{reviewId}/downVoteUserId/{userId}")
     @PreAuthorize("@securityChecks.checkUser(#userId)")
     public Response reviewThumbDownDelete(@PathParam("reviewId") final long reviewId,
                                           @PathParam("userId") final Long userId) {
@@ -235,7 +237,12 @@ public class ReviewController {
         User loggedUser = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).get();
 
         // TODO: Ahora tenemos un metodo que hace todo. Ahora habria que dividirlo en 2 disitntos o dejarlo asi, VER
-        rs.thumbDownReview(review,loggedUser);
+        boolean deleted = rs.deleteThumbDownReview(review,loggedUser);
+        if(!deleted) {
+            LOGGER.warn("DELETE /{}: Thumb down error", uriInfo.getPath());
+            throw new VoteNotFoundException();
+        }
+
         LOGGER.info("DELETE /{}: Thumb down successful", uriInfo.getPath());
 
         return Response.noContent().build();

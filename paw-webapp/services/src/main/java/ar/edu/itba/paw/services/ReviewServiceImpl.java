@@ -131,6 +131,36 @@ public class ReviewServiceImpl implements ReviewService{
         return userDislikeReviews;
     }
 
+    @Override
+    public boolean deleteThumbDownReview(Review review,User user){
+        for (Reputation reputation:review.getUserVotes()) {
+            if(reputation.getUser().getId()== user.getId()) {
+                if(reputation.isUpvote()){
+                    return false;
+                }
+                else {
+                    reviewDao.deleteVote(review,user);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
+    @Override
+    public boolean deleteThumbUpReview(Review review,User user) {
+        for (Reputation reputation:review.getUserVotes()) {
+            if(reputation.getUser().getId()== user.getId()) {
+                if(reputation.isDownvote()){
+                    return false;
+                }
+                else {
+                    reviewDao.deleteVote(review,user);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
 }

@@ -31,6 +31,8 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     private static final String ACCESS_TOKEN_TYPE = "access-token";
     private static final String REFRESH_TOKEN_TYPE = "refresh-token";
     private static final String REFRESH_TOKEN = "X-Refresh-Token";
+    private static final String ACCESS_TOKEN = "Access-Token";
+
 
 
     @Override
@@ -63,7 +65,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         String tokenType = jwtTokenUtil.getTokenType(token);
         if(tokenType.equals(REFRESH_TOKEN_TYPE)){
             userService.findByEmail(userDetails.getUsername()).ifPresent(user -> {
-                response.setHeader("Access-Token", jwtTokenUtil.createToken(user));
+                response.setHeader(ACCESS_TOKEN, jwtTokenUtil.createToken(user));
                 response.setHeader(REFRESH_TOKEN, jwtTokenUtil.createRefreshToken(user));
             });
         }else if(!tokenType.equals(ACCESS_TOKEN_TYPE)){

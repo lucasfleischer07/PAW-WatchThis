@@ -18,6 +18,8 @@ public interface ReviewService {
     List<Review> sortReviews(User user,List<Review> reviewList);
     void thumbUpReview(Review review,User user);
     void thumbDownReview(Review review,User user);
+    boolean deleteThumbDownReview(Review review,User user);
+    boolean deleteThumbUpReview(Review review,User user);
     Optional<Review> getReview(Long reviewId);
     void userLikeAndDislikeReviewsId(Set<Reputation> reputationList);
     Set<Review> userLikeReviews(Set<Reputation> reputationList);

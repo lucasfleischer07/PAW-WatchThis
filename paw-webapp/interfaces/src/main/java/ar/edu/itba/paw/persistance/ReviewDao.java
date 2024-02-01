@@ -16,6 +16,8 @@ public interface ReviewDao {
     void thumbUpReview(Review review,User user);
     void thumbDownReview(Review review,User user);
     Optional<Review> getReview(Long reviewId);
+    void deleteVote(Review review,User user);
+
 
 
 }

@@ -98,14 +98,9 @@ public class ReviewJpaDao implements ReviewDao{
     public void thumbUpReview(Review review,User user) {
         for (Reputation reputation:review.getUserVotes()) {
             if(reputation.getUser().getId()== user.getId()) {
-                if(reputation.isUpvote()){
-                    em.remove(reputation);
-
-                } else{
-                    reputation.setUpvote(true);
-                    reputation.setDownvote(false);
-                    em.merge(reputation);
-                }
+                reputation.setUpvote(true);
+                reputation.setDownvote(false);
+                em.merge(reputation);
                 return;
             }
         }
@@ -117,14 +112,9 @@ public class ReviewJpaDao implements ReviewDao{
     public void thumbDownReview(Review review,User user) {
         for (Reputation reputation:review.getUserVotes()) {
             if(reputation.getUser().getId()== user.getId()) {
-                if(reputation.isDownvote()){
-                    em.remove(reputation);
-
-                } else{
-                    reputation.setDownvote(true);
-                    reputation.setUpvote(false);
-                    em.merge(reputation);
-                }
+                reputation.setDownvote(true);
+                reputation.setUpvote(false);
+                em.merge(reputation);
                 return;
             }
         }
@@ -136,7 +126,14 @@ public class ReviewJpaDao implements ReviewDao{
     public Optional<Review> getReview(Long reviewId) {
         return Optional.ofNullable(em.find(Review.class, reviewId));
     }
-
+    @Override
+    public void deleteVote(Review review,User user){
+        for (Reputation reputation:review.getUserVotes()) {
+            if(reputation.getUser().getId()== user.getId()) {
+                em.remove(reputation);
+            }
+        }
+    }
 
 
 
