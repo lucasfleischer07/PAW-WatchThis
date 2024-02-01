@@ -16,7 +16,10 @@ public class Reputation {
     }
     @EmbeddedId
     private ReputationKey id;
-
+    @Column(name="id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "reputatio_id_seq")
+    @SequenceGenerator(name= "reputatio_id_seq",sequenceName = "reputatio_id_seq",allocationSize = 1)
+    private long reputationId;
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("userId")
     @JoinColumn(name = "userid")
