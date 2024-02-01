@@ -5,18 +5,19 @@ import ContentCard from '../views/components/ContentCard';
 
 // Import the service mocks
 import {
+    contentService,
     listsService
 } from '../services';
-i
+
 
 // Mock the context value
 const mockAuthContextValue = {
     isLogged: jest.fn(), // Create a jest mock function
 };
 jest.mock('../services', () => ({
-    listsService: {
-        addUserWatchList: jest.fn(),
-        deleteUserWatchList: jest.fn(),
+    contentService: {
+        addUserWatchList: jest.fn().mockResolvedValue({ data:{},error: false }),
+        deleteUserWatchList: jest.fn().mockResolvedValue({ data:{},error: false}),
     },
 }));
 
@@ -28,7 +29,7 @@ describe('ContentCard', () => {
 
     it('should add content to watchlist when movie is not in watchlist', async () => {
         // Mock the response from the listsService
-        listsService.addUserWatchList.mockResolvedValue({ error: false });
+        contentService.addUserWatchList.mockResolvedValue({ data:{},error: false });
         const container = document.createElement('div'); // Create a valid container element
         render((
             <Router>
@@ -53,12 +54,12 @@ describe('ContentCard', () => {
 
         // Wait for the asynchronous code in handleAddToWatchlist to complete
         // Assert that the appropriate functions were called and the state is updated correctly
-        expect(listsService.addUserWatchList).toHaveBeenCalled();
+        expect(contentService.addUserWatchList).toHaveBeenCalled();
     });
 
     it('should remove content from watchlist when movie is in watchlist', async () => {
         // Mock the response from the listsService
-        listsService.deleteUserWatchList.mockResolvedValue({ error: false });
+        contentService.deleteUserWatchList.mockResolvedValue({ data:{},error: false });
 
         const container = document.createElement('div'); // Create a valid container element
         render((
@@ -84,7 +85,7 @@ describe('ContentCard', () => {
 
         // Wait for the asynchronous code in handleAddToWatchlist to complete
         // Assert that the appropriate functions were called and the state is updated correctly
-        expect(listsService.deleteUserWatchList).toHaveBeenCalled();
+        expect(contentService.deleteUserWatchList).toHaveBeenCalled();
     });
     }
 )

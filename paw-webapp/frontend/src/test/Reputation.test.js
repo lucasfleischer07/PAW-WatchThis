@@ -15,6 +15,7 @@ import {
 // Mock the context value
 const mockAuthContextValue = {
     isLogged: jest.fn(), // Create a jest mock function
+    user: { id: 1 } // Assuming this is what your context would normally provide
 };
 
 // Mock the services
@@ -75,7 +76,7 @@ describe('Reputation', () => {
         });
 
         // Verify that the comment was added
-        expect(commentService.createComment).toHaveBeenCalledWith(useContext(AuthContext),mockReviewId,userId, mockCommentForm);
+        expect(commentService.createComment).toHaveBeenCalledWith(mockAuthContextValue, mockReviewId, userId, mockCommentForm);
 
         // Check if the new comment is visible
         await waitFor(() => {
@@ -86,7 +87,7 @@ describe('Reputation', () => {
 
     test('should handle like', async () => {
         commentService.getReviewComments = jest.fn().mockReturnValueOnce(reviewComments);
-        reviewService.reviewThumbUp.mockResolvedValueOnce({ error: false });
+        reviewService.reviewThumbUpPost.mockResolvedValueOnce({ error: false });
         mockAuthContextValue.isLogged.mockReturnValue(true);
 
         render(
@@ -106,14 +107,14 @@ describe('Reputation', () => {
         // Wait for state to update
         await waitFor(() => {
             // Check if the reviewReputation counter has been updated
-            expect(reviewService.reviewThumbUp).toHaveBeenCalled();
+            expect(reviewService.reviewThumbUpPost).toHaveBeenCalled();
             const expectedNewReputation = initialReputation + 1; // or the expected change
             expect(screen.getByTestId(`rating${mockReviewId}`).textContent).toBe(String(expectedNewReputation));
         });
     });
 
     test('should handle dislike', async () => {
-        reviewService.reviewThumbDown.mockResolvedValueOnce({ error: false });
+        reviewService.reviewThumbDownPost.mockResolvedValueOnce({ error: false });
         commentService.getReviewComments = jest.fn().mockReturnValueOnce(reviewComments);
         mockAuthContextValue.isLogged.mockReturnValue(true);
 
@@ -134,7 +135,7 @@ describe('Reputation', () => {
         // Wait for state to update
         await waitFor(() => {
             // Check if the reviewReputation counter has been updated
-            expect(reviewService.reviewThumbDown).toHaveBeenCalled();
+            expect(reviewService.reviewThumbDownPost).toHaveBeenCalled();
             const expectedNewReputation = initialReputation - 1; // or the expected change
             expect(screen.getByTestId(`rating${mockReviewId}`).textContent).toBe(String(expectedNewReputation));
         });

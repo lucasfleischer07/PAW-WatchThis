@@ -7,7 +7,7 @@ import { AuthContext } from '../context/AuthContext';
 
 // Import the service mocks
 import {
-    listsService
+    contentService
 } from '../services';
 
 
@@ -16,7 +16,7 @@ const mockAuthContextValue = {
     isLogged: jest.fn(), // Create a jest mock function
 };
 jest.mock('../services', () => ({
-    listsService: {
+    contentService: {
         addUserWatchList: jest.fn(),
         deleteUserWatchList: jest.fn(),
     },
@@ -29,8 +29,8 @@ describe('ContentCard', () => {
 
 
         it('should add content to watchlist when movie is not in watchlist', async () => {
-            // Mock the response from the listsService
-            listsService.addUserWatchList.mockResolvedValue({ error: false });
+            // Mock the response from the contentService
+            contentService.addUserWatchList.mockResolvedValue({ error: false });
             mockAuthContextValue.isLogged.mockReturnValue(true);
 
             const container = document.createElement('div'); // Create a valid container element
@@ -58,12 +58,12 @@ describe('ContentCard', () => {
 
             // Wait for the asynchronous code in handleAddToWatchlist to complete
             // Assert that the appropriate functions were called and the state is updated correctly
-            expect(listsService.addUserWatchList).toHaveBeenCalled();
+            expect(contentService.addUserWatchList).toHaveBeenCalled();
         });
 
         it('should remove content from watchlist when movie is in watchlist', async () => {
-            // Mock the response from the listsService
-            listsService.deleteUserWatchList.mockResolvedValue({ error: false });
+            // Mock the response from the contentService
+            contentService.deleteUserWatchList.mockResolvedValue({ error: false });
             mockAuthContextValue.isLogged.mockReturnValue(true);
 
             const container = document.createElement('div'); // Create a valid container element
@@ -93,7 +93,7 @@ describe('ContentCard', () => {
 
             // Wait for the asynchronous code in handleAddToWatchlist to complete
             // Assert that the appropriate functions were called and the state is updated correctly
-            expect(listsService.deleteUserWatchList).toHaveBeenCalled();
+            expect(contentService.deleteUserWatchList).toHaveBeenCalled();
         });
     }
 )

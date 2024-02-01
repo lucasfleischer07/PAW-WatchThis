@@ -59,7 +59,7 @@ describe('ReviewRegistrationPage Form Submission', () => {
         fireEvent.click(submitButton);
 
         await waitFor(() => {
-            expect(reviewService.reviewEdition()).toHaveBeenCalled(); // Check if the service was called
+            expect(reviewService.reviewEdition).toHaveBeenCalled(); // Check if the service was called
         });
     });
 });

@@ -9,7 +9,7 @@ import {useContext} from "react";
 // Import the service mocks
 import {
     reviewService,
-    reportsService
+    reportsService, contentService
 } from '../services';
 
 
@@ -21,10 +21,11 @@ const mockAuthContextValue = {
 };
 jest.mock('../services', () => ({
     reviewService:{
-        deleteReview:jest.fn()
-    },
-    reportsService:{
+        deleteReview:jest.fn(),
         addReviewReport:jest.fn()
+    },
+    contentService:{
+        getSpecificContent:jest.fn()
     }
 }));
 describe('ReviewCard', () => {
@@ -36,6 +37,8 @@ describe('ReviewCard', () => {
     test('should delete a review', () => {
         mockAuthContextValue.isLogged.mockReturnValue(true);
         reviewService.deleteReview.mockResolvedValue({ error: false })
+        contentService.getSpecificContent.mockResolvedValue({ error: false })
+
         const { getByTestId, getByText } = render(
             <Router>
                 <AuthContext.Provider value={mockAuthContextValue}>
@@ -54,11 +57,13 @@ describe('ReviewCard', () => {
 
     test('should report', () => {
         mockAuthContextValue.isLogged.mockReturnValue(true);
-        reportsService.addReviewReport.mockResolvedValue({ error: false })
+        reviewService.addReviewReport.mockResolvedValue({ error: false })
+        contentService.getSpecificContent.mockResolvedValue({ error: false })
+
         const { getByTestId, getByText } = render(
             <Router>
                 <AuthContext.Provider value={mockAuthContextValue}>
-                    <ReviewCard reviewId={1} reviewUser={"other"} userName={"me"} reviewUserId={2}/>
+                    <ReviewCard reviewId={1} reviewUser={"other"} loggedUserName={"me"} reviewUserId={2}/>
                 </AuthContext.Provider>
             </Router>
         );
@@ -69,7 +74,7 @@ describe('ReviewCard', () => {
         fireEvent.click(spam);
         const confirm = getByText('Yes');
         fireEvent.click(confirm);
-        expect(reportsService.addReviewReport).toHaveBeenCalledWith(useContext(AuthContext), 1,{"reportType": "Spam"})
+        expect(reviewService.addReviewReport).toHaveBeenCalledWith(mockAuthContextValue,1, undefined,{"reportType": "Spam"})
 
     });
 })

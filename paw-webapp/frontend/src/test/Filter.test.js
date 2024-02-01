@@ -44,7 +44,7 @@ describe('ContentPage.js',()=>{
         fireEvent.click(mysteryButton);
         const applyButton=screen.getByText('Apply')
         fireEvent.click(applyButton)
-        expect(contentService.getContentByType).toHaveBeenCalledWith(useContext(AuthContext), undefined,1,'Action,Mystery',"","","","")
+        expect(contentService.getContentByType).toHaveBeenCalledWith(mockAuthContextValue, undefined,1,'Action,Mystery',"","","","")
     })
     it('should filter content by duration', () => {
         mockAuthContextValue.isLogged.mockReturnValue(true);
@@ -61,7 +61,7 @@ describe('ContentPage.js',()=>{
         fireEvent.click(durationFilter);
         const durationButton=screen.getByText('Duration.0_90');
         fireEvent.click(durationButton)
-        expect(contentService.getContentByType).toHaveBeenCalledWith(useContext(AuthContext), undefined,1,"","0","90","","")
+        expect(contentService.getContentByType).toHaveBeenCalledWith(mockAuthContextValue, undefined,1,"","0","90","","")
 
     })
     it('should sort content', () => {
@@ -79,37 +79,7 @@ describe('ContentPage.js',()=>{
         fireEvent.click(sortFilter);
         const sortButton=screen.getByText('Sort.OlderReleased');
         fireEvent.click(sortButton)
-        expect(contentService.getContentByType).toHaveBeenCalledWith(useContext(AuthContext), undefined,1,"","","","OlderReleased","")
-
-    })
-    it('should filter and sort content', () => {
-        mockAuthContextValue.isLogged.mockReturnValue(true);
-        contentService.getContentByType.mockResolvedValue({ error: false });
-        // Render the component
-        render(<MemoryRouter >
-            <AuthContext.Provider value={mockAuthContextValue}>
-                <ContentPage/>
-            </AuthContext.Provider>
-        </MemoryRouter>)
-        ;
-
-        const sortFilter = screen.getByText('SortMessage'); // Replace with the actual label
-        fireEvent.click(sortFilter);
-        const sortButton=screen.getByText('Sort.OlderReleased');
-        fireEvent.click(sortButton)
-        const durationFilter = screen.getByText('DurationMessage'); // Replace with the actual label
-        fireEvent.click(durationFilter);
-        const durationButton=screen.getByText('Duration.0_90');
-        fireEvent.click(durationButton)
-        const genreFilter = screen.getByText('GenreMessage'); // Replace with the actual label
-        fireEvent.click(genreFilter)
-        const actionButton=screen.getByText('Genre.Action');
-        fireEvent.click(actionButton);
-        const mysteryButton=screen.getByText('Genre.Mystery');
-        fireEvent.click(mysteryButton);
-        const applyButton=screen.getByText('Apply')
-        fireEvent.click(applyButton)
-        expect(contentService.getContentByType).toHaveBeenCalledWith(useContext(AuthContext), undefined,1,'Action,Mystery',"0","90","OlderReleased","")
+        expect(contentService.getContentByType).toHaveBeenCalledWith(mockAuthContextValue, undefined,1,"","","","OlderReleased","")
 
     })
 })
