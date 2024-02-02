@@ -29,7 +29,6 @@ export function AuthProvider ({children}) {
     }
 
     const resetTokens = (authToken, refreshToken) => {
-        alert("Entra")
         localStorage.removeItem("userAuthToken");
         localStorage.removeItem("userRefreshToken");
         localStorage.setItem("userAuthToken", authToken);

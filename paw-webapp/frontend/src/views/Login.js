@@ -55,7 +55,6 @@ export default function Login() {
                 }
             })
             .catch((ex) => {
-                alert(ex)
                 setError(true)
                 toast.error(t('Login.Error'))
                 navigate("/error", { replace: true, state: {errorCode: 404} })

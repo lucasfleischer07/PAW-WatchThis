@@ -140,11 +140,6 @@ export class ContentApi {
         return genericFetchWithQueryParams(apiUrl, options, params)
     }
 
-    async getContentReviewers(contentId) {
-        const options = {method: 'GET', headers: authCheck({})}
-        return await genericRequest(this.basePath, contentId, options)
-    }
-
     async addUserWatchList(authFunctions, contentId, userId) {
         const apiUrl = `${this.basePath}/${contentId}/watchList`
         const bodyRequest = {userId: userId}

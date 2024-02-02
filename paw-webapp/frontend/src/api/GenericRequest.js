@@ -71,7 +71,6 @@ export async function genericFetchWithQueryParams(apiUrl, options, params, authF
         }
 
     } catch (e) {
-        console.log("Exc: " + e)
         return {error: true, errorCode: e.response? e.response.status : 500}
     }
 }

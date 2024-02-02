@@ -288,7 +288,7 @@ export default function InfoPage() {
 
                     if (auxUserId !== user?.id) {
                         try {
-                            const userData = await userService.getUserInfo(review.user);
+                            const userData = await userService.getUserInfo(authFunctions, review.user);
                             if (!userData.error) {
                                 return userData.data;
                             } else {
@@ -408,7 +408,6 @@ export default function InfoPage() {
                 setReviews(reviewsData.data);
                 const aux = reviewsData.totalPages;
                 setAmountPages(aux);
-
                 const userInfoPromises = reviewsData.data.map(async (review) => {
                     const auxUserUrl = review.user.split('/');
                     const auxUserId = parseInt(auxUserUrl[auxUserUrl.length - 1], 10);
