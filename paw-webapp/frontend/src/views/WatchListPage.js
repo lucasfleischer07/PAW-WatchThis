@@ -67,7 +67,7 @@ export default function WatchListPage(props) {
                             setTotalContent(watchListData.totalContent)
                             setAmountPages(watchListData.totalPages)
                         } else {
-                            if (watchListData.errorCode === 404) {
+                            if (watchListData.errorCode === 401) {
                                 setShowExpiredCookiesModal(true);
                             } else {
                                 navigate("/error", {replace: true, state: {errorCode: watchListData.errorCode}});

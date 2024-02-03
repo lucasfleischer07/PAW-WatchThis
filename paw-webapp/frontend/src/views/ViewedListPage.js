@@ -70,7 +70,7 @@ export default function ViewedListPage(props) {
                         setAmountPages(viewedListData.totalPages);
                         setTotalContent(viewedListData.totalContent);
                     } else {
-                        if (viewedListData.errorCode === 404) {
+                        if (viewedListData.errorCode === 401) {
                             setShowExpiredCookiesModal(true);
                         } else {
                             navigate("/error", { replace: true, state: { errorCode: viewedListData.errorCode } });

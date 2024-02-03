@@ -26,8 +26,8 @@ public class JwtTokenUtil {
     @Autowired
     PawUserDetailsService userDetailsService;
 
-    private static final int ACCESS_EXPIRY_TIME = 24 * 60 * 60 * 1000; //1 day (in millis)
-    private static final int REFRESH_EXPIRY_TIME = 7 * 24 * 60 * 60 * 1000; //1 week (in millis)
+    private static final int ACCESS_EXPIRY_TIME = 7 * 24 * 60 * 60 * 1000; //1 week (in millis)
+    private static final int REFRESH_EXPIRY_TIME = 2 * 7 * 24 * 60 * 60 * 1000; //2 week (in millis)
     private static final String ACCESS_TOKEN_TYPE = "access-token";
     private static final String REFRESH_TOKEN_TYPE = "refresh-token";
 
