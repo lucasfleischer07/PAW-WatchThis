@@ -30,7 +30,7 @@ export default function ReportedPage() {
 
     const [filterReason, setFilterReason] = useState('')
     const [page, setPage] = useState(1)
-    const [amountPages, setAmountPages] = useState(1)
+    const [amountPages, setAmountPages] = useState(-1)
     const [amountReportedReviews, setAmountReportedReviews] = useState(0)
     const [amountReportedComments, setAmountReportedComments] = useState(0)
 
@@ -105,7 +105,7 @@ export default function ReportedPage() {
     }
 
     useEffect(() => {
-        if(page < 1 || page > amountPages) {
+        if(page < 1 || (page > amountPages && amountPages !== -1)) {
             navigate("/error", {replace: true, state: {errorCode: 404}})
         } else {
             const queryParams = new URLSearchParams(search);

@@ -21,7 +21,7 @@ export default function ContentPage(props) {
 
     const [allContent, setAllContent] = useState([])
     const [actualPage, setActualPage] = useState(1)
-    const [amountPages, setAmountPages] = useState(1)
+    const [amountPages, setAmountPages] = useState(-1)
     const [userWatchListIds, setUserWatchListIds] = useState([])
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
     const [logOut, setLogOut] = useState(false)
@@ -53,7 +53,7 @@ export default function ContentPage(props) {
             setActualPage(currentPage)
         } else {
             if(settedParams === true) {
-                if(actualPage < 1 || actualPage > amountPages) {
+                if(actualPage < 1 || (actualPage > amountPages && amountPages != -1)) {
                     navigate("/error", { replace: true, state: {errorCode: 404} })
                 } else {
                     contentService.getContentByType(authFunctions,contentType, actualPage, genre, durationFrom, durationTo, sorting, query)

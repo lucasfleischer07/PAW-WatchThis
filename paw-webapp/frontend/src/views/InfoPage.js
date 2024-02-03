@@ -34,7 +34,7 @@ export default function InfoPage() {
     const [content, setContent] = useState({})
     const [reviews, setReviews] = useState({})
     const [actualPage, setActualPage] = useState(1)
-    const [amountPages, setAmountPages] = useState(1)
+    const [amountPages, setAmountPages] = useState(-1)
     const [isLikeReviewsList, setIsLikeReviewsList] = useState(false);
     const [isDislikeReviewsList, setIsDislikeReviewsList] = useState(false);
 
@@ -311,7 +311,8 @@ export default function InfoPage() {
             }
         }
 
-        if(actualPage < 1 || actualPage > amountPages) {
+        if(actualPage < 1 || (actualPage > amountPages && amountPages !== -1)) {
+            alert("Actual page: " + actualPage + " amountPages: " + amountPages )
             navigate("/error", { replace: true, state: {errorCode: 404} })
         } else {
             fetchData()
@@ -437,7 +438,7 @@ export default function InfoPage() {
             }
         }
 
-        if(actualPage < 1 || actualPage > amountPages) {
+        if(actualPage < 1 || (actualPage > amountPages && amountPages !== -1)) {
             navigate("/error", { replace: true, state: {errorCode: 404} })
         } else {
             fetchData()

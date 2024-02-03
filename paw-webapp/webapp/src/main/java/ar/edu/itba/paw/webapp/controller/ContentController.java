@@ -73,7 +73,7 @@ public class ContentController {
         PageWrapper<Content> contentListFilter = GetContentParams.getContentByParams(contentType, pageNum, durationFrom, durationTo, sorting, query, genre, watchListSavedBy, viewedListSavedBy, paginated, cs, us, new SecurityChecks(us, cs, rs, ccs));
 
         List<Content> contentListFilterPaginated = contentListFilter.getPageContent();
-        if(contentListFilterPaginated == null) {
+        if(contentListFilterPaginated == null || (paginated && contentListFilter.getPageAmount() < pageNum)) {
             LOGGER.warn("GET /{}: Failed at requesting content", uriInfo.getPath());
             throw new ContentNotFoundException();
         }

@@ -6,6 +6,7 @@ import ar.edu.itba.paw.webapp.dto.request.NewReportCommentDto;
 import ar.edu.itba.paw.webapp.dto.response.CommentReportDto;
 import ar.edu.itba.paw.webapp.dto.response.ReviewReportDto;
 import ar.edu.itba.paw.webapp.exceptions.CommentNotFoundException;
+import ar.edu.itba.paw.webapp.exceptions.PageNotFoundException;
 import ar.edu.itba.paw.webapp.exceptions.ReviewNotFoundException;
 import ar.edu.itba.paw.webapp.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.services.*;
@@ -137,6 +138,10 @@ public class CommentController {
         LOGGER.info("GET /{}: Reported comments list success for admin user", uriInfo.getPath());
         Response.ResponseBuilder response = Response.ok(new GenericEntity<Collection<CommentReportDto>>(commentReportedListDto){});
         if(reportId == null) {
+            if(commentsReported == null || commentsReported.getPageAmount() < page){
+                LOGGER.warn("GET /{}: Failed at requesting comment Report", uriInfo.getPath());
+                throw new PageNotFoundException();
+            }
             response.header("Total-Review-Reports",rrs.getReportedReviewsAmount(reason));
             response.header("Total-Comment-Reports",rrs.getReportedCommentsAmount(reason));
             ResponseBuildingUtils.setPaginationLinks(response,commentsReported , uriInfo);

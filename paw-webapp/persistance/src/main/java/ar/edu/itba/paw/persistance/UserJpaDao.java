@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -92,8 +93,10 @@ public class UserJpaDao implements UserDao{
         PageWrapper<Content> pageWrapper;
         if( page < pageAmount){
             pageWrapper = new PageWrapper<>(page,pageAmount,pageSize,contentList.subList((page-1)*pageSize,page * pageSize),contentList.size());
-        }else{
+        }else if(page == pageAmount){
             pageWrapper = new PageWrapper<>(page,pageAmount,pageSize,contentList.subList((page-1)*pageSize,(page-1) * pageSize + contentList.size()% pageSize ),contentList.size());
+        }else{
+            pageWrapper = new PageWrapper<>(page,pageAmount,pageSize, Collections.emptyList(),contentList.size());
         }
 
         return pageWrapper;
@@ -141,8 +144,10 @@ public class UserJpaDao implements UserDao{
         PageWrapper<Content> pageWrapper;
         if( page < pageAmount){
             pageWrapper = new PageWrapper<>(page,pageAmount,pageSize,contentList.subList((page-1)*pageSize,page * pageSize),contentList.size());
-        }else{
+        }else if (page == pageAmount){
             pageWrapper = new PageWrapper<>(page,pageAmount,pageSize,contentList.subList((page-1)*pageSize,(page-1) * pageSize + contentList.size()% pageSize ),contentList.size());
+        }else{
+            pageWrapper = new PageWrapper<>(page,pageAmount,pageSize, Collections.emptyList(),contentList.size());
         }
 
         return pageWrapper;

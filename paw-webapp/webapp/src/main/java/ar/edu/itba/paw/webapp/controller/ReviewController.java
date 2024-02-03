@@ -56,7 +56,7 @@ public class ReviewController {
                             @QueryParam("dislikedById") final Long dislikeById) {
         LOGGER.info("GET /{}: Called",uriInfo.getPath());
         PageWrapper<Review> reviewList = GetReviewsParams.getReviewsByParams(userId, contentId, reportedById, page, likeById, dislikeById, us, cs, rs);
-        if(reviewList == null) {
+        if(reviewList == null || reviewList.getPageAmount() < page) {
             LOGGER.warn("GET /{}: Invalid page param",uriInfo.getPath());
             throw new ContentNotFoundException();
         }
@@ -261,6 +261,10 @@ public class ReviewController {
         LOGGER.info("GET /{}: Reported reviews list success for admin user", uriInfo.getPath());
         Response.ResponseBuilder response = Response.ok(new GenericEntity<Collection<ReviewReportDto>>(reviewsReportedListDto){});
         if(reportId == null) {
+            if(reviewsReported == null || reviewsReported.getPageAmount() < page){
+                LOGGER.warn("GET /{}: Failed at requesting comment Report", uriInfo.getPath());
+                throw new PageNotFoundException();
+            }
             response.header("Total-Review-Reports",rrs.getReportedReviewsAmount(reason));
             response.header("Total-Comment-Reports",rrs.getReportedCommentsAmount(reason));
             ResponseBuildingUtils.setPaginationLinks(response,reviewsReported , uriInfo);

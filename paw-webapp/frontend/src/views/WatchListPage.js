@@ -21,7 +21,7 @@ export default function WatchListPage(props) {
 
     const [user, setUser] = useState(localStorage.hasOwnProperty("user")? JSON.parse(localStorage.getItem("user")) : null)
     const [page, setPage] = useState(1)
-    const [amountPages, setAmountPages] = useState(1)
+    const [amountPages, setAmountPages] = useState(-1)
     const [watchList, setWatchList] = useState([])
     const [added, setAdded] = useState(false)
     const [totalContent, setTotalContent] = useState(-1)
@@ -84,7 +84,7 @@ export default function WatchListPage(props) {
     }
 
     useEffect(() => {
-        if(page < 1 || page > amountPages) {
+        if(page < 1 || (page > amountPages && amountPages !== -1)) {
             navigate("/error", { replace: true, state: {errorCode: 404} })
         } else {
             const fetchData = async () => {

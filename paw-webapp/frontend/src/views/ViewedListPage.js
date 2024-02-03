@@ -23,7 +23,7 @@ export default function ViewedListPage(props) {
 
     const [totalContent, setTotalContent] = useState(-1)
     const [page, setPage] = useState(1)
-    const [amountPages, setAmountPages] = useState(1)
+    const [amountPages, setAmountPages] = useState(-1)
     const [viewedList, setViewedList] = useState([])
     const [watchList, setWatchList] = useState([])
     const [added, setAdded] = useState(false)
@@ -99,7 +99,7 @@ export default function ViewedListPage(props) {
     }
 
     useEffect(() => {
-        if(page < 1 || page > amountPages) {
+        if(page < 1 || (page > amountPages && amountPages !== -1)) {
             navigate("/error", { replace: true, state: {errorCode: 404} })
         } else {
             const fetchData = async () => {

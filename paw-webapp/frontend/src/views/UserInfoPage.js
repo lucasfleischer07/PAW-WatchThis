@@ -31,7 +31,7 @@ export default function UserInfoPage() {
     const [isSameUser, setIsSameUser] = useState(undefined)
     const [canPromote, setCanPromote] = useState(undefined)
     const [page, setPage] = useState(1)
-    const [amountPages, setAmountPages] = useState(1)
+    const [amountPages, setAmountPages] = useState(-1)
     const [reviews, setReviews] = useState([])
     const [reputation, setReputation] = useState(0)
     const [amountReviews, setAmountReviews] =useState(0)
@@ -204,7 +204,7 @@ export default function UserInfoPage() {
                 }
             }
 
-            if(page < 1 || page > amountPages) {
+            if(page < 1 || (page > amountPages && amountPages !== -1)) {
                 navigate("/error", { replace: true, state: {errorCode: 404} })
             } else {
                 fetchData()
