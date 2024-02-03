@@ -9,7 +9,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Primary
 @Repository
@@ -28,6 +30,24 @@ public class ReportJpaDao implements ReportDao{
 
         }
         else throw new IllegalArgumentException();
+    }
+
+    @SuppressWarnings("unchecked")
+    private TypedQuery<ReviewReport> getFinalReviewQuery(List resultList){
+        final List<Long> idList = (List<Long>) resultList.stream()
+                .map(n -> (Long) ((Number) n).longValue()).collect(Collectors.toList());
+        final TypedQuery<ReviewReport> query = em.createQuery("FROM ReviewReport WHERE id in :idList",ReviewReport.class);
+        query.setParameter("idList",idList);
+        return query;
+    }
+
+    @SuppressWarnings("unchecked")
+    private TypedQuery<CommentReport> getFinalCommentQuery(List resultList){
+        final List<Long> idList = (List<Long>) resultList.stream()
+                .map(n -> (Long) ((Number) n).longValue()).collect(Collectors.toList());
+        final TypedQuery<CommentReport> query = em.createQuery("FROM CommentReport WHERE id in :idList",CommentReport.class);
+        query.setParameter("idList",idList);
+        return query;
     }
 
     @Override
@@ -89,16 +109,17 @@ public class ReportJpaDao implements ReportDao{
 
     @Override
     public PageWrapper<ReviewReport> getReportedReviews(int page,int pageSize) {
-        TypedQuery<ReviewReport> query=em.createQuery("select r from  ReviewReport r where r.id in(select min(r2.id) from ReviewReport r2 group by r2.review) order by r.id asc",ReviewReport.class);
-        TypedQuery<ReviewReport> countQuery=em.createQuery("select r from  ReviewReport r where r.id in(select min(r2.id) from ReviewReport r2 group by r2.review) order by r.id asc",ReviewReport.class);
-        query.setFirstResult((page - 1) * pageSize);
-        query.setMaxResults(pageSize);
+        Query nativeQuery =em.createNativeQuery("select r.id from  ReviewReport r where r.id in(select min(r2.id) from ReviewReport r2 group by r2.review) order by r.id asc");
+        long totalContent = PageWrapper.calculatePageAmount(nativeQuery.getResultList().size(),pageSize);
+        int totalSize = nativeQuery.getResultList().size();
+
+        nativeQuery.setFirstResult((page - 1) * pageSize);
+        nativeQuery.setMaxResults(pageSize);
+
+        final TypedQuery<ReviewReport> query = getFinalReviewQuery(nativeQuery.getResultList());
 
 
-        long totalContent = PageWrapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
-
-        return new PageWrapper<ReviewReport>(page,totalContent,pageSize,query.getResultList(),countQuery.getResultList().size());
-
+        return new PageWrapper<ReviewReport>(page,totalContent,pageSize,query.getResultList(),totalSize);
     }
 
     @Override
@@ -110,16 +131,17 @@ public class ReportJpaDao implements ReportDao{
 
     @Override
     public PageWrapper<ReviewReport> getReportedReviewsByReason(ReportReason reason,int page,int pageSize){
-        TypedQuery<ReviewReport>query= em.createQuery("select r from ReviewReport r where  r.id in(select min(r2.id) from ReviewReport r2 where r2.reportReason = :reason group by r2.review) order by r.id asc", ReviewReport.class);
-        TypedQuery<ReviewReport>countQuery= em.createQuery("select r from ReviewReport r where  r.id in(select min(r2.id) from ReviewReport r2 where r2.reportReason = :reason group by r2.review) order by r.id asc", ReviewReport.class);
-        countQuery.setParameter("reason",reason);
-        query.setParameter("reason",reason);
-        query.setFirstResult((page - 1) * pageSize);
-        query.setMaxResults(pageSize);
+        Query nativeQuery = em.createQuery("select r.id from ReviewReport r where  r.id in(select min(r2.id) from ReviewReport r2 where r2.reportReason = :reason group by r2.review) order by r.id asc");
+        nativeQuery.setParameter("reason",reason);
+        long totalContent = PageWrapper.calculatePageAmount(nativeQuery.getResultList().size(),pageSize);
+        int totalSize = nativeQuery.getResultList().size();
 
-        long totalContent = PageWrapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
+        nativeQuery.setFirstResult((page - 1) * pageSize);
+        nativeQuery.setMaxResults(pageSize);
 
-        return new PageWrapper<ReviewReport>(page,totalContent,pageSize,query.getResultList(),countQuery.getResultList().size());
+        final TypedQuery<ReviewReport> query = getFinalReviewQuery(nativeQuery.getResultList());
+
+        return new PageWrapper<ReviewReport>(page,totalContent,pageSize,query.getResultList(),totalSize);
     }
 
     @Override
@@ -137,14 +159,16 @@ public class ReportJpaDao implements ReportDao{
 
     @Override
     public PageWrapper<CommentReport> getReportedComments(int page,int pageSize) {
-        TypedQuery<CommentReport>query= em.createQuery("select r from CommentReport r where r.id in(select min(r2.id) from CommentReport r2 group by r2.comment) order by r.id asc", CommentReport.class);
-        TypedQuery<CommentReport>countQuery= em.createQuery("select r from CommentReport r where r.id in(select min(r2.id) from CommentReport r2 group by r2.comment) order by r.id asc", CommentReport.class);
-        query.setFirstResult((page - 1) * pageSize);
-        query.setMaxResults(pageSize);
+        Query nativeQuery = em.createQuery("select r.id from CommentReport r where r.id in(select min(r2.id) from CommentReport r2 group by r2.comment) order by r.id asc");
+        long totalContent = PageWrapper.calculatePageAmount(nativeQuery.getResultList().size(),pageSize);
+        int totalSize = nativeQuery.getResultList().size();
 
-        long totalContent = PageWrapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
+        nativeQuery.setFirstResult((page - 1) * pageSize);
+        nativeQuery.setMaxResults(pageSize);
 
-        return new PageWrapper<CommentReport>(page,totalContent,pageSize,query.getResultList(),countQuery.getResultList().size());
+        final TypedQuery<CommentReport> query = getFinalCommentQuery(nativeQuery.getResultList());
+
+        return new PageWrapper<CommentReport>(page,totalContent,pageSize,query.getResultList(),totalSize);
     }
 
     @Override
@@ -156,17 +180,19 @@ public class ReportJpaDao implements ReportDao{
 
     @Override
     public PageWrapper<CommentReport> getReportedCommentsByReason(ReportReason reason,int page,int pageSize){
-        TypedQuery<CommentReport>query= em.createQuery("select r from CommentReport r  where r.id in(select min(r2.id) from CommentReport r2 where r2.reportReason = :reason group by r2.comment) order by r.id asc", CommentReport.class);
-        TypedQuery<CommentReport>countQuery= em.createQuery("select r from CommentReport r  where r.id in(select min(r2.id) from CommentReport r2 where r2.reportReason = :reason group by r2.comment) order by r.id asc", CommentReport.class);
-        countQuery.setParameter("reason",reason);
+        Query nativeQuery = em.createQuery("select r.id from CommentReport r  where r.id in(select min(r2.id) from CommentReport r2 where r2.reportReason = :reason group by r2.comment) order by r.id asc");
 
-        query.setParameter("reason",reason);
-        query.setFirstResult((page - 1) * pageSize);
-        query.setMaxResults(pageSize);
+        nativeQuery.setParameter("reason",reason);
+        long totalContent = PageWrapper.calculatePageAmount(nativeQuery.getResultList().size(),pageSize);
+        int totalSize = nativeQuery.getResultList().size();
 
-        long totalContent = PageWrapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
+        nativeQuery.setFirstResult((page - 1) * pageSize);
+        nativeQuery.setMaxResults(pageSize);
 
-        return new PageWrapper<CommentReport>(page,totalContent,pageSize,query.getResultList(),countQuery.getResultList().size());
+        final TypedQuery<CommentReport> query = getFinalCommentQuery(nativeQuery.getResultList());
+
+
+        return new PageWrapper<CommentReport>(page,totalContent,pageSize,query.getResultList(),totalSize);
     }
 
     @Override

@@ -10,6 +10,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Primary
 @Repository
@@ -18,32 +19,40 @@ public class ContentJpaDao implements ContentDao{
     @PersistenceContext
     private EntityManager em;
 
+    @SuppressWarnings("unchecked")
+    private TypedQuery<Content> getFinalQuery(List resultList){
+        final List<Long> idList = (List<Long>) resultList.stream()
+                .map(n -> (Long) ((Number) n).longValue()).collect(Collectors.toList());
+        final TypedQuery<Content> query = em.createQuery("FROM Content WHERE id in :idList",Content.class);
+        query.setParameter("idList",idList);
+        return query;
+    }
+
+    @SuppressWarnings("unchecked")
     @Override
     public PageWrapper<Content> getAllContent(String type, Sorting sort, int page, int pageSize) {
-        TypedQuery<Content> query = em.createQuery("SELECT c FROM Content c", Content.class);
+        Query nativeQuery;
 
         String sortString = sort == null ? "" : sort.getQueryString();
-        TypedQuery<Content> countQuery;
         if (Objects.equals(type, "movie") || Objects.equals(type, "serie")) {
-            query= em.createQuery("FROM Content WHERE type = :type" + sortString,Content.class);
-            countQuery = em.createQuery("FROM Content WHERE type = :type",Content.class);
-            countQuery.setParameter("type",type);
-            query.setParameter("type",type);
+            nativeQuery = em.createNativeQuery("SELECT id FROM Content WHERE type = :type" + sortString);
+            nativeQuery.setParameter("type",type);
         } else {
-            countQuery = em.createQuery("SELECT c FROM Content c", Content.class);
-            query= em.createQuery("FROM Content" + sortString,Content.class);
+            nativeQuery = em.createNativeQuery("SELECT id FROM Content " + sortString);
         }
+        long totalContent = PageWrapper.calculatePageAmount(nativeQuery.getResultList().size(),pageSize);
+        int totalSize = nativeQuery.getResultList().size();
 
-        query.setFirstResult((page - 1) * pageSize);
-        query.setMaxResults(pageSize);
-        long totalContent = PageWrapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
+        nativeQuery.setFirstResult((page - 1) * pageSize);
+        nativeQuery.setMaxResults(pageSize);
 
-        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList(),countQuery.getResultList().size()) ;
+        final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList());
+        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList(),totalSize) ;
     }
 
     @Override
     public Optional<Content> findByName(String name) {
-        final TypedQuery<Content> query=em.createQuery( "FROM Content WHERE name = :name",Content.class);
+         final TypedQuery<Content> query=em.createQuery( "FROM Content WHERE name = :name",Content.class);
         query.setParameter("name",name);
         return query.getResultList().stream().findFirst();
     }
@@ -64,88 +73,79 @@ public class ContentJpaDao implements ContentDao{
     public PageWrapper<Content> findByGenre(String type, String genre, Sorting sort, int page, int pageSize) {
         String sortString = sort == null ? "" : sort.getQueryString();
         List<Long> longList = genreBaseQuery(genre);
-        TypedQuery<Content> query;
-        TypedQuery<Content> countQuery;
+        Query nativeQuery;
         if (longList.size() == 0){
             return new PageWrapper<>(0,0,0,Collections.emptyList(),0);
         }
         if (Objects.equals(type, "movie") || Objects.equals(type, "serie")) {
-            query=em.createQuery("FROM Content WHERE id IN (:resultList) AND type = :type " + sortString, Content.class);
-            countQuery = em.createQuery("FROM Content WHERE id IN (:resultList) AND type = :type ",Content.class);
-            countQuery.setParameter("type",type);
-            query.setParameter("type",type);
+            nativeQuery = em.createNativeQuery("SELECT id FROM Content WHERE id IN (:resultList) AND type = :type" + sortString);
+            nativeQuery.setParameter("type",type);
         } else {
-            query = em.createQuery("FROM Content WHERE id IN (:resultList) " + sortString, Content.class);
-            countQuery = em.createQuery("FROM Content WHERE id IN (:resultList) ",Content.class);
+            nativeQuery = em.createNativeQuery("SELECT id FROM Content WHERE id IN (:resultList) " + sortString);
         }
 
-        countQuery.setParameter("resultList",longList);
-        query.setParameter("resultList",longList);
-        query.setFirstResult((page - 1) * pageSize);
-        query.setMaxResults(pageSize);
+        nativeQuery.setParameter("resultList",longList);
+        long totalContent = PageWrapper.calculatePageAmount(nativeQuery.getResultList().size(),pageSize);
+        int totalSize = nativeQuery.getResultList().size();
 
+        nativeQuery.setFirstResult((page - 1) * pageSize);
+        nativeQuery.setMaxResults(pageSize);
 
-        long totalContent = PageWrapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
+        final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList());
 
-        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList(),countQuery.getResultList().size()) ;
+        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList(),totalSize) ;
     }
 
     @Override
     public PageWrapper<Content> findByDuration(String type, int durationFrom, int durationTo, Sorting sort, int page, int pageSize) {
         String sortString = sort == null ? "" : sort.getQueryString();
-        TypedQuery<Content> query= em.createQuery("From Content",Content.class);
-        TypedQuery<Content> countQuery;
+        Query nativeQuery;
         if(!Objects.equals(type, "all")) {
-            query = em.createQuery("FROM Content WHERE durationnum > :durationFrom AND durationnum <= :durationTo AND type = :type " + sortString, Content.class);
-            countQuery = em.createQuery("FROM Content WHERE durationnum > :durationFrom  AND durationnum <= :durationTo AND type = :type",Content.class);
-            countQuery.setParameter("type",type);
-            query.setParameter("type",type);
+            nativeQuery = em.createNativeQuery("select id FROM Content WHERE durationnum > :durationFrom AND durationnum <= :durationTo AND type = :type " + sortString);
+            nativeQuery.setParameter("type",type);
         } else {
-            countQuery = em.createQuery("FROM Content WHERE durationnum > :durationFrom  AND durationnum <= :durationTo",Content.class);
-            query = em.createQuery("FROM Content WHERE durationnum > :durationFrom AND durationnum <= :durationTo " + sortString, Content.class);
+            nativeQuery = em.createNativeQuery("select id FROM Content WHERE durationnum > :durationFrom AND durationnum <= :durationTo " + sortString);
         }
-        countQuery.setParameter("durationFrom",durationFrom);
-        countQuery.setParameter("durationTo",durationTo);
-        query.setParameter("durationFrom",durationFrom);
-        query.setParameter("durationTo",durationTo);
-        query.setFirstResult((page - 1) * pageSize);
-        query.setMaxResults(pageSize);
+        nativeQuery.setParameter("durationFrom",durationFrom);
+        nativeQuery.setParameter("durationTo",durationTo);
+        long totalContent = PageWrapper.calculatePageAmount(nativeQuery.getResultList().size(),pageSize);
+        int totalSize = nativeQuery.getResultList().size();
 
-        long totalContent = PageWrapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
+        nativeQuery.setFirstResult((page - 1) * pageSize);
+        nativeQuery.setMaxResults(pageSize);
 
-        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList(),countQuery.getResultList().size());
+        final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList());
+
+
+        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList(),totalSize);
     }
 
     @Override
     public PageWrapper<Content> findByDurationAndGenre(String type, String genre, int durationFrom, int durationTo, Sorting sort, int page, int pageSize) {
         String sortString = sort == null ? "" : sort.getQueryString();
         List<Long> longList = genreBaseQuery(genre);
-        TypedQuery<Content> query;
-        TypedQuery<Content> countQuery;
+        Query nativeQuery;
         if (longList.size() == 0){
             return new PageWrapper<>(0,0,0,Collections.emptyList(),0);
         }
         if (Objects.equals(type, "movie") || Objects.equals(type, "serie")) {
-            query= em.createQuery("FROM Content WHERE id IN ( :resultList ) AND type = :type and durationnum > :durationFrom  AND durationnum <= :durationTo" + sortString,Content.class);
-            countQuery = em.createQuery("FROM Content WHERE id IN ( :resultList ) AND type = :type and durationnum > :durationFrom  AND durationnum <= :durationTo" + sortString,Content.class);
-            query.setParameter("type",type);
-            countQuery.setParameter("type",type);
+            nativeQuery= em.createNativeQuery("SELECT id FROM Content WHERE id IN ( :resultList ) AND type = :type and durationnum > :durationFrom  AND durationnum <= :durationTo" + sortString);
+            nativeQuery.setParameter("type",type);
         } else {
-            query= em.createQuery("FROM Content WHERE id IN ( :resultList ) AND durationnum > :durationFrom  AND durationnum <= :durationTo" + sortString,Content.class);
-            countQuery = em.createQuery("FROM Content WHERE id IN ( :resultList ) AND durationnum > :durationFrom  AND durationnum <= :durationTo" + sortString,Content.class);
+            nativeQuery= em.createNativeQuery("FROM Content WHERE id IN ( :resultList ) AND durationnum > :durationFrom  AND durationnum <= :durationTo " + sortString);
         }
-        countQuery.setParameter("durationFrom",durationFrom);
-        countQuery.setParameter("durationTo",durationTo);
-        countQuery.setParameter("resultList",longList);
+        nativeQuery.setParameter("durationFrom",durationFrom);
+        nativeQuery.setParameter("durationTo",durationTo);
+        nativeQuery.setParameter("resultList",longList);
+        long totalContent = PageWrapper.calculatePageAmount(nativeQuery.getResultList().size(),pageSize);
+        int totalSize = nativeQuery.getResultList().size();
 
-        long totalContent = PageWrapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
+        nativeQuery.setFirstResult((page - 1) * pageSize);
+        nativeQuery.setMaxResults(pageSize);
 
-        query.setParameter("durationFrom",durationFrom);
-        query.setParameter("durationTo",durationTo);
-        query.setParameter("resultList",longList);
-        query.setFirstResult((page - 1) * pageSize);
-        query.setMaxResults(pageSize);
-        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList(),countQuery.getResultList().size());
+        final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList());
+
+        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList(),totalSize);
     }
 
     @Override
@@ -155,85 +155,80 @@ public class ContentJpaDao implements ContentDao{
 
     @Override
     public PageWrapper<Content> getSearchedContent(String type, String queryUser, Sorting sort, int page, int pageSize) {
-        TypedQuery<Content> query;
-        TypedQuery<Content> countQuery;
+        Query nativeQuery;
         String sortString = sort == null ? "" : sort.getQueryString();
         if(Objects.equals(type, "movie") || Objects.equals(type, "serie")){
-            query= em.createQuery("From Content WHERE type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)" + sortString,Content.class);
-            countQuery = em.createQuery("FROM Content WHERE type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)" + sortString,Content.class);
-            countQuery.setParameter("type",type);
-            query.setParameter("type",type);
+            nativeQuery= em.createNativeQuery("SELECT id From Content WHERE type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)" + sortString);
+            nativeQuery.setParameter("type",type);
         } else{
-            query= em.createQuery("From Content WHERE (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)" + sortString,Content.class);
-            countQuery = em.createQuery("FROM Content WHERE (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)" + sortString,Content.class);
+            nativeQuery= em.createNativeQuery("SELECT id From Content WHERE (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)" + sortString);
         }
-        countQuery.setParameter("query","%" + queryUser.toLowerCase() + "%");
 
-        long totalContent = PageWrapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
 
-        query.setParameter("query","%" + queryUser.toLowerCase() + "%");
-        query.setFirstResult((page - 1) * pageSize);
-        query.setMaxResults(pageSize);
-        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList(),countQuery.getResultList().size());
+        nativeQuery.setParameter("query","%" + queryUser.toLowerCase() + "%");
+        long totalContent = PageWrapper.calculatePageAmount(nativeQuery.getResultList().size(),pageSize);
+        int totalSize = nativeQuery.getResultList().size();
+        nativeQuery.setFirstResult((page - 1) * pageSize);
+        nativeQuery.setMaxResults(pageSize);
+
+        final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList());
+
+        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList(),totalSize);
     }
 
     //First makes the genre query in a NativeQuery
     @Override
     public PageWrapper<Content> getSearchedContentByGenre(String type, String genre, Sorting sort, String queryUser, int page, int pageSize) {
         List<Long> longList = genreBaseQuery(genre);
-        TypedQuery<Content> query;
-        TypedQuery<Content> countQuery;
+        Query nativeQuery;
         if (longList.size() == 0){
             return new PageWrapper<>(0,0,0,Collections.emptyList(),0);
         }
         String sortString = sort == null ? "" : sort.getQueryString();
         if (Objects.equals(type, "movie") || Objects.equals(type, "serie")) {
-            query= em.createQuery(" FROM Content WHERE id IN ( :resultList ) AND type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)" + sortString,Content.class);
-            countQuery = em.createQuery("FROM Content WHERE id IN ( :resultList ) AND type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)",Content.class);
-            countQuery.setParameter("type",type);
-            query.setParameter("type",type);
+            nativeQuery= em.createNativeQuery("SELECT id FROM Content WHERE id IN ( :resultList ) AND type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)" + sortString);
+            nativeQuery.setParameter("type",type);
         } else {
-            query= em.createQuery(" FROM Content WHERE id IN ( :resultList ) AND (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)" + sortString,Content.class);
-            countQuery = em.createQuery("FROM Content WHERE id IN ( :resultList ) AND (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)",Content.class);
+            nativeQuery= em.createNativeQuery("SELECT id FROM Content WHERE id IN ( :resultList ) AND (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)" + sortString);
         }
-        countQuery.setParameter("query","%" + queryUser.toLowerCase() + "%");
-        countQuery.setParameter("resultList",longList);
 
-        long totalContent = PageWrapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
 
-        query.setParameter("query","%" + queryUser.toLowerCase() + "%");
-        query.setParameter("resultList",longList);
-        query.setFirstResult((page - 1) * pageSize);
-        query.setMaxResults(pageSize);
-        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList(),countQuery.getResultList().size());
+        nativeQuery.setParameter("query","%" + queryUser.toLowerCase() + "%");
+        nativeQuery.setParameter("resultList",longList);
+        long totalContent = PageWrapper.calculatePageAmount(nativeQuery.getResultList().size(),pageSize);
+        int totalSize = nativeQuery.getResultList().size();
+
+        nativeQuery.setFirstResult((page - 1) * pageSize);
+        nativeQuery.setMaxResults(pageSize);
+
+        final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList());
+
+        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList(),totalSize);
     }
 
     @Override
     public PageWrapper<Content> getSearchedContentByDuration(String type, int durationFrom, int durationTo, Sorting sort, String queryUser, int page, int pageSize) {
-        TypedQuery<Content> query= em.createQuery("From Content",Content.class);
         String sortString = sort == null ? "" : sort.getQueryString();
-        TypedQuery<Content> countQuery;
+        Query nativeQuery;
         if(!Objects.equals(type, "all")) {
-            query = em.createQuery("FROM Content WHERE durationnum > :durationFrom  AND durationnum <= :durationTo AND type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)" + sortString,Content.class);
-            countQuery = em.createQuery("FROM Content WHERE durationnum > :durationFrom  AND durationnum <= :durationTo AND type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)",Content.class);
-            countQuery.setParameter("type",type);
-            query.setParameter("type",type);
+            nativeQuery = em.createNativeQuery("SELECT id FROM Content WHERE durationnum > :durationFrom  AND durationnum <= :durationTo AND type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)" + sortString);
+            nativeQuery.setParameter("type",type);
         } else {
-            query = em.createQuery("FROM Content WHERE durationnum > :durationFrom  AND durationnum <= :durationTo and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)" + sortString,Content.class);
-            countQuery = em.createQuery("FROM Content WHERE durationnum > :durationFrom  AND durationnum <= :durationTo AND (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)",Content.class);
+            nativeQuery = em.createNativeQuery("SELECT id FROM Content WHERE durationnum > :durationFrom  AND durationnum <= :durationTo and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)" + sortString);
         }
-        countQuery.setParameter("query","%" + queryUser.toLowerCase() + "%");
-        countQuery.setParameter("durationFrom",durationFrom);
-        countQuery.setParameter("durationTo",durationTo);
 
-        long totalContent = PageWrapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
+        nativeQuery.setParameter("query","%" + queryUser.toLowerCase() + "%");
+        nativeQuery.setParameter("durationFrom",durationFrom);
+        nativeQuery.setParameter("durationTo",durationTo);
+        long totalContent = PageWrapper.calculatePageAmount(nativeQuery.getResultList().size(),pageSize);
+        int totalSize = nativeQuery.getResultList().size();
 
-        query.setParameter("query","%" + queryUser.toLowerCase() + "%");
-        query.setParameter("durationFrom",durationFrom);
-        query.setParameter("durationTo",durationTo);
-        query.setFirstResult((page - 1) * pageSize);
-        query.setMaxResults(pageSize);
-        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList(),countQuery.getResultList().size());
+        nativeQuery.setFirstResult((page - 1) * pageSize);
+        nativeQuery.setMaxResults(pageSize);
+
+        final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList());
+
+        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList(),totalSize);
     }
 
 
@@ -241,64 +236,60 @@ public class ContentJpaDao implements ContentDao{
     public PageWrapper<Content> getSearchedContentByDurationAndGenre(String type, String genre, int durationFrom, int durationTo, Sorting sort, String queryUser, int page, int pageSize) {
         String sortString = sort == null ? "" : sort.getQueryString();
         List<Long> longList = genreBaseQuery(genre);
-        TypedQuery<Content> query;
+        Query nativeQuery;
         if (longList.size() == 0){
             return new PageWrapper<>(0,0,0,Collections.emptyList(),0);
         }
-        TypedQuery<Content> countQuery;
         if (Objects.equals(type, "movie") || Objects.equals(type, "serie")) {
-            query= em.createQuery(" FROM Content WHERE id IN ( :resultList ) AND type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) AND durationnum > :durationFrom  AND durationnum <= :durationTo" + sortString,Content.class);
-            countQuery = em.createQuery("FROM Content WHERE id IN ( :resultList ) AND type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) AND durationnum > :durationFrom  AND durationnum <= :durationTo",Content.class);
-            countQuery.setParameter("type",type);
-            query.setParameter("type",type);
+            nativeQuery= em.createQuery("SELECT id FROM Content WHERE id IN ( :resultList ) AND type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) AND durationnum > :durationFrom  AND durationnum <= :durationTo" + sortString);
+            nativeQuery.setParameter("type",type);
         } else {
-            query= em.createQuery(" FROM Content WHERE id IN ( :resultList ) AND (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) AND durationnum > :durationFrom  AND durationnum <= :durationTo" + sortString,Content.class);
-            countQuery = em.createQuery("FROM Content WHERE id IN ( :resultList ) AND (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) AND durationnum > :durationFrom  AND durationnum <= :durationTo",Content.class);
+            nativeQuery= em.createQuery("SELECT id FROM Content WHERE id IN ( :resultList ) AND (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) AND durationnum > :durationFrom  AND durationnum <= :durationTo" + sortString);
         }
-        countQuery.setParameter("durationFrom",durationFrom);
-        countQuery.setParameter("durationTo",durationTo);
-        countQuery.setParameter("query","%" + queryUser.toLowerCase() + "%");
-        countQuery.setParameter("resultList",longList);
 
-        long totalContent = PageWrapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
+        nativeQuery.setParameter("durationFrom",durationFrom);
+        nativeQuery.setParameter("durationTo",durationTo);
+        nativeQuery.setParameter("query","%" + queryUser.toLowerCase() + "%");
+        nativeQuery.setParameter("resultList",longList);
+        long totalContent = PageWrapper.calculatePageAmount(nativeQuery.getResultList().size(),pageSize);
+        int totalSize = nativeQuery.getResultList().size();
 
-        query.setParameter("durationFrom",durationFrom);
-        query.setParameter("durationTo",durationTo);
-        query.setParameter("query","%" + queryUser.toLowerCase() + "%");
-        query.setParameter("resultList",longList);
-        query.setFirstResult((page - 1) * pageSize);
-        query.setMaxResults(pageSize);
+        nativeQuery.setFirstResult((page - 1) * pageSize);
+        nativeQuery.setMaxResults(pageSize);
 
+        final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList());
 
-        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList(),countQuery.getResultList().size());
+        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList(),totalSize);
     }
 
 
 
     @Override
     public PageWrapper<Content> getSearchedContentRandom(String queryUser, int page, int pageSize) {
-        TypedQuery<Content> query= em.createQuery("From Content WHERE (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) ORDER BY RANDOM()",Content.class);
-        TypedQuery<Content> countQuery = em.createQuery("FROM Content WHERE (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)",Content.class);
-        countQuery.setParameter("query","%" + queryUser.toLowerCase() + "%");
+        Query nativeQuery= em.createQuery("SELECT id From Content WHERE (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) ORDER BY RANDOM()");
+        nativeQuery.setParameter("query","%" + queryUser.toLowerCase() + "%");
 
-        long totalContent = PageWrapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
+        long totalContent = PageWrapper.calculatePageAmount(nativeQuery.getResultList().size(),pageSize);
+        int totalSize = nativeQuery.getResultList().size();
 
-        query.setParameter("query","%" + queryUser.toLowerCase() + "%");
-        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList(),countQuery.getResultList().size());
+        final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList());
+
+        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList(),totalSize);
     }
 
     @Override
     public PageWrapper<Content> findByType(String type, int page, int pageSize) {
-        TypedQuery<Content> query= em.createQuery("FROM Content WHERE type = :type",Content.class);
-        TypedQuery<Content> countQuery = em.createQuery("FROM Content WHERE type = :type",Content.class);
-        countQuery.setParameter("type",type);
+        Query nativeQuery= em.createQuery("SELECT id FROM Content WHERE type = :type");
 
-        long totalContent = PageWrapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
+        nativeQuery.setParameter("type",type);
+        long totalContent = PageWrapper.calculatePageAmount(nativeQuery.getResultList().size(),pageSize);
+        int totalSize = nativeQuery.getResultList().size();
 
-        query.setParameter("type",type);
-        query.setFirstResult((page - 1) * pageSize);
-        query.setMaxResults(pageSize);
-        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList(),countQuery.getResultList().size());
+        nativeQuery.setFirstResult((page - 1) * pageSize);
+        nativeQuery.setMaxResults(pageSize);
+        final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList());
+
+        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList(),totalSize);
     }
 
     @Override
@@ -310,15 +301,13 @@ public class ContentJpaDao implements ContentDao{
             longList.add(big.longValue());
         }
         TypedQuery<Content> query= em.createQuery(" FROM Content WHERE id IN ( :resultList ) ORDER BY rating DESC",Content.class);
-        TypedQuery<Content> countQuery = em.createQuery(" FROM Content WHERE id IN ( :resultList ) ORDER BY rating DESC",Content.class);
         query.setParameter("resultList",longList);
-        countQuery.setParameter("resultList",longList);
-
+        long totalContent = PageWrapper.calculatePageAmount(query.getResultList().size(),pageSize);
+        int totalSize = query.getResultList().size();
         query.setFirstResult((page - 1) * pageSize);
         query.setMaxResults(pageSize);
-        long totalContent = PageWrapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
 
-        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList(),countQuery.getResultList().size()) ;
+        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList(),totalSize) ;
     }
 
     @Override
@@ -332,15 +321,14 @@ public class ContentJpaDao implements ContentDao{
         }
         if(longList.size()>0){
             TypedQuery<Content> query= em.createQuery(" FROM Content WHERE id IN ( :resultList ) ",Content.class);
-            TypedQuery<Content> countQuery = em.createQuery(" FROM Content WHERE id IN ( :resultList ) ",Content.class);
             query.setParameter("resultList",longList);
-            countQuery.setParameter("resultList",longList);
+            long totalContent = PageWrapper.calculatePageAmount(query.getResultList().size(),pageSize);
+            int totalSize = query.getResultList().size();
 
             query.setFirstResult((page - 1) * pageSize);
             query.setMaxResults(pageSize);
-            long totalContent = PageWrapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
 
-            return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList(),countQuery.getResultList().size()) ;
+            return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList(),totalSize);
         }
         return new PageWrapper<Content>(0,0,0,Collections.emptyList(),0) ;
 
@@ -356,29 +344,31 @@ public class ContentJpaDao implements ContentDao{
         }
         if(longList.size()>0) {
             TypedQuery<Content> query = em.createQuery(" FROM Content WHERE id IN ( :resultList ) ", Content.class);
-            TypedQuery<Content> countQuery = em.createQuery(" FROM Content WHERE id IN ( :resultList ) ", Content.class);
             query.setParameter("resultList", longList);
-            countQuery.setParameter("resultList", longList);
+            long totalContent = PageWrapper.calculatePageAmount(query.getResultList().size(),pageSize);
+            int totalSize = query.getResultList().size();
 
             query.setFirstResult((page - 1) * pageSize);
             query.setMaxResults(pageSize);
-            long totalContent = PageWrapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
 
-            return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList(),countQuery.getResultList().size()) ;
+            return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList(),totalSize) ;
         }
         return new PageWrapper<Content>(0,0,0,Collections.emptyList(),0);
     }
 
     @Override
     public PageWrapper<Content> getLastAdded(int page, int pageSize) {
-        TypedQuery<Content> query= em.createQuery(" FROM Content ORDER BY id DESC ",Content.class);
-        TypedQuery<Content> countQuery = em.createQuery(" FROM Content ORDER BY id DESC ",Content.class);
+        Query nativeQuery= em.createQuery("SELECT id FROM Content ORDER BY id DESC ");
 
-        query.setFirstResult((page - 1) * pageSize);
-        query.setMaxResults(pageSize);
-        long totalContent = PageWrapper.calculatePageAmount(countQuery.getResultList().size(),pageSize);
+        long totalContent = PageWrapper.calculatePageAmount(nativeQuery.getResultList().size(),pageSize);
+        int totalSize = nativeQuery.getResultList().size();
 
-        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList(),countQuery.getResultList().size()) ;
+        nativeQuery.setFirstResult((page - 1) * pageSize);
+        nativeQuery.setMaxResults(pageSize);
+
+        final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList());
+
+        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList(),totalSize) ;
     }
 
     @Override
