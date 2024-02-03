@@ -20,15 +20,14 @@ public class ContentJpaDao implements ContentDao{
     private EntityManager em;
 
     @SuppressWarnings("unchecked")
-    private TypedQuery<Content> getFinalQuery(List resultList){
+    private TypedQuery<Content> getFinalQuery(List resultList,String sortString){
         final List<Long> idList = (List<Long>) resultList.stream()
                 .map(n -> (Long) ((Number) n).longValue()).collect(Collectors.toList());
-        final TypedQuery<Content> query = em.createQuery("FROM Content WHERE id in :idList",Content.class);
+        final TypedQuery<Content> query = em.createQuery("FROM Content WHERE id in :idList " + sortString,Content.class);
         query.setParameter("idList",idList);
         return query;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public PageWrapper<Content> getAllContent(String type, Sorting sort, int page, int pageSize) {
         Query nativeQuery;
@@ -46,8 +45,11 @@ public class ContentJpaDao implements ContentDao{
         nativeQuery.setFirstResult((page - 1) * pageSize);
         nativeQuery.setMaxResults(pageSize);
 
-        final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList());
-        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList(),totalSize) ;
+        if(totalSize > 0){
+            final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList(),sortString);
+            return new PageWrapper<Content>(page,totalContent,pageSize, query.getResultList(),totalSize);
+        }
+        return new PageWrapper<Content>(page,totalContent,pageSize, Collections.emptyList(),0);
     }
 
     @Override
@@ -91,9 +93,11 @@ public class ContentJpaDao implements ContentDao{
         nativeQuery.setFirstResult((page - 1) * pageSize);
         nativeQuery.setMaxResults(pageSize);
 
-        final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList());
-
-        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList(),totalSize) ;
+        if(totalSize > 0){
+            final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList(),sortString);
+            return new PageWrapper<Content>(page,totalContent,pageSize, query.getResultList(),totalSize);
+        }
+        return new PageWrapper<Content>(page,totalContent,pageSize, Collections.emptyList(),0);
     }
 
     @Override
@@ -114,10 +118,11 @@ public class ContentJpaDao implements ContentDao{
         nativeQuery.setFirstResult((page - 1) * pageSize);
         nativeQuery.setMaxResults(pageSize);
 
-        final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList());
-
-
-        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList(),totalSize);
+        if(totalSize > 0){
+            final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList(),sortString);
+            return new PageWrapper<Content>(page,totalContent,pageSize, query.getResultList(),totalSize);
+        }
+        return new PageWrapper<Content>(page,totalContent,pageSize, Collections.emptyList(),0);
     }
 
     @Override
@@ -143,9 +148,11 @@ public class ContentJpaDao implements ContentDao{
         nativeQuery.setFirstResult((page - 1) * pageSize);
         nativeQuery.setMaxResults(pageSize);
 
-        final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList());
-
-        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList(),totalSize);
+        if(totalSize > 0){
+            final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList(),sortString);
+            return new PageWrapper<Content>(page,totalContent,pageSize, query.getResultList(),totalSize);
+        }
+        return new PageWrapper<Content>(page,totalContent,pageSize, Collections.emptyList(),0);
     }
 
     @Override
@@ -171,9 +178,11 @@ public class ContentJpaDao implements ContentDao{
         nativeQuery.setFirstResult((page - 1) * pageSize);
         nativeQuery.setMaxResults(pageSize);
 
-        final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList());
-
-        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList(),totalSize);
+        if(totalSize > 0){
+            final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList(),sortString);
+            return new PageWrapper<Content>(page,totalContent,pageSize, query.getResultList(),totalSize);
+        }
+        return new PageWrapper<Content>(page,totalContent,pageSize, Collections.emptyList(),0);
     }
 
     //First makes the genre query in a NativeQuery
@@ -201,9 +210,11 @@ public class ContentJpaDao implements ContentDao{
         nativeQuery.setFirstResult((page - 1) * pageSize);
         nativeQuery.setMaxResults(pageSize);
 
-        final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList());
-
-        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList(),totalSize);
+        if(totalSize > 0){
+            final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList(),sortString);
+            return new PageWrapper<Content>(page,totalContent,pageSize, query.getResultList(),totalSize);
+        }
+        return new PageWrapper<Content>(page,totalContent,pageSize, Collections.emptyList(),0);
     }
 
     @Override
@@ -226,9 +237,11 @@ public class ContentJpaDao implements ContentDao{
         nativeQuery.setFirstResult((page - 1) * pageSize);
         nativeQuery.setMaxResults(pageSize);
 
-        final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList());
-
-        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList(),totalSize);
+        if(totalSize > 0){
+            final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList(),sortString);
+            return new PageWrapper<Content>(page,totalContent,pageSize, query.getResultList(),totalSize);
+        }
+        return new PageWrapper<Content>(page,totalContent,pageSize, Collections.emptyList(),0);
     }
 
 
@@ -257,9 +270,11 @@ public class ContentJpaDao implements ContentDao{
         nativeQuery.setFirstResult((page - 1) * pageSize);
         nativeQuery.setMaxResults(pageSize);
 
-        final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList());
-
-        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList(),totalSize);
+        if(totalSize > 0){
+            final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList(),sortString);
+            return new PageWrapper<Content>(page,totalContent,pageSize, query.getResultList(),totalSize);
+        }
+        return new PageWrapper<Content>(page,totalContent,pageSize, Collections.emptyList(),0);
     }
 
 
@@ -272,9 +287,11 @@ public class ContentJpaDao implements ContentDao{
         long totalContent = PageWrapper.calculatePageAmount(nativeQuery.getResultList().size(),pageSize);
         int totalSize = nativeQuery.getResultList().size();
 
-        final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList());
-
-        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList(),totalSize);
+        if(totalSize > 0){
+            final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList()," ORDER BY RANDOM()");
+            return new PageWrapper<Content>(page,totalContent,pageSize, query.getResultList(),totalSize);
+        }
+        return new PageWrapper<Content>(page,totalContent,pageSize, Collections.emptyList(),0);
     }
 
     @Override
@@ -287,9 +304,12 @@ public class ContentJpaDao implements ContentDao{
 
         nativeQuery.setFirstResult((page - 1) * pageSize);
         nativeQuery.setMaxResults(pageSize);
-        final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList());
 
-        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList(),totalSize);
+        if(totalSize > 0){
+            final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList(),"");
+            return new PageWrapper<Content>(page,totalContent,pageSize, query.getResultList(),totalSize);
+        }
+        return new PageWrapper<Content>(page,totalContent,pageSize, Collections.emptyList(),0);
     }
 
     @Override
@@ -366,9 +386,11 @@ public class ContentJpaDao implements ContentDao{
         nativeQuery.setFirstResult((page - 1) * pageSize);
         nativeQuery.setMaxResults(pageSize);
 
-        final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList());
-
-        return new PageWrapper<Content>(page,totalContent,pageSize,query.getResultList(),totalSize) ;
+        if(totalSize > 0){
+            final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList()," ORDER BY id DESC");
+            return new PageWrapper<Content>(page,totalContent,pageSize, query.getResultList(),totalSize);
+        }
+        return new PageWrapper<Content>(page,totalContent,pageSize, Collections.emptyList(),0);
     }
 
     @Override
