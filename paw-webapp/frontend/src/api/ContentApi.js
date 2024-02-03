@@ -8,12 +8,6 @@ export class ContentApi {
         this.basePath = `${paths.BASE_URL_API}${paths.CONTENT}`
     }
 
-    async getLandingPage() {
-        const url = `${this.basePath}/landing`
-        const options = {method: 'GET', headers: authCheck({})}
-        return await genericRequest(this.basePath, url, options)
-    }
-
     async getSpecificContent(authFunctions, content) {
         const options = {method: 'GET', headers: authCheck({})}
         return await genericRequest(this.basePath, content, options, authFunctions)
@@ -130,14 +124,6 @@ export class ContentApi {
         const apiUrl = listUrl
         const options = {method: 'GET', headers: authCheck({})}
         return genericFetchWithQueryParams(apiUrl, options, params, authFunctions)
-    }
-
-
-    async filterContentByType(contentType, page, filters) {
-        const apiUrl = `${this.basePath}/${contentType}/filters`
-        const params = {page: page, ...filters}
-        const options = {method: 'GET', headers: authCheck({})}
-        return genericFetchWithQueryParams(apiUrl, options, params)
     }
 
     async addUserWatchList(authFunctions, contentId, userId) {
