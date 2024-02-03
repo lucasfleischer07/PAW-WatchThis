@@ -224,8 +224,10 @@ export default function Filters(props) {
                 <div className="list-group">
                     <div className="dropdown W-dropdown-button">
                         <button id="genreGroupDrop" type="button" className="W-filter-title btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                            { durationFrom !== '' && durationTo !== '0' ?(
-                                t('Duration.From.To',{"durationFromArgument":durationFrom,"durationToArgument":durationTo})
+                            { durationFrom !== '' && durationTo !== '0' && durationTo !== '1000' ? (
+                                t('Duration.From.To', {"durationFromArgument": durationFrom, "durationToArgument": durationTo})
+                            ) : durationTo === '1000' ? (
+                                t('Duration.150_more')
                             ) : (
                                 t('DurationMessage')
                             )}
