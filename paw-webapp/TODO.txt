@@ -7,7 +7,7 @@ Poner una L si ya esta Listo
 
 - (L) El token lo devuelven en un header Authorization. Este es un request header (no response), le están dando una semántica nueva. Es mejor definir un header nuevo.
 
-- No implementaron refresh tokens
+- (L) No implementaron refresh tokens
 
 - (L) Toda respuesta del server me repite mi header Authorization, no sólo la primera al loguearme con user + pass.
 
@@ -20,7 +20,7 @@ Poner una L si ya esta Listo
 - (L) Se encuentran llamadas con semántica llamativa, por ejemplo: ?paginated=false&watchListSavedBy=61&page=1 paginated en false, pero piden pagina 1 y la respuesta trae headers link de paginación.
     Solucion: En ContentController linea 83 agregue un if de si es paginado, me setee los headers de paginacion, sino que no los genere y listo
 
-- No paginan con el modelo 1+1. Esto es un error conceptual grave.
+- (L) No paginan con el modelo 1+1. Esto es un error conceptual grave.
 
 - La API no es realmente RESTful. Estos son errores graves. Se citan algunos ejemplos (lista no exhaustiva):
     - (L) Endpoints como /users/{userId}/reviewsLiked devuelven listas de ids, no entidades hipervinculadas. El cliente debe saber construir las URLs correspondientes.
