@@ -136,7 +136,7 @@ public class CommentController {
         Collection<CommentReportDto> commentReportedListDto = CommentReportDto.mapCommentReportToCommentReportDto(uriInfo, commentsReported.getPageContent());
         LOGGER.info("GET /{}: Reported comments list success for admin user", uriInfo.getPath());
         Response.ResponseBuilder response = Response.ok(new GenericEntity<Collection<CommentReportDto>>(commentReportedListDto){});
-        if(reportId != null) {
+        if(reportId == null) {
             response.header("Total-Review-Reports",rrs.getReportedReviewsAmount(reason));
             response.header("Total-Comment-Reports",rrs.getReportedCommentsAmount(reason));
             ResponseBuildingUtils.setPaginationLinks(response,commentsReported , uriInfo);
