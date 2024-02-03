@@ -36,6 +36,8 @@ public class ReportJpaDao implements ReportDao{
 
     @SuppressWarnings("unchecked")
     private TypedQuery<ReviewReport> getFinalReviewQuery(List resultList){
+        if(resultList.size() == 0)
+            return null;
         final List<Long> idList = (List<Long>) resultList.stream()
                 .map(n -> (Long) ((Number) n).longValue()).collect(Collectors.toList());
         final TypedQuery<ReviewReport> query = em.createQuery("FROM ReviewReport WHERE id in :idList ORDER BY id asc",ReviewReport.class);
@@ -45,6 +47,8 @@ public class ReportJpaDao implements ReportDao{
 
     @SuppressWarnings("unchecked")
     private TypedQuery<CommentReport> getFinalCommentQuery(List resultList){
+        if(resultList.size() == 0)
+            return null;
         final List<Long> idList = (List<Long>) resultList.stream()
                 .map(n -> (Long) ((Number) n).longValue()).collect(Collectors.toList());
         final TypedQuery<CommentReport> query = em.createQuery("FROM CommentReport WHERE id in :idList ORDER BY id asc",CommentReport.class);
@@ -118,8 +122,8 @@ public class ReportJpaDao implements ReportDao{
         nativeQuery.setFirstResult((page - 1) * pageSize);
         nativeQuery.setMaxResults(pageSize);
 
-        if(totalSize > 0){
-            final TypedQuery<ReviewReport> query = getFinalReviewQuery(nativeQuery.getResultList());
+        final TypedQuery<ReviewReport> query = getFinalReviewQuery(nativeQuery.getResultList());
+        if(query != null){
             return new PageWrapper<ReviewReport>(page,totalContent,pageSize, query.getResultList(),totalSize);
         }
         return new PageWrapper<ReviewReport>(page,totalContent,pageSize, Collections.emptyList(),0);
@@ -142,8 +146,8 @@ public class ReportJpaDao implements ReportDao{
         nativeQuery.setFirstResult((page - 1) * pageSize);
         nativeQuery.setMaxResults(pageSize);
 
-        if(totalSize > 0){
-            final TypedQuery<ReviewReport> query = getFinalReviewQuery(nativeQuery.getResultList());
+        final TypedQuery<ReviewReport> query = getFinalReviewQuery(nativeQuery.getResultList());
+        if(query != null){
             return new PageWrapper<ReviewReport>(page,totalContent,pageSize, query.getResultList(),totalSize);
         }
         return new PageWrapper<ReviewReport>(page,totalContent,pageSize, Collections.emptyList(),0);
@@ -171,8 +175,8 @@ public class ReportJpaDao implements ReportDao{
         nativeQuery.setFirstResult((page - 1) * pageSize);
         nativeQuery.setMaxResults(pageSize);
 
-        if(totalSize > 0){
-            final TypedQuery<CommentReport> query = getFinalCommentQuery(nativeQuery.getResultList());
+        final TypedQuery<CommentReport> query = getFinalCommentQuery(nativeQuery.getResultList());
+        if(query != null){
             return new PageWrapper<CommentReport>(page,totalContent,pageSize, query.getResultList(),totalSize);
         }
         return new PageWrapper<CommentReport>(page,totalContent,pageSize, Collections.emptyList(),0);
@@ -196,8 +200,8 @@ public class ReportJpaDao implements ReportDao{
         nativeQuery.setFirstResult((page - 1) * pageSize);
         nativeQuery.setMaxResults(pageSize);
 
-        if(totalSize > 0){
-            final TypedQuery<CommentReport> query = getFinalCommentQuery(nativeQuery.getResultList());
+        final TypedQuery<CommentReport> query = getFinalCommentQuery(nativeQuery.getResultList());
+        if(query != null){
             return new PageWrapper<CommentReport>(page,totalContent,pageSize, query.getResultList(),totalSize);
         }
         return new PageWrapper<CommentReport>(page,totalContent,pageSize, Collections.emptyList(),0);
