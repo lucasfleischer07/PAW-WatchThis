@@ -209,9 +209,9 @@ export default function Reputation(props) {
                         navigate("/error", { replace: true, state: {errorCode: 404} })
                     })
 
-                if(isLogged()) {
+                // if(isLogged()) {
                     setLoaded(true);
-                }
+                // }
             }
         }
 

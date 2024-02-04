@@ -262,11 +262,11 @@ export default function Comments(props) {
                                                 {t('Review.WarningAddMessage')}
                                             </Modal.Body>
                                             <Modal.Footer>
-                                                <Button variant="secondary" onClick={handleCloseReportModal}>
-                                                    {t('No')}
+                                                <Button variant="secondary" onClick={handleCloseLoginModal}>
+                                                    {t('Close')}
                                                 </Button>
                                                 <Button variant="success" onClick={handleGoToLogin}>
-                                                    {t('Yes')}
+                                                    {t('Login.LoginMessage')}
                                                 </Button>
                                             </Modal.Footer>
                                         </Modal>
