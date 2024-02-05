@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.models;
 
 public enum ReportReason {
-    Spam("Span"),
+    Spam("Spam"),
     Insult("Insult"),
     Inappropriate("Inappropriate"),
     Unrelated("Unrelated"),

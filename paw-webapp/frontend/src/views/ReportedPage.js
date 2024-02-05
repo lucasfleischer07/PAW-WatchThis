@@ -247,15 +247,32 @@ export default function ReportedPage() {
                         <div className="W-review-comment-tabs">
                             <div className="list-group">
                                 <div className="dropdown W-dropdown-button">
-                                    {filterReason !== 'ANY' && filterReason !== '' ? (
+                                    {filterReason !== 'ANY' && filterReason !== '' && filterReason === 'Spam' ? (
                                         <button id="reportSortByGroup" type="button" className="W-filter-title W-margin-top-report btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                            {filterReason}
+                                            {t('Report.Spam')}
+                                        </button>
+                                    ) : filterReason !== 'ANY' && filterReason !== '' && filterReason === 'Insult' ? (
+                                        <button id="reportSortByGroup" type="button" className="W-filter-title W-margin-top-report btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                            {t('Report.Insult')}
+                                        </button>
+                                    ) : filterReason !== 'ANY' && filterReason !== '' && filterReason === 'Inappropriate' ? (
+                                        <button id="reportSortByGroup" type="button" className="W-filter-title W-margin-top-report btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                            {t('Report.Inappropriate')}
+                                        </button>
+                                    ) : filterReason !== 'ANY' && filterReason !== '' && filterReason === 'Unrelated' ? (
+                                        <button id="reportSortByGroup" type="button" className="W-filter-title W-margin-top-report btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                            {t('Report.Unrelated')}
+                                        </button>
+                                    ) : filterReason !== 'ANY' && filterReason !== '' && filterReason === 'Other' ? (
+                                        <button id="reportSortByGroup" type="button" className="W-filter-title W-margin-top-report btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                            {t('Report.Other')}
                                         </button>
                                     ) : (
                                         <button id="reportSortByGroup" type="button" className="W-filter-title btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                             {t('Report.Filter')}
                                         </button>
                                     )}
+
                                     <ul className="dropdown-menu">
                                         <li>
                                             <a className="dropdown-item" onClick={() => handleOnClickFilterClear()}>
