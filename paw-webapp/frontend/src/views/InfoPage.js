@@ -312,7 +312,6 @@ export default function InfoPage() {
         }
 
         if(actualPage < 1 || (actualPage > amountPages && amountPages !== -1)) {
-            alert("Actual page: " + actualPage + " amountPages: " + amountPages )
             navigate("/error", { replace: true, state: {errorCode: 404} })
         } else {
             fetchData()

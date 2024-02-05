@@ -60,7 +60,6 @@ public class UserController {
     // * ---------------------------------------------------------------------------------------------------------------
 
     // * ------------------------------------------------Forgot Password (desde el login)-------------------------------
-//    TODO: Ver si meter el location al usuario y devovler 201 CREATED o dejarlo asi
     @POST
     @Produces(value = {MediaType.TEXT_PLAIN})
     @Consumes(value = {MediaType.TEXT_PLAIN})

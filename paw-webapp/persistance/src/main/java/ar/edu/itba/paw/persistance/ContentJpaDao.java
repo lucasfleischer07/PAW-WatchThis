@@ -20,13 +20,15 @@ public class ContentJpaDao implements ContentDao{
     private EntityManager em;
 
     @SuppressWarnings("unchecked")
-    private TypedQuery<Content> getFinalQuery(List resultList,String sortString){
+    private TypedQuery<Content> getFinalQuery(List resultList, String sortString, int page, int pageSize){
         if(resultList.size() == 0)
             return null;
         final List<Long> idList = (List<Long>) resultList.stream()
                 .map(n -> (Long) ((Number) n).longValue()).collect(Collectors.toList());
         final TypedQuery<Content> query = em.createQuery("FROM Content WHERE id in :idList " + sortString,Content.class);
         query.setParameter("idList",idList);
+        query.setFirstResult((page - 1) * pageSize);
+        query.setMaxResults(pageSize);
         return query;
     }
 
@@ -36,7 +38,7 @@ public class ContentJpaDao implements ContentDao{
 
         String sortString = sort == null ? "" : sort.getQueryString();
         if (Objects.equals(type, "movie") || Objects.equals(type, "serie")) {
-            nativeQuery = em.createNativeQuery("SELECT id FROM Content WHERE type = :type" + sortString);
+            nativeQuery = em.createNativeQuery("SELECT id FROM Content WHERE type = :type");
             nativeQuery.setParameter("type",type);
         } else {
             nativeQuery = em.createNativeQuery("SELECT id FROM Content " + sortString);
@@ -44,11 +46,7 @@ public class ContentJpaDao implements ContentDao{
         long totalContent = PageWrapper.calculatePageAmount(nativeQuery.getResultList().size(),pageSize);
         int totalSize = nativeQuery.getResultList().size();
 
-        nativeQuery.setFirstResult((page - 1) * pageSize);
-        nativeQuery.setMaxResults(pageSize);
-
-
-        final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList(),sortString);
+        final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList(),sortString, page, pageSize);
         if(query != null){
             return new PageWrapper<Content>(page,totalContent,pageSize, query.getResultList(),totalSize);
         }
@@ -83,20 +81,17 @@ public class ContentJpaDao implements ContentDao{
             return new PageWrapper<>(0,0,0,Collections.emptyList(),0);
         }
         if (Objects.equals(type, "movie") || Objects.equals(type, "serie")) {
-            nativeQuery = em.createNativeQuery("SELECT id FROM Content WHERE id IN (:resultList) AND type = :type" + sortString);
+            nativeQuery = em.createNativeQuery("SELECT id FROM Content WHERE id IN (:resultList) AND type = :type");
             nativeQuery.setParameter("type",type);
         } else {
-            nativeQuery = em.createNativeQuery("SELECT id FROM Content WHERE id IN (:resultList) " + sortString);
+            nativeQuery = em.createNativeQuery("SELECT id FROM Content WHERE id IN (:resultList) ");
         }
 
         nativeQuery.setParameter("resultList",longList);
         long totalContent = PageWrapper.calculatePageAmount(nativeQuery.getResultList().size(),pageSize);
         int totalSize = nativeQuery.getResultList().size();
 
-        nativeQuery.setFirstResult((page - 1) * pageSize);
-        nativeQuery.setMaxResults(pageSize);
-
-        final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList(),sortString);
+        final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList(),sortString, page, pageSize);
         if(query != null){
             return new PageWrapper<Content>(page,totalContent,pageSize, query.getResultList(),totalSize);
         }
@@ -108,20 +103,17 @@ public class ContentJpaDao implements ContentDao{
         String sortString = sort == null ? "" : sort.getQueryString();
         Query nativeQuery;
         if(!Objects.equals(type, "all")) {
-            nativeQuery = em.createNativeQuery("select id FROM Content WHERE durationnum > :durationFrom AND durationnum <= :durationTo AND type = :type " + sortString);
+            nativeQuery = em.createNativeQuery("select id FROM Content WHERE durationnum > :durationFrom AND durationnum <= :durationTo AND type = :type ");
             nativeQuery.setParameter("type",type);
         } else {
-            nativeQuery = em.createNativeQuery("select id FROM Content WHERE durationnum > :durationFrom AND durationnum <= :durationTo " + sortString);
+            nativeQuery = em.createNativeQuery("select id FROM Content WHERE durationnum > :durationFrom AND durationnum <= :durationTo ");
         }
         nativeQuery.setParameter("durationFrom",durationFrom);
         nativeQuery.setParameter("durationTo",durationTo);
         long totalContent = PageWrapper.calculatePageAmount(nativeQuery.getResultList().size(),pageSize);
         int totalSize = nativeQuery.getResultList().size();
 
-        nativeQuery.setFirstResult((page - 1) * pageSize);
-        nativeQuery.setMaxResults(pageSize);
-
-        final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList(),sortString);
+        final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList(), sortString, page, pageSize);
         if(query != null){
             return new PageWrapper<Content>(page,totalContent,pageSize, query.getResultList(),totalSize);
         }
@@ -137,10 +129,10 @@ public class ContentJpaDao implements ContentDao{
             return new PageWrapper<>(0,0,0,Collections.emptyList(),0);
         }
         if (Objects.equals(type, "movie") || Objects.equals(type, "serie")) {
-            nativeQuery= em.createNativeQuery("SELECT id FROM Content WHERE id IN ( :resultList ) AND type = :type and durationnum > :durationFrom  AND durationnum <= :durationTo" + sortString);
+            nativeQuery= em.createNativeQuery("SELECT id FROM Content WHERE id IN ( :resultList ) AND type = :type and durationnum > :durationFrom  AND durationnum <= :durationTo");
             nativeQuery.setParameter("type",type);
         } else {
-            nativeQuery= em.createNativeQuery("FROM Content WHERE id IN ( :resultList ) AND durationnum > :durationFrom  AND durationnum <= :durationTo " + sortString);
+            nativeQuery= em.createNativeQuery("FROM Content WHERE id IN ( :resultList ) AND durationnum > :durationFrom  AND durationnum <= :durationTo ");
         }
         nativeQuery.setParameter("durationFrom",durationFrom);
         nativeQuery.setParameter("durationTo",durationTo);
@@ -148,10 +140,7 @@ public class ContentJpaDao implements ContentDao{
         long totalContent = PageWrapper.calculatePageAmount(nativeQuery.getResultList().size(),pageSize);
         int totalSize = nativeQuery.getResultList().size();
 
-        nativeQuery.setFirstResult((page - 1) * pageSize);
-        nativeQuery.setMaxResults(pageSize);
-
-        final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList(),sortString);
+        final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList(),sortString, page, pageSize);
         if(query != null){
             return new PageWrapper<Content>(page,totalContent,pageSize, query.getResultList(),totalSize);
         }
@@ -168,20 +157,18 @@ public class ContentJpaDao implements ContentDao{
         Query nativeQuery;
         String sortString = sort == null ? "" : sort.getQueryString();
         if(Objects.equals(type, "movie") || Objects.equals(type, "serie")){
-            nativeQuery= em.createNativeQuery("SELECT id From Content WHERE type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)" + sortString);
+            nativeQuery= em.createNativeQuery("SELECT id From Content WHERE type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)");
             nativeQuery.setParameter("type",type);
         } else{
-            nativeQuery= em.createNativeQuery("SELECT id From Content WHERE (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)" + sortString);
+            nativeQuery= em.createNativeQuery("SELECT id From Content WHERE (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)");
         }
 
 
         nativeQuery.setParameter("query","%" + queryUser.toLowerCase() + "%");
         long totalContent = PageWrapper.calculatePageAmount(nativeQuery.getResultList().size(),pageSize);
         int totalSize = nativeQuery.getResultList().size();
-        nativeQuery.setFirstResult((page - 1) * pageSize);
-        nativeQuery.setMaxResults(pageSize);
 
-        final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList(),sortString);
+        final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList(), sortString, page, pageSize);
         if(query != null){
             return new PageWrapper<Content>(page,totalContent,pageSize, query.getResultList(),totalSize);
         }
@@ -198,10 +185,10 @@ public class ContentJpaDao implements ContentDao{
         }
         String sortString = sort == null ? "" : sort.getQueryString();
         if (Objects.equals(type, "movie") || Objects.equals(type, "serie")) {
-            nativeQuery= em.createNativeQuery("SELECT id FROM Content WHERE id IN ( :resultList ) AND type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)" + sortString);
+            nativeQuery= em.createNativeQuery("SELECT id FROM Content WHERE id IN ( :resultList ) AND type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)");
             nativeQuery.setParameter("type",type);
         } else {
-            nativeQuery= em.createNativeQuery("SELECT id FROM Content WHERE id IN ( :resultList ) AND (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)" + sortString);
+            nativeQuery= em.createNativeQuery("SELECT id FROM Content WHERE id IN ( :resultList ) AND (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)");
         }
 
 
@@ -210,10 +197,7 @@ public class ContentJpaDao implements ContentDao{
         long totalContent = PageWrapper.calculatePageAmount(nativeQuery.getResultList().size(),pageSize);
         int totalSize = nativeQuery.getResultList().size();
 
-        nativeQuery.setFirstResult((page - 1) * pageSize);
-        nativeQuery.setMaxResults(pageSize);
-
-        final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList(),sortString);
+        final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList(),sortString, page, pageSize);
         if(query != null){
             return new PageWrapper<Content>(page,totalContent,pageSize, query.getResultList(),totalSize);
         }
@@ -225,10 +209,10 @@ public class ContentJpaDao implements ContentDao{
         String sortString = sort == null ? "" : sort.getQueryString();
         Query nativeQuery;
         if(!Objects.equals(type, "all")) {
-            nativeQuery = em.createNativeQuery("SELECT id FROM Content WHERE durationnum > :durationFrom  AND durationnum <= :durationTo AND type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)" + sortString);
+            nativeQuery = em.createNativeQuery("SELECT id FROM Content WHERE durationnum > :durationFrom  AND durationnum <= :durationTo AND type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)");
             nativeQuery.setParameter("type",type);
         } else {
-            nativeQuery = em.createNativeQuery("SELECT id FROM Content WHERE durationnum > :durationFrom  AND durationnum <= :durationTo and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)" + sortString);
+            nativeQuery = em.createNativeQuery("SELECT id FROM Content WHERE durationnum > :durationFrom  AND durationnum <= :durationTo and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query)");
         }
 
         nativeQuery.setParameter("query","%" + queryUser.toLowerCase() + "%");
@@ -240,7 +224,7 @@ public class ContentJpaDao implements ContentDao{
         nativeQuery.setFirstResult((page - 1) * pageSize);
         nativeQuery.setMaxResults(pageSize);
 
-        final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList(),sortString);
+        final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList(), sortString, page, pageSize);
         if(query != null){
             return new PageWrapper<Content>(page,totalContent,pageSize, query.getResultList(),totalSize);
         }
@@ -257,10 +241,10 @@ public class ContentJpaDao implements ContentDao{
             return new PageWrapper<>(0,0,0,Collections.emptyList(),0);
         }
         if (Objects.equals(type, "movie") || Objects.equals(type, "serie")) {
-            nativeQuery= em.createQuery("SELECT id FROM Content WHERE id IN ( :resultList ) AND type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) AND durationnum > :durationFrom  AND durationnum <= :durationTo" + sortString);
+            nativeQuery= em.createNativeQuery("SELECT id FROM Content WHERE id IN ( :resultList ) AND type = :type and (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) AND durationnum > :durationFrom  AND durationnum <= :durationTo");
             nativeQuery.setParameter("type",type);
         } else {
-            nativeQuery= em.createQuery("SELECT id FROM Content WHERE id IN ( :resultList ) AND (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) AND durationnum > :durationFrom  AND durationnum <= :durationTo" + sortString);
+            nativeQuery= em.createNativeQuery("SELECT id FROM Content WHERE id IN ( :resultList ) AND (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) AND durationnum > :durationFrom  AND durationnum <= :durationTo");
         }
 
         nativeQuery.setParameter("durationFrom",durationFrom);
@@ -270,10 +254,7 @@ public class ContentJpaDao implements ContentDao{
         long totalContent = PageWrapper.calculatePageAmount(nativeQuery.getResultList().size(),pageSize);
         int totalSize = nativeQuery.getResultList().size();
 
-        nativeQuery.setFirstResult((page - 1) * pageSize);
-        nativeQuery.setMaxResults(pageSize);
-
-        final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList(),sortString);
+        final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList(), sortString, page, pageSize);
         if(query != null){
             return new PageWrapper<Content>(page,totalContent,pageSize, query.getResultList(),totalSize);
         }
@@ -284,13 +265,13 @@ public class ContentJpaDao implements ContentDao{
 
     @Override
     public PageWrapper<Content> getSearchedContentRandom(String queryUser, int page, int pageSize) {
-        Query nativeQuery= em.createQuery("SELECT id From Content WHERE (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) ORDER BY RANDOM()");
+        Query nativeQuery= em.createNativeQuery("SELECT id From Content WHERE (LOWER(name) LIKE :query OR LOWER(creator) LIKE :query OR LOWER(released) LIKE :query) ORDER BY RANDOM()");
         nativeQuery.setParameter("query","%" + queryUser.toLowerCase() + "%");
 
         long totalContent = PageWrapper.calculatePageAmount(nativeQuery.getResultList().size(),pageSize);
         int totalSize = nativeQuery.getResultList().size();
 
-        final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList()," ORDER BY RANDOM()");
+        final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList()," ORDER BY RANDOM()", page, pageSize);
         if(query != null){
             return new PageWrapper<Content>(page,totalContent,pageSize, query.getResultList(),totalSize);
         }
@@ -299,16 +280,13 @@ public class ContentJpaDao implements ContentDao{
 
     @Override
     public PageWrapper<Content> findByType(String type, int page, int pageSize) {
-        Query nativeQuery= em.createQuery("SELECT id FROM Content WHERE type = :type");
+        Query nativeQuery= em.createNativeQuery("SELECT id FROM Content WHERE type = :type");
 
         nativeQuery.setParameter("type",type);
         long totalContent = PageWrapper.calculatePageAmount(nativeQuery.getResultList().size(),pageSize);
         int totalSize = nativeQuery.getResultList().size();
 
-        nativeQuery.setFirstResult((page - 1) * pageSize);
-        nativeQuery.setMaxResults(pageSize);
-
-        final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList(),"");
+        final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList(),"", page, pageSize);
         if(query != null){
             return new PageWrapper<Content>(page,totalContent,pageSize, query.getResultList(),totalSize);
         }
@@ -381,15 +359,12 @@ public class ContentJpaDao implements ContentDao{
 
     @Override
     public PageWrapper<Content> getLastAdded(int page, int pageSize) {
-        Query nativeQuery= em.createQuery("SELECT id FROM Content ORDER BY id DESC ");
+        Query nativeQuery= em.createNativeQuery("SELECT id FROM Content ORDER BY id DESC ");
 
         long totalContent = PageWrapper.calculatePageAmount(nativeQuery.getResultList().size(),pageSize);
         int totalSize = nativeQuery.getResultList().size();
 
-        nativeQuery.setFirstResult((page - 1) * pageSize);
-        nativeQuery.setMaxResults(pageSize);
-
-        final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList()," ORDER BY id DESC");
+        final TypedQuery<Content> query = getFinalQuery(nativeQuery.getResultList()," ORDER BY id DESC", page, pageSize);
         if(query != null){
             return new PageWrapper<Content>(page,totalContent,pageSize, query.getResultList(),totalSize);
         }

@@ -43,7 +43,6 @@ public class CommentServiceImpl implements CommentService{
                 emailService.sendMail("addedComment", messageSource.getMessage("Mail.CommentAdded", new Object[]{}, locale), mailVariables, locale);
             }
         } catch (MessagingException e) {
-            //algo
         }
         return comment;
     }

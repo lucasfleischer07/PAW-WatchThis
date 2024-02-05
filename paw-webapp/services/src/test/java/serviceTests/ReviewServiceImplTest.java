@@ -73,7 +73,6 @@ public class ReviewServiceImplTest {
     }
 
 
-    // TODO: Adaptar este test para que no sea mas sobre ids sino que sea para reviews enteras
     @Test
     public void userLikeAndDislikeTest(){
         Set<Reputation> reputations = new HashSet<>();

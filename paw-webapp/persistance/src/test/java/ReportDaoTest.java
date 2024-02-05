@@ -109,7 +109,6 @@ public class ReportDaoTest {
     }
     @Test
     public void getReportedCommentsByReason(){
-        //assertEquals(1,dao.getReportedCommentsByReason(ReportReason.Inappropriate,1,REPORTS_AMOUNT).getElemsAmount());
         assertEquals(0,dao.getReportedCommentsByReason(ReportReason.Other,1,REPORTS_AMOUNT).getElemsAmount());
     }
 

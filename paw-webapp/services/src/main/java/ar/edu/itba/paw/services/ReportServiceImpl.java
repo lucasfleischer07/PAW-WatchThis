@@ -83,7 +83,6 @@ public class ReportServiceImpl implements ReportService{
             }
             emailService.sendMail("deleteCommentReported", messageSource.getMessage("Mail.CommentDeleted", new Object[]{}, locale), mailVariables, locale);
         } catch (MessagingException e) {
-            //algo
         }
     }
 

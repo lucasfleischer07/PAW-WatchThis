@@ -197,7 +197,6 @@ public class ReviewController {
         Review review = rs.getReview(reviewId).orElseThrow(ReviewNotFoundException::new);
         User loggedUser = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).get();
 
-        // TODO: Ahora tenemos un metodo que hace todo. Ahora habria que dividirlo en 2 disitntos o dejarlo asi, VER
         boolean deleted = rs.deleteThumbUpReview(review, loggedUser);
         if(!deleted) {
             LOGGER.warn("DELETE /{}: Thumb up error", uriInfo.getPath());
@@ -236,7 +235,6 @@ public class ReviewController {
         Review review = rs.getReview(reviewId).orElseThrow(ReviewNotFoundException::new);
         User loggedUser = us.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).get();
 
-        // TODO: Ahora tenemos un metodo que hace todo. Ahora habria que dividirlo en 2 disitntos o dejarlo asi, VER
         boolean deleted = rs.deleteThumbDownReview(review,loggedUser);
         if(!deleted) {
             LOGGER.warn("DELETE /{}: Thumb down error", uriInfo.getPath());

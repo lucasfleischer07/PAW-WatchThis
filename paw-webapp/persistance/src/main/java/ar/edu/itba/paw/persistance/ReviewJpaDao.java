@@ -55,7 +55,6 @@ public class ReviewJpaDao implements ReviewDao{
                 .findFirst()
                 .orElse(null);
 
-        // Esto lo hago para mover la del usuario al principio
         if (userReview != null) {
             reviews.remove(userReview);
             reviews.add(0, userReview);
