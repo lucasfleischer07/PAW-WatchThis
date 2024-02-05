@@ -74,6 +74,11 @@
     text-align: center;
 }
 
+.row {
+    margin-left: 0;
+    margin-right: 0;
+}
+
 .W-editProfileButton-and-reviewsCant {
     justify-content: space-between;
     align-items: center;
