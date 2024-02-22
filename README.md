@@ -1,7 +1,7 @@
 # WatchThis
 
 ## Autores
-- [Fleischer, Lucas](https://github.com/tomalvarezz)
+- [Fleischer, Lucas](https://github.com/lucasfleischer07)
 - [Banfi, Malena](https://github.com/malenabanfi)
 - [Perez Rivera, Mateo](https://github.com/mateoperezrivera)
 - [Szejer, Ian](https://github.com/IanSzejer)
