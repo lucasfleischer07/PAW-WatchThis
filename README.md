@@ -34,6 +34,7 @@ Para levantar el frontend, dirigirse a la carpeta '/frontend' y correr:
 npm start
 ```
 Nota: Revisar la baseUrl de la API en `/frontend/src/paths/index.js`
+
 Nota: Revisar la configuracion de la base de datos `/wabapp/src/main/java/ar/edu/itba/paw/webapp/config/WebConfig.java`
 
 Para ejecutar los tests correr:
